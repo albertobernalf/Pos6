@@ -1,0 +1,360 @@
+    if (registroliquidacionHonorario.id == 1):   # SOAT 2004
+
+        # Consigue procedimientos a facturar
+
+        miConexion3 = None
+        try:
+            print("Entre por liquiacion SOAT")
+            miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner2", port="5432", user="postgres",
+                                           password="123456")
+            cur3 = miConexion3.cursor()
+
+
+            detalle = 'SELECT cups_id cups FROM cirugia_cirugiasprocedimientos WHERE cirugia_id = ' + "'" + str(cirugiaId) + "'"
+
+            print(detalle)
+
+            cupsLiquidacion = []
+
+            cur3.execute(detalle)
+
+            for cups in cur3.fetchall():
+                cupsLiquidacion.append({'cups':cups})
+
+
+            print("cups =" , cupsLiquidacion)
+
+            # Validacion si existe o No existe CABEZOTE
+
+            comando = 'SELECT id FROM facturacion_liquidacion WHERE "tipoDoc_id" = ' + "'" + str(registroCirugia.tipoDoc_id) + "' AND documento_id = " + "'" + str(registroCirugia.documento_id) + "'" + ' AND "consecAdmision" = ' + "'" + str(registroCirugia.consecAdmision) + "'"
+            cur3.execute(comando)
+
+            cabezoteLiquidacion = []
+
+            for id in cur3.fetchall():
+                cabezoteLiquidacion.append({'id': id})
+
+            print("CABEZOTE DE LIQUIDACION = ", cabezoteLiquidacion);
+
+            if (cabezoteLiquidacion == []):
+
+                comando = 'INSERT INTO facturacion_liquidacion ("sedesClinica_id", "tipoDoc_id", documento_id, "consecAdmision", fecha, "totalCopagos", "totalCuotaModeradora", "totalProcedimientos" , "totalSuministros" , "totalLiquidacion", "valorApagar", anticipos, "fechaRegistro", "estadoRegistro", convenio_id,  "usuarioRegistro_id", "totalAbonos") VALUES (' + "'" + str(
+                    sede) + "'," + "'" + str(registroCirugia.tipoDoc_id) + "','" + str(registroCirugia.documento_id) + "','" + str(
+                    registroCirugia.consecAdmision) + "','" + str(fechaRegistro) + "'," + '0,0,0,0,0,0,0,' + "'" + str(
+                    fechaRegistro) + "','" + str(estadoReg) + "'," + str(
+                    registroConvenio.convenio_id) + ',' + "'" + str(username_id) + "',0) RETURNING id "
+                cur3.execute(comando)
+                liquidacionId = curt.fetchone()[0]
+
+                print("resultado liquidacionId = ", liquidacionId)
+
+            else:
+                liquidacionId = cabezoteLiquidacion[0]['id']
+                liquidacionId = str(liquidacionId)
+                print("liquidacionId = ", liquidacionId)
+
+            liquidacionId = str(liquidacionId)
+            liquidacionId = liquidacionId.replace("(", ' ')
+            liquidacionId = liquidacionId.replace(")", ' ')
+            liquidacionId = liquidacionId.replace(",", ' ')
+
+            # Fin validacion de Liquidacion cabezote
+
+            # Rutiva busca en convenio el valor de la tarifa CUPS
+            print("liquidacionId = ", liquidacionId)
+
+            # Primero que todo borrar lo ya liquidado , para volver a hacer una nueva liquidacion
+
+            comando = 'DELETE FROM facturacion_liquidaciondetalle p WHERE liquidacion_id = ' + "'" + str(liquidacionId) + "' AND cirugia_id = " + "'" + str(cirugiaId) + "'"
+
+            cur3.execute(comando)
+
+            # Aqui RUTINA busca consecutivo de liquidacion
+
+
+            comando = 'SELECT (max(p.consecutivo) + 1) cons FROM facturacion_liquidaciondetalle p WHERE liquidacion_id = ' + liquidacionId
+
+            cur3.execute(comando)
+
+            print(comando)
+
+            consecLiquidacion = []
+
+            for cons in cur3.fetchall():
+                consecLiquidacion.append({'cons': cons})
+
+            print("consecLiquidacion = ", consecLiquidacion[0])
+
+            consecLiquidacion = consecLiquidacion[0]['cons']
+            consecLiquidacion = str(consecLiquidacion)
+            print("consecLiquidacion = ", consecLiquidacion)
+
+            consecLiquidacion = consecLiquidacion.replace("(", ' ')
+            consecLiquidacion = consecLiquidacion.replace(")", ' ')
+            consecLiquidacion = consecLiquidacion.replace(",", ' ')
+
+            if consecLiquidacion.strip() == 'None':
+                print("consecLiquidacion = ", consecLiquidacion)
+                consecLiquidacion = 0
+
+
+            # Aqui liquidacion de Materiales Quirugicos van a la cuenta
+
+            detalle = 'select matqx.suministro_id suministro, sum.nombre nomSuministro , tipos.nombre tipo ,matqx.cantidad cantidad, matqx."valorLiquidacion" valorLiquidacionMat from cirugia_cirugiasmaterialqx matqx, facturacion_suministros sum, facturacion_tipossuministro tipos where matqx.cirugia_id= ' + "'" + str(cirugiaId) + "'" + ' and matqx.suministro_id = sum.id and sum."tipoSuministro_id" = tipos.id and tipos.nombre = ' + "'" + str('MATERIAL QX') + "'"
+
+            materialesQx = []
+
+            print(detalle)
+            cur3.execute(detalle)
+
+            for suministro, nomSuministro, tipo, cantidad, valorLiquidacionMat  in cur3.fetchall():
+                materialesQx.append({'suministro': suministro, 'nomSuministro':nomSuministro, 'tipo':tipo, 'cantidad' :cantidad, 'valorLiquidacionMat':valorLiquidacionMat})
+
+            print("materialesQx = " , materialesQx)
+
+
+            # Materialde sutura y conexion
+
+            for matQx in materialesQx:
+
+                suministro = str(matQx['suministro'])
+                suministro = suministro.replace("(", ' ')
+                suministro = suministro.replace(")", ' ')
+                suministro = suministro.replace(",", ' ')
+
+                valorLiquidacionMat = str(matQx['valorLiquidacionMat'])
+                valorLiquidacionMat = valorLiquidacionMat.replace("(", ' ')
+                valorLiquidacionMat = valorLiquidacionMat.replace(")", ' ')
+                valorLiquidacionMat = valorLiquidacionMat.replace(",", ' ')
+
+                consecLiquidacion= int(consecLiquidacion) + 1
+                comando = 'INSERT INTO facturacion_liquidaciondetalle (consecutivo,fecha, cantidad, "valorUnitario", "valorTotal", "estadoRegistro", "fechaCrea", "fechaRegistro",  "cums_id",  "usuarioRegistro_id", liquidacion_id, "tipoRegistro", "tipoHonorario_id", cirugia_id) VALUES (' + "'" + str(consecLiquidacion) + "','" + str(fechaRegistro) + "','" + str(cantidad) + "','" + str(valorLiquidacionMat) + "','" + str(valorLiquidacionMat) + "','" + str('A') + "','" + str(fechaRegistro) + "','" + str(fechaRegistro)  + "','" + str(suministro) + "','" + str(username_id) + "'," + liquidacionId + ",'SISTEMA'," + "'" + str(suministro) + "'," +  "'" + str(cirugiaId) + "')"
+                print ("comando ", comando)
+                cur3.execute(comando)
+
+                # En teoria hasta aqui Materiales de sutura  ISS de acuerdo al procedimiento
+                #
+
+            pasada=0
+
+
+            for procedimiento1 in cupsLiquidacion:
+
+                pasada = pasada +1
+
+                procedimiento = str(procedimiento1['cups'])
+                procedimiento = procedimiento.replace("(", ' ')
+                procedimiento = procedimiento.replace(")", ' ')
+                procedimiento = procedimiento.replace(",", ' ')
+                print("procedimiento por el FORSEGUNDO = " ,procedimiento)
+                procedimiento =procedimiento.strip()
+
+                # consigue año de programacion de cirugia
+
+		progCiru = ProgramacionCirugia.objects.get(cirugia_id=cirugiaId)
+		fecha = progCiru.FechaProgramacionInicia
+		año = fecha.year
+ 
+                # consigue el salario minimo Legal
+
+		minimo = MinimosLegales.objects.get(año=año)
+
+
+                # consigue Grupo de procedimiento
+
+                detalle = 'SELECT "grupoQx_id" grupoQx FROM clinico_examenes WHERE id = ' + "'" + str(procedimiento) + "'"
+
+                grupoQx = []
+
+                cur3.execute(detalle)
+
+                for grupoQx  in cur3.fetchall():
+
+                    grupoQx.append({'grupoQx': grupoQx })
+
+                for grupoQx in grupoQx[0]['grupoQx']:
+
+                    grupoQx = grupoQx
+
+                print("grupoQx =" , grupoQx)
+
+                # consigo la tarifa del honorario SOAT a pagar al cirujano
+
+                detalle = 'SELECT "smldv"*minimo/30 valorCirujano FROM tarifarios_tablahonorariossoat WHERE "grupoQx_id" = ' + "'" + str(grupoQx) + "' AND " + '"tiposHonorario_id" = ' + "'" + str(registroHonorarioCirujano.id)  + "'"
+
+                valorCirujanoProced = []
+
+                cur3.execute(detalle)
+
+                for valorCirujano in cur3.fetchall():
+                    valorCirujanoProced.append({'valorCirujano': valorCirujano })
+
+                print("valorCirujanoProced =" , valorCirujanoProced[0]['valorCirujano'])
+
+                for valorCirujanoProced in valorCirujanoProced[0]['valorCirujano']:
+                    print("valorCirujanoProced1" , valorCirujanoProced)
+                    liquidaCirujano= float(valorCirujanoProced) 
+                    print ("liquidaCirujano =",liquidaCirujano )
+
+                # En teoria hasta aqui tengo el valor del Cirujano ISS de acuerdo al procedimiento
+
+
+                # Aqui liquidacion de honorarios Anestesiologo
+
+                # consigo valor a pagar al Anestesiologo
+
+
+                detalle = 'SELECT "smldv"*minimo/30 valorAnestesiologo FROM tarifarios_tablahonorariossoat WHERE "grupoQx_id" = ' + "'" + str(grupoQx) + "' AND " + '"tiposHonorario_id" = ' + "'" + str(registroHonorarioAnestesiologo.id)  + "'"
+
+                valorAnestesiologoProced = []
+
+                cur3.execute(detalle)
+
+                for valorAnestesiologo in cur3.fetchall():
+                    valorAnestesiologoProced.append({'valorAnestesiologo': valorAnestesiologo })
+
+                print("valorAnestesiologoProced =" , valorAnestesiologoProced[0]['valorAnestesiologo'])
+
+                for valorAnestesiologoProced in valorAnestesiologoProced[0]['valorAnestesiologo']:
+                    print("valorAnestesiologoProced = " ,valorAnestesiologoProced)
+                    liquidaAnestesiologo= float(valorAnestesiologoProced) 
+                    print("liquidaAnestesiologo =", liquidaAnestesiologo)
+                # En teoria hasta aqui honorariosAnestesiologo ISS de acuerdo al procedimiento
+
+                # Aqui liquidacion de honorarios Ayudante
+
+                # consigo valor a pagar al Ayudante
+
+                detalle = 'SELECT "smldv"*minimo/30 valorAyudante FROM tarifarios_tablahonorariossoat WHERE "grupoQx_id" = ' + "'" + str(grupoQx) + "' AND " + '"tiposHonorario_id" = ' + "'" + str(registroHonorarioAyudante.id)  + "'"
+
+                valorAyudanteProced = []
+
+                cur3.execute(detalle)
+
+                for valorAyudante in cur3.fetchall():
+                    valorAyudanteProced.append(
+                        {'valorAyudante': valorAyudante })
+
+                print("valorAyudanteProced =" , valorAyudanteProced[0]['valorAyudante'])
+
+                for valorAyudanteProced in valorAyudanteProced[0]['valorAyudante']:
+                    print(valorAyudanteProced)
+                    liquidaAyudante= float(valorAyudanteProced) 
+                    print("liquidaAyudante =", liquidaAyudante)
+
+                # En teoria hasta aqui honorarios Ayudante ISS de acuerdo al procedimiento
+
+                # Aqui INSERT a la tabla lioquidaciones de los valores liquidados para un procedimiento
+
+                # Aqui RUTINA busca consecutivo de liquidacion
+
+
+                comando = 'SELECT (max(p.consecutivo) + 1) cons FROM facturacion_liquidaciondetalle p WHERE liquidacion_id = ' + liquidacionId
+
+                cur3.execute(comando)
+
+                print(comando)
+
+                consecLiquidacion = []
+
+                for cons in cur3.fetchall():
+                    consecLiquidacion.append({'cons': cons})
+
+                print("consecLiquidacion = ", consecLiquidacion[0])
+
+                consecLiquidacion = consecLiquidacion[0]['cons']
+                consecLiquidacion = str(consecLiquidacion)
+                print("consecLiquidacion = ", consecLiquidacion)
+
+                consecLiquidacion = consecLiquidacion.replace("(", ' ')
+                consecLiquidacion = consecLiquidacion.replace(")", ' ')
+                consecLiquidacion = consecLiquidacion.replace(",", ' ')
+                print("consecLiquidacion = ", consecLiquidacion)
+
+                if consecLiquidacion.strip() == 'None':
+                    print("consecLiquidacion = ", consecLiquidacion)
+                    consecLiquidacion = 1
+
+                # Fin RUTINA busca consecutivo de liquidacion
+                # Cirujano
+                comando = 'INSERT INTO facturacion_liquidaciondetalle (consecutivo,fecha, cantidad, "valorUnitario", "valorTotal","estadoRegistro", "fechaCrea", "fechaRegistro",  "examen_id",  "usuarioRegistro_id", liquidacion_id, "tipoRegistro", "tipoHonorario_id", cirugia_id ) VALUES (' + "'" + str(consecLiquidacion) + "','" + str(fechaRegistro) + "','" + str('1') + "','" + str(liquidaCirujano) + "','" + str(liquidaCirujano) + "','" + str('A') + "','" + str(fechaRegistro) + "','" + str(fechaRegistro) + "','" + str(procedimiento) + "','" + str(username_id) + "'," + liquidacionId + ",'SISTEMA'," + "'" + str(registroHonorarioCirujano.id)  + "'," +  "'" + str(cirugiaId) + "')"
+                print("comando ", comando)
+                cur3.execute(comando)
+                # Anestesiologo
+                consecLiquidacion= int(consecLiquidacion) + 1
+                comando = 'INSERT INTO facturacion_liquidaciondetalle (consecutivo,fecha, cantidad, "valorUnitario", "valorTotal", "estadoRegistro","fechaCrea", "fechaRegistro", "examen_id",  "usuarioRegistro_id", liquidacion_id, "tipoRegistro", "tipoHonorario_id", cirugia_id) VALUES (' + "'" + str(consecLiquidacion) + "','" + str(fechaRegistro) + "','" + str('1') + "','" + str(liquidaAnestesiologo) + "','" + str(liquidaAnestesiologo) + "','" + str('A') + "','" + str(fechaRegistro) + "','" + str(fechaRegistro) + "','" + str(procedimiento) + "','" + str(username_id) + "'," + liquidacionId + ",'SISTEMA'," + "'" + str(registroHonorarioAnestesiologo.id) + "'," +  "'" + str(cirugiaId) + "')"
+                print("comando ", comando)
+                cur3.execute(comando)
+
+                # Ayudante
+                consecLiquidacion= int(consecLiquidacion) + 1
+
+                comando = 'INSERT INTO facturacion_liquidaciondetalle (consecutivo,fecha, cantidad, "valorUnitario", "valorTotal",  "estadoRegistro", "fechaCrea", "fechaRegistro", "examen_id",  "usuarioRegistro_id", liquidacion_id, "tipoRegistro", "tipoHonorario_id", cirugia_id) VALUES (' + "'" + str(consecLiquidacion) + "','" + str(fechaRegistro) + "','" + str('1') + "','" + str(liquidaAyudante) + "','" + str(liquidaAyudante) + "','" + str('A') + "','" + str(fechaRegistro) + "','" + str(fechaRegistro) +  "','" + str(procedimiento) + "','" + str(username_id) + "'," + liquidacionId + ",'SISTEMA'," + "'" + str(registroHonorarioAyudante.id) + "'," +  "'" + str(cirugiaId) + "')"
+                print("comando ", comando)
+                cur3.execute(comando)
+
+                print("ANTES DE pasada = ", pasada)
+
+                if (pasada==1):
+
+                    # Aqui liquidacion de Salas de CIRUGIA
+
+                    print ("Entre pasada = ", pasada)
+
+                    ## Luego ir a tabla tarifarios_tablaSalasdecirugiaiss para sacar el valor
+                    #
+
+		    detalle = 'SELECT tarifa.smldv*minimo/30 valor FROM cirugia_cirugias cir,  tarifarios_tablaSalasdecirugia tarifa, sitios_salas sala WHERE cir.id = ' + "'" + str(cirugiaId) + "'" + ' AND cir.sala_id = sala.id and tarifa."tiposSala_id" = tipsal.id and "grupoQx_id" =  ' + "'" + str(grupoQx) + "'"
+
+                    valorSala = []
+                    print(detalle)
+                    cur3.execute(detalle)
+
+                    for valor in cur3.fetchall():
+                        valorSala.append({'valor': valor})
+
+                    print("valor sala = " , valorSala[0])
+
+                    for valorSala in valorSala[0]['valor']:
+
+                        #valorSala = valorSala[0]
+                        print("valor sala = ", valorSala)
+
+                        valorSala = str(valorSala)
+                        valorSala = valorSala.replace("(", ' ')
+                        valorSala = valorSala.replace(")", ' ')
+                        valorSala = valorSala.replace(",", ' ')
+                        print("valor sala = ", valorSala)
+                        liquidaValorSala = valorSala
+
+                    # Salas
+                    #
+                    consecLiquidacion= int(consecLiquidacion) + 1
+                    comando = 'INSERT INTO facturacion_liquidaciondetalle (consecutivo,fecha, cantidad, "valorUnitario", "valorTotal", "estadoRegistro", "fechaCrea", "fechaRegistro",  "examen_id",  "usuarioRegistro_id", liquidacion_id, "tipoRegistro", "tipoHonorario_id", cirugia_id) VALUES (' + "'" + str(consecLiquidacion) + "','" + str(fechaRegistro) + "','" + str('1') + "','" + str(liquidaValorSala) + "','" + str(liquidaValorSala) + "','" + str('A') + "','" + str(fechaRegistro) + "','" + str(fechaRegistro)  + "','" + str(procedimiento)  + "','" + str(username_id) + "'," + liquidacionId + ",'SISTEMA'," + "'" + str(registroDerechosSala.id)+ "'," +  "'" + str(cirugiaId) + "')"
+                    print("comando", comando)
+                    cur3.execute(comando)
+
+                    # En teoria hasta aqui Salas de CIRUGIA  SOAT de acuerdo al procedimiento
+
+                # Fin INSERT liquidaciones
+
+
+            miConexion3.commit()
+            cur3.close()
+            miConexion3.close()
+
+            return JsonResponse({'success': True, 'message': 'Liquidacion Honorarios Soat cargada a cuenta Paciente Verificar valores !'})
+
+        except psycopg2.DatabaseError as error:
+            print("Entre por rollback", error)
+            if miConexion3:
+                print("Entro ha hacer el Rollback")
+                miConexion3.rollback()
+            raise error
+
+        finally:
+            if miConexion3:
+                cur3.close()
+                miConexion3.close()
+
+

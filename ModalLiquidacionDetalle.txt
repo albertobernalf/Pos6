@@ -1,0 +1,58 @@
+            <!-- Espacio Modales  LiquidacionDetalle-->
+
+            <div class="modal fade" id="crearModelLiquidacionDetalle" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="modelHeadingLiquidacionDetalle"></h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="alert alert-danger error-msg" style="display:none">
+                                <ul class="mb-0"></ul>
+                            </div>
+                            <form id="postFormLiquidacionDetalle" name="postFormLiquidacionDetalle" class="form-horizontal"
+                                  novalidate>
+                                {% csrf_token %}
+                                <input type="hidden" name="post_id" id="post_id">
+
+                                <div class="col">
+                                    <label for="nombreExamen" class="col-sm-2 control-label">NombreExamen:</label>
+                                    <select class="form-select  h-100 w-200" aria-label="" id="nombreExamen"
+                                            name="nombreExamen">
+                                        {% for examenes in Examenes %}
+                                        <option value="{{examenes.id}}"> {{examenes.nombre}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+				<div class="col">
+                                    Cantidad:
+                                    <input type="text" id="cantidad" name="cantidad" value="0"></input>
+                                </div>
+				<div class="col">
+                                    Valor Unitario:
+                                    <input type="text" id="valorUnitario" name="valorUnitario" value="0"></input>
+                                </div>
+				<div class="col">
+                                    Valor total:
+                                    <input type="text" id="valorTotal" name="valorTotal" value="0"></input>
+                                </div>
+                                <div class="col">
+                                    Observaciones:
+                                    <input type="text" id="observaciones" name="observaciones" value="0"></input>
+                                </div>
+                                <div class="col">
+                                    TipoRegistro:
+                                    <input type="text" id="tipoRegistro" name="tiporegistro" value="MANUAL" readonly> </input>
+                                </div>
+                                <div class="col-sm-offset-2 col-sm-10 mt-2">
+                                    <button type="submit" class="btn btn-primary" id="saveBtnCrearLiquidacionDetalle"
+                                            value="create">Guardar
+                                    </button>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+     <!-- FIN Espacio Modales  -->

@@ -1,0 +1,73 @@
+		  <div style="height: 70px;  width:100%; background-color:#EBEBEB;">
+			 <div class="row row-cols-8" style="height=1px;">
+					<div class="col">
+			  		     <div class="form-group row">
+						 <label for="Rfactura" class="col-form-label col-sm-4">LiquidacionId:</label>
+						 <div class="col-sm-6">
+							  <input type="text" id="Rfactura" name="Rfactura" value="0" readonly>
+	                                        </div>
+          	                            </div>
+                                    </div>
+                            
+				<div class="col">
+			  		     <div class="form-group row">
+						 <label for="RfechaFactura" class="col-form-label col-sm-4">Fecha:</label>
+						 <div class="col-sm-6">
+							  <input type="text" id="RfechaFactura" name="RfechaFactura" value="0" readonly>
+	                                        </div>
+          	                            </div>
+                                      </div>
+					<div class="col">
+			  		     <div class="form-group row">
+						 <label for="RtipoDoc_id" class="col-form-label col-sm-4">TipoDocumento:</label>
+						 <div class="col-sm-6">
+							  <input type="text" id="RtipoDoc_id" name="RtipoDoc_id" value="0" readonly>
+	                                        </div>
+          	                            </div>
+                                      </div>
+					<div class="col">
+			  		     <div class="form-group row">
+						 <label for="Rdocumento_id" class="col-form-label col-sm-4">Documento:</label>
+						 <div class="col-sm-6">
+							  <input type="text" id="Rdocumento_id" name="Rdocumentoc_id" value="0" readonly>
+	                                        </div>
+          	                            </div>
+                                      </div>
+
+					<div class="col">
+			  		     <div class="form-group row">
+					<label for="Rpaciente" class="col-form-label col-sm-4">Paciente:</label>
+
+						 <div class="col-sm-6">
+							  <input type="text" id="Rpaciente" name="Rpaciente" value="0" readonly>
+	                                        </div>
+          	                            </div>
+                                      </div>
+
+					<div class="col">
+			  		     <div class="form-group row">
+						 <label for="RconsecAdmision" class="col-form-label col-sm-4">ConsecutivoAdmision:</label>
+						 <div class="col-sm-6">
+							  <input type="text" id="RconsecAdmision" name="RconsecAdmision" value="0" readonly>
+	                                        </div>
+          	                            </div>
+                                      </div>
+
+					<div class="col">
+			  		     <div class="form-group row">
+						 <label for="RnombreConvenio" class="col-form-label col-sm-4">Convenio:</label>
+						 <div class="col-sm-6">
+							  <input type="text" id="RnombreConvenio" name="RnombreConvenio" value="0" readonly>
+	                                        </div>
+          	                            </div>
+                                      </div>
+				 <div class="col">
+					<div class="form-group row">
+					 <label for="BtnReFactura" class="col-form-label col-sm-3"> Refacturar </label>
+					     <div class="col col-sm-7">
+			                        <input type="button" class="form-control form-control-sm" id="BtnReFactura"  name="BtnReFactura" value="Adicionar" onclick="Refacturar()">
+					</div>
+					</div>
+				</div>
+	 </div>
+		 </div>

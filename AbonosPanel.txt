@@ -1,0 +1,297 @@
+
+    	/*------------------------------------------
+        --------------------------------------------
+        Click to Button
+        --------------------------------------------
+        --------------------------------------------*/
+        $('#createNewPostAbonosFacturacion').click(function () {
+
+
+            $('#post_id').val('');
+            $('#postFormCrearAbonosFacturacion').trigger("reset");
+            $('#modelHeadingCrearAbonosFacturacion').html("Creacion Abonos en admision");
+	  var liquidacionId = document.getElementById("liquidacionId").value;
+	document.getElementById("liquidacionId1").value =liquidacionId;
+            $('#crearAbonosModelFacturacion').modal('show');
+        });
+
+       /*------------------------------------------
+        --------------------------------------------
+        Create Post Code Abonos
+        --------------------------------------------
+        --------------------------------------------*/
+        $('#saveBtnCrearAbonosFacturacion').click(function (e) {
+            e.preventDefault();
+            $(this).html('Sending..');
+
+		alert (" Entre a Grabar el abono");
+
+            $.ajax({
+                data: $('#postFormCrearAbonosFacturacion').serialize(),
+	        url: "/guardaAbonosFacturacion/",
+                type: "POST",
+                dataType: 'json',
+                success: function (data) {
+			print ("Regrese e INSERTE cuantos ?? ");
+		   $("#mensajes").html(data.message);
+                  $('#postFormCrearAbonosFacturacion').trigger("reset");
+	 	  var tableA = $('#tablaAbonosFacturacion').DataTable(); 
+	          tableA.ajax.reload();
+	 	  var tableL = $('#tablaLiquidacionDetalle').DataTable(); 
+	          tableL.ajax.reload();
+ 		  LeerTotales();
+                },
+                error: function (data) {
+		              
+                        $('.success-msg').css('display','block');
+                        $('.success-msg').text(data.error);
+	
+                }
+            });
+        });
+
+
+
+  <div class="card-header" style="height:50px; margin-left: 0 ; margin-bottom: 0;border-top-right-radius: 0;">
+                                                <div class="row">
+                                                    <div class="col-sm-3">
+                                                        <input type="button" id="btn-rango" name="btn-rango"
+                                                               value="Refrescar ¡"
+                                                               onClick="cargarTablaAbonosPacienteFacturacion()">
+                                                        <div class="alert alert-success success-msg" style="display:none">
+							</div>
+                                                    </div>
+                                                    <div class="col-sm-3 text-end">
+                                                        <span class="text-secondary">Crear Abono</span>
+                                                        <a class="btn btn-success" href="javascript:void(0)" id="createNewPostAbonosFacturacion"> <i class="fa fa-plus"></i></a>
+                                                    </div>
+						
+
+                                                </div>
+                                            </div>
+
+  btn = btn + " <button   class='btn btn-primary editAbonosFacturacion' data-pk='" + row.pk + "'>" + "</button>";
+
+     <table class="table"  style="height: 5px; background-color:LightGray; BORDERCOLOR=RED ; border: 8px solid black; border-color: #96D4D4;  width:99%;">
+                   
+
+
+
+    $('#post_id').val('');
+            $('#postFormCrearAbonosFacturacion').trigger("reset");
+            $('#modelHeadingCrearAbonosFacturacion').html("Creacion Abonos en admision");
+	  var liquidacionId = document.getElementById("liquidacionId").value;
+	document.getElementById("liquidacionId1").value =liquidacionId;
+            $('#crearAbonosModelFacturacion').modal('show');
+
+
+	<!-- MODAL INICIALES  -->
+
+
+            <div class="modal fade" id="crearAbonosModelFacturacion" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="modelHeading"></h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="alert alert-danger error-msg" style="display:none">
+                                <ul class="mb-0"></ul>
+                            </div>
+                            <form id="postFormCrearAbonosFacturacion" name="postFormCrearAbonosFacturacion" class="form-horizontal"  novalidate>
+                                {% csrf_token %}
+                                <input type="hidden" name="post_id" id="post_id">
+
+				 <input type="hidden" id="liquidacionId1" name="liquidacionId1" value="0" >
+
+                                <div class="col">
+				 <div class="form-group row">
+                                    <label for="tipoPago" class="col-sm-2 control-label">Tipo Pago:</label>
+                                    <select class="form-select  h-100 w-200" aria-label="" id="tipoPago"
+                                            name="tipoPago">
+                                        {% for tiposPagos in TiposPagos %}
+                                        <option value="{{tiposPagos.id}}"> {{tiposPagos.nombre}}</option>
+                                        {% endfor %}
+                                    </select>
+				  </div>
+                                </div>
+                                <div class="col">
+				  <div class="form-group row">
+                                    <label for="formaPago" class="col-sm-2 control-label">Forma Pago:</label>
+                                    <select class="form-select  h-100 w-200" aria-label="" id="formaPago"
+                                            name="formaPago">
+                                        {% for formasPagos in FormasPagos %}
+                                        <option value="{{formasPagos.id}}"> {{formasPagos.nombre}}</option>
+                                        {% endfor %}
+                                    </select>
+				 </div>
+                                </div>
+                                <div class="col">
+					<div class="form-group row">
+                                    Valor:
+                                    <input type="text" id="valorAbono" name="valorAbono" value="0"></input>
+					</div>
+                                </div>
+                                <div class="col">
+					<div class="form-group row">
+                                    Descripcion:
+                                    <input type="text" id="descripcionAbono" name="descripcionAbono" value="0"> </input>
+					</div>
+                                </div>
+                                <div class="col-sm-offset-2 col-sm-10 mt-2">
+                                    <button type="button" class="btn btn-primary" id="saveBtnCrearAbonosFacturacion"
+                                            value="create">Guardar
+                                    </button>
+                                </div>
+
+                            </form>
+                        </div>  <!--  FIN body -->
+                    </div>               
+                </div>
+	   </div>
+
+		
+
+	<!-- FIN MODAL INICIAL  -->
+
+
+          <!-- Otra Modal  -->
+
+         <div class="modal fade" id="crearModalApliqueParcial" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="modelHeadingAplique"></h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="alert alert-danger error-msg" style="display:none">
+                                <ul class="mb-0"></ul>
+                            </div>
+                            <form id="postFormModalApliqueParcial" name="postFormModalApliqueParcial" class="form-horizontal"  novalidate>
+                                {% csrf_token %}
+                                <input type="hidden" name="post_id" id="post_id">
+				 <input type="hidden" id="liquidacionIdA" name="liquidacionIdA" value="0" >
+
+                                <div class="col">
+				 <div class="form-group row">
+                                    <label for="AtipoPago" class="col-sm-2 control-label">Tipo Pago:</label>
+                                    <select class="form-select  h-100 w-200" aria-label="" id="AtipoPago"
+                                            name="AtipoPago" readonly>
+                                        {% for tiposPagos in TiposPagos %}
+                                        <option value="{{tiposPagos.id}}"> {{tiposPagos.nombre}}</option>
+                                        {% endfor %}
+                                    </select>
+				  </div>
+                                </div>
+
+                                <div class="col">
+				  <div class="form-group row">
+                                    <label for="aformaPago" class="col-sm-2 control-label">Forma Pago:</label>
+                                    <select class="form-select  h-100 w-200" aria-label="" id="aformaPago"
+                                            name="aformaPago" readonly >
+                                        {% for formasPagos in FormasPagos %}
+                                        <option value="{{formasPagos.id}}"> {{formasPagos.nombre}}</option>
+                                        {% endfor %}
+                                    </select>
+				 </div>
+                                </div>
+
+                                <div class="col">
+					<div class="form-group row">
+                                    Valor:
+                                    <input type="text" id="avalorAbono" name="avalorAbono" value="0" readonly></input>
+					</div>
+                                </div>
+
+                                <div class="col">
+					<div class="form-group row">
+                                    Saldo:
+                                    <input type="text" id="aSaldo" name="aSaldo" value="0" readonly></input>
+					</div>
+                                </div>
+
+
+                                <div class="col">
+					<div class="form-group row">
+                                    Descripcion:
+                                    <input type="text" id="adescripcionAbono" name="adescripcionAbono" value="0" readonly> </input>
+					</div>
+                                </div>
+
+				<div class="col">
+					<div class="form-group row">
+                                    ValorEnCurso:
+                                    <input type="text" id="avalorEnCurso" name="avalorEnCurso" value="0" > </input>
+					</div>
+                                </div>
+
+
+                                <div class="col">
+                                    <button type="button" class="btn btn-primary" id="saveBtnApliqueAbonosFacturacion"
+                                            value="create">Guardar
+                                    </button>
+                                </div>
+
+                            </form>
+                        </div>  <!--  FIN body -->
+                    </div>       <!--  FIN modal-content -->        
+                </div> <!--  FIN modal-dialog -->        
+                </div> <!--  FIN modal fade -->        
+	
+          <!-- Fin otra modal -->
+
+
+
+	/*------------------------------------------
+        --------------------------------------------
+        Create Aplique Abonos
+        --------------------------------------------
+        --------------------------------------------*/
+	  $('body').on('click', '.editAbonosFacturacion', function () {	
+
+		alert("Entre Apolique");
+
+            $('#post_id').val('');
+            $('#postFormModalApliqueParcial').trigger("reset");
+            $('#modelHeadingAplique').html("Aplikque Abonos a liquidacion");
+    	    var liquidacionId = document.getElementById("liquidacionId").value;
+	    document.getElementById("liquidacionIdA").value =liquidacionId;
+	    alert("Voy a activar Ventana");
+            $('#crearModalApliqueParcial').modal('show');
+        });
+
+
+       /*------------------------------------------
+        --------------------------------------------
+        Aplique Code Abonos
+        --------------------------------------------
+        --------------------------------------------*/
+        $('#saveBtnApliqueAbonosFacturacion').click(function (e) {
+            e.preventDefault();
+            $(this).html('Sending..');
+
+            $.ajax({
+		 url: "/apliqueAbonos/",
+                data: $('#postFormModalApliqueParcial').serialize(),
+                type: "POST",
+                dataType: 'json',
+                success: function (data) {
+	
+            $("#mensajes").html(data.message);
+
+                  $('#postFormCrearAbonosFacturacion').trigger("reset");
+	 	  var tableA = $('#tablaAbonosFacturacion').DataTable(); 
+	          tableA.ajax.reload();
+	 	  var tableL = $('#tablaLiquidacionDetalle').DataTable(); 
+	          tableL.ajax.reload();
+ 		  LeerTotales();
+                },
+                error: function (data) {
+
+                        $('.success-msg').css('display','block');
+                        $('.success-msg').text(data.error);
+                }
+            });
+        });
+
+                    <!-- <a class="btn btn-success" href="javascript:void(0)" id="createAbonosFacturacion"> <i class="fa fa-plus"></i></a> -->

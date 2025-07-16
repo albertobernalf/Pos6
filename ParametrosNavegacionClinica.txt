@@ -1,0 +1,31 @@
+
+
+
+
+				              'cBoxCirugia':cBoxCirugia,
+	          	            'solicitaSangre':solicitaSangre,
+	                        'describeSangre':describeSangre,
+        	                'cantidadSangre':cantidadSangre,
+	                        'solicitaCamaUci':solicitaCamaUci,
+	                        
+	                        'solicitaMicroscopio':solicitaMicroscopio,
+	                        'solicitaRx':solicitaRx,
+	                        'solicitaOsteosintesis':solicitaOsteosintesis,
+	                        'solicitaBiopsia':solicitaBiopsia,
+	                        'solicitaMalla':solicitaMalla,
+	                        'solicitaOtros':solicitaOtros,
+	                        'solicitaHospitalizacion':solicitaHospitalizacion,
+	                        'solicitaAyudante':solicitaAyudante,
+	                        'solicitaTiempoQx':solicitaTiempoQx,
+	                        'solicitaTipoQx':solicitaTipoQx,
+	                        'solicitaAnestesia':solicitaAnestesia,
+	                        'solicitaOtros':solicitaOtros,
+	                        'tiempoMaxQx':tiempoMaxQx,
+	                        'solicitaAutoSutura':solicitaAutoSutura,
+	                        'solicitaSoporte':solicitaSoporte,
+	                        'describeOtros':describeOtros,
+	                        'tiposCirugia':tiposCirugia,
+	                        'dxPreQx':dxPreQx,
+	                        'dxPrinc':dxPrinc,
+	                        'dxRel1':dxRel1,
+

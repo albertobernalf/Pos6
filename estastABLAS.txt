@@ -1,0 +1,17 @@
+select * from tblhcl_evolheridas where num_admision = 916764;
+select * from tblhcl_evoluciones where num_admision = 916764 and fecha_evol >= '2024-07-17';
+
+"Clase funcional NYHA: I,  Disnea: Grado I,  Ingurgitación Yugular a 45 grados: -,  Llenado capilar: 3 SEG,  Cianosis: No Tiene,  Edemas: No Tiene
+REGULAR ESTADO GENERAL SIN SR RSCS RITMICOS RSRS DISMINUIDOS EN BASE DERECHA ABD SIN MASAS EXT SIMETRICAS MII INMOVILIZADA NEU SIN DEFICIT"
+
+
+select * from tblhcl_ingresos where num_admision = 916764 
+select * from tblhcl_signos where num_admision = 916764 
+select * from tblhcl_hallazgos_ic where num_admision = 916764 
+select * from tblhcl_hallazgos where num_admision = 916764 
+select * from tblhcl_imhaloterapia where num_admision = 916764 
+
+select * from tblhcl_fichasdetparaclinicos where num_admision = 916764 
+
+
+

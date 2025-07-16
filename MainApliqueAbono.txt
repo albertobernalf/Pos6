@@ -1,0 +1,15 @@
+	/*------------------------------------------
+        --------------------------------------------
+        Click to Button Aplicar Abonos
+        --------------------------------------------
+        --------------------------------------------*/
+  $('body').on('click', '.createAplicarAbono', function () {
+//	$('#createAplicarAbono').click(function () {
+
+         alert("EntreAplicaque Abono");
+
+         $('#post_id').val('');
+         $('#postFormModalApliqueParcial').trigger("reset");
+         $('#modelHeadingApliqu').html("Aplicar abono a Factura");
+	 $('#crearModalApliqueParcial').modal.show();
+	});

@@ -1,0 +1,16 @@
+def editarFurips(request, id):
+	autor_form = None
+        error = None
+        try:
+	  autor = Autor.objects.get(id=id)
+          if request.method == 'GET':
+                autor_form = AutoForm(instance= author)
+    	  else:
+		autor_form = AutoForm(request.POST, instance = autor)
+		if auto_form.is_valid():
+                   autor_form.save()
+                   return redirect('libro:listar_autor')
+        except ObjectDoesNotEsxist as e:
+                erro e
+        return render(request, 'libro/crear_autor.html,{'author_form:autor_form,'error':error}
+

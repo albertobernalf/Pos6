@@ -1,0 +1,24 @@
+# Cursor recorre Laboratorios
+
+miConexiont = psycopg2.connect(host="192.168.79.129", database="vulner", port="5432", user="postgres",   password="pass123")
+curt = miConexiont.cursor()
+
+comando = 'comando = 'select h."codigoCups" codigoCups,e.nombre nombre ,h.cantidad cantidad,h.observaciones observaciones  from clinico_historiaexamenes h, clinico_examenes e, clinico_tiposexamen t where h."tiposExamen_id" = t.id and t.nombre like ('%LABORATO%') and e."codigoCups" = h."codigoCups" and h.historia_id = ' + str(folio)
+curt.execute(comando)
+print(comando)
+
+laboratorios = []
+
+for codigoCups, nombre, cantidad, observaciones in curt.fetchall():
+            laboratorios.append(
+                {'codigoCups': codigoCups, 'nombre': nombre, 'cantidad': cantidad, 'observaciones':observaciones})
+miConexiont.close()
+
+for l in range(1, len(laboratorios)):
+  
+   pdf.cell(20,  10 + l, 'Cups ' + str(laboratorios[0+l]['codigoCups']) ,0,0,'L' )
+   pdf.cell(80,  10 + 1, 'Nombre: ' + str(laboratorios[0+l]['nombre']) ,0,0,'L' )
+   pdf.cell(25,  10 + l, 'Cantidad: ' + str(laboratorios[0+l]['cantidad']) ,0,0,'L' )
+   pdf.cell(25,  10 + l, 'Observacion: ' + str(laboratorios[0+l]['observaciones']) ,0,0,'L' )
+   linea=linea + 1
+   pdf.ln(linea)

@@ -1,0 +1,914 @@
+######### 1. docigo de validaAcceso
+
+
+                ingresos = []
+
+                #miConexionx = MySQLdb.connect(host='CMKSISTEPC07', user='sa', passwd='75AAbb??', db='vulnerable')
+                miConexionx = psycopg2.connect(host="192.168.79.129", database="vulner", port="5432", user="postgres", password="pass123")
+                curx = miConexionx.cursor()
+
+
+                #detalle = 'SELECT  tp.nombre tipoDoc,  u.documento documento, u.nombre  nombre , i.consec consec , i."fechaIngreso" , i."fechaSalida", ser.nombre servicioNombreIng, dep.nombre camaNombreIng , diag.nombre dxActual FROM admisiones_ingresos i, usuarios_usuarios u, sitios_dependencias dep , clinico_servicios ser ,usuarios_tiposDocumento tp , sitios_dependenciastipo deptip  , clinico_Diagnosticos diag , sitios_serviciosSedes sd  WHERE sd."sedesClinica_id" = i."sedesClinica_id"  and   sd.servicios_id  = ser.id and  i."sedesClinica_id" = dep."sedesClinica_id" AND i."sedesClinica_id" = ' + str(Sede) + '  AND  deptip.id = dep."dependenciasTipo_id" and  i."salidaDefinitiva" = ' + "'" +  'N' + "'" +  ' and tp.id = u."tipoDoc_id" and u.id = i."documento_id" and diag.id = i."dxIngreso_id" and i."dependenciasIngreso_id" = dep.id'
+                detalle = 'SELECT  tp.nombre tipoDoc,  u.documento documento, u.nombre  nombre , i.consec consec , i."fechaIngreso" , i."fechaSalida", ser.nombre servicioNombreIng, dep.nombre camaNombreIng , diag.nombre dxActual FROM admisiones_ingresos i, usuarios_usuarios u, sitios_dependencias dep , clinico_servicios ser ,usuarios_tiposDocumento tp , sitios_dependenciastipo deptip  , clinico_Diagnosticos diag , sitios_serviciosSedes sd WHERE sd."sedesClinica_id" = i."sedesClinica_id"  and sd.servicios_id  = ser.id and  i."sedesClinica_id" = dep."sedesClinica_id" AND i."sedesClinica_id" = ' + "'" + str(Sede) + "'" + ' AND  deptip.id = dep."dependenciasTipo_id" and i."serviciosIng_id" = ser.id AND dep.disponibilidad = ' + "'" + 'O' + "'" + ' AND i."salidaDefinitiva" = ' + "'" + 'N' + "'" + ' and tp.id = u."tipoDoc_id" and i."tipoDoc_id" = u."tipoDoc_id" and u.id = i."documento_id" and diag.id = i."dxActual_id" and i."fechaSalida" is null'
+
+                print(detalle)
+
+                curx.execute(detalle)
+
+                for tipoDoc, documento, nombre, consec, fechaIngreso, fechaSalida, servicioNombreIng, camaNombreIng, dxActual in curx.fetchall():
+                    ingresos.append({'tipoDoc': tipoDoc, 'Documento': documento, 'Nombre': nombre, 'Consec': consec,
+                                     'FechaIngreso': fechaIngreso, 'FechaSalida': fechaSalida,
+                                     'servicioNombreIng': servicioNombreIng, 'camaNombreIng': camaNombreIng,
+                                     'DxActual': dxActual})
+
+                miConexionx.close()
+                print(ingresos)
+                context['Ingresos'] = ingresos
+
+                # Combo de Servicios
+                #miConexiont = MySQLdb.connect(host='CMKSISTEPC07', user='sa', passwd='75AAbb??', db='vulnerable')
+                miConexiont = psycopg2.connect(host="192.168.79.129", database="vulner", port="5432", user="postgres", password="pass123")
+                curt = miConexiont.cursor()
+                comando = 'SELECT ser.id id ,ser.nombre nombre FROM sitios_serviciosSedes sed, clinico_servicios ser Where sed."sedesClinica_id" =' + "'" +  str(sede) + "'" + ' AND sed."servicios_id" = ser.id'
+                curt.execute(comando)
+                print(comando)
+
+                servicios = []
+                servicios.append({'id':'' , 'nombre': ''})
+
+                for id, nombre in curt.fetchall():
+                    servicios.append({'id': id, 'nombre': nombre})
+
+                miConexiont.close()
+                print(servicios)
+
+                context['Servicios'] = servicios
+
+                # Fin combo servicios
+
+                # Combo de SubServicios
+                #miConexiont = MySQLdb.connect(host='CMKSISTEPC07', user='sa', passwd='75AAbb??', db='vulnerable')
+                miConexiont = psycopg2.connect(host="192.168.79.129", database="vulner", port="5432", user="postgres", password="pass123")
+                curt = miConexiont.cursor()
+                comando = 'SELECT sub.id id ,sub.nombre nombre  FROM sitios_serviciosSedes sed, clinico_servicios ser  , sitios_subserviciossedes sub Where sed."sedesClinica_id" =' + "'" +  str(
+                    sede) + "'" + ' AND sed."servicios_id" = ser.id and  sed."sedesClinica_id" = sub."sedesClinica_id" and sed."servicios_id" = sub."serviciosSedes_id"'
+                curt.execute(comando)
+                print(comando)
+
+                subServicios = []
+                subServicios.append({'id': '', 'nombre': ''})
+
+                for id, nombre in curt.fetchall():
+                    subServicios.append({'id': id, 'nombre': nombre})
+
+                miConexiont.close()
+                print(subServicios)
+
+                context['SubServicios'] = subServicios
+
+                # Fin combo SubServicios
+
+                # Combo TiposDOc
+                #miConexiont = MySQLdb.connect(host='CMKSISTEPC07', user='sa', passwd='75AAbb??', db='vulnerable')
+                miConexiont = psycopg2.connect(host="192.168.79.129", database="vulner", port="5432", user="postgres", password="pass123")
+                curt = miConexiont.cursor()
+                comando = "SELECT id ,nombre FROM usuarios_TiposDocumento "
+                curt.execute(comando)
+                print(comando)
+
+                tiposDoc = []
+                #tiposDoc.append({'id': '', 'nombre': ''})
+
+
+
+                for id, nombre in curt.fetchall():
+                    tiposDoc.append({'id': id, 'nombre': nombre})
+
+                miConexiont.close()
+                print(tiposDoc)
+
+                context['TiposDoc'] = tiposDoc
+
+                # Fin combo TiposDOc
+
+                # Combo Habitaciones
+                #miConexiont = MySQLdb.connect(host='CMKSISTEPC07', user='sa', passwd='75AAbb??', db='vulnerable')
+                miConexiont = psycopg2.connect(host="192.168.79.129", database="vulner", port="5432", user="postgres", password="pass123")
+                curt = miConexiont.cursor()
+                #comando = 'SELECT id ,nombre FROM sitios_dependencias where "sedesClinica_id" = ' + "'"  + str(Sede) +"'"  + ' AND "dependenciasTipo_id" = 2'
+                comando = ' SELECT dep.id ,dep.nombre FROM sitios_dependencias dep, sitios_dependenciasTipo tip where dep."sedesClinica_id" = ' + "'" + str(Sede) + "'" + ' AND tip.nombre=' + "'" + str('HABITACIONES') + "'" + ' and dep."dependenciasTipo_id" = tip.id'
+                curt.execute(comando)
+                print(comando)
+
+                habitaciones = []
+                habitaciones.append({'id': '', 'nombre': ''})
+
+                for id, nombre in curt.fetchall():
+                    habitaciones.append({'id': id, 'nombre': nombre})
+
+                miConexiont.close()
+                print(habitaciones)
+
+                context['Habitaciones'] = habitaciones
+
+
+                # Fin combo Habitaciones
+
+                # Combo Especialidades
+                #miConexiont = MySQLdb.connect(host='CMKSISTEPC07', user='sa', passwd='75AAbb??', db='vulnerable')
+                miConexiont = psycopg2.connect(host="192.168.79.129", database="vulner", port="5432", user="postgres", password="pass123")
+                curt = miConexiont.cursor()
+                comando = "SELECT id ,nombre FROM clinico_Especialidades"
+                curt.execute(comando)
+                print(comando)
+
+                especialidades = []
+                especialidades.append({'id': '', 'nombre': ''})
+
+
+                for id, nombre in curt.fetchall():
+                    especialidades.append({'id': id, 'nombre': nombre})
+
+                miConexiont.close()
+                print(especialidades)
+
+                context['Especialidades'] = especialidades
+
+                # Fin combo Especialidades
+
+
+
+                # Combo EspecialidadesMedicos
+
+                #miConexiont = MySQLdb.connect(host='CMKSISTEPC07', user='sa', passwd='75AAbb??', db='vulnerable')
+                miConexiont = psycopg2.connect(host="192.168.79.129", database="vulner", port="5432", user="postgres", password="pass123")
+                curt = miConexiont.cursor()
+                comando = 'SELECT em.id ,e.nombre FROM clinico_Especialidades e, clinico_EspecialidadesMedicos em,planta_planta pl  where em."especialidades_id" = e.id and em."planta_id" = pl.id AND pl.documento = ' +"'"  + str(username) + "'"
+                curt.execute(comando)
+                print(comando)
+
+                especialidadesMedicos = []
+                especialidadesMedicos.append({'id': '', 'nombre': ''})
+
+                for id, nombre in curt.fetchall():
+                    especialidadesMedicos.append({'id': id, 'nombre': nombre})
+
+                miConexiont.close()
+                print(especialidadesMedicos)
+
+                context['EspecialidadesMedicos'] = especialidadesMedicos
+
+                # Fin combo EspecialidadesMedicos
+
+
+                # Combo Medicos
+                #miConexiont = MySQLdb.connect(host='CMKSISTEPC07', user='sa', passwd='75AAbb??', db='vulnerable')
+                miConexiont = psycopg2.connect(host="192.168.79.129", database="vulner", port="5432", user="postgres", password="pass123")
+                curt = miConexiont.cursor()
+                #comando = 'SELECT p.id id, p.nombre  nombre FROM planta_planta p ,  planta_perfilesplanta perf WHERE p."sedesClinica_id" = perf."sedesClinica_id" and  perf."sedesClinica_id" = ' + "'"  + str(Sede) + "'" +  ' AND perf."tiposPlanta_id" = 1 and p.id = perf."planta_id"'
+                comando = 'SELECT p.id id, p.nombre nombre FROM planta_planta p,clinico_medicos med, planta_tiposPlanta tp WHERE p."sedesClinica_id" = ' + "'" + str(Sede) + "'" + ' and p."tiposPlanta_id" = tp.id and tp.nombre = ' + "'" + str('MEDICO') + "'" +  ' and med.planta_id = p.id'
+
+                curt.execute(comando)
+                print(comando)
+
+                medicos = []
+                medicos.append({'id': '', 'nombre': ''})
+
+
+                for id, nombre in curt.fetchall():
+                    medicos.append({'id': id, 'nombre': nombre})
+
+                miConexiont.close()
+                print(medicos)
+
+                context['Medicos'] = medicos
+
+                # Fin combo Medicos
+
+                # Combo TiposFolio
+
+                #miConexiont = MySQLdb.connect(host='CMKSISTEPC07', user='sa', passwd='75AAbb??', db='vulnerable')
+                miConexiont = psycopg2.connect(host="192.168.79.129", database="vulner", port="5432", user="postgres", password="pass123")
+                curt = miConexiont.cursor()
+
+                comando = "SELECT e.id id, e.nombre nombre FROM clinico_tiposFolio e"
+
+                curt.execute(comando)
+                print(comando)
+
+                tiposFolio = []
+                tiposFolio.append({'id': '', 'nombre': ''})
+
+                for id, nombre in curt.fetchall():
+                    tiposFolio.append({'id': id, 'nombre': nombre})
+
+                miConexiont.close()
+                print(tiposFolio)
+
+                context['TiposFolio'] = tiposFolio
+
+                # Fin combo TiposFolio
+
+                # Combo TiposUsuario
+
+                #miConexiont = MySQLdb.connect(host='CMKSISTEPC07', user='sa', passwd='75AAbb??', db='vulnerable')
+                miConexiont = psycopg2.connect(host="192.168.79.129", database="vulner", port="5432", user="postgres", password="pass123")
+                curt = miConexiont.cursor()
+
+                comando = "SELECT p.id id, p.nombre  nombre FROM usuarios_tiposusuario p"
+
+                curt.execute(comando)
+                print(comando)
+
+                tiposUsuario = []
+                # tiposUsuario.append({'id': '', 'nombre': ''})
+
+                for id, nombre in curt.fetchall():
+                    tiposUsuario.append({'id': id, 'nombre': nombre})
+
+                miConexiont.close()
+                print(tiposUsuario)
+
+                context['TiposUsuario'] = tiposUsuario
+
+                # Fin combo Tipos Usuario
+
+                # Combo TiposDocumento
+
+                #miConexiont = MySQLdb.connect(host='CMKSISTEPC07', user='sa', passwd='75AAbb??', db='vulnerable')
+                miConexiont = psycopg2.connect(host="192.168.79.129", database="vulner", port="5432", user="postgres", password="pass123")
+                curt = miConexiont.cursor()
+
+                comando = "SELECT p.id id, p.nombre  nombre FROM usuarios_tiposDocumento p"
+
+                curt.execute(comando)
+                print(comando)
+
+                tiposDocumento = []
+                #tiposDocumento.append({'id': '', 'nombre': ''})
+
+                for id, nombre in curt.fetchall():
+                    tiposDocumento.append({'id': id, 'nombre': nombre})
+
+                miConexiont.close()
+                print(tiposDocumento)
+
+                context['TiposDocumento'] = tiposDocumento
+
+                # Fin combo TiposDocumento
+
+                # Combo Centros
+
+                #miConexiont = MySQLdb.connect(host='CMKSISTEPC07', user='sa', passwd='75AAbb??', db='vulnerable')
+                miConexiont = psycopg2.connect(host="192.168.79.129", database="vulner", port="5432", user="postgres", password="pass123")
+                curt = miConexiont.cursor()
+
+                comando = "SELECT p.id id, p.nombre  nombre FROM sitios_centros p"
+
+                curt.execute(comando)
+                print(comando)
+
+                centros = []
+
+                for id, nombre in curt.fetchall():
+                    centros.append({'id': id, 'nombre': nombre})
+
+                miConexiont.close()
+                print(tiposDocumento)
+
+                context['Centros'] = centros
+
+                # Fin combo Centros
+
+                # Combo Diagnosticos
+
+                #miConexiont = MySQLdb.connect(host='CMKSISTEPC07', user='sa', passwd='75AAbb??', db='vulnerable')
+                miConexiont = psycopg2.connect(host="192.168.79.129", database="vulner", port="5432", user="postgres", password="pass123")
+                curt = miConexiont.cursor()
+
+                comando = "SELECT p.id id, p.nombre  nombre FROM clinico_diagnosticos p"
+
+                curt.execute(comando)
+                print(comando)
+
+                diagnosticos = []
+                diagnosticos.append({'id': '', 'nombre': ''})
+
+                for id, nombre in curt.fetchall():
+                    diagnosticos.append({'id': id, 'nombre': nombre})
+
+                miConexiont.close()
+                print(diagnosticos)
+
+                context['Diagnosticos'] = diagnosticos
+
+                # Fin combo Diagnosticos
+
+                # Combo Departamentos
+
+                #miConexiont = MySQLdb.connect(host='CMKSISTEPC07', user='sa', passwd='75AAbb??', db='vulnerable')
+                miConexiont = psycopg2.connect(host="192.168.79.129", database="vulner", port="5432", user="postgres", password="pass123")
+                curt = miConexiont.cursor()
+
+                comando = "SELECT d.id id, d.nombre  nombre FROM sitios_departamentos d"
+
+                curt.execute(comando)
+                print(comando)
+
+                departamentos = []
+                # tiposDocumento.append({'id': '', 'nombre': ''})
+
+                for id, nombre in curt.fetchall():
+                    departamentos.append({'id': id, 'nombre': nombre})
+
+                miConexiont.close()
+                print(departamentos)
+
+                context['Departamentos'] = departamentos
+
+                # Fin combo Departamentos
+
+                # Combo Ciudades
+
+                #iConexiont = MySQLdb.connect(host='CMKSISTEPC07', user='sa', passwd='75AAbb??', db='vulnerable')
+                miConexiont = psycopg2.connect(host="192.168.79.129", database="vulner", port="5432", user="postgres", password="pass123")
+                curt = miConexiont.cursor()
+
+                comando = "SELECT c.id id, c.nombre  nombre FROM sitios_ciudades c"
+
+                curt.execute(comando)
+                print(comando)
+
+                ciudades = []
+
+
+                for id, nombre in curt.fetchall():
+                    ciudades.append({'id': id, 'nombre': nombre})
+
+                miConexiont.close()
+                print(ciudades)
+
+                context['Ciudades'] = ciudades
+
+                # Fin combo Ciudades
+
+
+######### 2. codigo de RetornaMen
+
+ingresos = []
+
+    # miConexionx = MySQLdb.connect(host='CMKSISTEPC07', user='sa', passwd='75AAbb??', db='vulnerable')
+    miConexionx = psycopg2.connect(host="192.168.79.129", database="vulner", port="5432", user="postgres",
+                                   password="pass123")
+    curx = miConexionx.cursor()
+
+
+    detalle = 'SELECT  tp.nombre tipoDoc,  u.documento documento, u.nombre  nombre , i.consec consec , i."fechaIngreso" , i."fechaSalida", ser.nombre servicioNombreIng, dep.nombre camaNombreIng , diag.nombre dxActual FROM admisiones_ingresos i, usuarios_usuarios u, sitios_dependencias dep , clinico_servicios ser ,usuarios_tiposDocumento tp , sitios_dependenciastipo deptip  , clinico_Diagnosticos diag , sitios_serviciosSedes sd WHERE sd."sedesClinica_id" = i."sedesClinica_id"  and sd.servicios_id  = ser.id and  i."sedesClinica_id" = dep."sedesClinica_id" AND i."sedesClinica_id" = ' + "'" + str(Sede) + "'" + ' AND  deptip.id = dep."dependenciasTipo_id" and  dep.disponibilidad = ' + "'" + 'O' + "'" + ' AND i."salidaDefinitiva" = ' + "'" + 'N' + "'" + ' and tp.id = u."tipoDoc_id" and i."tipoDoc_id" = u."tipoDoc_id" and u.id = i."documento_id" and diag.id = i."dxActual_id" and i."fechaSalida" is null'
+    print(detalle)
+
+    curx.execute(detalle)
+
+    for tipoDoc, documento, nombre, consec, fechaIngreso, fechaSalida, servicioNombreIng, camaNombreIng, dxActual in curx.fetchall():
+        ingresos.append({'tipoDoc': tipoDoc, 'Documento': documento, 'Nombre': nombre, 'Consec': consec,
+                         'FechaIngreso': fechaIngreso, 'FechaSalida': fechaSalida,
+                         'servicioNombreIng': servicioNombreIng, 'camaNombreIng': camaNombreIng,
+                         'DxActual': dxActual})
+
+    miConexionx.close()
+    print(ingresos)
+    context['Ingresos'] = ingresos
+
+    # Combo de Servicios
+    # miConexiont = MySQLdb.connect(host='CMKSISTEPC07', user='sa', passwd='75AAbb??', db='vulnerable')
+    miConexiont = psycopg2.connect(host="192.168.79.129", database="vulner", port="5432", user="postgres",
+                                   password="pass123")
+    curt = miConexiont.cursor()
+    comando = 'SELECT ser.id id ,ser.nombre nombre FROM sitios_serviciosSedes sed, clinico_servicios ser Where sed."sedesClinica_id" =' + "'" + str(
+        sede) + "'" + ' AND sed."servicios_id" = ser.id'
+    curt.execute(comando)
+    print(comando)
+
+    servicios = []
+    servicios.append({'id': '', 'nombre': ''})
+
+    for id, nombre in curt.fetchall():
+        servicios.append({'id': id, 'nombre': nombre})
+
+    miConexiont.close()
+    print(servicios)
+
+    context['Servicios'] = servicios
+
+    # Fin combo servicios
+
+    # Combo de SubServicios
+    # miConexiont = MySQLdb.connect(host='CMKSISTEPC07', user='sa', passwd='75AAbb??', db='vulnerable')
+    miConexiont = psycopg2.connect(host="192.168.79.129", database="vulner", port="5432", user="postgres",
+                                   password="pass123")
+    curt = miConexiont.cursor()
+    comando = 'SELECT sub.id id ,sub.nombre nombre  FROM sitios_serviciosSedes sed, clinico_servicios ser  , sitios_subserviciossedes sub Where sed."sedesClinica_id" =' + "'" + str(
+        sede) + "'" + ' AND sed."servicios_id" = ser.id and  sed."sedesClinica_id" = sub."sedesClinica_id" and sed."servicios_id" = sub."serviciosSedes_id"'
+    curt.execute(comando)
+    print(comando)
+
+    subServicios = []
+    subServicios.append({'id': '', 'nombre': ''})
+
+    for id, nombre in curt.fetchall():
+        subServicios.append({'id': id, 'nombre': nombre})
+
+    miConexiont.close()
+    print(subServicios)
+
+    context['SubServicios'] = subServicios
+
+    # Fin combo SubServicios
+
+    # Combo TiposDOc
+    # miConexiont = MySQLdb.connect(host='CMKSISTEPC07', user='sa', passwd='75AAbb??', db='vulnerable')
+    miConexiont = psycopg2.connect(host="192.168.79.129", database="vulner", port="5432", user="postgres",
+                                   password="pass123")
+    curt = miConexiont.cursor()
+    comando = "SELECT id ,nombre FROM usuarios_TiposDocumento "
+    curt.execute(comando)
+    print(comando)
+
+    tiposDoc = []
+    # tiposDoc.append({'id': '', 'nombre': ''})
+
+    for id, nombre in curt.fetchall():
+        tiposDoc.append({'id': id, 'nombre': nombre})
+
+    miConexiont.close()
+    print(tiposDoc)
+
+    context['TiposDoc'] = tiposDoc
+
+    # Fin combo TiposDOc
+
+    # Combo Habitaciones
+    # miConexiont = MySQLdb.connect(host='CMKSISTEPC07', user='sa', passwd='75AAbb??', db='vulnerable')
+    miConexiont = psycopg2.connect(host="192.168.79.129", database="vulner", port="5432", user="postgres",
+                                   password="pass123")
+    curt = miConexiont.cursor()
+    # comando = 'SELECT id ,nombre FROM sitios_dependencias where "sedesClinica_id" = ' + "'"  + str(Sede) +"'"  + ' AND "dependenciasTipo_id" = 2'
+    comando = ' SELECT dep.id ,dep.nombre FROM sitios_dependencias dep, sitios_dependenciasTipo tip where dep."sedesClinica_id" = ' + "'" + str(
+        Sede) + "'" + ' AND tip.nombre=' + "'" + str('HABITACIONES') + "'" + ' and dep."dependenciasTipo_id" = tip.id'
+    curt.execute(comando)
+    print(comando)
+
+    habitaciones = []
+    habitaciones.append({'id': '', 'nombre': ''})
+
+    for id, nombre in curt.fetchall():
+        habitaciones.append({'id': id, 'nombre': nombre})
+
+    miConexiont.close()
+    print(habitaciones)
+
+    context['Habitaciones'] = habitaciones
+
+    # Fin combo Habitaciones
+
+    # Combo Especialidades
+    # miConexiont = MySQLdb.connect(host='CMKSISTEPC07', user='sa', passwd='75AAbb??', db='vulnerable')
+    miConexiont = psycopg2.connect(host="192.168.79.129", database="vulner", port="5432", user="postgres",
+                                   password="pass123")
+    curt = miConexiont.cursor()
+    comando = "SELECT id ,nombre FROM clinico_Especialidades"
+    curt.execute(comando)
+    print(comando)
+
+    especialidades = []
+    especialidades.append({'id': '', 'nombre': ''})
+
+    for id, nombre in curt.fetchall():
+        especialidades.append({'id': id, 'nombre': nombre})
+
+    miConexiont.close()
+    print(especialidades)
+
+    context['Especialidades'] = especialidades
+
+    # Fin combo Especialidades
+
+    # Combo EspecialidadesMedicos
+
+    # miConexiont = MySQLdb.connect(host='CMKSISTEPC07', user='sa', passwd='75AAbb??', db='vulnerable')
+    miConexiont = psycopg2.connect(host="192.168.79.129", database="vulner", port="5432", user="postgres",
+                                   password="pass123")
+    curt = miConexiont.cursor()
+    comando = 'SELECT em.id ,e.nombre FROM clinico_Especialidades e, clinico_EspecialidadesMedicos em,planta_planta pl  where em."especialidades_id" = e.id and em."planta_id" = pl.id AND pl.documento = ' + "'" + str(
+        username) + "'"
+    curt.execute(comando)
+    print(comando)
+
+    especialidadesMedicos = []
+    especialidadesMedicos.append({'id': '', 'nombre': ''})
+
+    for id, nombre in curt.fetchall():
+        especialidadesMedicos.append({'id': id, 'nombre': nombre})
+
+    miConexiont.close()
+    print(especialidadesMedicos)
+
+    context['EspecialidadesMedicos'] = especialidadesMedicos
+
+    # Fin combo EspecialidadesMedicos
+
+    # Combo Medicos
+    # miConexiont = MySQLdb.connect(host='CMKSISTEPC07', user='sa', passwd='75AAbb??', db='vulnerable')
+    miConexiont = psycopg2.connect(host="192.168.79.129", database="vulner", port="5432", user="postgres",
+                                   password="pass123")
+    curt = miConexiont.cursor()
+    # comando = 'SELECT p.id id, p.nombre  nombre FROM planta_planta p ,  planta_perfilesplanta perf WHERE p."sedesClinica_id" = perf."sedesClinica_id" and  perf."sedesClinica_id" = ' + "'"  + str(Sede) + "'" +  ' AND perf."tiposPlanta_id" = 1 and p.id = perf."planta_id"'
+    comando = 'SELECT p.id id, p.nombre nombre FROM planta_planta p,clinico_medicos med, planta_tiposPlanta tp WHERE p."sedesClinica_id" = ' + "'" + str(
+        Sede) + "'" + ' and p."tiposPlanta_id" = tp.id and tp.nombre = ' + "'" + str(
+        'MEDICO') + "'" + ' and med.planta_id = p.id'
+
+    curt.execute(comando)
+    print(comando)
+
+    medicos = []
+    medicos.append({'id': '', 'nombre': ''})
+
+    for id, nombre in curt.fetchall():
+        medicos.append({'id': id, 'nombre': nombre})
+
+    miConexiont.close()
+    print(medicos)
+
+    context['Medicos'] = medicos
+
+    # Fin combo Medicos
+
+    # Combo TiposFolio
+
+    # miConexiont = MySQLdb.connect(host='CMKSISTEPC07', user='sa', passwd='75AAbb??', db='vulnerable')
+    miConexiont = psycopg2.connect(host="192.168.79.129", database="vulner", port="5432", user="postgres",
+                                   password="pass123")
+    curt = miConexiont.cursor()
+
+    comando = "SELECT e.id id, e.nombre nombre FROM clinico_tiposFolio e"
+
+    curt.execute(comando)
+    print(comando)
+
+    tiposFolio = []
+    tiposFolio.append({'id': '', 'nombre': ''})
+
+    for id, nombre in curt.fetchall():
+        tiposFolio.append({'id': id, 'nombre': nombre})
+
+    miConexiont.close()
+    print(tiposFolio)
+
+    context['TiposFolio'] = tiposFolio
+
+    # Fin combo TiposFolio
+
+    # Combo TiposUsuario
+
+    # miConexiont = MySQLdb.connect(host='CMKSISTEPC07', user='sa', passwd='75AAbb??', db='vulnerable')
+    miConexiont = psycopg2.connect(host="192.168.79.129", database="vulner", port="5432", user="postgres",
+                                   password="pass123")
+    curt = miConexiont.cursor()
+
+    comando = "SELECT p.id id, p.nombre  nombre FROM usuarios_tiposusuario p"
+
+    curt.execute(comando)
+    print(comando)
+
+    tiposUsuario = []
+    # tiposUsuario.append({'id': '', 'nombre': ''})
+
+    for id, nombre in curt.fetchall():
+        tiposUsuario.append({'id': id, 'nombre': nombre})
+
+    miConexiont.close()
+    print(tiposUsuario)
+
+    context['TiposUsuario'] = tiposUsuario
+
+    # Fin combo Tipos Usuario
+
+    # Combo TiposDocumento
+
+    # miConexiont = MySQLdb.connect(host='CMKSISTEPC07', user='sa', passwd='75AAbb??', db='vulnerable')
+    miConexiont = psycopg2.connect(host="192.168.79.129", database="vulner", port="5432", user="postgres",
+                                   password="pass123")
+    curt = miConexiont.cursor()
+
+    comando = "SELECT p.id id, p.nombre  nombre FROM usuarios_tiposDocumento p"
+
+    curt.execute(comando)
+    print(comando)
+
+    tiposDocumento = []
+    # tiposDocumento.append({'id': '', 'nombre': ''})
+
+    for id, nombre in curt.fetchall():
+        tiposDocumento.append({'id': id, 'nombre': nombre})
+
+    miConexiont.close()
+    print(tiposDocumento)
+
+    context['TiposDocumento'] = tiposDocumento
+
+    # Fin combo TiposDocumento
+
+    # Combo Centros
+
+    # miConexiont = MySQLdb.connect(host='CMKSISTEPC07', user='sa', passwd='75AAbb??', db='vulnerable')
+    miConexiont = psycopg2.connect(host="192.168.79.129", database="vulner", port="5432", user="postgres",
+                                   password="pass123")
+    curt = miConexiont.cursor()
+
+    comando = "SELECT p.id id, p.nombre  nombre FROM sitios_centros p"
+
+    curt.execute(comando)
+    print(comando)
+
+    centros = []
+
+    for id, nombre in curt.fetchall():
+        centros.append({'id': id, 'nombre': nombre})
+
+    miConexiont.close()
+    print(tiposDocumento)
+
+    context['Centros'] = centros
+
+    # Fin combo Centros
+
+    # Combo Diagnosticos
+
+    # miConexiont = MySQLdb.connect(host='CMKSISTEPC07', user='sa', passwd='75AAbb??', db='vulnerable')
+    miConexiont = psycopg2.connect(host="192.168.79.129", database="vulner", port="5432", user="postgres",
+                                   password="pass123")
+    curt = miConexiont.cursor()
+
+    comando = "SELECT p.id id, p.nombre  nombre FROM clinico_diagnosticos p"
+
+    curt.execute(comando)
+    print(comando)
+
+    diagnosticos = []
+    diagnosticos.append({'id': '', 'nombre': ''})
+
+    for id, nombre in curt.fetchall():
+        diagnosticos.append({'id': id, 'nombre': nombre})
+
+    miConexiont.close()
+    print(diagnosticos)
+
+    context['Diagnosticos'] = diagnosticos
+
+    # Fin combo Diagnosticos
+
+    # Combo Departamentos
+
+    # miConexiont = MySQLdb.connect(host='CMKSISTEPC07', user='sa', passwd='75AAbb??', db='vulnerable')
+    miConexiont = psycopg2.connect(host="192.168.79.129", database="vulner", port="5432", user="postgres",
+                                   password="pass123")
+    curt = miConexiont.cursor()
+
+    comando = "SELECT d.id id, d.nombre  nombre FROM sitios_departamentos d"
+
+    curt.execute(comando)
+    print(comando)
+
+    departamentos = []
+    # tiposDocumento.append({'id': '', 'nombre': ''})
+
+    for id, nombre in curt.fetchall():
+        departamentos.append({'id': id, 'nombre': nombre})
+
+    miConexiont.close()
+    print(departamentos)
+
+    context['Departamentos'] = departamentos
+
+    # Fin combo Departamentos
+
+    # Combo Ciudades
+
+    # iConexiont = MySQLdb.connect(host='CMKSISTEPC07', user='sa', passwd='75AAbb??', db='vulnerable')
+    miConexiont = psycopg2.connect(host="192.168.79.129", database="vulner", port="5432", user="postgres",
+                                   password="pass123")
+    curt = miConexiont.cursor()
+
+    comando = "SELECT c.id id, c.nombre  nombre FROM sitios_ciudades c"
+
+    curt.execute(comando)
+    print(comando)
+
+    ciudades = []
+
+    for id, nombre in curt.fetchall():
+        ciudades.append({'id': id, 'nombre': nombre})
+
+    miConexiont.close()
+    print(ciudades)
+
+    context['Ciudades'] = ciudades
+
+    # Fin combo Ciudades
+
+
+# Combo Vias Ingreso
+
+    # iConexiont = MySQLdb.connect(host='CMKSISTEPC07', user='sa', passwd='75AAbb??', db='vulnerable')
+    miConexiont = psycopg2.connect(host="192.168.79.129", database="vulner", port="5432", user="postgres",
+                                   password="pass123")
+    curt = miConexiont.cursor()
+
+    comando = "SELECT c.id id,c.nombre nombre FROM clinico_viasingreso c"
+
+    curt.execute(comando)
+    print(comando)
+
+    viasIngreso = []
+
+    for id, nombre in curt.fetchall():
+        viasIngreso.append({'id': id, 'nombre': nombre})
+
+    miConexiont.close()
+    print(viasIngreso)
+
+    context['ViasIngreso'] = viasIngreso
+
+    # Fin combo vias Ingreso
+
+    # Combo Causas Externa
+
+    # iConexiont = MySQLdb.connect(host='CMKSISTEPC07', user='sa', passwd='75AAbb??', db='vulnerable')
+    miConexiont = psycopg2.connect(host="192.168.79.129", database="vulner", port="5432", user="postgres",
+                                   password="pass123")
+    curt = miConexiont.cursor()
+
+    comando = "SELECT c.id id,c.nombre nombre FROM clinico_causasExterna c"
+
+    curt.execute(comando)
+    print(comando)
+
+    causasExterna = []
+
+    for id, nombre in curt.fetchall():
+        causasExterna.append({'id': id, 'nombre': nombre})
+
+    miConexiont.close()
+    print(causasExterna)
+
+    context['CausasExterna'] = causasExterna
+
+    # Fin combo causasExterna
+
+    # Combo Regimenes
+
+    # iConexiont = MySQLdb.connect(host='CMKSISTEPC07', user='sa', passwd='75AAbb??', db='vulnerable')
+    miConexiont = psycopg2.connect(host="192.168.79.129", database="vulner", port="5432", user="postgres",
+                                   password="pass123")
+    curt = miConexiont.cursor()
+
+    comando = "SELECT c.id id,c.nombre nombre FROM clinico_regimenes c"
+
+    curt.execute(comando)
+    print(comando)
+
+    regimenes = []
+
+    for id, nombre in curt.fetchall():
+        regimenes.append({'id': id, 'nombre': nombre})
+
+    miConexiont.close()
+    print(regimenes)
+
+    context['Regimenes'] = regimenes
+
+    # Fin combo regimenes
+
+
+    # Combo Tipos Cotizante
+
+    # iConexiont = MySQLdb.connect(host='CMKSISTEPC07', user='sa', passwd='75AAbb??', db='vulnerable')
+    miConexiont = psycopg2.connect(host="192.168.79.129", database="vulner", port="5432", user="postgres",
+                                   password="pass123")
+    curt = miConexiont.cursor()
+
+    comando = "SELECT c.id id,c.nombre nombre FROM clinico_tiposcotizante c"
+
+    curt.execute(comando)
+    print(comando)
+
+    tiposCotizante = []
+
+    for id, nombre in curt.fetchall():
+        tiposCotizante.append({'id': id, 'nombre': nombre})
+
+    miConexiont.close()
+    print(tiposCotizante)
+
+    context['TiposCotizante'] = tiposCotizante
+
+    # Fin combo tiposCotizante
+
+
+    # Combo municipios
+
+    # iConexiont = MySQLdb.connect(host='CMKSISTEPC07', user='sa', passwd='75AAbb??', db='vulnerable')
+    miConexiont = psycopg2.connect(host="192.168.79.129", database="vulner", port="5432", user="postgres",
+                                   password="pass123")
+    curt = miConexiont.cursor()
+
+    comando = "SELECT c.id id,c.nombre nombre FROM sitios_municipios c"
+
+    curt.execute(comando)
+    print(comando)
+
+    municipios = []
+
+    for id, nombre in curt.fetchall():
+        municipios.append({'id': id, 'nombre': nombre})
+
+    miConexiont.close()
+    print(municipios)
+
+    context['Municipios'] = municipios
+
+    # Fin combo municipios
+
+    # Combo localidades
+
+    # iConexiont = MySQLdb.connect(host='CMKSISTEPC07', user='sa', passwd='75AAbb??', db='vulnerable')
+    miConexiont = psycopg2.connect(host="192.168.79.129", database="vulner", port="5432", user="postgres",
+                                   password="pass123")
+    curt = miConexiont.cursor()
+
+    comando = "SELECT c.id id,c.nombre nombre FROM sitios_localidades c"
+
+    curt.execute(comando)
+    print(comando)
+
+    localidades = []
+
+    for id, nombre in curt.fetchall():
+        localidades.append({'id': id, 'nombre': nombre})
+
+    miConexiont.close()
+    print(localidades)
+
+    context['Localidades'] = localidades
+
+    # Fin combo localidades
+
+
+    # Combo estadoCivil
+
+    # iConexiont = MySQLdb.connect(host='CMKSISTEPC07', user='sa', passwd='75AAbb??', db='vulnerable')
+    miConexiont = psycopg2.connect(host="192.168.79.129", database="vulner", port="5432", user="postgres",
+                                   password="pass123")
+    curt = miConexiont.cursor()
+
+    comando = "SELECT c.id id,c.nombre nombre FROM basicas_estadocivil c"
+
+    curt.execute(comando)
+    print(comando)
+
+    estadoCivil = []
+
+    for id, nombre in curt.fetchall():
+        estadoCivil.append({'id': id, 'nombre': nombre})
+
+    miConexiont.close()
+    print(estadoCivil)
+
+    context['EstadoCivil'] = estadoCivil
+
+    # Fin combo estadoCivil
+
+
+    # Combo ocupaciones
+
+    # iConexiont = MySQLdb.connect(host='CMKSISTEPC07', user='sa', passwd='75AAbb??', db='vulnerable')
+    miConexiont = psycopg2.connect(host="192.168.79.129", database="vulner", port="5432", user="postgres",
+                                   password="pass123")
+    curt = miConexiont.cursor()
+
+    comando = "SELECT c.id id,c.nombre nombre FROM basicas_ocupaciones c"
+
+    curt.execute(comando)
+    print(comando)
+
+    ocupaciones = []
+
+    for id, nombre in curt.fetchall():
+        ocupaciones.append({'id': id, 'nombre': nombre})
+
+    miConexiont.close()
+    print(ocupaciones)
+
+    context['Ocupaciones'] = ocupaciones
+
+    # Fin combo ocupaciones
+

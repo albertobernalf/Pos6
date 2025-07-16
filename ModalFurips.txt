@@ -1,0 +1,445 @@
+
+    <article id="Furips">
+        <center><h3>Furips</h3></center>
+
+
+    </article>
+
+<!-- Modal FURIPS -->
+
+        <div class="card">
+            <div class="myForm">
+                <form id="ModalFurips" method="POST"">
+		            <div class="modal fade" id="modalFurips" tabindex="-1" role="dialog"  style="overflow-y:scroll;" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg " role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                </div>
+                                <div class="modal-body">
+            <table class="table" style="height: 50px; background-color:LightGray;  width:90%;">
+                <tr>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                        <table class="table" style="height: 5px; background-color:LightGray; BORDERCOLOR=RED ; border: 8px solid black; border-color: #96D4D4;  width:90%;">
+                    <form class="form-inline" action="/crearFurips/" method="POST" id="furipsForma">
+                                <input type="text" id="ingresoIdF" name="ingresoIdF" value="">
+
+                         <div class="row row-cols-8">
+                                        <div class="col-1">
+                                                     <label for="fechaRadicado" class="col-sm-6 control-label">fechaRadicado:</label>
+
+				 <input type="text" id="fechaRadicado" name="fechaRadicado" value="">
+					
+
+                                        </div>
+                                        <div class="col-1">
+                                                     <label for="numeroRadicacion" class="col-sm-6 control-label">numeroRadicacion:</label>
+				 <input type="text" id="numeroRadicacion" name="numeroRadicacion" value="">
+
+                                            
+                                        </div>
+                                        <div class="col-1">
+                                                     <label for="numeroFactura" class="col-sm-6 control-label">numeroFactura:</label>
+				 <input type="text" id="numeroFactura" name="numeroFactura" value="">
+		
+					
+                                            
+                                        </div>
+                                        <div class="col-1">
+                                            <label for="primerNombreVictima" class="col-sm-6 control-label">primerNombreVictima:</label>
+
+				 <input type="text" id="primerNombreVictima" name="primerNombreVictima" value="">
+
+                                            
+                                        </div>
+                                        <div class="col-1">
+                                            {{FuripsForm.segundoNombreVictima.label}}
+					{{FuripsForm.segundoNombreVictima}}
+                                            
+                                        </div>
+                                        <div class="col-1">
+
+                                            <label for="primerApellidoVictima" class="col-sm-6 control-label">primerNombreVictima:</label>
+
+				 <input type="text" id="primerApellidoVictima" name="primerApellidoVictima" value="">
+                                          
+                                        </div>
+                                        <div class="col-1">
+                                            {{FuripsForm.segundoApellidoVictima.label}}
+					 {{FuripsForm.segundoApellidoVictima}}
+                                           
+                                        </div>
+                                       <div class="col-1">
+                                             {{FuripsForm.tipoDocVictima.label}}
+                                            {{FuripsForm.tipoDocVictima}}
+                                        </div>
+                         </div>
+                            <div class="row">
+                            </div>
+                            <div class="row row-cols-8">
+                                        <div class="col-1">
+                                             {{FuripsForm.documentoVictima.label}}
+                                            {{FuripsForm.documentoVictima}}
+                                        </div>
+                                       <div class="col-1">
+                                            {{FuripsForm.consecVictima.label }}
+                                            {{FuripsForm.consecVictima }}
+                                        </div>
+                                       <div class="col-1">
+                                                {{FuripsForm.condicionAccidentado.label}}
+                                            {{FuripsForm.condicionAccidentado}}
+                                        </div>
+                                       <div class="col-1">
+                                           {{FuripsForm.evento.label}}
+                                            {{FuripsForm.evento}}
+                                        </div>
+                                        <div class="col-1">
+                                            {{FuripsForm.direccionEvento.label}}
+                                            {{FuripsForm.direccionEvento}}
+                                        </div>
+                                       <div class="col-1">
+                                           {{FuripsForm.tipoDocVictima.label}}
+                                            {{FuripsForm.tipoDocVictima}}
+                                        </div>
+                                       <div class="col-1">
+                                           {{FuripsForm.departamentoEvento.label}}
+                                            {{FuripsForm.departamentoEvento}}
+                                        </div>
+                                       <div class="col-1">
+                                           {{FuripsForm.municipioEvento.label}}
+                                            {{FuripsForm.municipioEvento}}
+                                        </div>
+                        </div>
+                                <div class="row">
+                            </div>
+
+                             <div class="row row-cols-8">
+                                       <div class="col-1">
+                                           {{FuripsForm.localidadEvento.label }}
+                                            {{FuripsForm.localidadEvento }}
+                                        </div>
+                                       <div class="col-1">
+                                           {{FuripsForm.zonaEvento.label}}
+                                            {{FuripsForm.zonaEvento }}
+                                        </div>
+                                 <div class="col-1">
+                                     {{FuripsForm.fechaEvento.label}}
+                                            {{FuripsForm.fechaEvento}}
+                                        </div>
+                                       <div class="col-1">
+                                           {{FuripsForm.eventoDescripcion.label}}
+                                            {{FuripsForm.eventoDescripcion}}
+                                        </div>
+                                       <div class="col-1">
+                                               {{FuripsForm.estado.label}}
+                                            {{FuripsForm.estado}}
+                                        </div>
+                                       <div class="col-1">
+                                           {{FuripsForm.marcaVehiculo.label}}
+                                            {{FuripsForm.marcaVehiculo}}
+                                        </div>
+                                       <div class="col-1">
+                                           {{FuripsForm.placaVehiculo.label }}
+                                            {{FuripsForm.placaVehiculo }}
+                                        </div>
+                                       <div class="col-1">
+                                           {{FuripsForm.tipoServicioVehiculo.label }}
+                                            {{FuripsForm.tipoServicioVehiculo }}
+                                        </div>
+                        </div>
+                        <div class="row">
+                        </div>
+                            <div class="row row-cols-8">
+                                        <div class="col-1">
+                                            {{FuripsForm.tipoVehiculo.label}}
+                                            {{FuripsForm.tipoVehiculo}}
+                                        </div>
+                                       <div class="col-1">
+                                           {{FuripsForm.codigoaseguradora.label}}
+                                            {{FuripsForm.codigoaseguradora}}
+                                        </div>
+                                       <div class="col-1">
+                                           {{FuripsForm.numeroPoliza.label}}
+                                            {{FuripsForm.numeroPoliza}}
+                                        </div>
+                                       <div class="col-1">
+                                           {{FuripsForm.fechaIniPoliza.label}}
+                                            {{FuripsForm.fechaIniPoliza}}
+                                        </div>
+                                       <div class="col-1">
+                                           {{FuripsForm.fechaFinPoliza.label }}
+                                            {{FuripsForm.fechaFinPoliza }}
+                                        </div>
+                                       <div class="col-1">
+                                           {{FuripsForm.intervencionAutoridad.label }}
+                                            {{FuripsForm.intervencionAutoridad }}
+
+                                        </div>
+                                            <div class="col-1">
+                                                {{FuripsForm.cobroExcedentePoliza.label}}
+                                            {{FuripsForm.cobroExcedentePoliza}}
+                                        </div>
+                                       <div class="col-1">
+                                           {{FuripsForm.primerNombrePropietario.label}}
+                                            {{FuripsForm.primerNombrePropietario}}
+
+                                        </div>
+                        </div>
+
+                            <div class="row row-cols-8">
+
+                                       <div class="col-1">
+                                           {{FuripsForm.segundoNombrePropietario.label}}
+                                            {{FuripsForm.segundoNombrePropietario}}
+                                        </div>
+                                       <div class="col-1">
+                                           {{FuripsForm.primerApellidoPropietario.label}}
+                                            {{FuripsForm.primerApellidoPropietario}}
+                                        </div>
+                                       <div class="col-1">
+                                           {{FuripsForm.segundoApellidoPropietario.label }}
+                                            {{FuripsForm.segundoApellidoPropietario }}
+                                        </div>
+                                       <div class="col-1">
+                                           {{FuripsForm.tipoDocPropietario.label }}
+                                            {{FuripsForm.tipoDocPropietario }}
+                                        </div>
+                                        <div class="col-1">
+                                            {{FuripsForm.documentoPropietario.label}}
+                                            {{FuripsForm.documentoPropietario}}
+                                        </div>
+                                       <div class="col-1">
+                                           {{FuripsForm.departamentoPropietario.label}}
+                                            {{FuripsForm.departamentoPropietario}}
+                                        </div>
+                                       <div class="col-1">
+                                           {{FuripsForm.municipioPropietario.label}}
+                                            {{FuripsForm.municipioPropietario}}
+                                        </div>
+                                       <div class="col-1">
+                                           {{FuripsForm.localidadPropietario.label}}
+                                            {{FuripsForm.localidadPropietario}}
+                                        </div>
+                        </div>
+                            <div class="row row-cols-8">
+
+                                       <div class="col-1">
+                                           {{FuripsForm.direccionPropietario.label }}
+                                            {{FuripsForm.direccionPropietario }}
+                                        </div>
+                                       <div class="col-1">
+                                            {{FuripsForm.primerNombreInvolucrado.label }}
+                                            {{FuripsForm.primerNombreInvolucrado }}
+                                        </div>
+                                         <div class="col-1">
+                                             {{FuripsForm.segundoNombreInvolucrado.label}}
+                                            {{FuripsForm.segundoNombreInvolucrado}}
+                                        </div>
+                                       <div class="col-1">
+                                           {{FuripsForm.primerApellidoInvolucrado.label}}
+                                            {{FuripsForm.primerApellidoInvolucrado}}
+                                        </div>
+                                       <div class="col-1">
+                                            {{FuripsForm.segundoApellidoInvolucrado.label}}
+                                            {{FuripsForm.segundoApellidoInvolucrado}}
+                                        </div>
+                                       <div class="col-1">
+                                             {{FuripsForm.tipoDocInvolucrado.label}}
+                                            {{FuripsForm.tipoDocInvolucrado}}
+                                        </div>
+                                       <div class="col-1">
+                                           {{FuripsForm.documentoInvolucrado.label }}
+                                            {{FuripsForm.documentoInvolucrado }}
+                                        </div>
+                                       <div class="col-1">
+                                               {{FuripsForm.departamentoInvolucrado.label }}
+                                            {{FuripsForm.departamentoInvolucrado }}
+                                        </div>
+                        </div>
+                            <div class="row">
+
+                            </div>
+
+                            <div class="row row-cols-8">
+                                        <div class="col-1">
+                                            {{FuripsForm.municipioInvolucrado.label}}
+                                            {{FuripsForm.municipioInvolucrado}}
+                                        </div>
+                                       <div class="col-1">
+                                           {{FuripsForm.localidadInvolucrado.label}}
+                                            {{FuripsForm.localidadInvolucrado}}
+                                        </div>
+                                       <div class="col-1">
+                                             {{FuripsForm.direccionInvolucrado.label}}
+                                            {{FuripsForm.direccionInvolucrado}}
+                                        </div>
+                                       <div class="col-1">
+                                            {{FuripsForm.tipoReferencia.label}}
+                                            {{FuripsForm.tipoReferencia}}
+                                        </div>
+                                       <div class="col-1">
+                                            {{FuripsForm.fechaRemision.label }}
+                                            {{FuripsForm.fechaRemision }}
+                                        </div>
+                                       <div class="col-1">
+                                             {{FuripsForm.prestadorRemite.label }}
+                                            {{FuripsForm.prestadorRemite }}
+                                        </div>
+                                        <div class="col-1">
+                                              {{FuripsForm.codigoInscripcion.label}}
+                                            {{FuripsForm.codigoInscripcion}}
+                                        </div>
+                                       <div class="col-1">
+                                             {{FuripsForm.profesionalRemite.label}}
+                                            {{FuripsForm.profesionalRemite}}
+                                        </div>
+
+                        </div>
+                    <div class="row">
+                            </div>
+                                 <div class="row row-cols-8">
+                                       <div class="col-1">
+                                              {{FuripsForm.fechaAceptacion.label}}
+                                            {{FuripsForm.fechaAceptacion}}
+                                        </div>
+                                       <div class="col-1">
+                                            {{FuripsForm.prestadorRecibe.label}}
+                                            {{FuripsForm.prestadorRecibe}}
+                                        </div>
+                                       <div class="col-1">
+                                            {{FuripsForm.codigoInscripcionRecibe.label }}
+                                            {{FuripsForm.codigoInscripcionRecibe }}
+                                        </div>
+                                       <div class="col-1">
+                                               {{FuripsForm.profesionalRecibe.label }}
+                                            {{FuripsForm.profesionalRecibe }}
+                                        </div>
+                                     <div class="col-1">
+                                         {{FuripsForm.numeroPlacaTranporto.label}}
+                                            {{FuripsForm.numeroPlacaTranporto}}
+                                        </div>
+                                       <div class="col-1">
+                                             {{FuripsForm.trasportoVictimaDesde.label}}
+                                            {{FuripsForm.trasportoVictimaDesde}}
+                                        </div>
+                                       <div class="col-1">
+                                              {{FuripsForm.trasportoVictimaHasta.label}}
+                                            {{FuripsForm.trasportoVictimaHasta}}
+                                        </div>
+                                       <div class="col-1">
+                                           {{FuripsForm.tipoTransporteTransporto.label}}
+                                            {{FuripsForm.tipoTransporteTransporto}}
+                                        </div>
+
+                        </div>
+                    <div class="row">
+
+                            </div>
+
+
+                         <div class="row row-cols-8">
+                                       <div class="col-1">
+                                            {{FuripsForm.lugarRecogeVictima.label }}
+                                            {{FuripsForm.lugarRecogeVictima }}
+                                        </div>
+                                       <div class="col-1">
+                                           {{FuripsForm.certificacionIngreso.label }}
+                                            {{FuripsForm.certificacionIngreso }}
+                                        </div>
+                                                 <div class="col-1">
+                                                     {{FuripsForm.certificacionEgreso.label}}
+                                            {{FuripsForm.certificacionEgreso}}
+                                        </div>
+                                       <div class="col-1">
+                                           {{FuripsForm.dxPrincIngreso.label}}
+                                            {{FuripsForm.dxPrincIngreso}}
+                                        </div>
+                                       <div class="col-1">
+                                           {{FuripsForm.dxRel1Ingreso.label}}
+                                            {{FuripsForm.dxRel1Ingreso}}
+                                        </div>
+                                       <div class="col-1">
+                                            {{FuripsForm.dxRel2Ingreso.label}}
+                                            {{FuripsForm.dxRel2Ingreso}}
+                                        </div>
+                                       <div class="col-1">
+                                            {{FuripsForm.dxPrincEgreso.label }}
+                                            {{FuripsForm.dxPrincEgreso }}
+                                        </div>
+                                       <div class="col-1">
+                                           {{FuripsForm.dxRel1Egreso.label }}
+                                            {{FuripsForm.dxRel1Egreso }}
+                                        </div>
+                        </div>
+                    <div class="row">
+
+                            </div>
+
+                            <div class="row row-cols-8">
+                                        <div class="col-1">
+                                            {{FuripsForm.dxRel2Egreso.label}}
+                                            {{FuripsForm.dxRel2Egreso}}
+                                        </div>
+                                       <div class="col-1">
+                                           {{FuripsForm.tipoDocProfesionalAtendio.label}}
+                                            {{FuripsForm.tipoDocProfesionalAtendio}}
+                                        </div>
+                                       <div class="col-1">
+                                           {{FuripsForm.documentoProfesionalAtendio.label}}
+                                            {{FuripsForm.documentoProfesionalAtendio}}
+                                        </div>
+                                       <div class="col-1">
+                                           {{FuripsForm.amparoReclamaFacturadoQx.label}}
+                                            {{FuripsForm.amparoReclamaFacturadoQx}}
+                                        </div>
+                                       <div class="col-1">
+                                           {{FuripsForm.amparoReclamaAFosygaQx.label }}
+                                            {{FuripsForm.amparoReclamaAFosygaQx }}
+                                        </div>
+                                       <div class="col-1">
+                                           {{FuripsForm.amparoReclamaFacturadoGastos.label }}
+                                            {{FuripsForm.amparoReclamaFacturadoGastos }}
+                                        </div>
+                                <div class="col-1">
+                                    {{FuripsForm.amparoReclamaAFosygaGastos.label}}
+                                            {{FuripsForm.amparoReclamaAFosygaGastos}}
+                                        </div>
+					<div class="col-1">
+				  <input type="button" id="furips" name="furips" class="btn btn-primary" value="save" onclick="Furips()">
+                                        </div>
+                        </div>
+                         <div class="row">
+
+                        </div>
+
+                        </table>
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+                </form>
+
+            </table>
+
+                                </div>
+                                <div class="modal-footer">
+					  <span id="mensajesErrorModalFurips" name="mensajesErrorModalFuripss" style= "color:red; font-size:18px; line-height:35px; font-family: Calibri;" > </span>
+                                     <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="CierraModalActualiza()">Close
+                                        </button>
+                                        <input type="button" class="btn btn-primary" value="save" onclick="FuripsActualiza()">
+
+
+                               </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+<!-- FIN Modal FURIPS -->

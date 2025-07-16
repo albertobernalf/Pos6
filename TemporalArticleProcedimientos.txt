@@ -1,0 +1,352 @@
+        <article id="TarifariosProcedimientos">
+      
+            <form action="/enviosRips/" method="get" id="FormEnviosRips">
+
+                <input type="hidden" id="username" name="username" value="{{Username}}">
+                <input type="hidden" id="sedeSeleccionada" name="sedeSeleccionada" value="{{SedeSeleccionada}}">
+                <input type="hidden" id="numreporte" name="numreporte" value="{{numreporte}}">
+                <input type="hidden" id="grupo" name="grupo" value="{{Grupo}}">
+                <input type="hidden" id="subGrupo" name="subGrupo" value="{{SubGrupo}}">
+                <!--  Estos si de la Aplixcacion base -->
+                <input type="hidden" id="sede" name="sede" value="{{Sede}}">
+                <input type="hidden" id="documento" name="documento" value="{{Documento}}">
+                <input type="hidden" id="nombreSede" name="nombreSede" value="{{NombreSede}}">
+                <input type="hidden" id="profesional" name="profesional" value="{{Profesional}}">
+                <input type="hidden" id="permisosGrales" name="permisosGrales" value="{{PermisosGrales}}">
+                <input type="hidden" id="permisosDetalle" name="permisosDetalle" value="{{PermisosDetalle}}">
+                <input type="hidden" id="escogeModulo" name="escogeModulo" value="{{EscogeModulo}}">
+                <input type="hidden" id="username_id" name="username_id" value="{{Username_id}}">
+
+                <input type="hidden" id="tipoDocId" name="tipoDocId" value="">
+                <input type="hidden" id="nombreTipoDoc" name="nombreTipoDoc" value="">
+                <input type="hidden" id="documentoId" name="documentoId" value="">
+                <input type="hidden" id="documento2" name="documento2" value="">
+                <input type="hidden" id="consec" name="consec" value="">
+                <input type="hidden" id="tipoIng" name="tipoIng" value="{{tipoIng}}">
+		<input type="hidden" id="convenioId" name="convenioId" value="{{convenioId}}">
+ 			<input type="text" id="autorizacionId" name="autorizacionId" value="" readonly> </input>
+	
+            </form>
+
+
+
+            <!-- INICIO TABLE DE  EL DATATABLE  -->
+
+ 		<div class="container my-2">
+
+
+
+		<div align="right" height="15px" width="550px">
+
+  			  <form id="postFormCrearItemTarifario" name="postFormCrearItemTarifario">
+
+	                                <input type="hidden" name="post_id" id="post_id">
+
+	                      <div class="row row-cols-lg-auto g-3 align-items-center mb-3">
+
+
+				  <div class="col-12">
+				           		                         
+				 <label  for="codigoHomologado">CantidadFacturas:</label>
+                                    <input type="text" class="form-control form-control-sm" id="codigoHomologado" name="codigoHomologado" value="0" placeholder="codigoHomologado:" ></input>
+                                </div>
+
+				<div class="col-12">
+                                    TiposTarifa:
+				<select class="select-css"  id="tiposTarifa_id"
+                                                                name="tiposTarifa_id">
+                                                            {% for tiposTarifa in TiposTarifa %}
+                                                            <option value="{{tiposTarifa.id}}">
+                                                                {{tiposTarifa.nombre}}
+                                                            </option>
+                                                            {% endfor %}
+                                                        </select>
+                                </div>
+
+
+				<div class="col-12">
+                                    Cups:
+				<select class="select-css"  id="codigoCups_id"
+                                                                name="codigoCups_id">
+                                                            {% for cups in Cups %}
+                                                            <option value="{{cups.id}}">
+                                                                {{cups.nombre}}
+                                                            </option>
+                                                            {% endfor %}
+                                                        </select>
+                                </div>
+
+				<select class="select-css"  id="concepto_id"
+                                                                name="concepto_id">
+                                                            {% for conceptos in Conceptos %}
+                                                            <option value="{{conceptos.id}}">
+                                                                {{conceptos.nombre}}
+                                                            </option>
+                                                            {% endfor %}
+                                                        </select>
+                                </div>
+
+                          
+				<div class="col-12">
+				  <label for="colValorBase">Valor Base:</label>                              
+					 <input type="text"  class="form-control form-control-sm" id="colValorBase" name="colValorBase" placeholder="colValorBase"  >
+                                </div>
+
+				<div class="col-12">
+				 <label class="visually-hidden" for="fechaRespuesta">Fecha Respuesta:</label>
+                                    
+					 <input type="datetime-local"  class="form-control form-control-sm" id="fechaRespuesta" name="fechaRespuesta" placeholder="fechaRespuesta"  readonly>
+                                </div>
+				<div class="col-12">
+		        	       <input type="button" style="height:25px;margin-left: 0 ; margin-bottom: 0;border-top-right-radius: 0;"  size="30px" id="BtnCrearItemTarifario"  name="BtnCrearItemTarifario" value="Adicionar" onclick= "CrearItemTarifario()" >				    
+                                </div>
+                                </div> <!-- CIERRA ROW 8 COLUMNAS  -->
+
+                            </form>
+
+
+		</div>
+
+				<div class="col-12">
+		        	       <input type="button" style="height:25px;margin-left: 0 ; margin-bottom: 0;border-top-right-radius: 0;"  size="30px" id="BtnAplicarTarifario"  name="BtnAplicarTarifario" value="Aplicar tarifario" onclick= "ModalAplicarTarifario()" >				    
+                                </div>
+
+
+
+   			   <div class="row">
+
+                                        <table  id= "tablaTarifariosProcedimientos" class=" display table table-striped" style="width: 100%";>
+                                           <thead>
+                                            <tr >    
+						<bold>                                  
+ 
+				                <th>id</th>
+				                <th>codigoHomologado</th>
+				                <th>tiposTarifa_id</th>
+				                <th>codigoCups_id</th>
+				                <th>concepto_id</th>
+				                <th>colValorBase</th>
+				                <th>colValor1</th>
+				                <th>colValor2</th>
+				                <th>colValor3</th>
+				                <th>colValor4</th>
+				                <th>colValor5</th>
+				                <th>colValor6</th>
+				                <th>colValor7</th>
+				                <th>colValor8</th>
+				                <th>colValor9</th>
+				                <th>colValor10</th>
+					        <th>usuarioRegistro_id</th>
+					        <th>fechaRegistro</th>
+					        <th>estadoReg</th>
+	                                        <th>Seleccionar</th> 
+
+						</bold>                                  
+
+                                            </tr>
+                                            </thead>
+                                            <tbody style="vertical-align:bottom; horizontal-align:left">
+                                            </tbody>
+					<tfoot>
+                                            <tr >    
+						<bold>                                  
+				                <th>id</th>
+				                <th>codigoHomologado</th>
+				                <th>tiposTarifa_id</th>
+				                <th>codigoCups_id</th>
+				                <th>concepto_id</th>
+				                <th>colValorBase</th>
+				                <th>colValor1</th>
+				                <th>colValor2</th>
+				                <th>colValor3</th>
+				                <th>colValor4</th>
+				                <th>colValor5</th>
+				                <th>colValor6</th>
+				                <th>colValor7</th>
+				                <th>colValor8</th>
+				                <th>colValor9</th>
+				                <th>colValor10</th>
+					        <th>usuarioRegistro_id</th>
+					        <th>fechaRegistro</th>
+					        <th>estadoReg</th>
+	                                        <th>Seleccionar</th> 
+						</bold>                                  
+
+                                            </tr>
+                                            </tfoot>
+   </table>
+
+	</div>
+	</div>
+
+	            <!-- Espacio Modales  Tarifarios-->
+
+
+            <div class="modal fade" id="crearModelAplicarTarifario" tabindex="-1" role="dialog"  style="overflow-y:scroll;" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document" modal-lg>
+                    <div class="modal-content">
+                        <div class="modal-header">
+                             <h4 class="modal-title" id="modelHeadingAplicarTarifario"> </h4> 
+			<button type="button" class="btn btn-primary" id="saveBtnAplicarTarifario" onclick="AplicarTarifario()">Grabar!</button> 
+                        </div>
+		<div style="width:500px; heigth:100px; ">
+                        <div class="modal-body">
+                            <div class="alert alert-danger error-msg" style="display:none">
+                                <ul class="mb-0"></ul>
+                            </div>
+			
+  			  <form id="postFormAplicarTarifario" name="postFormAplicarTarifario">
+
+                                <input type="hidden" name="post_id" id="post_id">
+
+                      <div class="row row-cols-lg-auto g-3 align-items-center mb-3">
+
+				D E S D E  T A R I F A :
+
+				<select class="select-css"  id="tiposTarifa_id"
+                                                                name="tiposTarifa_id">
+                                                            {% for tiposTarifa in TiposTarifa %}
+                                                            <option value="{{tiposTarifa.id}}">
+                                                                {{tiposTarifa.nombre}}
+                                                            </option>
+                                                            {% endfor %}
+                                                        </select>
+                                </div>
+
+
+				<div class="col-12">
+                                    Cups:
+				<select class="select-css"  id="codigoCups_id"
+                                                                name="codigoCups_id">
+                                                            {% for cups in Cups %}
+                                                            <option value="{{cups.id}}">
+                                                                {{cups.nombre}}
+                                                            </option>
+                                                            {% endfor %}
+                                                        </select>
+                                </div>
+
+				<select class="select-css"  id="concepto_id"
+                                                                name="concepto_id">
+                                                            {% for conceptos in Conceptos %}
+                                                            <option value="{{conceptos.id}}">
+                                                                {{conceptos.nombre}}
+                                                            </option>
+                                                            {% endfor %}
+                                                        </select>
+                                </div>
+
+                          
+				<div class="col-12">
+				  <label for="colValorBase">Valor Base:</label>                              
+					 <input type="text"  class="form-control form-control-sm" id="colValorBase" name="colValorBase" placeholder="colValorBase"  >
+                                </div>
+
+
+
+
+				H A C I A   T A R I F A :
+
+				<select class="select-css"  id="tiposTarifa_id"
+                                                                name="tiposTarifa_id">
+                                                            {% for tiposTarifa in TiposTarifa %}
+                                                            <option value="{{tiposTarifa.id}}">
+                                                                {{tiposTarifa.nombre}}
+                                                            </option>
+                                                            {% endfor %}
+                                                        </select>
+                                </div>
+
+
+				<div class="col-12">
+                                    Cups:
+				<select class="select-css"  id="codigoCups_id"
+                                                                name="codigoCups_id">
+                                                            {% for cups in Cups %}
+                                                            <option value="{{cups.id}}">
+                                                                {{cups.nombre}}
+                                                            </option>
+                                                            {% endfor %}
+                                                        </select>
+                                </div>
+
+				<select class="select-css"  id="concepto_id"
+                                                                name="concepto_id">
+                                                            {% for conceptos in Conceptos %}
+                                                            <option value="{{conceptos.id}}">
+                                                                {{conceptos.nombre}}
+                                                            </option>
+                                                            {% endfor %}
+                                                        </select>
+                                </div>
+
+
+
+				<div class="col-12">
+				  <label for="porcentaje">Porcentaje:</label>                              
+					 <input type="text"  class="form-control form-control-sm" id="porcentaje" name="porcentaje" placeholder="Porcentaje"  >
+                                </div>
+
+
+				<div class="col-12">
+				  <label for="valor">Valor:</label>                              
+					 <input type="text"  class="form-control form-control-sm" id="valor" name="valor" placeholder="Valor"  >
+                                </div>
+
+                          
+				<div class="col-12">
+				  <label for="columna">Valor Base:</label>                              
+					 <input type="text"  class="form-control form-control-sm" id="columna" name="columna" placeholder="Columna"  >
+                                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                <div class="col-12">
+				 <label  for="estadoReg">EstadoRegistro:</label>
+                                    
+                                    <input type="text" class="form-control form-control-sm" id="estadoReg" name="estadoReg" value="A" placeholder="CantidadRechazadas:"  estadoReg> </input>
+                                </div>
+
+
+                                <div class="col-12">
+                                    Usuario:
+                                    <input type="text" id="usuarioRegistro_id" name="usuarioRegistro_id" value="{{Username_id}}" readonly > </input>
+                                </div>
+
+
+                                <div class="col-12">
+                                    <center> 
+					<button type="button" class="btn btn-primary" id="saveBtnAplicarTarifarios"   value="create" onclick="AplicarTarifario()">Guardar </button> 
+					</center> 
+                                </div>
+
+
+                                </div> <!-- CIERRA ROW 8 COLUMNAS  -->
+
+                            </form>
+
+                        </div> <!-- CIERRA BODY -->
+			</div> <!-- CIERRA DIV TAMANO -->			
+                        </div> <!-- CIERRA MODAL CONTENTE -->
+                    </div> <!-- CIERRA MODAL DIALOG -->
+                </div>  <!-- CIERRA MODAL FADE -->                 
+
+     <!-- FIN Espacio Modales  -->
+
+
+        </article>
+
+

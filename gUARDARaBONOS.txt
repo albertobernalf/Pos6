@@ -1,0 +1,47 @@
+                                <div class="col">
+				  <div class="form-group row">
+                                    <label for="aformaPago" class="col-sm-2 control-label">Forma Pago:</label>
+                                    <select class="form-select  h-100 w-200" aria-label="" id="aformaPago"
+                                            name="aformaPago" readonly >
+                                        {% for formasPagos in FormasPagos %}
+                                        <option value="{{formasPagos.id}}"> {{formasPagos.nombre}}</option>
+                                        {% endfor %}
+                                    </select>
+				 </div>
+                                </div>
+
+                                <div class="col">
+					<div class="form-group row">
+                                    Valor:
+                                    <input type="text" id="avalorAbono" name="avalorAbono" value="0" readonly></input>
+					</div>
+                                </div>
+
+                                <div class="col">
+					<div class="form-group row">
+                                    Saldo:
+                                    <input type="text" id="aSaldo" name="aSaldo" value="0" readonly></input>
+					</div>
+                                </div>
+
+
+                                <div class="col">
+					<div class="form-group row">
+                                    Descripcion:
+                                    <input type="text" id="adescripcionAbono" name="adescripcionAbono" value="0" readonly> </input>
+					</div>
+                                </div>
+
+				<div class="col">
+					<div class="form-group row">
+                                    ValorEnCurso:
+                                    <input type="text" id="avalorEnCurso" name="avalorEnCurso" value="0" > </input>
+					</div>
+                                </div>
+
+
+                                <div class="col">
+                                    <button type="submit" class="btn btn-primary" id="saveBtnApliqueAbonosFacturacion"
+                                            value="create">Guardar
+                                    </button>
+                                </div>

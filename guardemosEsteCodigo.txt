@@ -1,0 +1,23 @@
+        # Abro Conexion
+
+        miConexionx = psycopg2.connect(host="192.168.79.129", database="vulner", port="5432", user="postgres",password="pass123")
+        cur = miConexionx.cursor()
+
+        comando = 'select conv.id id, convProc."codigoHomologado" codigoHomologado, convProc.valor valor,  convProc.cups_id cupsId ,exa.nombre cupsNombre, tipostar.nombre tarifa FROM contratacion_convenios conv , contratacion_conveniosprocedimientos convProc, tarifas_tipostarifa tipostar, clinico_examenes exa WHERE conv.id = convProc.convenio_id and convProc."tipoTarifa_id" = tipostar.id and convProc.cups_id = exa.id and conv.id = ' + "'" + str(llave[0]) + "'"
+        print(comando)
+
+        cur.execute(comando)
+
+        conveniosP = []
+
+        for id, codigoHomologado, valor,  cupsId ,cupsNombre,tarifa in cur.fetchall():
+            conveniosP.append( {"id": id,
+                     "codigoHomologado": codigoHomologado,
+                     "valor": valor,
+                     "cupsId": cupsId, "cupsNombre": cupsNombre,
+                     "tarifa": tarifa })
+
+        miConexionx.close()
+        print(conveniosP)
+
+        # Cierro Conexion

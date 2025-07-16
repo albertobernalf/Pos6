@@ -1,0 +1,50 @@
+				<th>fechaRegistro</th>
+				 <th>codDiagnosticoPrincipal_id</th>
+				 <th>codDiagnosticoRelacionado_id</th>
+				 <th>codTecnologiaSalud_id</th>
+				 <th>conceptoRecaudo_id</th> 
+				<th>formaFarmaceutica_id</th> 
+				<th>tipoDocumentoIdentificacion_id</th>
+				 <th>tipoMedicamento_id</th> 
+				<th>unidadMedida_id</th>
+				 <th>unidadMinDispensa_id</th> 		
+					<th>usuarioRegistro_id</th> 	
+				<th>ripsDetalle_id</th> 
+				<th>itemFactura</th> 
+				<th>ripsTipos_id</th> 
+				<th>ripsTransaccion_id<th>
+
+
+
+				<tfoot>fechaRegistro</tfoot>
+				 <tfoot>codDiagnosticoPrincipal_id</tfoot>
+				 <tfoot>codDiagnosticoRelacionado_id</tfoot>
+				 <tfoot>codTecnologiaSalud_id</tfoot>
+				 <tfoot>conceptoRecaudo_id</tfoot> 
+				<tfoot>formaFarmaceutica_id</tfoot> 
+				<tfoot>tipoDocumentoIdentificacion_id</tfoot>
+				 <tfoot>tipoMedicamento_id</tfoot> 
+				<tfoot>unidadMedida_id</tfoot>
+				 <tfoot>unidadMinDispensa_id</tfoot> 		
+					<tfoot>usuarioRegistro_id</tfoot> 	
+				<tfoot>ripsDetalle_id</tfoot> 
+				<tfoot>itemFactura</tfoot> 
+				<tfoot>ripsTipos_id</tfoot> 
+				<tfoot>ripsTransaccion_id<tfoot>
+
+
+	  { data: "fields.fechaRegistro"},
+	  { data: "fields.codDiagnosticoPrincipal_id"},
+	  { data: "fields.codDiagnosticoRelacionado_id"},
+	  { data: "fields.codTecnologiaSalud_id"},
+	  { data: "fields.conceptoRecaudo_id"},
+	  { data: "fields.formaFarmaceutica_id"},
+	  { data: "fields.tipoDocumentoIdentificacion_id"},
+	  { data: "fields.tipoMedicamento_id"},
+	  { data: "fields.unidadMedida_id"},
+	  { data: "fields.unidadMinDispensa_id"},
+	  { data: "fields.usuarioRegistro_id"},
+	  { data: "fields.ripsDetalle_id"},
+	  { data: "fields.itemFactura"},
+	  { data: "fields.ripsTipos_id"},
+	  { data: "fields.ripsTransaccion_id"},

@@ -1,0 +1,29 @@
+Cambios 02/07/2024
+
+En historia: Se borra la llave grande   se deja como estaban
+             en tablas como: historCabezote, historiaexamenesCabezote etc
+
+ip maquina virtual : 192.168.79.129 
+
+-- Segundo tips detallar los .js/ menuAdmisiones/panelAdmisiones etc
+
+
+-- Tercer tisps todos los views. verificar paso a paso
+
+-- Ojo ver nombre de Sede
+
+
+Cambios 03/07/2024
+
+DESDE LA ORGANIZACION DEL CODIGO:
+
+Cuales son las variables que debo portar o pasar:permisosGrales , PermisosDetalle
+
+documento,username,profesional,sede,nombreSede,permisosGrales, permisosDetalle
+
+Estos se portan hasta la pagina : donde hrf= escoge que creo se llama:
+
+porque esta avccesioPrinicpal1.htm,,, principal, principal1 en reportes , no cambiarlo a una carpta que se llame
+Inicio o Comienzo o Acceso no se algo asip, con cabeza, menuacceso
+
+Ver como Atenuar o desatenuar , resaltar los botones con acceso vs los botones sin acceso.

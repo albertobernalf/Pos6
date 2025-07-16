@@ -1,0 +1,38 @@
+Datos mínimos:
+De identificación
+Nombres y apellidos
+Tipo y número de identificación y/o número de historia clínica
+Edad
+Sexo
+Servicio de ingreso
+Fecha y hora de ingreso
+Servicio de egreso
+Fecha y hora de egreso
+Del ingreso
+Motivo de la solicitud del servicio (percepción del usuario)
+Estado general al ingreso (especialmente cuando sea una urgencia)
+Enfermedad actual
+Antecedentes
+Revisión por sistemas, relacionada con el motivo que originó el servicio
+Hallazgos del examen físico
+Diagnóstico: incluir los presuntivos, confirmados y relacionados
+Conducta: incluye la solicitud de procedimientos diagnósticos y el plan de manejo terapéutico
+De la evolución
+Cambios en el estado del paciente que conlleven a modificar la conducta o el manejo (se deben incluir complicaciones, accidentes u otro eventos adversos que haya surgido durante la estancia en el servicio de urgencia o de hospitalización)
+Resultados de procedimientos diagnósticos, que justifiquen los cambios en el manejo o en el diagnóstico
+Justificación de indicaciones terapéuticas cuando éstas lo ameriten
+Del egreso
+Diagnósticos presuntivos, principales y relacionados confirmados
+Condiciones generales a la salida del paciente que incluya incapacidad funcional si la hubiere
+Plan de manejo ambulatorio (ojo con esto donce metemos estop)???
+Del médico que elaboró la epicrisis
+Nombres y apellidos legibles
+Firma
+Número del registro
+
+Preguntas:
+
+-- La epicrisis es por folio, por atencion , por tiempo ?
+-- todas las gloas viene de una radicacion
+-- las notas credito son sobre facturas y generadas en glosas
+-- No existe proceso de remision ?

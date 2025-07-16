@@ -1,0 +1,50 @@
+1. llena dataset
+2. paralelo por hilos
+3. se disparan todos los hilos
+4. inicial secuencial
+5. la dyan por alguna razon , no se que paso con la facvtura o si la factura paso
+   saltos de facturass, unma factura se envia mas de una vez,  la dyan queda con la misma informacion mas de 1 vez y hay que responder por esa factura
+   us sistea que permitiera un control mas estricto:
+   pasela varias veces, pero no confirme aca hasta que la dyan confirme
+   la dyan nunca da seguridad de que eso es asip
+   validacion muy fuerte.-
+   
+   facturacon electronica para medical / dioiagnostico
+   6 demonios
+   NC, ND
+   los que mandan correo
+   correo a la administradora
+   la factura tiene un responsable, quein encargado de responder: particula o responsable
+   le manda correo a una empresa. Asegurar correo no rebote.-
+   Rips
+   Otro proceso lo habiua agarrado sebas
+   Administracion del Git/GitLab
+
+Recibir el tema de los certificados con la dyan. sin ello no hay comunicacion con ellos.-
+Recibir el proyecto - Nc, ND, servicios de demonios ...
+Un endpoint , celini que hace, se comunica con el Ministerio de salud envia el xml y el zip
+rene tiene una funcion, que saca json se envia y se recibe un json
+rene lo manda a tablas lo que el miniusterio le dice ok.
+Recin¿bir json--> se reparte en tablas y ya se tiene la informacion rapidisiomo en 7 tablas
+cabeza = envio del json y por debajo la data el detalle
+
+1. elque recibe el json
+2. la info que hay que enviar para que se armen los json
+2. rene recive el json del ministerio con lo aprobado
+3. lo que falla no se coloca lo que esta bien
+
+
+Se encesitan :
+
+claves gitlab
+certificados d ela dyan para manejar las cosas ..
+tema demonios
+dockers
+linux ..
+Servidor de Facturacion Electronica
+
+Servidor .57  ?
+   
+
+
+

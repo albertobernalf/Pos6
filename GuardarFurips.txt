@@ -1,0 +1,33 @@
+def GuardaFurips(request):
+
+    print ("Entre GuardaFurps" )
+
+    ingresoId = request.POST["ingresoIdF"]
+    sede = request.POST["sede"]
+    print ("ingresoId = ", ingresoId)
+    print("sede = ", sede)
+    fechaRegistro = datetime.datetime.now()
+    registroId = Ingresos.objects.get(id=ingresoId)
+    print  ("registroId documento =" , registroId.documento_id)
+
+    forma = request.POST["form"]
+	
+	if form1.is_valid():
+           print ("Entre forma valida")
+	   nuevo_furips = Furips({ 
+
+
+	   })		
+    nuevo_furips.save()
+
+    ## falta usuarioRegistro_id
+    miConexion3 = psycopg2.connect(host="192.168.79.129", database="vulner", port="5432", user="postgres",  password="pass123")
+    cur3 = miConexion3.cursor()
+    #comando = 'insert into cartera_Pagos ("fecha", "tipoDoc_id" , documento_id, consec,  "tipoPago_id" , "formaPago_id", valor, descripcion ,"fechaRegistro","estadoReg") values ('  + "'" + str(fechaRegistro) + "'," +  "'" + str(registroId.tipoDoc_id) + "'" + ' , ' + "'" + str(registroId.documento_id) + "'" + ', ' + "'" + str(registroId.consec) + "'" + '  , ' + "'" + str(tipoPago) + "'" + '  , ' + "'" + str(formaPago) + "'" + ', ' + "'" + str(valor) + "',"   + "'" + str(descripcion) + "','"   + str(fechaRegistro) + "'," + "'" +  str("A") + "');"
+    #print(comando)
+    #cur3.execute(comando)
+    #miConexion3.commit()
+    miConexion3.close()
+
+    return JsonResponse({'success': True, 'message': 'Furips Actualizado satisfactoriamente!'})
+

@@ -1,0 +1,58 @@
+        if (accion == 'Crear' and porcentage != 0 and conceptos == '' and valorVariacion == '0' and honorarios != '' and cups != ''):
+            print("Entre1DOS")
+            comando = 'INSERT INTO contratacion_ConveniosLiquidacionTarifasHonorarios ("codigoHomologado", valor,  "fechaRegistro", "estadoReg",convenio_id,suministro_id, "tipoTarifa_id", "usuarioRegistro_id", concepto_id, "tipoHonorario_id" , cups_id) select "codigoHomologado", round((+"valor" +"valor"*' + str(porcentage) + '/100)) subido  ,' + "'" + str(fechaRegistro) + "'," + "'" + str(estadoReg) + "'," + "'" + str(convenioId) + "'," + ' cast(suministro_id as numeric), '  + str(tiposTarifa) + "," + "'" +  str(username_id) + "'" +  ', concepto_id  , "tipoHonorario_id", "codigoCups_id" from tarifas_LiquidacionTarifasHonorarios where "tipoTarifa_id" = ' + "'" + str(tiposTarifa) + "'" + ' AND "tipoHonorario_id" = ' + honorarios + ' AND "codigoCups_id" = ' + cups
+
+    	## VERIFICAR ESTEP DE ABAJO
+
+        if (accion == 'Crear' and porcentage != 0 and conceptos != '' and valorVariacion == '0'):
+            print("Entre2")
+            comando = 'INSERT INTO contratacion_ConveniosLiquidacionTarifasHonorarios ("codigoHomologado", valor,  "fechaRegistro", "estadoReg",convenio_id,suministro_id, "tipoTarifa_id", "usuarioRegistro_id", concepto_id) select "codigoHomologado", round((+"valor" +"valor"*' + str(porcentage) + '/100)) subido  ,' + "'" + str(fechaRegistro) + "'," + "'" + str(estadoReg) + "'," + "'" + str(convenioId) + "'," + ' cast(suministro_id as numeric), ' +"'"  + str(tiposTarifa)  + "'," + "'" + str(username_id) + "'" + ', concepto_id from tarifas_LiquidacionTarifasHonorarios where "tipoTarifa_id" = ' + "'" + str(tiposTarifa) + "' AND concepto_id =" + "'" + str(conceptos) + "'"
+
+	    ## es decir por valor
+
+        if (accion == 'Crear' and porcentage == '0'  and conceptos == '' and valorVariacion != '0' and honorarios == '' and cups == ''):
+            print("Entre3")
+            comando = 'INSERT INTO contratacion_ConveniosLiquidacionTarifasHonorarios ("codigoHomologado", valor,  "fechaRegistro", "estadoReg",convenio_id,suministro_id, "tipoTarifa_id", "usuarioRegistro_id", concepto_id, "tipoHonorario_id", cups_id) select "codigoHomologado", round( ' + "'" + str(valorVariacion) + "')" + ' subido  ,' + "'" + str(fechaRegistro) + "'," + "'" + str(estadoReg) + "'," + "'" + str(convenioId) +  "'," + ' cast(suministro_id as numeric), '   +"'" + str(tiposTarifa)  + "'," + "'" + str(username_id) + "'" + ', concepto_id , "tipoHonorario_id", "codigoCups_id"  from tarifas_LiquidacionTarifasHonorarios where "tipoTarifa_id" = ' + "'" + str(tiposTarifa) + "'"
+
+
+        if (accion == 'Crear' and porcentage == '0'  and conceptos != '' and valorVariacion !='0' and honorarios == '' and cups == ''):
+            print("Entre4")
+            comando = 'INSERT INTO contratacion_ConveniosLiquidacionTarifasHonorarios ("codigoHomologado", valor,  "fechaRegistro", "estadoReg",convenio_id,suministro_id, "tipoTarifa_id", "usuarioRegistro_id", concepto_id, "tipoHonorario_id", cups_id) select "codigoHomologado", round( ' + "'" + str(valorVariacion) + "')" + ' subido  ,' + "'" + str(fechaRegistro) + "'," + "'" + str(estadoReg) + "'," + "'" + str(convenioId) + "'," + ' cast(suministro_id as numeric), '  +"'"  + str(tiposTarifa)  + "'," + "'" + str(username_id) + "'" + ', concepto_id , "tipoHonorario_id", "codigoCups_id"  from tarifas_LiquidacionTarifasHonorarios where "tipoTarifa_id" = ' + "'" + str(tiposTarifa) + "' AND concepto_id =" + "'" + str(conceptos) + "'"
+
+
+        if (accion == 'Borrar' and conceptos == '' and valorVariacion == '0' and honorarios == '' and cups == ''):
+            print("Entre11")
+            comando = 'DELETE FROM contratacion_ConveniosLiquidacionTarifasHonorarios  where convenio_id =  ' + "'" + str(convenioId) + "' AND " + '"tipoTarifa_id" = ' + "'" + str(tiposTarifa) + "'"
+
+
+        if (accion == 'Borrar' and conceptos != '' and valorVariacion == '0' and honorarios == '' and cups == ''):
+            print("Entre12")
+            comando = 'DELETE FROM contratacion_ConveniosLiquidacionTarifasHonorarios where convenio_id =  ' + "'" + str(convenioId) + "' AND " + '"tipoTarifa_id" = ' + "'" + str(tiposTarifa) + "' AND concepto_id =" + "'" + str(conceptos) + "'"
+
+        if (accion == 'Borrar' and conceptos != '' and valorVariacion == '0' and honorarios != '' and cups == ''):
+            print("Entre122")
+            comando = 'DELETE FROM contratacion_ConveniosLiquidacionTarifasHonorarios where convenio_id =  ' + "'" + str(convenioId) + "' AND " + '"tipoTarifa_id" = ' + "'" + str(tiposTarifa) + "' AND concepto_id =" + "'" + str(conceptos) + "'" + ' AND "tipoHonorario_id" = ' + honorarios
+
+
+        if (accion == 'Borrar' and conceptos != '' and valorVariacion == '0' and honorarios != '' and cups != ''):
+            print("Entre123")
+            comando = 'DELETE FROM contratacion_ConveniosLiquidacionTarifasHonorarios where convenio_id =  ' + "'" + str(convenioId) + "' AND " + '"tipoTarifa_id" = ' + "'" + str(tiposTarifa) + "' AND concepto_id =" + "'" + str(conceptos) + "'" + ' AND "tipoHonorario_id" = ' + honorarios + ' AND cups_id = ' + cups
+
+
+        if (accion == 'Borrar' and conceptos == '' and valorVariacion != '0' and honorarios == '' and cups == ''):
+            print("Entre13")
+            comando = 'DELETE FROM contratacion_ConveniosLiquidacionTarifasHonorarios where convenio_id =  ' + "'" + str(convenioId) + "' AND " + '"tipoTarifa_id" = ' + "'" + str(tiposTarifa) + "' and valor = " + "'" + str(valorVariacion) + "'"
+
+
+        if (accion == 'Borrar' and conceptos == '' and valorVariacion != '0' and honorarios != '' and cups == ''):
+            print("Entre133")
+            comando = 'DELETE FROM contratacion_ConveniosLiquidacionTarifasHonorarios where convenio_id =  ' + "'" + str(convenioId) + "' AND " + '"tipoTarifa_id" = ' + "'" + str(tiposTarifa) + "' AND concepto_id =" + "'" + str(conceptos) + "'" + ' AND "tipoHonorario_id" = ' + honorarios
+
+
+        if (accion == 'Borrar' and conceptos == '' and valorVariacion != '0' and honorarios != '' and cups != ''):
+            print("Entre135")
+            comando = 'DELETE FROM contratacion_ConveniosLiquidacionTarifasHonorarios where convenio_id =  ' + "'" + str(convenioId) + "' AND " + '"tipoTarifa_id" = ' + "'" + str(tiposTarifa) + "' AND concepto_id =" + "'" + str(conceptos) + "'" + ' AND "tipoHonorario_id" = ' + honorarios + ' AND cups_id = ' + cups
+
+        if (accion == 'Borrar' and conceptos != '' and valorVariacion !='0' and honorarios != '' and cups != ''):
+            print("Entre14")
+            comando = 'DELETE FROM contratacion_ConveniosLiquidacionTarifasHonorarios where convenio_id =  ' + "'" + str(convenioId) + "' AND " + '"tipoTarifa_id" = ' + "'" + str(tiposTarifa) + "' AND concepto_id =" + "'" + str(conceptos) + "'" + ' AND "tipoHonorario_id" = ' + honorarios + ' AND cups_id = ' + cups + ' AND concepto_id = " + conceptos

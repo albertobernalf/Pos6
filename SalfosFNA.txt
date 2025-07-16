@@ -1,0 +1,4 @@
+San Carlos    3366000
+medical:     11962000
+
+saldos ces      15328000

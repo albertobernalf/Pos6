@@ -1,0 +1,64 @@
+-- alertas (recordatorios de citas, tratamientos etc
+-- perfil detallado acada usuario
+-- ubicacion real del paciente
+-- bodegas virtuales
+-- foto del paciente
+-- ojo servicio pero no servicio clinico ejemplo sistemas
+   -- son como lugares dentro de la clinica
+-- al iniciar sesion ingresa directamente a la sede del usuario,
+  si tiene muchas sedes a que sede
+
+-- tablero por paciente (DATOS: CODIGO, IDENTIFM INGREOM UBUCACION) # DE PARACLINICOS SERVICO DE URGENCIAS
+	--SOLICITADOS, TOMADOS, CON RESULTADO, PENDIENTES
+	-- CUANTOS QX
+- tiempos de atencion por paciente.-
+-- curaciones
+-- las bodegas virtuales..> permiten monitorear stock de mediamnetos
+-- asociar la bodega con el detalle de cargos es decoir que caiga el cargo 
+  a la cuenta paciente
+-- notas aclaratorias
+-- imagenes medicas en la hclinica
+-- implementacin codigo de barra en farmcia -- desde el almacen
+
+
+-- unificacion tema de tarifarios
+-- lista de chequeo sala de cirugias
+    -- consentimientos informados en el sistema
+	-- las hojs de gastos-los formatos
+	-- Fichas- formatos//implantables
+
+-- Revisar medicamentos regulados
+-- genereracion automatica de los informes regulatorios
+-- Mejorar traslado de cargo
+-- Facturacion - Glosas masivas
+-- Farmacia valida calcullo en balance de liquidos
+-- cirugia revizar proceso de cargue hoja de gastos
+
+-- validar por tiempo consulta externa
+-- restrccion acceso hc
+-- todas las consultas del dia se deben cerrar a media noche
+-- dejar consistentes las admisiones legan datos    y el paciente muerto
+
+-- Nutricion y medicamentos
+-- Apertura de admisiones
+-- record asnestesicol
+-- fotos secuencias heridas
+-- alertas en signis vitales
+-- formatpo d reucperacion
+-- lateralidad diagnostico - boletas
+-- entrega de turno enfermeria/medicos - evolouco9n delo medico, administracion de medicamentos , bo9leta qx
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

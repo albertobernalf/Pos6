@@ -1,0 +1,54 @@
+-- Table: tblcon_acusedet
+
+-- DROP TABLE tblcon_acusedet;
+
+CREATE TABLE tblcon_acusedet
+(
+  codreg_acuse integer NOT NULL,
+  usu_crea character varying(50),
+  fec_crea date,
+  hora_crea character varying(50),
+  mensaje_dian character varying(500),
+  estado character varying(50),
+  cod_evento character varying(50),
+  des_evento character varying(50),
+  cod_reclamo character varying(50),
+  cod_desreclamo character varying(50),
+  cufe_def character varying(5000),
+  cufe_vr character varying(5000),
+  ruta_xml character varying(5000),
+  ruta_xmlfirmado character varying(5000),
+  num_id_realiza character varying(50),
+  nom_realiza character varying(50),
+  ape_realiza character varying(50),
+  cod_cargo_realiza character varying(50),
+  cod_area_realiza character varying(50),
+  cufe_cude character varying(900),
+  CONSTRAINT tblcon_acusedet_pkey PRIMARY KEY (codreg_acuse)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE tblcon_acusedet
+  OWNER TO postgres;
+GRANT ALL ON TABLE tblcon_acusedet TO postgres;
+GRANT SELECT ON TABLE tblcon_acusedet TO desarrollo_lectura;
+GRANT SELECT ON TABLE tblcon_acusedet TO reporteador;
+GRANT SELECT ON TABLE tblcon_acusedet TO reportes_lectura;
+GRANT SELECT ON TABLE tblcon_acusedet TO powerbi;
+GRANT SELECT ON TABLE tblcon_acusedet TO consulta;
+GRANT SELECT, INSERT ON TABLE tblcon_acusedet TO haroldr;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE tblcon_acusedet TO imhotep;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE tblcon_acusedet TO karola;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE tblcon_acusedet TO rogerm;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE tblcon_acusedet TO albertob;
+GRANT SELECT ON TABLE tblcon_acusedet TO nataliam;
+GRANT SELECT ON TABLE tblcon_acusedet TO marisolg;
+GRANT SELECT ON TABLE tblcon_acusedet TO renea;
+GRANT SELECT ON TABLE tblcon_acusedet TO sandrab;
+GRANT SELECT ON TABLE tblcon_acusedet TO davidd;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE tblcon_acusedet TO desarrollo;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE tblcon_acusedet TO nataliae;
+GRANT SELECT ON TABLE tblcon_acusedet TO huellero;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE tblcon_acusedet TO christianv;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE tblcon_acusedet TO sebastians;

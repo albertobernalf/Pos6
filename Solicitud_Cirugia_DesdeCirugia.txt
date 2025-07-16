@@ -1,0 +1,416 @@
+<!--  Solicitud de Cirugia  postFormCirugiaClinica  -->
+
+			
+  			  <form id="postFormCirugiaClinica" name="postFormCirugiaClinica">
+
+                      <div class="row row-cols-lg-auto g-3 align-items-center mb-3">
+
+			  <div class="col-4">
+                                        <label for="serviciosAdministrativosI" class="col-sm-1 control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SeviciosAdmon:</label>
+                                        <div class="col-sm-8">
+                                            <select class="select-css h-40 w-20" id="serviciosAdministrativosI"  tabindex= "0"
+                                                    name="serviciosAdministrativosI"
+                                                    required>
+                                                {% for serviciosAdministrativos in ServiciosAdministrativos %}
+                                                <option value="{{serviciosAdministrativos.id}}"> {{serviciosAdministrativos.nombre}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+	
+				  <div class="col-4">
+                                        <label for="anestesia" class="col-sm-1 control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SeviciosAdmon:</label>
+                                        <div class="col-sm-8">
+                                            <select class="select-css h-40 w-20" id="anestesia"  tabindex= "0"
+                                                    name="anestesia"
+                                                    required>
+                                                {% for tiposAnestesia in TiposAnestesia %}
+                                                <option value="{{tiposAnestesia.id}}"> {{tiposAnestesia.nombre}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+
+				  <div class="col-4">
+                                        <label for="tiposCirugia" class="col-sm-1 control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SeviciosAdmon:</label>
+                                        <div class="col-sm-8">
+                                            <select class="select-css h-40 w-20" id="tiposCirugia"  tabindex= "0"
+                                                    name="tiposCirugia"
+                                                    required>
+                                                {% for tiposCirugia in TiposCirugia %}
+                                                <option value="{{tiposCirugia.id}}"> {{tiposCirugia.nombre}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+
+  				<div class="col-4">
+                                        <label for="dxPreQx" class="col-sm-1 control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SeviciosAdmon:</label>
+                                        <div class="col-sm-8">
+                                            <select class="select-css h-40 w-20" id="dxPreQx"  tabindex= "0"
+                                                    name="dxPreQx"
+                                                    required>
+                                                {% for diagnosticosCirugia in DiagnosticosCirugia %}
+                                                <option value="{{diagnosticosCirugia.id}}"> {{diagnosticosCirugia.nombre}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+
+				<div class="col-3">
+                                        <label for="dxPrinc" class="col-sm-1 control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SeviciosAdmon:</label>
+                                        <div class="col-sm-8">
+                                            <select class="select-css h-40 w-20" id="dxPrinc"  tabindex= "0"
+                                                    name="dxPrinc"
+                                                    required>
+                                                {% for diagnosticosCirugia in DiagnosticosCirugia %}
+                                                <option value="{{diagnosticosCirugia.id}}"> {{diagnosticosCirugia.nombre}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+
+				<div class="col-3">
+                                        <label for="dxRel1" class="col-sm-1 control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SeviciosAdmon:</label>
+                                        <div class="col-sm-8">
+                                            <select class="select-css h-40 w-20" id="dxRel1"  tabindex= "0"
+                                                    name="dxRel1"
+                                                    required>
+                                                {% for diagnosticosCirugia in DiagnosticosCirugia %}
+                                                <option value="{{diagnosticosCirugia.id}}"> {{diagnosticosCirugia.nombre}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+	
+				<div class="col-3">
+                                        <label for="dxRel2" class="col-sm-1 control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SeviciosAdmon:</label>
+                                        <div class="col-sm-8">
+                                            <select class="select-css h-40 w-20" id="dxRel2"  tabindex= "0"
+                                                    name="dxRel2"
+                                                    required>
+                                                {% for diagnosticosCirugia in DiagnosticosCirugia %}
+                                                <option value="{{diagnosticosCirugia.id}}"> {{diagnosticosCirugia.nombre}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+
+				<div class="col-3">
+                                        <label for="especialidadX" class="col-sm-1 control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SeviciosAdmon:</label>
+                                        <div class="col-sm-8">
+                                            <select class="select-css h-40 w-20" id="especialidadX"  tabindex= "0"
+                                                    name="especialidadX"
+                                                    required>
+                                                {% for especialidadesCirugia in EspecialidadesCirugia %}
+                                                <option value="{{especialidadesCirugia.id}}"> {{especialidadesCirugia.nombre}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+
+
+                                                   
+				
+				<div class="col-1">
+					                          	                               
+					 <input type="text"  class="form-control form-control-sm" id="solicitaHospitalizacion" name="solicitaHospitalizacion" size="7" placeholder="SolHosp"  >
+
+                                </div>
+				<div class="col-1">
+					<label  for="solicitaAyudante">solicitaAyudante:</label>                               	                               
+					 <input type="text"  class="form-control form-control-sm" id="solicitaAyudante" name="solicitaAyudante" placeholder="solicitaAyudante"  >
+
+                                </div>
+				<div class="col-1">
+					<label  for="solicitaTiempoQx">solicitaTiempoQx:</label>                               	                               
+					 <input type="text"  class="form-control form-control-sm" id="solicitaTiempoQx" name="solicitaTiempoQx" placeholder="solicitaTiempoQx"  >
+
+                                </div>
+				<div class="col-1">
+					<label  for="solicitatipoQx">solicitatipoQx:</label>                               	                               
+					 <input type="text"  class="form-control form-control-sm" id="solicitatipoQx" name="solicitatipoQx" placeholder="solicitatipoQx"  >
+
+                                </div>
+				<div class="col-1">
+					<label  for="solicitaAnestesia">solicitaAnestesia:</label>                               	                               
+					 <input type="text"  class="form-control form-control-sm" id="solicitaAnestesia" name="solicitaAnestesia" placeholder="solicitaAnestesia"  >
+
+                                </div>
+				<div class="col-1">
+					<label  for="solicitaOtros">solicitaOtros:</label>                               	                               
+					 <input type="text"  class="form-control form-control-sm" id="solicitaOtros" name="solicitaOtros" placeholder="solicitaOtros"  >
+
+                                </div>
+				<div class="col-1">
+					<label  for="tiempoMaxQx">tiempoMaxQx:</label>                               	                               
+					 <input type="text"  class="form-control form-control-sm" id="tiempoMaxQx" name="tiempoMaxQx" placeholder="tiempoMaxQx"  >
+
+                                </div>
+				<div class="col-1">
+					<label  for="solicitaAutoSutura">solicitaAutoSutura:</label>                               	                               
+					 <input type="text"  class="form-control form-control-sm" id="solicitaAutoSutura" name="solicitaAutoSutura" placeholder="solicitaAutoSutura"  >
+
+                                </div>
+				<div class="col-1">
+					<label  for="solicitaSoporte">solicitaSoporte:</label>                               	                               
+					 <input type="text"  class="form-control form-control-sm" id="solicitaSoporte" name="solicitaSoporte" placeholder="solicitaAutoSutura"  >
+
+                                </div>
+				<div class="col-1">
+					<label  for="describeOtros">describeOtros:</label>                               	                               
+					 <input type="text"  class="form-control form-control-sm" id="describeOtros" name="describeOtros" placeholder="describeOtros"  >
+
+                                </div>
+
+
+				<div class="col-1">
+					<label  for="solicitaSangre">solicitaSangre:</label>                               	                               
+					 <input type="text"  class="form-control form-control-sm" id="solicitaSangre" name="solicitaSangre" placeholder="solicitaSangre"  >
+
+                                </div>
+						
+
+				<div class="col-1">
+					<label  for="describeSangre">describeSangre:</label>                               	                               
+					 <input type="text"  class="form-control form-control-sm" id="describeSangre" name="describeSangre" placeholder="describeSangre"  >
+
+                                </div>
+
+				<div class="col-1">
+					<label  for="cantidadSangre">cantidadSangre:</label>                               	                               
+					 <input type="text"  class="form-control form-control-sm" id="cantidadSangre" name="cantidadSangre" placeholder="cantidadSangre"  >
+
+                                </div>
+
+				<div class="col-1">
+					<label  for="solicitaCamaUci">solicitaCamaUci:</label>                               	                               
+					 <input type="text"  class="form-control form-control-sm" id="solicitaCamaUci" name="solicitaCamaUci" placeholder="solicitaCamaUci"  >
+
+                                </div>
+
+								<div class="col-1">
+					<label  for="solicitaMicroscopio">solicitaMicroscopio:</label>                               	                               
+					 <input type="text"  class="form-control form-control-sm" id="solicitaMicroscopio" name="solicitaMicroscopio" placeholder="solicitaMicroscopio"  >
+
+                                </div>
+			<div class="col-1">
+					<label  for="solicitaCamaUci">solicitaCamaUci:</label>                               	                               
+					 <input type="text"  class="form-control form-control-sm" id="solicitaCamaUci" name="solicitaCamaUci" placeholder="solicitaCamaUci"  >
+
+                                </div>
+			<div class="col-1">
+					<label  for="solicitaRx">solicitaRx:</label>                               	                               
+					 <input type="text"  class="form-control form-control-sm" id="solicitaRx" name="solicitaRx" placeholder="solicitaRx"  >
+
+                                </div>
+			<div class="col-1">
+					<label  for="solicitaCamaUci">solicitaCamaUci:</label>                               	                               
+					 <input type="text"  class="form-control form-control-sm" id="solicitaCamaUci" name="solicitaCamaUci" placeholder="solicitaCamaUci"  >
+
+                                </div>
+			<div class="col-1">
+					<label  for="solicitaOsteosintesis">solicitaOsteosintesis:</label>                               	                               
+					 <input type="text"  class="form-control form-control-sm" id="solicitaOsteosintesis" name="solicitaOsteosintesis" placeholder="solicitaOsteosintesis"  >
+
+                                </div>
+			<div class="col-1">
+					<label  for="solicitaBiopsia">solicitaBiopsia:</label>                               	                               
+					 <input type="text"  class="form-control form-control-sm" id="solicitaBiopsia" name="solicitaBiopsia" placeholder="solicitaBiopsia"  >
+
+	                         </div>
+				<div class="col-1">
+					<label  for="solicitaMalla">solicitaMalla:</label>                               	                               
+					 <input type="text"  class="form-control form-control-sm" id="solicitaMalla" name="solicitaMalla" placeholder="solicitaMalla"  >
+
+                                </div>
+				<div class="col-1">
+					<label  for="solicitaOtros">solicitaOtros:</label>                               	                               
+					 <input type="text"  class="form-control form-control-sm" id="solicitaOtros" name="solicitaOtros" placeholder="solicitaOtros"  >
+
+                                </div>
+			
+
+					
+
+				<div class="col-12">
+				
+					 <input type="hidden"  class="form-control form-control-sm" id="username3_id" name="username3_id" >
+                                </div>
+
+
+
+                                </div> <!-- CIERRA ROW 8 COLUMNAS  -->
+
+                            </form>
+
+<!-- Solicitud de Cirugia -->
+
+
+def CrearSolicitudCirugia(request):
+
+  
+
+    serviciosAdministrativos = request.POST.get("serviciosAdministrativos")
+    print ("serviciosAdministrativos =", serviciosAdministrativos)
+
+    solicitaSangre = request.POST["solicitaSangre"]
+    print ("solicitaSangre =", solicitaSangre)
+
+    describeSangre = request.POST["describeSangre"]
+    print ("describeSangre =", describeSangre)
+
+    cantidadSangre = request.POST["cantidadSangre"]
+    print ("cantidadSangre =", cantidadSangre)
+
+    solicitaCamaUci = request.POST["solicitaCamaUci"]
+    print ("solicitaCamaUci =", solicitaCamaUci)
+
+    solicitaMicroscopio = request.POST["solicitaMicroscopio"]
+    print ("olicitaMicroscopio =", solicitaMicroscopio)
+
+
+    solicitaCamaUci = request.POST["solicitaCamaUci"]
+    print ("solicitaCamaUci =", solicitaCamaUci)
+
+    solicitaRx = request.POST["solicitaRx"]
+    print ("solicitaRx =", solicitaRx)
+
+    solicitaCamaUci = request.POST["solicitaCamaUci"]
+    print ("solicitaCamaUci =", solicitaCamaUci)
+
+    solicitaOsteosintesis = request.POST["solicitaOsteosintesis"]
+    print ("solicitaOsteosintesis =", solicitaOsteosintesis)
+    solicitaBiopsia = request.POST["solicitaBiopsia"]
+    print ("solicitaBiopsia =", solicitaBiopsia)
+    solicitaMalla = request.POST["solicitaMalla"]
+    print ("solicitaMalla =", solicitaMalla)
+    solicitaOtros = request.POST["solicitaOtros"]
+    print ("solicitaOtros =", solicitaOtros)
+
+    anestesia = request.POST["anestesia"]
+    print ("anestesia =", anestesia)
+    sedesClinica_id = request.POST["sedesClinica_id"]
+    print("sedesClinica_id =", sedesClinica_id)
+
+    username = request.POST["username3_id"]
+    print("username =", username)
+
+
+    solicitaHospitalizacion = request.POST["solicitaHospitalizacion"]
+    print ("solicitaHospitalizacion =", solicitaHospitalizacion)
+    solicitaAyudante = request.POST["solicitaAyudante"]
+    print ("solicitaAyudante =", solicitaAyudante)
+    solicitaTiempoQx = request.POST["solicitaTiempoQx"]
+    print ("solicitaTiempoQx =", solicitaTiempoQx)
+
+
+    solicitaTipoQx = request.POST["solicitatipoQx"]
+    print ("solicitatipoQx =", solicitaTipoQx)
+    solicitaAnestesia = request.POST["solicitaAnestesia"]
+    print ("solicitaAnestesia =", solicitaAnestesia)
+    solicitaOtros = request.POST["solicitaOtros"]
+    print ("solicitaOtros =", solicitaOtros)
+    tiempoMaxQx = request.POST["tiempoMaxQx"]
+    print ("tiempoMaxQx =", tiempoMaxQx)
+    solicitaAutoSutura = request.POST["solicitaAutoSutura"]
+    print ("solicitaAutoSutura =", solicitaAutoSutura)
+
+    solicitaSoporte = request.POST["solicitaSoporte"]
+    print ("solicitaSoporte =", solicitaSoporte)
+
+    describeOtros = request.POST["describeOtros"]
+    print ("describeOtros =", describeOtros)
+
+    especialidadX = request.POST["especialidadX"]
+    print("especialidadX =", especialidadX)
+
+    tiposCirugia = request.POST["tiposCirugia"]
+    print ("tiposCirugia =", tiposCirugia)
+
+    dxPreQx = request.POST["dxPreQx"]
+    print ("dxPreQx =", dxPreQx)
+
+
+    dxPrinc = request.POST["dxPrinc"]
+    print ("dxPrinc =", dxPrinc)
+
+    dxRel1 = request.POST["dxRel1"]
+    print ("dxRel1 =", dxRel1)
+
+
+    dxPostQx = "null"
+    dxRel3 = 'null'
+
+    if dxPreQx == '':
+        dxPreQx = "null"
+
+    if dxPostQx == '':
+        dxPostQx = "null"
+
+    if dxPrinc == '':
+        dxPrinc = "null"
+    if dxRel1 == '':
+        dxRel1 = "null"
+    if dxRel2 == '':
+        dxRel2 = "null"
+
+    #especialidadId = EspecialidadesMedicos.objects.get(planta_id=username)
+
+    estadoCirugia = EstadosCirugias.objects.get(nombre='SIN ASIGNAR')
+    estadoProgramacion = EstadosProgramacion.objects.get(nombre='Solicitud')
+    #estadoSala = EstadosSalas.objetcs.get(nombre='OCUPADA')
+    estadoReg = 'A'
+    fechaRegistro = datetime.datetime.now()  ## esta e la fecha que funcionap copiar a demas programas a ver que pasa
+    fechaSolicita = datetime.datetime.now()
+
+  
+
+    tipoDocCirugia = = request.POST["tipoDocCirugia"]
+    print("tipoDocCirugia =", tipoDocCirugia)
+    documentoCirugia = = request.POST["documentoCirugia"]
+    print("documentoCirugia =", documentoCirugia)
+    consecutivoIngresoCirugia = request.POST["consecutivoIngresoCirugia"]
+    print("consecutivoIngresoCirugia =", consecutivoIngresoCirugia)
+
+    # Aqui buscar el ingreso del paciente
+    documento_id = usuarios.objects.get(tipoDoc_id=tipoDocCirugia, documento=documentoCirugia)
+    registroIngreso = Ingresos.objects.get(tipoDoc_id=tipoDocCirugia,documento_id=documento_id.id, consec=consecutivoIngresoCirugia)
+
+    miConexion3 = None
+    try:
+
+        miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner2", port="5432", user="postgres",  password="123456")
+        cur3 = miConexion3.cursor()
+
+
+        comando = 'INSERT INTO cirugia_cirugias ("consecAdmision", "fechaSolicita", "solicitaHospitalizacion", "solicitaAyudante", "solicitaTiempoQx",  "solicitaAnestesia", "solicitaSangre", "describeSangre", "cantidadSangre", "solicitaCamaUci", "solicitaMicroscopio", "solicitaRx", "solicitaAutoSutura", "solicitaOsteosintesis",  "solicitaBiopsia", "solicitaMalla", "solicitaOtros", "describeOtros", "tiempoMaxQx", "fechaRegistro", "estadoReg", anestesia_id, documento_id,  "dxPreQx_id", "dxPrinc_id", "dxRel1_id", especialidad_id, "sedesClinica_id", "tipoDoc_id", "usuarioRegistro_id", "usuarioSolicita_id", "serviciosAdministrativos_id", "estadoProgramacion_id", "tiposCirugia_id","estadoCirugia_id") VALUES (' + "'" + str(registroIngreso.consec) + "','" + str(fechaSolicita) + "','" + str(solicitaHospitalizacion) + "','" + str(solicitaAyudante) + "','" + str(solicitaTiempoQx) + "','"  + str(solicitaAnestesia) + "','" + str(solicitaSangre) + "','" + str(describeSangre) + "','" + str(cantidadSangre) + "','" + str(solicitaCamaUci) + "','" + str(solicitaMicroscopio) + "','" + str(solicitaRx) + "','" + str(solicitaAutoSutura) + "','" + str(solicitaOsteosintesis) + "','"  + str(solicitaBiopsia) + "','" + str(solicitaMalla) + "','" + str(solicitaOtros) + "','" + str(describeOtros) + "','" + str(tiempoMaxQx) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(anestesia) + "','" + str(registroIngreso.documento_id) + "','" + str(dxPreQx) + "','" + str(dxPrinc) + "','" + str(dxRel1) + "','" + str(especialidadX) + "','" + str(sedesClinica_id) + "','" + str(registroIngreso.tipoDoc_id) + "','" + str(username) + "','" + str(username) + "','" + str(serviciosAdministrativos) + "','" + str(estadoProgramacion.id) + "','" + str(tiposCirugia) + "','" + str(estadoCirugia.id) + "')"
+
+
+        print(comando)
+        cur3.execute(comando)
+
+        comando2 = 'INSERT INTO cirugia_programacioncirugias ("consecAdmision", "fechaRegistro", "estadoReg", documento_id, "sedesClinica_id", "tipoDoc_id", "usuarioRegistro_id",  "estadoProgramacion_id") values (' + "'" + str(registroIngreso.consec) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(registroIngreso.documento_id) + "','" + str(sedesClinica_id) + "','" + str(registroIngreso.tipoDoc_id) + "','" + str(username) + "','" + str(estadoProgramacion.id) + "')"
+
+        print(comando2)
+        cur3.execute(comando2)
+
+        miConexion3.commit()
+        cur3.close()
+        miConexion3.close()
+
+        return JsonResponse({'success': True, 'message': 'Solicitud Actualizada satisfactoriamente!'})
+
+
+    except psycopg2.DatabaseError as error:
+        print ("Entre por rollback" , error)
+        if miConexion3:
+            print("Entro ha hacer el Rollback")
+            miConexion3.rollback()
+        raise error
+
+    finally:
+        if miConexion3:
+            cur3.close()
+            miConexion3.close()
+

@@ -1,0 +1,288 @@
+<div class="modal-body">
+
+   <input type="hidden" id="Sede" name="Sede" value="{{Sede}}">
+                                        <input type="hidden" id="Servicio" name="Servicio" value="{{Servicio}}">
+                                        <input type="hidden" id="documento" name="documento" value="{{Documento}}">
+                                        <input type="hidden" id="username" name="username" value="{{Username}}">
+                                        <input type="hidden" id="Username_id" name="Username_id"
+                                               value="{{Username_id}}">
+                                        <input type="hidden" id="Profesional" name="Profesional"
+                                               value="{{Profesional}}">
+                                        <input type="hidden" id="nombreSede" name="nombreSede" value="{{NombreSede}}">
+                                        <input type="hidden" id="escogeModulo" name="escogeModulo"
+                                               value="{{EscogeModulo}}">
+                                        <input type="hidden" id="bakbusServicio2" name="bakbusServicio2" value="">
+                                        <input type="hidden" id="bakbusSubServicio2" name="bakbusSubServicio2" value="">
+                                        <input type="hidden" id="bakdependenciasIngreso" name="bakdependenciasIngreso"
+                                               value="">
+                                        <input type="hidden" id="baktipoDoc" name="baktipoDoc" value="">
+                                        <input type="hidden" id="bakbusDocumentoSel" name="bakbusDocumentoSel" value="">
+                                        <input type="hidden" id="bakfechaIngreso" name="bakfechaIngreso" value="">
+                                        <input type="hidden" id="bakdxIngreso" name="bakdxIngreso" value="">
+                                        <input type="hidden" id="bakespecialidadesMedicosIngreso"
+                                               name="bakespecialidadesMedicosIngreso" value="">
+                                        <input type="hidden" id="bakmedicoIngreso" name="bakmedicoIngreso" value="">
+                                        <input type="hidden" id="bakescogeModulo" name="bakescogeModulo"
+                                               value="{{EscogeModulo}}">
+
+                                        <div class="form-row">
+                                            <div class="col">
+                                                <label for="busServicio2"
+                                                       class="col-sm-1 col-form-label col-form-label-sm">Servicio:</label>
+                                                <div class="col-sm-4">
+                                                    <select class="form-select  h-10 w-100 form-control form-control-sm"
+                                                            aria-label="" id="busServicio2" name="busServicio2"
+                                                            disabled>
+                                                        {% for servicios in Servicios %}
+                                                        <option value="{{servicios.id}}"> {{servicios.nombre}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <label for="busSubServicio2"
+                                                       class="col-sm-1 col-form-label col-form-label-sm">SubServicios:</label>
+                                                <div class="col-sm-4">
+                                                    <select class="form-select  h-100 w-200 form-control form-control-sm"
+                                                            aria-label=""
+                                                            id="busSubServicio2" name="busSubServicio2" disabled>
+                                                        {% for servicios in Servicios %}
+                                                        <option value="{{servicios.id}}"> {{servicios.nombre}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <label for="dependenciasIngreso"
+                                                       class="col-sm-1 col-form-label col-form-label-sm">SubServicios:</label>
+                                                <div class="col-sm-8">
+                                                    <select class="form-select  h-100 w-200 form-control form-control-sm"
+                                                            aria-label=""
+                                                            id="dependenciasIngreso" name="dependenciasIngreso"
+                                                            disabled>
+                                                        {% for servicios in Servicios %}
+                                                        <option value="{{servicios.id}}"> {{servicios.nombre}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <label for="tipoDoc" class="col-sm-1 col-form-label col-form-label-sm">SubServicios:</label>
+                                                <div class="col-sm-8">
+                                                    <select class="form-select  h-100 w-200 form-control form-control-sm"
+                                                            aria-label=""
+                                                            id="tipoDoc" name="tipoDoc" disabled>
+                                                        {% for servicios in Servicios %}
+                                                        <option value="{{servicios.id}}"> {{servicios.nombre}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <label class="col-sm-8 control-label"
+                                                       for="busDocumentoSel">DocNo:</label>
+                                                <input type="text" class="form-control" id="busDocumentoSel"
+                                                       name="busDocumentoSel" required>
+                                            </div>
+
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="col">
+                                                <label for="dxIngreso"
+                                                       class="col-sm-1 col-form-label col-form-label-sm">Diagnosticos:</label>
+                                                <div class="col-sm-8">
+                                                    <select class="form-select  h-100 w-200 form-control form-control-sm"
+                                                            aria-label="" id="dxIngreso" name="dxIngreso" disabled>
+                                                        {% for servicios in Servicios %}
+                                                        <option value="{{servicios.id}}"> {{servicios.nombre}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <label for="busEspecialidad"
+                                                       class="col-sm-1 col-form-label col-form-label-sm">Diagnosticos:</label>
+                                                <div class="col-sm-8">
+                                                    <select class="form-select  h-40 w-10 form-control form-control-sm"
+                                                            aria-label="" id="busEspecialidad" name="busEspecialidad"
+                                                            disabled>
+                                                        {% for servicios in Servicios %}
+                                                        <option value="{{servicios.id}}"> {{servicios.nombre}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <label for="medicoIngreso"
+                                                       class="col-sm-1 col-form-label col-form-label-sm">Diagnosticos:</label>
+                                                <div class="col-sm-8">
+                                                    <select class="form-select  h-40 w-100 form-control form-control-sm"
+                                                            aria-label="" id="medicoIngreso" name="medicoIngreso"
+                                                            disabled>
+                                                        {% for servicios in Servicios %}
+                                                        <option value="{{servicios.id}}"> {{servicios.nombre}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <label for="viasIngreso"
+                                                       class="col-sm-1 col-form-label col-form-label-sm">Diagnosticos:</label>
+                                                <div class="col-sm-4">
+                                                    <select class="form-select  h-40 w-150 form-control form-control-sm"
+                                                            aria-label="" id="viasIngreso" name="viasIngreso" disabled>
+                                                        {% for servicios in Servicios %}
+                                                        <option value="{{servicios.id}}"> {{servicios.nombre}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <label for="causasExterna"
+                                                       class="col-sm-1 col-form-label col-form-label-sm">Diagnosticos:</label>
+                                                <div class="col-sm-4">
+                                                    <select class="form-select  h-40 w-150 form-control form-control-sm"
+                                                            aria-label="" id="causasExterna" name="causasExterna"
+                                                            disabled>
+                                                        {% for servicios in Servicios %}
+                                                        <option value="{{servicios.id}}"> {{servicios.nombre}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div class="form-row">
+
+                                                    <div class="col">
+                                                        <label for="regimenes"
+                                                               class="col-sm-1 col-form-label col-form-label-sm">Diagnosticos:</label>
+                                                        <div class="col-sm-4">
+                                                            <select class="form-select  h-40 w-100 form-control form-control-sm"
+                                                                    aria-label="" id="regimenes" name="regimenes"
+                                                                    disabled>
+                                                                {% for servicios in Servicios %}
+                                                                <option value="{{servicios.id}}"> {{servicios.nombre}}
+                                                                </option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <label for="tiposCotizante"
+                                                               class="col-sm-1 col-form-label col-form-label-sm">Diagnosticos:</label>
+                                                        <div class="col-sm-4">
+                                                            <select class="form-select  h-40 w-100 form-control form-control-sm"
+                                                                    aria-label="" id="tiposCotizante"
+                                                                    name="tiposCotizante" disabled>
+                                                                {% for servicios in Servicios %}
+                                                                <option value="{{servicios.id}}"> {{servicios.nombre}}
+                                                                </option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <label for="empresas"
+                                                               class="col-sm-1 col-form-label col-form-label-sm">Diagnosticos:</label>
+                                                        <div class="col-sm-4">
+                                                            <select class="form-select  h-40 w-100 form-control form-control-sm"
+                                                                    aria-label="" id="empresas" name="empresas"
+                                                                    disabled>
+                                                                {% for servicios in Servicios %}
+                                                                <option value="{{servicios.id}}"> {{servicios.nombre}}
+                                                                </option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <label for="acompanantes"
+                                                               class="col-sm-1 col-form-label col-form-label-sm">Diagnosticos:</label>
+                                                        <div class="col-sm-4">
+                                                            <select class="form-select  h-40 w-100 form-control form-control-sm"
+                                                                    aria-label="" id="acompanantes" name="acompanantes"
+                                                                    disabled>
+                                                                {% for servicios in Servicios %}
+                                                                <option value="{{servicios.id}}"> {{servicios.nombre}}
+                                                                </option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <label for="responsables"
+                                                               class="col-sm-1 col-form-label col-form-label-sm">Diagnosticos:</label>
+                                                        <div class="col-sm-4">
+                                                            <select class="form-select  h-40 w-100 form-control form-control-sm"
+                                                                    aria-label="" id="responsables" name="responsables"
+                                                                    disabled>
+                                                                {% for servicios in Servicios %}
+                                                                <option value="{{servicios.id}}"> {{servicios.nombre}}
+                                                                </option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <label class="col-sm-8 control-label"
+                                                               for="remitido">DocNo:</label>
+                                                        <input type="text" class="form-control" id="remitido"
+                                                               name="remitido" required>
+                                                    </div>
+                                                    <div class="col">
+                                                        <label for="ips"
+                                                               class="col-sm-1 col-form-label col-form-label-sm">Diagnosticos:</label>
+                                                        <div class="col-sm-4">
+                                                            <select class="form-select  h-40 w-100 form-control form-control-sm"
+                                                                    aria-label="" id="ips" name="ips" disabled>
+                                                                {% for servicios in Servicios %}
+                                                                <option value="{{servicios.id}}"> {{servicios.nombre}}
+                                                                </option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <label class="col-sm-8 control-label"
+                                                               for="numManilla">DocNo:</label>
+                                                        <input type="text" class="form-control" id="numManilla"
+                                                               name="numManilla" required>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+</div>
+
+
+
+
+
+
+ <div class="card">
+                <div class="myForm">
+                    <form id="AdmisionTriage" method="POST" onsubmit="crearAdmisionTriage1()">
+                        <div class="modal fade" id="crearAdmisionTriage" tabindex="-1" role="dialog"  style="overflow-y:scroll;" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Creacion Admision desde
+                                            Triage</h5>
+                                        <button type="button" class="close" data-dismiss="modal"    aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        hola
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal"  onclick="CierraModalAdmisionTriage()">Close
+                                        </button>
+                                        <input type="button" class="btn btn-primary" value="save"  onclick="crearAdmisionTriage1()">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>

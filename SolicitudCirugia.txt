@@ -1,0 +1,97 @@
+Informe Quirurgico: (la descricionqx es parte)
+	tiene : personal que opero
+		cups operados
+		material qx y osteosintesis
+
+-- Boton Ventana Modal:
+
+		pre-operatorio
+      		post-operatorio
+		impresion dx
+		complicaciones cie
+		descricionqx
+		hallazgos clinicos
+		Forma realizaacion ??
+		tejidos enviados a patoloagia
+		tipo de fractura
+		uso de intensificador
+		
+		NOTA OPERATORIA contiene:
+		Analisis textArea
+		Plan  textArea
+
+-- Boton Modal Tiempos Qx o al final en (2) renglones
+
+ confirmar grupo qx (cirujano-anestesio, atydante etc) ???. NO ES OTRA COSA QUE LOS PARTICIPANTES FINALES
+OSEA NO HAY PROBLEMAP
+
+                      tiempos qx:
+			Ingreso pac a quirofano
+			ini anestesia
+			ini ciru
+			fin ciru
+			fin anes
+			salida quirofano
+			tiempo qx total
+			tiempo anestesico total
+			tiemp toal en sala
+			ingreso arecupera
+			salida recuperacion
+			timpo total recuperacion
+
+FIN INFORME QUIRURGICO
+
+Solicitud: Admision, Fecha solic, Serv, Cama, paciente, cc,
+           nacio, edad, genero,empresa, tel
+
+dxnosticos
+
+procedimientos nombre, cups
+
+Tiempo maximo para prog ciru
+Cirujano,  especialidad , ayudantye ?
+Tiempo qx 2 ,minutos  Tipo ciru limpis, tipo anestesia regional
+
+requerimiento especiales:
+
+reserva sangre  cual  cuantas , cama uci ?? , Material osteositesis ?
+microscopio,  rx,  autosutura, biopsia por congelacion,  malla  otro
+
+--
+descripcion material solicitado
+
+tornillos largos de 3.5 /7 set de clavos de k
+
+Fecha y hora de prog cirugia 06/05/2025  07:00
+
+---------
+
+Material Qx: Consumo de dispositivos medicos especiales y material de osteosintesis
+
+Hoja de gastos : medicamntos // insumos
+
+prescripcion medica: medicamentos
+
+sabana de enfermria : confirmar grupo qx (cirujano-anestesio, atydante etc)
+                      tiempos qx:
+			Ingreso pac a quirofano
+			ini anestesia
+			ini ciru
+			fin ciru
+			fin anes
+			salida quirofano
+			tiempo qx total
+			tiempo anestesico total
+			tiemp toal en sala
+			ingreso arecupera
+			salida recuperacion
+			timpo total recuperacion
+
+Bitacoras de cirugia : es cxoimo un seguimiento es texot
+
+
+Las boletas qx son como resumenes aspectos de las cirugias
+
+
+
+		

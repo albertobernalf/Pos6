@@ -1,0 +1,49 @@
+# Aqui Manejo Transaccionalidad
+
+    miConexion3 = None
+    try:
+
+            miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner2", port="5432", user="postgres",  password="123456")
+            cur3 = miConexion3.cursor()
+	
+            print("comando = ", comando)
+            cur3.execute(comando)
+            miConexion3.commit()
+            cur3.close()
+
+            return JsonResponse({'success': True, 'Mensaje': 'Convenio Actualizado satisfactoriamente!'})
+
+
+    except psycopg2.DatabaseError as error:
+        print ("Entre por rollback" , error)
+        if miConexion3:
+            print("Entro ha hacer el Rollback")
+            miConexion3.rollback()
+	raise error
+
+
+    finally:
+        if miConexion3:
+            cur3.close()
+            miConexion3.close()
+
+       
+
+# Aqui Fin Manejo Transaccionalidad
+
+
+## transaccionalidad django rollback
+
+try:
+        with transaction.atomic():
+            obj = MyModel.objects.create(name="Ejemplo")
+            if algo_malo:
+                raise ValueError("Algo salió mal")
+            otra_funcion()
+    except Exception as e:
+        # Aquí ya se hizo rollback automáticamente
+        print("Se hizo rollback por:", e)
+
+
+
+, sedesClinica_id=sede

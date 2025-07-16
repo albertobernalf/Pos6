@@ -1,0 +1,105 @@
+
+	       <div class="row row-cols-8" style="height=1px;">
+
+					<div class="col">
+			  		     <div class="form-group row">
+						 <label for="AliquidacionId" class="col-form-label col-sm-4">LiquidacionId:</label>
+						 <div class="col-sm-6">
+							  <input type="text" id="AliquidacionId" name="AliquidacionId" value="0" readonly>
+	                                        </div>
+          	                            </div>
+                                      </div>
+
+
+					
+					<div class="col">
+			  		     <div class="form-group row">
+						 <label for="Afecha" class="col-form-label col-sm-4">Fecha:</label>
+						 <div class="col-sm-6">
+							  <input type="text" id="Afecha" name="Afecha" value="0" readonly>
+	                                        </div>
+          	                            </div>
+                                      </div>
+
+
+
+					<div class="col">
+			  		     <div class="form-group row">
+						 <label for="AtipoDoc_id" class="col-form-label col-sm-4">TipoDocumento:</label>
+						 <div class="col-sm-6">
+							  <input type="text" id="AtipoDoc_id" name="AtipoDoc_id" value="0" readonly>
+	                                        </div>
+          	                            </div>
+                                      </div>
+
+					<div class="col">
+			  		     <div class="form-group row">
+						 <label for="Adocumento_id" class="col-form-label col-sm-4">Documento:</label>
+						 <div class="col-sm-6">
+							  <input type="text" id="Adocumento_id" name="Adocumentoc_id" value="0" readonly>
+	                                        </div>
+          	                            </div>
+                                      </div>
+
+					<div class="col">
+			  		     <div class="form-group row">
+					<label for="paciente" class="col-form-label col-sm-4">Paciente:</label>
+
+						 <div class="col-sm-6">
+							  <input type="text" id="Apaciente" name="Apaciente" value="0" readonly>
+	                                        </div>
+          	                            </div>
+                                      </div>
+
+					<div class="col">
+			  		     <div class="form-group row">
+						 <label for="AconsecAdmision" class="col-form-label col-sm-4">ConsecutivoAdmision:</label>
+						 <div class="col-sm-6">
+							  <input type="text" id="AconsecAdmision" name="AconsecAdmision" value="0" readonly>
+	                                        </div>
+          	                            </div>
+                                      </div>
+
+					<div class="col">
+			  		     <div class="form-group row">
+						 <label for="AnombreConvenio" class="col-form-label col-sm-4">Convenio:</label>
+						 <div class="col-sm-6">
+							  <input type="text" id="AnombreConvenio" name="AnombreConvenio" value="0" readonly>
+	                                        </div>
+          	                            </div>
+                                      </div>
+
+					<div class="col">
+			  		     <div class="form-group row">
+						 <label for="Aobservaciones" class="col-form-label col-sm-4">Observaciones:</label>
+						 <div class="col-sm-6">
+							  <input type="text" id="Aobservaciones" name="Aobservaciones" value="0" readonly>
+	                                        </div>
+          	                            </div>
+                                      </div>
+
+	 </div>
+
+
+
+ <article id="Traslados">
+            <center><h3>Traslados Convenios</h3></center>
+	  <div style="height: 70px;  width:100%; background-color:#EBEBEB;">
+	 </div>
+        </article>
+
+        <article id="Facturacion">
+            <center><h3>Facturas Clinica</h3></center>
+	  <div style="height: 70px;  width:100%; background-color:#EBEBEB;">
+	 </div>
+        </article>
+
+
+        <article id="Anulacion">
+            <center><h3>Anulacion Facturas </h3></center>
+	  <div style="height: 70px;  width:100%; background-color:#EBEBEB;">
+	 </div>
+        </article>
+
+      
+

@@ -1,0 +1,39 @@
+ path('escoge/<str:Sede>,<str:Username>,<str:Profesional>,<str:Documento>,<str:NombreSede>,<str:escogeModulo>', viewsAdmisiones.escogeAcceso),
+<form action="{% url 'studentapp:editrow' rowid=student_detail.id %}" id="editform" method="POST">
+ <form action="{% url 'searchnet:search' %}" method="GET"
+
+
+
+	    /*------------------------------------------
+        --------------------------------------------
+        Click to Button
+        --------------------------------------------
+        --------------------------------------------*/
+        $('#createNewPostLaboratorios').click(function () {
+
+	    //var ingresoId= document.getElementById("ingresoId1").value;
+	    //document.getElementById("ingresoId2").value = ingresoId;
+
+            $('#saveBtnCrearLaboratorios').val("Create Post");
+            $('#post_id').val('');
+            $('#postFormCrearLaboratorios').trigger("reset");
+            $('#modelHeadingLaboratorios').html("Creacion Laboratorios");
+            $('#crearLaboratoriosModel').modal('show');
+        });
+
+
+
+
+                 tiposExamen_Id = queda["tiposExamen_Id"]
+                    codigoCups = queda["laboratorios"]
+                    cantidad = queda["cantidad"]
+                    observa = queda["observa"]
+                    tiposExamen_Id = queda["tiposExamen_Id"]
+                    tiposExamen_Id = queda["tiposExamen_Id"]
+                    estadoExamenes_id = "1"
+                    a = HistoriaExamenes(tiposExamen_id= tiposExamen_Id ,codigoCups =  codigoCups,cantidad = cantidad, observaciones=observa,estadoReg='A' , estadoExamenes_id= estadoExamenes_id, anulado="N", historia_id=historiaId, usuaroRegistra_id=usuarioRegistro)
+                    a.save()
+                    print ("tipoExamen =" , queda["tiposExamen_Id"])
+                    print("laboratorios =", queda["laboratorios"])
+                    print("cantidad =", queda["cantidad"])
+                    print("observaciones =", queda["observa"])

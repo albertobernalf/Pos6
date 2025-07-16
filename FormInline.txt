@@ -1,0 +1,30 @@
+<div class="container py-4 px-3 mx-auto">
+  <h1>Hello, Bootstrap and Vite!</h1>
+
+  <!-- Inline form -->
+  <form>
+    <!-- Inline fields -->
+    <div class="row row-cols-lg-auto g-3 align-items-center mb-3">
+      <div class="col-12">
+        <label class="visually-hidden" for="firstNameInput">First Name</label>
+        <input type="text" class="form-control" id="firstNameInput" placeholder="First Name">
+      </div>
+      <div class="col-12">
+        <label class="visually-hidden" for="lastNameInput">Last Name</label>
+        <input type="text" class="form-control" id="lastNameInput" placeholder="Last Name">
+      </div>
+      <div class="col-12">
+        <label class="visually-hidden" for="emailInput">Email</label>
+        <input type="email" class="form-control" id="emailInput" placeholder="Email">
+      </div>
+    </div>
+
+    <!-- Description textarea -->
+    <div class="mb-3">
+      <label for="descriptionTextarea" class="form-label">Description</label>
+      <textarea class="form-control" id="descriptionTextarea">
+	 </div>
+
+ </div>
+  </form>
+ </div>

@@ -1,0 +1,22 @@
+Entre GuardaConvenioAdmision
+ingresoId =  50096
+sede =  1
+registroId documento = 11
+insert into facturacion_ConveniosPacienteIngresos ("consecAdmision", "fechaRegistro",  convenio_id, documento_id, "tipoDoc_id" , "usuarioRegistro_id" ,"estadoReg") values ('1' , '2024-11-22 12:41:44.985609', '8'  , '11', '1','1','A');
+Internal Server Error: /guardaConvenioAdmision/
+Traceback (most recent call last):
+  File "C:\EntornosPython\practicaPos3\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\EntornosPython\practicaPos3\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\EntornosPython\practicaPos3\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\EntornosPython\practicaPos3\vulner\admisiones\views.py", line 5084, in GuardaConvenioAdmision
+    liquidacionId =  Liquidacion.objects.get(tipoDoc_id=registroId.tipoDoc_id, documento_id=registroId.documento_id, consecAdmision = registroId.consec , convenio_id=None)
+  File "C:\EntornosPython\practicaPos3\lib\site-packages\django\db\models\manager.py", line 82, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "C:\EntornosPython\practicaPos3\lib\site-packages\django\db\models\query.py", line 397, in get
+    raise self.model.DoesNotExist(
+facturacion.models.Liquidacion.DoesNotExist: Liquidacion matching query does not exist.
+[22/Nov/2024 12:41:45] "POST /guardaConvenioAdmision/ HTTP/1.1" 500 20834
+Entre  load_dataConvenioAdmisiones

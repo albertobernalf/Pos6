@@ -1,0 +1,14 @@
+sispro para envio d rips
+envio reportes resolucion minsterio 
+con unusuriios personal
+usuario persona natural ministerio de salud
+pagina sispro - info relacionada con rips
+usuario al ministerio de salud
+el uuario de asocia  a la clinica
+soliictar uusario a clinica
+registrra o actuliar usuario a asociar
+biomed tambien
+se selcionala clinica medical, llega al correo del administrador.-
+consultar usaurios asociados pero no puede hacer ninguna actualizacion
+al loguearse: se busca clinica medical, la autoriacion llega alcorreo registrado
+

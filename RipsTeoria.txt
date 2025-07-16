@@ -1,0 +1,304 @@
+RIPS:
+
+tabla: RipsTransaccion : (id, numDocumentoIdObligado char(9), numFactura c(20) --> sujeto a DIAN , tipoNota char(1) , numNota c(20),  usuarioRegistra ,fechaRegistro )
+{"numDocumentoIdObligado": "900000000",
+"numFactura": "Fac00000001",
+"tipoNota": null,
+"numNota": null
+}
+tabla: RipsUsuarios: (id, tipoDocumentoIdentificacion c(2), numDocumentoIdentificacion c(20), tipoUsuario c(2), fechaNacimiento c(10), codSexo c(1), codPaisResidencia c(3), codMunicipioResidencia c(5), codZonaTerritorialResidencia c(2), incapacidad c(2), consecutivo n(7),codPaisOrigen c(3))
+
+"usuarios": [
+{
+"tipoDocumentoIdentificacion": "CC",   		-- parametizacion rips (SELECT JSON )
+"numDocumentoIdentificacion": "52100200",
+"tipoUsuario": "01",
+"fechaNacimiento": "2000-01-01",
+"codSexo": "M",     			-- parametizacion rips (SELECT JSON )
+"codPaisResidencia": "170",  		-- parametizacion rips (SELECT JSON )
+"codMunicipioResidencia": "05134",   -- parametizacion rips (SELECT JSON )
+"codZonaTerritorialResidencia": "01",    -- parametizacion rips (SELECT JSON )
+"incapacidad": "SI",  			-- parametizacion rips (SELECT JSON )
+"consecutivo": 1,
+"codPaisOrigen": "170"  			-- parametizacion rips (SELECT JSON )
+},
+{
+"tipoDocumentoIdentificacion": "CC",
+"numDocumentoIdentificacion": "52100200",
+"tipoUsuario": "01",
+"fechaNacimiento": "2000-01-01",
+"codSexo": "M",
+"codPaisResidencia": "170",
+"codMunicipioResidencia": "05134",
+"codZonaTerritorialResidencia": "01",
+"incapacidad": "SI",
+"consecutivo": 2,
+"codPaisOrigen": "170"
+}
+]
+}
+
+// item servicios en el JSON
+
+{
+"servicios":
+{
+"consultas": [
+{
+}
+],
+"procedimientos": [
+{
+}
+],
+"urgencias": [
+{
+}
+],
+"hospitalizacion": [
+{
+}
+],
+"recienNacidos": [
+{
+}
+],
+"medicamentos": [
+{
+}
+],
+"otrosServicíos": [
+{
+}
+],
+}
+}
+
+
+tabla: RipsConsultas : (id, codPrestador c(12), fechaInicioAtencion c(16), numAutorizacion c(30), codConsulta c(6), modalidadGrupoServicioTecSal c(2), grupoServicios c(2), codServicio c(4), 
+                            finalidadTecnologiaSalud c(2), causaMotivoAtencion c(2), codDiagnosticoPrincipal c(25), codDiagnosticoRelacionado1 c(25), codDiagnosticoRelacionado2 c(25), 
+                            codDiagnosticoRelacionado3 c(25), tipoDiagnosticoPrincipal c(2), tipoDocumentoIdentificacion c(2), numDocumentoIdentificacion c(20), vrServicio n(10), conceptoRecaudo c(2),
+				valorPagoModerador n(10), numFEVPagoModerador c(20), consecutivo n(7), 
+
+{
+
+"consultas": [
+{
+"codPrestador": "500000000001",
+"fechaInicioAtencion": "2021-08-18 08:10",
+"numAutorizacion": "100000000002",
+"codConsulta": "890201",
+"modalidadGrupoServicioTecSal": "09",    -- Creo en la citya Medica
+"grupoServicios": "01",                  -- en la cita medica
+"codServicio": 1,                       -- en la cita medica
+"finalidadTecnologiaSalud": "11",          -- en la cita medica
+"causaMotivoAtencion": "21",             -- en la cita medica
+"codDiagnosticoPrincipal": "D482",
+"codDiagnosticoRelacionado1": "B428",
+"codDiagnosticoRelacionado2": null,
+"codDiagnosticoRelacionado3": null,
+"tipoDiagnosticoPrincipal": "01",
+"tipoDocumentoIdentificacion": "CC",    -- parametizacion rips (SELECT JSON )
+"numDocumentoIdentificacion": "80100200",
+"vrServicio": 36341,
+"conceptoRecaudo": "02",                 -- en la cita medica
+"valorPagoModerador": 5000,
+"numFEVPagoModerador": "FVE1",
+"consecutivo": 1
+},
+{
+"codPrestador": "500000000001",
+"fechaInicioAtencion": "2021-08-19 05:00",
+"numAutorizacion": "100000000002",
+"codConsulta": "890201",
+"modalidadGrupoServicioTecSal": "09",
+"grupoServicios": "01",
+"codServicio": 1,
+"finalidadTecnologiaSalud": "11",
+"causaMotivoAtencion": "21",
+"codDiagnosticoPrincipal": "D482",
+"codDiagnosticoRelacionado1": "B428",
+"codDiagnosticoRelacionado2": null,
+"codDiagnosticoRelacionado3": null,
+"tipoDiagnosticoPrincipal": "01",
+"tipoDocumentoIdentificacion": "CC",
+"numDocumentoIdentificacion": "80100200",
+"vrServicio": 36341,
+"conceptoRecaudo": "02",
+"valorPagoModerador": 5000,
+"numFEVPagoModerador": "FVE2",
+"consecutivo": 2
+}
+]
+}
+
+tabla RipsProcedimientos: (id, codPrestador c(12), fechaInicioAtencion c(16), idMIPRES c(15), numAutorizacion c(30), codProcedimiento c(6), viaIngresoServicioSalud c(2), 
+                            modalidadGrupoServicioTecSal c(2), grupoServicios c(2), codServicio n(4), finalidadTecnologiaSalud c(2), 	tipoDocumentoIdentificacion c(2), numDocumentoIdentificacion c(20),
+                             codDiagnosticoPrincipal c(25), codDiagnosticoRelacionado c(25), codComplicacion c(25), vrServicio n(15), conceptoRecaudo c(2), valorPagoModerador n(10),
+				numFEVPagoModerador c(20), consecutivo n(7)
+
+
+{
+"procedimientos": [
+{
+"codPrestador": "500000000001",
+"fechaInicioAtencion": "2021-08-18 08:10",
+"idMIPRES": null,              -- Parametrizacion en Examenes Historia Clinica
+"numAutorizacion": null,           -- Parametrizacion en Modulo Autorizaciones
+"codProcedimiento": "895100",    -- Parametrizacion en Examenes
+"viaIngresoServicioSalud": "01",    -- Parametrizacion en Ingresos
+"modalidadGrupoServicioTecSal": "01", -- Parametrizacion en Ingresos creop
+"grupoServicios": "04",               -- Parametrizacion en Ingresos
+"codServicio": 123,                  -- Parametrizacion en Ingresos
+"finalidadTecnologiaSalud": "44",    -- Parametrizacion en Ingresos
+"tipoDocumentoIdentificacion": "CC",
+"numDocumentoIdentificacion": "80100200",
+"codDiagnosticoPrincipal": "E109",
+"codDiagnosticoRelacionado": "E109",
+"codComplicacion": "E109",
+"vrServicio": 49700,
+"conceptoRecaudo": "02",
+"valorPagoModerador": 5000,
+"numFEVPagoModerador": "FVE3",
+"consecutivo": 1
+}
+]
+}
+
+tabla RipsUrgenciasObs:         (ID, codPrestador C(12), fechaInicioAtencion C(16), causaMotivoAtencion C(2), codDiagnosticoPrincipal C(25), codDiagnosticoPrincipalE C(25), codDiagnosticoRelacionadoE1 C(25),
+				codDiagnosticoRelacionadoE2 C(25), codDiagnosticoRelacionadoE3 C(25), condicionDestinoUsuarioEgreso C(2), codDiagnosticoCausaMuerte C(25), fechaEgreso C(16), consecutivo n(7))
+
+{
+"urgencias": [
+{
+"codPrestador": "500000000001",
+"fechaInicioAtencion": "2021-08-18 08:10",
+"causaMotivoAtencion": "21",   -- causaexterna en ingresos  pero RIPS
+"codDiagnosticoPrincipal": "B427",
+"codDiagnosticoPrincipalE": "B427",
+"codDiagnosticoRelacionadoE1": null,
+"codDiagnosticoRelacionadoE2": null,
+"codDiagnosticoRelacionadoE3": null,
+"condicionDestinoUsuarioEgreso": "01",
+"codDiagnosticoCausaMuerte": null,
+"fechaEgreso": "2021-08-23 20:22",
+"consecutivo": 1
+}
+]
+}
+
+tabla RipsHospitalizacion: (id, codPrestador c(12),  viaIngresoServicioSalud c(2), fechaInicioAtencion c(16), numAutorizacion c(30), causaMotivoAtencion c(2), codDiagnosticoPrincipal c(25), 
+                               codDiagnosticoPrincipalE c(25), codDiagnosticoRelacionadoE1 c(25), codDiagnosticoRelacionadoE2 c(25),  codDiagnosticoRelacionadoE3 c(25), codComplicacion c(25),
+				condicionDestinoUsuarioEgreso c(2),  codDiagnosticoCausaMuerte c(25), fechaEgreso c(16), consecutivo n(7))
+
+{
+"hospitalizacion": [
+{
+"codPrestador": "500000000001",
+"viaIngresoServicioSalud": "02",    -- Parametrizacion en Ingresos
+"fechaInicioAtencion": "2021-08-18 08:10",
+"numAutorizacion": "0102342", 
+"causaMotivoAtencion": "21",        -- causaexterna en ingresos  pero RIPS
+"codDiagnosticoPrincipal": "B427",
+"codDiagnosticoPrincipalE": "B427",
+"codDiagnosticoRelacionadoE1": null,
+"codDiagnosticoRelacionadoE2": null,
+"codDiagnosticoRelacionadoE3": null,
+"codComplicacion": null,
+"condicionDestinoUsuarioEgreso": "01",
+"codDiagnosticoMuerte": null,
+"fechaEgreso": "2021-12-12 14:22",
+"consecutivo": 1
+}
+]
+}
+
+tabla RipsRecienNacido: (id, codPrestador c(12), tipoDocumentoIdentificacion c(2), numDocumentoIdentificacion c(20), fechaNacimiento n(16), edadGestacional C(2), numConsultasCPrenatal n(2),
+				codSexoBiologico C(2), peso N(4), codDiagnosticoPrincipal C(25), condicionDestinoUsuarioEgreso C(2), codDiagnosticoCausaMuerte C(25), fechaEgreso C(16), consecutivo N(7)
+{
+"recienNacidos": [
+{
+"codPrestador": "500000000001",
+"tipoDocumentoIdentificacion": "RC",
+"numDocumentoIdentificacion": "10172349991",
+"fechaNacimiento": "2019-05-10 10:40",
+"edadGestacional": 40,    -- Parametrizacion en Ingresos
+"numConsultasCPrenatal": 6,   -- Parametrizacion en Ingresos
+"codSexoBiologico": "02",   -- Parametrizacion en Ingresos
+"peso": 1850,                       -- Parametrizacion en Ingresos
+"codDiagnosticoPrincipal":"K469",
+"condicionDestinoUsuarioEgreso": "01",   -- Parametrizacion en Ingresos
+"codDiagnosticoCausaMuerte": null,
+"fechaEgreso": "2019-05-25 09:30",
+"consecutivo": 1
+}
+]
+}
+
+tabla RipsMedicamentos: (id, codPrestador c(12), numAutorizacion c(30), idMIPRES c(15), fechaDispensAdmon c(16), codDiagnosticoPrincipal c(25), codDiagnosticoRelacionado c(25), tipoMedicamento c(2),
+				codTecnologiaSalud c(20), nomTecnologiaSalud c(30), concentracionMedicamento n(3), unidadMedida n(4), formaFarmaceutica c(8), unidadMinDispensa n(2), cantidadMedicamento n(10),
+				diasTratamiento n(3), tipoDocumentoIdentificacion c(2), numDocumentoIdentificacion c(20), vrUnitMedicamento n(15), vrServicio n(15), conceptoRecaudo c(2), valorPagoModerador n(10),
+				numFEVPagoModerador c(20), consecutivo n(7))
+
+{
+"medicamentos": (
+{
+"codPrestador": "500000000001",
+"numAutorizacion": null,
+"idMIPRES": "1017232344",          -- historia_examenes
+"fechaDispensAdmon": "2021-08-18 08:10",
+"codDiagnosticoPrincipal": "K469",
+"codDiagnosticoRelacionado": null,
+"tipoMedicamento": "01",        -- historia_rips  rips_ripstipomedicamento
+"codTecnologiaSalud": "1A1014721001104",    -- catalogoRispoCuns rips_ripscums
+"nomTecnologiaSalud": null,      -- Denominación Común Internacional (DCI)
+"concentracionMedicamento": 0,   - 
+"unidadMedida": 0,                 -- umm en rips  rips_ripsumm;
+"formaFarmaceutica": "123456",       -- ffm en rips  rips_ripsformafarmaceutica
+"unidadMinDispensa": 1,       -- upr en rips rips_ripsunidadupr
+"cantidadMedicamento": 10,
+"diasTratamiento": 365,
+"tipoDocumentoIdentificacion": "CC",  -- rips  rips_ripstiposdocumento   (homologa en el query de extraccion RIPS)
+"numDocumentoIdentificacion": "10234561292",
+"vrUnitMedicamento": 1,
+"vrServicio": 1,
+"conceptoRecaudo": "02",     -- rips
+"valorPagoModerador": 4500,
+"numFEVPagoModerador": "FEV4",
+"consecutivo": 1
+}
+]
+}
+
+tabla RipsOtrosServicios: ( id, codPrestador c(12), numAutorizacion c(30), idMIPRES n(15), fechaSuministroTecnologia c(16), tipoOS c(2), codTecnologiaSalud c(20), nomTecnologiaSalud c(60),
+				cantidadOS n(5), tipoDocumentoIdentificacion c(2), numDocumentoIdentificacion c(20), vrUnitOS n(15), vrServicio n(15), conceptoRecaudo c(2), valorPagoModerador n(10),
+				numFEVPagoModerador c(20), consecutivo n(7)
+
+
+
+{
+"otrosServicios": [
+{
+"codPrestador": "500000000001",
+"numAutorizacion": null,
+"idMIPRES": "1034284847",       -- historia_examenes
+"fechaSuministroTecnologia": "2021-08-18 08:10",
+"tipoOS": "01",
+"codTecnologiaSalud": "T2387G",  -- catalogoRispoCuns
+"nomTecnologiaSalud": "Dispositivo",  -- Denominación Común Internacional (DCI)
+"cantidadOS": 1,
+"tipoDocumentoIdentificacion": "CC", -- rips
+"numDocumentoIdentificacion": "10234561292",
+"vrUnitOS": 350000,
+"vrServicio": 350000,
+"conceptoRecaudo": "02",   -- rips
+"valorPagoModerador": 5000,
+"numFEVPagoModerador": "FEV5",
+"consecutivo": 1
+}
+]
+}
+
+
+		
+

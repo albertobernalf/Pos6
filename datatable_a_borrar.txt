@@ -1,0 +1,180 @@
+
+<script type="text/javascript">
+var $ = jQuery;
+$(document).ready(function() {
+        /*------------------------------------------
+        --------------------------------------------
+        Post Listing Page
+        --------------------------------------------
+        --------------------------------------------*/
+
+        var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
+        var username = document.getElementById("username").value;
+        var nombreSede = document.getElementById("nombreSede").value;
+	    var sede = document.getElementById("sede").value;
+        var username_id = document.getElementById("username_id").value;
+        var data =  {}   ;
+
+        data['username'] = username;
+        data['sedeSeleccionada'] = sedeSeleccionada;
+        data['nombreSede'] = nombreSede;
+        data['sede'] = sede;
+        data['username_id'] = username_id;
+        data = JSON.stringify(data);
+
+        alert( "Entro a la definicion del dtatable = tablaConveniosAdmisiones);
+
+        var table = $('.tablaConveniosAdmisiones').DataTable({
+         "language": {
+                  "lengthMenu": "Display _MENU_ registros",
+                   "search": "Filtrar registros:",
+                    },
+            processing: true,
+            serverSide: false,
+            scrollY: '300px',
+	    scrollX: true,
+	    scrollCollapse: true,
+            paging:false,
+            columnDefs: [
+                {
+                    "render": function ( data, type, row ) {
+                        var btn = '';
+                          btn = btn + " <button   class='btn btn-primary editPostConvenios' data-pk='" + row.pk + "'>" + "</button>";
+                        return btn;
+                    },
+                    "targets": 4
+               }
+            ],
+            ajax: {
+                 url:"/load_dataConvenioAdmisiones/" +  data,
+                 type: "POST",
+                dataSrc: ""
+            },
+
+            lengthMenu: [2,3, 5, 10, 20, 30, 40, 50],
+            columns: [
+                { data: "fields.id"},
+                { data: "fields.tipoDoc"},
+                { data: "fields.documento"},
+                { data: "fields.convenio"},
+
+            ]
+        });
+	/*--------------------------------------------
+        Click to Edit Button
+        --------------------------------------------
+        --------------------------------------------*/
+        $('body').on('click', '.editPostConvenios', function () {
+
+          var post_id = $(this).data('pk');
+          alert("pk1 = " + $(this).data('pk'));
+
+      	$.ajax({
+	           url: '/creacionHc/postConsultaHcli/',
+	            data : {post_id:post_id},
+	           type: 'POST',
+	           dataType : 'json',
+	  		success: function (data) {
+                        alert("Regrese");
+                        alert("respuesta="  + data);
+
+			 $('#pk').val(data.pk);
+        	        $('#tipoDocId').val(data.tipoDocId);
+                	$('#nombreTipoDoc').val(data.nombreTipoDoc);
+	                $('#documentoId').val(data.documentoId);
+	                $('#documento').val(data.documento);
+	                $('#consec').val(data.consec);
+
+
+                    },
+	   		    error: function (request, status, error) {
+	   			    $("#mensajes").html(" !  Reproduccion  con error !");
+	   	    	}
+	     });
+
+        });
+
+        /*------------------------------------------
+        --------------------------------------------
+        Print Error Msg
+        --------------------------------------------
+        --------------------------------------------*/
+        function printErrorMsg(msg) {
+            $('.error-msg').find('ul').html('');
+            $('.error-msg').css('display','block');
+            $.each( msg, function( key, value ) {
+                $(".error-msg").find("ul").append('<li>'+value+'</li>');
+            });
+        }
+
+
+        $('#btn-rango').on('click', function() {
+        alert("Entre Activa Tabla");
+
+        table.ajax.reload();
+          return false;
+    });
+
+});
+</script>
+
+
+<script>
+            var newButton = document.createElement("button");
+            newButton.innerHTML = "Activa  Tabla";
+    	    newButton.setAttribute("id", "btn-rango");
+	        newButton.setAttribute("name", "btn-rango");
+            document.body.appendChild(newButton);
+</script>
+
+
+
+
+
+
+                 <table class="table"
+                           style="height: 5px; background-color:LightGray; BORDERCOLOR=RED ; border: 8px solid black; border-color: #96D4D4;  width:99%;">
+                        <form class="form-inline" action="/crearConvenioPacienteDef/" method="POST"
+                              id="FormaConvenioPaciente">
+                            <!-- INICIO TABLE DE  EL DATATABLE  -->
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <div class="row">
+                                                <div class="row">
+
+                                                </div>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="alert alert-success success-msg"
+                                                             style="display:none"></div>
+                                                        <table class="display nowrap table table table-bordered  tablaConveniosAdmisiones table-hover table-sm dtr-inline">
+
+                                                            <thead>
+                                                            <tr>
+                                                                <th style="width:5%;">id</th>
+                                                                <th style="width:5%;">TipoDoc</th>
+                                                                <th style="width:12%;">Documento</th>
+                                                                <th style="width:20%;">Convenio</th>
+                                                                <th style="width:5%;">Action</th>
+                                                                <!--  <th data-visible="true"></th>  -->
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody style="vertical-align:bottom">
+                                                            <tr style="height:10%">
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- FIN TABLE DE  EL DATATABLE  -->
+                        </form>
+                    </table>
+   

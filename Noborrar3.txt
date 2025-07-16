@@ -1,0 +1,16 @@
+    <script type="text/javascript">
+		    var $ = jQuery;
+		    function cargarTablaAbonosPacienteFacturacion()
+	        {
+
+
+  	        var data =  {}   ;
+                var sede = document.getElementById("sede").value;
+                data['sede'] = sede;
+                var ingresoId= document.getElementById("ingresoId").value;
+                data['ingresoId'] = ingresoId;
+                data = JSON.stringify(data);
+	            table = $("#tablaAbonosFacturacion").dataTable().fnDestroy();
+                initTableAbonosFacturacion(data);
+            }
+            </script>

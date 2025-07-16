@@ -1,0 +1,8 @@
+
+
+puede Adicionar un cups para un tarifario
+puede crear un % a un tarifario creado
+puede aplicar un valor a un cups o rango de cups
+puede modificar el valor de un tarifario-cups
+puede subir un tarifario desde excel
+
