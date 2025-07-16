@@ -71,7 +71,7 @@
                 <input type="hidden" id="consec" name="consec" value="">
                 <input type="hidden" id="tipoIng" name="tipoIng" value="{{tipoIng}}">
 		<input type="hidden" id="convenioId" name="convenioId" value="{{convenioId}}">
-	
+		<input type="text" id="farmaciaId" name="farmaciaId" value="">
             </form>
 
   <!-- INICIO TABLE DE  EL DATATABLE  -->
@@ -164,6 +164,7 @@
 			Ingreso: <span id="consecutivoAdmision"></span>
 			Servicio: <span id="servicio"></span>
 			Hab: <span id="habitacion"></span>
+			<input type="text" id="farmaciaDetalle" name="farmaciaDetalle" value="">
 		</div>
 
 
@@ -234,15 +235,14 @@
                             <div class="row">
                                 <div class="col-sm-12">
                                     <div class="card">
-                                        <div class="card-header" style="height:100px;">
+                                        <div class="card-header" style="height:70px;">
                                             <center>
                                                 <div class="row">
-                                                    <div class="col-sm-1">
-
-                                                   </div>
-                                                    <div class="col-sm-2">
-                    							    Medicamento
-                                                        <select class="select-css"  id="medicamentos"
+                                                    
+                                                    <div class="col-sm-3">
+						<!-- <label  for="medicamentos">Medicamentos:</label>   -->
+                    							    
+                                                        <select class="select-css" id="medicamentos"
                                                                 name="medicamentos">
                                                             {% for medicamentos in Medicamentos %}
                                                             <option value="{{medicamentos.id}}">
@@ -252,14 +252,16 @@
                                                         </select>
                                                     </div>
                                                     <div class="col-sm-1">
-					                                		Dosis:
-                                                        <input type="text" id="dosis" name="dosis" value="">
+					                  
+                                                        <input type="text" id="dosis" name="dosis" placeholder="Dosis" value="">
                                                     </div>
+						 <div class="col-sm-1">
+								 </div>
 
-                                                    <div class="col-sm-1">
- 							                    Unidad Medida
+                                                    <div class="col-sm-2">
+ 							                  
                                                         <select class="select-css" id="uMedidaDosis"
-                                                                name="uMedidaDosis">
+                                                                name="uMedidaDosis" placeholder="UMedida">
                                                             {% for uMedidaDosis in UMedidaDosis %}
                                                             <option value="{{uMedidaDosis.id}}">
                                                                 {{uMedidaDosis.nombre}}
@@ -267,33 +269,13 @@
                                                             {% endfor %}
                                                         </select>
                                                     </div>
-                                                    <div class="col-sm-1">
-							                    Forma Farma:
-                                                        <select class="select-css" id="formaFarma"
-                                                                name="formaFarma">
-                                                            {% for formaFarma in FormaFarma %}
-                                                            <option value="{{formaFarma.id}}">
-                                                                {{formaFarma.nombre}}
-                                                            </option>
-                                                            {% endfor %}
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-sm-1">
-							                        Frecuencia
-                                                        <select class="select-css" id="frecuencia"
-                                                                name="frecuencia">
-                                                            {% for frecuencia in Frecuencia %}
-                                                            <option value="{{frecuencia.id}}">
-                                                                {{frecuencia.nombre}}
-                                                            </option>
-                                                            {% endfor %}
-                                                        </select>
-                                                    </div>
+                                                   
+                                                   
 
 						 <div class="col-sm-1">
-							                        Vias Adm
+							                        
                                                         <select class="select-css" id="vias"
-                                                                name="vias">
+                                                                name="vias" placeholder="Vias Adm">
                                                             {% for viasAdministracion in ViasAdministracion %}
                                                             <option value="{{viasAdministracion.id}}">
                                                                 {{viasAdministracion.nombre}}
@@ -305,13 +287,10 @@
 
 						                            <div class="col-sm-1">
 							                        Cantidad:
-                                                        <input type="text" id="cantidadMedicamento" name="cantidadMedicamento" value="">
+                                                        <input type="text" id="cantidadMedicamento" name="cantidadMedicamento" value="" placeholder="Cantidad">
                                                     </div>
-						                            <div class="col-sm-1">
-							                            DiasTratamiento:
-                                                        <input type="text" id="diasTratamiento" name="diasTratamiento" value="">
-                                                    </div>
-
+							 <div class="col-sm-1">
+								 </div>
                                                     <div class="col-sm-1 text-end">
                                                         <span class="text-secondary">Adicionar</span>
                                                         <a class="btn btn-success" href="javascript:void(0)"
@@ -320,7 +299,7 @@
                                                 </div>
                                             </center>
                                         </div>
-                                        <div class="card-body" style="height:100px;">
+                                        <div class="card-body" style="height:5px;">
                                             <div class="row">
                                                 <div class="col-sm-12">
                                                     <table id="tablaFormulacion"
@@ -330,7 +309,7 @@
                                                             <th style="width:5%;">Id</th>
                                                             <th style="width:5%;">Medicamento</th>
                                                             <th style="width:5%;">Dosis</th>
-                                                           <th style="width:5%;">UMedida</th>
+                                                           <th style="width:1%;">UMedida</th>
                                            					
                                                             <th style="width:5%;">ViasAdmon</th>
                                                             <th style="width:5%;">Cant</th>
@@ -364,8 +343,65 @@
              <!-- HASTA AQUI DATATABLE -->
 
              
-		<div align="center" height="20px" width="50px">
-               <input type="button" style="height:30px;margin-left: 0 ; margin-bottom: 0;border-top-right-radius: 0;"  size="30px" id="BtnAdicionarDespachosDispensa"  name="BtnAdicionarDespachosDispensa" value="CrearDespacho" onclick= "AdicionarDespachosDispensa()" >				    
+		<div align="left" height="20px" width="50px">
+
+		 <div class="row">
+					   <div class="col-sm-2">
+ 							   Entrega:               
+                                                        <select class="select-css" id="servicioAdmonEntrega"
+                                                                name="servicioAdmonEntrega" >
+                                                            {% for serviciosAdministrativos in ServiciosAdministrativos %}
+                                                            <option value="{{serviciosAdministrativos.id}}">
+                                                                {{serviciosAdministrativos.nombre}}
+                                                            </option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+
+
+					   <div class="col-sm-2">
+							Funcionario: 							                  
+                                                        <select class="select-css" id="plantaEntrega"
+                                                                name="plantaEntrega" >
+                                                            {% for plantaUsuarios in PlantaUsuarios %}
+                                                            <option value="{{plantaUsuarios.id}}">
+                                                                {{plantaUsuarios.nombre}}
+                                                            </option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+
+
+					   <div class="col-sm-2">
+							Recibe: 							                  
+                                                        <select class="select-css" id="servicioAdmonRecibe"
+                                                                name="servicioAdmonRecibe" >
+                                                            {% for serviciosAdministrativos in ServiciosAdministrativos %}
+                                                            <option value="{{serviciosAdministrativos.id}}">
+                                                                {{serviciosAdministrativos.nombre}}
+                                                            </option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+
+
+					   <div class="col-sm-2">
+								Funcionario; 							                  
+                                                        <select class="select-css" id="plantaRecibe"
+                                                                name="plantaRecibe" >
+                                                            {% for plantaUsuarios in PlantaUsuarios %}
+                                                            <option value="{{plantaUsuarios.id}}">
+                                                                {{plantaUsuarios.nombre}}
+                                                            </option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+
+
+               <input type="button" style="height:30px;margin-left: 0 ; margin-bottom: 0;border-top-right-radius: 0;"  size="10px" id="BtnAdicionarDespachosDispensa"  name="BtnAdicionarDespachosDispensa" value="Dispensar" onclick= "AdicionarDespachosDispensa()" >				    
+
+		</div> <!-- cierra el row -->
+
 		</div>
              </div>
 

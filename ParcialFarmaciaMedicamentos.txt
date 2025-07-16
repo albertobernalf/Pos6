@@ -1,0 +1,176 @@
+
+
+$('#tablaFormulacion tbody').on('click', 'tr', function () {
+    confirm("Desea eliminar LA FILA: ");
+       var tableL = $('#tablaFormulacion').DataTable();
+      var fila = $(this).parents("tr")['prevObject']['0']['_DT_RowIndex'];
+          alert("Fila a borrar = " + fila);
+		var rows = tableL
+			    .rows(fila)
+			    .remove()
+			    .draw();
+		 document.getElementById("tablaFormulacion").deleteRow(fila-1);
+
+});
+
+
+/*------------------------------------------
+        --------------------------------------------
+        Create Post Code Formulacion
+        --------------------------------------------
+        --------------------------------------------*/
+        $('#BtnAdicionarFormulacion').click(function (e) {
+            e.preventDefault();
+
+
+   	   if (controlMed == 0)
+   	   {
+   	   var table10 = $('#tablaFormulacion').DataTable({scrollY: '50px', paging:false,   scrollX: true,  scrollCollapse: true,  lengthMenu: [5]});   // accede de nuevo a la DataTable.
+   	   controlMed=1;
+   	   }
+   	   else
+   	   {
+	  var table10 = $('#tablaFormulacion').DataTable();
+   	   }
+
+
+           var select3 = document.getElementById("medicamentos"); /*Obtener el SELECT */
+      	   var medicamentos= select3.options[select3.selectedIndex].value; /* Obtener el valor */
+      	   textMedicamentos = select3.options[select3.selectedIndex].innerText; //El texto de la opción seleccionada
+
+           var dosis =  document.getElementById("dosis").value;
+
+	   var select3 = document.getElementById("uMedidaDosis"); /*Obtener el SELECT */
+      	   var uMedidaDosis= select3.options[select3.selectedIndex].value; /* Obtener el valor */
+      	   textUMedidaDosis = select3.options[select3.selectedIndex].innerText; //El texto de la opción seleccionada
+
+	   var select3 = document.getElementById("uMedidaDosis"); /*Obtener el SELECT */
+      	   var uMedidaDosis= select3.options[select3.selectedIndex].value; /* Obtener el valor */
+      	   textUMedidaDosis = select3.options[select3.selectedIndex].innerText; //El texto de la opción seleccionada
+
+
+	   var select3 = document.getElementById("vias"); /*Obtener el SELECT */
+      	   var viasAdministracion = select3.options[select3.selectedIndex].value; /* Obtener el valor */
+      	   textViasAdministracion = select3.options[select3.selectedIndex].innerText; //El texto de la opción seleccionada
+	
+	   var cantidadMedicamento =  document.getElementById("cantidadMedicamento").value;
+
+	    table10.row.add([ medicamentos, textMedicamentos, dosis, uMedidaDosis,  textUMedidaDosis,viasAdministracion, textViasAdministracion, cantidadMedicamento   ,  '<i class="fa fa-trash"></i>']).draw(false);
+
+        });
+
+
+
+
+
+
+// MEDICAMENTOS
+
+function tableActionsFormulacion() {
+
+   var table10 = $('#tablaFormulacion').DataTable({
+                "language": {
+                  "lengthMenu": "Display _MENU_ registros",
+                   "search": "Filtrar registros:",
+                    },
+                processing: true,
+                serverSide: false,
+                scrollY: '130px',
+	            scrollX: true,
+	            scrollCollapse: true,
+                paging:false,
+                 columnDefs: [
+                {
+                    "render": function ( data, type, row ) {
+                        var btn = '';
+			  btn = btn + " <button class='btn btn-danger deleteRevisionSistemas' id='borraDiag'>" + '<i class="fa fa-trash"></i>' + "</button>";
+                        return btn;
+                    },
+                    "targets": 13
+               }
+            ],
+        lengthMenu: [5],
+    columns:[
+    //"dummy" configuration
+        { visible: true }, //col 1
+        { visible: true }, //col 2
+        { visible: true }, //col 3
+	  { visible: true }, //col 3
+	  { visible: true }, //col 3
+	  { visible: true }, //col 3
+	  { visible: true }, //col 3
+
+
+            ],
+    });
+}
+
+
+
+// FIN MEDICAMENTOS
+
+formHistoriaClinica.addEventListener('submit', e=>{
+            confirm("Confirma Guardar Folio !");
+
+
+	// Formulacion
+
+    const table10 = $('#tablaFormulacion').DataTable();
+     var datos_tabla10 = table10.rows().data().toArray();
+
+        formulacion=[]
+
+
+	for(var i= 0; i < datos_tabla10.length; i++) {
+
+	    formulacion.push({
+	        "medicamentos"    : datos_tabla10[i][0] ,
+	        "dosis"    : datos_tabla10[i][2],
+	        "uMedidaDosis"    : datos_tabla10[i][3] ,
+	        "vias"    : datos_tabla10[i][9] ,
+	        "viasAdministracion"    : datos_tabla10[i][10] ,
+	        "cantidadMedicamento"    : datos_tabla10[i][11] ,
+
+	      });
+	   };
+
+	    formulacion  = JSON.stringify(formulacion);
+    
+ 	// Fin Formulacion
+
+
+
+  $.ajax({
+            	   type: 'POST',
+ 	               url: '/crearHistoriaClinica/',
+  	               data: { 'tipoDocPaciente':tipoDocPaciente,
+  	                      'documentoPaciente':documentoPaciente,
+  	                      'ingresoPaciente':ingresoPaciente,
+ 	               		  'folio':folio,			        
+        			'formulacion':formulacion,
+
+				   },
+ 	      		success: function (respuesta2) {
+ 	      		        var data = JSON.parse(respuesta2);
+				// var data  = respuesta2;
+ 	      		      
+     			    $("#mensajes").html(data.message);
+
+			document.getElementById("mensajes").innerHTML = data.message;
+		            }
+	
+			// location.reload();  Con el submit ya no seria necesariorecargar la pagina
+
+ 	      		}, // cierra function sucess
+ 	      		error: function (request, status, error) {
+ 	      			document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
+ 	      			
+
+ 	      		}, // cierra error function
+  	        });  // cierra ajax
+
+});  // cierra commit
+
+
+
+

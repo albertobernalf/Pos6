@@ -23,7 +23,7 @@ from django.http import JsonResponse
 import pyodbc
 import psycopg2
 import json
-#import datetime
+import datetime
 from datetime import date, timedelta
 import time
 from decimal import Decimal
@@ -131,7 +131,7 @@ def Load_dataFarmaciaDetalle(request, data):
                                    password="123456")
     curx = miConexionx.cursor()
 
-    detalle = 'select  far.id id,estados.nombre estadoNombre ,origen.nombre origenNombre, mov.nombre movNombre, sum.nombre suministro, 	det."dosisCantidad" dosis, dosis.descripcion unidadDosis,   vias.nombre via,	det."cantidadOrdenada" cantidad, det."diasTratamiento" tratamiento , via.nombre viaAdministracion FROM farmacia_farmacia far INNER JOIN farmacia_farmaciadetalle det ON (det.farmacia_id = far.id) LEFT JOIN farmacia_farmaciaestados estados  ON (estados.id = far.estado_id) INNER JOIN enfermeria_enfermeriatipoorigen origen ON (origen.id = far."tipoOrigen_id") INNER JOIN enfermeria_enfermeriatipomovimiento mov ON (mov.id = far."tipoOrigen_id") INNER JOIN facturacion_suministros sum ON (sum.id= det.suministro_id) INNER JOIN clinico_viasadministracion vias ON (vias.id= det."viaAdministracion_id") INNER JOIN clinico_unidadesdemedidadosis dosis ON (dosis.id= det."dosisUnidad_id") INNER JOIN clinico_viasadministracion via ON (via.id= det."viaAdministracion_id")  where far.id ='  + "'" + str(farmaciaId) + "'"
+    detalle = 'select  det.id id,estados.nombre estadoNombre ,origen.nombre origenNombre, mov.nombre movNombre, sum.nombre suministro, 	det."dosisCantidad" dosis, dosis.descripcion unidadDosis,   vias.nombre via,	det."cantidadOrdenada" cantidad, det."diasTratamiento" tratamiento , via.nombre viaAdministracion FROM farmacia_farmacia far INNER JOIN farmacia_farmaciadetalle det ON (det.farmacia_id = far.id) LEFT JOIN farmacia_farmaciaestados estados  ON (estados.id = far.estado_id) INNER JOIN enfermeria_enfermeriatipoorigen origen ON (origen.id = far."tipoOrigen_id") INNER JOIN enfermeria_enfermeriatipomovimiento mov ON (mov.id = far."tipoOrigen_id") INNER JOIN facturacion_suministros sum ON (sum.id= det.suministro_id) INNER JOIN clinico_viasadministracion vias ON (vias.id= det."viaAdministracion_id") INNER JOIN clinico_unidadesdemedidadosis dosis ON (dosis.id= det."dosisUnidad_id") INNER JOIN clinico_viasadministracion via ON (via.id= det."viaAdministracion_id")  where far.id ='  + "'" + str(farmaciaId) + "'"
     print(detalle)
 
     curx.execute(detalle)
@@ -231,3 +231,133 @@ def BuscaDatosPaciente(request):
     serialized1 = json.dumps(datosPaciente, default=str)
 
     return HttpResponse(serialized1, content_type='application/json')
+
+
+def AdicionarDespachosDispensa(request):
+    print("Entre AdicionarDespachosDispensa")
+
+    context = {}
+
+    username = request.POST['username']
+    sede = request.POST['sede']
+    username_id = request.POST['username_id']
+    farmaciaId = request.POST['farmaciaId']
+    farmaciaDetalleId = request.POST['farmaciaDetalleId']
+
+    servicioAdmonEntrega = request.POST['farmaciaDetalleId']
+    servicioAdmonRecibe = request.POST['servicioAdmonRecibe']
+    plantaEntrega = request.POST['plantaEntrega']
+    plantaRecibe = request.POST['plantaRecibe']
+
+
+    print("sede:", sede)
+    print("username:", username)
+    print("username_id:", username_id)
+    print("farmaciaDetalleId:", farmaciaDetalleId)
+
+    # Desde aqui
+    # Guarda en FarmaciaDespachos
+
+    # Guarda en FarmaciaDespachosDispensa
+
+    # Grabacion Formulacion
+
+    formulacion = request.POST['formulacion']
+
+    print("voy a validar Medicamentos =", formulacion)
+
+    jsonFormulacion = json.loads(formulacion)
+
+    print("voy para el FOR")
+
+    print("voy a validar JSONMedicamentos =", jsonFormulacion)
+    medicamentos= ""
+    estadoReg = 'A'
+    fechaRegistro = datetime.datetime.now()
+
+    miConexion3 = None
+    try:
+
+        miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                       password="123456")
+        cur3 = miConexion3.cursor()
+        # Primero creamos el despacho
+
+        comando = 'INSERT INTO farmacia_farmaciadespachos ("fechaRegistro", "estadoReg",farmacia_id, "serviciosAdministrativosEntrega_id","usuarioEntrega_id", "usuarioRegistro_id","serviciosAdministrativosRecibe_id" , "usuarioRecibe_id") VALUES (' + "'" + str(fechaRegistro) + "','" + str(estadoReg) + "'," + str(farmaciaId) + ",'" + str(servicioAdmonEntrega) + "','" + str(plantaEntrega) + "','" + str(username) + "','" +  str(servicioAdmonRecibe) + "','" +  str(plantaRecibe) + "')"
+        print(comando)
+        cur3.execute(comando)
+
+        # Segundo creamos la dispensacion del despacho
+        item = 0
+
+        for key in jsonFormulacion:
+
+            if key["medicamentos"] != '':
+                item = item +1
+                medicamentos = key["medicamentos"].strip()
+                print("medicamentos=", medicamentos)
+
+                dosis = key["dosis"].strip()
+                print("dosis=", dosis)
+                uMedidaDosis = key["uMedidaDosis"].strip()
+                print("uMedidaDosis=", uMedidaDosis)
+                # frecuencia = key["frecuencia"]
+                # print("frecuencia=", frecuencia)
+                # vias = key["vias"]
+                # print("vias =", vias )
+                viasAdministracion = key["viasAdministracion"].strip()
+                print("viasAdministracion =", viasAdministracion)
+                cantidadMedicamento = key["cantidadMedicamento"].strip()
+                print("cantidadMedicamento=", cantidadMedicamento)
+                # diasTratamiento = key["diasTratamiento"]
+                # print("diasTratamiento=", diasTratamiento)
+
+                comando = 'INSERT INTO farmacia_farmaciadespachosdispensa ("dosisCantidad","cantidadOrdenada","fechaRegistro", "estadoReg",despacho_id, "dosisUnidad_id", "farmaciaDetalle_id", "suministro_id","usuarioRegistro_id", "viaAdministracion_id", item)  VALUES ( ' + "'" + str(dosis) + "','" + str(cantidadMedicamento) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(despachoId) + "','" + str(uMedidaDosis) + "','" + str(farmaciaDetalleId) + "','" + str(medicamentos) + "','" + str(usuarioRegistro) + "','" + str(viasAdministracion) + "','" + str(item) + "')"
+
+                print(comando)
+                cur3.execute(comando)
+
+                # Tercero creamos lo que Enfermeria recibe
+
+                comando = 'INSERT INTO farmacia_farmaciadespachos ("fechaRegistro", "estadoReg",farmacia_id, "serviciosAdministrativosEntrega_id","usuarioEntrega_id", "usuarioRegistro_id","serviciosAdministrativosRecibe_id" , "usuarioRecibe_id" VALUES () '
+                print(comando)
+                cur3.execute(comando)
+
+                # Cuarto cargamos a la cuenta del paciente
+
+                comando = 'INSERT INTO farmacia_farmaciadespachos ("fechaRegistro", "estadoReg",farmacia_id, "serviciosAdministrativosEntrega_id","usuarioEntrega_id", "usuarioRegistro_id","serviciosAdministrativosRecibe_id" , "usuarioRecibe_id" VALUES () '
+                print(comando)
+                cur3.execute(comando)
+
+
+        miConexion3.commit()
+        cur3.close()
+        miConexion3.close()
+
+        return JsonResponse({'success': True, 'message': 'Programacion Actualizada satisfactoriamente!'})
+
+
+    except psycopg2.DatabaseError as error:
+        print("Entre por rollback", error)
+        if miConexion3:
+            print("Entro ha hacer el Rollback")
+            miConexion3.rollback()
+        raise error
+
+    finally:
+        if miConexion3:
+            cur3.close()
+            miConexion3.close()
+
+
+
+
+    # Guarda en Enfermeriarecibe
+
+    # Guarda en la cuenta del paciente facturacion_liquidaciondetalle
+
+
+    # Creo eso es todop
+
+
+	

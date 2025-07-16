@@ -13,13 +13,75 @@ let dataTablePanelFarmaciaInitialized = false;
 let dataTableFarmaciaDespachosInitialized = false;
 let dataTableFarmaciaDetalleInitialized = false;
 let dataTableDespachosFarmaciaDispensaInitialized = false;
-
+var controlMed = 0;
 
 
 $(document).ready(function() {
 
 
 // aqui van los filtros de busqueda
+
+$('#tablaFormulacion tbody').on('click', 'tr', function () {
+    confirm("Desea eliminar LA FILA: ");
+       var tableL = $('#tablaFormulacion').DataTable();
+      var fila = $(this).parents("tr")['prevObject']['0']['_DT_RowIndex'];
+          alert("Fila a borrar = " + fila);
+		var rows = tableL
+			    .rows(fila)
+			    .remove()
+			    .draw();
+		 document.getElementById("tablaFormulacion").deleteRow(fila-1);
+
+});
+
+
+/*------------------------------------------
+        --------------------------------------------
+        Create Post Code Formulacion
+        --------------------------------------------
+        --------------------------------------------*/
+        $('#BtnAdicionarFormulacion').click(function (e) {
+            e.preventDefault();
+
+
+   	   if (controlMed == 0)
+   	   {
+   	   var table10 = $('#tablaFormulacion').DataTable({scrollY: '100px', paging:false,   scrollX: true,  scrollCollapse: true,  lengthMenu: [5]});   // accede de nuevo a la DataTable.
+   	   controlMed=1;
+   	   }
+   	   else
+   	   {
+	  var table10 = $('#tablaFormulacion').DataTable();
+   	   }
+
+
+           var select3 = document.getElementById("medicamentos"); /*Obtener el SELECT */
+      	   var medicamentos= select3.options[select3.selectedIndex].value; /* Obtener el valor */
+      	   textMedicamentos = select3.options[select3.selectedIndex].innerText; //El texto de la opción seleccionada
+
+           var dosis =  document.getElementById("dosis").value;
+
+	        var select3 = document.getElementById("uMedidaDosis"); /*Obtener el SELECT */
+      	   var uMedidaDosis= select3.options[select3.selectedIndex].value; /* Obtener el valor */
+      	   textUMedidaDosis = select3.options[select3.selectedIndex].innerText; //El texto de la opción seleccionada
+
+	         var select3 = document.getElementById("uMedidaDosis"); /*Obtener el SELECT */
+      	   var uMedidaDosis= select3.options[select3.selectedIndex].value; /* Obtener el valor */
+      	   textUMedidaDosis = select3.options[select3.selectedIndex].innerText; //El texto de la opción seleccionada
+
+
+	         var select3 = document.getElementById("vias"); /*Obtener el SELECT */
+      	   var viasAdministracion = select3.options[select3.selectedIndex].value; /* Obtener el valor */
+      	   textViasAdministracion = select3.options[select3.selectedIndex].innerText; //El texto de la opción seleccionada
+	
+	        var cantidadMedicamento =  document.getElementById("cantidadMedicamento").value;
+
+	    table10.row.add([ medicamentos, textMedicamentos, dosis,  textUMedidaDosis, textViasAdministracion, cantidadMedicamento   ,  '<i class="fa fa-trash"></i>']).draw(false);
+
+        });
+
+
+
 
 });
 
@@ -278,7 +340,7 @@ function arrancaFarmacia(valorTabla,valorData)
 	},
 
                 { data: "fields.id"},
-		{ data: "fields.dosis"}, 
+        		{ data: "fields.dosis"},
                 { data: "fields.unidadDosis"},
                 { data: "fields.suministro"},
                 { data: "fields.viaAdministracion"},
@@ -447,6 +509,9 @@ $('#tablaPanelFarmacia tbody').on('click', '.miSelFarmacia', function() {
 	     var post_id = $(this).data('pk');
 	farmaciaId =   post_id;
 	alert("farmaciaId = " +  farmaciaId);
+
+	document.getElementById("farmaciaId").value = farmaciaId;
+
 	
 
     	var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
@@ -499,7 +564,8 @@ $('#tablaFarmaciaDetalle tbody').on('click', '.miFarmaciaDetalle', function() {
 	     var post_id = $(this).data('pk');
 	farmaciaDetalleId =   post_id;
 	alert("farmaciaDetalleId = " +  farmaciaDetalleId);
-	
+	document.getElementById("farmaciaDetalle").value = farmaciaDetalleId;
+
 
     	var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
         var username = document.getElementById("username").value;
@@ -522,5 +588,119 @@ $('#tablaFarmaciaDetalle tbody').on('click', '.miFarmaciaDetalle', function() {
   });
 
 
+// Medicamentos
 
+function tableActionsFormulacion() {
+
+   var table10 = $('#tablaFormulacion').DataTable({
+                "language": {
+                  "lengthMenu": "Display _MENU_ registros",
+                   "search": "Filtrar registros:",
+                    },
+                processing: true,
+                serverSide: false,
+                scrollY: '130px',
+	            scrollX: true,
+	            scrollCollapse: true,
+                paging:false,
+                 columnDefs: [
+                {
+                    "render": function ( data, type, row ) {
+                        var btn = '';
+			  btn = btn + " <button class='btn btn-danger deleteRevisionSistemas' id='borraDiag'>" + '<i class="fa fa-trash"></i>' + "</button>";
+                        return btn;
+                    },
+                    "targets": 13
+               }
+            ],
+        lengthMenu: [5],
+    columns:[
+    //"dummy" configuration
+        { visible: true }, //col 1
+        { visible: true }, //col 2
+        { visible: true }, //col 3
+	  { visible: false }, //col 4
+	  { visible: true }, //col 5
+	  { visible: false }, //col 6
+	  { visible: true }, //col 7
+
+
+            ],
+    });
+}
+
+
+
+// FIN MEDICAMENTOS
+
+
+function AdicionarDespachosDispensa()
+{
+
+	// Formulacion
+	alert("Entre a GRABAR despacho");
+
+     	var username = document.getElementById("username").value;
+        var sede = document.getElementById("sede").value;
+        var username_id = document.getElementById("username_id").value;
+        var farmaciaDetalleId = document.getElementById("farmaciaDetalle").value;
+        var servicioAdmonEntrega = document.getElementById("servicioAdmonEntrega").value;
+        var servicioAdmonRecibe = document.getElementById("servicioAdmonRecibe").value;
+        var plantaEntrega = document.getElementById("plantaEntrega").value;
+        var plantaRecibe = document.getElementById("plantaRecibe").value;
+        var farmaciaId = document.getElementById("farmaciaId").value;
+
+    const table10 = $('#tablaFormulacion').DataTable();
+     var datos_tabla10 = table10.rows().data().toArray();
+
+        formulacion=[]
+
+
+	for(var i= 0; i < datos_tabla10.length; i++) {
+
+	    formulacion.push({
+	        "medicamentos"    : datos_tabla10[i][0] ,
+	        "dosis"    : datos_tabla10[i][2],
+	        "uMedidaDosis"    : datos_tabla10[i][3] ,
+	      /*  "vias"    : datos_tabla10[i][4] , */
+	        "viasAdministracion"    : datos_tabla10[i][4] ,
+	        "cantidadMedicamento"    : datos_tabla10[i][5] ,
+
+	      });
+	   };
+
+	    formulacion  = JSON.stringify(formulacion);
+
+	    alert("Esto envio formulacion = " + formulacion)
+    
+ 	// Fin Formulacion
+
+
+  $.ajax({
+            	   type: 'POST',
+ 	               url: '/adicionarDespachosDispensa/',
+  	               data: { 'username':username, 'sede':sede, 'username_id':username_id,'formulacion':formulacion,
+                            'farmaciaDetalleId':farmaciaDetalleId,'servicioAdmonEntrega':servicioAdmonEntrega, 'servicioAdmonRecibe':servicioAdmonRecibe,
+                             	   'plantaEntrega':plantaEntrega, 'plantaRecibe':plantaRecibe, 'farmaciaId':farmaciaId},
+ 	      		success: function (respuesta2) {
+ 	      		        var data = JSON.parse(respuesta2);
+				// var data  = respuesta2;
+ 	      		      
+     			    $("#mensajes").html(data.message);
+
+			document.getElementById("mensajes").innerHTML = data.message;
+
+	
+			// location.reload();  Con el submit ya no seria necesariorecargar la pagina
+
+ 	      		}, // cierra function sucess
+ 	      		error: function (request, status, error) {
+ 	      			document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
+ 	      			
+
+ 	      		}, // cierra error function
+  	        });  // cierra ajax
+
+
+}
 

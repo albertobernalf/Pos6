@@ -1,4 +1,6 @@
 select * from  farmacia_farmaciaDespachos;
+select * from  farmacia_farmaciaDespachosdispensa;
+
 select * from  farmacia_farmacia;
 select * from  farmacia_farmaciaDetalle;
 
@@ -86,6 +88,6 @@ INNER JOIN enfermeria_enfermeriatipoorigen origen ON (origen.id =  far."tipoOrig
 	WHERE far."sedesClinica_id" = '1' AND far."fechaRegistro" >= '2025-01-01' 
 	ORDER BY far."fechaRegistro" desc
 
-	INNER JOIN clinico_historia hist ON (hist.id = far.historia_id) INNER JOIN admisiones_ingresos adm ON (adm."tipoDoc_id" = hist."tipoDoc_id"  AND adm.documento_id = hist.documento_id AND adm.consec = hist."consecAdmision") INNER JOIN usuarios_usuarios usu ON (usu.id = adm.documento_id ) INNER JOIN usuarios_tiposdocumento tipos ON (tipos.id = adm."tipoDoc_id")	 INNER JOIN sitios_dependencias dep ON (dep.id=adm."dependenciasActual_id")  INNER JOIN clinico_servicios servicios ON servicios.id=adm."serviciosActual_id"
+	
 
 

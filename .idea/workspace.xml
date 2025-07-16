@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d041c887-ab16-4071-a5e4-52a8295bbd5d" name="Changes" comment="" />
+    <list default="true" id="d041c887-ab16-4071-a5e4-52a8295bbd5d" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/admisiones/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/admisiones/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/farmacia/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/farmacia/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/farmacia/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/farmacia/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/script_farmacia01.sql" beforeDir="false" afterPath="$PROJECT_DIR$/script_farmacia01.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/css/panelFarmacia.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/panelFarmacia.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/mainFarmaciaF.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/mainFarmaciaF.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/farmacia/panelFarmaciaF.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/farmacia/panelFarmaciaF.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vulner/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/vulner/urls.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -18,14 +28,14 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "C:/EntornosPython/Pos6",
-    "settings.editor.selected.configurable": "vcs.Git"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/EntornosPython/Pos6&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;vcs.Git&quot;
   }
-}]]></component>
+}</component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
