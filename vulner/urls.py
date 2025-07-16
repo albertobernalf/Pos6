@@ -376,6 +376,7 @@ urlpatterns = [
     path('load_dataFarmaciaDetalle/<str:data>', viewsFarmacia.Load_dataFarmaciaDetalle,name='load_dataFarmaciaDetalle'),
     path('buscaDatosPaciente/', viewsFarmacia.BuscaDatosPaciente , name='busca_DatosPaciente'),
     path('load_dataFarmaciaDespachosDispensa/<str:data>', viewsFarmacia.Load_dataFarmaciaDespachosDispensa,name='load__dataFarmaciaDespachosDispensa'),
+    path('load_dataFarmaciaDespachos/<str:data>', viewsFarmacia.Load_dataFarmaciaDespachos, name='load__dataFarmaciaDespachos'),
     path('adicionarDespachosDispensa/', viewsFarmacia.AdicionarDespachosDispensa , name='Adicionar_Despachos_Dispensa'),
 
 

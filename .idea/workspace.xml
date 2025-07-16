@@ -4,10 +4,10 @@
     <list default="true" id="d041c887-ab16-4071-a5e4-52a8295bbd5d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/admisiones/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/admisiones/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/farmacia/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/farmacia/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clinico/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/clinico/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/enfermeria/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/enfermeria/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/farmacia/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/farmacia/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/script_farmacia01.sql" beforeDir="false" afterPath="$PROJECT_DIR$/script_farmacia01.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/css/panelFarmacia.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/panelFarmacia.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/static/mainFarmaciaF.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/mainFarmaciaF.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/farmacia/panelFarmaciaF.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/farmacia/panelFarmaciaF.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/vulner/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/vulner/urls.py" afterDir="false" />

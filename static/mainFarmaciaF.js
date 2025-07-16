@@ -476,12 +476,12 @@ const initDataTablePanelFarmacia = async () => {
         arrancaFarmacia(1,data);
 	    dataTablePanelFarmaciaInitialized = true;
 
-        arrancaFarmacia(3,data);
-	    dataTableFarmaciaDetalleInitialized = true;
+        //arrancaFarmacia(3,data);
+	    //dataTableFarmaciaDetalleInitialized = true;
 
 
-        arrancaFarmacia(2,data);
-	    dataTableFarmaciaDespachosInitialized = true;
+        //arrancaFarmacia(2,data);
+	    //dataTableFarmaciaDespachosInitialized = true;
 
         arrancaFarmacia(4,data);
 	    dataTableFarmaciaDespachosDispensaInitialized = true;
@@ -563,9 +563,9 @@ $('#tablaFarmaciaDetalle tbody').on('click', '.miFarmaciaDetalle', function() {
 
 	     var post_id = $(this).data('pk');
 	farmaciaDetalleId =   post_id;
-	alert("farmaciaDetalleId = " +  farmaciaDetalleId);
-	document.getElementById("farmaciaDetalle").value = farmaciaDetalleId;
 
+	document.getElementById("farmaciaDetalle").value = farmaciaDetalleId;
+	farmaciaId = document.getElementById("farmaciaId").value ;
 
     	var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
         var username = document.getElementById("username").value;
@@ -579,12 +579,13 @@ $('#tablaFarmaciaDetalle tbody').on('click', '.miFarmaciaDetalle', function() {
         data['sede'] = sede;
         data['username_id'] = username_id;
 	data['farmaciaDetalleId'] = farmaciaDetalleId;
+	data['farmaciaId'] = farmaciaId;
  	    data = JSON.stringify(data);
 
 	     arrancaFarmacia(4,data);
 		     	dataTableFarmaciaDespachosDispensaInitialized = true;
 
-      
+
   });
 
 
@@ -682,16 +683,37 @@ function AdicionarDespachosDispensa()
   	               data: { 'username':username, 'sede':sede, 'username_id':username_id,'formulacion':formulacion,
                             'farmaciaDetalleId':farmaciaDetalleId,'servicioAdmonEntrega':servicioAdmonEntrega, 'servicioAdmonRecibe':servicioAdmonRecibe,
                              	   'plantaEntrega':plantaEntrega, 'plantaRecibe':plantaRecibe, 'farmaciaId':farmaciaId},
- 	      		success: function (respuesta2) {
- 	      		        var data = JSON.parse(respuesta2);
-				// var data  = respuesta2;
- 	      		      
+ 	      		success: function (data) {
+
      			    $("#mensajes").html(data.message);
 
 			document.getElementById("mensajes").innerHTML = data.message;
 
-	
-			// location.reload();  Con el submit ya no seria necesariorecargar la pagina
+    	var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
+        var username = document.getElementById("username").value;
+        var nombreSede = document.getElementById("nombreSede").value;
+    	var sede = document.getElementById("sede").value;
+        var username_id = document.getElementById("username_id").value;
+        var farmaciaId = document.getElementById("farmaciaId").value;
+         var data =  {}   ;
+        data['username'] = username;
+        data['sedeSeleccionada'] = sedeSeleccionada;
+        data['nombreSede'] = nombreSede;
+        data['sede'] = sede;
+        data['username_id'] = username_id;
+
+	    data['farmaciaId'] = farmaciaId;
+
+
+ 	    data = JSON.stringify(data);
+
+        arrancaFarmacia(2,data);
+	    dataTableFarmaciaDespachosInitialized = true;
+        // aqui inicializar tablaFormulacion etc
+
+        var tabla = $('#tablaFormulacion').DataTable();
+        tabla.rows().remove().draw();
+
 
  	      		}, // cierra function sucess
  	      		error: function (request, status, error) {

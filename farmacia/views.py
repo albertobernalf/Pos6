@@ -33,6 +33,8 @@ from clinico.models import Servicios, EspecialidadesMedicos
 import io
 import pandas as pd
 from cirugia.models import EstadosCirugias, EstadosSalas, EstadosProgramacion, ProgramacionCirugias, Cirugias, ProgramacionCirugias
+from clinico.models import UnidadesDeMedidaDosis, ViasAdministracion
+from enfermeria.models import EnfermeriaDetalle
 from contratacion.models import Convenios
 from django.db.models import Min, Max, Avg
 from django.db.models import F
@@ -153,6 +155,50 @@ def Load_dataFarmaciaDetalle(request, data):
 
     return HttpResponse(serialized1, content_type='application/json')
 
+def Load_dataFarmaciaDespachos(request, data):
+    print("Entre Load_dataFarmaciaDespachos")
+
+    context = {}
+    d = json.loads(data)
+
+    username = d['username']
+    sede = d['sede']
+    username_id = d['username_id']
+    farmaciaDetalleId = d['farmaciaDetalleId']
+    farmaciaId = d['farmaciaId']
+
+    nombreSede = d['nombreSede']
+    print("sede:", sede)
+    print("username:", username)
+    print("username_id:", username_id)
+    print("farmaciaDetalleId:", farmaciaDetalleId)
+
+    farmaciaDespachos = []
+
+    miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                   password="123456")
+    curx = miConexionx.cursor()
+
+    detalle = 'select dispensa.id id, dispensa.despacho_id despacho , sum.nombre suministro, 	dispensa."dosisCantidad" dosis, dosis.descripcion unidadDosis,   vias.nombre via,	dispensa."cantidadOrdenada" cantidad FROM farmacia_farmaciadespachosdispensa dispensa INNER JOIN farmacia_farmaciaDetalle detalle ON (detalle.id = dispensa."farmaciaDetalle_id") INNER JOIN facturacion_suministros sum ON (sum.id= dispensa.suministro_id) INNER JOIN clinico_viasadministracion vias ON (vias.id= dispensa."viaAdministracion_id") INNER JOIN clinico_unidadesdemedidadosis dosis ON (dosis.id= dispensa."dosisUnidad_id") WHERE detalle.FARMACIA_ID=' + "'" + str(farmaciaId) + "'"
+
+    print(detalle)
+
+    curx.execute(detalle)
+
+    for id,despacho, suministro, dosis, unidadDosis, via, cantidad in curx.fetchall():
+        farmaciaDespachos.append(
+            {"model": "famacia.farmaciadespachos", "pk": id, "fields":
+                {'id': id, 'despacho':despacho, 'suministro': suministro ,'unidadDosis':unidadDosis, 'via':via, 'cantidad':cantidad  }})
+
+    miConexionx.close()
+    print(farmaciaDespachos)
+
+    serialized1 = json.dumps(farmaciaDespachos, default=str)
+
+    return HttpResponse(serialized1, content_type='application/json')
+
+
+
 
 def Load_dataFarmaciaDespachosDispensa(request, data):
     print("Entre Load_dataFarmaciaDespachosDispensa")
@@ -164,6 +210,7 @@ def Load_dataFarmaciaDespachosDispensa(request, data):
     sede = d['sede']
     username_id = d['username_id']
     farmaciaDetalleId = d['farmaciaDetalleId']
+    farmaciaId = d['farmaciaId']
 
     nombreSede = d['nombreSede']
     print("sede:", sede)
@@ -177,16 +224,16 @@ def Load_dataFarmaciaDespachosDispensa(request, data):
                                    password="123456")
     curx = miConexionx.cursor()
 
-    detalle = 'select dispensa.id id, dispensa.despacho_id despacho , sum.nombre suministro, 	dispensa."dosisCantidad" dosis, dosis.descripcion unidadDosis,   vias.nombre via,	dispensa."cantidadOrdenada" cantidad, dispensa."diasTratamiento" tratamiento FROM farmacia_farmaciadespachosdispensa dispensa INNER JOIN farmacia_farmaciaDetalle detalle ON (detalle.id = dispensa."farmaciaDetalle_id") INNER JOIN facturacion_suministros sum ON (sum.id= dispensa.suministro_id) INNER JOIN clinico_viasadministracion vias ON (vias.id= dispensa."viaAdministracion_id") INNER JOIN clinico_unidadesdemedidadosis dosis ON (dosis.id= dispensa."dosisUnidad_id") WHERE detalle.FARMACIA_ID=' + "'" + str(farmaciaDetalleId) + "'"
+    detalle = 'select dispensa.id id, dispensa.despacho_id despacho , sum.nombre suministro, 	dispensa."dosisCantidad" dosis, dosis.descripcion unidadDosis,   vias.nombre via,	dispensa."cantidadOrdenada" cantidad FROM farmacia_farmaciadespachosdispensa dispensa INNER JOIN farmacia_farmaciaDetalle detalle ON (detalle.id = dispensa."farmaciaDetalle_id") INNER JOIN facturacion_suministros sum ON (sum.id= dispensa.suministro_id) INNER JOIN clinico_viasadministracion vias ON (vias.id= dispensa."viaAdministracion_id") INNER JOIN clinico_unidadesdemedidadosis dosis ON (dosis.id= dispensa."dosisUnidad_id") WHERE detalle.FARMACIA_ID=' + "'" + str(farmaciaId) + "'"
 
     print(detalle)
 
     curx.execute(detalle)
 
-    for id,despacho, suministro, dosis, unidadDosis, via, cantidad, tratamiento in curx.fetchall():
+    for id,despacho, suministro, dosis, unidadDosis, via, cantidad in curx.fetchall():
         farmaciaDespachosDispensa.append(
             {"model": "famacia.farmaciadespachosDispensa", "pk": id, "fields":
-                {'id': id, 'despacho':despacho, 'suministro': suministro ,'unidadDosis':unidadDosis, 'via':via, 'cantidad':cantidad,'tratamiento':tratamiento  }})
+                {'id': id, 'despacho':despacho, 'suministro': suministro ,'unidadDosis':unidadDosis, 'via':via, 'cantidad':cantidad  }})
 
     miConexionx.close()
     print(farmaciaDespachosDispensa)
@@ -283,9 +330,14 @@ def AdicionarDespachosDispensa(request):
         cur3 = miConexion3.cursor()
         # Primero creamos el despacho
 
-        comando = 'INSERT INTO farmacia_farmaciadespachos ("fechaRegistro", "estadoReg",farmacia_id, "serviciosAdministrativosEntrega_id","usuarioEntrega_id", "usuarioRegistro_id","serviciosAdministrativosRecibe_id" , "usuarioRecibe_id") VALUES (' + "'" + str(fechaRegistro) + "','" + str(estadoReg) + "'," + str(farmaciaId) + ",'" + str(servicioAdmonEntrega) + "','" + str(plantaEntrega) + "','" + str(username) + "','" +  str(servicioAdmonRecibe) + "','" +  str(plantaRecibe) + "')"
+        comando = 'INSERT INTO farmacia_farmaciadespachos ("fechaRegistro", "estadoReg",farmacia_id, "serviciosAdministrativosEntrega_id","usuarioEntrega_id", "usuarioRegistro_id","serviciosAdministrativosRecibe_id" , "usuarioRecibe_id") VALUES (' + "'" + str(fechaRegistro) + "','" + str(estadoReg) + "'," + str(farmaciaId) + ",'" + str(servicioAdmonEntrega) + "','" + str(plantaEntrega) + "','" + str(username_id) + "','" +  str(servicioAdmonRecibe) + "','" +  str(plantaRecibe) + "') RETURNING id ;"
         print(comando)
-        cur3.execute(comando)
+
+        resultado = cur3.execute(comando)
+        despachoId = cur3.fetchone()[0]
+
+
+        print ("despachoId = ", despachoId)
 
         # Segundo creamos la dispensacion del despacho
         item = 0
@@ -301,33 +353,43 @@ def AdicionarDespachosDispensa(request):
                 print("dosis=", dosis)
                 uMedidaDosis = key["uMedidaDosis"].strip()
                 print("uMedidaDosis=", uMedidaDosis)
+                MedidaDosis = UnidadesDeMedidaDosis.objects.get(descripcion=uMedidaDosis)
+                print ("MedidaDosis =", MedidaDosis.id)
+
                 # frecuencia = key["frecuencia"]
                 # print("frecuencia=", frecuencia)
                 # vias = key["vias"]
                 # print("vias =", vias )
                 viasAdministracion = key["viasAdministracion"].strip()
                 print("viasAdministracion =", viasAdministracion)
+                vias = ViasAdministracion.objects.get(nombre=viasAdministracion)
+                print ("vias =", vias)
+
+
                 cantidadMedicamento = key["cantidadMedicamento"].strip()
                 print("cantidadMedicamento=", cantidadMedicamento)
                 # diasTratamiento = key["diasTratamiento"]
                 # print("diasTratamiento=", diasTratamiento)
 
-                comando = 'INSERT INTO farmacia_farmaciadespachosdispensa ("dosisCantidad","cantidadOrdenada","fechaRegistro", "estadoReg",despacho_id, "dosisUnidad_id", "farmaciaDetalle_id", "suministro_id","usuarioRegistro_id", "viaAdministracion_id", item)  VALUES ( ' + "'" + str(dosis) + "','" + str(cantidadMedicamento) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(despachoId) + "','" + str(uMedidaDosis) + "','" + str(farmaciaDetalleId) + "','" + str(medicamentos) + "','" + str(usuarioRegistro) + "','" + str(viasAdministracion) + "','" + str(item) + "')"
+                comando = 'INSERT INTO farmacia_farmaciadespachosdispensa ("dosisCantidad","cantidadOrdenada","fechaRegistro", "estadoReg",despacho_id, "dosisUnidad_id", "farmaciaDetalle_id", "suministro_id","usuarioRegistro_id", "viaAdministracion_id", item)  VALUES ( ' + "'" + str(dosis) + "','" + str(cantidadMedicamento) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(despachoId) + "','" + str(MedidaDosis.id) + "','" + str(farmaciaDetalleId) + "','" + str(medicamentos) + "','" + str(username_id) + "','" + str(vias.id) + "','" + str(item) + "')"
 
                 print(comando)
                 cur3.execute(comando)
 
                 # Tercero creamos lo que Enfermeria recibe
 
-                comando = 'INSERT INTO farmacia_farmaciadespachos ("fechaRegistro", "estadoReg",farmacia_id, "serviciosAdministrativosEntrega_id","usuarioEntrega_id", "usuarioRegistro_id","serviciosAdministrativosRecibe_id" , "usuarioRecibe_id" VALUES () '
+                enfermeriaDetalleId = EnfermeriaDetalle.objects.get(farmaciaDetalle_id=farmaciaDetalleId)
+                print("vias =", vias)
+
+                comando = 'INSERT INTO enfermeria_enfermeriarecibe ("dosisCantidad","cantidadDispensada","fechaRegistro", "estadoReg", "dosisUnidad_id", "enfermeriaDetalle_id", "suministro_id","usuarioRegistro_id", "viaAdministracion_id",despachos_id, item)  VALUES ( ' + "'" + str(dosis) + "','" + str(cantidadMedicamento) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(MedidaDosis.id) + "','" + str(enfermeriaDetalleId.id) + "','" + str(medicamentos) + "','" + str(username_id) + "','" + str(vias.id) + "','"  + str(despachoId) + "','"  + str(item) + "')"
                 print(comando)
                 cur3.execute(comando)
 
                 # Cuarto cargamos a la cuenta del paciente
 
-                comando = 'INSERT INTO farmacia_farmaciadespachos ("fechaRegistro", "estadoReg",farmacia_id, "serviciosAdministrativosEntrega_id","usuarioEntrega_id", "usuarioRegistro_id","serviciosAdministrativosRecibe_id" , "usuarioRecibe_id" VALUES () '
-                print(comando)
-                cur3.execute(comando)
+                #comando = 'INSERT INTO facturacion_liquidacionDetalle ("fechaRegistro", "estadoReg",farmacia_id, "serviciosAdministrativosEntrega_id","usuarioEntrega_id", "usuarioRegistro_id","serviciosAdministrativosRecibe_id" , "usuarioRecibe_id" VALUES () '
+                #print(comando)
+                #cur3.execute(comando)
 
 
         miConexion3.commit()

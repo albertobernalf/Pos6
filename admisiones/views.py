@@ -2743,6 +2743,9 @@ def escogeAcceso(request, Sede, Username, Profesional, Documento, NombreSede, es
 
         serviciosAdministrativos = []
 
+        serviciosAdministrativos.append({'id': '', 'nombre': ''})
+
+
         for id, nombre in curt.fetchall():
             serviciosAdministrativos.append({'id': id, 'nombre': nombre})
 
@@ -2813,7 +2816,7 @@ def escogeAcceso(request, Sede, Username, Profesional, Documento, NombreSede, es
         print(comando)
 
         plantaUsuarios= []
-        uMedidaDosis.append({'id': '', 'nombre': ''})
+        plantaUsuarios.append({'id': '', 'nombre': ''})
 
         for id, nombre in curt.fetchall():
             plantaUsuarios.append({'id': id, 'nombre': nombre})
@@ -2823,7 +2826,8 @@ def escogeAcceso(request, Sede, Username, Profesional, Documento, NombreSede, es
 
         context['PlantaUsuarios'] = plantaUsuarios
 
-        # Fin combo UMedidaDosis
+        # Fin combo PlantaUsuarios
+
 
 
 

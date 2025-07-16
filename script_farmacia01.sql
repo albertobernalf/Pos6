@@ -89,5 +89,7 @@ INNER JOIN enfermeria_enfermeriatipoorigen origen ON (origen.id =  far."tipoOrig
 	ORDER BY far."fechaRegistro" desc
 
 	
-
+INSERT INTO farmacia_farmaciadespachos ("fechaRegistro", "estadoReg",farmacia_id, "serviciosAdministrativosEntrega_id",
+	"usuarioEntrega_id", "usuarioRegistro_id","serviciosAdministrativosRecibe_id" , "usuarioRecibe_id")
+	VALUES ('2025-07-16 12:14:18.866042','A',11,'11','4','15','4')
 

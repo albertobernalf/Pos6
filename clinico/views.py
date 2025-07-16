@@ -1620,6 +1620,19 @@ def crearHistoriaClinica(request):
 
                         print("Esto grabe de Medicamentos : ", i.id);
 
+                        # Aqui rutina Actualizar totales de CABEZOTE de liquidacion. Primero por ORM calcula totales
+                        # OJOOO ESTA RUTINA se debe hacer desde DISPENSACION NDE FARMAICA.
+                        # POR EL MOMNETO DESDE AQUIP
+
+                        print("medicamentos = ", medicamentos)
+
+                        medicamentosId = Suministros.objects.get(id=medicamentos)
+                        print("medicamentosId total", medicamentosId)
+                        print("medicamentosId", medicamentosId.id)
+                        print("requiereAutorizacion", medicamentosId.requiereAutorizacion)
+
+                        tiposSuministroId = TiposSuministro.objects.get(nombre='MEDICAMENTOS')
+
                         if (medicamentosId.requiereAutorizacion == 'N'):
 
                             # Aqui Gaurdar FARMACIA
@@ -1642,23 +1655,11 @@ def crearHistoriaClinica(request):
 
                             # Aqui Guardar ENFERMERIA DETALLE
 
-                            er = EnfermeriaDetalle(enfermeria_id=e.id , historiaMedicamentos_id = i.id , suministro_id = medicamentos ,  dosisCantidad = dosis,  dosisUnidad_id =uMedidaDosis ,viaAdministracion_id = vias , frecuencia_id=frecuencia  , cantidadOrdenada=cantidadMedicamento  , diasTratamiento=diasTratamiento, fechaRegistro =fechaRegistro ,  usuarioRegistro_id  =  usuarioRegistro, estadoReg = 'A')
+                            er = EnfermeriaDetalle(enfermeria_id=e.id , historiaMedicamentos_id = i.id , farmaciaDetalle_id = fd.id, suministro_id = medicamentos ,  dosisCantidad = dosis,  dosisUnidad_id =uMedidaDosis ,viaAdministracion_id = vias ,  cantidadOrdenada=cantidadMedicamento  ,fechaRegistro =fechaRegistro ,  usuarioRegistro_id  =  usuarioRegistro, estadoReg = 'A')
                             er.save()
 
                         # Fin Grabacion Formulacion
 
-                        # Aqui rutina Actualizar totales de CABEZOTE de liquidacion. Primero por ORM calcula totales
-			# OJOOO ESTA RUTINA se debe hacer desde DISPENSACION NDE FARMAICA.
-			# POR EL MOMNETO DESDE AQUIP
-
-                        print("medicamentos = ", medicamentos)
-
-                        medicamentosId = Suministros.objects.get(id=medicamentos)
-                        print ("medicamentosId total", medicamentosId)
-                        print("medicamentosId", medicamentosId.id)
-                        print("requiereAutorizacion", medicamentosId.requiereAutorizacion)
-
-                        tiposSuministroId = TiposSuministro.objects.get(nombre='MEDICAMENTOS')
 
                         ## Desde Aqui rutina de Facturacion
                         #
