@@ -35,7 +35,6 @@ SELECT recibe.id id, tipos.nombre tipoDoc, usu.documento documento, usu.nombre p
 	  medida.descripcion UnidadMedida, sum.nombre medicamento, via.nombre via
 FROM admisiones_ingresos ing
 INNER JOIN clinico_historia hist ON (hist."tipoDoc_id" = ing."tipoDoc_id" AND hist.documento_id=ing.documento_id AND hist."consecAdmision" = ing.consec)
---INNER JOIN clinico_historiamedicamentos histmed ON (histmed.historia_id = hist.id)
 INNER JOIN farmacia_farmacia far ON (far.historia_id= hist.id)
 INNER JOIN farmacia_farmaciadetalle fardet ON (fardet.farmacia_id = far.id)
 INNER JOIN	enfermeria_enfermeriarecibe recibe ON (recibe."farmaciaDetalle_id" = fardet.id)
@@ -46,5 +45,8 @@ INNER JOIN usuarios_usuarios usu ON (usu.id = ing.documento_id)
 INNER JOIN usuarios_tiposdocumento tipos ON (tipos.id = usu."tipoDoc_id")	
 WHERE ing.id= 50133
 order by hist.folio, fardet."consecutivoMedicamento"
+
+detalle ='SELECT recibe.id id, tipos.nombre tipoDoc, usu.documento documento, usu.nombre paciente, hist.folio folio, fardet."consecutivoMedicamento" consecutivoMedicamento, recibe."cantidadDispensada" cantidad, 	  medida.descripcion UnidadMedida, sum.nombre medicamento, via.nombre via FROM admisiones_ingresos ing INNER JOIN clinico_historia hist ON (hist."tipoDoc_id" = ing."tipoDoc_id" AND hist.documento_id=ing.documento_id AND hist."consecAdmision" = ing.consec) INNER JOIN farmacia_farmacia far ON (far.historia_id= hist.id) INNER JOIN farmacia_farmaciadetalle fardet ON (fardet.farmacia_id = far.id) INNER JOIN	enfermeria_enfermeriarecibe recibe ON (recibe."farmaciaDetalle_id" = fardet.id) INNER JOIN facturacion_suministros sum ON (sum.id = recibe.suministro_id) INNER JOIN clinico_viasadministracion via ON (via.id = recibe."viaAdministracion_id") INNER JOIN clinico_unidadesdemedidadosis medida ON (medida.id = recibe."dosisUnidad_id") INNER JOIN usuarios_usuarios usu ON (usu.id = ing.documento_id) INNER JOIN usuarios_tiposdocumento tipos ON (tipos.id = usu."tipoDoc_id")	WHERE ing.id=' + "'" + str(ingresoId) + "'" + ' order by hist.folio, fardet."consecutivoMedicamento"
+
 
 

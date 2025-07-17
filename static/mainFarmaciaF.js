@@ -46,7 +46,7 @@ $('#tablaFormulacion tbody').on('click', 'tr', function () {
 
    	   if (controlMed == 0)
    	   {
-   	   var table10 = $('#tablaFormulacion').DataTable({scrollY: '100px', paging:false,   scrollX: true,  scrollCollapse: true,  lengthMenu: [5]});   // accede de nuevo a la DataTable.
+   	   var table10 = $('#tablaFormulacion').DataTable({scrollY: '80px', paging:false,  search:false,  scrollX: true,  scrollCollapse: true,  lengthMenu: [5]});   // accede de nuevo a la DataTable.
    	   controlMed=1;
    	   }
    	   else
@@ -606,7 +606,7 @@ function tableActionsFormulacion() {
                     },
                 processing: true,
                 serverSide: false,
-                scrollY: '130px',
+                scrollY: '100px',
 	            scrollX: true,
 	            scrollCollapse: true,
                 paging:false,

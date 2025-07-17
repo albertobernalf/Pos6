@@ -787,10 +787,17 @@ Gran Contribuyente Res. 0012220 de 26-12-2022 - Actividad económica 8610
 AUTORETENEDOR EN RENTA RESOLUCION 151 DEL 14-01-2016
 Cufe: daeeb9343955c6037479b2e1b7bb485526f7524e5b085b4a5eb6e64298b22873bd6ef35b929221
 
-- Aqui en adelante nueva etapa ENFERMERIA
+- Aqui en adelante nueva etapa ENFERMERIA/FARMACIA .ALTO TURMEQUE PAPABEROL
 
 -- Ojo al ingresar un folio si no tiene convenio se revienta verificar
 -- OJO en el ORM esta colocando mal la fecha de registro
 -- OJO con los rollback cuango guarda folio de laboratorio
 -- crear modal para despachar
 -- solo traer a farmacia los NO DESPACHADOS
+-- cuando dispense al guardar en liquidaciondetalle, tuvoi problema con la escogencia del convenio_id, aquihay problemilla. un ,omento cogio una y en otro momento cogio otro cabezote
+-- ojop tenia dos vancomicinas repetidas
+-- en farmaia no suma bien los totales del cabezote  suministrois y prceimientos OJOP
+
+-- El boton refrecar en factuyracion esta muy grande
+-- ojo toca mejporar las pántallas en darmacia y enfemeria algo pasa
+- ojo los mensajes de satisfactorio en azul y de error en rojo primero hay que borrarlos y despues si escribir o sio quedan montados

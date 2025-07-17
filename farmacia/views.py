@@ -29,14 +29,16 @@ import time
 from decimal import Decimal
 from admisiones.models import Ingresos
 from facturacion.models import ConveniosPacienteIngresos, Liquidacion, LiquidacionDetalle, Facturacion, FacturacionDetalle, Conceptos
-from clinico.models import Servicios, EspecialidadesMedicos
-from farmacia.models import FarmaciaEstados
+from tarifarios.models import TarifariosDescripcion
+from clinico.models import Servicios, EspecialidadesMedicos, Historia, HistoriaMedicamentos
+from farmacia.models import FarmaciaEstados, Farmacia, FarmaciaDetalle
 import io
 import pandas as pd
 from cirugia.models import EstadosCirugias, EstadosSalas, EstadosProgramacion, ProgramacionCirugias, Cirugias, ProgramacionCirugias
 from clinico.models import UnidadesDeMedidaDosis, ViasAdministracion
 from enfermeria.models import EnfermeriaDetalle
 from contratacion.models import Convenios
+from cartera.models import Pagos
 from django.db.models import Min, Max, Avg
 from django.db.models import F
 
@@ -295,7 +297,7 @@ def AdicionarDespachosDispensa(request):
     username_id = request.POST['username_id']
     farmaciaId = request.POST['farmaciaId']
     farmaciaDetalleId = request.POST['farmaciaDetalleId']
-    farmaciaEstadosId = request.POST['farmaciaEstados']
+
 
     servicioAdmonEntrega = request.POST['servicioAdmonEntrega']
     print("servicioAdmonEntrega:", servicioAdmonEntrega)
@@ -313,6 +315,20 @@ def AdicionarDespachosDispensa(request):
     print("farmaciaDetalleId:", farmaciaDetalleId)
 
     # Desde aqui
+
+    # Busco la Historia
+    farmacia = Farmacia.objects.get(id=farmaciaId)
+    historia = Historia.objects.get(id=farmacia.historia_id)
+    tipoDocId = historia.tipoDoc_id
+    documentoId= historia.documento_id
+    ingresoPaciente = historia.consecAdmision
+
+
+
+    print("tipoDocId:", tipoDocId)
+    print("documentoId:", documentoId)
+    print("ingresoPaciente:", ingresoPaciente)
+
     # Guarda en FarmaciaDespachos
 
     # Guarda en FarmaciaDespachosDispensa
@@ -346,8 +362,128 @@ def AdicionarDespachosDispensa(request):
         resultado = cur3.execute(comando)
         despachoId = cur3.fetchone()[0]
 
-
         print ("despachoId = ", despachoId)
+
+        ##############################################
+        ##############################################
+        ## DESDE AQUI CABEZOTE LIQUIDACION
+        ## El UNICO PROBLEMA ES SI OPRIME DISMENSAR Y NMO VA NINGUN DESPACHO OJO CONTROLAR ESTO CON JAVASCRIPT EN EL MANI
+
+        # Aqui rutina busca Convenio del Paciente
+
+
+        comando = 'SELECT min(p.convenio_id) id FROM facturacion_conveniospacienteingresos p WHERE "tipoDoc_id" = ' + "'" + str(tipoDocId) + "'" + ' AND documento_id = ' + "'" + str(documentoId) + "'" + ' AND "consecAdmision" = ' + "'" + str(ingresoPaciente) + "'"
+        cur3.execute(comando)
+
+        print(comando)
+
+        convenio = []
+
+        for id in cur3.fetchall():
+            convenio.append({'id': id})
+
+        print("convenioId = ", convenio[0])
+
+        convenioId = convenio[0]['id']
+        convenioId = str(convenioId)
+        print("convenioId = ", convenioId)
+
+        convenioId = convenioId.replace("(", ' ')
+        convenioId = convenioId.replace(")", ' ')
+        convenioId = convenioId.replace(",", ' ')
+        print("convenioId = ", convenioId)
+        print("Tamalo de convenioId =", len(convenioId))
+
+        convenioId = convenioId.strip()
+
+        print("sin espacioos convenioId =", convenioId)
+
+        if convenioId.strip() == 'None':
+            convenioId = 0
+            print("Entre a MODIFICAR convenioID")
+
+        print("ULTIMO valor de convenioId= ", convenioId)
+
+        # Fin Rutina busca convenio del paciente
+
+        # Validacion si existe o No existe CABEZOTE
+
+        comando = 'SELECT id FROM facturacion_liquidacion WHERE "tipoDoc_id" = ' + "'" + str(tipoDocId) + "' AND documento_id = " + "'" + str(documentoId) + "'" + ' AND "consecAdmision" = ' + "'" + str(ingresoPaciente) + "'"
+        cur3.execute(comando)
+
+        cabezoteLiquidacion = []
+
+        for id in cur3.fetchall():
+            cabezoteLiquidacion.append({'id': id})
+
+        print("CABEZOTE DE LIQUIDACION = ", cabezoteLiquidacion);
+
+
+        if (cabezoteLiquidacion == []):
+            # Si no existe liquidacion CABEZOTE se debe crear con los totales, abonos, anticipos, procedimiento, suministros etc
+            comando = 'INSERT INTO facturacion_liquidacion ("sedesClinica_id", "tipoDoc_id", documento_id, "consecAdmision", fecha, "totalCopagos", "totalCuotaModeradora", "totalProcedimientos" , "totalSuministros" , "totalLiquidacion", "valorApagar", anticipos, "fechaRegistro", "estadoRegistro", convenio_id,  "usuarioRegistro_id", "totalAbonos") VALUES (' + "'" + str(sede) + "'," + "'" + str(tipoDocId) + "','" + str(documentoId) + "','" + str(ingresoPaciente) + "','" + str(fechaRegistro) + "'," + '0,0,0,0,0,0,0,' + "'" + str(fechaRegistro) + "','" + str(estadoReg) + "'," + str(convenioId) + ',' + "'" + str(username_id) + "',0) RETURNING id "
+            cur3.execute(comando)
+            liquidacionId = cur3.fetchone()[0]
+
+            print("resultado liquidacionId = ", liquidacionId)
+
+            # liquidacionU = Liquidacion.objects.all().aggregate(maximo=Coalesce(Max('id'), 0))
+            # liquidacionId = (liquidacionU['maximo']) + 0
+        else:
+            liquidacionId = cabezoteLiquidacion[0]['id']
+            liquidacionId = str(liquidacionId)
+            print("liquidacionId = ", liquidacionId)
+
+        liquidacionId = str(liquidacionId)
+        liquidacionId = liquidacionId.replace("(", ' ')
+        liquidacionId = liquidacionId.replace(")", ' ')
+        liquidacionId = liquidacionId.replace(",", ' ')
+
+        # Fin validacion de Liquidacion cabezote
+
+        # Rutiva busca en convenio el valor de la tarifa CUPS
+        print("liquidacionId = ", liquidacionId)
+
+        # Aqui RUTINA busca consecutivo de liquidacion
+
+        comando = 'SELECT (max(p.consecutivo) + 1) cons FROM facturacion_liquidaciondetalle p WHERE liquidacion_id = ' + liquidacionId
+
+        cur3.execute(comando)
+
+        print(comando)
+
+        consecLiquidacion = []
+
+        for cons in cur3.fetchall():
+            consecLiquidacion.append({'cons': cons})
+
+        print("consecLiquidacion = ", consecLiquidacion[0])
+
+        consecLiquidacion = consecLiquidacion[0]['cons']
+        consecLiquidacion = str(consecLiquidacion)
+        print("consecLiquidacion = ", consecLiquidacion)
+
+        consecLiquidacion = consecLiquidacion.replace("(", ' ')
+        consecLiquidacion = consecLiquidacion.replace(")", ' ')
+        consecLiquidacion = consecLiquidacion.replace(",", ' ')
+
+        if consecLiquidacion.strip() == 'None':
+            print("consecLiquidacion = ", consecLiquidacion)
+            consecLiquidacion = 1
+
+        # Fin RUTINA busca consecutivo de liquidacion
+
+        # RUTINA encuentra columna de dondel LEER la tarifa.
+        #
+        contratacion = Convenios.objects.get(id=convenioId)
+
+        columnaALeer = TarifariosDescripcion.objects.get(id=contratacion.tarifariosDescripcionProc_id)
+
+        print("Columna a leer = ", columnaALeer.columna)
+
+        ## FIN CABEZOTE DE LIQUIDACION
+        #############################################
+        ###############################################
 
         # Segundo creamos la dispensacion del despacho
         item = 0
@@ -375,11 +511,16 @@ def AdicionarDespachosDispensa(request):
                 vias = ViasAdministracion.objects.get(nombre=viasAdministracion)
                 print ("vias =", vias)
 
-
                 cantidadMedicamento = key["cantidadMedicamento"].strip()
                 print("cantidadMedicamento=", cantidadMedicamento)
                 # diasTratamiento = key["diasTratamiento"]
                 # print("diasTratamiento=", diasTratamiento)
+
+                # Busco historialMediamentos
+
+                farmaciaDetalle = FarmaciaDetalle.objects.get(id=farmaciaDetalleId)
+                historiaMediamentos = HistoriaMedicamentos.objects.get(id=farmaciaDetalle.historiaMedicamentos_id)
+
 
                 comando = 'INSERT INTO farmacia_farmaciadespachosdispensa ("dosisCantidad","cantidadOrdenada","fechaRegistro", "estadoReg",despacho_id, "dosisUnidad_id", "farmaciaDetalle_id", "suministro_id","usuarioRegistro_id", "viaAdministracion_id")  VALUES ( ' + "'" + str(dosis) + "','" + str(cantidadMedicamento) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(despachoId) + "','" + str(MedidaDosis.id) + "','" + str(farmaciaDetalleId) + "','" + str(medicamentos) + "','" + str(username_id) + "','" + str(vias.id) +  "')"
 
@@ -397,10 +538,99 @@ def AdicionarDespachosDispensa(request):
 
                 # Cuarto cargamos a la cuenta del paciente
 
-                #comando = 'INSERT INTO facturacion_liquidacionDetalle ("fechaRegistro", "estadoReg",farmacia_id, "serviciosAdministrativosEntrega_id","usuarioEntrega_id", "usuarioRegistro_id","serviciosAdministrativosRecibe_id" , "usuarioRecibe_id" VALUES () '
-                #print(comando)
-                #cur3.execute(comando)
 
+                ## Desde Aqui rutina de Facturacion Para Medicamentos
+                #
+
+                comando = 'SELECT conv.convenio_id id ,exa.cums cums, sum."' + str(columnaALeer.columna) + '"' + ' tarifaValor FROM facturacion_conveniospacienteingresos conv, tarifarios_tarifariosdescripcion des, tarifarios_tarifariossuministros sum, facturacion_suministros exa, contratacion_convenios conv1 , tarifarios_tipostarifa tiptar WHERE conv."tipoDoc_id" = ' + "'" + str(tipoDocId) + "'" + ' AND conv.documento_id = ' + "'" + str(documentoId) + "'" + ' AND conv."consecAdmision" = ' + "'" + str(ingresoPaciente) + "'" + ' AND conv.convenio_id = conv1.id AND des.id = conv1."tarifariosDescripcionSum_id" AND sum."codigoCum_id" = exa.id  And exa.id = ' + "'" + str(medicamentos) + "'" + ' AND des."tiposTarifa_id" = tiptar.id and sum."tiposTarifa_id" = tiptar.id'
+
+                print("comando =", comando)
+
+                cur3.execute(comando)
+                convenioValor = []
+
+                for id, sum, tarifaValor in cur3.fetchall():
+                    convenioValor.append({'id': id, 'sum': sum, 'valor': tarifaValor})
+
+
+                if (convenioValor != []):
+                    print("convenioValor[0]['valor'] = ", convenioValor[0]['valor'])
+                    print("convenioValor[0]['sum'] = ", convenioValor[0]['sum'])
+
+                if (convenioValor != []):
+
+                    print("Sum = ", convenioValor[0]['sum'])
+                    tarifaValor = convenioValor[0]['valor']
+                    tarifaValor = str(tarifaValor)
+                    print("tarifaValor = ", tarifaValor)
+                    tarifaValor = tarifaValor.replace("None", ' ')
+                    tarifaValor = tarifaValor.replace("(", ' ')
+                    tarifaValor = tarifaValor.replace(")", ' ')
+                    tarifaValor = tarifaValor.replace(",", ' ')
+                    tarifaValor = tarifaValor.replace(" ", '')
+                    print("tarifaValor = ", tarifaValor)
+
+                else:
+                    tarifaValor = 0
+
+                if tarifaValor == None:
+                    tarifaValor = 0
+
+                TotalTarifa = float(tarifaValor) * float(cantidadMedicamento)
+                print("consecLiquidacion LISTO= ", consecLiquidacion)
+
+                # Aqui Rutina FACTURACION crea en liquidaciondetalle el registro con la tarifa, con campo cups y convenio
+                #
+
+                comando = 'INSERT INTO facturacion_liquidaciondetalle (consecutivo,fecha, cantidad, "valorUnitario", "valorTotal",cirugia_id,"fechaCrea", "fechaRegistro", "estadoRegistro", "cums_id",  "usuarioRegistro_id", liquidacion_id, "tipoRegistro", "historiaMedicamento_id") VALUES (' + "'" + str(consecLiquidacion) + "','" + str(fechaRegistro) + "','" + str(cantidadMedicamento) + "','" + str(tarifaValor) + "','" + str(TotalTarifa) + "',null,'" + str(fechaRegistro) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(medicamentos) + "','" + str(username_id) + "'," + liquidacionId + ",'SISTEMA'," + "'" + str(historiaMediamentos) + "'" + ')'
+                print("comando ", comando)
+
+                cur3.execute(comando)
+
+                consecLiquidacion = int(consecLiquidacion) + 1
+
+            # Fin rutina Facturacion Medicamentos detalle
+
+        ## Vamops a actualizar los totales de la Liquidacion:
+        #
+        totalSuministros = LiquidacionDetalle.objects.all().filter(liquidacion_id=liquidacionId).filter(examen_id=None).exclude(estadoRegistro='N').aggregate(totalS=Coalesce(Sum('valorTotal'), 0))
+        totalSuministros = (totalSuministros['totalS']) + 0
+        print("totalSuministros", totalSuministros)
+        totalProcedimientos = LiquidacionDetalle.objects.all().filter(liquidacion_id=liquidacionId).filter(cums_id=None).exclude(estadoRegistro='N').aggregate(totalP=Coalesce(Sum('valorTotal'), 0))
+        totalProcedimientos = (totalProcedimientos['totalP']) + 0
+        print("totalProcedimientos", totalProcedimientos)
+        registroPago = Liquidacion.objects.get(id=liquidacionId)
+
+        # Continua Aqui
+
+        totalCopagos = Pagos.objects.all().filter(tipoDoc_id=tipoDocId).filter(documento_id=documentoId).filter(consec=ingresoPaciente).filter(formaPago_id=4).exclude(estadoReg='N').aggregate(totalC=Coalesce(Sum('valor'), 0))
+        totalCopagos = (totalCopagos['totalC']) + 0
+        print("totalCopagos", totalCopagos)
+        totalCuotaModeradora = Pagos.objects.all().filter(tipoDoc_id=tipoDocId).filter(documento_id=documentoId).filter(consec=ingresoPaciente).filter(formaPago_id=3).exclude(estadoReg='N').aggregate(totalM=Coalesce(Sum('valor'), 0))
+        totalCuotaModeradora = (totalCuotaModeradora['totalM']) + 0
+        print("totalCuotaModeradora", totalCuotaModeradora)
+        totalAnticipos = Pagos.objects.all().filter(tipoDoc_id=tipoDocId).filter(documento_id=documentoId).filter(consec=ingresoPaciente).filter(formaPago_id=1).exclude(estadoReg='N').aggregate(Anticipos=Coalesce(Sum('valor'), 0))
+        totalAnticipos = (totalAnticipos['Anticipos']) + 0
+        print("totalAnticipos", totalAnticipos)
+        totalAbonos = Pagos.objects.all().filter(tipoDoc_id=tipoDocId).filter(documento_id=documentoId).filter(consec=ingresoPaciente).filter(formaPago_id=2).exclude(estadoReg='N').aggregate(totalAb=Coalesce(Sum('valor'), 0))
+        totalAbonos = (totalAbonos['totalAb']) + 0
+        # totalAbonos = totalCopagos + totalAnticipos + totalCuotaModeradora
+        print("totalAbonos", totalAbonos)
+
+        totalRecibido = totalCopagos + totalCuotaModeradora + totalAnticipos + totalAbonos
+        totalApagar = totalSuministros + totalProcedimientos - totalRecibido
+        totalLiquidacion = totalSuministros + totalProcedimientos
+        print("totalLiquidacion", totalLiquidacion)
+        print("totalAPagar", totalApagar)
+
+        # Rutina Guarda en cabezote los totales
+
+        print("Voy a grabar el cabezote")
+
+        comando = 'UPDATE facturacion_liquidacion SET "totalSuministros" = ' + str(totalSuministros) + ',"totalProcedimientos" = ' + str(totalProcedimientos) + ', "totalCopagos" = ' + str(totalCopagos) + ' , "totalCuotaModeradora" = ' + str(totalCuotaModeradora) + ', anticipos = ' + str(totalAnticipos) + ' ,"totalAbonos" = ' + str(totalAbonos) + ', "totalLiquidacion" = ' + str(totalLiquidacion) + ', "valorApagar" = ' + str(totalApagar) + ', "totalRecibido" = ' + str(totalRecibido) + ' WHERE id =' + str(liquidacionId)
+        cur3.execute(comando)
+
+        ## FIN rutina de Facturacion Para Medicamentos Total
 
         miConexion3.commit()
         cur3.close()

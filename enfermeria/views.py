@@ -126,7 +126,7 @@ def Load_dataMedicamentosEnfermeria(request, data):
     d = json.loads(data)
 
     ingresoId = d['ingresoId']
- 
+
     print ("ingresoId =", ingresoId)
 
 
