@@ -791,3 +791,6 @@ Cufe: daeeb9343955c6037479b2e1b7bb485526f7524e5b085b4a5eb6e64298b22873bd6ef35b92
 
 -- Ojo al ingresar un folio si no tiene convenio se revienta verificar
 -- OJO en el ORM esta colocando mal la fecha de registro
+-- OJO con los rollback cuango guarda folio de laboratorio
+-- crear modal para despachar
+-- solo traer a farmacia los NO DESPACHADOS

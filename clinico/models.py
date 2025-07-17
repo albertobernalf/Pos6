@@ -1077,6 +1077,7 @@ class HistoriaMedicamentos(models.Model):
     antibiotico = models.CharField(max_length=1, blank=True, null=True, editable=True)
     fechaSuspension = models.DateTimeField( blank=True, null=True, editable=True)
     consecutivoLiquidacion = models.IntegerField(blank=True, null=True)
+    consecutivoMedicamento = models.IntegerField(blank=True, null=True)
     usuarioRegistro = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True,    on_delete=models.PROTECT)
     fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)
     estadoReg = models.CharField(max_length=1, default='A', editable=False)

@@ -384,6 +384,7 @@ urlpatterns = [
 
     path('load_dataPanelEnfermeria/<str:data>', viewsEnfermeria.Load_dataPanelEnfermeria,name='load_dataPanelEnfermeria'),
     path('load_dataPanelEnfermeria2/<str:data>', viewsEnfermeria.Load_dataPanelEnfermeria2,name='load_dataPanelEnfermeria2'),
+    path('load_dataMedicamentosEnfermeria/<str:data>', viewsEnfermeria.Load_dataMedicamentosEnfermeria,    name='load_dataMedicamentosEnfermeria'),
  
 
 

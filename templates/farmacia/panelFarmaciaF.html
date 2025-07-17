@@ -47,7 +47,7 @@
 
 	<article id="Farmacia">
 
-  <form action="/PanelEnfermeria/" method="get" id="FormPanelEnfermeria">
+  	<form action="/PanelEnfermeria/" method="get" id="FormPanelEnfermeria">
 
                 <input type="hidden" id="username" name="username" value="{{Username}}">
                 <input type="hidden" id="sedeSeleccionada" name="sedeSeleccionada" value="{{SedeSeleccionada}}">
@@ -80,7 +80,7 @@
 
    			   <div class="row">
 				
-                                        <table  id= "tablaPanelFarmacia" class=" display table table-striped table-sm fs-6 nowrap" style="width: 100%";>
+                                        <table  id= "tablaPanelFarmacia" class=" display table table-striped table-sm fs-6 nowrap" style="width: 100%">
                                            <thead>
                                             <tr>    
 						<bold> 
@@ -116,8 +116,6 @@
  <!-- Modales Enfermeria -->
 
      <!-- FIN Espacio Modales  -->
-
-	
 
 	</article>
 
@@ -167,11 +165,9 @@
 			<input type="text" id="farmaciaDetalle" name="farmaciaDetalle" value="" readonly>
 		</div>
 
-
-
    			   <div class="row">
 				
-                                        <table  id= "tablaFarmaciaDetalle" class=" display table table-striped table-sm fs-6 nowrap" style="width: 100%";>
+                                        <table  id= "tablaFarmaciaDetalle" class=" display table table-striped table-sm fs-6 nowrap" style="width: 100%">
                                            <thead>
                                             <tr>    
 						<bold> 
@@ -191,13 +187,13 @@
                                             </tbody>
                                      
                                         </table>
-                                    </div>
+
 
 			<!-- Aquip van los combos de Adicionar -->
 
-   			   <div class="row">
+
 				
-                                        <table  id= "tablaFarmaciaDespachosDispensa" class=" display table table-striped table-sm fs-6 nowrap" style="width: 100%";>
+                                        <table  id= "tablaFarmaciaDespachosDispensa" class=" display table table-striped table-sm fs-6 nowrap" style="width: 100%">
                                            <thead>
                                             <tr>    
 						<bold> 
@@ -209,7 +205,7 @@
 					 <th>unidadDosis</th>                                                 
 					 <th>via</th>                                                 
 					 <th>cantidad</th>                                                 
-					 <th>tratamiento</th>                                                 
+					                                           
 				              
 					</bold>                                  
 
@@ -219,8 +215,8 @@
                                             </tbody>
                                      
                                         </table>
-                                    </div>
-                 
+                                    </div> <!-- cierrra el row  -->
+               
 
 
 		<!--   estop viene de clinico -->
@@ -330,10 +326,12 @@
                                                         </tr>
                                                         </tbody>
                                                     </table>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                                  </div>  
+                                            </div> <!-- cierrra el row  -->
+
+                                        </div> <!-- cierrra el body  -->
+                                    </div> <!-- cierrra el card  -->
+
                                 </div>
                             </div>
                             <!-- FIN TABLE DE  EL DATATABLE  -->
@@ -343,9 +341,12 @@
              <!-- HASTA AQUI DATATABLE -->
 
              
-		<div align="left" height="20px" width="50px">
+		<div align="left" height="10px" width="30px">
 
 		 <div class="row">
+				 <div class="col-sm-2">
+			          </div>
+
 					   <div class="col-sm-2">
  							   Entrega:               
                                                         <select class="select-css" id="servicioAdmonEntrega"
@@ -396,12 +397,13 @@
                                                             {% endfor %}
                                                         </select>
                                                     </div>
+					   <div class="col-sm-2">
 
-
-               <input type="button" style="height:30px;margin-left: 0 ; margin-bottom: 0;border-top-right-radius: 0;"  size="10px" id="BtnAdicionarDespachosDispensa"  name="BtnAdicionarDespachosDispensa" value="Dispensar" onclick= "AdicionarDespachosDispensa()" >				    
-
+				               <input type="button" style="height:30px;margin-left: 0 ; margin-bottom: 0;border-top-right-radius: 0;"  size="10px" id="BtnAdicionarDespachosDispensa"  name="BtnAdicionarDespachosDispensa" value="Dispensar" onclick= "AdicionarDespachosDispensa()" >				    
+                                                    </div>
 		</div> <!-- cierra el row -->
 
+		</div>
 		</div>
              </div>
 
@@ -458,6 +460,7 @@
 <div class="marco">
     <ul class="tabs">
        <li><a href="#PedidosEnfermeria"><span class="fa-solid fa-user-doctor-message"></span> <span class="tab-text"> </span> Pedidos Enfermeria</a></li>
+	<li><a href="#ConsultaDespachos"><span class="fa-solid fa-user-doctor-message"></span> <span class="tab-text"> </span> Consulta Despachos</a></li>
  </ul>
 </div>
 

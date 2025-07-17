@@ -118,3 +118,40 @@ def Load_dataPanelEnfermeria2(request, data):
     serialized1 = json.dumps(enfermeria, default=str)
 
     return HttpResponse(serialized1, content_type='application/json')
+
+def Load_dataMedicamentosEnfermeria(request, data):
+    print("Entre Load_dataMedicamentosEnfermeria")
+
+    context = {}
+    d = json.loads(data)
+
+    ingresoId = d['ingresoId']
+ 
+    print ("ingresoId =", ingresoId)
+
+
+    medicamentosEnfermeria = []
+
+    miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                       password="123456")
+    curx = miConexionx.cursor()
+
+    detalle = 'SELECT recibe.id id, tipos.nombre tipoDoc, usu.documento documento, usu.nombre paciente, hist.folio folio, fardet."consecutivoMedicamento" consecutivoMedicamento, recibe."cantidadDispensada" cantidad, 	  medida.descripcion UnidadMedida, sum.nombre medicamento, via.nombre via FROM admisiones_ingresos ing INNER JOIN clinico_historia hist ON (hist."tipoDoc_id" = ing."tipoDoc_id" AND hist.documento_id=ing.documento_id AND hist."consecAdmision" = ing.consec) INNER JOIN farmacia_farmacia far ON (far.historia_id= hist.id) INNER JOIN farmacia_farmaciadetalle fardet ON (fardet.farmacia_id = far.id) INNER JOIN	enfermeria_enfermeriarecibe recibe ON (recibe."farmaciaDetalle_id" = fardet.id) INNER JOIN facturacion_suministros sum ON (sum.id = recibe.suministro_id) INNER JOIN clinico_viasadministracion via ON (via.id = recibe."viaAdministracion_id") INNER JOIN clinico_unidadesdemedidadosis medida ON (medida.id = recibe."dosisUnidad_id") INNER JOIN usuarios_usuarios usu ON (usu.id = ing.documento_id) INNER JOIN usuarios_tiposdocumento tipos ON (tipos.id = usu."tipoDoc_id")	WHERE ing.id=' + "'" + str(ingresoId) + "'" + ' order by hist.folio, fardet."consecutivoMedicamento"'
+
+    print(detalle)
+
+    curx.execute(detalle)
+
+    for id, tipoDoc, documento, paciente, folio, consecutivoMedicamento, cantidad,  UnidadMedida, medicamento, via in curx.fetchall():
+            medicamentosEnfermeria.append({"model": "ingresos.ingresos", "pk": id, "fields":
+                {'id': id, 'tipoDoc': tipoDoc, 'Documento': documento, 'paciente': paciente,
+                 'folio': folio, 'consecutivoMedicamento': consecutivoMedicamento,   'cantidad': cantidad, 'UnidadMedida': UnidadMedida,
+                   'medicamento': medicamento}})
+
+    miConexionx.close()
+    print("medicamentosEnfermeria = " , medicamentosEnfermeria)
+
+
+    serialized1 = json.dumps(medicamentosEnfermeria, default=str)
+
+    return HttpResponse(serialized1, content_type='application/json')

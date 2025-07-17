@@ -27,7 +27,7 @@ from clinico.forms import  IncapacidadesForm, HistorialDiagnosticosCabezoteForm,
 from django.db.models import Avg, Max, Min , Sum
 from usuarios.models import Usuarios, TiposDocumento
 from admisiones.models import Ingresos
-from farmacia.models import Farmacia, FarmaciaDetalle
+from farmacia.models import Farmacia, FarmaciaDetalle, FarmaciaEstados
 from enfermeria.models import Enfermeria, EnfermeriaDetalle
 
 from django.contrib import messages
@@ -1591,6 +1591,13 @@ def crearHistoriaClinica(request):
 
                 print("voy a validar JSONMedicamentos =", jsonFormulacion)
 
+                consecutivo = 1
+
+                # Consigue el esato de Farmacia SOLICITUD
+
+                estadoFarmaciaSolicitud = FarmaciaEstados.objects.get(nombre='SOLICITUD')
+                print("estadoFarmaciaSolicitud", estadoFarmaciaSolicitud)
+
                 for key in jsonFormulacion:
 
                     medicamentos = key["medicamentos"]
@@ -1611,12 +1618,12 @@ def crearHistoriaClinica(request):
                     diasTratamiento = key["diasTratamiento"]
                     print("diasTratamiento=", diasTratamiento)
 
-
                     if medicamentos != "":
                         i = HistoriaMedicamentos(dosisCantidad=dosis, suministro_id= medicamentos,frecuencia_id=frecuencia,dosisUnidad_id=uMedidaDosis,  
                                                    viaAdministracion_id = vias,  cantidadOrdenada= cantidadMedicamento, diasTratamiento= diasTratamiento,
-                                          historia_id=historiaId,usuarioRegistro_id=usuarioRegistro  , estadoReg='A', fechaRegistro=fechaRegistro , consecutivoLiquidacion=consecLiquidacion)
+                                          historia_id=historiaId,usuarioRegistro_id=usuarioRegistro  , estadoReg='A', fechaRegistro=fechaRegistro , consecutivoLiquidacion=consecLiquidacion, consecutivoMedicamento=consecutivo)
                         i.save()
+
 
                         print("Esto grabe de Medicamentos : ", i.id);
 
@@ -1633,30 +1640,33 @@ def crearHistoriaClinica(request):
 
                         tiposSuministroId = TiposSuministro.objects.get(nombre='MEDICAMENTOS')
 
-                        if (medicamentosId.requiereAutorizacion == 'N'):
+                        # Aqui logica para crear el cabezote de Farmacia y Enfermeria
+
+                        if (consecutivo == 1):
 
                             # Aqui Gaurdar FARMACIA
 
-                            f = Farmacia(historia_id=historiaId , serviciosAdministrativos_id =serviciosAdministrativos , tipoOrigen_id = '1', tipoMovimiento_id = '1' , fechaRegistro =fechaRegistro  , usuarioRegistro_id  =  usuarioRegistro, estadoReg = 'A' , sedesClinica_id = sede)
+                            f = Farmacia(historia_id=historiaId , serviciosAdministrativos_id =serviciosAdministrativos , tipoOrigen_id = '1', tipoMovimiento_id = '1' , fechaRegistro =fechaRegistro  , usuarioRegistro_id  =  usuarioRegistro, estadoReg = 'A' , sedesClinica_id = sede,  estado_id= estadoFarmaciaSolicitud.id)
                             f.save()
-
-                            # Aqui Gaurdar FARMACIA DETALLE
-                            #
-                            fd = FarmaciaDetalle(farmacia_id=f.id , historiaMedicamentos_id = i.id , suministro_id = medicamentos ,  dosisCantidad = dosis,  dosisUnidad_id =uMedidaDosis ,viaAdministracion_id = vias , frecuencia_id=frecuencia  , cantidadOrdenada=cantidadMedicamento  , diasTratamiento=diasTratamiento, fechaRegistro =fechaRegistro ,  usuarioRegistro_id  =  usuarioRegistro, estadoReg = 'A')
-                            fd.save()
-
-
 
                             # Aqui Guardar ENFERMERIA
 
                             e = Enfermeria(historia_id=historiaId , serviciosAdministrativos_id =serviciosAdministrativos , tipoOrigen_id = '1', tipoMovimiento_id = '1' , fechaRegistro =fechaRegistro  , usuarioRegistro_id  =  usuarioRegistro, estadoReg = 'A' , sedesClinica_id = sede)
                             e.save()
 
+                        if (medicamentosId.requiereAutorizacion == 'N'):
+
+                            # Aqui Guardar FARMACIA DETALLE
+                            #
+                            fd = FarmaciaDetalle(farmacia_id=f.id , historiaMedicamentos_id = i.id , suministro_id = medicamentos ,  dosisCantidad = dosis,  dosisUnidad_id =uMedidaDosis ,viaAdministracion_id = vias , cantidadOrdenada=cantidadMedicamento  , fechaRegistro =fechaRegistro ,  usuarioRegistro_id  =  usuarioRegistro, estadoReg = 'A', consecutivoMedicamento=consecutivo)
+                            fd.save()
 
                             # Aqui Guardar ENFERMERIA DETALLE
 
                             er = EnfermeriaDetalle(enfermeria_id=e.id , historiaMedicamentos_id = i.id , farmaciaDetalle_id = fd.id, suministro_id = medicamentos ,  dosisCantidad = dosis,  dosisUnidad_id =uMedidaDosis ,viaAdministracion_id = vias ,  cantidadOrdenada=cantidadMedicamento  ,fechaRegistro =fechaRegistro ,  usuarioRegistro_id  =  usuarioRegistro, estadoReg = 'A')
                             er.save()
+
+                        consecutivo = consecutivo + 1
 
                         # Fin Grabacion Formulacion
 

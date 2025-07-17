@@ -2828,6 +2828,30 @@ def escogeAcceso(request, Sede, Username, Profesional, Documento, NombreSede, es
 
         # Fin combo PlantaUsuarios
 
+       # Combo Estados Farmacia
+        miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                       password="123456")
+        curt = miConexiont.cursor()
+
+        comando = 'SELECT e.id id, e.nombre nombre  FROM farmacia_farmaciaestados e'
+
+        curt.execute(comando)
+        print(comando)
+
+        farmaciaEstados= []
+      
+
+        for id, nombre in curt.fetchall():
+            farmaciaEstados.append({'id': id, 'nombre': nombre})
+
+        miConexiont.close()
+        print(farmaciaEstados)
+
+        context['FarmaciaEstados'] = farmaciaEstados
+
+        # Fin combo farmaciaEstados
+
+
 
 
 

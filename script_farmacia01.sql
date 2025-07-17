@@ -4,9 +4,22 @@ select * from  farmacia_farmaciaDespachosdispensa;
 select * from  farmacia_farmacia;
 select * from  farmacia_farmaciaDetalle;
 
+select * from enfermeria_enfermeria;
+select * from enfermeria_enfermeriadetalle;
+update enfermeria_enfermeriadetalle set "farmaciaDetalle_id" = 6;
+select * from enfermeria_enfermeriarecibe;
+
 select * from clinico_historia;
 select * from clinico_unidadesdemedidadosis;
-select * from farmacia_farmaciaestados;
+select * from enfermeria_enfermeriarecibe;
+
+delete from enfermeria_enfermeria;
+delete from enfermeria_enfermeriadetalle;
+delete from enfermeria_enfermeriarecibe;
+delete from farmacia_farmaciaDespachosdispensa
+delete from farmacia_farmaciaDespachos
+delete from farmacia_farmaciadetalle
+
 
 -- update farmacia_farmacia set estado_id=2;
 select hist."tipoDoc_id" tipoDoc, usu.documento documento, usu.nombre paciente, hist."consecAdmision" aonsecutivo,
@@ -93,3 +106,55 @@ INSERT INTO farmacia_farmaciadespachos ("fechaRegistro", "estadoReg",farmacia_id
 	"usuarioEntrega_id", "usuarioRegistro_id","serviciosAdministrativosRecibe_id" , "usuarioRecibe_id")
 	VALUES ('2025-07-16 12:14:18.866042','A',11,'11','4','15','4')
 
+select dispensa.id id, dispensa.despacho_id despacho , sum.nombre suministro,   dispensa."dosisCantidad" dosis, dosis.descripcion unidadDosis,   vias.nombre via,     dispensa."cantidadOrdenada" cantidad, dispensa."diasTratamiento" tratamiento FROM farmacia_farmaciadespachosdispensa dispensa INNER JOIN farmacia_farmaciaDetalle detalle ON (detalle.id = dispensa."farmaciaDetalle_id") INNER JOIN facturacion_suministros sum ON (sum.id= dispensa.suministro_id) INNER JOIN clinico_viasadministracion vias ON (vias.id= dispensa."viaAdministracion_id") INNER JOIN clinico_unidadesdemedidadosis dosis ON (dosis.id= dispensa."dosisUnidad_id") WHERE detalle.FARMACIA_ID='6'
+
+
+INSERT INTO farmacia_farmaciadespachos ("fechaRegistro", "estadoReg",farmacia_id, "serviciosAdministrativosEntrega_id","usuarioEntrega_id", "usuarioRegistro_id","serviciosAdministrativosRecibe_id" , "usuarioRecibe_id") VALUES ('2025-07-16 14:44:34.173563','A',11,'6','3','1','13','4') RETURNING id ;	
+
+delete from farmacia_farmaciaDespachos;
+
+select * from clinico_UnidadesDeMedidaDosis;
+select * from clinico_viasAdministracion
+
+select dispensa.id id, dispensa.despacho_id despacho , sum.nombre suministro,   dispensa."dosisCantidad" dosis, 
+	dosis.descripcion unidadDosis,   vias.nombre via,    dispensa."cantidadOrdenada" cantidad
+	FROM farmacia_farmaciadespachosdispensa dispensa 
+	INNER JOIN farmacia_farmaciaDetalle detalle ON (detalle.id = dispensa."farmaciaDetalle_id")
+	INNER JOIN facturacion_suministros sum ON (sum.id= dispensa.suministro_id)
+	INNER JOIN clinico_viasadministracion vias ON (vias.id= dispensa."viaAdministracion_id") 
+	INNER JOIN clinico_unidadesdemedidadosis dosis ON (dosis.id= dispensa."dosisUnidad_id")
+	WHERE detalle.farmacia_id='11'
+
+select * from  farmacia_farmaciaDespachos;
+select * from  farmacia_farmaciaDespachosdispensa;
+
+select * from  farmacia_farmacia;
+select * from  farmacia_farmaciaDetalle;
+
+
+select dispensa.id id, dispensa.despacho_id despacho , sum.nombre suministro, 	dispensa."dosisCantidad" dosis,
+	dosis.descripcion unidadDosis,   vias.nombre via,	dispensa."cantidadOrdenada" cantidad 
+	FROM farmacia_farmaciadespachosdispensa dispensa
+	INNER JOIN farmacia_farmaciaDetalle detalle ON (detalle.id = dispensa."farmaciaDetalle_id") 
+	INNER JOIN facturacion_suministros sum ON (sum.id= dispensa.suministro_id) 
+	INNER JOIN clinico_viasadministracion vias ON (vias.id= dispensa."viaAdministracion_id") 
+	INNER JOIN clinico_unidadesdemedidadosis dosis ON (dosis.id= dispensa."dosisUnidad_id") 
+	WHERE detalle.FARMACIA_ID= 11
+
+
+select far.id id,origen.nombre origen, mov.nombre mov , serv.nombre servicio, far.historia_id historia,
+	est.nombre estado, tipos.nombre tipoDoc, usu.documento documento, usu.nombre paciente, servicios.nombre servicio, 
+	dep.nombre cama 
+	FROM farmacia_farmacia far 
+	INNER JOIN enfermeria_enfermeriatipoorigen origen ON (origen.id =  far."tipoOrigen_id")
+	INNER JOIN enfermeria_enfermeriatipomovimiento mov ON (mov.id= far."tipoMovimiento_id") 
+	INNER JOIN sitios_serviciosadministrativos serv ON (serv.id = far."serviciosAdministrativos_id") 
+	INNER JOIN farmacia_farmaciaEstados est ON (est.id=far.estado_id) 
+	INNER JOIN clinico_historia hist ON (hist.id = far.historia_id) 
+	INNER JOIN admisiones_ingresos adm ON (adm."tipoDoc_id" = hist."tipoDoc_id"  AND adm.documento_id = hist.documento_id AND adm.consec = hist."consecAdmision") 
+	INNER JOIN usuarios_usuarios usu ON (usu.id = adm.documento_id )
+	INNER JOIN usuarios_tiposdocumento tipos ON (tipos.id = adm."tipoDoc_id")  
+	INNER JOIN sitios_dependencias dep ON (dep.id=adm."dependenciasActual_id") 
+	INNER JOIN clinico_servicios servicios ON servicios.id=adm."serviciosActual_id" 
+	WHERE far."sedesClinica_id" = '1' AND far."fechaRegistro" >= '2025-01-01' 
+	ORDER BY far."fechaRegistro" desc

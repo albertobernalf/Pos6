@@ -220,7 +220,7 @@ function arrancaFarmacia(valorTabla,valorData)
   lengthMenu: [2, 4, 15],
            processing: true,
             serverSide: false,
-            scrollY: '475px',
+            scrollY: '275px',
 	    scrollX: true,
 	    scrollCollapse: true,
             paging:false,
@@ -290,7 +290,7 @@ function arrancaFarmacia(valorTabla,valorData)
   lengthMenu: [2, 4, 15],
            processing: true,
             serverSide: false,
-            scrollY: '475px',
+            scrollY: '175px',
 	    scrollX: true,
 	    scrollCollapse: true,
             paging:false,
@@ -383,7 +383,7 @@ function arrancaFarmacia(valorTabla,valorData)
   lengthMenu: [2, 4, 15],
            processing: true,
             serverSide: false,
-            scrollY: '475px',
+            scrollY: '75px',
 	    scrollX: true,
 	    scrollCollapse: true,
             paging:false,
@@ -434,12 +434,12 @@ function arrancaFarmacia(valorTabla,valorData)
 
                 { data: "fields.id"},
                 { data: "fields.despacho"},
-		   { data: "fields.suministro"}, 
+	    	   { data: "fields.suministro"},
                 { data: "fields.dosis"},
                 { data: "fields.unidadDosis"},
                 { data: "fields.via"},
                 { data: "fields.cantidad"},
-                { data: "fields.tratamiento"},
+
                         ]
             }
 	        
@@ -526,6 +526,8 @@ $('#tablaPanelFarmacia tbody').on('click', '.miSelFarmacia', function() {
         data['sede'] = sede;
         data['username_id'] = username_id;
 	data['farmaciaId'] = farmaciaId;
+		//    data['farmaciaDetalleId'] = farmaciaDetalleId;
+
  	    data = JSON.stringify(data);
 
      $.ajax({
@@ -551,6 +553,10 @@ $('#tablaPanelFarmacia tbody').on('click', '.miSelFarmacia', function() {
 
 		     arrancaFarmacia(3,data);
 		     	dataTableFarmaciaDetalleInitialized = true;
+
+        arrancaFarmacia(4,data);
+	    dataTableFarmaciaDespachosDispensaInitialized = true;
+
 	
       
   });
@@ -651,6 +657,7 @@ function AdicionarDespachosDispensa()
         var plantaRecibe = document.getElementById("plantaRecibe").value;
         var farmaciaId = document.getElementById("farmaciaId").value;
 
+
     const table10 = $('#tablaFormulacion').DataTable();
      var datos_tabla10 = table10.rows().data().toArray();
 
@@ -695,6 +702,7 @@ function AdicionarDespachosDispensa()
     	var sede = document.getElementById("sede").value;
         var username_id = document.getElementById("username_id").value;
         var farmaciaId = document.getElementById("farmaciaId").value;
+        var farmaciaDetalleId = document.getElementById("farmaciaDetalle").value;
          var data =  {}   ;
         data['username'] = username;
         data['sedeSeleccionada'] = sedeSeleccionada;
@@ -703,13 +711,21 @@ function AdicionarDespachosDispensa()
         data['username_id'] = username_id;
 
 	    data['farmaciaId'] = farmaciaId;
-
+	    data['farmaciaDetalleId'] = farmaciaDetalleId;
 
  	    data = JSON.stringify(data);
 
-        arrancaFarmacia(2,data);
-	    dataTableFarmaciaDespachosInitialized = true;
+        arrancaFarmacia(4,data);
+	    dataTableFarmaciaDespachosDispensaInitialized = true;
+
         // aqui inicializar tablaFormulacion etc
+
+        /// Aqui inicializar combos
+        $("servicioAdmonEntrega").prop('selectedIndex', 0);
+        $("plantaEntrega").prop('selectedIndex', 0);
+        $("servicioAdmonRecibe").prop('selectedIndex', 0);
+        $("plantaRecibe").prop('selectedIndex', 0);
+
 
         var tabla = $('#tablaFormulacion').DataTable();
         tabla.rows().remove().draw();
@@ -725,4 +741,5 @@ function AdicionarDespachosDispensa()
 
 
 }
+
 
