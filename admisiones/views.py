@@ -2722,6 +2722,82 @@ def escogeAcceso(request, Sede, Username, Profesional, Documento, NombreSede, es
         print("ENTRE PERMSISO ENFERMERIA")
         ## Aqui contexto para solo ENFERMERIA
 
+        # Combo ServiciosAdministrativos
+
+        miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                       password="123456")
+        curt = miConexiont.cursor()
+
+        comando = 'select m.id id, m.nombre||' + "'" + str(' ') + "'||" + ' u.nombre nombre FROM sitios_serviciosAdministrativos m, sitios_ubicaciones u where m.ubicaciones_id= u.id AND m."sedesClinica_id" = ' + str(sede)
+
+        print(comando)
+        curt.execute(comando)
+
+        serviciosAdministrativos = []
+
+        serviciosAdministrativos.append({'id': '', 'nombre': ''})
+
+
+        for id, nombre in curt.fetchall():
+            serviciosAdministrativos.append({'id': id, 'nombre': nombre})
+
+        miConexiont.close()
+        print("ServiciosAdministrativos = " , serviciosAdministrativos)
+        context['ServiciosAdministrativos'] = serviciosAdministrativos
+
+        # Fin Combo ServiciosAdministrativos
+
+        # Combo EnfermeriaTipoOrigen
+
+        miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                       password="123456")
+        curt = miConexiont.cursor()
+
+        comando = 'select o.id id, o.nombre nombre FROM enfermeria_enfermeriaTipoOrigen o'
+
+        print(comando)
+        curt.execute(comando)
+
+        enfermeriaTipoOrigen = []
+
+        enfermeriaTipoOrigen.append({'id': '', 'nombre': ''})
+
+
+        for id, nombre in curt.fetchall():
+            enfermeriaTipoOrigen.append({'id': id, 'nombre': nombre})
+
+        miConexiont.close()
+        print("enfermeriaTipoOrigen  = " , enfermeriaTipoOrigen )
+        context['EnfermeriaTipoOrigen '] = enfermeriaTipoOrigen 
+
+        # Fin Combo enfermeriaTipoOrigen 
+
+
+        # Combo EnfermeriaTipoMovimiento
+
+        miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                       password="123456")
+        curt = miConexiont.cursor()
+
+        comando = 'select o.id id, o.nombre nombre FROM enfermeria_enfermeriaTipoMovimiento o'
+
+        print(comando)
+        curt.execute(comando)
+
+        enfermeriaTipoMovimiento = []
+
+        enfermeriaTipoMovimiento.append({'id': '', 'nombre': ''})
+
+
+        for id, nombre in curt.fetchall():
+            enfermeriaTipoMovimiento.append({'id': id, 'nombre': nombre})
+
+        miConexiont.close()
+        print("enfermeriaTipoMovimiento  = " , enfermeriaTipoMovimiento )
+        context['EnfermeriaTipoMovimiento '] = enfermeriaTipoMovimiento
+
+        # Fin Combo enfermeriaTipoMovimiento 
+
 
         ## FIN CONTEXTO
         return render(request, "enfermeria/PanelEnfermeriaF.html", context)

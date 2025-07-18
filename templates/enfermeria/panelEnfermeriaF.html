@@ -230,6 +230,8 @@
 			Servicio: <span id="servicio"></span>
 			Hab: <span id="habitacion"></span>
 			<input type="text" id="enfermeriaDetalle" name="enfermeriaDetalle" value="" readonly>
+	               <input type="button" style="height:30px;margin-left: 0 ; margin-bottom: 0;border-top-right-radius: 0;"  size="10px" id="BtnSolicitudPedidosEnfermeria"  name="BtnSolicitudPedidosEnfermeria" value="CreaPedido" onclick= "CreaPedidosEnfermeriaCabezote()" >				    
+
 		</div>
 
    			   <div class="row">
@@ -238,8 +240,7 @@
                                            <thead>
                                             <tr>    
 						<bold> 
-					          <th>Sel</th>    
-					     <th>Estado</th>                                                                                          
+					          <th>Sel</th>    					                                                                                      
  						  <th>id</th>                             
 						 <th>tipoOrigen</th>                                        
 						 <th>tipoMovimiento</th>  
@@ -489,7 +490,73 @@
 		<!-- finaliza lo que viene de clinico -->      	
 
 
-           <!-- Modales Historia CLinica -->
+           <!-- Modales -->
+
+
+                <!-- Creacion Modal Crea Pedido  -->
+
+        <div class="container">
+            <div class="card">
+                <div class="myForm">
+                    <form id="postFormModalCreaPedidosEnfermeria" method="POST" onsubmit="CierraModal()">
+                        <div class="modal fade" id="creaModalPedidosEnfermeria" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+                            <div class="modal-dialog  modal-dialog-scrollable  modal-dialog-center" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                           <div  class="modal-title" id="exampleModalLabel" style="text-align:center;"><font gont-family="Times New roman" size=5">Pedidos Enfermeria</font> </div>
+                                        <button type="button" class="close" data-bs-dismiss="modal"  aria-label="Close"> <span aria-hidden="true">&times;</span>  </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row row-cols-1 mt-3">
+                                            <div class="col">
+                                                <label for="enfermeriaTipoOrigenx"  class="col-sm-10 col-form-label col-form-label-sm">Tipo Origen:</label>
+                                                <select class="form-select  h-10 w-100 form-control form-control-sm" aria-label="" id="enfermeriaTipoOrigenx" name="enfermeriaTipoOrigenx">
+                                                    {% for enfermeriaTipoOrigen in EnfermeriaTipoOrigen %}
+                                                    <option value="{{enfermeriaTipoOrigen.id}}"> {{enfermeriaTipoOrigen.nombre}}
+                                                    </option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+					 <div class="row row-cols-1 mt-3">
+                                            <div class="col">
+                                                <label for="enfermeriaTipoMovimientox"  class="col-sm-10 col-form-label col-form-label-sm">Tipo Movimiento:</label>
+                                                <select class="form-select  h-10 w-100 form-control form-control-sm" aria-label="" id="enfermeriaTipoMovimientox" name="enfermeriaTipoMovimientox">
+                                                    {% for enfermeriaTipoMovimiento in EnfermeriaTipoMovimiento %}
+                                                    <option value="{{enfermeriaTipoMovimiento.id}}"> {{enfermeriaTipoMovimiento.nombre}}
+                                                    </option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div class="col">
+                                                <label for="servicioEnfermeria"  class="col-sm-10 col-form-label col-form-label-sm">Servicio:</label>
+                                                <select class="form-select  h-10 w-100 form-control form-control-sm" aria-label="" id="servicioEnfermeria" name="servicioEnfermeria">
+                                                    {% for serviciosAdministrativos in ServiciosAdministrativos %}
+                                                    <option value="{{serviciosAdministrativos.id}}"> {{serviciosAdministrativos.nombre}}
+                                                    </option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+
+                                        </div> <!-- Cierra row -->
+
+                                    </div> <!-- Cierra body -->
+                                    <div class="modal-footer">
+				 <span id="mensajesErrorModalPedidosEnfermeria" name="mensajesErrorPedidosEnfermeria" style= "color:red; font-size:18px; line-height:35px; font-family: Calibri;" > </span>
+                                       <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar   </button>
+
+                                         <input type="button" class="btn btn-primary" value="save"  onclick="CreaPedidosEnfermeriaCabezote()"> 
+                                        
+                                    </div> <!-- Cierra footer-->
+                                </div> <!-- Cierra content -->
+                            </div> <!-- Cierra modal dialog -->
+                        </div> <!-- Cierra modal -->
+                    </form> <!-- Cierra cla forma-->
+                </div> <!-- Cierra muform -->
+            </div> <!-- Cierra el Card-->
+        </div> <!-- Cierra container -->
+
+            <!-- Fin Creacion Modal estado Despachoo  -->
+
 
      <!-- FIN Espacio Modales  -->
 	

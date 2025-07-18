@@ -366,10 +366,10 @@ function arrancaEnfermeria(valorTabla,valorData)
 	    scrollCollapse: true,
             paging:false,
             columnDefs: [
-		{ className: 'centered', targets: [0, 1, 2, 3, 4, 5] },
+		{ className: 'centered', targets: [0, 1, 2,] },
 	    { width: '10%', targets: [2,3] },
 		{  
-                    "targets": 12
+                    "targets": 4
                }
             ],
 	 pageLength: 3,
@@ -542,7 +542,7 @@ window.addEventListener('load', async () => {
 
 $('#tablaPanelEnfermeria tbody').on('click', '.miIngresoEnfermeriaId', function() {
 
-	
+	alert ("Seleccione Enfermeria");
 
 	     var post_id = $(this).data('pk');
 	ingresoId =   post_id;
@@ -568,6 +568,29 @@ $('#tablaPanelEnfermeria tbody').on('click', '.miIngresoEnfermeriaId', function(
 	
  	    data = JSON.stringify(data);
 
+	  $.ajax({
+                data: {'ingresoId':ingresoId},
+	        url: "/buscaDatosPacienteEnfermeria/",
+                type: "POST",
+                dataType: 'json',
+                success: function (info) {
+			
+		document.getElementById("nombreTipoDoc").innerHTML = info[0].fields.nombreTipoDoc;
+		document.getElementById("documento").innerHTML = info[0].fields.documento;
+		document.getElementById("paciente").innerHTML = info[0].fields.paciente;
+		document.getElementById("consecutivoAdmision").innerHTML = info[0].fields.consecutivoAdmision;
+		document.getElementById("servicio").innerHTML = info[0].fields.servicio;
+		document.getElementById("habitacion").innerHTML = info[0].fields.cama;
+
+                },
+            error: function (request, status, error) {
+		alert("llegue con error ", error);
+		document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error + ' ' + error
+	   	    	}
+            });
+
+
+
 	     arrancaEnfermeria(2,data);
 	     dataTableMedicamentosEnfermeriaInitialized = true;
 
@@ -579,11 +602,62 @@ $('#tablaPanelEnfermeria tbody').on('click', '.miIngresoEnfermeriaId', function(
 	     dataTablePedidosEnfermeriaInitialized = true;
 
 
-	     arrancaEnfermeria(5,data);
-	     dataTablePedidosEnfermeriaDetalleInitialized = true;
+
+
+	    // arrancaEnfermeria(5,data);
+	    // dataTablePedidosEnfermeriaDetalleInitialized = true;
 
       
   });
 
 
+function CreaPedidosEnfermeriaCabezote()
+{
+	alert("ENTRE cargar modal CreaPedidosEnfermeriaCabezote");
+
+	 $('#postFormModalCreaPedidosEnfermeria').trigger("reset");
+
+            $('#modelHeadingPedidosEnfermeria').html("Creacon Pedidos Enfermeria");
+            $('#creaModalPedidosEnfermeria').modal('show');     
+
+
+
+}
+
+
+function PedidosEnfermeriaCabezote()
+{
+
+		alert("ENTRE CreaPedidosEnfermeriaCabezote");
+	var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
+        var username = document.getElementById("username").value;
+        var nombreSede = document.getElementById("nombreSede").value;
+    	var sede = document.getElementById("sede").value;
+        var username_id = document.getElementById("username_id").value;
+
+        var enfermeriaTipoOrigen = document.getElementById("enfermeriaTipoOrigen").value;
+        var enfermeriaTipoMovimiento = document.getElementById("enfermeriaTipoMovimiento").value;
+        var servicioEnfermeria = document.getElementById("servicioEnfermeria").value;
+
+
+
+		
+     $.ajax({
+                data: {'username_id ':username_id ,'sede':sede,'enfermeriaTipoOrigen':enfermeriaTipoOrigen,'enfermeriaTipoMovimiento':enfermeriaTipoMovimiento,'servicioEnfermeria':servicioEnfermeria},
+	        url: "/creaPedidosEnfermeriaCabezote/",
+                type: "POST",
+                dataType: 'json',
+                success: function (info) {
+		document.getElementById("mensajes").innerHTML = 'Se actualiza cambio de estado';
+
+                },
+            error: function (request, status, error) {
+
+		document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error + ' ' + error
+	   	    	}
+            });
+		   $('#creaModalPedidosEnfermeria').modal('hide');  
+
+
+}
 

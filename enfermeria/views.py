@@ -227,7 +227,7 @@ def Load_dataPedidosEnfermeria(request, data):
 
 
 
-    detalle = '	select enf.id id,origen.nombre origen, mov.nombre mov , serv.nombre servicio, tipos.nombre tipoDoc, usu.documento documento, usu.nombre paciente, serv.nombre servicio FROM enfermeria_enfermeria enf INNER JOIN enfermeria_enfermeriatipoorigen origen ON (origen.id =  enf."tipoOrigen_id") INNER JOIN enfermeria_enfermeriatipomovimiento mov ON (mov.id= enf."tipoMovimiento_id")  INNER JOIN sitios_serviciosadministrativos serv ON (serv.id = enf."serviciosAdministrativos_id") INNER JOIN admisiones_ingresos adm ON (adm."tipoDoc_id" = '  + "'" + str(ingresoAdmision.tipoDoc_id ) + "'" + '  AND adm.documento_id = ' + "'" + str(ingresoAdmision.documento_id) + "'" + ' AND adm.consec = ' + "'" + str(ingresoAdmision.consec) + "'" + ' ) INNER JOIN usuarios_usuarios usu ON (usu.id = adm.documento_id ) INNER JOIN usuarios_tiposdocumento tipos ON (tipos.id = adm."tipoDoc_id") WHERE enf."sedesClinica_id" = ' + "'" + str(sede) + "'" + ' AND enf."fechaRegistro" >= ' + "'" + str('2025 - 01 - 01') + "'"  + ' AND mov.nombre='  + "'" + str('PEDIDO') + "'" + ' ORDER BY enf."fechaRegistro" desc'
+    detalle = '	select enf.id id,origen.nombre origen, mov.nombre mov , serv.nombre servicio, tipos.nombre tipoDoc, usu.documento documento, usu.nombre paciente, serv.nombre servicio FROM enfermeria_enfermeria enf INNER JOIN enfermeria_enfermeriatipoorigen origen ON (origen.id =  enf."tipoOrigen_id") INNER JOIN enfermeria_enfermeriatipomovimiento mov ON (mov.id= enf."tipoMovimiento_id")  INNER JOIN sitios_serviciosadministrativos serv ON (serv.id = enf."serviciosAdministrativos_id") INNER JOIN admisiones_ingresos adm ON (adm."tipoDoc_id" = '  + "'" + str(ingresoAdmision.tipoDoc_id ) + "'" + '  AND adm.documento_id = ' + "'" + str(ingresoAdmision.documento_id) + "'" + ' AND adm.consec = ' + "'" + str(ingresoAdmision.consec) + "'" + ' ) INNER JOIN usuarios_usuarios usu ON (usu.id = adm.documento_id ) INNER JOIN usuarios_tiposdocumento tipos ON (tipos.id = adm."tipoDoc_id") WHERE enf."sedesClinica_id" = ' + "'" + str(sede) + "'" + ' AND enf."fechaRegistro" >= ' + "'" + str('2025-01-01') + "'"  + ' AND mov.nombre='  + "'" + str('PEDIDO') + "'" + ' ORDER BY enf."fechaRegistro" desc'
 
 
     print(detalle)
@@ -248,5 +248,128 @@ def Load_dataPedidosEnfermeria(request, data):
 
 
 def Load_dataPedidosEnfermeriaDetalle(request, data):
-    print("Entre Load_PedidosEnfermeria")
-    pass
+    print("Entre Load_dataPedidosEnfermeriaDetalle")
+
+    context = {}
+    envioDatos = {}
+
+    d = json.loads(data)
+
+    ingresoId = d['ingresoId']
+
+    print("ingresoId =", ingresoId)
+
+    ingresoAdmision = Ingresos.objects.get(id=ingresoId)
+
+
+    username = d['username']
+    sede = d['sede']
+    username_id = d['username_id']
+
+    nombreSede = d['nombreSede']
+    print("sede:", sede)
+    print("username:", username)
+    print("username_id:", username_id)
+
+    enfermeriaDetalle = []
+
+    miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                   password="123456")
+    curx = miConexionx.cursor()
+
+    detalle = '	select  det.id id,origen.nombre origenNombre, mov.nombre movNombre, sum.nombre suministro, det."dosisCantidad" dosis, dosis.descripcion unidadDosis,   vias.nombre via,	det."cantidadOrdenada" cantidad, via.nombre viaAdministracion FROM enfermeria_enfermeria enf INNER JOIN enfermeria_enfermeriadetalle det  ON (det.enfermeria_id = enf.id) 		INNER JOIN enfermeria_enfermeriatipoorigen origen ON (origen.id = enf."tipoOrigen_id") INNER JOIN enfermeria_enfermeriatipomovimiento mov ON (mov.id = enf."tipoOrigen_id") 	INNER JOIN facturacion_suministros sum ON (sum.id= det.suministro_id) 	INNER JOIN clinico_viasadministracion vias ON (vias.id= det."viaAdministracion_id") 	INNER JOIN clinico_unidadesdemedidadosis dosis ON (dosis.id= det."dosisUnidad_id") 	INNER JOIN clinico_viasadministracion via ON (via.id= det."viaAdministracion_id")  where enf.id ='
+
+    print(detalle)
+
+    curx.execute(detalle)
+
+    for id, origenNombre,movNombre,suministro, dosis, unidadDosis, via, cantidad , viaAdministracion  in curx.fetchall():
+        enfermeriaDetalle.append(
+            {"model": "famacia.farmaciaDetalle", "pk": id, "fields":
+                {'id': id, 'origenNombre': origenNombre ,'movNombre':movNombre,'suministro':suministro,'dosis':dosis ,'unidadDosis':unidadDosis ,'cantidad':cantidad , 'viaAdministracion':viaAdministracion}})
+
+    miConexionx.close()
+    print(enfermeriaDetalle)
+
+    print("envioDatos = " , envioDatos)
+
+    serialized1 = json.dumps(enfermeriaDetalle, default=str)
+
+    return HttpResponse(serialized1, content_type='application/json')
+
+
+def BuscaDatosPacienteEnfermeria(request):
+    print("Entre BuscaDatosPacienteEnfermeria")
+
+
+    ingresoId = request.POST['ingresoId']
+    print ("ingresoId =", ingresoId)
+
+    ingresoAdmision = Ingresos.objects.get(id=ingresoId)
+
+    # Combo Datos Paciente
+
+    datosPacienteEnfermeria = []
+
+    miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                   password="123456")
+    curx = miConexionx.cursor()
+
+    detalle = 'select usu.id id,  i."tipoDoc_id" tipoDoc, tipos.nombre nombreTipoDoc, usu.documento documento, usu.nombre paciente, i."consec" consecutivoAdmision, serv.nombre servicio, dep.numero cama FROM admisiones_ingresos i INNER JOIN usuarios_usuarios usu ON (usu.id=i.documento_id) INNER JOIN usuarios_tiposdocumento tipos ON (tipos.id=i."tipoDoc_id")  INNER Join sitios_dependencias dep on (dep.id=i."dependenciasActual_id") INNER Join clinico_servicios serv on (serv.id=i."serviciosActual_id") where i.id= ' + "'" + str(ingresoId) + "'"
+    print(detalle)
+
+    curx.execute(detalle)
+
+    for id,tipoDoc,nombreTipoDoc, documento, paciente ,consecutivoAdmision, servicio, cama  in curx.fetchall():
+        datosPacienteEnfermeria.append(
+            {"model": "datosPacienteEnfermeria", "pk": id, "fields":
+                {'id':id, 'tipoDoc': tipoDoc, 'nombreTipoDoc':nombreTipoDoc, 'documento': documento,'paciente':paciente,'consecutivoAdmision':consecutivoAdmision ,'servicio':servicio, 'cama':cama}})
+
+    miConexionx.close()
+    print(datosPacienteEnfermeria)
+
+
+    # Fin Combo
+
+    serialized1 = json.dumps(datosPacienteEnfermeria, default=str)
+
+    return HttpResponse(serialized1, content_type='application/json')
+
+def CreaPedidosEnfermeriaCabezote(request):
+    print("Entre CreaPedidosEnfermeriaCabezote")
+
+    username_id = request.POST['username_id']
+    print ("username_id =", username_id)
+
+    sede = request.POST['sede']
+    print ("sede =", sede)
+
+    enfermeriaTipoOrigen = request.POST['enfermeriaTipoOrigen']
+    print ("enfermeriaTipoOrigen =", enfermeriaTipoOrigen)
+
+    enfermeriaTipoMovimiento = request.POST['enfermeriaTipoMovimiento']
+    print ("enfermeriaTipoMovimiento =", enfermeriaTipoMovimiento)
+
+    servicioEnfermeria = request.POST['servicioEnfermeria']
+    print ("servicioEnfermeria =", servicioEnfermeria)
+
+    estadoReg = 'A'
+    fechaRegistro = datetime.datetime.now()
+
+    #Actualiza estado despacho
+
+
+    miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                   password="123456")
+    curx = miConexionx.cursor()
+
+    detalle = 'INSERT INTO enfermeria_enfermeria ( "tipoMovimiento_id", "fechaRegistro", "estadoReg", historia_id, "serviciosAdministrativos_id", "usuarioRegistro_id", "tipoOrigen_id", "sedesClinica_id") VALUES (' + "'" + str(enfermeriaTipoMovimiento) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "',null,'" + str(servicioEnfermeria) + "','" + str(username_id) + "','"  + str(enfermeriaTipoOrigen) + "','" + str(sede) + "'"
+    print(detalle)
+
+    curx.execute(detalle)
+    miConexionx.commit()
+    miConexionx.close()
+    print(datosPaciente)
+
+    return JsonResponse({'success': True, 'message': 'Pedido de Enfermeria Creado!'})
+

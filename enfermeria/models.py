@@ -2,16 +2,28 @@ from django.db import models
 
 # Create your models here.
 
+class TiposTurnosEnfermeria(models.Model):
+    id = models.AutoField(primary_key=True)
+    sedesClinica = models.ForeignKey('sitios.SedesClinica',   blank=True,null= True, on_delete=models.PROTECT ,related_name ='sedesClinica_377')
+    nombre = models.CharField(max_length=50, blank=False, null=False,  editable = True)
+    horario = models.CharField(max_length=50, default='A', editable=True)
+    fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)
+    usuarioRegistro = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True,    on_delete=models.PROTECT ,   related_name='usuarioenf01')
+    estadoReg = models.CharField(max_length=1, default='A', editable=False)
+
+    def __str__(self):
+        return str(self.id)
 
 
 class TurnosEnfermeria(models.Model):
     id = models.AutoField(primary_key=True)
-    sedesClinica = models.ForeignKey('sitios.SedesClinica',   blank=True,null= True, on_delete=models.PROTECT ,related_name ='sedesClinica377')
-    nombre = models.CharField(max_length=50, blank=False, null=False,  editable = True)
+    sedesClinica = models.ForeignKey('sitios.SedesClinica',   blank=True,null= True, on_delete=models.PROTECT ,related_name ='sedesClinica_398')
+    tiposTurnosEnfermeria = models.ForeignKey('enfermeria.TiposTurnosEnfermeria',   blank=True,null= True, on_delete=models.PROTECT ,related_name ='tiposTurno01')  
+    #nombre = models.CharField(max_length=50, blank=False, null=False,  editable = True)
     serviciosAdministrativos = models.ForeignKey('sitios.ServiciosAdministrativos', blank=True,null= True, editable=True,  on_delete=models.PROTECT,   related_name='serenf01')
     enfermeraTurno = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True, on_delete=models.PROTECT)
     fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)
-    usuarioRegistro = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True,    on_delete=models.PROTECT ,   related_name='usuarioenf01')
+    usuarioRegistro = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True,    on_delete=models.PROTECT ,   related_name='usuarioenf02')
     estadoReg = models.CharField(max_length=1, default='A', editable=False)
 
     def __str__(self):
