@@ -378,6 +378,7 @@ urlpatterns = [
     path('load_dataFarmaciaDespachosDispensa/<str:data>', viewsFarmacia.Load_dataFarmaciaDespachosDispensa,name='load__dataFarmaciaDespachosDispensa'),
     path('load_dataFarmaciaDespachos/<str:data>', viewsFarmacia.Load_dataFarmaciaDespachos, name='load__dataFarmaciaDespachos'),
     path('adicionarDespachosDispensa/', viewsFarmacia.AdicionarDespachosDispensa , name='Adicionar_Despachos_Dispensa'),
+    path('cambiaEstadoDespacho/', viewsFarmacia.CambiaEstadoDespacho, name='cambiaEstado_Despacho'),
 
 
     #Enfermeria
@@ -385,7 +386,10 @@ urlpatterns = [
     path('load_dataPanelEnfermeria/<str:data>', viewsEnfermeria.Load_dataPanelEnfermeria,name='load_dataPanelEnfermeria'),
     path('load_dataPanelEnfermeria2/<str:data>', viewsEnfermeria.Load_dataPanelEnfermeria2,name='load_dataPanelEnfermeria2'),
     path('load_dataMedicamentosEnfermeria/<str:data>', viewsEnfermeria.Load_dataMedicamentosEnfermeria,    name='load_dataMedicamentosEnfermeria'),
- 
+    path('load_dataParaClinicosEnfermeria/<str:data>', viewsEnfermeria.Load_dataParaClinicosEnfermeria,  name='Load_dataParaClinicos_Enfermeria'),
+    path('load_dataPedidosEnfermeria/<str:data>', viewsEnfermeria.Load_dataPedidosEnfermeria, name='load_dataPedidos_Enfermeria'),
+    path('load_dataPedidosEnfermeriaDetalle/<str:data>', viewsEnfermeria.Load_dataPedidosEnfermeriaDetalle, name='load_dataPedidos_EnfermeriaDetalle'),
+
 
 
     # Citas Medicas

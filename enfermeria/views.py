@@ -155,3 +155,98 @@ def Load_dataMedicamentosEnfermeria(request, data):
     serialized1 = json.dumps(medicamentosEnfermeria, default=str)
 
     return HttpResponse(serialized1, content_type='application/json')
+
+
+def Load_dataParaClinicosEnfermeria(request, data):
+    print("Entre Load_dataParaClinicosEnfermeria")
+
+    context = {}
+    d = json.loads(data)
+
+    ingresoId = d['ingresoId']
+
+    print ("ingresoId =", ingresoId)
+
+    ingresoAdmision = Ingresos.objects.get(id=ingresoId)
+
+
+    paraClinicosEnfermeria = []
+
+    miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                       password="123456")
+    curx = miConexionx.cursor()
+
+
+    detalle = 'SELECT histExa.id id ,planta.nombre medico,hist.fecha fecha,hist.folio folio, tiposExa.nombre tipo ,histExa.consecutivo consecutivo,   histExa."codigoCups" cups,  exa.nombre examen, histExa.cantidad FROM clinico_historia hist INNER JOIN 	clinico_historiaexamenes histExa ON (histExa.historia_id = hist.id) INNER JOIN 	clinico_tiposexamen tiposExa ON ( tiposExa.id = histExa."tiposExamen_id") INNER JOIN clinico_examenes exa ON (exa."TiposExamen_id" = tiposExa.id and exa."codigoCups" = histExa."codigoCups") INNER JOIN planta_planta planta on (planta.id=hist.planta_id) WHERE hist."tipoDoc_id" = ' + "'" + str(ingresoAdmision.tipoDoc_id) + "' AND hist.documento_id = " + "'" + str(ingresoAdmision.documento_id) + "'" + ' and hist."consecAdmision" = ' + "'" + str(ingresoAdmision.consec) + "'" + ' order by hist.fecha, hist.folio'
+
+    print(detalle)
+
+    curx.execute(detalle)
+
+    for id, medico, fecha, folio, tipo, consecutivo, cups, examen,  cantidad  in curx.fetchall():
+            paraClinicosEnfermeria.append({"model": "paraclinicos", "pk": id, "fields":
+                {'id': id, 'medico': medico, 'fecha': fecha, 'folio' : folio,  'tipo': tipo,
+                 'consecutivo': consecutivo, 'cups': cups,   'examen': examen, 'cantidad': cantidad}})
+
+    miConexionx.close()
+    print("paraClinicosEnfermeria = " , paraClinicosEnfermeria)
+
+
+    serialized1 = json.dumps(paraClinicosEnfermeria, default=str)
+
+    return HttpResponse(serialized1, content_type='application/json')
+
+
+def Load_dataPedidosEnfermeria(request, data):
+    print("Entre Load_PedidosEnfermeria")
+
+    context = {}
+    d = json.loads(data)
+
+    ingresoId = d['ingresoId']
+
+    print ("ingresoId =", ingresoId)
+
+    ingresoAdmision = Ingresos.objects.get(id=ingresoId)
+
+
+    username = d['username']
+    sede = d['sede']
+    username_id = d['username_id']
+
+    nombreSede = d['nombreSede']
+    print("sede:", sede)
+    print("username:", username)
+    print("username_id:", username_id)
+
+    enfermeria = []
+
+    miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                   password="123456")
+    curx = miConexionx.cursor()
+
+
+
+    detalle = '	select enf.id id,origen.nombre origen, mov.nombre mov , serv.nombre servicio, tipos.nombre tipoDoc, usu.documento documento, usu.nombre paciente, serv.nombre servicio FROM enfermeria_enfermeria enf INNER JOIN enfermeria_enfermeriatipoorigen origen ON (origen.id =  enf."tipoOrigen_id") INNER JOIN enfermeria_enfermeriatipomovimiento mov ON (mov.id= enf."tipoMovimiento_id")  INNER JOIN sitios_serviciosadministrativos serv ON (serv.id = enf."serviciosAdministrativos_id") INNER JOIN admisiones_ingresos adm ON (adm."tipoDoc_id" = '  + "'" + str(ingresoAdmision.tipoDoc_id ) + "'" + '  AND adm.documento_id = ' + "'" + str(ingresoAdmision.documento_id) + "'" + ' AND adm.consec = ' + "'" + str(ingresoAdmision.consec) + "'" + ' ) INNER JOIN usuarios_usuarios usu ON (usu.id = adm.documento_id ) INNER JOIN usuarios_tiposdocumento tipos ON (tipos.id = adm."tipoDoc_id") WHERE enf."sedesClinica_id" = ' + "'" + str(sede) + "'" + ' AND enf."fechaRegistro" >= ' + "'" + str('2025 - 01 - 01') + "'"  + ' AND mov.nombre='  + "'" + str('PEDIDO') + "'" + ' ORDER BY enf."fechaRegistro" desc'
+
+
+    print(detalle)
+
+    curx.execute(detalle)
+
+    for id, origen, mov, servicio, tipoDoc, documento,paciente, servicio  in curx.fetchall():
+        enfermeria.append(
+            {"model": "enfermeria.enfermeria", "pk": id, "fields":
+                {'id': id, 'origen': origen, 'mov':mov, 'servicio': servicio, 'tipoDoc':tipoDoc,'documento':documento, 'paciente':paciente, 'servicio':servicio }})
+
+    miConexionx.close()
+    print(enfermeria)
+
+    serialized1 = json.dumps(enfermeria, default=str)
+
+    return HttpResponse(serialized1, content_type='application/json')
+
+
+def Load_dataPedidosEnfermeriaDetalle(request, data):
+    print("Entre Load_PedidosEnfermeria")
+    pass

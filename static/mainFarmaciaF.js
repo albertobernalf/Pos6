@@ -128,7 +128,7 @@ function arrancaFarmacia(valorTabla,valorData)
 		{ className: 'centered', targets: [0, 1, 2, 3, 4, 5] },
 	    { width: '10%', targets: [2,3] },
 		{  
-                    "targets": 11
+                    "targets": 12
                }
             ],
 	 pageLength: 3,
@@ -168,6 +168,18 @@ function arrancaFarmacia(valorTabla,valorData)
                     },
 
 	},
+
+{
+	  "render": function ( data, type, row ) {
+                        var btn = '';
+
+	     btn = btn + " <button class='miEditaFarmaciaEstadoDespacho btn-primary ' data-pk='" + row.pk + "'>" + '<i class="fa-duotone fa-regular fa-thumbs-up"></i>' + "</button>";
+
+                       return btn;
+                    },
+
+	},
+
 
                 { data: "fields.id"},
                 { data: "fields.origen"},
@@ -595,6 +607,57 @@ $('#tablaFarmaciaDetalle tbody').on('click', '.miFarmaciaDetalle', function() {
   });
 
 
+// Cambia estado despacho implora Modal
+
+$('#tablaPanelFarmacia tbody').on('click', '.miEditaFarmaciaEstadoDespacho', function() {
+
+		alert("ENTRE miEditaFarmaciaEstadoDespach");
+
+	     var post_id = $(this).data('pk');
+	farmaciaId =   post_id;
+	alert("farmaciaId = " +  farmaciaId);
+ $('#postFormModalEstadoFarmacia').trigger("reset");
+
+            $('#modelHeadingProgramacionCirugia').html("Actualiza Estado Despacho");
+            $('#creaModalEstadoFarmacia').modal('show');     
+
+
+  });
+
+
+
+function CambiaEstadoDespacho()
+{
+
+		alert("ENTRE miEditaFarmaciaEstadoDespach");
+	farmaciaId = document.getElementById("farmaciaId").value ;
+	alert("farmaciaId = " +  farmaciaId);
+
+	document.getElementById("farmaciaId").value = farmaciaId;
+    	var estadoFarmaciaDespacho = document.getElementById("estadoFarmaciaDespacho").value;
+
+     $.ajax({
+                data: {'farmaciaId':farmaciaId,'estadoFarmaciaDespacho':estadoFarmaciaDespacho },
+	        url: "/cambiaEstadoDespacho/",
+                type: "POST",
+                dataType: 'json',
+                success: function (info) {
+		document.getElementById("mensajes").innerHTML = 'Se actualiza cambio de estado';
+
+                },
+            error: function (request, status, error) {
+
+		document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error + ' ' + error
+	   	    	}
+            });
+		   $('#creaModalEstadoFarmacia').modal('hide');  
+		     arrancaFarmacia(1,data);
+		     	dataTableFarmaciaInitialized = true;
+
+  };
+
+
+
 // Medicamentos
 
 function tableActionsFormulacion() {
@@ -714,6 +777,9 @@ function AdicionarDespachosDispensa()
 	    data['farmaciaDetalleId'] = farmaciaDetalleId;
 
  	    data = JSON.stringify(data);
+
+        arrancaFarmacia(1,data);
+	    dataTableFarmaciaDespachosInitialized = true;
 
         arrancaFarmacia(4,data);
 	    dataTableFarmaciaDespachosDispensaInitialized = true;

@@ -11,6 +11,12 @@ let dataTableI;
 
 let dataTablePanelEnfermeriaInitialized = false;
 let dataTableMedicamentosEnfermeriaInitialized = false;
+let dataTableParaclinicosEnfermeriaEnfermeriaInitialized = false;
+let dataTableOptionsPedidosEnfermeria = false;
+let dataTableOptionsPedidosEnfermeriaDetalle = false;
+
+
+
 
 
 $(document).ready(function() {
@@ -227,6 +233,269 @@ function arrancaEnfermeria(valorTabla,valorData)
   }
 
 
+    if (valorTabla == 3)
+    {
+        let dataTableOptionsParaClinicosEnfermeria  ={
+   dom: "<'row mb-1'<'col-sm-3'B><'col-sm-3'><'col-sm-6'f>>" + // B = Botones a la izquierda, f = filtro a la derecha
+             "<'row'<'col-sm-12'tr>>" +
+             "<'row mt-3'<'col-sm-5'i><'col-sm-7'p>>",
+  buttons: [
+    {
+      extend: 'excelHtml5',
+      text: '<i class="fas fa-file-excel"></i> ',
+      titleAttr: 'Exportar a Excel',
+      className: 'btn btn-success',
+    },
+    {
+      extend: 'pdfHtml5',
+      text: '<i class="fas fa-file-pdf"></i> ',
+      titleAttr: 'Exportar a PDF',
+      className: 'btn btn-danger',
+    },
+    {
+      extend: 'print',
+      text: '<i class="fa fa-print"></i> ',
+      titleAttr: 'Imprimir',
+      className: 'btn btn-info',
+    },
+  ],
+  lengthMenu: [2, 4, 15],
+           processing: true,
+            serverSide: false,
+            scrollY: '475px',
+	    scrollX: true,
+	    scrollCollapse: true,
+            paging:false,
+            columnDefs: [
+		{ className: 'centered', targets: [0, 1, 2, 3] },
+	    { width: '10%', targets: [2,3] },
+		{  
+                    "targets": 8
+               }
+            ],
+	 pageLength: 3,
+	  destroy: true,
+	  language: {
+		    processing: 'Procesando...',
+		    lengthMenu: 'Mostrar _MENU_ registros',
+		    zeroRecords: 'No se encontraron resultados',
+		    emptyTable: 'Ningún dato disponible en esta tabla',
+		    infoEmpty: 'Mostrando registros del 0 al 0 de un total de 0 registros',
+		    infoFiltered: '(filtrado de un total de _MAX_ registros)',
+		    search: 'Buscar:',
+		    infoThousands: ',',
+		    loadingRecords: 'Cargando...',
+		    paginate: {
+			      first: 'Primero',
+			      last: 'Último',
+			      next: 'Siguiente',
+			      previous: 'Anterior',
+		    }
+			},
+
+           ajax: {
+                 url:"/load_dataParaClinicosEnfermeria/" +  data,
+                 type: "POST",
+                 dataSrc: ""
+            },
+            columns: [
+
+	{
+	  "render": function ( data, type, row ) {
+                        var btn = '';
+
+              btn = btn + " <input type='radio'  name='paraclinicoId' class='paraclinicoId form-check-input ' data-pk='"  + row.pk + "'>" + "</input>";
+
+
+                       return btn;
+                    },
+
+	},
+
+                 { data: "fields.id"},
+                 { data: "fields.medico" }, 
+                { data: "fields.fecha"},
+                { data: "fields.folio"},
+                { data: "fields.tipo"},
+                { data: "fields.consecutivo"},
+                { data: "fields.cups"},
+                { data: "fields.examen"},
+                { data: "fields.cantidad"},
+
+
+                        ]
+            }
+	        
+		   dataTable = $('#tablaParaClinicosEnfermeria').DataTable(dataTableOptionsParaClinicosEnfermeria);
+
+
+  }
+
+
+    if (valorTabla == 4)
+    {
+        let dataTableOptionsPedidosEnfermeria  ={
+   dom: "<'row mb-1'<'col-sm-3'B><'col-sm-3'><'col-sm-6'f>>" + // B = Botones a la izquierda, f = filtro a la derecha
+             "<'row'<'col-sm-12'tr>>" +
+             "<'row mt-3'<'col-sm-5'i><'col-sm-7'p>>",
+  buttons: [
+    {
+      extend: 'excelHtml5',
+      text: '<i class="fas fa-file-excel"></i> ',
+      titleAttr: 'Exportar a Excel',
+      className: 'btn btn-success',
+    },
+    {
+      extend: 'pdfHtml5',
+      text: '<i class="fas fa-file-pdf"></i> ',
+      titleAttr: 'Exportar a PDF',
+      className: 'btn btn-danger',
+    },
+    {
+      extend: 'print',
+      text: '<i class="fa fa-print"></i> ',
+      titleAttr: 'Imprimir',
+      className: 'btn btn-info',
+    },
+  ],
+  lengthMenu: [2, 4, 15],
+           processing: true,
+            serverSide: false,
+            scrollY: '475px',
+	    scrollX: true,
+	    scrollCollapse: true,
+            paging:false,
+            columnDefs: [
+		{ className: 'centered', targets: [0, 1, 2, 3, 4, 5] },
+	    { width: '10%', targets: [2,3] },
+		{  
+                    "targets": 12
+               }
+            ],
+	 pageLength: 3,
+	  destroy: true,
+	  language: {
+		    processing: 'Procesando...',
+		    lengthMenu: 'Mostrar _MENU_ registros',
+		    zeroRecords: 'No se encontraron resultados',
+		    emptyTable: 'Ningún dato disponible en esta tabla',
+		    infoEmpty: 'Mostrando registros del 0 al 0 de un total de 0 registros',
+		    infoFiltered: '(filtrado de un total de _MAX_ registros)',
+		    search: 'Buscar:',
+		    infoThousands: ',',
+		    loadingRecords: 'Cargando...',
+		    paginate: {
+			      first: 'Primero',
+			      last: 'Último',
+			      next: 'Siguiente',
+			      previous: 'Anterior',
+		    }
+			},
+
+           ajax: {
+                 url:"/load_dataPedidosEnfermeria/" +  data,
+                 type: "POST",
+                 dataSrc: ""
+            },
+            columns: [
+	{
+	  "render": function ( data, type, row ) {
+                        var btn = '';
+
+		 btn = btn + " <input type='radio' name='miPedidosEnfermeria' class='miPedidosEnfermeria form-check-input ' data-pk='"  + row.pk + "'>" + "</input>";
+
+
+                       return btn;
+                    },
+
+	},
+
+                { data: "fields.id"},
+                { data: "fields.origen"},
+		   { data: "fields.mov"}, 
+                { data: "fields.servicio"},
+
+
+                        ]
+            }
+	        
+		   dataTable = $('#tablaPedidosEnfermeria').DataTable(dataTableOptionsPedidosEnfermeria);
+
+
+  }
+
+
+
+    if (valorTabla == 5)
+    {
+        let dataTableOptionsPedidosEnfermeriaDetalle  ={
+  lengthMenu: [2, 4, 15],
+           processing: true,
+            serverSide: false,
+            scrollY: '175px',
+	    scrollX: true,
+	    scrollCollapse: true,
+            paging:false,
+            columnDefs: [
+		{ className: 'centered', targets: [0, 1, 2, 3, 4, 5] },
+	    { width: '10%', targets: [2,3] },
+		{  
+                    "targets": 6
+               }
+            ],
+	 pageLength: 3,
+	  destroy: true,
+	  language: {
+		    processing: 'Procesando...',
+		    lengthMenu: 'Mostrar _MENU_ registros',
+		    zeroRecords: 'No se encontraron resultados',
+		    emptyTable: 'Ningún dato disponible en esta tabla',
+		    infoEmpty: 'Mostrando registros del 0 al 0 de un total de 0 registros',
+		    infoFiltered: '(filtrado de un total de _MAX_ registros)',
+		    search: 'Buscar:',
+		    infoThousands: ',',
+		    loadingRecords: 'Cargando...',
+		    paginate: {
+			      first: 'Primero',
+			      last: 'Último',
+			      next: 'Siguiente',
+			      previous: 'Anterior',
+		    }
+			},
+
+           ajax: {
+                 url:"/load_dataPedidosEnfermeriaDetalle/" +  data,
+                 type: "POST",
+                 dataSrc: ""
+            },
+            columns: [
+	{
+	  "render": function ( data, type, row ) {
+                        var btn = '';
+
+		 btn = btn + " <input type='radio' name='miPedidosEnfermeriaDetalle' class='miPedidosEnfermeriaDetale form-check-input ' data-pk='"  + row.pk + "'>" + "</input>";
+
+
+                       return btn;
+                    },
+
+	},
+
+                { data: "fields.id"},
+        		{ data: "fields.dosis"},
+                { data: "fields.unidadDosis"},
+                { data: "fields.suministro"},
+                { data: "fields.viaAdministracion"},
+                { data: "fields.cantidad"},
+
+                        ]
+            }
+	        
+		   dataTable = $('#tablaPedidosEnfermeriaDetalle').DataTable(dataTableOptionsPedidosEnfermeriaDetalle);
+
+
+  }
+
 
 
   
@@ -273,11 +542,11 @@ window.addEventListener('load', async () => {
 
 $('#tablaPanelEnfermeria tbody').on('click', '.miIngresoEnfermeriaId', function() {
 
-		alert("A cargar medicamentos Enfermeria ");
+	
 
 	     var post_id = $(this).data('pk');
 	ingresoId =   post_id;
-	alert("ingresoId = " +  ingresoId);
+
 
 	document.getElementById("ingresoId").value = ingresoId;
 
@@ -302,9 +571,17 @@ $('#tablaPanelEnfermeria tbody').on('click', '.miIngresoEnfermeriaId', function(
 	     arrancaEnfermeria(2,data);
 	     dataTableMedicamentosEnfermeriaInitialized = true;
 
-		alert(" ya cargue los medicamentos");
+	     arrancaEnfermeria(3,data);
+	     dataTableParaclinicosEnfermeriaEnfermeriaInitialized = true;
 
-	
+
+	     arrancaEnfermeria(4,data);
+	     dataTablePedidosEnfermeriaInitialized = true;
+
+
+	     arrancaEnfermeria(5,data);
+	     dataTablePedidosEnfermeriaDetalleInitialized = true;
+
       
   });
 

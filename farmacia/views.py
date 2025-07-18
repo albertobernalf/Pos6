@@ -314,6 +314,8 @@ def AdicionarDespachosDispensa(request):
     print("username_id:", username_id)
     print("farmaciaDetalleId:", farmaciaDetalleId)
 
+    parcialDespachado = FarmaciaEstados.objects.get(nombre='PARCIALMENTE DESPACHADO')
+
     # Desde aqui
 
     # Busco la Historia
@@ -363,6 +365,13 @@ def AdicionarDespachosDispensa(request):
         despachoId = cur3.fetchone()[0]
 
         print ("despachoId = ", despachoId)
+
+        comando = 'UPDATE farmacia_farmacia SET estado_id = ' + "'" + str(parcialDespachado.id) + "' WHERE id = '" + str(farmaciaId) + "'"
+        print(comando)
+
+        cur3.execute(comando)
+
+
 
         ##############################################
         ##############################################
@@ -662,4 +671,30 @@ def AdicionarDespachosDispensa(request):
     # Creo eso es todop
 
 
-	
+def CambiaEstadoDespacho(request):
+    print("Entre CambiaEstadoDespacho")
+
+    farmaciaId = request.POST['farmaciaId']
+    print ("farmaciaId =", farmaciaId)
+
+    estadoFarmaciaDespacho = request.POST['estadoFarmaciaDespacho']
+    print ("estadoFarmaciaDespacho =", estadoFarmaciaDespacho)
+
+
+    #Actualiza estado despacho
+
+    datosPaciente = []
+
+    miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                   password="123456")
+    curx = miConexionx.cursor()
+
+    detalle = 'UPDATE farmacia_farmacia SET estado_id = ' + "'" + str(estadoFarmaciaDespacho) + "' WHERE id = " +"'" + str(farmaciaId) + "'"
+    print(detalle)
+
+    curx.execute(detalle)
+    miConexionx.commit()
+    miConexionx.close()
+    print(datosPaciente)
+
+    return JsonResponse({'success': True, 'message': 'Estado de Despacho Actualizado!'})
