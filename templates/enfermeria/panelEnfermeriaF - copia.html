@@ -402,9 +402,9 @@
 			          </div>
 
 					   <div class="col-sm-2">
- 							   Enfermera:               
-                                                        <select class="select-css" id="servicioAdmonEnfermeria"
-                                                                name="servicioAdmonEnfermeria" >
+ 							   Entrega:               
+                                                        <select class="select-css" id="servicioAdmonEntrega"
+                                                                name="servicioAdmonEntrega" >
                                                             {% for serviciosAdministrativos in ServiciosAdministrativos %}
                                                             <option value="{{serviciosAdministrativos.id}}">
                                                                 {{serviciosAdministrativos.nombre}}
@@ -413,6 +413,44 @@
                                                         </select>
                                                     </div>
 
+
+					   <div class="col-sm-2">
+							Funcionario: 							                  
+                                                        <select class="select-css" id="plantaEntrega"
+                                                                name="plantaEntrega" >
+                                                            {% for plantaUsuarios in PlantaUsuarios %}
+                                                            <option value="{{plantaUsuarios.id}}">
+                                                                {{plantaUsuarios.nombre}}
+                                                            </option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+
+
+					   <div class="col-sm-2">
+							Recibe: 							                  
+                                                        <select class="select-css" id="servicioAdmonRecibe"
+                                                                name="servicioAdmonRecibe" >
+                                                            {% for serviciosAdministrativos in ServiciosAdministrativos %}
+                                                            <option value="{{serviciosAdministrativos.id}}">
+                                                                {{serviciosAdministrativos.nombre}}
+                                                            </option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+
+
+					   <div class="col-sm-2">
+								Funcionario; 							                  
+                                                        <select class="select-css" id="plantaRecibe"
+                                                                name="plantaRecibe" >
+                                                            {% for plantaUsuarios in PlantaUsuarios %}
+                                                            <option value="{{plantaUsuarios.id}}">
+                                                                {{plantaUsuarios.nombre}}
+                                                            </option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
 					   <div class="col-sm-2">
 
 				               <input type="button" style="height:30px;margin-left: 0 ; margin-bottom: 0;border-top-right-radius: 0;"  size="10px" id="BtnAdicionarPedidosEnfermeria"  name="BtnAdicionarPedidosEnfermeria" value="Solicitar" onclick= "GuardarPedido()" >				    

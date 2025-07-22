@@ -70,16 +70,16 @@ def Load_dataFarmacia(request, data):
     curx = miConexionx.cursor()
 
 
-    detalle = 'select far.id id,origen.nombre origen, mov.nombre mov , serv.nombre servicio, far.historia_id historia, est.nombre estado, tipos.nombre tipoDoc, usu.documento documento, usu.nombre paciente, servicios.nombre servicio, dep.nombre cama FROM farmacia_farmacia far INNER JOIN enfermeria_enfermeriatipoorigen origen ON (origen.id =  far."tipoOrigen_id") INNER JOIN enfermeria_enfermeriatipomovimiento mov ON (mov.id= far."tipoMovimiento_id") INNER JOIN sitios_serviciosadministrativos serv ON (serv.id = far."serviciosAdministrativos_id") INNER JOIN farmacia_farmaciaEstados est ON (est.id=far.estado_id) INNER JOIN clinico_historia hist ON (hist.id = far.historia_id) INNER JOIN admisiones_ingresos adm ON (adm."tipoDoc_id" = hist."tipoDoc_id"  AND adm.documento_id = hist.documento_id AND adm.consec = hist."consecAdmision") INNER JOIN usuarios_usuarios usu ON (usu.id = adm.documento_id ) INNER JOIN usuarios_tiposdocumento tipos ON (tipos.id = adm."tipoDoc_id")	 INNER JOIN sitios_dependencias dep ON (dep.id=adm."dependenciasActual_id")  INNER JOIN clinico_servicios servicios ON servicios.id=adm."serviciosActual_id"  WHERE far."sedesClinica_id" = ' + "'" + str(sede) + "'" + ' AND far."fechaRegistro" >= ' +  "'" +  str('2025-01-01') + "' and far.estado_id <> " + "'" + str(despachado.id) + "'"  + ' ORDER BY far."fechaRegistro" desc'
+    detalle = 'select far.id id,origen.nombre origen, mov.nombre mov , serv.nombre servicio, far.historia_id historia,far."ingresoPaciente_id" ingreso, est.nombre estado, tipos.nombre tipoDoc, usu.documento documento, usu.nombre paciente, servicios.nombre servicio, dep.nombre cama FROM farmacia_farmacia far INNER JOIN enfermeria_enfermeriatipoorigen origen ON (origen.id =  far."tipoOrigen_id") INNER JOIN enfermeria_enfermeriatipomovimiento mov ON (mov.id= far."tipoMovimiento_id") INNER JOIN sitios_serviciosadministrativos serv ON (serv.id = far."serviciosAdministrativos_id") INNER JOIN farmacia_farmaciaEstados est ON (est.id=far.estado_id) INNER JOIN clinico_historia hist ON (hist.id = far.historia_id) INNER JOIN admisiones_ingresos adm ON (adm."tipoDoc_id" = hist."tipoDoc_id"  AND adm.documento_id = hist.documento_id AND adm.consec = hist."consecAdmision") INNER JOIN usuarios_usuarios usu ON (usu.id = adm.documento_id ) INNER JOIN usuarios_tiposdocumento tipos ON (tipos.id = adm."tipoDoc_id")	 INNER JOIN sitios_dependencias dep ON (dep.id=adm."dependenciasActual_id")  INNER JOIN clinico_servicios servicios ON servicios.id=adm."serviciosActual_id"  WHERE far."sedesClinica_id" = ' + "'" + str(sede) + "'" + ' AND far."fechaRegistro" >= ' +  "'" +  str('2025-01-01') + "'" + ' and far.estado_id <> ' + "'" + str(despachado.id) + "'" + ' UNION  select far.id id,origen.nombre origen, mov.nombre mov , serv.nombre servicio, far.historia_id historia,far."ingresoPaciente_id" ingreso, est.nombre estado, tipos.nombre tipoDoc, usu.documento documento, usu.nombre paciente, servicios.nombre servicio, dep.nombre cama FROM farmacia_farmacia far INNER JOIN enfermeria_enfermeriatipoorigen origen ON (origen.id =  far."tipoOrigen_id") INNER JOIN enfermeria_enfermeriatipomovimiento mov ON (mov.id= far."tipoMovimiento_id") INNER JOIN sitios_serviciosadministrativos serv ON (serv.id = far."serviciosAdministrativos_id") INNER JOIN farmacia_farmaciaEstados est ON (est.id=far.estado_id) INNER JOIN admisiones_ingresos adm ON (adm.id= far."ingresoPaciente_id") INNER JOIN usuarios_usuarios usu ON (usu.id = adm.documento_id ) INNER JOIN usuarios_tiposdocumento tipos ON (tipos.id = adm."tipoDoc_id")	 INNER JOIN sitios_dependencias dep ON (dep.id=adm."dependenciasActual_id")  INNER JOIN clinico_servicios servicios ON servicios.id=adm."serviciosActual_id"  WHERE far."sedesClinica_id" = ' + "'" + str(sede) + "'" + ' AND far."fechaRegistro" >= ' + "'" + str('2025-01-01') + "'" + ' and far.estado_id <> ' + "'" + str(despachado.id) + "'" + ' ORDER BY 6 desc'
 
     print(detalle)
 
     curx.execute(detalle)
 
-    for id, origen, mov, servicio, historia,estado, tipoDoc, documento,paciente, servicio,cama  in curx.fetchall():
+    for id, origen, mov, servicio, historia, ingreso, estado, tipoDoc, documento,paciente, servicio,cama  in curx.fetchall():
         farmacia.append(
             {"model": "farmacia.farmacia", "pk": id, "fields":
-                {'id': id, 'origen': origen, 'mov':mov, 'servicio': servicio, 'historia': historia ,'estado':estado,'tipoDoc':tipoDoc,'documento':documento, 'paciente':paciente, 'servicio':servicio, 'cama':cama }})
+                {'id': id, 'origen': origen, 'mov':mov, 'servicio': servicio, 'historia': historia ,'ingreso':ingreso, 'estado':estado,'tipoDoc':tipoDoc,'documento':documento, 'paciente':paciente, 'servicio':servicio, 'cama':cama }})
 
     miConexionx.close()
     print(farmacia)
@@ -297,7 +297,7 @@ def AdicionarDespachosDispensa(request):
     username_id = request.POST['username_id']
     farmaciaId = request.POST['farmaciaId']
     farmaciaDetalleId = request.POST['farmaciaDetalleId']
-
+    print("farmaciaDetalleId = ", farmaciaDetalleId)
 
     servicioAdmonEntrega = request.POST['servicioAdmonEntrega']
     print("servicioAdmonEntrega:", servicioAdmonEntrega)
@@ -320,10 +320,20 @@ def AdicionarDespachosDispensa(request):
 
     # Busco la Historia
     farmacia = Farmacia.objects.get(id=farmaciaId)
-    historia = Historia.objects.get(id=farmacia.historia_id)
-    tipoDocId = historia.tipoDoc_id
-    documentoId= historia.documento_id
-    ingresoPaciente = historia.consecAdmision
+
+    if (farmacia.historia_id == ''):
+        print ("Entre SOLICITUD DE MEDICAMENTOS")
+        historia = Historia.objects.get(id=farmacia.historia_id)
+        tipoDocId = historia.tipoDoc_id
+        documentoId= historia.documento_id
+        ingresoPaciente = historia.consecAdmision
+
+    else:
+        print ("Entre PEDIDO ENFERMERIA")
+        ingre = Ingresos.objects.get(id=farmacia.ingresoPaciente_id)
+        tipoDocId = ingre.tipoDoc_id
+        documentoId= ingre.documento_id
+        ingresoPaciente = ingre.consec
 
 
 
@@ -528,7 +538,11 @@ def AdicionarDespachosDispensa(request):
                 # Busco historialMediamentos
 
                 farmaciaDetalle = FarmaciaDetalle.objects.get(id=farmaciaDetalleId)
-                historiaMediamentos = HistoriaMedicamentos.objects.get(id=farmaciaDetalle.historiaMedicamentos_id)
+
+                if (farmacia.historia_id == None):
+                    historiaMedicamentos = 'null'
+                else:
+                    historiaMedicamentos = HistoriaMedicamentos.objects.get(id=farmaciaDetalle.historiaMedicamentos_id)
 
 
                 comando = 'INSERT INTO farmacia_farmaciadespachosdispensa ("dosisCantidad","cantidadOrdenada","fechaRegistro", "estadoReg",despacho_id, "dosisUnidad_id", "farmaciaDetalle_id", "suministro_id","usuarioRegistro_id", "viaAdministracion_id")  VALUES ( ' + "'" + str(dosis) + "','" + str(cantidadMedicamento) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(despachoId) + "','" + str(MedidaDosis.id) + "','" + str(farmaciaDetalleId) + "','" + str(medicamentos) + "','" + str(username_id) + "','" + str(vias.id) +  "')"
@@ -537,9 +551,10 @@ def AdicionarDespachosDispensa(request):
                 cur3.execute(comando)
 
                 # Tercero creamos lo que Enfermeria recibe
+                print("farmaciaDetalleId =", farmaciaDetalleId)
 
                 enfermeriaDetalleId = EnfermeriaDetalle.objects.get(farmaciaDetalle_id=farmaciaDetalleId)
-                print("vias =", vias)
+                #print("vias =", vias)
 
                 comando = 'INSERT INTO enfermeria_enfermeriarecibe ("dosisCantidad","cantidadDispensada","fechaRegistro", "estadoReg", "dosisUnidad_id", "enfermeriaDetalle_id", "suministro_id","usuarioRegistro_id", "viaAdministracion_id",despachos_id, "farmaciaDetalle_id")  VALUES ( ' + "'" + str(dosis) + "','" + str(cantidadMedicamento) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(MedidaDosis.id) + "','" + str(enfermeriaDetalleId.id) + "','" + str(medicamentos) + "','" + str(username_id) + "','" + str(vias.id) + "','"  + str(despachoId) + "','"  + str(farmaciaDetalleId) + "')"
                 print(comando)
@@ -591,7 +606,7 @@ def AdicionarDespachosDispensa(request):
                 # Aqui Rutina FACTURACION crea en liquidaciondetalle el registro con la tarifa, con campo cups y convenio
                 #
 
-                comando = 'INSERT INTO facturacion_liquidaciondetalle (consecutivo,fecha, cantidad, "valorUnitario", "valorTotal",cirugia_id,"fechaCrea", "fechaRegistro", "estadoRegistro", "cums_id",  "usuarioRegistro_id", liquidacion_id, "tipoRegistro", "historiaMedicamento_id") VALUES (' + "'" + str(consecLiquidacion) + "','" + str(fechaRegistro) + "','" + str(cantidadMedicamento) + "','" + str(tarifaValor) + "','" + str(TotalTarifa) + "',null,'" + str(fechaRegistro) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(medicamentos) + "','" + str(username_id) + "'," + liquidacionId + ",'SISTEMA'," + "'" + str(historiaMediamentos) + "'" + ')'
+                comando = 'INSERT INTO facturacion_liquidaciondetalle (consecutivo,fecha, cantidad, "valorUnitario", "valorTotal",cirugia_id,"fechaCrea", "fechaRegistro", "estadoRegistro", "cums_id",  "usuarioRegistro_id", liquidacion_id, "tipoRegistro", "historiaMedicamento_id") VALUES (' + "'" + str(consecLiquidacion) + "','" + str(fechaRegistro) + "','" + str(cantidadMedicamento) + "','" + str(tarifaValor) + "','" + str(TotalTarifa) + "',null,'" + str(fechaRegistro) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(medicamentos) + "','" + str(username_id) + "'," + liquidacionId + ",'SISTEMA'," + str(historiaMedicamentos)  + ')'
                 print("comando ", comando)
 
                 cur3.execute(comando)

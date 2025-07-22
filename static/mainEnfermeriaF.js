@@ -808,10 +808,7 @@ function GuardarPedido()
      	var username = document.getElementById("username").value;
         var sede = document.getElementById("sede").value;
         var username_id = document.getElementById("username_id").value;
-        var servicioAdmonEntrega = document.getElementById("servicioAdmonEntrega").value;
-        var servicioAdmonRecibe = document.getElementById("servicioAdmonRecibe").value;
-        var plantaEntrega = document.getElementById("plantaEntrega").value;
-        var plantaRecibe = document.getElementById("plantaRecibe").value;
+        var servicioAdmonEnfermeria = document.getElementById("servicioAdmonEnfermeria").value;
         var enfermeriaId = document.getElementById("enfermeriaId").value;
 
 
@@ -844,8 +841,7 @@ function GuardarPedido()
             	   type: 'POST',
  	               url: '/adicionarFormulacionEnfermeria/',
   	               data: { 'username':username, 'sede':sede, 'username_id':username_id,'formulacionEnfermeria':formulacionEnfermeria,
-                            'servicioAdmonEntrega':servicioAdmonEntrega, 'servicioAdmonRecibe':servicioAdmonRecibe,
-                             	   'plantaEntrega':plantaEntrega, 'plantaRecibe':plantaRecibe, 'enfermeriaId':enfermeriaId},
+                            'servicioAdmonEnfermeria':servicioAdmonEnfermeria,'enfermeriaId':enfermeriaId},
  	      		success: function (data) {
 
      			    $("#mensajes").html(data.message);
@@ -878,10 +874,7 @@ function GuardarPedido()
         // aqui inicializar tablaFormulacion etc
 
         /// Aqui inicializar combos
-        $("servicioAdmonEntrega").prop('selectedIndex', 0);
-        $("plantaEntrega").prop('selectedIndex', 0);
-        $("servicioAdmonRecibe").prop('selectedIndex', 0);
-        $("plantaRecibe").prop('selectedIndex', 0);
+        $("servicioAdmonEnfermeria").prop('selectedIndex', 0);
 
 
         var tabla = $('#tablaFormulacionEnfermeria').DataTable();

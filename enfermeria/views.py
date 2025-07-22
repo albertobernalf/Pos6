@@ -28,9 +28,11 @@ from datetime import date, timedelta
 import time
 from decimal import Decimal
 from admisiones.models import Ingresos
+from farmacia.models import FarmaciaEstados
 from facturacion.models import ConveniosPacienteIngresos, Liquidacion, LiquidacionDetalle, Facturacion, FacturacionDetalle, Conceptos
 from clinico.models import Servicios, EspecialidadesMedicos, UnidadesDeMedidaDosis, ViasAdministracion
 import io
+from enfermeria.models import Enfermeria
 import pandas as pd
 from cirugia.models import EstadosCirugias, EstadosSalas, EstadosProgramacion, ProgramacionCirugias, Cirugias, ProgramacionCirugias
 from contratacion.models import Convenios
@@ -136,7 +138,8 @@ def Load_dataMedicamentosEnfermeria(request, data):
                                        password="123456")
     curx = miConexionx.cursor()
 
-    detalle = 'SELECT recibe.id id, tipos.nombre tipoDoc, usu.documento documento, usu.nombre paciente, hist.folio folio, fardet."consecutivoMedicamento" consecutivoMedicamento, recibe."cantidadDispensada" cantidad, 	  medida.descripcion UnidadMedida, sum.nombre medicamento, via.nombre via FROM admisiones_ingresos ing INNER JOIN clinico_historia hist ON (hist."tipoDoc_id" = ing."tipoDoc_id" AND hist.documento_id=ing.documento_id AND hist."consecAdmision" = ing.consec) INNER JOIN farmacia_farmacia far ON (far.historia_id= hist.id) INNER JOIN farmacia_farmaciadetalle fardet ON (fardet.farmacia_id = far.id) INNER JOIN	enfermeria_enfermeriarecibe recibe ON (recibe."farmaciaDetalle_id" = fardet.id) INNER JOIN facturacion_suministros sum ON (sum.id = recibe.suministro_id) INNER JOIN clinico_viasadministracion via ON (via.id = recibe."viaAdministracion_id") INNER JOIN clinico_unidadesdemedidadosis medida ON (medida.id = recibe."dosisUnidad_id") INNER JOIN usuarios_usuarios usu ON (usu.id = ing.documento_id) INNER JOIN usuarios_tiposdocumento tipos ON (tipos.id = usu."tipoDoc_id")	WHERE ing.id=' + "'" + str(ingresoId) + "'" + ' order by hist.folio, fardet."consecutivoMedicamento"'
+    detalle = 'SELECT recibe.id id, tipos.nombre tipoDoc, usu.documento documento, usu.nombre paciente, hist.folio folio, fardet."consecutivoMedicamento" consecutivoMedicamento, recibe."cantidadDispensada" cantidad, 	  medida.descripcion UnidadMedida, sum.nombre medicamento, via.nombre via FROM admisiones_ingresos ing INNER JOIN clinico_historia hist ON (hist."tipoDoc_id" = ing."tipoDoc_id" AND hist.documento_id=ing.documento_id AND hist."consecAdmision" = ing.consec) INNER JOIN farmacia_farmacia far ON (far.historia_id= hist.id) INNER JOIN farmacia_farmaciadetalle fardet ON (fardet.farmacia_id = far.id) INNER JOIN	enfermeria_enfermeriarecibe recibe ON (recibe."farmaciaDetalle_id" = fardet.id) INNER JOIN facturacion_suministros sum ON (sum.id = recibe.suministro_id) INNER JOIN clinico_viasadministracion via ON (via.id = recibe."viaAdministracion_id") INNER JOIN clinico_unidadesdemedidadosis medida ON (medida.id = recibe."dosisUnidad_id") INNER JOIN usuarios_usuarios usu ON (usu.id = ing.documento_id) INNER JOIN usuarios_tiposdocumento tipos ON (tipos.id = usu."tipoDoc_id")	WHERE ing.id=' + "'" + str(ingresoId) + "' UNION " + ' SELECT recibe.id id, tipos.nombre tipoDoc, usu.documento documento, usu.nombre paciente, 0 folio, fardet."consecutivoMedicamento" consecutivoMedicamento, recibe."cantidadDispensada" cantidad, 	  medida.descripcion UnidadMedida, sum.nombre medicamento, via.nombre via FROM admisiones_ingresos ing INNER JOIN farmacia_farmacia far ON (far."ingresoPaciente_id"= ing.id) INNER JOIN farmacia_farmaciadetalle fardet ON (fardet.farmacia_id = far.id) INNER JOIN	enfermeria_enfermeriarecibe recibe ON (recibe."farmaciaDetalle_id" = fardet.id) INNER JOIN facturacion_suministros sum ON (sum.id = recibe.suministro_id) INNER JOIN clinico_viasadministracion via ON (via.id = recibe."viaAdministracion_id") INNER JOIN clinico_unidadesdemedidadosis medida ON (medida.id = recibe."dosisUnidad_id") INNER JOIN usuarios_usuarios usu ON (usu.id = ing.documento_id) INNER JOIN usuarios_tiposdocumento tipos ON (tipos.id = usu."tipoDoc_id")	WHERE ing.id=' + "'" + str(ingresoId) + "' ORDER BY 5,6"
+
 
     print(detalle)
 
@@ -389,15 +392,8 @@ def AdicionarFormulacionEnfermeria(request):
     enfermeria = Enfermeria.objects.get(id=enfermeriaId)
 
 
-    servicioAdmonEntrega = request.POST['servicioAdmonEntrega']
-    print("servicioAdmonEntrega:", servicioAdmonEntrega)
-    servicioAdmonRecibe = request.POST['servicioAdmonRecibe']
-    print("servicioAdmonRecibe:", servicioAdmonRecibe)
-    plantaEntrega = request.POST['plantaEntrega']
-    print("plantaEntrega:", plantaEntrega)
-
-    plantaRecibe = request.POST['plantaRecibe']
-    print("plantaRecibe:", plantaRecibe)
+    servicioAdmonEnfermeria = request.POST['servicioAdmonEnfermeria']
+    print("servicioAdmonEnfermeria:", servicioAdmonEnfermeria)
 
     print("sede:", sede)
     print("username:", username)
@@ -422,13 +418,15 @@ def AdicionarFormulacionEnfermeria(request):
     miConexion3 = None
     try:
 
+        solicitud = FarmaciaEstados.objects.get(nombre='SOLICITUD')
+
         miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
                                        password="123456")
         cur3 = miConexion3.cursor()
 
         # Creamos el Pedido de enfermeria en Farmacia
 
-        comando = 'INSERT INTO farmacia_farmacia ("tipoMovimiento_id", "fechaRegistro", "estadoReg","serviciosAdministrativosEntrega_id","usuarioEntrega_id", "usuarioRegistro_id","tipoOrigen_id", "sedesClinica_id", estado_id) VALUES (' +                "'" + str(enfermeria.tipomovimiento_id) + "','" + str( fechaRegistro) + "','" + str(estadoReg) + ",'" + str(servicioAdmonEntrega) +  "','" + str(username_id) + "','" + str(enfermeria.tipoorigen_id) + "','" + str(sede) + "'" + ") RETURNING id ;"
+        comando = 'INSERT INTO farmacia_farmacia ("tipoMovimiento_id", "fechaRegistro", "estadoReg","serviciosAdministrativos_id", "usuarioRegistro_id","tipoOrigen_id", "sedesClinica_id", estado_id, "ingresoPaciente_id") VALUES (' + "'" + str(enfermeria.tipoMovimiento_id) + "','" + str( fechaRegistro) + "','" + str(estadoReg) + "','" + str(servicioAdmonEnfermeria) +  "','" + str(username_id) + "','" + str(enfermeria.tipoOrigen_id) + "','" + str(sede) + "','" + str(solicitud.id)  + "','"  + str(enfermeria.ingresoPaciente_id) + "') RETURNING id ;"
         print(comando)
 
         resultado = cur3.execute(comando)
@@ -470,18 +468,20 @@ def AdicionarFormulacionEnfermeria(request):
                 # diasTratamiento = key["diasTratamiento"]
                 # print("diasTratamiento=", diasTratamiento)
 
-                ## Desde aqui INSERTAMOS EL DETALLE DE ENFERMERIA
-
-                comando = 'INSERT INTO enfermeria_enfermeriadetalle ("dosisCantidad","cantidadOrdenada","fechaRegistro", "estadoReg", "dosisUnidad_id", "enfermeria_id", "suministro_id","usuarioRegistro_id", "viaAdministracion_id")  VALUES ( ' + "'" + str(dosis) + "','" + str(cantidadMedicamento) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(MedidaDosis.id) + "','" + str(enfermeriaId) + "','" + str(medicamentos) + "','" + str(username_id) + "','" + str(vias.id) +  "')"
-
-                print(comando)
-                cur3.execute(comando)
-
-
 
                 # Creamos el detalle del pedido en Farmacia
 
+                comando = 'INSERT INTO farmacia_farmaciadetalle ("dosisCantidad","cantidadOrdenada","fechaRegistro", "estadoReg", "dosisUnidad_id", "farmacia_id", "suministro_id","usuarioRegistro_id", "viaAdministracion_id")  VALUES ( ' + "'" + str(dosis) + "','" + str(cantidadMedicamento) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(MedidaDosis.id) + "','" + str(farmaciaId) + "','" + str(medicamentos) + "','" + str(username_id) + "','" + str(vias.id) +  "') RETURNING id ;"
+                print(comando)
+                resultado = cur3.execute(comando)
+                farmaciaDetalle = cur3.fetchone()[0]
 
+                ## Desde aqui INSERTAMOS EL DETALLE DE ENFERMERIA
+
+                comando = 'INSERT INTO enfermeria_enfermeriadetalle ("dosisCantidad","cantidadOrdenada","fechaRegistro", "estadoReg", "dosisUnidad_id", "enfermeria_id", "suministro_id","usuarioRegistro_id", "viaAdministracion_id", "farmaciaDetalle_id")  VALUES ( ' + "'" + str(dosis) + "','" + str(cantidadMedicamento) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(MedidaDosis.id) + "','" + str(enfermeriaId) + "','" + str(medicamentos) + "','" + str(username_id) + "','" + str(vias.id) + "','" + str(farmaciaDetalle)   +  "')"
+
+                print(comando)
+                cur3.execute(comando)
 
 
         miConexion3.commit()
