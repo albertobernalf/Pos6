@@ -6,6 +6,7 @@ class Farmacia(models.Model):
     id = models.AutoField(primary_key=True)
     sedesClinica = models.ForeignKey('sitios.SedesClinica',   blank=True,null= True, on_delete=models.PROTECT ,related_name ='sedesClinica390')
     historia = models.ForeignKey('clinico.Historia', on_delete=models.PROTECT, blank=True, null=True,  editable=True,  related_name='HistoriaFarmacia01')
+    ingresoPaciente =  models.ForeignKey('admisiones.Ingresos', on_delete=models.PROTECT, blank=True, null=True,  editable=True,  related_name='Ingreso988')
     serviciosAdministrativos = models.ForeignKey('sitios.ServiciosAdministrativos', blank=True,null= True, editable=True,  on_delete=models.PROTECT,   related_name='servAdmFarm01')
     tipoOrigen = models.ForeignKey('enfermeria.EnfermeriaTipoOrigen', on_delete=models.PROTECT, blank=True, null=True,  editable=True,  related_name='TipoEnfermeria04')
     tipoMovimiento = models.ForeignKey('enfermeria.EnfermeriaTipoMovimiento', on_delete=models.PROTECT, blank=True, null=True,  editable=True,  related_name='TipoEnfermeria05')

@@ -12,14 +12,61 @@ let dataTableI;
 let dataTablePanelEnfermeriaInitialized = false;
 let dataTableMedicamentosEnfermeriaInitialized = false;
 let dataTableParaclinicosEnfermeriaEnfermeriaInitialized = false;
-let dataTableOptionsPedidosEnfermeria = false;
-let dataTableOptionsPedidosEnfermeriaDetalle = false;
-
+let dataTablePedidosEnfermeria = false;
+let dataTablePedidosEnfermeriaDetalle = false;
+var controlMed = 0;
 
 
 
 
 $(document).ready(function() {
+
+/*------------------------------------------
+        --------------------------------------------
+        Create Post Code Formulacion
+        --------------------------------------------
+        --------------------------------------------*/
+        $('#BtnAdicionarFormulacionEnfermeria').click(function (e) {
+            e.preventDefault();
+
+
+   	   if (controlMed == 0)
+   	   {
+   	   var table10 = $('#tablaFormulacionEnfermeria').DataTable({scrollY: '80px', paging:false,  search:false,  scrollX: true,  scrollCollapse: true,  lengthMenu: [5]});   // accede de nuevo a la DataTable.
+   	   controlMed=1;
+   	   }
+   	   else
+   	   {
+	  var table10 = $('#tablaFormulacionEnfermeria').DataTable();
+   	   }
+
+		
+           var select3 = document.getElementById("medicamentos"); /*Obtener el SELECT */
+      	   var medicamentos= select3.options[select3.selectedIndex].value; /* Obtener el valor */
+      	   textMedicamentos = select3.options[select3.selectedIndex].innerText; //El texto de la opción seleccionada
+
+           var dosis =  document.getElementById("dosis").value;
+
+	        var select3 = document.getElementById("uMedidaDosis"); /*Obtener el SELECT */
+      	   var uMedidaDosis= select3.options[select3.selectedIndex].value; /* Obtener el valor */
+      	   textUMedidaDosis = select3.options[select3.selectedIndex].innerText; //El texto de la opción seleccionada
+
+	         var select3 = document.getElementById("uMedidaDosis"); /*Obtener el SELECT */
+      	   var uMedidaDosis= select3.options[select3.selectedIndex].value; /* Obtener el valor */
+      	   textUMedidaDosis = select3.options[select3.selectedIndex].innerText; //El texto de la opción seleccionada
+
+
+	         var select3 = document.getElementById("vias"); /*Obtener el SELECT */
+      	   var viasAdministracion = select3.options[select3.selectedIndex].value; /* Obtener el valor */
+      	   textViasAdministracion = select3.options[select3.selectedIndex].innerText; //El texto de la opción seleccionada
+	
+	        var cantidadMedicamento =  document.getElementById("cantidadMedicamento").value;
+
+		
+
+	    table10.row.add([ medicamentos, textMedicamentos, dosis,  textUMedidaDosis, textViasAdministracion, cantidadMedicamento   ,  '<i class="fa fa-trash"></i>']).draw(false);
+
+        });
 
 
 // aqui van los filtros de busqueda
@@ -35,9 +82,9 @@ function arrancaEnfermeria(valorTabla,valorData)
     if (valorTabla == 1)
     {
         let dataTableOptionsPanelEnfermeria  ={
-   dom: "<'row mb-1'<'col-sm-3'B><'col-sm-3'><'col-sm-6'f>>" + // B = Botones a la izquierda, f = filtro a la derecha
+   dom: "<'row mb-1'<'col-sm-2'B><'col-sm-3'><'col-sm-6'f>>" + // B = Botones a la izquierda, f = filtro a la derecha
              "<'row'<'col-sm-12'tr>>" +
-             "<'row mt-3'<'col-sm-5'i><'col-sm-7'p>>",
+             "<'row mt-1'<'col-sm-5'i><'col-sm-7'p>>",
   buttons: [
     {
       extend: 'excelHtml5',
@@ -236,7 +283,7 @@ function arrancaEnfermeria(valorTabla,valorData)
     if (valorTabla == 3)
     {
         let dataTableOptionsParaClinicosEnfermeria  ={
-   dom: "<'row mb-1'<'col-sm-3'B><'col-sm-3'><'col-sm-6'f>>" + // B = Botones a la izquierda, f = filtro a la derecha
+   dom: "<'row mb-1'<'col-sm-2'B><'col-sm-3'><'col-sm-6'f>>" + // B = Botones a la izquierda, f = filtro a la derecha
              "<'row'<'col-sm-12'tr>>" +
              "<'row mt-3'<'col-sm-5'i><'col-sm-7'p>>",
   buttons: [
@@ -331,13 +378,12 @@ function arrancaEnfermeria(valorTabla,valorData)
 
   }
 
-
     if (valorTabla == 4)
     {
         let dataTableOptionsPedidosEnfermeria  ={
-   dom: "<'row mb-1'<'col-sm-3'B><'col-sm-3'><'col-sm-6'f>>" + // B = Botones a la izquierda, f = filtro a la derecha
-             "<'row'<'col-sm-12'tr>>" +
-             "<'row mt-3'<'col-sm-5'i><'col-sm-7'p>>",
+   dom: "<'row mb-1'<'col-sm-2'B><'col-sm-3'><'col-sm-6'f>>" + // B = Botones a la izquierda, f = filtro a la derecha
+            "<'row'<'col-sm-12'tr>>" + 
+             "<'row mt-1'<'col-sm-5'i><'col-sm-7'p>>",
   buttons: [
     {
       extend: 'excelHtml5',
@@ -361,10 +407,12 @@ function arrancaEnfermeria(valorTabla,valorData)
   lengthMenu: [2, 4, 15],
            processing: true,
             serverSide: false,
-            scrollY: '475px',
+            scrollY: '75px',
 	    scrollX: true,
 	    scrollCollapse: true,
             paging:false,
+	    "info": false,
+		"showNEntries" : false,
             columnDefs: [
 		{ className: 'centered', targets: [0, 1, 2,] },
 	    { width: '10%', targets: [2,3] },
@@ -404,7 +452,6 @@ function arrancaEnfermeria(valorTabla,valorData)
 
 		 btn = btn + " <input type='radio' name='miPedidosEnfermeria' class='miPedidosEnfermeria form-check-input ' data-pk='"  + row.pk + "'>" + "</input>";
 
-
                        return btn;
                     },
 
@@ -432,10 +479,12 @@ function arrancaEnfermeria(valorTabla,valorData)
   lengthMenu: [2, 4, 15],
            processing: true,
             serverSide: false,
-            scrollY: '175px',
+            scrollY: '75px',
 	    scrollX: true,
 	    scrollCollapse: true,
             paging:false,
+	    "info": false,
+		"showNEntries" : false,
             columnDefs: [
 		{ className: 'centered', targets: [0, 1, 2, 3, 4, 5] },
 	    { width: '10%', targets: [2,3] },
@@ -455,6 +504,7 @@ function arrancaEnfermeria(valorTabla,valorData)
 		    search: 'Buscar:',
 		    infoThousands: ',',
 		    loadingRecords: 'Cargando...',
+	
 		    paginate: {
 			      first: 'Primero',
 			      last: 'Último',
@@ -557,6 +607,7 @@ $('#tablaPanelEnfermeria tbody').on('click', '.miIngresoEnfermeriaId', function(
         var nombreSede = document.getElementById("nombreSede").value;
     	var sede = document.getElementById("sede").value;
         var username_id = document.getElementById("username_id").value;
+        var enfermeriaId=0;
 
          var data =  {}   ;
         data['username'] = username;
@@ -565,6 +616,7 @@ $('#tablaPanelEnfermeria tbody').on('click', '.miIngresoEnfermeriaId', function(
         data['sede'] = sede;
         data['username_id'] = username_id;
 	data['ingresoId'] = ingresoId;
+	data['enfermeriaId'] = enfermeriaId;
 	
  	    data = JSON.stringify(data);
 
@@ -597,21 +649,43 @@ $('#tablaPanelEnfermeria tbody').on('click', '.miIngresoEnfermeriaId', function(
 	     arrancaEnfermeria(3,data);
 	     dataTableParaclinicosEnfermeriaEnfermeriaInitialized = true;
 
-
 	     arrancaEnfermeria(4,data);
 	     dataTablePedidosEnfermeriaInitialized = true;
 
-
-
-
-	    // arrancaEnfermeria(5,data);
-	    // dataTablePedidosEnfermeriaDetalleInitialized = true;
+	     arrancaEnfermeria(5,data);
+	     dataTablePedidosEnfermeriaDetalleInitialized = true;
 
       
   });
 
 
-function CreaPedidosEnfermeriaCabezote()
+$('#tablaPedidosEnfermeria tbody').on('click', '.miPedidosEnfermeria', function() {
+
+	alert ("Seleccione miPedidosEnfermeria");
+
+	     var post_id = $(this).data('pk');
+	enfermeriaId =   post_id;
+
+	document.getElementById("enfermeriaId").value = enfermeriaId;
+
+         var data =  {}   ;
+        data['username'] = username;
+        data['sedeSeleccionada'] = sedeSeleccionada;
+        data['nombreSede'] = nombreSede;
+        data['sede'] = sede;
+        data['username_id'] = username_id;
+	data['enfermeriaId'] = enfermeriaId;
+
+	 data = JSON.stringify(data);
+
+  	 arrancaEnfermeria(5,data);
+	 dataTablePedidosEnfermeriaDetalleInitialized = true;
+      
+  });
+
+
+
+function ModalPedidosEnfermeriaCabezote()
 {
 	alert("ENTRE cargar modal CreaPedidosEnfermeriaCabezote");
 
@@ -625,7 +699,7 @@ function CreaPedidosEnfermeriaCabezote()
 }
 
 
-function PedidosEnfermeriaCabezote()
+function CreaPedidosEnfermeriaCabezote()
 {
 
 		alert("ENTRE CreaPedidosEnfermeriaCabezote");
@@ -634,21 +708,40 @@ function PedidosEnfermeriaCabezote()
         var nombreSede = document.getElementById("nombreSede").value;
     	var sede = document.getElementById("sede").value;
         var username_id = document.getElementById("username_id").value;
+	var ingresoId = document.getElementById("ingresoId").value ;
 
-        var enfermeriaTipoOrigen = document.getElementById("enfermeriaTipoOrigen").value;
-        var enfermeriaTipoMovimiento = document.getElementById("enfermeriaTipoMovimiento").value;
+        var enfermeriaTipoOrigen = document.getElementById("enfermeriaTipoOrigenx").value;
+        var enfermeriaTipoMovimiento = document.getElementById("enfermeriaTipoMovimientox").value;
         var servicioEnfermeria = document.getElementById("servicioEnfermeria").value;
 
-
-
+	alert("username_id: " + username_id );
+	alert("enfermeriaTipoOrigen: " + enfermeriaTipoOrigen );
+	alert("enfermeriaTipoMovimiento : " + enfermeriaTipoMovimiento  );
 		
      $.ajax({
-                data: {'username_id ':username_id ,'sede':sede,'enfermeriaTipoOrigen':enfermeriaTipoOrigen,'enfermeriaTipoMovimiento':enfermeriaTipoMovimiento,'servicioEnfermeria':servicioEnfermeria},
+
 	        url: "/creaPedidosEnfermeriaCabezote/",
+                data: {'ingresoId':ingresoId, 'username_id':username_id ,'sede':sede,'enfermeriaTipoOrigen':enfermeriaTipoOrigen,'enfermeriaTipoMovimiento':enfermeriaTipoMovimiento,'servicioEnfermeria':servicioEnfermeria},
                 type: "POST",
                 dataType: 'json',
                 success: function (info) {
 		document.getElementById("mensajes").innerHTML = 'Se actualiza cambio de estado';
+
+
+	         var data =  {}   ;
+	        data['username'] = username;
+	        data['sedeSeleccionada'] = sedeSeleccionada;
+	        data['nombreSede'] = nombreSede;
+	        data['sede'] = sede;
+	        data['username_id'] = username_id;
+		   data['ingresoId'] = ingresoId;
+
+	    data = JSON.stringify(data);
+
+	        arrancaEnfermeria(4,data);
+
+	        dataTablePedidosEnfermeriaInitialized = true;
+
 
                 },
             error: function (request, status, error) {
@@ -660,4 +753,150 @@ function PedidosEnfermeriaCabezote()
 
 
 }
+
+
+// Medicamentos
+
+function tableActionsFormulacionEnfermeria() {
+
+   var table10 = $('#tablaFormulacionEnfermeria').DataTable({
+                "language": {
+                  "lengthMenu": "Display _MENU_ registros",
+                   "search": "Filtrar registros:",
+                    },
+                processing: true,
+                serverSide: false,
+                scrollY: '100px',
+	            scrollX: true,
+	            scrollCollapse: true,
+                paging:false,
+                 columnDefs: [
+                {
+                    "render": function ( data, type, row ) {
+                        var btn = '';
+			  btn = btn + " <button class='btn btn-danger deleteRevisionSistemas' id='borraDiag'>" + '<i class="fa fa-trash"></i>' + "</button>";
+                        return btn;
+                    },
+                    "targets": 13
+               }
+            ],
+        lengthMenu: [5],
+    columns:[
+    //"dummy" configuration
+        { visible: true }, //col 1
+        { visible: true }, //col 2
+        { visible: true }, //col 3
+	  { visible: false }, //col 4
+	  { visible: true }, //col 5
+	  { visible: false }, //col 6
+	  { visible: true }, //col 7
+
+
+            ],
+    });
+}
+
+// FIN MEDICAMENTOS
+
+
+function GuardarPedido()
+{
+
+	// Formulacion
+	alert("Entre a GRABAR PedidosEnfermeria");
+
+     	var username = document.getElementById("username").value;
+        var sede = document.getElementById("sede").value;
+        var username_id = document.getElementById("username_id").value;
+        var servicioAdmonEntrega = document.getElementById("servicioAdmonEntrega").value;
+        var servicioAdmonRecibe = document.getElementById("servicioAdmonRecibe").value;
+        var plantaEntrega = document.getElementById("plantaEntrega").value;
+        var plantaRecibe = document.getElementById("plantaRecibe").value;
+        var enfermeriaId = document.getElementById("enfermeriaId").value;
+
+
+    const table10 = $('#tablaFormulacionEnfermeria').DataTable();
+     var datos_tabla10 = table10.rows().data().toArray();
+
+        formulacionEnfermeria=[]
+
+	for(var i= 0; i < datos_tabla10.length; i++) {
+
+	    formulacionEnfermeria.push({
+	        "medicamentos"    : datos_tabla10[i][0] ,
+	        "dosis"    : datos_tabla10[i][2],
+	        "uMedidaDosis"    : datos_tabla10[i][3] ,
+	      /*  "vias"    : datos_tabla10[i][4] , */
+	        "viasAdministracion"    : datos_tabla10[i][4] ,
+	        "cantidadMedicamento"    : datos_tabla10[i][5] ,
+
+	      });
+	   };
+
+	    formulacionEnfermeria  = JSON.stringify(formulacionEnfermeria);
+
+	    alert("Esto envio formulacionEnfermeri = " + formulacionEnfermeria)
+    
+ 	// Fin Formulacion
+
+
+  $.ajax({
+            	   type: 'POST',
+ 	               url: '/adicionarFormulacionEnfermeria/',
+  	               data: { 'username':username, 'sede':sede, 'username_id':username_id,'formulacionEnfermeria':formulacionEnfermeria,
+                            'servicioAdmonEntrega':servicioAdmonEntrega, 'servicioAdmonRecibe':servicioAdmonRecibe,
+                             	   'plantaEntrega':plantaEntrega, 'plantaRecibe':plantaRecibe, 'enfermeriaId':enfermeriaId},
+ 	      		success: function (data) {
+
+     			    $("#mensajes").html(data.message);
+
+			document.getElementById("mensajes").innerHTML = data.message;
+
+    	var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
+        var username = document.getElementById("username").value;
+        var nombreSede = document.getElementById("nombreSede").value;
+    	var sede = document.getElementById("sede").value;
+        var username_id = document.getElementById("username_id").value;
+        var ingresoId = document.getElementById("ingresoId").value;
+ 
+         var data =  {}   ;
+        data['username'] = username;
+        data['sedeSeleccionada'] = sedeSeleccionada;
+        data['nombreSede'] = nombreSede;
+        data['sede'] = sede;
+        data['username_id'] = username_id;
+
+	    data['ingresoId'] = ingresoId;
+ 	    data = JSON.stringify(data);
+
+	    arrancaEnfermeria(4,data);
+	    dataTablePedidosEnfermeriaInitialized = true;
+
+	    arrancaEnfermeria(5,data);
+	    dataTablePedidosEnfermeriaDetalleInitialized = true;
+
+        // aqui inicializar tablaFormulacion etc
+
+        /// Aqui inicializar combos
+        $("servicioAdmonEntrega").prop('selectedIndex', 0);
+        $("plantaEntrega").prop('selectedIndex', 0);
+        $("servicioAdmonRecibe").prop('selectedIndex', 0);
+        $("plantaRecibe").prop('selectedIndex', 0);
+
+
+        var tabla = $('#tablaFormulacionEnfermeria').DataTable();
+        tabla.rows().remove().draw();
+
+
+ 	      		}, // cierra function sucess
+ 	      		error: function (request, status, error) {
+ 	      			document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
+ 	      			
+
+ 	      		}, // cierra error function
+  	        });  // cierra ajax
+
+
+}
+
 

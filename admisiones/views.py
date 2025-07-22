@@ -2768,7 +2768,7 @@ def escogeAcceso(request, Sede, Username, Profesional, Documento, NombreSede, es
 
         miConexiont.close()
         print("enfermeriaTipoOrigen  = " , enfermeriaTipoOrigen )
-        context['EnfermeriaTipoOrigen '] = enfermeriaTipoOrigen 
+        context['EnfermeriaTipoOrigen'] = enfermeriaTipoOrigen 
 
         # Fin Combo enfermeriaTipoOrigen 
 
@@ -2794,9 +2794,107 @@ def escogeAcceso(request, Sede, Username, Profesional, Documento, NombreSede, es
 
         miConexiont.close()
         print("enfermeriaTipoMovimiento  = " , enfermeriaTipoMovimiento )
-        context['EnfermeriaTipoMovimiento '] = enfermeriaTipoMovimiento
+        context['EnfermeriaTipoMovimiento'] = enfermeriaTipoMovimiento
 
         # Fin Combo enfermeriaTipoMovimiento 
+
+        # Combo Medicamentos
+
+        miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                       password="123456")
+        curt = miConexiont.cursor()
+
+        comando = 'SELECT e.id id, e.nombre nombre  FROM facturacion_Suministros e, facturacion_tipossuministro t  where e."tipoSuministro_id" = t.id AND t.nombre = ' + "'" + str('MEDICAMENTOS') + "' ORDER BY e.nombre"
+
+        curt.execute(comando)
+        print(comando)
+
+        medicamentos = []
+        medicamentos.append({'id': '', 'nombre': ''})
+
+        for id, nombre in curt.fetchall():
+            medicamentos.append({'id': id, 'nombre': nombre})
+
+        miConexiont.close()
+        print(medicamentos)
+
+        context['Medicamentos'] = medicamentos
+
+        # Fin combo medicamentos
+
+
+       # Combo UMedidaDosis
+
+        miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                       password="123456")
+        curt = miConexiont.cursor()
+
+        comando = 'SELECT e.id id, e.descripcion nombre  FROM clinico_unidadesdemedidadosis e'
+
+        curt.execute(comando)
+        print(comando)
+
+        uMedidaDosis= []
+        uMedidaDosis.append({'id': '', 'nombre': ''})
+
+        for id, nombre in curt.fetchall():
+            uMedidaDosis.append({'id': id, 'nombre': nombre})
+
+        miConexiont.close()
+        print(uMedidaDosis)
+
+        context['UMedidaDosis'] = uMedidaDosis
+
+        # Fin combo UMedidaDosis
+
+        # Combo Vias Administracion
+
+        # iConexiont = MySQLdb.connect(host='CMKSISTEPC07', user='sa', passwd='75AAbb??', db='vulnerable')
+        miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                       password="123456")
+        curt = miConexiont.cursor()
+
+        comando = "SELECT c.id id,c.nombre nombre FROM clinico_viasAdministracion c"
+
+        curt.execute(comando)
+        print(comando)
+
+        viasAdministracion = []
+
+        for id, nombre in curt.fetchall():
+            viasAdministracion.append({'id': id, 'nombre': nombre})
+
+        miConexiont.close()
+        print(viasAdministracion)
+
+        context['ViasAdministracion'] = viasAdministracion
+
+        # Fin combo Vias Administracion
+
+
+       # Combo PlantaUsuarios
+
+        miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                       password="123456")
+        curt = miConexiont.cursor()
+
+        comando = 'SELECT e.id id, e.nombre nombre  FROM planta_planta e'
+
+        curt.execute(comando)
+        print(comando)
+
+        plantaUsuarios= []
+        plantaUsuarios.append({'id': '', 'nombre': ''})
+
+        for id, nombre in curt.fetchall():
+            plantaUsuarios.append({'id': id, 'nombre': nombre})
+
+        miConexiont.close()
+        print(plantaUsuarios)
+
+        context['PlantaUsuarios'] = plantaUsuarios
+
+        # Fin combo PlantaUsuarios
 
 
         ## FIN CONTEXTO

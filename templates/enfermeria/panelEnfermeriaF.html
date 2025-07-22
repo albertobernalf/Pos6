@@ -229,8 +229,8 @@
 			Ingreso: <span id="consecutivoAdmision"></span>
 			Servicio: <span id="servicio"></span>
 			Hab: <span id="habitacion"></span>
-			<input type="text" id="enfermeriaDetalle" name="enfermeriaDetalle" value="" readonly>
-	               <input type="button" style="height:30px;margin-left: 0 ; margin-bottom: 0;border-top-right-radius: 0;"  size="10px" id="BtnSolicitudPedidosEnfermeria"  name="BtnSolicitudPedidosEnfermeria" value="CreaPedido" onclick= "CreaPedidosEnfermeriaCabezote()" >				    
+			<input type="text" id="enfermeriaId" name="enfermeriaId" value="" readonly>
+	               <input type="button" style="height:30px;margin-left: 0 ; margin-bottom: 0;border-top-right-radius: 0;"  size="10px" id="BtnSolicitudPedidosEnfermeria"  name="BtnSolicitudPedidosEnfermeria" value="CreaPedido" onclick= "ModalPedidosEnfermeriaCabezote()">				    
 
 		</div>
 
@@ -356,7 +356,7 @@
                                                     <div class="col-sm-1 text-end">
                                                         <span class="text-secondary">Adicionar</span>
                                                         <a class="btn btn-success" href="javascript:void(0)"
-                                                           id="BtnAdicionarFormulacion"> <i class="fa fa-plus"></i></a>
+                                                           id="BtnAdicionarFormulacionEnfermeria"> <i class="fa fa-plus"></i></a>
                                                     </div>
                                                 </div>
                                             </center>
@@ -364,7 +364,7 @@
                                         <div class="card-body" style="height:5px;">
                                             <div class="row">
                                                 <div class="col-sm-12">
-                                                    <table id="tablaFormulacion"
+                                                    <table id="tablaFormulacionEnfermeria"
                                                            class="display nowrap table table table-bordered  tablaFormulacion table-hover table-sm dtr-inline">
                                                         <thead>
                                                         <tr>
@@ -453,7 +453,7 @@
                                                     </div>
 					   <div class="col-sm-2">
 
-				               <input type="button" style="height:30px;margin-left: 0 ; margin-bottom: 0;border-top-right-radius: 0;"  size="10px" id="BtnAdicionarPedidosEnfermeria"  name="BtnAdicionarPedidosEnfermeria" value="Solicitar" onclick= "AdicionarPedidoEnfermeria()" >				    
+				               <input type="button" style="height:30px;margin-left: 0 ; margin-bottom: 0;border-top-right-radius: 0;"  size="10px" id="BtnAdicionarPedidosEnfermeria"  name="BtnAdicionarPedidosEnfermeria" value="Solicitar" onclick= "GuardarPedido()" >				    
                                                     </div>
 		</div> <!-- cierra el row -->
 

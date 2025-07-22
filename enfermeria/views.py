@@ -23,13 +23,13 @@ from django.http import JsonResponse
 import pyodbc
 import psycopg2
 import json
-#import datetime
+import datetime
 from datetime import date, timedelta
 import time
 from decimal import Decimal
 from admisiones.models import Ingresos
 from facturacion.models import ConveniosPacienteIngresos, Liquidacion, LiquidacionDetalle, Facturacion, FacturacionDetalle, Conceptos
-from clinico.models import Servicios, EspecialidadesMedicos
+from clinico.models import Servicios, EspecialidadesMedicos, UnidadesDeMedidaDosis, ViasAdministracion
 import io
 import pandas as pd
 from cirugia.models import EstadosCirugias, EstadosSalas, EstadosProgramacion, ProgramacionCirugias, Cirugias, ProgramacionCirugias
@@ -227,7 +227,7 @@ def Load_dataPedidosEnfermeria(request, data):
 
 
 
-    detalle = '	select enf.id id,origen.nombre origen, mov.nombre mov , serv.nombre servicio, tipos.nombre tipoDoc, usu.documento documento, usu.nombre paciente, serv.nombre servicio FROM enfermeria_enfermeria enf INNER JOIN enfermeria_enfermeriatipoorigen origen ON (origen.id =  enf."tipoOrigen_id") INNER JOIN enfermeria_enfermeriatipomovimiento mov ON (mov.id= enf."tipoMovimiento_id")  INNER JOIN sitios_serviciosadministrativos serv ON (serv.id = enf."serviciosAdministrativos_id") INNER JOIN admisiones_ingresos adm ON (adm."tipoDoc_id" = '  + "'" + str(ingresoAdmision.tipoDoc_id ) + "'" + '  AND adm.documento_id = ' + "'" + str(ingresoAdmision.documento_id) + "'" + ' AND adm.consec = ' + "'" + str(ingresoAdmision.consec) + "'" + ' ) INNER JOIN usuarios_usuarios usu ON (usu.id = adm.documento_id ) INNER JOIN usuarios_tiposdocumento tipos ON (tipos.id = adm."tipoDoc_id") WHERE enf."sedesClinica_id" = ' + "'" + str(sede) + "'" + ' AND enf."fechaRegistro" >= ' + "'" + str('2025-01-01') + "'"  + ' AND mov.nombre='  + "'" + str('PEDIDO') + "'" + ' ORDER BY enf."fechaRegistro" desc'
+    detalle = '	select enf.id id,origen.nombre origen, mov.nombre mov , serv.nombre servicio, tipos.nombre tipoDoc, usu.documento documento, usu.nombre paciente, serv.nombre servicio FROM enfermeria_enfermeria enf INNER JOIN enfermeria_enfermeriatipoorigen origen ON (origen.id =  enf."tipoOrigen_id") INNER JOIN enfermeria_enfermeriatipomovimiento mov ON (mov.id= enf."tipoMovimiento_id")  INNER JOIN sitios_serviciosadministrativos serv ON (serv.id = enf."serviciosAdministrativos_id") INNER JOIN admisiones_ingresos adm ON (adm.id = enf."ingresoPaciente_id" AND adm.id=' + "'" +  str(ingresoId) + "')"  + ' INNER JOIN usuarios_usuarios usu ON (usu.id = adm.documento_id ) INNER JOIN usuarios_tiposdocumento tipos ON (tipos.id = adm."tipoDoc_id") WHERE enf."sedesClinica_id" = ' + "'" + str(sede) + "'" + ' AND enf."fechaRegistro" >= ' + "'" + str('2025-01-01') + "'"  +  ' AND origen.nombre = ' + "'" + str('ENFERMERIA') +"'" + ' AND mov.nombre='  + "'" + str('PEDIDOS ENFERMERIA') + "'" + ' ORDER BY enf."fechaRegistro" desc'
 
 
     print(detalle)
@@ -255,11 +255,9 @@ def Load_dataPedidosEnfermeriaDetalle(request, data):
 
     d = json.loads(data)
 
-    ingresoId = d['ingresoId']
+    enfermeriaId = d['enfermeriaId']
 
-    print("ingresoId =", ingresoId)
-
-    ingresoAdmision = Ingresos.objects.get(id=ingresoId)
+    print("enfermeriaId =", enfermeriaId)
 
 
     username = d['username']
@@ -277,7 +275,7 @@ def Load_dataPedidosEnfermeriaDetalle(request, data):
                                    password="123456")
     curx = miConexionx.cursor()
 
-    detalle = '	select  det.id id,origen.nombre origenNombre, mov.nombre movNombre, sum.nombre suministro, det."dosisCantidad" dosis, dosis.descripcion unidadDosis,   vias.nombre via,	det."cantidadOrdenada" cantidad, via.nombre viaAdministracion FROM enfermeria_enfermeria enf INNER JOIN enfermeria_enfermeriadetalle det  ON (det.enfermeria_id = enf.id) 		INNER JOIN enfermeria_enfermeriatipoorigen origen ON (origen.id = enf."tipoOrigen_id") INNER JOIN enfermeria_enfermeriatipomovimiento mov ON (mov.id = enf."tipoOrigen_id") 	INNER JOIN facturacion_suministros sum ON (sum.id= det.suministro_id) 	INNER JOIN clinico_viasadministracion vias ON (vias.id= det."viaAdministracion_id") 	INNER JOIN clinico_unidadesdemedidadosis dosis ON (dosis.id= det."dosisUnidad_id") 	INNER JOIN clinico_viasadministracion via ON (via.id= det."viaAdministracion_id")  where enf.id ='
+    detalle = '	select  det.id id,origen.nombre origenNombre, mov.nombre movNombre, sum.nombre suministro, det."dosisCantidad" dosis, dosis.descripcion unidadDosis,   vias.nombre via,	det."cantidadOrdenada" cantidad, via.nombre viaAdministracion FROM enfermeria_enfermeria enf INNER JOIN enfermeria_enfermeriadetalle det  ON (det.enfermeria_id = enf.id) 		INNER JOIN enfermeria_enfermeriatipoorigen origen ON (origen.id = enf."tipoOrigen_id") INNER JOIN enfermeria_enfermeriatipomovimiento mov ON (mov.id = enf."tipoOrigen_id") 	INNER JOIN facturacion_suministros sum ON (sum.id= det.suministro_id) 	INNER JOIN clinico_viasadministracion vias ON (vias.id= det."viaAdministracion_id") 	INNER JOIN clinico_unidadesdemedidadosis dosis ON (dosis.id= det."dosisUnidad_id") 	INNER JOIN clinico_viasadministracion via ON (via.id= det."viaAdministracion_id")  where det.enfermeria_id =' + "'" + str(enfermeriaId) + "'"
 
     print(detalle)
 
@@ -338,6 +336,10 @@ def BuscaDatosPacienteEnfermeria(request):
 def CreaPedidosEnfermeriaCabezote(request):
     print("Entre CreaPedidosEnfermeriaCabezote")
 
+    ingresoId = request.POST['ingresoId']
+    print ("ingresoId =", ingresoId)
+
+
     username_id = request.POST['username_id']
     print ("username_id =", username_id)
 
@@ -363,13 +365,152 @@ def CreaPedidosEnfermeriaCabezote(request):
                                    password="123456")
     curx = miConexionx.cursor()
 
-    detalle = 'INSERT INTO enfermeria_enfermeria ( "tipoMovimiento_id", "fechaRegistro", "estadoReg", historia_id, "serviciosAdministrativos_id", "usuarioRegistro_id", "tipoOrigen_id", "sedesClinica_id") VALUES (' + "'" + str(enfermeriaTipoMovimiento) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "',null,'" + str(servicioEnfermeria) + "','" + str(username_id) + "','"  + str(enfermeriaTipoOrigen) + "','" + str(sede) + "'"
+    detalle = 'INSERT INTO enfermeria_enfermeria ( "tipoMovimiento_id", "fechaRegistro", "estadoReg", historia_id, "serviciosAdministrativos_id", "usuarioRegistro_id", "tipoOrigen_id", "sedesClinica_id","ingresoPaciente_id") VALUES (' + "'" + str(enfermeriaTipoMovimiento) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "',null,'" + str(servicioEnfermeria) + "','" + str(username_id) + "','"  + str(enfermeriaTipoOrigen) + "','" + str(sede) + "','" + str(ingresoId) + "')"
     print(detalle)
 
     curx.execute(detalle)
     miConexionx.commit()
     miConexionx.close()
-    print(datosPaciente)
+
 
     return JsonResponse({'success': True, 'message': 'Pedido de Enfermeria Creado!'})
+
+
+def AdicionarFormulacionEnfermeria(request):
+    print("Entre AdicionarFormulacionenfermeria")
+
+    context = {}
+
+    username = request.POST['username']
+    sede = request.POST['sede']
+    username_id = request.POST['username_id']
+    enfermeriaId = request.POST['enfermeriaId']
+
+    enfermeria = Enfermeria.objects.get(id=enfermeriaId)
+
+
+    servicioAdmonEntrega = request.POST['servicioAdmonEntrega']
+    print("servicioAdmonEntrega:", servicioAdmonEntrega)
+    servicioAdmonRecibe = request.POST['servicioAdmonRecibe']
+    print("servicioAdmonRecibe:", servicioAdmonRecibe)
+    plantaEntrega = request.POST['plantaEntrega']
+    print("plantaEntrega:", plantaEntrega)
+
+    plantaRecibe = request.POST['plantaRecibe']
+    print("plantaRecibe:", plantaRecibe)
+
+    print("sede:", sede)
+    print("username:", username)
+    print("username_id:", username_id)
+    print("enfermeriaId:", enfermeriaId)
+
+    # Desde aqui
+
+    formulacionEnfermeria = request.POST['formulacionEnfermeria']
+
+    print("voy a validar Medicamentos =", formulacionEnfermeria)
+
+    jsonFormulacionEnfermeria = json.loads(formulacionEnfermeria)
+
+    print("voy para el FOR")
+
+    print("voy a validar JSONMedicamentos =", jsonFormulacionEnfermeria)
+    medicamentos= ""
+    estadoReg = 'A'
+    fechaRegistro = datetime.datetime.now()
+
+    miConexion3 = None
+    try:
+
+        miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                       password="123456")
+        cur3 = miConexion3.cursor()
+
+        # Creamos el Pedido de enfermeria en Farmacia
+
+        comando = 'INSERT INTO farmacia_farmacia ("tipoMovimiento_id", "fechaRegistro", "estadoReg","serviciosAdministrativosEntrega_id","usuarioEntrega_id", "usuarioRegistro_id","tipoOrigen_id", "sedesClinica_id", estado_id) VALUES (' +                "'" + str(enfermeria.tipomovimiento_id) + "','" + str( fechaRegistro) + "','" + str(estadoReg) + ",'" + str(servicioAdmonEntrega) +  "','" + str(username_id) + "','" + str(enfermeria.tipoorigen_id) + "','" + str(sede) + "'" + ") RETURNING id ;"
+        print(comando)
+
+        resultado = cur3.execute(comando)
+        farmaciaId = cur3.fetchone()[0]
+
+        print("farmaciaId = ", farmaciaId)
+
+        ##############################################
+        ##############################################
+
+        # Segundo creamos la dispensacion del despacho
+        item = 0
+
+        for key in jsonFormulacionEnfermeria:
+
+            if key["medicamentos"] != '':
+                item = item +1
+                medicamentos = key["medicamentos"].strip()
+                print("medicamentos=", medicamentos)
+
+                dosis = key["dosis"].strip()
+                print("dosis=", dosis)
+                uMedidaDosis = key["uMedidaDosis"].strip()
+                print("uMedidaDosis=", uMedidaDosis)
+                MedidaDosis = UnidadesDeMedidaDosis.objects.get(descripcion=uMedidaDosis)
+                print ("MedidaDosis =", MedidaDosis.id)
+
+                # frecuencia = key["frecuencia"]
+                # print("frecuencia=", frecuencia)
+                # vias = key["vias"]
+                # print("vias =", vias )
+                viasAdministracion = key["viasAdministracion"].strip()
+                print("viasAdministracion =", viasAdministracion)
+                vias = ViasAdministracion.objects.get(nombre=viasAdministracion)
+                print ("vias =", vias)
+
+                cantidadMedicamento = key["cantidadMedicamento"].strip()
+                print("cantidadMedicamento=", cantidadMedicamento)
+                # diasTratamiento = key["diasTratamiento"]
+                # print("diasTratamiento=", diasTratamiento)
+
+                ## Desde aqui INSERTAMOS EL DETALLE DE ENFERMERIA
+
+                comando = 'INSERT INTO enfermeria_enfermeriadetalle ("dosisCantidad","cantidadOrdenada","fechaRegistro", "estadoReg", "dosisUnidad_id", "enfermeria_id", "suministro_id","usuarioRegistro_id", "viaAdministracion_id")  VALUES ( ' + "'" + str(dosis) + "','" + str(cantidadMedicamento) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(MedidaDosis.id) + "','" + str(enfermeriaId) + "','" + str(medicamentos) + "','" + str(username_id) + "','" + str(vias.id) +  "')"
+
+                print(comando)
+                cur3.execute(comando)
+
+
+
+                # Creamos el detalle del pedido en Farmacia
+
+
+
+
+        miConexion3.commit()
+        cur3.close()
+        miConexion3.close()
+
+        return JsonResponse({'success': True, 'message': 'Pedido Enferemria creado satisfactoriamente!' })
+
+
+    except psycopg2.DatabaseError as error:
+        print("Entre por rollback", error)
+        if miConexion3:
+            print("Entro ha hacer el Rollback")
+            miConexion3.rollback()
+        raise error
+
+    finally:
+        if miConexion3:
+            cur3.close()
+            miConexion3.close()
+
+
+
+
+    # Guarda en Enfermeriarecibe
+
+    # Guarda en la cuenta del paciente facturacion_liquidaciondetalle
+
+
+    # Creo eso es todop
+
 
