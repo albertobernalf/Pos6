@@ -222,7 +222,7 @@ function arrancaEnfermeria(valorTabla,valorData)
 		{ className: 'centered', targets: [0, 1, 2, 3] },
 	    { width: '10%', targets: [2,3] },
 		{  
-                    "targets": 8
+                    "targets": 10
                }
             ],
 	 pageLength: 3,
@@ -290,6 +290,8 @@ function arrancaEnfermeria(valorTabla,valorData)
                 { data: "fields.cantidad"},
                 { data: "fields.UnidadMedida"},
                 { data: "fields.medicamento"},
+                { data: "fields.frecuencia"},
+                { data: "fields.diasTratamiento"},
                         ]
             }
 	        
@@ -1032,6 +1034,8 @@ $('#tablaMedicamentosEnfermeria tbody').on('click', '.Planear', function() {
 		document.getElementById("dosisP").value =dato3.dosis;
 		document.getElementById("medidaP").value = dato3.UnidadMedida;
 		document.getElementById("suministroP").value = dato3.medicamento;
+		document.getElementById("frecuenciaP").value = dato3.frecuencia;
+		document.getElementById("diasTratamientoP").value = dato3.diasTratamientoP;
 		document.getElementById("numeroPlaneos").value = 0;
 
 
