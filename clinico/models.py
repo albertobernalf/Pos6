@@ -753,6 +753,7 @@ class UnidadesDeMedidaDosis(models.Model):
 class FrecuenciasAplicacion(models.Model):
     id = models.AutoField(primary_key=True)
     descripcion = models.CharField(max_length=100, blank=True, null=True, editable=True)
+    numeroHoras =  models.IntegerField( blank=True, null=True, editable=True)
     fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)
     estadoReg = models.CharField(max_length=1, default='A', editable=False)
 

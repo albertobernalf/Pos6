@@ -222,7 +222,7 @@ function arrancaEnfermeria(valorTabla,valorData)
 		{ className: 'centered', targets: [0, 1, 2, 3] },
 	    { width: '10%', targets: [2,3] },
 		{  
-                    "targets": 10
+                    "targets": 11
                }
             ],
 	 pageLength: 3,
@@ -287,6 +287,7 @@ function arrancaEnfermeria(valorTabla,valorData)
                 { data: "fields.folio"},
   
                 { data: "fields.consecutivoMedicamento"},
+                { data: "fields.dosis"},
                 { data: "fields.cantidad"},
                 { data: "fields.UnidadMedida"},
                 { data: "fields.medicamento"},
@@ -870,10 +871,6 @@ $('#tablaPanelEnfermeria tbody').on('click', '.miIngresoEnfermeriaId', function(
 		document.getElementById("habitacionM").innerHTML = info[0].fields.cama;
 
 
-	
-
-
-
                 },
             error: function (request, status, error) {
 		alert("llegue con error ", error);
@@ -1033,15 +1030,15 @@ $('#tablaMedicamentosEnfermeria tbody').on('click', '.Planear', function() {
             $('#modelHeadingPlaneacionEnfermeria').html("Creacon Pedidos Enfermeria");
 		document.getElementById("dosisP").value =dato3.dosis;
 		document.getElementById("medidaP").value = dato3.UnidadMedida;
+		document.getElementById("cantidadP").value = dato3.cantidad;
 		document.getElementById("suministroP").value = dato3.medicamento;
 		document.getElementById("frecuenciaP").value = dato3.frecuencia;
-		document.getElementById("diasTratamientoP").value = dato3.diasTratamientoP;
+		document.getElementById("diasTratamientoP").value = dato3.diasTratamiento;
 		document.getElementById("numeroPlaneos").value = 0;
+		document.getElementById("enfermeriaRecibeId").value = post_id;
 
 
             $('#ModalPlaneacionEnfermeria').modal('show');     
-
-
 
 
   });
@@ -1054,19 +1051,28 @@ function GuardarPlaneacion()
 
 	     var post_id = $(this).data('pk');
 	alert ("post_id = " + post_id);
-	var ingresoId = post_id;
 
-
-	document.getElementById("ingresoId").value = ingresoId;
-
-	
-
-    	var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
+   	var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
         var username = document.getElementById("username").value;
         var nombreSede = document.getElementById("nombreSede").value;
     	var sede = document.getElementById("sede").value;
         var username_id = document.getElementById("username_id").value;
-        var enfermeriaId=0;
+
+	var enfermeriaRecibeId  = document.getElementById("enfermeriaRecibeId").value;
+	var desdePlanea = document.getElementById("desdePlanea").value;
+
+	alert(" desdePlanea = " + desdePlanea );
+
+
+        var numeroPlaneos = document.getElementById("numeroPlaneos").value;
+        var frecuenciaP = document.getElementById("frecuenciaP").value;
+
+	var dosisP = document.getElementById("dosisP").value;
+	var medidaP = document.getElementById("medidaP").value;
+	var suministroP = document.getElementById("suministroP").value;
+	var viaP = document.getElementById("viaP").value;
+	var diasTratamientoP = document.getElementById("diasTratamientoP").value;
+	var cantidadP = document.getElementById("cantidadP").value;
 
          var data =  {}   ;
         data['username'] = username;
@@ -1074,13 +1080,17 @@ function GuardarPlaneacion()
         data['nombreSede'] = nombreSede;
         data['sede'] = sede;
         data['username_id'] = username_id;
-	data['ingresoId'] = ingresoId;
+	data['enfermeriaRecibeId'] = enfermeriaRecibeId;
+	data['desdePlanea'] = desdePlanea;
+	data['numeroPlaneos'] = numeroPlaneos;
+	data['frecuenciaP'] = frecuenciaP;
+
 
 	
  	    data = JSON.stringify(data);
 
 	  $.ajax({
-                data: {'ingresoId':ingresoId},
+                data: {'sede':sede,'username_id':username_id, 'enfermeriaRecibeId':enfermeriaRecibeId,'desdePlanea':desdePlanea, 'numeroPlaneos':numeroPlaneos, 'frecuenciaP':frecuenciaP,'dosisP':dosisP, 'medidaP':medidaP, 'suministroP':suministroP, 'viaP':viaP, 'diasTratamientoP':diasTratamientoP, 'cantidadP' : cantidadP },
 	        url: "/guardaPlaneacionEnfermeria/",
                 type: "POST",
                 dataType: 'json',
