@@ -101,17 +101,57 @@
 	</article>
 
 
+<article id="Turno">     	
+		<div class="container my-2" style="width:100%">
+           		<div class="row" style="width:100%">
+                                        <table id= "tablaTurnosEnfermeria" class="display table table-striped table-sm fs-6 nowrap" style="width:100%">
+                                           <thead>
+                                            <tr>    
+					<bold>    
+	        			    <th>S1</th> 
+				        <th>id</th>
+				        <th>Servicio</th>
+                                	<th>Tipo Turno</th>
+                                	<th>Enfermera</th>
+	                                <th>Horario</th>
+					</bold>                                  
+                                            </tr>
+                                            </thead>
+                                            <tbody style="margin-left:0">
+                                            </tbody>
+                                        </table>
+                        </div>
+                </div>
+	
+</article>
+
+
+
 <article id="Medicamentos">
 
  
 		<div class="container my-2" style="width:100%">
+
+		<div align="left" height="15px" width="50px">
+			TipoDoc: <span id="nombreTipoDocM"></span>
+			Doc: <span id="documentoM"></span>
+			Paciente: <span id="pacienteM"></span>
+			Ingreso: <span id="consecutivoAdmisionM"></span>
+			Servicio: <span id="servicioM"></span>
+			Hab: <span id="habitacionM"></span>
+
+		</div>
+
+
             	   <div class="row" style="width:100%">
 
                                         <table id="tablaMedicamentosEnfermeria" class="display table table-striped table-sm fs-6 nowrap" style="width:100%">
                                            <thead>
                                             <tr>    
 					<bold>    
-	        			    <th style="width:5px">S1</th> 		                              
+	        			<th style="width:5px">S1</th> 	
+					<th style="width:5px">S2</th> 
+        	                 		                              
 				        <th>id</th>
 				        <th style="width:150px">tipoDoc</th>
                                 	<th>Documento</th>
@@ -126,11 +166,121 @@
                                             </thead>
                                             <tbody style="margin-left:0">
                                             </tbody>
-
                                         </table>
-                                    </div>
 
-   		                                </div>
+
+
+           		<div class="row" style="width:100%">
+                                        <table id= "tablaPlaneacionEnfermeria" class="display table table-striped table-sm fs-6 nowrap" style="width:100%">
+                                           <thead>
+                                            <tr>    
+					<bold>    
+	        			    <th>S1</th> 
+				        <th>id</th>
+				        <th>fechaPlanea</th>
+                                	<th>turnoPlanea</th>
+                                	<th>enfermeraPlanea</th>
+	                                <th>cantidadPlaneada</th>
+	                                <th>fechaAplica</th>
+	                                <th>turnoAplica</th>
+	                                <th>enfermeraAplica</th>
+	                                <th>dosis</th>
+	                                <th>medida</th>
+	                                <th>suministro</th>
+	                                <th>via</th>
+	                                <th>frecuencia</th>
+	                                <th>dias</th>
+
+					</bold>                                  
+                                            </tr>
+                                            </thead>
+                                            <tbody style="margin-left:0">
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+ 		                                </div>
+
+
+
+
+  <!-- Creacion Modal Planeacion Medicamentos  -->
+
+        <div class="container">
+            <div class="card">
+                <div class="myForm">
+                    <form id="postFormModalPlaneacionEnfermeria" method="POST" onsubmit="CierraModal()">
+                        <div class="modal fade" id="ModalPlaneacionEnfermeria" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+                            <div class="modal-dialog  modal-lg modal-dialog-scrollable  modal-dialog-center" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                           <div  class="modal-title" id="exampleModalLabel" style="text-align:center;"><font gont-family="Times New roman" size=5">Planeacion Enfermeria</font> </div>
+                                        <button type="button" class="close" data-bs-dismiss="modal"  aria-label="Close"> <span aria-hidden="true">&times;</span>  </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row row-cols-4 mt-3">
+                                            <div class="col">
+                                                <label for="dosisP"  class="col-sm-10 col-form-label col-form-label-sm">Dosis:</label>
+                                               <input type="text" id="dosisP" name="dosisP" value="" readonly>
+					      
+                                            </div> 
+					  <div class="col">
+                                                <label for="medidaP"  class="col-sm-10 col-form-label col-form-label-sm">Medida:</label>
+                                                <input type="text" id="medidaP" name="medidaP" value="" readonly>
+                                            </div>
+
+					<div class="col">
+                                          <label for="cantidadP"  class="col-sm-10 col-form-label col-form-label-sm">Cantidad:</label>
+                                                <input type="text" id="cantidadP" name="cantidadP" value="" readonly>
+                                            </div>
+				
+					  <div class="col">
+                                                <label for="suministroP"  class="col-sm-10 col-form-label col-form-label-sm">Suministro:</label>
+                                                <input type="text" id="suministroP" name="suministroP" value="" readonly>
+                                            </div>
+					  <div class="col">
+                                                <label for="viaP"  class="col-sm-10 col-form-label col-form-label-sm">Via:</label>
+                                                <input type="text" id="viaP" name="viaP" value="">
+                                            </div>
+
+					  <div class="col">
+                                                <label for="frecuenciaP"  class="col-sm-10 col-form-label col-form-label-sm">Frecuencia:</label>
+                                                <input type="text" id="frecuenciaP" name="frecuenciaP" value="" readonly>
+                                            </div>
+
+
+					  <div class="col">
+                                                <label for="desdePlanea"  class="col-sm-10 col-form-label col-form-label-sm">Desde:</label>
+                                                <input type="datetime" id="desdePlanea" name="desdePlanea" value="">
+                                            </div>
+
+
+					  <div class="col">
+                                                <label for="numeroPlaneos"  class="col-sm-10 col-form-label col-form-label-sm">Numero de Planes:</label>
+                                                <input type="text" id="numeroPlaneos" name="numeroPlaneos" value="">
+                                            </div>
+
+
+                                        </div> <!-- Cierra row -->
+
+                                    </div> <!-- Cierra body -->
+                                    <div class="modal-footer">
+				 <span id="mensajesErrorModalPlaneacionEnfermeria" name="mensajesErrorModalPlaneacionsEnfermeria" style= "color:red; font-size:18px; line-height:35px; font-family: Calibri;" > </span>
+                                       <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar   </button>
+
+                                         <input type="button" class="btn btn-primary" value="save"  onclick="GuardarPlaneacion()"> 
+                                        
+                                    </div> <!-- Cierra footer-->
+                                </div> <!-- Cierra content -->
+                            </div> <!-- Cierra modal dialog -->
+                        </div> <!-- Cierra modal -->
+                    </form> <!-- Cierra cla forma-->
+                </div> <!-- Cierra muform -->
+            </div> <!-- Cierra el Card-->
+        </div> <!-- Cierra container -->
+
+            <!-- Fin Creacion Modal Planeacion Enfermeria-->
+
 
    			
 </article>
@@ -140,6 +290,7 @@
      <!-- INICIO TABLE DE  EL DATATABLE  -->
 
 		<div class="container my-2" style="width:100%">
+
              
    			   <div class="row" style="width:100%">
 
@@ -166,7 +317,9 @@
                                     </div>
                                 </div>
 
-	
+	<!-- Espacio modales medicamento - paraclinicos  Enfermeria -->
+
+
 
 </article>
 
@@ -521,10 +674,11 @@
 
 
      <!-- FIN Espacio Modales  -->
-	
-	
 
 </article>
+
+
+
 
 <article id="Devoluciones">
         	
@@ -532,17 +686,6 @@
 
 </article>
 
-
-
-
-<article id="Turnos">
-        	
-		<div class="container my-2">
-                
-                </div>
-	
-
-</article>
 
 <article id="Dietas">
         	
@@ -575,16 +718,14 @@
 
 
 {% block footer %}
+
 <div class="marco">
     <ul class="tabs">
-
-        <li><a href="#Turnos"><span class="fa-solid fa-user-doctor-message"></span> <span  class="tab-text"> </span> Turnos </a></li>
+        <li><a href="#Turno"><span class="fa-solid fa-user-doctor-message"></span> <span  class="tab-text"> </span> Turnos </a></li>
         <li><a href="#Dietas"><span class="fa-solid fa-user-doctor-message"></span> <span  class="tab-text"> </span> Dietas </a></li>
         <li><a href="#OtrosPedidos"><span class="fa-solid fa-user-doctor-message"></span> <span class="tab-text"> </span> Otros Pedidos </a></li>
- 
     </ul>
 </div>
-
 
 {% endblock %}
 

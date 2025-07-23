@@ -138,17 +138,17 @@ def Load_dataMedicamentosEnfermeria(request, data):
                                        password="123456")
     curx = miConexionx.cursor()
 
-    detalle = 'SELECT recibe.id id, tipos.nombre tipoDoc, usu.documento documento, usu.nombre paciente, hist.folio folio, fardet."consecutivoMedicamento" consecutivoMedicamento, recibe."cantidadDispensada" cantidad, 	  medida.descripcion UnidadMedida, sum.nombre medicamento, via.nombre via FROM admisiones_ingresos ing INNER JOIN clinico_historia hist ON (hist."tipoDoc_id" = ing."tipoDoc_id" AND hist.documento_id=ing.documento_id AND hist."consecAdmision" = ing.consec) INNER JOIN farmacia_farmacia far ON (far.historia_id= hist.id) INNER JOIN farmacia_farmaciadetalle fardet ON (fardet.farmacia_id = far.id) INNER JOIN	enfermeria_enfermeriarecibe recibe ON (recibe."farmaciaDetalle_id" = fardet.id) INNER JOIN facturacion_suministros sum ON (sum.id = recibe.suministro_id) INNER JOIN clinico_viasadministracion via ON (via.id = recibe."viaAdministracion_id") INNER JOIN clinico_unidadesdemedidadosis medida ON (medida.id = recibe."dosisUnidad_id") INNER JOIN usuarios_usuarios usu ON (usu.id = ing.documento_id) INNER JOIN usuarios_tiposdocumento tipos ON (tipos.id = usu."tipoDoc_id")	WHERE ing.id=' + "'" + str(ingresoId) + "' UNION " + ' SELECT recibe.id id, tipos.nombre tipoDoc, usu.documento documento, usu.nombre paciente, 0 folio, fardet."consecutivoMedicamento" consecutivoMedicamento, recibe."cantidadDispensada" cantidad, 	  medida.descripcion UnidadMedida, sum.nombre medicamento, via.nombre via FROM admisiones_ingresos ing INNER JOIN farmacia_farmacia far ON (far."ingresoPaciente_id"= ing.id) INNER JOIN farmacia_farmaciadetalle fardet ON (fardet.farmacia_id = far.id) INNER JOIN	enfermeria_enfermeriarecibe recibe ON (recibe."farmaciaDetalle_id" = fardet.id) INNER JOIN facturacion_suministros sum ON (sum.id = recibe.suministro_id) INNER JOIN clinico_viasadministracion via ON (via.id = recibe."viaAdministracion_id") INNER JOIN clinico_unidadesdemedidadosis medida ON (medida.id = recibe."dosisUnidad_id") INNER JOIN usuarios_usuarios usu ON (usu.id = ing.documento_id) INNER JOIN usuarios_tiposdocumento tipos ON (tipos.id = usu."tipoDoc_id")	WHERE ing.id=' + "'" + str(ingresoId) + "' ORDER BY 5,6"
+    detalle = 'SELECT recibe.id id, tipos.nombre tipoDoc, usu.documento documento, usu.nombre paciente, hist.folio folio,   fardet."consecutivoMedicamento" consecutivoMedicamento, recibe."cantidadDispensada" cantidad, 	  medida.descripcion UnidadMedida, sum.nombre medicamento, via.nombre via FROM admisiones_ingresos ing INNER JOIN clinico_historia hist ON (hist."tipoDoc_id" = ing."tipoDoc_id" AND hist.documento_id=ing.documento_id AND hist."consecAdmision" = ing.consec) INNER JOIN farmacia_farmacia far ON (far.historia_id= hist.id) INNER JOIN farmacia_farmaciadetalle fardet ON (fardet.farmacia_id = far.id) INNER JOIN	enfermeria_enfermeriarecibe recibe ON (recibe."farmaciaDetalle_id" = fardet.id) INNER JOIN facturacion_suministros sum ON (sum.id = recibe.suministro_id) INNER JOIN clinico_viasadministracion via ON (via.id = recibe."viaAdministracion_id") INNER JOIN clinico_unidadesdemedidadosis medida ON (medida.id = recibe."dosisUnidad_id") INNER JOIN usuarios_usuarios usu ON (usu.id = ing.documento_id) INNER JOIN usuarios_tiposdocumento tipos ON (tipos.id = usu."tipoDoc_id")	WHERE ing.id=' + "'" + str(ingresoId) + "' UNION " + ' SELECT recibe.id id, tipos.nombre tipoDoc, usu.documento documento, usu.nombre paciente, 0 folio,  fardet."consecutivoMedicamento" consecutivoMedicamento, recibe."cantidadDispensada" cantidad, 	  medida.descripcion UnidadMedida, sum.nombre medicamento, via.nombre via FROM admisiones_ingresos ing INNER JOIN farmacia_farmacia far ON (far."ingresoPaciente_id"= ing.id) INNER JOIN farmacia_farmaciadetalle fardet ON (fardet.farmacia_id = far.id) INNER JOIN	enfermeria_enfermeriarecibe recibe ON (recibe."farmaciaDetalle_id" = fardet.id) INNER JOIN facturacion_suministros sum ON (sum.id = recibe.suministro_id) INNER JOIN clinico_viasadministracion via ON (via.id = recibe."viaAdministracion_id") INNER JOIN clinico_unidadesdemedidadosis medida ON (medida.id = recibe."dosisUnidad_id") INNER JOIN usuarios_usuarios usu ON (usu.id = ing.documento_id) INNER JOIN usuarios_tiposdocumento tipos ON (tipos.id = usu."tipoDoc_id")	WHERE ing.id=' + "'" + str(ingresoId) + "' ORDER BY 5,6"
 
 
     print(detalle)
 
     curx.execute(detalle)
 
-    for id, tipoDoc, documento, paciente, folio, consecutivoMedicamento, cantidad,  UnidadMedida, medicamento, via in curx.fetchall():
+    for id, tipoDoc, documento, paciente, folio,  consecutivoMedicamento, cantidad,  UnidadMedida, medicamento, via in curx.fetchall():
             medicamentosEnfermeria.append({"model": "ingresos.ingresos", "pk": id, "fields":
                 {'id': id, 'tipoDoc': tipoDoc, 'Documento': documento, 'paciente': paciente,
-                 'folio': folio, 'consecutivoMedicamento': consecutivoMedicamento,   'cantidad': cantidad, 'UnidadMedida': UnidadMedida,
+                 'folio': folio,   'consecutivoMedicamento': consecutivoMedicamento,   'cantidad': cantidad, 'UnidadMedida': UnidadMedida,
                    'medicamento': medicamento}})
 
     miConexionx.close()
@@ -514,3 +514,80 @@ def AdicionarFormulacionEnfermeria(request):
     # Creo eso es todop
 
 
+def Load_dataTurnosEnfermeria(request, data):
+    print("Entre Load_dataTurnosEnfermeria")
+
+    context = {}
+    d = json.loads(data)
+
+    sede = d['sede']
+
+    print ("sede =", sede)
+
+
+    turnosEnfermeria = []
+
+    miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                       password="123456")
+    curx = miConexionx.cursor()
+
+    detalle = 'select turnos.id id, serv.nombre servicio, tipos.nombre tipoNombre , planta.nombre plantaNombre, tipos.horario horario FROM enfermeria_turnosenfermeria turnos INNER JOIN enfermeria_tiposturnosenfermeria tipos on (tipos.id = turnos."tiposTurnosEnfermeria_id") INNER JOIN planta_planta planta on (planta.id = turnos."enfermeraTurno_id") INNER JOIN sitios_serviciosadministrativos serv on (serv.id = turnos."serviciosAdministrativos_id") WHERE turnos."sedesClinica_id" = ' + "'" + str(sede) + "'"
+
+    print(detalle)
+
+    curx.execute(detalle)
+
+    for id, servicio, tipoNombre, plantaNombre, horario in curx.fetchall():
+            turnosEnfermeria.append({"model": "ingresos.ingresos", "pk": id, "fields":
+                {'id': id, 'servicio': servicio, 'tipoNombre': tipoNombre, 'plantaNombre': plantaNombre,
+                 'horario': horario}})
+
+    miConexionx.close()
+    print("turnosEnfermeria = " , turnosEnfermeria)
+
+
+    serialized1 = json.dumps(turnosEnfermeria, default=str)
+
+    return HttpResponse(serialized1, content_type='application/json')
+
+
+def Load_dataPlaneacionEnfermeria(request, data):
+    print("Entre Load_dataPlaneacionEnfermeria")
+
+    context = {}
+    d = json.loads(data)
+
+    sede = d['sede']
+
+    print ("sede =", sede)
+
+    ingresoId = d['ingresoId']
+
+    print ("ingresoId =", ingresoId)
+
+
+    planeacionEnfermeria = []
+
+    miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                       password="123456")
+    curx = miConexionx.cursor()
+
+    detalle = 'select pla.id id, pla."fechaPlanea" fechaPlanea, tipos1.nombre turnoPlanea, planta1.nombre enfermeraPlanea, pla."cantidadPlaneada" cantidadPlaneada, 	 pla."fechaAplica" fechaAplica, tipos2.nombre turnoAplica, planta2.nombre enfermeraAplica,   pla."cantidadAplicada" cantidadAplicada,	 pla."dosisCantidad" dosis, medida.descripcion medida, sum.nombre suministro, vias.nombre via, frec.descripcion frecuencia,	pla."diasTratamiento" dias FROM enfermeria_enfermeriaplaneacion pla INNER JOIN enfermeria_enfermeria enf ON (enf.id=pla.enfermeria_id)	 INNER JOIN planta_planta planta1 ON (planta1.id = pla."enfermeraPlanea_id") INNER JOIN planta_planta planta2 ON (planta2.id = pla."enfermeraAplica_id") INNER JOIN clinico_viasadministracion vias ON (vias.id = pla."viaAdministracion_id") INNER JOIN clinico_unidadesdemedidadosis medida ON (medida.id = pla."dosisUnidad_id") INNER JOIN clinico_frecuenciasaplicacion frec ON (medida.id = pla.frecuencia_id) INNER JOIN facturacion_suministros sum	ON (sum.id = pla.suministro_id) INNER JOIN enfermeria_tiposturnosenfermeria tipos1 ON ( tipos1.id = pla."turnoEnfermeriaPlanea_id") INNER JOIN enfermeria_tiposturnosenfermeria tipos2 ON ( tipos2.id = pla."turnoEnfermeriaAplica_id") WHERE enf."sedesClinica_id" = ' + "'" + str(sede) + "'" +  ' AND enf."ingresoPaciente_id" = ' + "'" + str(ingresoId) + "'"
+
+    print(detalle)
+
+    curx.execute(detalle)
+
+    for id, fechaPlanea, turnoPlanea, enfermeraPlanea, cantidadPlaneada,fechaAplica, turnoAplica, enfermeraAplica, cantidadAplicada, dosis, medida, suministro, via, frecuencia, dias  in curx.fetchall():
+            planeacionEnfermeria.append({"model": "ingresos.ingresos", "pk": id, "fields":
+                {'id': id, 'fechaPlanea': fechaPlanea, 'turnoPlanea': turnoPlanea, 'enfermeraPlanea': enfermeraPlanea,
+                 'cantidadPlaneada': cantidadPlaneada,'fechaAplica': fechaAplica, 'turnoAplica': turnoAplica, 'enfermeraAplica': enfermeraAplica, 'cantidadAplicada': cantidadAplicada,
+                 'dosis':dosis, 'medida':medida, 'suministro':suministro, 'via':via, 'frecuencia':frecuencia, 'dias':dias}})
+
+    miConexionx.close()
+    print("planeacionEnfermeria = " , planeacionEnfermeria)
+
+
+    serialized1 = json.dumps(planeacionEnfermeria, default=str)
+
+    return HttpResponse(serialized1, content_type='application/json')
