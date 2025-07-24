@@ -16,6 +16,8 @@ let dataTablePedidosEnfermeria = false;
 let dataTablePedidosEnfermeriaDetalle = false;
 let dataTableTurnosEnfermeria = false;
 let dataTablePlaneacionEnfermeria = false;
+let dataTableDietaEnfermeria = false;
+let dataTableNotasEnfermeria = false;
 
 var controlMed = 0;
 
@@ -601,7 +603,7 @@ function arrancaEnfermeria(valorTabla,valorData)
   lengthMenu: [2, 4, 15],
            processing: true,
             serverSide: false,
-            scrollY: '75px',
+            scrollY: '425px',
 	    scrollX: true,
 	    scrollCollapse: true,
             paging:false,
@@ -775,6 +777,200 @@ function arrancaEnfermeria(valorTabla,valorData)
   }
 
 
+
+    if (valorTabla == 8)
+    {
+        let dataTableOptionsDietasEnfermeria  ={
+   dom: "<'row mb-1'<'col-sm-2'B><'col-sm-3'><'col-sm-6'f>>" + // B = Botones a la izquierda, f = filtro a la derecha
+             "<'row'<'col-sm-12'tr>>" +
+             "<'row mt-1'<'col-sm-5'i><'col-sm-7'p>>",
+  buttons: [
+    {
+      extend: 'excelHtml5',
+      text: '<i class="fas fa-file-excel"></i> ',
+      titleAttr: 'Exportar a Excel',
+      className: 'btn btn-success',
+    },
+    {
+      extend: 'pdfHtml5',
+      text: '<i class="fas fa-file-pdf"></i> ',
+      titleAttr: 'Exportar a PDF',
+      className: 'btn btn-danger',
+    },
+    {
+      extend: 'print',
+      text: '<i class="fa fa-print"></i> ',
+      titleAttr: 'Imprimir',
+      className: 'btn btn-info',
+    },
+  ],
+
+  lengthMenu: [2, 4, 15],
+           processing: true,
+            serverSide: false,
+            scrollY: '425px',
+	    scrollX: true,
+	    scrollCollapse: true,
+            paging:false,
+	    "info": false,
+		"showNEntries" : false,
+            columnDefs: [
+		{ className: 'centered', targets: [0, 1, 2, 3, 4, 5] },
+	    { width: '10%', targets: [2,3] },
+		{  
+                    "targets": 5
+               }
+            ],
+	 pageLength: 3,
+	  destroy: true,
+	  language: {
+		    processing: 'Procesando...',
+		    lengthMenu: 'Mostrar _MENU_ registros',
+		    zeroRecords: 'No se encontraron resultados',
+		    emptyTable: 'Ningún dato disponible en esta tabla',
+		    infoEmpty: 'Mostrando registros del 0 al 0 de un total de 0 registros',
+		    infoFiltered: '(filtrado de un total de _MAX_ registros)',
+		    search: 'Buscar:',
+		    infoThousands: ',',
+		    loadingRecords: 'Cargando...',
+	
+		    paginate: {
+			      first: 'Primero',
+			      last: 'Último',
+			      next: 'Siguiente',
+			      previous: 'Anterior',
+		    }
+			},
+
+           ajax: {
+                 url:"/load_dataDietasEnfermeria/" +  data,
+                 type: "POST",
+                 dataSrc: ""
+            },
+            columns: [
+	{
+	  "render": function ( data, type, row ) {
+                        var btn = '';
+
+		 btn = btn + " <input type='radio' name='miDietaEnfermeria' class='miDietaEnfermeria form-check-input ' data-pk='"  + row.pk + "'>" + "</input>";
+
+
+                       return btn;
+                    },
+
+	},
+
+                { data: "fields.id"},
+        		{ data: "fields.consecutivo"},
+        		{ data: "fields.folio"},
+                { data: "fields.nombreTipoDieta"},
+                { data: "fields.observaciones"},
+                { data: "fields.profesional"},
+
+                        ]
+            }
+	        
+		   dataTable = $('#tablaDietasEnfermeria').DataTable(dataTableOptionsDietasEnfermeria);
+
+
+  }
+
+
+    if (valorTabla == 9)
+    {
+        let dataTableOptionsNotasEnfermeria  ={
+   dom: "<'row mb-1'<'col-sm-2'B><'col-sm-3'><'col-sm-6'f>>" + // B = Botones a la izquierda, f = filtro a la derecha
+             "<'row'<'col-sm-12'tr>>" +
+             "<'row mt-1'<'col-sm-5'i><'col-sm-7'p>>",
+  buttons: [
+    {
+      extend: 'excelHtml5',
+      text: '<i class="fas fa-file-excel"></i> ',
+      titleAttr: 'Exportar a Excel',
+      className: 'btn btn-success',
+    },
+    {
+      extend: 'pdfHtml5',
+      text: '<i class="fas fa-file-pdf"></i> ',
+      titleAttr: 'Exportar a PDF',
+      className: 'btn btn-danger',
+    },
+    {
+      extend: 'print',
+      text: '<i class="fa fa-print"></i> ',
+      titleAttr: 'Imprimir',
+      className: 'btn btn-info',
+    },
+  ],
+
+  lengthMenu: [2, 4, 15],
+           processing: true,
+            serverSide: false,
+            scrollY: '425px',
+	    scrollX: true,
+	    scrollCollapse: true,
+            paging:false,
+	    "info": false,
+		"showNEntries" : false,
+            columnDefs: [
+		{ className: 'centered', targets: [0, 1, 2, 3, 4, 5] },
+	    { width: '10%', targets: [2,3] },
+		{  
+                    "targets": 3
+               }
+            ],
+	 pageLength: 3,
+	  destroy: true,
+	  language: {
+		    processing: 'Procesando...',
+		    lengthMenu: 'Mostrar _MENU_ registros',
+		    zeroRecords: 'No se encontraron resultados',
+		    emptyTable: 'Ningún dato disponible en esta tabla',
+		    infoEmpty: 'Mostrando registros del 0 al 0 de un total de 0 registros',
+		    infoFiltered: '(filtrado de un total de _MAX_ registros)',
+		    search: 'Buscar:',
+		    infoThousands: ',',
+		    loadingRecords: 'Cargando...',
+	
+		    paginate: {
+			      first: 'Primero',
+			      last: 'Último',
+			      next: 'Siguiente',
+			      previous: 'Anterior',
+		    }
+			},
+
+           ajax: {
+                 url:"/load_dataNotasEnfermeria/" +  data,
+                 type: "POST",
+                 dataSrc: ""
+            },
+            columns: [
+	{
+	  "render": function ( data, type, row ) {
+                        var btn = '';
+
+		 btn = btn + " <input type='radio' name='miNotaEnfermeria' class='miNotaEnfermeria form-check-input ' data-pk='"  + row.pk + "'>" + "</input>";
+
+
+                       return btn;
+                    },
+
+	},
+
+                { data: "fields.id"},
+                		{ data: "fields.folio"},
+                { data: "fields.observaciones"},
+                { data: "fields.profesional"},
+
+                        ]
+            }
+	        
+		   dataTable = $('#tablaNotasEnfermeria').DataTable(dataTableOptionsNotasEnfermeria);
+
+
+  }
+
   
 }
 
@@ -838,6 +1034,7 @@ $('#tablaPanelEnfermeria tbody').on('click', '.miIngresoEnfermeriaId', function(
     	var sede = document.getElementById("sede").value;
         var username_id = document.getElementById("username_id").value;
         var enfermeriaId=0;
+	var enfermeriaRecibeId = document.getElementById("enfermeriaRecibeId").value;
 
          var data =  {}   ;
         data['username'] = username;
@@ -847,6 +1044,7 @@ $('#tablaPanelEnfermeria tbody').on('click', '.miIngresoEnfermeriaId', function(
         data['username_id'] = username_id;
 	data['ingresoId'] = ingresoId;
 	data['enfermeriaId'] = enfermeriaId;
+	data['enfermeriaRecibeId'] = enfermeriaRecibeId;
 	
  	    data = JSON.stringify(data);
 
@@ -870,6 +1068,23 @@ $('#tablaPanelEnfermeria tbody').on('click', '.miIngresoEnfermeriaId', function(
 		document.getElementById("consecutivoAdmisionM").innerHTML = info[0].fields.consecutivoAdmision;
 		document.getElementById("servicioM").innerHTML = info[0].fields.servicio;
 		document.getElementById("habitacionM").innerHTML = info[0].fields.cama;
+
+
+		document.getElementById("nombreTipoDocD").innerHTML = info[0].fields.nombreTipoDoc;
+		document.getElementById("documentoD").innerHTML = info[0].fields.documento;
+		document.getElementById("pacienteD").innerHTML = info[0].fields.paciente;
+		document.getElementById("consecutivoAdmisionD").innerHTML = info[0].fields.consecutivoAdmision;
+		document.getElementById("servicioD").innerHTML = info[0].fields.servicio;
+		document.getElementById("habitacionD").innerHTML = info[0].fields.cama;
+
+
+		document.getElementById("nombreTipoDocN").innerHTML = info[0].fields.nombreTipoDoc;
+		document.getElementById("documentoN").innerHTML = info[0].fields.documento;
+		document.getElementById("pacienteN").innerHTML = info[0].fields.paciente;
+		document.getElementById("consecutivoAdmisionN").innerHTML = info[0].fields.consecutivoAdmision;
+		document.getElementById("servicioN").innerHTML = info[0].fields.servicio;
+		document.getElementById("habitacionN").innerHTML = info[0].fields.cama;
+
 
 
                 },
@@ -900,6 +1115,15 @@ $('#tablaPanelEnfermeria tbody').on('click', '.miIngresoEnfermeriaId', function(
 
 	     arrancaEnfermeria(7,data);
 	     dataTablePlaneacionEnfermeriaInitialized = true;
+		
+
+
+	     arrancaEnfermeria(8,data);
+	     dataTableDietasEnfermeriaInitialized = true;
+
+
+	     arrancaEnfermeria(9,data);
+	     dataTableNotasEnfermeriaInitialized = true;
 
       
   });
@@ -1230,6 +1454,9 @@ function GuardarAplicacion()
 	alert(" ingresoId= " + ingresoId);
 
 
+	var enfermeriaRecibeId  = document.getElementById("enfermeriaRecibeId").value;
+
+
 
 
 	var dosisA = document.getElementById("dosisA").value;
@@ -1246,6 +1473,7 @@ function GuardarAplicacion()
         data['nombreSede'] = nombreSede;
         data['sede'] = sede;
         data['username_id'] = username_id;
+	data['enfermeriaRecibeId'] = enfermeriaRecibeId;
 	data['ingresoId'] = ingresoId;
 
  	    data = JSON.stringify(data);
@@ -1419,5 +1647,139 @@ function GuardarPedido()
 
 
 }
+
+
+
+function GuardarDietas() 
+{
+	alert ("A GuardarDietas");
+
+	     var post_id = $(this).data('pk');
+	
+	var ingresoId = document.getElementById("ingresoId").value ;
+
+
+   	var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
+        var username = document.getElementById("username").value;
+        var nombreSede = document.getElementById("nombreSede").value;
+    	var sede = document.getElementById("sede").value;
+        var username_id = document.getElementById("username_id").value;
+
+	 var tiposDietasD = document.getElementById("tiposDietasD").value;
+	 var observacionesD = document.getElementById("observacionesD").value;
+	 var serviciosAdministrativosD = document.getElementById("serviciosAdministrativosD").value;
+
+	alert(" ingresoId= " + ingresoId);
+
+
+         var data =  {}   ;
+        data['username'] = username;
+        data['sedeSeleccionada'] = sedeSeleccionada;
+        data['nombreSede'] = nombreSede;
+        data['sede'] = sede;
+        data['username_id'] = username_id;
+	data['ingresoId'] = ingresoId;
+
+ 	    data = JSON.stringify(data);
+
+	  $.ajax({
+                data: {'sede':sede,'username_id':username_id,'tiposDietasD':tiposDietasD, 'observacionesD':observacionesD, 'ingresoId':ingresoId,'serviciosAdministrativosD':serviciosAdministrativosD},
+	        url: "/guardaDietasEnfermeria/",
+                type: "POST",
+                dataType: 'json',
+                success: function (info) {
+
+		alert ("llegue listop");
+
+
+    /// Aqui inicializar combos
+        $("serviciosAdministrativosD").prop('selectedIndex', 0);
+        $("tiposDietasD").prop('selectedIndex', 0);
+
+
+
+			document.getElementById("mensajes").innerHTML = 'Error Contacte a su Administrador' + ': ' + info
+
+                },
+            error: function (request, status, error) {
+		alert("llegue con error ", error);
+		document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error + ' ' + error
+	   	    	}
+            });
+
+
+	     arrancaEnfermeria(8,data);
+	     dataTableDietasEnfermeriaInitialized = true;
+
+      
+  };
+
+
+
+
+function GuardarNotasEnfermeria() 
+{
+	alert ("A GuardarNotasEnfermeria");
+
+	     var post_id = $(this).data('pk');
+	
+	var ingresoId = document.getElementById("ingresoId").value ;
+
+
+   	var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
+        var username = document.getElementById("username").value;
+        var nombreSede = document.getElementById("nombreSede").value;
+    	var sede = document.getElementById("sede").value;
+        var username_id = document.getElementById("username_id").value;
+
+
+	 var observacionesN = document.getElementById("observacionesN").value;
+	 var serviciosAdministrativosN = document.getElementById("serviciosAdministrativosN").value;
+
+	alert(" ingresoId= " + ingresoId);
+
+
+         var data =  {}   ;
+        data['username'] = username;
+        data['sedeSeleccionada'] = sedeSeleccionada;
+        data['nombreSede'] = nombreSede;
+        data['sede'] = sede;
+        data['username_id'] = username_id;
+	data['ingresoId'] = ingresoId;
+
+ 	    data = JSON.stringify(data);
+
+	  $.ajax({
+                data: {'sede':sede,'username_id':username_id, 'observacionesN':observacionesN, 'ingresoId':ingresoId,'serviciosAdministrativosN':serviciosAdministrativosN},
+	        url: "/guardaNotasEnfermeria/",
+                type: "POST",
+                dataType: 'json',
+                success: function (info) {
+
+		alert ("llegue listop");
+
+
+    /// Aqui inicializar combos
+        $("serviciosAdministrativosND").prop('selectedIndex', 0);
+        $("tiposDietasN").prop('selectedIndex', 0);
+
+
+
+			document.getElementById("mensajes").innerHTML = 'Error Contacte a su Administrador' + ': ' + info
+
+                },
+            error: function (request, status, error) {
+		alert("llegue con error ", error);
+		document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error + ' ' + error
+	   	    	}
+            });
+
+
+	     arrancaEnfermeria(9,data);
+	     dataTableNotasEnfermeriaInitialized = true;
+
+      
+  };
+
 
 

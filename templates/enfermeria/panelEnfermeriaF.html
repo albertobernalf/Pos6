@@ -12,13 +12,16 @@
 
 <div class="marco">
     <ul class="tabs">
-	<li><a href="#PanelEnfermeria"><span class="fa-solid fa-user-doctor-message"></span> <span class="tab-text"> </span> Panel Enfermeria </a></li>
+	<li><a href="#PanelEnfermeria"><span class="fa-solid fa-user-doctor-message"></span> <span class="tab-text"> </span> Panel </a></li>
         <li><a href="#ParaClinicos"><span class="fa-solid fa-user-doctor-message">   </span> <span class="tab-text"> </span> ParaClinicos </a></li>
         <li><a href="#Medicamentos"><span class="fa-solid fa-user-doctor-message">   </span> <span  class="tab-text"> </span> Medicamentos </a></li>
         <li><a href="#Liquidos"><span class="fa-solid fa-user-doctor-message"></span><span  class="tab-text"> </span> Liquidos </a></li>
-	<li><a href="#NotasEnfermeria"><span class="fa-solid fa-user-doctor-message"></span> <span class="tab-text"> </span> Notas de Enfermeria </a></li>
+	<li><a href="#NotasEnfermeria"><span class="fa-solid fa-user-doctor-message"></span> <span class="tab-text"> </span> NotasEnf</a></li>
        <li><a href="#Pedidos"><span class="fa-solid fa-user-doctor-message"></span> <span class="tab-text"> </span> Pedidos </a></li>
+        <li><a href="#Dietas"><span class="fa-solid fa-user-doctor-message"></span> <span  class="tab-text"> </span> Dietas </a></li>
         <li><a href="#Devoluciones"><span class="fa-solid fa-user-doctor-message"></span> <span  class="tab-text"> </span> Devoluciones </a></li>
+    <li><a href="#Turno"><span class="fa-solid fa-user-doctor-message"></span> <span  class="tab-text"> </span> Turnos </a></li>
+
     </ul>
 </div>
 
@@ -125,6 +128,92 @@
 	
 </article>
 
+<article id="Dietas">
+        	
+		 <!-- INICIO TABLE DE  EL DATATABLE  -->
+
+		<div class="container my-2" style="width:100%">
+
+		<div align="left" height="15px" width="50px">
+			TipoDoc: <span id="nombreTipoDocD"></span>
+			Doc: <span id="documentoD"></span>
+			Paciente: <span id="pacienteD"></span>
+			Ingreso: <span id="consecutivoAdmisionD"></span>
+			Servicio: <span id="servicioD"></span>
+			Hab: <span id="habitacionD"></span>
+
+		</div>
+
+   			 <div class="row">
+
+ 					 <div class="col-sm-2">
+						 <label  for="serviciosAdministrativosD">Medicamentos:</label>   
+                    							    
+                                                        <select class="select-css" id="serviciosAdministrativosD"
+                                                                name="serviciosAdministrativosD">
+                                                            {% for serviciosAdministrativos in ServiciosAdministrativos %}
+                                                            <option value="{{serviciosAdministrativos.id}}">
+                                                                {{serviciosAdministrativos.nombre}}
+                                                            </option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+
+
+                                                    
+                                                    <div class="col-sm-2">
+						 <label  for="tiposDietasD">Medicamentos:</label>   
+                    							    
+                                                        <select class="select-css" id="tiposDietasD"
+                                                                name="tiposDietasD">
+                                                            {% for tiposDietas in TipoDietas %}
+                                                            <option value="{{tiposDietas.id}}">
+                                                                {{tiposDietas.nombre}}
+                                                            </option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+
+						<div class="col-sm-6">
+						<label for="observacionesD">Descripción:</label>
+						<textarea id="observacionesD" name="observacionesD" rows="6" cols="80" placeholder="Ingrese Dieta detallada..." required wrap="hard"></textarea>
+
+						</div>
+						    <div class="col-sm-2">
+       						 <input type="button" class="btn btn-primary" value="Guardar"  onclick="GuardarDietas()"> 
+						</div>
+	</div>
+
+
+             
+   			   <div class="row" style="width:100%">
+
+                                        <table id= "tablaDietasEnfermeria" class="display table table-striped table-sm fs-6 nowrap" style="width:100%">
+                                           <thead>
+                                            <tr>    
+					<bold>    
+	        			    <th>S1</th> 
+				        <th>id</th>
+				        <th>Consecutivo</th>
+				        <th>Folio</th>
+                                	<th>tipoDieta</th>
+                                	<th>Observaciones</th>
+	                                <th>Profesional</th>
+					</bold>                                  
+                                            </tr>
+                                            </thead>
+                                            <tbody style="margin-left:0">
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+	<!-- Espacio modales Dietas  Enfermeria -->
+
+	
+
+</article>
+
 
 
 <article id="Medicamentos">
@@ -222,7 +311,7 @@
                                         <button type="button" class="close" data-bs-dismiss="modal"  aria-label="Close"> <span aria-hidden="true">&times;</span>  </button>
                                     </div>
                                     <div class="modal-body">
-				<input type="text" id="enfermeriaRecibeId" name="enfermeriaRecibeId" value="" >
+				<input type="text" id="enfermeriaRecibeId" name="enfermeriaRecibeId" value="0" >
                                         <div class="row row-cols-5 mt-3">
                                             <div class="col">
                                                 <label for="dosisP"  class="col-sm-10 col-form-label col-form-label-sm">Dosis:</label>
@@ -433,8 +522,74 @@
 
 <article id="NotasEnfermeria">
 
-	<div class="container my-2">
-         </div>				
+	        	
+		 <!-- INICIO TABLE DE  EL DATATABLE  -->
+
+		<div class="container my-2" style="width:100%">
+
+		<div align="left" height="15px" width="50px">
+			TipoDoc: <span id="nombreTipoDocN"></span>
+			Doc: <span id="documentoN"></span>
+			Paciente: <span id="pacienteN"></span>
+			Ingreso: <span id="consecutivoAdmisionN"></span>
+			Servicio: <span id="servicioN"></span>
+			Hab: <span id="habitacionN"></span>
+
+		</div>
+
+   			 <div class="row">
+
+ 					 <div class="col-sm-2">
+						 <label  for="serviciosAdministrativosN">Servicio:</label>   
+                    							    
+                                                        <select class="select-css" id="serviciosAdministrativosN"
+                                                                name="serviciosAdministrativosN">
+                                                            {% for serviciosAdministrativos in ServiciosAdministrativos %}
+                                                            <option value="{{serviciosAdministrativos.id}}">
+                                                                {{serviciosAdministrativos.nombre}}
+                                                            </option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+
+
+                                                    
+                                               
+						<div class="col-sm-6">
+						<label for="observacionesN">Nota:</label>
+						<textarea id="observacionesN" name="observacionesN" rows="6" cols="80" placeholder="Ingrese Dieta detallada..." required wrap="hard"></textarea>
+
+						</div>
+						    <div class="col-sm-2">
+       						 <input type="button" class="btn btn-primary" value="Guardar"  onclick="GuardarNotasEnfermeria()"> 
+						</div>
+	</div>
+
+
+             
+   			   <div class="row" style="width:100%">
+
+                                        <table id= "tablaNotasEnfermeria" class="display table table-striped table-sm fs-6 nowrap" style="width:100%">
+                                           <thead>
+                                            <tr>    
+					<bold>    
+	        			    <th>S1</th> 
+				        <th>id</th>
+				        <th>Folio</th>
+					<th>Observaciones</th>
+	                                <th>Profesional</th>
+					</bold>                                  
+                                            </tr>
+                                            </thead>
+                                            <tbody style="margin-left:0">
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+	<!-- Espacio modales Dietas  Enfermeria -->
+
+			
 
 
 </article>
@@ -786,14 +941,6 @@
 </article>
 
 
-<article id="Dietas">
-        	
-		<div class="container my-2">
-              
-                 </div>
-	
-
-</article>
 
 <article id="OtrosPedidos">
        	<div class="container my-2">
@@ -820,8 +967,7 @@
 
 <div class="marco">
     <ul class="tabs">
-        <li><a href="#Turno"><span class="fa-solid fa-user-doctor-message"></span> <span  class="tab-text"> </span> Turnos </a></li>
-        <li><a href="#Dietas"><span class="fa-solid fa-user-doctor-message"></span> <span  class="tab-text"> </span> Dietas </a></li>
+    
         <li><a href="#OtrosPedidos"><span class="fa-solid fa-user-doctor-message"></span> <span class="tab-text"> </span> Otros Pedidos </a></li>
     </ul>
 </div>

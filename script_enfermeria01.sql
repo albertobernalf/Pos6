@@ -93,7 +93,7 @@ SELECT * FROM ENFERMERIA_ENFERMERIADETALLE
 UPDATE facturacion_suministros SET nombre = 'VANCOMICINA 500 MG INYECTABLE INTRAVENOSO UnI' where id=6835;
 
 select * from enfermeria_enfermeriaplaneacion;
-
+ 
 select pla.id id, pla."fechaPlanea" fechaPlanea, tipos1.nombre turnoPlanea, planta1.nombre enfermeraPlanea, 
 	pla."cantidadPlaneada" cantidadPlaneada,    pla."fechaAplica" fechaAplica, tipos2.nombre turnoAplica,
 	planta2.nombre enfermeraAplica,   pla."cantidadAplicada" cantidadAplicada,

@@ -30,7 +30,7 @@ from decimal import Decimal
 from admisiones.models import Ingresos
 from farmacia.models import FarmaciaEstados
 from facturacion.models import ConveniosPacienteIngresos, Liquidacion, LiquidacionDetalle, Facturacion, FacturacionDetalle, Conceptos, Suministros
-from clinico.models import Servicios, EspecialidadesMedicos, UnidadesDeMedidaDosis, ViasAdministracion, FrecuenciasAplicacion
+from clinico.models import Servicios, EspecialidadesMedicos, UnidadesDeMedidaDosis, ViasAdministracion, FrecuenciasAplicacion, TiposFolio, Historia, TipoDietas
 import io
 from enfermeria.models import Enfermeria,EnfermeriaRecibe, EnfermeriaDetalle, TurnosEnfermeria, TiposTurnosEnfermeria
 import pandas as pd
@@ -566,7 +566,6 @@ def Load_dataPlaneacionEnfermeria(request, data):
     print ("ingresoId =", ingresoId)
 
     enfermeriaRecibeId = d['enfermeriaRecibeId']
-
     print("enfermeriaRecibeId =", enfermeriaRecibeId)
 
 
@@ -788,3 +787,231 @@ def GuardaAplicacionEnfermeria(request):
             cur3.close()
             miConexion3.close()
 
+
+
+def Load_dataDietasEnfermeria(request, data):
+    print("Entre Load_dataDietasEnfermeria")
+
+    context = {}
+    d = json.loads(data)
+
+    ingresoId = d['ingresoId']
+
+    print ("ingresoId =", ingresoId)
+
+
+    dietasEnfermeria = []
+
+    miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                       password="123456")
+    curx = miConexionx.cursor()
+
+
+    detalle = 'SELECT dieta.id id, dieta.consecutivo consecutivo, his.folio folio, tipoDieta.nombre nombreTipoDieta, dieta.observaciones, pla.nombre profesional FROM clinico_historialdietas dieta INNER JOIN clinico_tipodietas tipoDieta ON (tipoDieta.id = dieta."tipoDieta_id") INNER JOIN clinico_historia his ON (his.id = dieta.historia_id) INNER JOIN admisiones_ingresos ing on (ing."tipoDoc_id" = his."tipoDoc_id" AND ing.documento_id = his.documento_id AND ing.consec = his."consecAdmision") INNER JOIN planta_planta pla on (pla.id = his."usuarioRegistro_id") WHERE ing.id = ' + "'" + str(
+        ingresoId) + "'"
+
+    print(detalle)
+
+    curx.execute(detalle)
+
+    for id, consecutivo, folio, nombreTipoDieta, observaciones, profesional in curx.fetchall():
+            dietasEnfermeria.append({"model": "ingresos.ingresos", "pk": id, "fields":
+                {'id': id, 'consecutivo': consecutivo, 'folio': folio, 'nombreTipoDieta': nombreTipoDieta,
+                 'observaciones': observaciones,   'profesional': profesional}})
+
+    miConexionx.close()
+    print("dietasEnfermeria = " , dietasEnfermeria)
+
+
+    serialized1 = json.dumps(dietasEnfermeria, default=str)
+
+    return HttpResponse(serialized1, content_type='application/json')
+
+
+def GuardaDietasEnfermeria(request):
+    print("Entre GuardaDietasEnfermeria")
+
+
+    username_id = request.POST['username_id']
+    print ("username_id =", username_id)
+
+    sede = request.POST['sede']
+    print ("sede =", sede)
+
+    ingresoId = request.POST['ingresoId']
+    print ("ingresoId =", ingresoId)
+    ingreso = Ingresos.objects.get(id=ingresoId)
+
+    tiposDietas = request.POST['tiposDietasD']
+    print ("tiposDietas =", tiposDietas)
+
+    #tiposDietasId = TipoDietas.objects.get(nombre=tiposDietas)
+    #print ("tiposDietasId =", tiposDietasId.id)
+
+    observaciones = request.POST['observacionesD']
+    print ("observaciones =", observaciones)
+    serviciosAdministrativos = request.POST['serviciosAdministrativosD']
+    print ("serviciosAdministrativos =", serviciosAdministrativos)
+
+    tiposFolio = TiposFolio.objects.get(nombre='ENFERMERIA')
+
+    estadoReg = 'A'
+    fechaRegistro = datetime.datetime.now()
+
+    #Crea Dieta Enfermeria
+
+    miConexion3 = None
+    try:
+
+        miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                       password="123456")
+        cur3 = miConexion3.cursor()
+
+        # Primero buscamos el numero del folio nuevo
+        ultimofolio = Historia.objects.all().filter(tipoDoc_id=ingreso.tipoDoc_id).filter(documento_id=ingreso.documento_id).aggregate(maximo=Coalesce(Max('folio'), 0))
+
+        print("ultimo folio = ", ultimofolio)
+        print("ultimo folio = ", ultimofolio['maximo'])
+        ultimofolio2 = (ultimofolio['maximo']) + 1
+        print("ultimo folio2 = ", ultimofolio2)
+
+        # Segundo  INSERT en clinico_historial
+
+        detalle = 'INSERT INTO clinico_historia ("consecAdmision", folio, fecha, "fechaRegistro", "estadoReg", documento_id, "tipoDoc_id" , planta_id, "tiposFolio_id" , "usuarioRegistro_id", "sedesClinica_id", "serviciosAdministrativos_id" ) VALUES (' + "'" + str(ingreso.consec) + "','" + str(ultimofolio2) +  "','" + str(fechaRegistro) + "','" + str(fechaRegistro) + "','" + str(estadoReg) +"','" + str(ingreso.documento_id) + "','" + str(ingreso.tipoDoc_id) + "','" + str(username_id)  + "','" + str(tiposFolio.id)  + "','" + str(username_id) + "','" + str(sede) + "','" + str(serviciosAdministrativos) + "') RETURNING id"
+        print(detalle)
+        resultado = cur3.execute(detalle)
+        historiaId = cur3.fetchone()[0]
+        print("historiaId = ", historiaId)
+
+        # Segundo  INSERT en clinico_historialdietas
+
+        detalle = 'INSERT INTO clinico_historialdietas ( observaciones, "estadoReg", historia_id, "tipoDieta_id" )  VALUES (' + "'" + str(observaciones) + "','" + str(estadoReg) +"','" + str(historiaId) + "','" + str(tiposDietas) + "')"
+        print(detalle)
+        cur3.execute(detalle)
+        miConexion3.commit()
+        miConexion3.close()
+
+        return JsonResponse({'success': True, 'message': 'Dieta Paciente Creada!'})
+
+    except psycopg2.DatabaseError as error:
+        print("Entre por rollback", error)
+        if miConexion3:
+            print("Entro ha hacer el Rollback")
+            miConexion3.rollback()
+        raise error
+
+    finally:
+        if miConexion3:
+            cur3.close()
+            miConexion3.close()
+
+
+def GuardaNotasEnfermeria(request):
+    print("Entre GuardaNotasEnfermeria")
+
+
+    username_id = request.POST['username_id']
+    print ("username_id =", username_id)
+
+    sede = request.POST['sede']
+    print ("sede =", sede)
+
+    ingresoId = request.POST['ingresoId']
+    print ("ingresoId =", ingresoId)
+    ingreso = Ingresos.objects.get(id=ingresoId)
+
+
+    observaciones = request.POST['observacionesN']
+    print ("observaciones =", observaciones)
+    serviciosAdministrativos = request.POST['serviciosAdministrativosN']
+    print ("serviciosAdministrativos =", serviciosAdministrativos)
+
+    tiposFolio = TiposFolio.objects.get(nombre='ENFERMERIA')
+
+    estadoReg = 'A'
+    fechaRegistro = datetime.datetime.now()
+
+    #Crea Dieta Enfermeria
+
+    miConexion3 = None
+    try:
+
+        miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                       password="123456")
+        cur3 = miConexion3.cursor()
+
+        # Primero buscamos el numero del folio nuevo
+        ultimofolio = Historia.objects.all().filter(tipoDoc_id=ingreso.tipoDoc_id).filter(documento_id=ingreso.documento_id).aggregate(maximo=Coalesce(Max('folio'), 0))
+
+        print("ultimo folio = ", ultimofolio)
+        print("ultimo folio = ", ultimofolio['maximo'])
+        ultimofolio2 = (ultimofolio['maximo']) + 1
+        print("ultimo folio2 = ", ultimofolio2)
+
+        # Segundo  INSERT en clinico_historial
+
+        detalle = 'INSERT INTO clinico_historia ("consecAdmision", folio, fecha, "fechaRegistro", "estadoReg", documento_id, "tipoDoc_id" , planta_id, "tiposFolio_id" , "usuarioRegistro_id", "sedesClinica_id", "serviciosAdministrativos_id" ) VALUES (' + "'" + str(ingreso.consec) + "','" + str(ultimofolio2) +  "','" + str(fechaRegistro) + "','" + str(fechaRegistro) + "','" + str(estadoReg) +"','" + str(ingreso.documento_id) + "','" + str(ingreso.tipoDoc_id) + "','" + str(username_id)  + "','" + str(tiposFolio.id)  + "','" + str(username_id) + "','" + str(sede) + "','" + str(serviciosAdministrativos) + "') RETURNING id"
+        print(detalle)
+        resultado = cur3.execute(detalle)
+        historiaId = cur3.fetchone()[0]
+        print("historiaId = ", historiaId)
+
+        # Segundo  INSERT en clinico_historialdietas
+
+        detalle = 'INSERT INTO clinico_historialnotasenfermeria ( observaciones, "fechaRegistro", "estadoReg", historia_id )  VALUES (' + "'" + str(observaciones) + "','" + str(fechaRegistro)  + "','" + str(estadoReg) +"','" + str(historiaId) + "')"
+        print(detalle)
+        cur3.execute(detalle)
+        miConexion3.commit()
+        miConexion3.close()
+
+        return JsonResponse({'success': True, 'message': 'Dieta Paciente Creada!'})
+
+    except psycopg2.DatabaseError as error:
+        print("Entre por rollback", error)
+        if miConexion3:
+            print("Entro ha hacer el Rollback")
+            miConexion3.rollback()
+        raise error
+
+    finally:
+        if miConexion3:
+            cur3.close()
+            miConexion3.close()
+
+
+def Load_dataNotasEnfermeria(request, data):
+    print("Entre Load_dataNotasEnfermeria")
+
+    context = {}
+    d = json.loads(data)
+
+    ingresoId = d['ingresoId']
+
+    print ("ingresoId =", ingresoId)
+
+
+    notasEnfermeria = []
+
+    miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                       password="123456")
+    curx = miConexionx.cursor()
+
+
+    detalle = 'SELECT notas.id id, his.folio folio,  notas.observaciones, pla.nombre profesional FROM clinico_historialnotasenfermeria notas  INNER JOIN clinico_historia his ON (his.id = notas.historia_id) INNER JOIN admisiones_ingresos ing on (ing."tipoDoc_id" = his."tipoDoc_id" AND ing.documento_id = his.documento_id AND ing.consec = his."consecAdmision") INNER JOIN planta_planta pla on (pla.id = his."usuarioRegistro_id") WHERE ing.id = ' + "'" + str(
+        ingresoId) + "'"
+
+    print(detalle)
+
+    curx.execute(detalle)
+
+    for id, folio, observaciones, profesional in curx.fetchall():
+            notasEnfermeria.append({"model": "ingresos.ingresos", "pk": id, "fields":
+                {'id': id,  'folio': folio,  'observaciones': observaciones,   'profesional': profesional}})
+
+    miConexionx.close()
+    print("notasEnfermeria = " , notasEnfermeria)
+
+
+    serialized1 = json.dumps(notasEnfermeria, default=str)
+
+    return HttpResponse(serialized1, content_type='application/json')

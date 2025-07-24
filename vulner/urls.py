@@ -396,7 +396,10 @@ urlpatterns = [
     path('load_dataPlaneacionEnfermeria/<str:data>', viewsEnfermeria.Load_dataPlaneacionEnfermeria, name='Load_dataPlaneacion_Enfermeria'),
     path('guardaPlaneacionEnfermeria/', viewsEnfermeria.GuardaPlaneacionEnfermeria, name='GuardaPlaneacion_Enfermeria'),
     path('guardaAplicacionEnfermeria/', viewsEnfermeria.GuardaAplicacionEnfermeria, name='GuardaAplicacion_Enfermeria'),
-
+    path('load_dataDietasEnfermeria/<str:data>', viewsEnfermeria.Load_dataDietasEnfermeria, name='Load_dataDietas_Enfermeria'),
+    path('guardaDietasEnfermeria/', viewsEnfermeria.GuardaDietasEnfermeria, name='GuardaDietas_Enfermeria'),
+    path('guardaNotasEnfermeria/', viewsEnfermeria.GuardaNotasEnfermeria, name='GuardaDNotas_Enfermeria'),
+    path('load_dataNotasEnfermeria/<str:data>', viewsEnfermeria.Load_dataNotasEnfermeria,   name='Load_dataNotas_Enfermeria'),
 
     # Citas Medicas
 

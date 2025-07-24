@@ -801,3 +801,9 @@ Cufe: daeeb9343955c6037479b2e1b7bb485526f7524e5b085b4a5eb6e64298b22873bd6ef35b92
 -- El boton refrecar en factuyracion esta muy grande
 -- ojo toca mejporar las pántallas en darmacia y enfemeria algo pasa
 - ojo los mensajes de satisfactorio en azul y de error en rojo primero hay que borrarlos y despues si escribir o sio quedan montados
+
+ojo pendiente en aplicacion de medicamentos arreglar cuando aplica la modal no pasa el enfemeriarecibeid a load_dataplaneacionenfermeria
+-- ops no entiendo por que no me inicializa combos en las dietas que pasar
+-- ops no sep por que no refresca la grilla de dietas
+-- ojo que pasa con el servicio adminiustrativo en toda la planeacion y la aplicacion de mediacmentos
+

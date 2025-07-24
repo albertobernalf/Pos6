@@ -2896,6 +2896,31 @@ def escogeAcceso(request, Sede, Username, Profesional, Documento, NombreSede, es
 
         # Fin combo PlantaUsuarios
 
+       # Combo TipoDietas
+
+        miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                       password="123456")
+        curt = miConexiont.cursor()
+
+        comando = 'SELECT e.id id, e.nombre nombre  FROM clinico_tipodietas e'
+
+        curt.execute(comando)
+        print(comando)
+
+        tipoDietas= []
+        tipoDietas.append({'id': '', 'nombre': ''})
+
+        for id, nombre in curt.fetchall():
+            tipoDietas.append({'id': id, 'nombre': nombre})
+
+        miConexiont.close()
+        print(tipoDietas)
+
+        context['TipoDietas'] = tipoDietas
+
+        # Fin combo tipoDietas
+
+
 
         ## FIN CONTEXTO
         return render(request, "enfermeria/PanelEnfermeriaF.html", context)
