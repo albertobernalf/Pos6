@@ -1137,3 +1137,14 @@ class HistorialDietas(models.Model):
 
     def __str__(self):
         return self.observaciones
+
+
+class HistorialNotasEnfermeria(models.Model):
+    id = models.AutoField(primary_key=True)
+    historia = models.ForeignKey('clinico.Historia', on_delete=models.PROTECT, blank=True, null=True,  editable=True,  related_name='NotaEnfHistoria001')
+    observaciones = models.CharField(max_length=4000 ,blank=True, null=True)
+    fechaRegistro = models.DateTimeField(default=now, editable=False)
+    estadoReg = models.CharField(max_length=1, default='A', editable=False)
+
+    def __str__(self):
+        return self.historia

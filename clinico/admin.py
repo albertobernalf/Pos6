@@ -4,7 +4,7 @@ from django.contrib import admin
 
 from clinico.models import Medicos, Especialidades , TiposExamen, Examenes, Historia, HistoriaExamenes, HistoriaResultados, EspecialidadesMedicos, Servicios, Diagnosticos, EstadosSalida,   EstadoExamenes,  Enfermedades, TiposFolio, TiposAntecedente,  CausasExterna, ViasIngreso , TiposIncapacidad,  HistorialAntecedentes, TiposDiagnostico, HistorialDiagnosticos, HistorialInterconsultas, EstadosInterconsulta
 from clinico.models import TiposRadiologia,ViasEgreso, RevisionSistemas, NivelesClinica, TiposTriage, TurnosEnfermeria, TiposSalidas, Eps, TiposCotizante,  Regimenes, Recomendaciones, Hallazgos, NivelesRegimenes, Ips, TiposInterconsulta, ViasAdministracion, UnidadesDeMedidaDosis, FrecuenciasAplicacion, HistoriaMedicamentos, PrincipiosActivos, Medicamentos
-from clinico.models import CodigosAtc, FormasFarmaceuticas, HistorialIncapacidades, ExamenesRasgos, HistoriaResultados, HistoriaOxigeno, TipoOxigenacion, TipoDietas, HistorialDietas
+from clinico.models import CodigosAtc, FormasFarmaceuticas, HistorialIncapacidades, ExamenesRasgos, HistoriaResultados, HistoriaOxigeno, TipoOxigenacion, TipoDietas, HistorialDietas, HistorialNotasEnfermeria
 
 @admin.register(Servicios)
 class serviciosAdmin(admin.ModelAdmin):
@@ -425,3 +425,11 @@ class historialDietasAdmin(admin.ModelAdmin):
         search_fields = ("id", "historia","tipoDieta","consecutivo","observaciones")
         # Filtrar
         list_filter = ("id", "historia","tipoDieta","consecutivo","observaciones")
+
+@admin.register(HistorialNotasEnfermeria)
+class historialNotasEnfermeriaAdmin(admin.ModelAdmin):
+
+        list_display = ("id", "historia","observaciones","fechaRegistro")
+        search_fields = ("id", "historia","observaciones","fechaRegistro")
+        # Filtrar
+        list_filter = ("id", "historia","observaciones","fechaRegistro")
