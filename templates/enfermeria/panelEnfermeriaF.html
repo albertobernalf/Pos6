@@ -159,10 +159,10 @@
         	                        <th>Folio</th>
         	                        <th>Consecutivo</th>
         	                        <th>Dosis</th>
-
         	                        <th>Cantidad</th>
 	                                <th>Medida</th>
                 	                <th>Medicamento</th>
+                	                <th>via</th>
                 	                <th>Frecuencia</th>
                 	                <th>Dias</th>
 					</bold>                                  
@@ -279,7 +279,7 @@
 
                                     </div> <!-- Cierra body -->
                                     <div class="modal-footer">
-				 <span id="mensajesErrorModalPlaneacionEnfermeria" name="mensajesErrorModalPlaneacionsEnfermeria" style= "color:red; font-size:18px; line-height:35px; font-family: Calibri;" > </span>
+				 <span id="mensajesErrorModalPlaneacionEnfermeria" name="mensajesErrorModalPlaneacionEnfermeria" style= "color:red; font-size:18px; line-height:35px; font-family: Calibri;" > </span>
                                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar   </button>
 
                                          <input type="button" class="btn btn-primary" value="save"  onclick="GuardarPlaneacion()"> 
@@ -294,6 +294,91 @@
         </div> <!-- Cierra container -->
 
             <!-- Fin Creacion Modal Planeacion Enfermeria-->
+
+
+
+  <!-- Creacion Modal Aplicacion Medicamentos Enfermeria  -->
+
+        <div class="container">
+            <div class="card">
+                <div class="myForm">
+                    <form id="postFormModalAplicacionEnfermeria" method="POST" onsubmit="CierraModal()">
+                        <div class="modal fade" id="ModalAplicacionEnfermeria" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+                            <div class="modal-dialog  modal-lg modal-dialog-scrollable  modal-dialog-center" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                           <div  class="modal-title" id="exampleModalLabel" style="text-align:center;"><font gont-family="Times New roman" size=5">Aplicacion Medicamentos Enfermeria</font> </div>
+                                        <button type="button" class="close" data-bs-dismiss="modal"  aria-label="Close"> <span aria-hidden="true">&times;</span>  </button>
+                                    </div>
+                                    <div class="modal-body">
+			<input type="text" id="planeacionEnfermeriaId" name="planeacionEnfermeriaId">
+
+                                        <div class="row row-cols-5 mt-3">
+                                            <div class="col">
+                                                <label for="dosisA"  class="col-sm-10 col-form-label col-form-label-sm">Dosis:</label>
+						
+                                               <input type="text" id="dosisA" name="dosisA" value="" readonly>
+					      
+                                            </div> 
+					  <div class="col">
+                                                <label for="medidaA"  class="col-sm-10 col-form-label col-form-label-sm">Medida:</label>
+                                                <input type="text" id="medidaA" name="medidaA" value="" readonly>
+                                            </div>
+
+					<div class="col">
+                                          <label for="cantidadA"  class="col-sm-10 col-form-label col-form-label-sm">Cantidad:</label>
+                                                <input type="text" id="cantidadA" name="cantidadA" value="" readonly>
+                                            </div>
+				
+					  <div class="col">
+                                                <label for="suministroA"  class="col-sm-10 col-form-label col-form-label-sm">Suministro:</label>
+                                                <input type="text" id="suministroA" name="suministroA" value="" readonly>
+                                            </div>
+					  <div class="col">
+                                                <label for="viaA"  class="col-sm-10 col-form-label col-form-label-sm">Via:</label>
+                                                <input type="text" id="viaA" name="viaA" value="">
+                                            </div>
+
+					  <div class="col">
+                                                <label for="frecuenciaA"  class="col-sm-10 col-form-label col-form-label-sm">Frecuencia:</label>
+                                                <input type="text" id="frecuenciaA" name="frecuenciaA" value="" readonly>
+                                            </div>
+
+					  <div class="col">
+                                                <label for="diasTratamientoA"  class="col-sm-10 col-form-label col-form-label-sm">Dias:</label>
+                                                <input type="text" id="diasTratamientoA" name="diasTratamientoA" value="" readonly>
+                                            </div>
+
+
+					  <div class="col">
+                                                <label for="fechaAplica"  class="form-control form-control-sm">Fecha-Hora Aplicacion:</label>
+                                                <input type="datetime-local" id="fechaAplica" name="fechaAplica" value="">
+                                            </div>
+
+
+					  <div class="col">
+                                            </div>
+
+				
+                                        </div> <!-- Cierra row -->
+
+                                    </div> <!-- Cierra body -->
+                                    <div class="modal-footer">
+				 <span id="mensajesErrorModalAplicaEnfermeria" name="mensajesErrorModalAplicaEnfermeria" style= "color:red; font-size:18px; line-height:35px; font-family: Calibri;" > </span>
+                                       <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar   </button>
+
+                                         <input type="button" class="btn btn-primary" value="save"  onclick="GuardarAplicacion()"> 
+                                        
+                                    </div> <!-- Cierra footer-->
+                                </div> <!-- Cierra content -->
+                            </div> <!-- Cierra modal dialog -->
+                        </div> <!-- Cierra modal -->
+                    </form> <!-- Cierra cla forma-->
+                </div> <!-- Cierra muform -->
+            </div> <!-- Cierra el Card-->
+        </div> <!-- Cierra container -->
+
+            <!-- Fin Creacion Modal Aplicacion Medicamentos Enfermeria-->
 
 
    			

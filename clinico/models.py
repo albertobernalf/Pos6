@@ -1117,3 +1117,23 @@ class ExamenesRasgos(models.Model):
 
     def __str__(self):
         return self.nombre
+
+class TipoDietas(models.Model):
+    id = models.AutoField(primary_key=True)
+    nombre = models.CharField(max_length=30, null = False)
+    fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)
+    estadoReg = models.CharField(max_length=1, default='A', editable=False )
+
+    def __str__(self):
+        return self.nombre
+
+class HistorialDietas(models.Model):
+    id = models.AutoField(primary_key=True)
+    historia =  models.ForeignKey('clinico.Historia',  blank=True, null=True, editable=True, on_delete=models.PROTECT,   related_name='Dietas001g8')
+    tipoDieta = models.ForeignKey('clinico.TipoDietas',  blank=True, null=True, editable=True, on_delete=models.PROTECT,   related_name='tipoDietas001')
+    consecutivo = models.IntegerField(blank=True, null=True)
+    observaciones = models.CharField(max_length=2000 ,blank=True, null=True)
+    estadoReg = models.CharField(max_length=1, default='A', editable=False)
+
+    def __str__(self):
+        return self.observaciones

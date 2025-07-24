@@ -145,7 +145,7 @@ SELECT recibe.id id, tipos.nombre tipoDoc, usu.documento documento, usu.nombre p
 	WHERE ing.id='50133' 
 	ORDER BY 5,6
 
-
+ 
 select * from enfermeria_enfermeriaplaneacion;
 SELECT * FROM enfermeria_enfermeriarecibe;
 SELECT * FROM farmacia_farmaciadetalle;
@@ -156,6 +156,8 @@ select * from enfermeria_tiposturnosenfermeria;
 
 select * from enfermeria_enfermeriaplaneacion;
 	select * from clinico_frecuenciasaplicacion;
+
+	select * from clinico_viasadministracion;
 
 select pla.id id,pla."fechaPlanea" fechaPlanea, tipos1.nombre turnoPlanea, planta1.nombre enfermeraPlanea, pla."cantidadPlaneada" cantidadPlaneada,
 	 pla."fechaAplica" fechaAplica, tipos2.nombre turnoAplica, planta2.nombre enfermeraAplica,   pla."cantidadAplicada" cantidadAplicada,
@@ -177,6 +179,8 @@ detalle ='select pla.id id, pla."fechaPlanea" fechaPlanea, tipos1.nombre turnoPl
 
 select * from enfermeria_enfermeriarecibe;
 	select * from enfermeria_enfermeriadetalle;
+
+	update enfermeria_enfermeriadetalle set "diasTratamiento"= 6, frecuencia_id=3
  
 SELECT recibe.id id, tipos.nombre tipoDoc, usu.documento documento, usu.nombre paciente, hist.folio folio, 
 	fardet."consecutivoMedicamento" consecutivoMedicamento, recibe."cantidadDispensada" cantidad, 	
@@ -195,3 +199,10 @@ SELECT recibe.id id, tipos.nombre tipoDoc, usu.documento documento, usu.nombre p
 	WHERE ing.id=50133
 	
 	UNION " + ' SELECT recibe.id id, tipos.nombre tipoDoc, usu.documento documento, usu.nombre paciente, 0 folio,  fardet."consecutivoMedicamento" consecutivoMedicamento, recibe."cantidadDispensada" cantidad, 	  medida.descripcion UnidadMedida, sum.nombre medicamento, via.nombre via FROM admisiones_ingresos ing INNER JOIN farmacia_farmacia far ON (far."ingresoPaciente_id"= ing.id) INNER JOIN farmacia_farmaciadetalle fardet ON (fardet.farmacia_id = far.id) INNER JOIN	enfermeria_enfermeriarecibe recibe ON (recibe."farmaciaDetalle_id" = fardet.id) INNER JOIN facturacion_suministros sum ON (sum.id = recibe.suministro_id) INNER JOIN clinico_viasadministracion via ON (via.id = recibe."viaAdministracion_id") INNER JOIN clinico_unidadesdemedidadosis medida ON (medida.id = recibe."dosisUnidad_id") INNER JOIN usuarios_usuarios usu ON (usu.id = ing.documento_id) INNER JOIN usuarios_tiposdocumento tipos ON (tipos.id = usu."tipoDoc_id")	WHERE ing.id=' + "'" + str(ingresoId) + "' ORDER BY 5,6"
+
+
+INSERT INTO enfermeria_enfermeriaplaneacion ( "consecutivoPlaneacion",  "fechaPlanea", "dosisCantidad", "cantidadPlaneada",
+	"diasTratamiento", "fechaRegistro", "estadoReg", "dosisUnidad_id", "enfermeraPlanea_id", frecuencia_id, suministro_id,
+	"usuarioRegistro_id", "viaAdministracion_id",  enfermeria_id,  "turnoEnfermeriaPlanea_id") 
+	VALUES ('1','2025-07-23T16:00','undefined','1','undefined','2025-07-23 15:46:48.563066','A','undefined','1',
+	'CADA 6 HORAS','HIDROMORFONA CLORHIDRATO AMPOLLA 2 MG ML.','1','','1','12','1')

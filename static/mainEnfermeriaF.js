@@ -214,7 +214,7 @@ function arrancaEnfermeria(valorTabla,valorData)
   lengthMenu: [2, 4, 15],
            processing: true,
             serverSide: false,
-            scrollY: '125px',
+            scrollY: '250px',
 	    scrollX: true,
 	    scrollCollapse: true,
             paging:false,
@@ -222,7 +222,7 @@ function arrancaEnfermeria(valorTabla,valorData)
 		{ className: 'centered', targets: [0, 1, 2, 3] },
 	    { width: '10%', targets: [2,3] },
 		{  
-                    "targets": 11
+                    "targets": 12
                }
             ],
 	 pageLength: 3,
@@ -291,6 +291,7 @@ function arrancaEnfermeria(valorTabla,valorData)
                 { data: "fields.cantidad"},
                 { data: "fields.UnidadMedida"},
                 { data: "fields.medicamento"},
+                { data: "fields.via"},
                 { data: "fields.frecuencia"},
                 { data: "fields.diasTratamiento"},
                         ]
@@ -698,7 +699,7 @@ function arrancaEnfermeria(valorTabla,valorData)
   lengthMenu: [2, 4, 15],
            processing: true,
             serverSide: false,
-            scrollY: '75px',
+            scrollY: '425px',
 	    scrollX: true,
 	    scrollCollapse: true,
             paging:false,
@@ -763,7 +764,7 @@ function arrancaEnfermeria(valorTabla,valorData)
                 { data: "fields.suministro"},
                 { data: "fields.via"},
                 { data: "fields.frecuencia"},
-                { data: "fields.diasa"},
+                { data: "fields.dias"},
 
                         ]
             }
@@ -999,6 +1000,90 @@ function CreaPedidosEnfermeriaCabezote()
 
 }
 
+$('#tablaMedicamentosEnfermeria tbody').on('click', '.miMedicamentosId', function() {
+
+	alert ("Sleecion Meicamento");
+
+	     var post_id = $(this).data('pk');
+	alert ("post_id = " + post_id);
+	var enfermeriaRecibeId = post_id;
+
+
+	var ingresoId = document.getElementById("ingresoId").value ;
+
+
+
+   	var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
+        var username = document.getElementById("username").value;
+        var nombreSede = document.getElementById("nombreSede").value;
+    	var sede = document.getElementById("sede").value;
+        var username_id = document.getElementById("username_id").value;
+
+         var data =  {}   ;
+        data['username'] = username;
+        data['sedeSeleccionada'] = sedeSeleccionada;
+        data['nombreSede'] = nombreSede;
+        data['sede'] = sede;
+        data['username_id'] = username_id;
+	data['ingresoId'] = ingresoId;
+	data['enfermeriaRecibeId'] = enfermeriaRecibeId;
+	
+ 	    data = JSON.stringify(data);
+
+	     arrancaEnfermeria(7,data);
+	     dataTablePlaneacionEnfermeriaInitialized = true;
+
+
+});
+
+$('#tablaPlaneacionEnfermeria tbody').on('click', '.miAplicacionEnfermeria', function() {
+
+	alert ("A Aplicar Medicamentos");
+
+	     var post_id = $(this).data('pk');
+	alert ("post_id = " + post_id);
+	var row = $(this).closest('tr'); // Encuentra la fila
+
+	
+
+	var table = $('#tablaPlaneacionEnfermeria').DataTable();  // Inicializa el DataTable jquery//
+	
+ 	var rowindex = table.row(row).data(); // Obtiene los datos de la fila
+       console.log("rowindex= " , rowindex);
+
+	    	 dato1 = Object.values(rowindex);
+		console.log(" fila seleccionad d evuelta dato1 = ",  dato1);
+	        dato3 = dato1[2];
+		console.log(" fila selecciona de vuelta dato3 = ",  dato3);
+	        console.log ( "Suministro es =  = " , dato3.medicamento); 
+		document.getElementById("planeacionEnfermeriaId").value = dato3.id;
+
+
+
+	// Aquip cargar modal planeacion medicamentos
+	 $('#postFormModalPlaneacionEnfermeria').trigger("reset");
+
+            $('#modelHeadingAplicaEnfermeria').html("Creacon Pedidos Enfermeria");
+		document.getElementById("dosisA").value =dato3.dosis;
+		document.getElementById("medidaA").value = dato3.medida;
+		document.getElementById("cantidadA").value = dato3.cantidadPlaneada;
+		document.getElementById("suministroA").value = dato3.suministro;
+		document.getElementById("viaA").value = dato3.via;
+		alert("via = " + dato3.via);
+		document.getElementById("frecuenciaA").value = dato3.frecuencia;
+		document.getElementById("diasTratamientoA").value = dato3.dias;
+		document.getElementById("enfermeriaRecibeId").value = post_id;
+
+
+            $('#ModalAplicacionEnfermeria').modal('show');     
+
+
+
+
+
+});
+
+
 
 
 $('#tablaMedicamentosEnfermeria tbody').on('click', '.Planear', function() {
@@ -1032,6 +1117,8 @@ $('#tablaMedicamentosEnfermeria tbody').on('click', '.Planear', function() {
 		document.getElementById("medidaP").value = dato3.UnidadMedida;
 		document.getElementById("cantidadP").value = dato3.cantidad;
 		document.getElementById("suministroP").value = dato3.medicamento;
+		document.getElementById("viaP").value = dato3.via;
+		alert("via = " + dato3.via);
 		document.getElementById("frecuenciaP").value = dato3.frecuencia;
 		document.getElementById("diasTratamientoP").value = dato3.diasTratamiento;
 		document.getElementById("numeroPlaneos").value = 0;
@@ -1051,6 +1138,7 @@ function GuardarPlaneacion()
 
 	     var post_id = $(this).data('pk');
 	alert ("post_id = " + post_id);
+	var ingresoId = document.getElementById("ingresoId").value ;
 
    	var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
         var username = document.getElementById("username").value;
@@ -1084,6 +1172,7 @@ function GuardarPlaneacion()
 	data['desdePlanea'] = desdePlanea;
 	data['numeroPlaneos'] = numeroPlaneos;
 	data['frecuenciaP'] = frecuenciaP;
+	data['ingresoId'] = ingresoId;
 
 
 	
@@ -1104,11 +1193,84 @@ function GuardarPlaneacion()
 	   	    	}
             });
 
+		 $('#postFormModalPlaneacionEnfermeria').trigger("reset");
+		 $('#ModalPlaneacionEnfermeria').modal('hide');  
 
 
 
-	     arrancaEnfermeria(6,data);
-	     dataTableTurnossEnfermeriaInitialized = true;
+	     arrancaEnfermeria(7,data);
+	     dataTablePlaneacionEnfermeriaInitialized = true;
+
+      
+  };
+
+
+
+function GuardarAplicacion() 
+{
+	alert ("A Guardar Aplicacion medicamentos");
+
+	     var post_id = $(this).data('pk');
+	
+	var ingresoId = document.getElementById("ingresoId").value ;
+
+		registroAplica =  document.getElementById("planeacionEnfermeriaId").value ;
+
+
+
+   	var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
+        var username = document.getElementById("username").value;
+        var nombreSede = document.getElementById("nombreSede").value;
+    	var sede = document.getElementById("sede").value;
+        var username_id = document.getElementById("username_id").value;
+
+	var enfermeriaRecibeId  = document.getElementById("enfermeriaRecibeId").value;
+	var fechaAplica = document.getElementById("fechaAplica").value;
+
+	alert(" ingresoId= " + ingresoId);
+
+
+
+
+	var dosisA = document.getElementById("dosisA").value;
+	var medidaA = document.getElementById("medidaA").value;
+	var suministroA = document.getElementById("suministroA").value;
+	var viaA = document.getElementById("viaA").value;
+	var diasTratamientoA = document.getElementById("diasTratamientoA").value;
+	var cantidadA = document.getElementById("cantidadA").value;
+        var frecuenciaA = document.getElementById("frecuenciaA").value;
+
+         var data =  {}   ;
+        data['username'] = username;
+        data['sedeSeleccionada'] = sedeSeleccionada;
+        data['nombreSede'] = nombreSede;
+        data['sede'] = sede;
+        data['username_id'] = username_id;
+	data['ingresoId'] = ingresoId;
+
+ 	    data = JSON.stringify(data);
+
+	  $.ajax({
+                data: {'sede':sede,'username_id':username_id,
+			'enfermeriaRecibeId':enfermeriaRecibeId,'fechaAplica':fechaAplica,'frecuenciaA':frecuenciaA, 
+			'dosisA':dosisA,'medidaA':medidaA,
+			 'suministroA':suministroA,'viaA':viaA,'diasTratamientoA':diasTratamientoA,
+			 'cantidadA':cantidadA ,'registroAplica':registroAplica },
+	        url: "/guardaAplicacionEnfermeria/",
+                type: "POST",
+                dataType: 'json',
+                success: function (info) {
+			
+
+                },
+            error: function (request, status, error) {
+		alert("llegue con error ", error);
+		document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error + ' ' + error
+	   	    	}
+            });
+
+		 $('#postFormModalAplicacionEnfermeria').trigger("reset");
+		 $('#ModalAplicacionEnfermeria').modal('hide');  
 
 
 	     arrancaEnfermeria(7,data);

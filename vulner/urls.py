@@ -395,6 +395,9 @@ urlpatterns = [
     path('load_dataTurnosEnfermeria/<str:data>', viewsEnfermeria.Load_dataTurnosEnfermeria,name='Load_dataTurnos_Enfermeria'),
     path('load_dataPlaneacionEnfermeria/<str:data>', viewsEnfermeria.Load_dataPlaneacionEnfermeria, name='Load_dataPlaneacion_Enfermeria'),
     path('guardaPlaneacionEnfermeria/', viewsEnfermeria.GuardaPlaneacionEnfermeria, name='GuardaPlaneacion_Enfermeria'),
+    path('guardaAplicacionEnfermeria/', viewsEnfermeria.GuardaAplicacionEnfermeria, name='GuardaAplicacion_Enfermeria'),
+
+
     # Citas Medicas
 
     # Usuarios

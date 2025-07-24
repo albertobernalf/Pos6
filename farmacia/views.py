@@ -532,8 +532,8 @@ def AdicionarDespachosDispensa(request):
 
                 cantidadMedicamento = key["cantidadMedicamento"].strip()
                 print("cantidadMedicamento=", cantidadMedicamento)
-                # diasTratamiento = key["diasTratamiento"]
-                # print("diasTratamiento=", diasTratamiento)
+                diasTratamiento = key["diasTratamiento"]
+                print("diasTratamiento=", diasTratamiento)
 
                 # Busco historialMediamentos
 

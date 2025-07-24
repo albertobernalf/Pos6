@@ -138,7 +138,7 @@ def Load_dataMedicamentosEnfermeria(request, data):
                                        password="123456")
     curx = miConexionx.cursor()
 
-    detalle = 'SELECT recibe.id id, tipos.nombre tipoDoc, usu.documento documento, usu.nombre paciente, hist.folio folio,   fardet."consecutivoMedicamento" consecutivoMedicamento, recibe."dosisCantidad" dosis, recibe."cantidadDispensada" cantidad, 	  medida.descripcion UnidadMedida, sum.nombre medicamento, via.nombre via , frec.descripcion frecuencia, enfdet."diasTratamiento" FROM admisiones_ingresos ing INNER JOIN clinico_historia hist ON (hist."tipoDoc_id" = ing."tipoDoc_id" AND hist.documento_id=ing.documento_id AND hist."consecAdmision" = ing.consec) INNER JOIN farmacia_farmacia far ON (far.historia_id= hist.id) INNER JOIN farmacia_farmaciadetalle fardet ON (fardet.farmacia_id = far.id) INNER JOIN	enfermeria_enfermeriarecibe recibe ON (recibe."farmaciaDetalle_id" = fardet.id) INNER JOIN	enfermeria_enfermeriadetalle enfdet ON (enfdet.id = recibe."enfermeriaDetalle_id") INNER JOIN facturacion_suministros sum ON (sum.id = recibe.suministro_id) INNER JOIN clinico_viasadministracion via ON (via.id = recibe."viaAdministracion_id") INNER JOIN clinico_unidadesdemedidadosis medida ON (medida.id = recibe."dosisUnidad_id") LEFT JOIN clinico_frecuenciasaplicacion frec ON (frec.id = enfdet."frecuencia_id") INNER JOIN usuarios_usuarios usu ON (usu.id = ing.documento_id) INNER JOIN usuarios_tiposdocumento tipos ON (tipos.id = usu."tipoDoc_id")	WHERE ing.id=' + "'" + str(ingresoId) + "' UNION " + ' SELECT recibe.id id, tipos.nombre tipoDoc, usu.documento documento, usu.nombre paciente, 0 folio,  fardet."consecutivoMedicamento" consecutivoMedicamento, recibe."cantidadDispensada" cantidad, 	  medida.descripcion UnidadMedida, sum.nombre medicamento, via.nombre via , frec.descripcion frecuencia, enfdet."diasTratamiento"  FROM admisiones_ingresos ing INNER JOIN farmacia_farmacia far ON (far."ingresoPaciente_id"= ing.id) INNER JOIN farmacia_farmaciadetalle fardet ON (fardet.farmacia_id = far.id) INNER JOIN enfermeria_enfermeriarecibe recibe ON (recibe."farmaciaDetalle_id" = fardet.id) INNER JOIN	enfermeria_enfermeriadetalle enfdet ON (enfdet.id = recibe."enfermeriaDetalle_id")  INNER JOIN facturacion_suministros sum ON (sum.id = recibe.suministro_id) INNER JOIN clinico_viasadministracion via ON (via.id = recibe."viaAdministracion_id") INNER JOIN clinico_unidadesdemedidadosis medida ON (medida.id = recibe."dosisUnidad_id") LEFT JOIN clinico_frecuenciasaplicacion frec ON (frec.id = enfdet."frecuencia_id") INNER JOIN usuarios_usuarios usu ON (usu.id = ing.documento_id) INNER JOIN usuarios_tiposdocumento tipos ON (tipos.id = usu."tipoDoc_id")	WHERE ing.id=' + "'" + str(ingresoId) + "' ORDER BY 5,6"
+    detalle = 'SELECT recibe.id id, tipos.nombre tipoDoc, usu.documento documento, usu.nombre paciente, hist.folio folio,   fardet."consecutivoMedicamento" consecutivoMedicamento, recibe."dosisCantidad" dosis, recibe."cantidadDispensada" cantidad, 	  medida.descripcion UnidadMedida, sum.nombre medicamento, via.nombre via , frec.descripcion frecuencia, enfdet."diasTratamiento" FROM admisiones_ingresos ing INNER JOIN clinico_historia hist ON (hist."tipoDoc_id" = ing."tipoDoc_id" AND hist.documento_id=ing.documento_id AND hist."consecAdmision" = ing.consec) INNER JOIN farmacia_farmacia far ON (far.historia_id= hist.id) INNER JOIN farmacia_farmaciadetalle fardet ON (fardet.farmacia_id = far.id) INNER JOIN	enfermeria_enfermeriarecibe recibe ON (recibe."farmaciaDetalle_id" = fardet.id) INNER JOIN	enfermeria_enfermeriadetalle enfdet ON (enfdet.id = recibe."enfermeriaDetalle_id") INNER JOIN facturacion_suministros sum ON (sum.id = recibe.suministro_id) INNER JOIN clinico_viasadministracion via ON (via.id = recibe."viaAdministracion_id") INNER JOIN clinico_unidadesdemedidadosis medida ON (medida.id = recibe."dosisUnidad_id") LEFT JOIN clinico_frecuenciasaplicacion frec ON (frec.id = enfdet."frecuencia_id") INNER JOIN usuarios_usuarios usu ON (usu.id = ing.documento_id) INNER JOIN usuarios_tiposdocumento tipos ON (tipos.id = usu."tipoDoc_id")	WHERE ing.id=' + "'" + str(ingresoId) + "' UNION " + ' SELECT recibe.id id, tipos.nombre tipoDoc, usu.documento documento, usu.nombre paciente, 0 folio,  fardet."consecutivoMedicamento" consecutivoMedicamento, recibe."dosisCantidad" dosis,  recibe."cantidadDispensada" cantidad, 	  medida.descripcion UnidadMedida, sum.nombre medicamento, via.nombre via , frec.descripcion frecuencia, enfdet."diasTratamiento"  FROM admisiones_ingresos ing INNER JOIN farmacia_farmacia far ON (far."ingresoPaciente_id"= ing.id) INNER JOIN farmacia_farmaciadetalle fardet ON (fardet.farmacia_id = far.id) INNER JOIN enfermeria_enfermeriarecibe recibe ON (recibe."farmaciaDetalle_id" = fardet.id) INNER JOIN	enfermeria_enfermeriadetalle enfdet ON (enfdet.id = recibe."enfermeriaDetalle_id")  INNER JOIN facturacion_suministros sum ON (sum.id = recibe.suministro_id) INNER JOIN clinico_viasadministracion via ON (via.id = recibe."viaAdministracion_id") INNER JOIN clinico_unidadesdemedidadosis medida ON (medida.id = recibe."dosisUnidad_id") LEFT JOIN clinico_frecuenciasaplicacion frec ON (frec.id = enfdet."frecuencia_id") INNER JOIN usuarios_usuarios usu ON (usu.id = ing.documento_id) INNER JOIN usuarios_tiposdocumento tipos ON (tipos.id = usu."tipoDoc_id")	WHERE ing.id=' + "'" + str(ingresoId) + "' ORDER BY 5,6"
 
 
     print(detalle)
@@ -149,7 +149,7 @@ def Load_dataMedicamentosEnfermeria(request, data):
             medicamentosEnfermeria.append({"model": "ingresos.ingresos", "pk": id, "fields":
                 {'id': id, 'tipoDoc': tipoDoc, 'Documento': documento, 'paciente': paciente,
                  'folio': folio,   'consecutivoMedicamento': consecutivoMedicamento, 'dosis':dosis,   'cantidad': cantidad, 'UnidadMedida': UnidadMedida,
-                   'medicamento': medicamento,'frecuencia':frecuencia, 'diasTratamiento':diasTratamiento}})
+                   'medicamento': medicamento,'via':via, 'frecuencia':frecuencia, 'diasTratamiento':diasTratamiento}})
 
     miConexionx.close()
     print("medicamentosEnfermeria = " , medicamentosEnfermeria)
@@ -565,6 +565,10 @@ def Load_dataPlaneacionEnfermeria(request, data):
 
     print ("ingresoId =", ingresoId)
 
+    enfermeriaRecibeId = d['enfermeriaRecibeId']
+
+    print("enfermeriaRecibeId =", enfermeriaRecibeId)
+
 
     planeacionEnfermeria = []
 
@@ -572,7 +576,7 @@ def Load_dataPlaneacionEnfermeria(request, data):
                                        password="123456")
     curx = miConexionx.cursor()
 
-    detalle = 'select pla.id id, pla."fechaPlanea" fechaPlanea, tipos1.nombre turnoPlanea, planta1.nombre enfermeraPlanea, pla."cantidadPlaneada" cantidadPlaneada, 	 pla."fechaAplica" fechaAplica, tipos2.nombre turnoAplica, planta2.nombre enfermeraAplica,   pla."cantidadAplicada" cantidadAplicada,	 pla."dosisCantidad" dosis, medida.descripcion medida, sum.nombre suministro, vias.nombre via, frec.descripcion frecuencia,	pla."diasTratamiento" dias FROM enfermeria_enfermeriaplaneacion pla INNER JOIN enfermeria_enfermeria enf ON (enf.id=pla.enfermeria_id)	 INNER JOIN planta_planta planta1 ON (planta1.id = pla."enfermeraPlanea_id") INNER JOIN planta_planta planta2 ON (planta2.id = pla."enfermeraAplica_id") INNER JOIN clinico_viasadministracion vias ON (vias.id = pla."viaAdministracion_id") INNER JOIN clinico_unidadesdemedidadosis medida ON (medida.id = pla."dosisUnidad_id") INNER JOIN clinico_frecuenciasaplicacion frec ON (medida.id = pla.frecuencia_id) INNER JOIN facturacion_suministros sum	ON (sum.id = pla.suministro_id) INNER JOIN enfermeria_tiposturnosenfermeria tipos1 ON ( tipos1.id = pla."turnoEnfermeriaPlanea_id") INNER JOIN enfermeria_tiposturnosenfermeria tipos2 ON ( tipos2.id = pla."turnoEnfermeriaAplica_id") WHERE enf."sedesClinica_id" = ' + "'" + str(sede) + "'" +  ' AND enf."ingresoPaciente_id" = ' + "'" + str(ingresoId) + "'"
+    detalle = 'select pla.id id, pla."fechaPlanea" fechaPlanea, tipos1.nombre turnoPlanea, planta1.nombre enfermeraPlanea, pla."cantidadPlaneada" cantidadPlaneada, 	 pla."fechaAplica" fechaAplica, tipos2.nombre turnoAplica, planta2.nombre enfermeraAplica,   pla."cantidadAplicada" cantidadAplicada,	 pla."dosisCantidad" dosis, medida.descripcion medida, sum.nombre suministro, vias.nombre via, frec.descripcion frecuencia,	pla."diasTratamiento" dias FROM enfermeria_enfermeriaplaneacion pla INNER JOIN enfermeria_enfermeria enf ON (enf.id=pla.enfermeria_id)	 LEFT JOIN planta_planta planta1 ON (planta1.id = pla."enfermeraPlanea_id") LEFT JOIN planta_planta planta2 ON (planta2.id = pla."enfermeraAplica_id") INNER JOIN clinico_viasadministracion vias ON (vias.id = pla."viaAdministracion_id") INNER JOIN clinico_unidadesdemedidadosis medida ON (medida.id = pla."dosisUnidad_id") INNER JOIN clinico_frecuenciasaplicacion frec ON (frec.id = pla.frecuencia_id) INNER JOIN facturacion_suministros sum	ON (sum.id = pla.suministro_id) LEFT JOIN enfermeria_tiposturnosenfermeria tipos1 ON ( tipos1.id = pla."turnoEnfermeriaPlanea_id") LEFT JOIN enfermeria_tiposturnosenfermeria tipos2 ON ( tipos2.id = pla."turnoEnfermeriaAplica_id") WHERE enf."sedesClinica_id" = ' + "'" + str(sede) + "'" +  ' AND enf."ingresoPaciente_id" = ' + "'" + str(ingresoId) + "'" + ' AND pla."enfermeriaRecibe_id" = ' + "'" + str(enfermeriaRecibeId) + "'"
 
     print(detalle)
 
@@ -621,6 +625,9 @@ def GuardaPlaneacionEnfermeria(request):
     cantidad = request.POST['cantidadP']
     print("cantidad =", cantidad)
     medida = request.POST['medidaP']
+
+    medidaId = UnidadesDeMedidaDosis.objects.get(descripcion=medida)
+
     print("medida =", medida)
     suministro = request.POST['suministroP']
     print("suministro =", suministro)
@@ -628,8 +635,8 @@ def GuardaPlaneacionEnfermeria(request):
     sum = Suministros.objects.get(nombre=suministro)
 
     via = request.POST['viaP']
-    via=86
     print("via =", via)
+    viaId = ViasAdministracion.objects.get(nombre=via)
 
     diasTratamiento = request.POST['diasTratamientoP']
 
@@ -640,6 +647,9 @@ def GuardaPlaneacionEnfermeria(request):
 
     frecuencia = FrecuenciasAplicacion.objects.get(descripcion=frecuenciaP)
     print ("frecuencia =", frecuencia.id)
+
+    horasAMultiplicar = frecuencia.numeroHoras
+    horasAMultiplicarTotales = 0
 
     estadoReg = 'A'
     fechaRegistro = datetime.datetime.now()
@@ -659,20 +669,112 @@ def GuardaPlaneacionEnfermeria(request):
 
         print ("aqui voy")
 
-        for x in range(1, int(numeroPlaneos)):
+        for x in range(1, int(numeroPlaneos) + 1):
 
-            detalle = 'INSERT INTO enfermeria_enfermeriaplaneacion ( "consecutivoPlaneacion",  "fechaPlanea", "dosisCantidad", "cantidadPlaneada",  "diasTratamiento", "fechaRegistro", "estadoReg", "dosisUnidad_id", "enfermeraPlanea_id", frecuencia_id, suministro_id, "usuarioRegistro_id", "viaAdministracion_id",  enfermeria_id,  "turnoEnfermeriaPlanea_id") VALUES (' + "'" + str(consecutivoPlaneacion) + "', cast('" + str(fechaPlanea) + "' as timestamp)" + ' + INTERVAL ' + "'" + str('6 Hours') + "','" + str(dosis) + "','" + str(cantidad) + "','" + str(diasTratamiento) +  "','"  + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(dosis) + "','" + str(username_id) + "','"  + str(frecuencia.id) + "','" + str(sum.id) + "','" + str(username_id) + "','" + str(via) + "','"+ str(enfermeria.id) + "','" + str(turnoEnfermeria.id) + "')"
+            detalle = 'INSERT INTO enfermeria_enfermeriaplaneacion ( "consecutivoPlaneacion",  "fechaPlanea", "dosisCantidad", "cantidadPlaneada",  "diasTratamiento", "fechaRegistro", "estadoReg", "dosisUnidad_id", "enfermeraPlanea_id", frecuencia_id, suministro_id, "usuarioRegistro_id", "viaAdministracion_id", "enfermeriaRecibe_id",  enfermeria_id,  "turnoEnfermeriaPlanea_id") VALUES (' + "'" + str(consecutivoPlaneacion) + "', cast('" + str(desdePlanea) + "' as timestamp)" + ' + INTERVAL ' + "'"  + str(horasAMultiplicarTotales) + str(' Hours') + "'," + str(dosis) + ",'" + str(cantidad) + "','" + str(diasTratamiento) +  "','"  + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(medidaId.id) + "','" + str(username_id) + "','"  + str(frecuencia.id) + "','" + str(sum.id) + "','" + str(username_id) + "','" + str(viaId.id) +  "','" + str(enfermeriaRecibeId) + "','"+ str(enfermeria.id) + "','" + str(turnoEnfermeria.id) + "')"
             print(detalle)
             cur3.execute(detalle)
 
-            #fechaPlanea = fechaPlanea + str(timedelta(hours=frecuencia.numeroHoras))  # datetime after 10 days
-            print ("fechaPlanea = " , fechaPlanea)
+            horasAMultiplicarTotales = horasAMultiplicar * x
+            print("horasAMultiplicarTotales", horasAMultiplicarTotales)
             consecutivoPlaneacion = consecutivoPlaneacion + 1
 
         miConexion3.commit()
         miConexion3.close()
 
         return JsonResponse({'success': True, 'message': 'Planeacion de Enfermeria Creado!'})
+
+    except psycopg2.DatabaseError as error:
+        print("Entre por rollback", error)
+        if miConexion3:
+            print("Entro ha hacer el Rollback")
+            miConexion3.rollback()
+        raise error
+
+    finally:
+        if miConexion3:
+            cur3.close()
+            miConexion3.close()
+
+
+def GuardaAplicacionEnfermeria(request):
+    print("Entre GuardaAplicacionEnfermeria")
+
+    registroAplica = request.POST['registroAplica']
+    print ("registroAplica =", registroAplica)
+
+
+    username_id = request.POST['username_id']
+    print ("username_id =", username_id)
+
+    sede = request.POST['sede']
+    print ("sede =", sede)
+
+    #enfermeriaRecibeId = request.POST['enfermeriaRecibeId']
+    #print ("enfermeriaRecibeId =", enfermeriaRecibeId)
+
+    #recibe = EnfermeriaRecibe.objects.get(id=enfermeriaRecibeId)
+    #detalle = EnfermeriaDetalle.objects.get(id=recibe.enfermeriaDetalle_id)
+    #enfermeria = Enfermeria.objects.get(id=detalle.enfermeria_id)
+
+    turnoEnfermeria = TurnosEnfermeria.objects.get(id=username_id)
+    tiposTurnoEnfermeria = TiposTurnosEnfermeria.objects.get(id=turnoEnfermeria.tiposTurnosEnfermeria_id)
+
+    fechaAplica = request.POST['fechaAplica']
+    print ("fechaAplica =", fechaAplica)
+    dosis = request.POST['dosisA']
+    print("dosis =", dosis)
+    cantidad = request.POST['cantidadA']
+    print("cantidad =", cantidad)
+    medida = request.POST['medidaA']
+
+    medidaId = UnidadesDeMedidaDosis.objects.get(descripcion=medida)
+
+    print("medida =", medida)
+    suministro = request.POST['suministroA']
+    print("suministro =", suministro)
+
+    sum = Suministros.objects.get(nombre=suministro)
+
+    via = request.POST['viaA']
+    print("via =", via)
+    viaId = ViasAdministracion.objects.get(nombre=via)
+
+    diasTratamiento = request.POST['diasTratamientoA']
+
+    print("diasTratamiento =", diasTratamiento)
+
+    frecuenciaA = request.POST['frecuenciaA']
+    print ("frecuenciaA =", frecuenciaA)
+
+    frecuencia = FrecuenciasAplicacion.objects.get(descripcion=frecuenciaA)
+    print ("frecuencia =", frecuencia.id)
+
+    estadoReg = 'A'
+    fechaRegistro = datetime.datetime.now()
+
+    #Actualiza Planeacion de Enfermeria
+
+    miConexion3 = None
+    try:
+
+        miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                       password="123456")
+        cur3 = miConexion3.cursor()
+        # Primero creamos el despacho
+
+        print ("aqui voy")
+
+
+        detalle = 'UPDATE enfermeria_enfermeriaplaneacion SET "turnoEnfermeriaAplica_id" = ' + "'" + str(turnoEnfermeria.id) + "'," + '"enfermeraAplica_id" = ' + "'" + str(username_id) + "'"  + ', "fechaAplica" = ' + "'" + str(fechaAplica) + "' WHERE id =" + "'" + str(registroAplica) +"'"
+        print(detalle)
+        cur3.execute(detalle)
+
+
+        miConexion3.commit()
+        miConexion3.close()
+
+        return JsonResponse({'success': True, 'message': 'Aplicacion de Enfermeria Creado!'})
 
     except psycopg2.DatabaseError as error:
         print("Entre por rollback", error)
