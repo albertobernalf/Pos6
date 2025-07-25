@@ -111,4 +111,24 @@ select pla.id id, pla."fechaPlanea" fechaPlanea, tipos1.nombre turnoPlanea, plan
 	LEFT JOIN enfermeria_tiposturnosenfermeria tipos2 ON ( tipos2.id = pla."turnoEnfermeriaAplica_id") 
 	WHERE enf."sedesClinica_id" = '1' AND enf."ingresoPaciente_id" = '50133' AND pla."enfermeriaRecibe_id" = '7'
 
--- ojop cuando fui a aplicar medicamento no tenia el enfermeriaRecibe para cargar el load_dataplaneacionEnfermeria
+select * from clinico_tipodietas;
+
+select * from clinico_historialdietas;
+
+select * from clinico_historia order by id desc;
+
+SELECT dieta.id id, dieta.consecutivo consecutivo, his.folio folio, tipoDieta.nombre nombreTipoDieta, dieta.observaciones,
+	  pla.nombre profesional
+FROM clinico_historialdietas dieta
+INNER JOIN clinico_tipodietas tipoDieta ON (tipoDieta.id = dieta."tipoDieta_id")
+INNER JOIN clinico_historia his ON (his.id = dieta.historia_id)
+INNER JOIN admisiones_ingresos ing on (ing."tipoDoc_id" = his."tipoDoc_id" AND ing.documento_id = his.documento_id AND ing.consec = his."consecAdmision")
+INNER JOIN planta_planta pla on (pla.id = his."usuarioRegistro_id")	
+WHERE ING.ID = 50133
+
+detalle ='SELECT dieta.id id, dieta.consecutivo consecutivo, his.folio folio, tipoDieta.nombre nombreTipoDieta, dieta.observaciones, pla.nombre profesional FROM clinico_historialdietas dieta INNER JOIN clinico_tipodietas tipoDieta ON (tipoDieta.id = dieta."tipoDieta_id") INNER JOIN clinico_historia his ON (his.id = dieta.historia_id) INNER JOIN admisiones_ingresos ing on (ing."tipoDoc_id" = his."tipoDoc_id" AND ing.documento_id = his.documento_id AND ing.consec = his."consecAdmision") INNER JOIN planta_planta pla on (pla.id = his."usuarioRegistro_id") WHERE Iing.id = ' + "'" + str(ingresoId) + "'"
+
+select * from clinico_tiposfolio;
+
+select * from clinico_historialnotasenfermeria;
+

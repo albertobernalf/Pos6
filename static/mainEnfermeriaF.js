@@ -913,7 +913,7 @@ function arrancaEnfermeria(valorTabla,valorData)
 	    "info": false,
 		"showNEntries" : false,
             columnDefs: [
-		{ className: 'centered', targets: [0, 1, 2, 3, 4, 5] },
+		{ className: 'centered', targets: [0, 1, 2, ] },
 	    { width: '10%', targets: [2,3] },
 		{  
                     "targets": 3
@@ -959,7 +959,7 @@ function arrancaEnfermeria(valorTabla,valorData)
 	},
 
                 { data: "fields.id"},
-                		{ data: "fields.folio"},
+                { data: "fields.folio"},
                 { data: "fields.observaciones"},
                 { data: "fields.profesional"},
 

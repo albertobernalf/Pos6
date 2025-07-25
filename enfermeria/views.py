@@ -995,7 +995,7 @@ def Load_dataNotasEnfermeria(request, data):
     miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
                                        password="123456")
     curx = miConexionx.cursor()
-
+	
 
     detalle = 'SELECT notas.id id, his.folio folio,  notas.observaciones, pla.nombre profesional FROM clinico_historialnotasenfermeria notas  INNER JOIN clinico_historia his ON (his.id = notas.historia_id) INNER JOIN admisiones_ingresos ing on (ing."tipoDoc_id" = his."tipoDoc_id" AND ing.documento_id = his.documento_id AND ing.consec = his."consecAdmision") INNER JOIN planta_planta pla on (pla.id = his."usuarioRegistro_id") WHERE ing.id = ' + "'" + str(
         ingresoId) + "'"
