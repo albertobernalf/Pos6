@@ -259,6 +259,16 @@
                                         </table>
 			</div>
 
+	<!-- aqui viene el datattable dinamico desde clinica -- >
+
+		<!--   estop viene de clinico -->
+           <!-- DESDE AQUIP DATATABLE  -->
+
+                    <table class="table"
+                           style="height: 5px; background-color:LightGray; BORDERCOLOR=RED ; border: 8px solid black; border-color: #96D4D4;  width:99%;">
+                        <form class="form-inline" action="/crearFormulacionDef/" method="POST"
+                              id="FormaFormulacion">
+
                             <!-- INICIO TABLE DE  EL DATATABLE  -->
                             <div class="row">
                                 <div class="col-sm-12">
@@ -360,20 +370,14 @@
                                                     </table>
 
 
-                                                  </div>  
-                                            </div> <!-- cierrra el row  -->
 
-                                        </div> <!-- cierrra el body  -->
-                                    </div> <!-- cierrra el card  -->
+		<div align="left" height="10px" width="30px">
 
-                                </div>
-                            </div>
-                            <!-- FIN TABLE DE  EL DATATABLE  -->
-  <div class="row" style="width:100%">
-	</div>
+		 <div class="row" >
+				 <div class="col-sm-2">
+			          </div>
 
-		  <div class="row" style="width:100%">
-				 <div class="col-sm-6">
+									 <div class="col-sm-8">
 						 <label  for="serviciosAdministrativosDev">Servicio Devuelve:</label>   
                     							    
                                                         <select class="select-css" id="serviciosAdministrativosDev"
@@ -389,9 +393,33 @@
 		<div class="col-sm-6">
 	    <input type="button" class="btn btn-primary" value="Crear Devolucion"  onclick="GuardarDevolucion()"> 
 			</div>
+		</div> <!-- cierra el row -->
+
+		</div>
 
 
-		</div> <!-- cierra row -->
+                                                  </div>  
+                                            </div> <!-- cierrra el row  -->
+
+                                        </div> <!-- cierrra el body  -->
+                                    </div> <!-- cierrra el card  -->
+
+                                </div>
+                            </div>
+                            <!-- FIN TABLE DE  EL DATATABLE  -->
+                        </form>
+                    </table>
+  
+             <!-- HASTA AQUI DATATABLE -->
+
+
+		<!-- finaliza lo que viene de clinico -->      	
+
+
+		 
+
+	<!-- fin vien de clinico
+
 
 		</div>
 

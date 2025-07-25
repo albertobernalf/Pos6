@@ -545,10 +545,12 @@ def AdicionarDespachosDispensa(request):
                     historiaMedicamentos = HistoriaMedicamentos.objects.get(id=farmaciaDetalle.historiaMedicamentos_id)
 
 
-                comando = 'INSERT INTO farmacia_farmaciadespachosdispensa ("dosisCantidad","cantidadOrdenada","fechaRegistro", "estadoReg",despacho_id, "dosisUnidad_id", "farmaciaDetalle_id", "suministro_id","usuarioRegistro_id", "viaAdministracion_id")  VALUES ( ' + "'" + str(dosis) + "','" + str(cantidadMedicamento) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(despachoId) + "','" + str(MedidaDosis.id) + "','" + str(farmaciaDetalleId) + "','" + str(medicamentos) + "','" + str(username_id) + "','" + str(vias.id) +  "')"
+                comando = 'INSERT INTO farmacia_farmaciadespachosdispensa ("dosisCantidad","cantidadOrdenada","fechaRegistro", "estadoReg",despacho_id, "dosisUnidad_id", "farmaciaDetalle_id", "suministro_id","usuarioRegistro_id", "viaAdministracion_id")  VALUES ( ' + "'" + str(dosis) + "','" + str(cantidadMedicamento) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(despachoId) + "','" + str(MedidaDosis.id) + "','" + str(farmaciaDetalleId) + "','" + str(medicamentos) + "','" + str(username_id) + "','" + str(vias.id) +  "') RETURNING 1"
 
                 print(comando)
-                cur3.execute(comando)
+                resultado = cur3.execute(comando)
+
+                farmaciaDespachosDispensaId = cur3.fetchone()[0]
 
                 # Tercero creamos lo que Enfermeria recibe
                 print("farmaciaDetalleId =", farmaciaDetalleId)
@@ -556,9 +558,11 @@ def AdicionarDespachosDispensa(request):
                 enfermeriaDetalleId = EnfermeriaDetalle.objects.get(farmaciaDetalle_id=farmaciaDetalleId)
                 #print("vias =", vias)
 
-                comando = 'INSERT INTO enfermeria_enfermeriarecibe ("dosisCantidad","cantidadDispensada","fechaRegistro", "estadoReg", "dosisUnidad_id", "enfermeriaDetalle_id", "suministro_id","usuarioRegistro_id", "viaAdministracion_id",despachos_id, "farmaciaDetalle_id")  VALUES ( ' + "'" + str(dosis) + "','" + str(cantidadMedicamento) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(MedidaDosis.id) + "','" + str(enfermeriaDetalleId.id) + "','" + str(medicamentos) + "','" + str(username_id) + "','" + str(vias.id) + "','"  + str(despachoId) + "','"  + str(farmaciaDetalleId) + "')"
+                comando = 'INSERT INTO enfermeria_enfermeriarecibe ("dosisCantidad","cantidadDispensada","fechaRegistro", "estadoReg", "dosisUnidad_id", "enfermeriaDetalle_id", "suministro_id","usuarioRegistro_id", "viaAdministracion_id",despachos_id, "farmaciaDetalle_id", "farmaciaDespachosDispensa_id")  VALUES ( ' + "'" + str(dosis) + "','" + str(cantidadMedicamento) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(MedidaDosis.id) + "','" + str(enfermeriaDetalleId.id) + "','" + str(medicamentos) + "','" + str(username_id) + "','" + str(vias.id) + "','"  + str(despachoId) + "','"  + str(farmaciaDetalleId) + "','" + str(farmaciaDespachosDispensaId) +  "')"
                 print(comando)
                 cur3.execute(comando)
+
+
 
                 # Cuarto cargamos a la cuenta del paciente
 

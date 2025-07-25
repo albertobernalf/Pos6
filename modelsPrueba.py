@@ -802,8 +802,16 @@ Cufe: daeeb9343955c6037479b2e1b7bb485526f7524e5b085b4a5eb6e64298b22873bd6ef35b92
 -- ojo toca mejporar las pántallas en darmacia y enfemeria algo pasa
 - ojo los mensajes de satisfactorio en azul y de error en rojo primero hay que borrarlos y despues si escribir o sio quedan montados
 
+
+-- Para el dia lunes 28-julio
+  -- Buenoi seguir con lo que traje de clinico a enfermeria datatable dinamico, falta los scripts a mainenfermeria
+  -- devoluciones enfermeria (crear datatable dinamico para registrar las devolucuone y hcer fncion guardar de enfermeria y farmacia a la vez . y modulo farmacia-devoluciones hacer terminar 
+
 ojo pendiente en aplicacion de medicamentos arreglar cuando aplica la modal no pasa el enfemeriarecibeid a load_dataplaneacionenfermeria
 -- ops no entiendo por que no me inicializa combos en las dietas que pasar
 -- ops no sep por que no refresca la grilla de dietas
 -- ojo que pasa con el servicio adminiustrativo en toda la planeacion y la aplicacion de mediacmentos
+
+-- ops en enfermeiarecibe campo farmaciaddespaciodispensa, se creo nuevo aqui creo hay un error verificar
+-- ops datatablke despachos en farmacia no funcion
 

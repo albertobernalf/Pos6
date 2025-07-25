@@ -1003,7 +1003,7 @@ function arrancaEnfermeria(valorTabla,valorData)
   lengthMenu: [2, 4, 15],
            processing: true,
             serverSide: false,
-            scrollY: '250px',
+            scrollY: '120px',
 	    scrollX: true,
 	    scrollCollapse: true,
             paging:false,
