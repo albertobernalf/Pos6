@@ -18,6 +18,7 @@ let dataTableTurnosEnfermeria = false;
 let dataTablePlaneacionEnfermeria = false;
 let dataTableDietaEnfermeria = false;
 let dataTableNotasEnfermeria = false;
+let dataTableDevolucionEnfermeriaInitialized = false;
 
 var controlMed = 0;
 
@@ -296,6 +297,7 @@ function arrancaEnfermeria(valorTabla,valorData)
                 { data: "fields.via"},
                 { data: "fields.frecuencia"},
                 { data: "fields.diasTratamiento"},
+
                         ]
             }
 	        
@@ -971,6 +973,115 @@ function arrancaEnfermeria(valorTabla,valorData)
 
   }
 
+
+    if (valorTabla == 10)
+    {
+        let dataTableOptionsDevolucionEnfermeria  ={
+   dom: "<'row mb-1'<'col-sm-3'B><'col-sm-3'><'col-sm-6'f>>" + // B = Botones a la izquierda, f = filtro a la derecha
+             "<'row'<'col-sm-12'tr>>" +
+             "<'row mt-3'<'col-sm-5'i><'col-sm-7'p>>",
+  buttons: [
+    {
+      extend: 'excelHtml5',
+      text: '<i class="fas fa-file-excel"></i> ',
+      titleAttr: 'Exportar a Excel',
+      className: 'btn btn-success',
+    },
+    {
+      extend: 'pdfHtml5',
+      text: '<i class="fas fa-file-pdf"></i> ',
+      titleAttr: 'Exportar a PDF',
+      className: 'btn btn-danger',
+    },
+    {
+      extend: 'print',
+      text: '<i class="fa fa-print"></i> ',
+      titleAttr: 'Imprimir',
+      className: 'btn btn-info',
+    },
+  ],
+  lengthMenu: [2, 4, 15],
+           processing: true,
+            serverSide: false,
+            scrollY: '250px',
+	    scrollX: true,
+	    scrollCollapse: true,
+            paging:false,
+            columnDefs: [
+		{ className: 'centered', targets: [0, 1, 2, 3] },
+	    { width: '10%', targets: [2,3] },
+		{  
+                    "targets": 12
+               }
+            ],
+	 pageLength: 3,
+	  destroy: true,
+	  language: {
+		    processing: 'Procesando...',
+		    lengthMenu: 'Mostrar _MENU_ registros',
+		    zeroRecords: 'No se encontraron resultados',
+		    emptyTable: 'Ningún dato disponible en esta tabla',
+		    infoEmpty: 'Mostrando registros del 0 al 0 de un total de 0 registros',
+		    infoFiltered: '(filtrado de un total de _MAX_ registros)',
+		    search: 'Buscar:',
+		    infoThousands: ',',
+		    loadingRecords: 'Cargando...',
+		    paginate: {
+			      first: 'Primero',
+			      last: 'Último',
+			      next: 'Siguiente',
+			      previous: 'Anterior',
+		    }
+			},
+
+           ajax: {
+                 url:"/load_dataDevolucionEnfermeria/" +  data,
+                 type: "POST",
+                 dataSrc: ""
+            },
+            columns: [
+
+	{
+	  "render": function ( data, type, row ) {
+                        var btn = '';
+     btn = btn + " <button class='Devolver btn-primary ' data-pk='" + row.pk + "'>" + '<i class="fa-duotone fa-regular fa-thumbs-up"></i>' + "</button>";
+                       return btn;
+                    },
+
+	},
+           
+                 { data: "fields.id"},
+		{
+			target: 2,
+			visible: false
+		},
+		{
+			target: 3,
+			visible: false
+		},
+		{
+			target: 4,
+			visible: false
+		},
+
+                { data: "fields.folio"},
+  
+                { data: "fields.consecutivoMedicamento"},
+                { data: "fields.dosis"},
+                { data: "fields.cantidad"},
+                { data: "fields.UnidadMedida"},
+                { data: "fields.medicamento"},
+                { data: "fields.via"},
+                { data: "fields.frecuencia"},
+                { data: "fields.diasTratamiento"},
+                        ]
+            }
+	        
+		   dataTable = $('#tablaDevolucionEnfermeria').DataTable(dataTableOptionsDevolucionEnfermeria);
+
+
+  }
+
   
 }
 
@@ -1124,6 +1235,9 @@ $('#tablaPanelEnfermeria tbody').on('click', '.miIngresoEnfermeriaId', function(
 
 	     arrancaEnfermeria(9,data);
 	     dataTableNotasEnfermeriaInitialized = true;
+
+	     arrancaEnfermeria(10,data);
+	     dataTableDevolucionEnfermeriaInitialized = true;
 
       
   });
@@ -1356,6 +1470,52 @@ $('#tablaMedicamentosEnfermeria tbody').on('click', '.Planear', function() {
 
 
 
+$('#tablaDevolucionEnfermeria tbody').on('click', '.Devolver', function() {
+
+	alert ("A devolver Meidcamentos");
+
+	     var post_id = $(this).data('pk');
+	alert ("post_id = " + post_id);
+	var row = $(this).closest('tr'); // Encuentra la fila
+
+
+
+	var table = $('#tablaDevolucionEnfermeria').DataTable();  // Inicializa el DataTable jquery//
+	
+ 	var rowindex = table.row(row).data(); // Obtiene los datos de la fila
+       console.log("rowindex= " , rowindex);
+
+	    	 dato1 = Object.values(rowindex);
+		console.log(" fila seleccionad d evuelta dato1 = ",  dato1);
+	        dato3 = dato1[2];
+		console.log(" fila selecciona de vuelta dato3 = ",  dato3);
+	        console.log ( "Suministro es =  = " , dato3.medicamento); 
+
+
+
+	// Aquip cargar modal planeacion medicamentos
+	 $('#postFormModalDevolvernEnfermeria').trigger("reset");
+
+            $('#modelHeadingDevolvernEnfermeria').html("Devolver a Farmacia");
+		document.getElementById("dosisDev").value =dato3.dosis;
+		document.getElementById("medidaDev").value = dato3.UnidadMedida;
+		document.getElementById("cantidadDev").value = dato3.cantidad;
+		document.getElementById("suministroDev").value = dato3.medicamento;
+		document.getElementById("viaDev").value = dato3.via;
+		alert("via = " + dato3.via);
+		document.getElementById("frecuenciaDev").value = dato3.frecuencia;
+		document.getElementById("diasTratamientoDev").value = dato3.diasTratamiento;
+		document.getElementById("numeroPlaneos").value = 0;
+		document.getElementById("enfermeriaRecibeId").value = post_id;
+
+
+            $('#ModalDevolverEnfermeria').modal('show');     
+
+
+  });
+
+
+
 function GuardarPlaneacion() 
 {
 	alert ("A Guardar planeacion medicamentos");
@@ -1419,6 +1579,68 @@ function GuardarPlaneacion()
 
 		 $('#postFormModalPlaneacionEnfermeria').trigger("reset");
 		 $('#ModalPlaneacionEnfermeria').modal('hide');  
+
+
+
+	     arrancaEnfermeria(7,data);
+	     dataTablePlaneacionEnfermeriaInitialized = true;
+
+      
+  };
+
+
+
+
+function GuardarDevolver() 
+{
+	alert ("A Guardar Devolver medicamentos");
+
+	     var post_id = $(this).data('pk');
+	alert ("post_id = " + post_id);
+	var ingresoId = document.getElementById("ingresoId").value ;
+
+   	var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
+        var username = document.getElementById("username").value;
+        var nombreSede = document.getElementById("nombreSede").value;
+    	var sede = document.getElementById("sede").value;
+        var username_id = document.getElementById("username_id").value;
+
+	var enfermeriaRecibeId  = document.getElementById("enfermeriaRecibeId").value;
+	var cantidadDev = document.getElementById("cantidadDev").value;
+
+         var data =  {}   ;
+        data['username'] = username;
+        data['sedeSeleccionada'] = sedeSeleccionada;
+        data['nombreSede'] = nombreSede;
+        data['sede'] = sede;
+        data['username_id'] = username_id;
+	data['enfermeriaRecibeId'] = enfermeriaRecibeId;
+	data['desdePlanea'] = desdePlanea;
+	data['numeroPlaneos'] = numeroPlaneos;
+	data['frecuenciaP'] = frecuenciaP;
+	data['ingresoId'] = ingresoId;
+
+
+	
+ 	    data = JSON.stringify(data);
+
+	  $.ajax({
+                data: {'sede':sede,'username_id':username_id, 'enfermeriaRecibeId':enfermeriaRecibeId, 'cantidadDev' : cantidadDev },
+	        url: "/guardaDevolverEnfermeria/",
+                type: "POST",
+                dataType: 'json',
+                success: function (info) {
+			
+
+                },
+            error: function (request, status, error) {
+		alert("llegue con error ", error);
+		document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error + ' ' + error
+	   	    	}
+            });
+
+		 $('#postFormModalDevolverEnfermeria').trigger("reset");
+		 $('#ModalDevolverEnfermeria').modal('hide');  
 
 
 

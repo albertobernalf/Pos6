@@ -215,6 +215,131 @@
 </article>
 
 
+<article id="Devoluciones">
+        	
+<div class="container my-2" style="width:100%">
+
+		<div align="left" height="15px" width="50px">
+			TipoDoc: <span id="nombreTipoDocDev"></span>
+			Doc: <span id="documentoDev"></span>
+			Paciente: <span id="pacienteDev"></span>
+			Ingreso: <span id="consecutivoAdmisionDev"></span>
+			Servicio: <span id="servicioDev"></span>
+			Hab: <span id="habitacionDev"></span>
+
+		</div>
+
+            	   <div class="row" style="width:100%">
+
+                                        <table id="tablaDevolucionEnfermeria" class="display table table-striped table-sm fs-6 nowrap" style="width:100%">
+                                           <thead>
+                                            <tr>    
+					<bold>    
+	        			<th style="width:5px">S1</th> 	
+			        	                 		                              
+				        <th>id</th>
+				        <th style="width:150px">tipoDoc</th>
+                                	<th>Documento</th>
+	                                <th>Paciente</th>
+        	                        <th>Folio</th>
+        	                        <th>Consecutivo</th>
+        	                        <th>Dosis</th>
+        	                        <th>Cantidad</th>
+	                                <th>Medida</th>
+                	                <th>Medicamento</th>
+                	                <th>via</th>
+                	                <th>Frecuencia</th>
+                	                <th>Dias</th>
+			
+					</bold>                                  
+                                            </tr>
+                                            </thead>
+                                            <tbody style="margin-left:0">
+                                            </tbody>
+                                        </table>
+			</div>
+		</div>
+
+  <!-- Creacion Modal Devolver Medicamentos  -->
+
+        <div class="container">
+            <div class="card">
+                <div class="myForm">
+                    <form id="postFormModalDevolverEnfermeria" method="POST" onsubmit="CierraModal()">
+                        <div class="modal fade" id="ModalDevolverEnfermeria" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+                            <div class="modal-dialog  modal-lg modal-dialog-scrollable  modal-dialog-center" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                           <div  class="modal-title" id="exampleModalLabel" style="text-align:center;"><font gont-family="Times New roman" size=5">Devolver a Farmacia</font> </div>
+                                        <button type="button" class="close" data-bs-dismiss="modal"  aria-label="Close"> <span aria-hidden="true">&times;</span>  </button>
+                                    </div>
+                                    <div class="modal-body">
+				
+                                        <div class="row row-cols-5 mt-3">
+                                            <div class="col">
+                                                <label for="dosisDev"  class="col-sm-10 col-form-label col-form-label-sm">Dosis:</label>
+						
+                                               <input type="text" id="dosisDev" name="dosisDev" value="" readonly>
+					      
+                                            </div> 
+					  <div class="col">
+                                                <label for="medidaDev"  class="col-sm-10 col-form-label col-form-label-sm">Medida:</label>
+                                                <input type="text" id="medidaDev" name="medidaDev" value="" readonly>
+                                            </div>
+
+					<div class="col">
+                                          <label for="cantidadDev"  class="col-sm-10 col-form-label col-form-label-sm">Cantidad:</label>
+                                                <input type="text" id="cantidadDev" name="cantidadDev" value="" >
+                                            </div>
+				
+					  <div class="col">
+                                                <label for="suministroDev"  class="col-sm-10 col-form-label col-form-label-sm">Suministro:</label>
+                                                <input type="text" id="suministroDev" name="suministroDev" value="" readonly>
+                                            </div>
+					  <div class="col">
+                                                <label for="viaDev"  class="col-sm-10 col-form-label col-form-label-sm">Via:</label>
+                                                <input type="text" id="viaDev" name="viaDev" value="">
+                                            </div>
+
+					  <div class="col">
+                                                <label for="frecuenciaDev"  class="col-sm-10 col-form-label col-form-label-sm">Frecuencia:</label>
+                                                <input type="text" id="frecuenciaDev" name="frecuenciaDev" value="" readonly>
+                                            </div>
+
+					  <div class="col">
+                                                <label for="diasTratamientoDev"  class="col-sm-10 col-form-label col-form-label-sm">Dias:</label>
+                                                <input type="text" id="diasTratamientoDev" name="diasTratamientoDev" value="" readonly>
+                                            </div>
+
+					  <div class="col">
+                                            </div>
+
+
+                                        </div> <!-- Cierra row -->
+
+                                    </div> <!-- Cierra body -->
+                                    <div class="modal-footer">
+				 <span id="mensajesErrorModalDevolverEnfermeria" name="mensajesErrorModalDevolverEnfermeria" style= "color:red; font-size:18px; line-height:35px; font-family: Calibri;" > </span>
+                                       <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar   </button>
+
+                                         <input type="button" class="btn btn-primary" value="Guardar"  onclick="GuardarDevolver()"> 
+                                        
+                                    </div> <!-- Cierra footer-->
+                                </div> <!-- Cierra content -->
+                            </div> <!-- Cierra modal dialog -->
+                        </div> <!-- Cierra modal -->
+                    </form> <!-- Cierra cla forma-->
+                </div> <!-- Cierra muform -->
+            </div> <!-- Cierra el Card-->
+        </div> <!-- Cierra container -->
+
+            <!-- Fin Creacion Modal Devolver Enfermeria-->
+
+	
+
+</article>
+
+
 
 <article id="Medicamentos">
 
@@ -254,6 +379,7 @@
                 	                <th>via</th>
                 	                <th>Frecuencia</th>
                 	                <th>Dias</th>
+
 					</bold>                                  
                                             </tr>
                                             </thead>
@@ -468,6 +594,9 @@
         </div> <!-- Cierra container -->
 
             <!-- Fin Creacion Modal Aplicacion Medicamentos Enfermeria-->
+
+
+
 
 
    			
@@ -934,11 +1063,6 @@
 
 
 
-<article id="Devoluciones">
-        	
-	
-
-</article>
 
 
 

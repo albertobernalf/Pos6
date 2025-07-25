@@ -713,3 +713,85 @@ def CambiaEstadoDespacho(request):
     print(datosPaciente)
 
     return JsonResponse({'success': True, 'message': 'Estado de Despacho Actualizado!'})
+
+def Load_dataDespachosFarmacia(request, data):
+    print("Entre Load_dataDespachosFarmacia")
+
+    context = {}
+    d = json.loads(data)
+
+    username = d['username']
+    sede = d['sede']
+    username_id = d['username_id']
+
+    nombreSede = d['nombreSede']
+    print("sede:", sede)
+    print("username:", username)
+    print("username_id:", username_id)
+
+    fechaRegistro = datetime.datetime.now()
+
+    despachosFarmacia = []
+
+    miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                   password="123456")
+    curx = miConexionx.cursor()
+
+    detalle = 'select desp.id id, desp.id despacho,serv1.nombre servEntrega ,  pla1.nombre entrega , serv2.nombre servRecibe, pla2.nombre recibe FROM farmacia_farmaciadespachos desp INNER JOIN farmacia_farmaciadespachosdispensa disp ON (disp.despacho_id = desp.id) LEFT JOIN sitios_serviciosadministrativos serv1 ON (serv1.id = desp."serviciosAdministrativosEntrega_id") LEFT JOIN sitios_serviciosadministrativos serv2 ON (serv2.id = desp."serviciosAdministrativosRecibe_id") LEFT JOIN planta_planta pla1 ON (pla1.id = desp."usuarioEntrega_id") LEFT JOIN planta_planta pla2 ON (pla2.id = desp."usuarioRecibe_id") WHERE desp."fechaRegistro" >= ' + "'" + str(fechaRegistro) + "'"
+
+    print(detalle)
+
+    curx.execute(detalle)
+
+    for id, despacho, servEntrega, entrega, servRecibe, recibe  in curx.fetchall():
+        despachosFarmacia.append(
+            {"model": "farmacia.farmaciaDespachos", "pk": id, "fields":
+                {'id': id, 'despacho': despacho, 'servEntrega':servEntrega, 'entrega': entrega, 'servRecibe': servRecibe ,'recibe':recibe  }})
+
+    miConexionx.close()
+    print(despachosFarmacia)
+
+    serialized1 = json.dumps(despachosFarmacia, default=str)
+
+    return HttpResponse(serialized1, content_type='application/json')
+
+def Load_dataDespachosDetalleFarmacia(request, data):
+    print("Entre Load_dataDespachosDetalleFarmacia")
+
+    context = {}
+    d = json.loads(data)
+
+    username = d['username']
+    sede = d['sede']
+    username_id = d['username_id']
+
+    nombreSede = d['nombreSede']
+    print("sede:", sede)
+    print("username:", username)
+    print("username_id:", username_id)
+
+    fechaRegistro = datetime.datetime.now()
+
+    despachosDetalleFarmacia = []
+
+    miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                   password="123456")
+    curx = miConexionx.cursor()
+
+    detalle = 'select disp.id id ,disp."dosisCantidad" dosis, med.descripcion  unidadMedida, disp."cantidadOrdenada" cantidad , sum.nombre suministro FROM farmacia_farmaciadespachos desp INNER JOIN farmacia_farmaciadespachosdispensa disp ON (disp.despacho_id = desp.id) LEFT JOIN sitios_serviciosadministrativos serv1 ON (serv1.id = desp."serviciosAdministrativosEntrega_id") LEFT JOIN sitios_serviciosadministrativos serv2 ON (serv2.id = desp."serviciosAdministrativosRecibe_id") LEFT JOIN planta_planta pla1 ON (pla1.id = desp."usuarioEntrega_id") LEFT JOIN planta_planta pla2 ON (pla2.id = desp."usuarioRecibe_id") INNER JOIN clinico_unidadesdemedidadosis med ON (med.id = disp."dosisUnidad_id") INNER JOIN facturacion_suministros sum ON (sum.id = disp.suministro_id) WHERE desp."fechaRegistro" >= ' + "'" + str(fechaRegistro) + "'"
+
+    print(detalle)
+
+    curx.execute(detalle)
+
+    for id, dosis, unidadMedida, cantidad, suministro  in curx.fetchall():
+        despachosDetalleFarmacia.append(
+            {"model": "farmacia.farmaciaDespachosDetalle", "pk": id, "fields":
+                {'id': id, 'dosis': dosis, 'unidadMedida':unidadMedida, 'cantidad': cantidad, 'suministro': suministro}})
+
+    miConexionx.close()
+    print(despachosDetalleFarmacia)
+
+    serialized1 = json.dumps(despachosDetalleFarmacia, default=str)
+
+    return HttpResponse(serialized1, content_type='application/json')

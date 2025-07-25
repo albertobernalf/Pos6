@@ -21,7 +21,7 @@
         <li><a href="#Despachos"><span class="fa-solid fa-user-doctor-message"></span> <span class="tab-text"> </span> Despachos </a></li>
         <li><a href="#Devoluciones"><span class="fa-solid fa-user-doctor-message"></span> <span  class="tab-text"> </span> Devoluciones</a></li>
         <li><a href="#DispensacionGeneral"><span class="fa-solid fa-user-doctor-message"></span> <span  class="tab-text"> </span> Dispensacion General </a></li>
-
+	<li><a href="#ConsultaDespachos"><span class="fa-solid fa-user-doctor-message"></span> <span class="tab-text"> </span>Despachos</a></li>
     </ul>
 </div>
 
@@ -153,10 +153,67 @@
 
             <!-- Fin Creacion Modal estado Despachoo  -->
 
-
-	
-
 	</article>
+
+<article id="ConsultaDespachos">
+        	
+ <!-- INICIO TABLE DE  EL DATATABLE  -->
+		<div class="container my-2">
+
+
+   			   <div class="row">
+				
+                                        <table  id= "tablaDespachosFarmacia" class=" display table table-striped table-sm fs-6 nowrap" style="width: 100%">
+                                           <thead>
+                                            <tr>    
+						<bold> 
+					     <th>Sel</th>    
+					     <th>Despacho Id</th>                                                                                          
+ 						  <th>ServEntrega</th>                             
+						 <th>Entrega</th>                                        
+						 <th>SerSalida</th>  
+						 <th>Recibe</th>  					
+			              
+					</bold>                                  
+
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                     
+                                        </table>
+                                    </div>
+
+   			   <div class="row">
+				
+                                        <table  id= "tablaDespachosDetalleFarmacia" class=" display table table-striped table-sm fs-6 nowrap" style="width: 100%">
+                                           <thead>
+                                            <tr>    
+						<bold> 
+					     <th>Sel</th>    
+					     <th>id</th>                                                                                          
+ 						  <th>Despacho</th>                             
+						 <th>Dosis</th>                                        
+						 <th>UMedida</th>  
+						 <th>Cantidad</th>  					
+					 <th>Insumo</th>     
+
+				              
+					</bold>                                  
+
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                     
+                                        </table>
+                                    </div>
+
+
+                                </div>
+
+
+</article>
 
 
         <article id="Despachos">
@@ -470,6 +527,10 @@
    </article>
 
 
+
+
+
+
 <article id="DispensacionGeneral">
         	
 
@@ -483,13 +544,6 @@
 
 
 </article>
-
-<article id="ConsultaDespachos">
-        	
-
-
-</article>
-
 
 
      
@@ -512,7 +566,7 @@
 {% block footer %}
 <div class="marco">
     <ul class="tabs">
-	<li><a href="#ConsultaDespachos"><span class="fa-solid fa-user-doctor-message"></span> <span class="tab-text"> </span> Consulta Despachos</a></li>
+
  </ul>
 </div>
 

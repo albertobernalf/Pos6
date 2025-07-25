@@ -696,6 +696,94 @@ def GuardaPlaneacionEnfermeria(request):
             miConexion3.close()
 
 
+def GuardaDevolverEnfermeria(request):
+    print("Entre GuardaDevolverEnfermeria")
+
+    username_id = request.POST['username_id']
+    print ("username_id =", username_id)
+
+    sede = request.POST['sede']
+    print ("sede =", sede)
+
+    enfermeriaRecibeId = request.POST['enfermeriaRecibeId']
+    print ("enfermeriaRecibeId =", enfermeriaRecibeId)
+
+    recibe = EnfermeriaRecibe.objects.get(id=enfermeriaRecibeId)
+    detalle = EnfermeriaDetalle.objects.get(id=recibe.enfermeriaDetalle_id)
+    enfermeria = Enfermeria.objects.get(id=detalle.enfermeria_id)
+
+    turnoEnfermeria = TurnosEnfermeria.objects.get(id=username_id)
+    tiposTurnoEnfermeria = TiposTurnosEnfermeria.objects.get(id=turnoEnfermeria.tiposTurnosEnfermeria_id)
+
+    dosis = request.POST['dosisDev']
+    print("dosis =", dosis)
+    cantidad = request.POST['cantidadDev']
+    print("cantidad =", cantidad)
+    medida = request.POST['medidaDev']
+
+    medidaId = UnidadesDeMedidaDosis.objects.get(descripcion=medida)
+
+    print("medida =", medida)
+    suministro = request.POST['suministroDev']
+    print("suministro =", suministro)
+
+    sum = Suministros.objects.get(nombre=suministro)
+
+    via = request.POST['viaDev']
+    print("via =", via)
+    viaId = ViasAdministracion.objects.get(nombre=via)
+
+    diasTratamiento = request.POST['diasTratamientoDev']
+
+    print("diasTratamiento =", diasTratamiento)
+
+    frecuenciaP = request.POST['frecuenciaDev']
+    print ("frecuenciaP =", frecuenciaP)
+
+    frecuencia = FrecuenciasAplicacion.objects.get(descripcion=frecuenciaP)
+    print ("frecuencia =", frecuencia.id)
+
+
+    estadoReg = 'A'
+    fechaRegistro = datetime.datetime.now()
+
+    #Actualiza Planeacion de Enfermeria
+
+    consecutivoPlaneacion = 1
+
+    miConexion3 = None
+    try:
+
+        miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                       password="123456")
+        cur3 = miConexion3.cursor()
+        # Primero creamos el despacho
+
+        print ("aqui a Devolver a framacia ")
+
+        detalle = 'INSERT INTO enfermeria_enfermeriaplaneacion ( "consecutivoPlaneacion",  "fechaPlanea", "dosisCantidad", "cantidadPlaneada",  "diasTratamiento", "fechaRegistro", "estadoReg", "dosisUnidad_id", "enfermeraPlanea_id", frecuencia_id, suministro_id, "usuarioRegistro_id", "viaAdministracion_id", "enfermeriaRecibe_id",  enfermeria_id,  "turnoEnfermeriaPlanea_id") VALUES (' + "'" + str(consecutivoPlaneacion) + "', cast('" + str(desdePlanea) + "' as timestamp)" + ' + INTERVAL ' + "'"  + str(horasAMultiplicarTotales) + str(' Hours') + "'," + str(dosis) + ",'" + str(cantidad) + "','" + str(diasTratamiento) +  "','"  + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(medidaId.id) + "','" + str(username_id) + "','"  + str(frecuencia.id) + "','" + str(sum.id) + "','" + str(username_id) + "','" + str(viaId.id) +  "','" + str(enfermeriaRecibeId) + "','"+ str(enfermeria.id) + "','" + str(turnoEnfermeria.id) + "')"
+        print(detalle)
+        cur3.execute(detalle)
+
+
+        miConexion3.commit()
+        miConexion3.close()
+
+        return JsonResponse({'success': True, 'message': 'Planeacion de Enfermeria Creado!'})
+
+    except psycopg2.DatabaseError as error:
+        print("Entre por rollback", error)
+        if miConexion3:
+            print("Entro ha hacer el Rollback")
+            miConexion3.rollback()
+        raise error
+
+    finally:
+        if miConexion3:
+            cur3.close()
+            miConexion3.close()
+
+
 def GuardaAplicacionEnfermeria(request):
     print("Entre GuardaAplicacionEnfermeria")
 
@@ -1013,5 +1101,43 @@ def Load_dataNotasEnfermeria(request, data):
 
 
     serialized1 = json.dumps(notasEnfermeria, default=str)
+
+    return HttpResponse(serialized1, content_type='application/json')
+
+def Load_dataDevolucionEnfermeria(request, data):
+    print("Entre Load_dataDevolucionEnfermeria")
+
+    context = {}
+    d = json.loads(data)
+
+    ingresoId = d['ingresoId']
+
+    print ("ingresoId =", ingresoId)
+
+
+    devolucionEnfermeria = []
+
+    miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                       password="123456")
+    curx = miConexionx.cursor()
+
+    detalle = 'SELECT recibe.id id, tipos.nombre tipoDoc, usu.documento documento, usu.nombre paciente, hist.folio folio,   fardet."consecutivoMedicamento" consecutivoMedicamento, recibe."dosisCantidad" dosis, recibe."cantidadDispensada" cantidad, 	  medida.descripcion UnidadMedida, sum.nombre medicamento, via.nombre via , frec.descripcion frecuencia, enfdet."diasTratamiento" FROM admisiones_ingresos ing INNER JOIN clinico_historia hist ON (hist."tipoDoc_id" = ing."tipoDoc_id" AND hist.documento_id=ing.documento_id AND hist."consecAdmision" = ing.consec) INNER JOIN farmacia_farmacia far ON (far.historia_id= hist.id) INNER JOIN farmacia_farmaciadetalle fardet ON (fardet.farmacia_id = far.id) INNER JOIN	enfermeria_enfermeriarecibe recibe ON (recibe."farmaciaDetalle_id" = fardet.id) INNER JOIN	enfermeria_enfermeriadetalle enfdet ON (enfdet.id = recibe."enfermeriaDetalle_id") INNER JOIN facturacion_suministros sum ON (sum.id = recibe.suministro_id) INNER JOIN clinico_viasadministracion via ON (via.id = recibe."viaAdministracion_id") INNER JOIN clinico_unidadesdemedidadosis medida ON (medida.id = recibe."dosisUnidad_id") LEFT JOIN clinico_frecuenciasaplicacion frec ON (frec.id = enfdet."frecuencia_id") INNER JOIN usuarios_usuarios usu ON (usu.id = ing.documento_id) INNER JOIN usuarios_tiposdocumento tipos ON (tipos.id = usu."tipoDoc_id")	WHERE ing.id=' + "'" + str(ingresoId) + "' UNION " + ' SELECT recibe.id id, tipos.nombre tipoDoc, usu.documento documento, usu.nombre paciente, 0 folio,  fardet."consecutivoMedicamento" consecutivoMedicamento, recibe."dosisCantidad" dosis,  recibe."cantidadDispensada" cantidad, 	  medida.descripcion UnidadMedida, sum.nombre medicamento, via.nombre via , frec.descripcion frecuencia, enfdet."diasTratamiento"  FROM admisiones_ingresos ing INNER JOIN farmacia_farmacia far ON (far."ingresoPaciente_id"= ing.id) INNER JOIN farmacia_farmaciadetalle fardet ON (fardet.farmacia_id = far.id) INNER JOIN enfermeria_enfermeriarecibe recibe ON (recibe."farmaciaDetalle_id" = fardet.id) INNER JOIN	enfermeria_enfermeriadetalle enfdet ON (enfdet.id = recibe."enfermeriaDetalle_id")  INNER JOIN facturacion_suministros sum ON (sum.id = recibe.suministro_id) INNER JOIN clinico_viasadministracion via ON (via.id = recibe."viaAdministracion_id") INNER JOIN clinico_unidadesdemedidadosis medida ON (medida.id = recibe."dosisUnidad_id") LEFT JOIN clinico_frecuenciasaplicacion frec ON (frec.id = enfdet."frecuencia_id") INNER JOIN usuarios_usuarios usu ON (usu.id = ing.documento_id) INNER JOIN usuarios_tiposdocumento tipos ON (tipos.id = usu."tipoDoc_id")	WHERE ing.id=' + "'" + str(ingresoId) + "' ORDER BY 5,6"
+
+
+    print(detalle)
+
+    curx.execute(detalle)
+
+    for id, tipoDoc, documento, paciente, folio,  consecutivoMedicamento, dosis, cantidad,  UnidadMedida, medicamento, via, frecuencia, diasTratamiento in curx.fetchall():
+            devolucionEnfermeria.append({"model": "ingresos.ingresos", "pk": id, "fields":
+                {'id': id, 'tipoDoc': tipoDoc, 'Documento': documento, 'paciente': paciente,
+                 'folio': folio,   'consecutivoMedicamento': consecutivoMedicamento, 'dosis':dosis,   'cantidad': cantidad, 'UnidadMedida': UnidadMedida,
+                   'medicamento': medicamento,'via':via, 'frecuencia':frecuencia, 'diasTratamiento':diasTratamiento}})
+
+    miConexionx.close()
+    print("devolucionEnfermeria = " , devolucionEnfermeria)
+
+
+    serialized1 = json.dumps(devolucionEnfermeria, default=str)
 
     return HttpResponse(serialized1, content_type='application/json')
