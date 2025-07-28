@@ -680,8 +680,8 @@ const initDataTablePanelFarmacia = async () => {
         //arrancaFarmacia(2,data);
 	    //dataTableFarmaciaDespachosInitialized = true;
 
-        arrancaFarmacia(4,data);
-	    dataTableFarmaciaDespachosDispensaInitialized = true;
+      //  arrancaFarmacia(4,data);
+	//    dataTableFarmaciaDespachosDispensaInitialized = true;
 
 
 }

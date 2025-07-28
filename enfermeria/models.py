@@ -476,7 +476,7 @@ class EnfermeriaDevolucion(models.Model):
     usuarioDevuelve = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True, on_delete=models.PROTECT   , related_name='PlantaDevuelve4353')
     serviciosAdministrativosRecibe = models.ForeignKey('sitios.ServiciosAdministrativos', blank=True,null= True, editable=True,  on_delete=models.PROTECT,   related_name='servRecibe32431')
     usuarioRecibe = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True, on_delete=models.PROTECT   , related_name='PlantaRecibe4553')
-    observaciones =  models.CharField(max_length=250,  editable=True,  blank=True)
+    #observaciones =  models.CharField(max_length=250,  editable=True,  blank=True)
     fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)
     usuarioRegistro = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True, on_delete=models.PROTECT   , related_name='PlantaEnfermeriaia3453')
     estadoReg = models.CharField(max_length=1, default='A', editable=False,  blank=True, null=True,)
@@ -486,9 +486,9 @@ class EnfermeriaDevolucion(models.Model):
 
 class EnfermeriaDevolucionDetalle(models.Model):
     id = models.AutoField(primary_key=True)
-    enfermeriaDevolucion = models.ForeignKey('farmacia.FarmaciaDevolucion', on_delete=models.PROTECT, blank=True, null=True,  editable=True,  related_name='EnfermeriaDevolucion061')
-    enfermeriaRecibe = models.ForeignKey('enfermeria.EnfermeriaRecibe', on_delete=models.PROTECT, blank=True, null=True,  editable=True,  related_name='FarmaciaDespachos261201')
+    enfermeriaDevolucion = models.ForeignKey('enfermeria.EnfermeriaDevolucion', on_delete=models.PROTECT, blank=True, null=True,  editable=True,  related_name='EnfermeriDevolos261201')
     cantidadDevuelta = models.DecimalField(max_digits=10, decimal_places=0, blank=True, null=True, editable=True)
+    observaciones =  models.CharField(max_length=250,  editable=True,  blank=True)
     fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)
     usuarioRegistro = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True, on_delete=models.PROTECT   , related_name='PlantaEnfermeria3453')
     estadoReg = models.CharField(max_length=1, default='A', editable=False,  blank=True, null=True,)

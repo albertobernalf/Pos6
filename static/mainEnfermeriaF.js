@@ -104,9 +104,10 @@ $(document).ready(function() {
 	   var textUMedidaDosis =  document.getElementById("medidaDev").value;
 	   var textViasAdministracion =  document.getElementById("viaDev").value;
 	   var cantidadMedicamento =  document.getElementById("cantidadDev").value;
+	   var observaciones =  document.getElementById("observacionesDev").value;
 	
 
-	    table11.row.add([ enfermeriaRecibeId, textMedicamentos, dosis,  textUMedidaDosis, textViasAdministracion, cantidadMedicamento   ,  '<i class="fa fa-trash"></i>']).draw(false);
+	    table11.row.add([ enfermeriaRecibeId, textMedicamentos, dosis,  textUMedidaDosis, textViasAdministracion, cantidadMedicamento, observaciones,    '<i class="fa fa-trash"></i>']).draw(false);
 
 		 $('#postFormModalDevolverEnfermeria').trigger("reset");
 		 $('#ModalDevolverEnfermeria').modal('hide');  
@@ -2003,13 +2004,13 @@ function GuardarDevolucion()
      	var username = document.getElementById("username").value;
         var sede = document.getElementById("sede").value;
         var username_id = document.getElementById("username_id").value;
-        var servicioAdmonEnfermeria = document.getElementById("servicioAdmonEnfermeriaDev").value;
+        var servicioAdmonEnfermeria = document.getElementById("serviciosAdministrativosDev").value;
         var enfermeriaId = document.getElementById("enfermeriaId").value;
         var enfermeriaRecibeId = document.getElementById("recibeDevId").value;
 
 
     const table10 = $('#tablaFormulacionDevolucion').DataTable();
-     var datos_tabla10 = table10.rows().data().toArray();
+     var datos_tabla11 = table10.rows().data().toArray();
 
 
         formulacionDevolucion=[]
@@ -2023,6 +2024,7 @@ function GuardarDevolucion()
 	        "uMedidaDosis"    : datos_tabla11[i][3] ,
 	        "viasAdministracion"    : datos_tabla11[i][4] ,
 	        "cantidadMedicamento"    : datos_tabla11[i][5] ,
+	        "observaciones"    : datos_tabla11[i][6] ,
 
 	      });
 	   };
@@ -2037,7 +2039,7 @@ function GuardarDevolucion()
   $.ajax({
             	   type: 'POST',
  	               url: '/guardarDevolucionEnfermeria/',
-  	               data: { 'username':username, 'sede':sede, 'username_id':username_id,'formulacionEDevolucion':formulacionDevolucion,
+  	               data: { 'username':username, 'sede':sede, 'username_id':username_id,'formulacionDevolucion':formulacionDevolucion,
                             'servicioAdmonEnfermeria':servicioAdmonEnfermeria,'enfermeriaId':enfermeriaId},
  	      		success: function (data) {
 

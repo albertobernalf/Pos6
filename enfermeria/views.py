@@ -709,7 +709,7 @@ def GuardarDevolucionEnfermeria(request):
     print ("servicioAdmonEnfermeria =", servicioAdmonEnfermeria)
 
 
-    devolucionEnfermeria = request.POST["formulacionDevolucio"]
+    devolucionEnfermeria = request.POST["formulacionDevolucion"]
     print("devolucionEnfermeria =", devolucionEnfermeria)
 
     ## Rutina leer el JSON de devolucionEnfermeria en python primero
@@ -725,6 +725,16 @@ def GuardarDevolucionEnfermeria(request):
         miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
                                        password="123456")
         cur3 = miConexion3.cursor()
+
+        # Primero cDevolucion cabezote
+
+        print("aqui a Devolver a framacia ")
+
+        detalle = 'INSERT INTO enfermeria_enfermeriadevolucion (  "fechaRegistro", "estadoReg", "sedesClinica_id", "serviciosAdministrativosDevuelve_id",  "usuarioDevuelve_id", "usuarioRegistro_id") VALUES (' + "'" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(sede) + "','" + str(servicioAdmonEnfermeria) + "','" + str(username_id)  + "','" + str(username_id) + "') RETURNING id"
+        print(detalle)
+        cur3.execute(detalle)
+        devolucionId =  cur3.fetchone()[0]
+
 
         for key1 in jsondevolucionEnfermeria:
 
@@ -742,31 +752,32 @@ def GuardarDevolucionEnfermeria(request):
             print("viasAdministracion", viasAdministracion)
             cantidadMedicamento = key1["cantidadMedicamento"]
             print("cantidadMedicamento", cantidadMedicamento)
+            observaciones = key1["observaciones"]
+            print("observaciones", observaciones)
 
-            recibe = EnfermeriaRecibe.objects.get(id=enfermeriaRecibeId)
-            detalle = EnfermeriaDetalle.objects.get(id=recibe.enfermeriaDetalle_id)
-            enfermeria = Enfermeria.objects.get(id=detalle.enfermeria_id)
+            if medicamentos != "":
 
-            turnoEnfermeria = TurnosEnfermeria.objects.get(id=username_id)
-            tiposTurnoEnfermeria = TiposTurnosEnfermeria.objects.get(id=turnoEnfermeria.tiposTurnosEnfermeria_id)
+                    # Segundo Devolucion detalle
 
-            # Primero cDevolucion cabezote
+                    detalle = 'INSERT INTO enfermeria_enfermeriadevoluciondetalle ("cantidadDevuelta", "fechaRegistro", "estadoReg", "enfermeriaDevolucion_id", "usuarioRegistro_id", observaciones) VALUES (' + "'" + str(cantidadMedicamento) + "','"  +  str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(devolucionId) + "','" + str(username_id) + "','" + str(observaciones) + "')"
 
-            print("aqui a Devolver a framacia ")
+                    print(detalle)
+                    cur3.execute(detalle)
 
-            detalle = 'INSERT INTO enfermeria_enfermeriadevolucion ( observaciones, "fechaRegistro", "estadoReg", "sedesClinica_id", "serviciosAdministrativosDevuelve_id", "serviciosAdministrativosRecibe_id", "usuarioDevuelve_id", "usuarioRecibe_id", "usuarioRegistro_id") VALUES ()'
-            print(detalle)
-            cur3.execute(detalle)
+                    # Tercero actualiza totales cantidades
 
-            # Segundo Devolucion detalle
+                    detalle = 'UPDATE enfermeria_enfermeriarecibe SET "cantidadDevuelta" = ' + "'" + str(cantidadMedicamento) + "'," + '"netoCantidad" = "netoCantidad") - ' +  int(cantidadMedicamento) + ")" + ' WHERE id = ' + "'" + str(enfermeriaRecibeId) + "'"
 
-            miConexion3.commit()
-            miConexion3.close()
+                    print(detalle)
+                    cur3.execute(detalle)
 
-            # Tercero actualizamos acumulados
+        miConexion3.commit()
+        miConexion3.close()
+
+        # Tercero actualizamos acumulados
 
 
-            return JsonResponse({'success': True, 'message': 'Planeacion de Enfermeria Creado!'})
+        return JsonResponse({'success': True, 'message': 'Devolucion de Enfermeria Creado! ' + str(devolucionId )})
 
 
     except psycopg2.DatabaseError as error:
