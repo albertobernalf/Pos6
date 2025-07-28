@@ -226,6 +226,8 @@
 			Ingreso: <span id="consecutivoAdmisionDev"></span>
 			Servicio: <span id="servicioDev"></span>
 			Hab: <span id="habitacionDev"></span>
+		
+
 
 		</div>
 
@@ -263,74 +265,33 @@
                             <div class="row">
                                 <div class="col-sm-12">
                                     <div class="card">
-                                        <div class="card-header" style="height:70px;">
-                                            <center>
-                                                <div class="row">
-                                                    
-                                                    <div class="col-sm-3">
-						<!-- <label  for="medicamentos">Medicamentos:</label>   -->
+                                        <div class="card-header" style="height:75px;">
+                                                                                      <center>
+			<div class="row" style="width:100%">
+				 <div class="col-sm-6">
+						 <label  for="serviciosAdministrativosDev">Servicio Devuelve:</label>   
                     							    
-                                                        <select class="select-css" id="medicamentos"
-                                                                name="medicamentos">
-                                                            {% for medicamentos in Medicamentos %}
-                                                            <option value="{{medicamentos.id}}">
-                                                                {{medicamentos.nombre}}
-                                                            </option>
-                                                            {% endfor %}
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-sm-1">
-					                  
-                                                        <input type="text" id="dosis" name="dosis" placeholder="Dosis" value="">
-                                                    </div>
-						 <div class="col-sm-1">
-								 </div>
-
-                                                    <div class="col-sm-2">
- 							                  
-                                                        <select class="select-css" id="uMedidaDosis"
-                                                                name="uMedidaDosis" placeholder="UMedida">
-                                                            {% for uMedidaDosis in UMedidaDosis %}
-                                                            <option value="{{uMedidaDosis.id}}">
-                                                                {{uMedidaDosis.nombre}}
-                                                            </option>
-                                                            {% endfor %}
-                                                        </select>
-                                                    </div>
-                                                   
-                                                   
-
-						 <div class="col-sm-1">
-							                        
-                                                        <select class="select-css" id="vias"
-                                                                name="vias" placeholder="Vias Adm">
-                                                            {% for viasAdministracion in ViasAdministracion %}
-                                                            <option value="{{viasAdministracion.id}}">
-                                                                {{viasAdministracion.nombre}}
+                                                        <select class="select-css" id="serviciosAdministrativosDev"
+                                                                name="serviciosAdministrativosDev">
+                                                            {% for serviciosAdministrativos in ServiciosAdministrativos %}
+                                                            <option value="{{serviciosAdministrativos.id}}">
+                                                                {{serviciosAdministrativos.nombre}}
                                                             </option>
                                                             {% endfor %}
                                                         </select>
                                                     </div>
 
+				<div class="col-sm-6">
+				    <input type="button" class="btn btn-primary" value="Crear Devolucion"  onclick="GuardarDevolucion()"> 
+				</div>
 
-						                            <div class="col-sm-1">
-							                        Cantidad:
-                                                        <input type="text" id="cantidadMedicamento" name="cantidadMedicamento" value="" placeholder="Cantidad">
-                                                    </div>
-							 <div class="col-sm-1">
-								 </div>
-                                                    <div class="col-sm-1 text-end">
-                                                        <span class="text-secondary">Adicionar</span>
-                                                        <a class="btn btn-success" href="javascript:void(0)"
-                                                           id="BtnAdicionarFormulacion"> <i class="fa fa-plus"></i></a>
-                                                    </div>
-                                                </div>
-                                            </center>
-                                        </div>
+                                            <center>
+
+                                        </div> <!-- cierra el header -->
                                         <div class="card-body" style="height:5px;">
                                             <div class="row">
                                                 <div class="col-sm-12">
-                                                    <table id="tablaFormulacion"
+                                                    <table id="tablaFormulacionDevolucion"
                                                            class="display nowrap table table table-bordered  tablaFormulacion table-hover table-sm dtr-inline">
                                                         <thead>
                                                         <tr>
@@ -340,7 +301,7 @@
                                                            <th style="width:1%;">UMedida</th>
                                            					
                                                             <th style="width:5%;">ViasAdmon</th>
-                                                            <th style="width:5%;">Cant</th>
+                                                            <th style="width:5%;">Devolver</th>
                                                         
                                                             <th style="width:3%;">Borrar</th>
                                                         </tr>
@@ -364,6 +325,9 @@
                                             </div> <!-- cierrra el row  -->
 
                                         </div> <!-- cierrra el body  -->
+				  <div class="card-footer" style="height:5px;">
+
+                                    </div> <!-- cierrra el footer  -->
                                     </div> <!-- cierrra el card  -->
 
                                 </div>
@@ -372,26 +336,7 @@
   <div class="row" style="width:100%">
 	</div>
 
-		  <div class="row" style="width:100%">
-				 <div class="col-sm-6">
-						 <label  for="serviciosAdministrativosDev">Servicio Devuelve:</label>   
-                    							    
-                                                        <select class="select-css" id="serviciosAdministrativosDev"
-                                                                name="serviciosAdministrativosDev">
-                                                            {% for serviciosAdministrativos in ServiciosAdministrativos %}
-                                                            <option value="{{serviciosAdministrativos.id}}">
-                                                                {{serviciosAdministrativos.nombre}}
-                                                            </option>
-                                                            {% endfor %}
-                                                        </select>
-                                                    </div>
-
-		<div class="col-sm-6">
-	    <input type="button" class="btn btn-primary" value="Crear Devolucion"  onclick="GuardarDevolucion()"> 
-			</div>
-
-
-		</div> <!-- cierra row -->
+		 
 
 		</div>
 
@@ -411,6 +356,7 @@
                                     <div class="modal-body">
 				
                                         <div class="row row-cols-5 mt-3">
+						Id: <input type="text" id="recibeDevId" name="recibeDevId" value="" readonly>
                                             <div class="col">
                                                 <label for="dosisDev"  class="col-sm-10 col-form-label col-form-label-sm">Dosis:</label>
 						
@@ -447,6 +393,14 @@
                                             </div>
 
 					<div class="col">
+                                          <label for="cantidadPura"  class="col-sm-10 col-form-label col-form-label-sm">Cantidad actual:</label>
+                                                <input type="text" id="cantidadPura" name="cantidadPura" value=""  readonly>
+                                            </div>
+
+
+
+
+					<div class="col">
                                           <label for="cantidadDev"  class="col-sm-10 col-form-label col-form-label-sm">Cantidad a devolver:</label>
                                                 <input type="text" id="cantidadDev" name="cantidadDev" value="" >
                                             </div>
@@ -460,7 +414,7 @@
 				 <span id="mensajesErrorModalDevolverEnfermeria" name="mensajesErrorModalDevolverEnfermeria" style= "color:red; font-size:18px; line-height:35px; font-family: Calibri;" > </span>
                                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar   </button>
 
-                                         <input type="button" class="btn btn-primary" value="Adicionar"  onclick="GuardarDevolver()"> 
+                                         <input type="button" class="btn btn-primary" id='BtnFormulacionDev' name='BtnFormulacionDev' value="Devolver"> 
                                         
                                     </div> <!-- Cierra footer-->
                                 </div> <!-- Cierra content -->
@@ -1235,6 +1189,7 @@
 </div>
 
 {% endblock %}
+
 
 
 

@@ -696,8 +696,8 @@ def GuardaPlaneacionEnfermeria(request):
             miConexion3.close()
 
 
-def GuardaDevolverEnfermeria(request):
-    print("Entre GuardaDevolverEnfermeria")
+def GuardarDevolucionEnfermeria(request):
+    print("Entre GuardarDevolucionEnfermeria")
 
     username_id = request.POST['username_id']
     print ("username_id =", username_id)
@@ -705,51 +705,19 @@ def GuardaDevolverEnfermeria(request):
     sede = request.POST['sede']
     print ("sede =", sede)
 
-    enfermeriaRecibeId = request.POST['enfermeriaRecibeId']
-    print ("enfermeriaRecibeId =", enfermeriaRecibeId)
+    servicioAdmonEnfermeria = request.POST['servicioAdmonEnfermeria']
+    print ("servicioAdmonEnfermeria =", servicioAdmonEnfermeria)
 
-    recibe = EnfermeriaRecibe.objects.get(id=enfermeriaRecibeId)
-    detalle = EnfermeriaDetalle.objects.get(id=recibe.enfermeriaDetalle_id)
-    enfermeria = Enfermeria.objects.get(id=detalle.enfermeria_id)
 
-    turnoEnfermeria = TurnosEnfermeria.objects.get(id=username_id)
-    tiposTurnoEnfermeria = TiposTurnosEnfermeria.objects.get(id=turnoEnfermeria.tiposTurnosEnfermeria_id)
+    devolucionEnfermeria = request.POST["formulacionDevolucio"]
+    print("devolucionEnfermeria =", devolucionEnfermeria)
 
-    dosis = request.POST['dosisDev']
-    print("dosis =", dosis)
-    cantidad = request.POST['cantidadDev']
-    print("cantidad =", cantidad)
-    medida = request.POST['medidaDev']
-
-    medidaId = UnidadesDeMedidaDosis.objects.get(descripcion=medida)
-
-    print("medida =", medida)
-    suministro = request.POST['suministroDev']
-    print("suministro =", suministro)
-
-    sum = Suministros.objects.get(nombre=suministro)
-
-    via = request.POST['viaDev']
-    print("via =", via)
-    viaId = ViasAdministracion.objects.get(nombre=via)
-
-    diasTratamiento = request.POST['diasTratamientoDev']
-
-    print("diasTratamiento =", diasTratamiento)
-
-    frecuenciaP = request.POST['frecuenciaDev']
-    print ("frecuenciaP =", frecuenciaP)
-
-    frecuencia = FrecuenciasAplicacion.objects.get(descripcion=frecuenciaP)
-    print ("frecuencia =", frecuencia.id)
-
+    ## Rutina leer el JSON de devolucionEnfermeria en python primero
+    consecutivo = 0
+    jsondevolucionEnfermeria = json.loads(devolucionEnfermeria)
 
     estadoReg = 'A'
     fechaRegistro = datetime.datetime.now()
-
-    #Actualiza Planeacion de Enfermeria
-
-    consecutivoPlaneacion = 1
 
     miConexion3 = None
     try:
@@ -757,19 +725,49 @@ def GuardaDevolverEnfermeria(request):
         miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
                                        password="123456")
         cur3 = miConexion3.cursor()
-        # Primero creamos el despacho
 
-        print ("aqui a Devolver a framacia ")
+        for key1 in jsondevolucionEnfermeria:
 
-        detalle = 'INSERT INTO enfermeria_enfermeriaplaneacion ( "consecutivoPlaneacion",  "fechaPlanea", "dosisCantidad", "cantidadPlaneada",  "diasTratamiento", "fechaRegistro", "estadoReg", "dosisUnidad_id", "enfermeraPlanea_id", frecuencia_id, suministro_id, "usuarioRegistro_id", "viaAdministracion_id", "enfermeriaRecibe_id",  enfermeria_id,  "turnoEnfermeriaPlanea_id") VALUES (' + "'" + str(consecutivoPlaneacion) + "', cast('" + str(desdePlanea) + "' as timestamp)" + ' + INTERVAL ' + "'"  + str(horasAMultiplicarTotales) + str(' Hours') + "'," + str(dosis) + ",'" + str(cantidad) + "','" + str(diasTratamiento) +  "','"  + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(medidaId.id) + "','" + str(username_id) + "','"  + str(frecuencia.id) + "','" + str(sum.id) + "','" + str(username_id) + "','" + str(viaId.id) +  "','" + str(enfermeriaRecibeId) + "','"+ str(enfermeria.id) + "','" + str(turnoEnfermeria.id) + "')"
-        print(detalle)
-        cur3.execute(detalle)
+            print("key1 = ", key1)
+            queda = key1
+            enfermeriaRecibeId = key1["enfermeriaRecibeId"]
+            print("enfermeriaRecibeId", enfermeriaRecibeId)
+            medicamentos = key1["medicamentos"].strip()
+            print("medicamentos = ", medicamentos)
+            dosis = key1["dosis"]
+            print("dosis", dosis)
+            uMedidaDosis = key1["uMedidaDosis"]
+            print("uMedidaDosis", uMedidaDosis)
+            viasAdministracion = key1["viasAdministracion"]
+            print("viasAdministracion", viasAdministracion)
+            cantidadMedicamento = key1["cantidadMedicamento"]
+            print("cantidadMedicamento", cantidadMedicamento)
+
+            recibe = EnfermeriaRecibe.objects.get(id=enfermeriaRecibeId)
+            detalle = EnfermeriaDetalle.objects.get(id=recibe.enfermeriaDetalle_id)
+            enfermeria = Enfermeria.objects.get(id=detalle.enfermeria_id)
+
+            turnoEnfermeria = TurnosEnfermeria.objects.get(id=username_id)
+            tiposTurnoEnfermeria = TiposTurnosEnfermeria.objects.get(id=turnoEnfermeria.tiposTurnosEnfermeria_id)
+
+            # Primero cDevolucion cabezote
+
+            print("aqui a Devolver a framacia ")
+
+            detalle = 'INSERT INTO enfermeria_enfermeriadevolucion ( observaciones, "fechaRegistro", "estadoReg", "sedesClinica_id", "serviciosAdministrativosDevuelve_id", "serviciosAdministrativosRecibe_id", "usuarioDevuelve_id", "usuarioRecibe_id", "usuarioRegistro_id") VALUES ()'
+            print(detalle)
+            cur3.execute(detalle)
+
+            # Segundo Devolucion detalle
+
+            miConexion3.commit()
+            miConexion3.close()
+
+            # Tercero actualizamos acumulados
 
 
-        miConexion3.commit()
-        miConexion3.close()
+            return JsonResponse({'success': True, 'message': 'Planeacion de Enfermeria Creado!'})
 
-        return JsonResponse({'success': True, 'message': 'Planeacion de Enfermeria Creado!'})
 
     except psycopg2.DatabaseError as error:
         print("Entre por rollback", error)

@@ -21,6 +21,7 @@ let dataTableNotasEnfermeria = false;
 let dataTableDevolucionEnfermeriaInitialized = false;
 
 var controlMed = 0;
+var controlDev = 0;
 
 
 
@@ -46,7 +47,8 @@ $(document).ready(function() {
 	  var table10 = $('#tablaFormulacionEnfermeria').DataTable();
    	   }
 
-		
+
+
            var select3 = document.getElementById("medicamentos"); /*Obtener el SELECT */
       	   var medicamentos= select3.options[select3.selectedIndex].value; /* Obtener el valor */
       	   textMedicamentos = select3.options[select3.selectedIndex].innerText; //El texto de la opción seleccionada
@@ -64,7 +66,7 @@ $(document).ready(function() {
 
 	         var select3 = document.getElementById("vias"); /*Obtener el SELECT */
       	   var viasAdministracion = select3.options[select3.selectedIndex].value; /* Obtener el valor */
-      	   textViasAdministracion = select3.options[select3.selectedIndex].innerText; //El texto de la opción seleccionada
+      	   var textViasAdministracion = select3.options[select3.selectedIndex].innerText; //El texto de la opción seleccionada
 	
 	        var cantidadMedicamento =  document.getElementById("cantidadMedicamento").value;
 
@@ -74,6 +76,45 @@ $(document).ready(function() {
 
         });
 
+
+
+/*------------------------------------------
+        --------------------------------------------
+        Create Post Code Formulacion Devolucinens
+        --------------------------------------------
+        --------------------------------------------*/
+        $('#BtnFormulacionDev').click(function (e) {
+            e.preventDefault();
+
+		alert("entre devolver medicamentos");
+
+   	   if (controlDev == 0)
+   	   {
+   	   var table11 = $('#tablaFormulacionDevolucion').DataTable({scrollY: '180px', paging:false,  search:false,  scrollX: true,  scrollCollapse: true,  lengthMenu: [5]});   // accede de nuevo a la DataTable.
+   	   controlMed=1;
+   	   }
+   	   else
+   	   {
+	  var table11 = $('#tablaFormulacionDevolucion').DataTable();
+   	   }
+
+  	   var enfermeriaRecibeId =  document.getElementById("recibeDevId").value;
+	   var textMedicamentos =    document.getElementById("suministroDev").value;
+	   var dosis =  document.getElementById("dosisDev").value;
+	   var textUMedidaDosis =  document.getElementById("medidaDev").value;
+	   var textViasAdministracion =  document.getElementById("viaDev").value;
+	   var cantidadMedicamento =  document.getElementById("cantidadDev").value;
+	
+
+	    table11.row.add([ enfermeriaRecibeId, textMedicamentos, dosis,  textUMedidaDosis, textViasAdministracion, cantidadMedicamento   ,  '<i class="fa fa-trash"></i>']).draw(false);
+
+		 $('#postFormModalDevolverEnfermeria').trigger("reset");
+		 $('#ModalDevolverEnfermeria').modal('hide');  
+
+
+        });
+
+	
 
 // aqui van los filtros de busqueda
 
@@ -1197,6 +1238,14 @@ $('#tablaPanelEnfermeria tbody').on('click', '.miIngresoEnfermeriaId', function(
 		document.getElementById("habitacionN").innerHTML = info[0].fields.cama;
 
 
+		document.getElementById("nombreTipoDocDev").innerHTML = info[0].fields.nombreTipoDoc;
+		document.getElementById("documentoDev").innerHTML = info[0].fields.documento;
+		document.getElementById("pacienteDev").innerHTML = info[0].fields.paciente;
+		document.getElementById("consecutivoAdmisionDev").innerHTML = info[0].fields.consecutivoAdmision;
+		document.getElementById("servicioDev").innerHTML = info[0].fields.servicio;
+		document.getElementById("habitacionDev").innerHTML = info[0].fields.cama;
+
+
 
                 },
             error: function (request, status, error) {
@@ -1500,6 +1549,7 @@ $('#tablaDevolucionEnfermeria tbody').on('click', '.Devolver', function() {
 		document.getElementById("dosisDev").value =dato3.dosis;
 		document.getElementById("medidaDev").value = dato3.UnidadMedida;
 		document.getElementById("cantidadDev").value = dato3.cantidad;
+		document.getElementById("cantidadPura").value = dato3.cantidad;
 		document.getElementById("suministroDev").value = dato3.medicamento;
 		document.getElementById("viaDev").value = dato3.via;
 		alert("via = " + dato3.via);
@@ -1507,6 +1557,8 @@ $('#tablaDevolucionEnfermeria tbody').on('click', '.Devolver', function() {
 		document.getElementById("diasTratamientoDev").value = dato3.diasTratamiento;
 		document.getElementById("numeroPlaneos").value = 0;
 		document.getElementById("enfermeriaRecibeId").value = post_id;
+		document.getElementById("recibeDevId").value =dato3.id;
+
 
 
             $('#ModalDevolverEnfermeria').modal('show');     
@@ -1579,68 +1631,6 @@ function GuardarPlaneacion()
 
 		 $('#postFormModalPlaneacionEnfermeria').trigger("reset");
 		 $('#ModalPlaneacionEnfermeria').modal('hide');  
-
-
-
-	     arrancaEnfermeria(7,data);
-	     dataTablePlaneacionEnfermeriaInitialized = true;
-
-      
-  };
-
-
-
-
-function GuardarDevolver() 
-{
-	alert ("A Guardar Devolver medicamentos");
-
-	     var post_id = $(this).data('pk');
-	alert ("post_id = " + post_id);
-	var ingresoId = document.getElementById("ingresoId").value ;
-
-   	var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
-        var username = document.getElementById("username").value;
-        var nombreSede = document.getElementById("nombreSede").value;
-    	var sede = document.getElementById("sede").value;
-        var username_id = document.getElementById("username_id").value;
-
-	var enfermeriaRecibeId  = document.getElementById("enfermeriaRecibeId").value;
-	var cantidadDev = document.getElementById("cantidadDev").value;
-
-         var data =  {}   ;
-        data['username'] = username;
-        data['sedeSeleccionada'] = sedeSeleccionada;
-        data['nombreSede'] = nombreSede;
-        data['sede'] = sede;
-        data['username_id'] = username_id;
-	data['enfermeriaRecibeId'] = enfermeriaRecibeId;
-	data['desdePlanea'] = desdePlanea;
-	data['numeroPlaneos'] = numeroPlaneos;
-	data['frecuenciaP'] = frecuenciaP;
-	data['ingresoId'] = ingresoId;
-
-
-	
- 	    data = JSON.stringify(data);
-
-	  $.ajax({
-                data: {'sede':sede,'username_id':username_id, 'enfermeriaRecibeId':enfermeriaRecibeId, 'cantidadDev' : cantidadDev },
-	        url: "/guardaDevolverEnfermeria/",
-                type: "POST",
-                dataType: 'json',
-                success: function (info) {
-			
-
-                },
-            error: function (request, status, error) {
-		alert("llegue con error ", error);
-		document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error + ' ' + error
-	   	    	}
-            });
-
-		 $('#postFormModalDevolverEnfermeria').trigger("reset");
-		 $('#ModalDevolverEnfermeria').modal('hide');  
 
 
 
@@ -2002,6 +1992,103 @@ function GuardarNotasEnfermeria()
 
       
   };
+
+
+function GuardarDevolucion()
+{
+
+	// Formulacion
+	alert("Entre a GRABAR GuardarDevolucion");
+
+     	var username = document.getElementById("username").value;
+        var sede = document.getElementById("sede").value;
+        var username_id = document.getElementById("username_id").value;
+        var servicioAdmonEnfermeria = document.getElementById("servicioAdmonEnfermeriaDev").value;
+        var enfermeriaId = document.getElementById("enfermeriaId").value;
+        var enfermeriaRecibeId = document.getElementById("recibeDevId").value;
+
+
+    const table10 = $('#tablaFormulacionDevolucion').DataTable();
+     var datos_tabla10 = table10.rows().data().toArray();
+
+
+        formulacionDevolucion=[]
+
+	for(var i= 0; i < datos_tabla11.length; i++) {
+
+	    formulacionDevolucion.push({
+	        "enfermeriaRecibeId"    : datos_tabla11[i][0] ,
+	        "medicamentos"    : datos_tabla11[i][1] ,
+	        "dosis"    : datos_tabla11[i][2],
+	        "uMedidaDosis"    : datos_tabla11[i][3] ,
+	        "viasAdministracion"    : datos_tabla11[i][4] ,
+	        "cantidadMedicamento"    : datos_tabla11[i][5] ,
+
+	      });
+	   };
+
+	    formulacionDevolucion  = JSON.stringify(formulacionDevolucion);
+
+	    alert("Esto envio formulacionDevolucion = " + formulacionDevolucion);
+    
+ 	// Fin Formulacion
+
+
+  $.ajax({
+            	   type: 'POST',
+ 	               url: '/guardarDevolucionEnfermeria/',
+  	               data: { 'username':username, 'sede':sede, 'username_id':username_id,'formulacionEDevolucion':formulacionDevolucion,
+                            'servicioAdmonEnfermeria':servicioAdmonEnfermeria,'enfermeriaId':enfermeriaId},
+ 	      		success: function (data) {
+
+     			    $("#mensajes").html(data.message);
+
+			document.getElementById("mensajes").innerHTML = data.message;
+
+    	var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
+        var username = document.getElementById("username").value;
+        var nombreSede = document.getElementById("nombreSede").value;
+    	var sede = document.getElementById("sede").value;
+        var username_id = document.getElementById("username_id").value;
+        var ingresoId = document.getElementById("ingresoId").value;
+ 
+         var data =  {}   ;
+        data['username'] = username;
+        data['sedeSeleccionada'] = sedeSeleccionada;
+        data['nombreSede'] = nombreSede;
+        data['sede'] = sede;
+        data['username_id'] = username_id;
+
+	    data['ingresoId'] = ingresoId;
+ 	    data = JSON.stringify(data);
+
+	    arrancaEnfermeria(4,data);
+	    dataTablePedidosEnfermeriaInitialized = true;
+
+	    arrancaEnfermeria(5,data);
+	    dataTablePedidosEnfermeriaDetalleInitialized = true;
+
+        // aqui inicializar tablaFormulacion etc
+
+        /// Aqui inicializar combos
+        $("servicioAdmonEnfermeriaDev").prop('selectedIndex', 0);
+
+        var tabla = $('#tablaFormulacionDevolucion').DataTable();
+        tabla.rows().remove().draw();
+
+
+ 	      		}, // cierra function sucess
+ 	      		error: function (request, status, error) {
+ 	      			document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
+ 	      			
+
+ 	      		}, // cierra error function
+  	        });  // cierra ajax
+
+
+}
+
+
 
 
 

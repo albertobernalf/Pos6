@@ -401,7 +401,7 @@ urlpatterns = [
     path('guardaDietasEnfermeria/', viewsEnfermeria.GuardaDietasEnfermeria, name='GuardaDietas_Enfermeria'),
     path('guardaNotasEnfermeria/', viewsEnfermeria.GuardaNotasEnfermeria, name='GuardaDNotas_Enfermeria'),
     path('load_dataNotasEnfermeria/<str:data>', viewsEnfermeria.Load_dataNotasEnfermeria,   name='Load_dataNotas_Enfermeria'),
-    path('guardaDevolveronEnfermeria/', viewsEnfermeria.GuardaDevolverEnfermeria, name='GuardaDevolver_Enfermeria'),
+    path('guardarDevolucionEnfermeria/', viewsEnfermeria.GuardarDevolucionEnfermeria, name='GuardarDevolucion_Enfermeria'),
     path('load_dataDevolucionEnfermeria/<str:data>', viewsEnfermeria.Load_dataDevolucionEnfermeria, name='load_dataDevolucionEnfermeria'),
 
     # Citas Medicas

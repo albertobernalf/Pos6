@@ -804,14 +804,15 @@ Cufe: daeeb9343955c6037479b2e1b7bb485526f7524e5b085b4a5eb6e64298b22873bd6ef35b92
 
 
 -- Para el dia lunes 28-julio
-  -- Buenoi seguir con lo que traje de clinico a enfermeria datatable dinamico, falta los scripts a mainenfermeria
-  -- devoluciones enfermeria (crear datatable dinamico para registrar las devolucuone y hcer fncion guardar de enfermeria y farmacia a la vez . y modulo farmacia-devoluciones hacer terminar 
+  -- Bueno seguir con lo que traje de clinico a enfermeria datatable dinamico, falta los scripts a mainenfermeria
+  -- devoluciones enfermeria (crear datatable dinamico para registrar las devolucuone y hacer fncion guardar de enfermeria y farmacia a la vez . 
+     y modulo farmacia-devoluciones hacer terminar 
 
 ojo pendiente en aplicacion de medicamentos arreglar cuando aplica la modal no pasa el enfemeriarecibeid a load_dataplaneacionenfermeria
 -- ops no entiendo por que no me inicializa combos en las dietas que pasar
--- ops no sep por que no refresca la grilla de dietas
--- ojo que pasa con el servicio adminiustrativo en toda la planeacion y la aplicacion de mediacmentos
+-- ops no se por que no refresca la grilla de dietas
+-- ojo que pasa con el servicio administrativo en toda la planeacion y la aplicacion de medicamentos
 
--- ops en enfermeiarecibe campo farmaciaddespaciodispensa, se creo nuevo aqui creo hay un error verificar
--- ops datatablke despachos en farmacia no funcion
+-- ops en enfermeriarecibe campo farmaciadespaciodispensa, se creo nuevo aqui creo hay un error verificar
+-- ops datatable despachos en farmacia no funcion
 
