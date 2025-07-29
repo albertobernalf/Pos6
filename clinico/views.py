@@ -232,6 +232,7 @@ def crearHistoriaClinica(request):
             ingresoPaciente = request.POST["ingresoPaciente"]
             print("ingresoPaciente = ", ingresoPaciente)
 
+	    
 
             tiposFolio = request.POST["tiposFolioEscogido"]
             print("tiposFolioEscogido = ", tiposFolio)
@@ -295,6 +296,12 @@ def crearHistoriaClinica(request):
             print("tipoDocId =", tipoDocId)
             documentoId = Usuarios.objects.get(tipoDoc_id=tipoDocId.id, documento=documento)
             print("documentoId =", documentoId)
+
+	    # Aqui se consigue el ingreso del paciente	
+            ingresosPaciente = Ingresos.objects.get(tipoDoc_id=tipoDocId.id ,  documento_id=documentoId.id , consec= ingresoPaciente)
+
+            print(" ingresosPaciente = ", ingresosPaciente)
+
 
             motivo = request.POST["motivo"]
             objetivo = request.POST["objetivo"]
@@ -1646,12 +1653,12 @@ def crearHistoriaClinica(request):
 
                             # Aqui Gaurdar FARMACIA
 
-                            f = Farmacia(historia_id=historiaId , serviciosAdministrativos_id =serviciosAdministrativos , tipoOrigen_id = '1', tipoMovimiento_id = '1' , fechaRegistro =fechaRegistro  , usuarioRegistro_id  =  usuarioRegistro, estadoReg = 'A' , sedesClinica_id = sede,  estado_id= estadoFarmaciaSolicitud.id)
+                            f = Farmacia(historia_id=historiaId , serviciosAdministrativos_id =serviciosAdministrativos , tipoOrigen_id = '1', tipoMovimiento_id = '1' , fechaRegistro =fechaRegistro  , usuarioRegistro_id  =  usuarioRegistro, estadoReg = 'A' , sedesClinica_id = sede,  estado_id= estadoFarmaciaSolicitud.id, ingresoPaciente_id=ingresosPaciente.id)
                             f.save()
 
                             # Aqui Guardar ENFERMERIA
 
-                            e = Enfermeria(historia_id=historiaId , serviciosAdministrativos_id =serviciosAdministrativos , tipoOrigen_id = '1', tipoMovimiento_id = '1' , fechaRegistro =fechaRegistro  , usuarioRegistro_id  =  usuarioRegistro, estadoReg = 'A' , sedesClinica_id = sede)
+                            e = Enfermeria(historia_id=historiaId , serviciosAdministrativos_id =serviciosAdministrativos , tipoOrigen_id = '1', tipoMovimiento_id = '1' , fechaRegistro =fechaRegistro  , usuarioRegistro_id  =  usuarioRegistro, estadoReg = 'A' , sedesClinica_id = sede , ingresoPaciente_id=ingresosPaciente.id)
                             e.save()
 
                         if (medicamentosId.requiereAutorizacion == 'N'):
@@ -1663,7 +1670,7 @@ def crearHistoriaClinica(request):
 
                             # Aqui Guardar ENFERMERIA DETALLE
 
-                            er = EnfermeriaDetalle(enfermeria_id=e.id , historiaMedicamentos_id = i.id , farmaciaDetalle_id = fd.id, suministro_id = medicamentos ,  dosisCantidad = dosis,  dosisUnidad_id =uMedidaDosis ,viaAdministracion_id = vias ,  cantidadOrdenada=cantidadMedicamento  ,fechaRegistro =fechaRegistro ,  usuarioRegistro_id  =  usuarioRegistro, estadoReg = 'A')
+                            er = EnfermeriaDetalle(enfermeria_id=e.id , historiaMedicamentos_id = i.id , farmaciaDetalle_id = fd.id, suministro_id = medicamentos ,  dosisCantidad = dosis,  dosisUnidad_id =uMedidaDosis ,viaAdministracion_id = vias ,  cantidadOrdenada=cantidadMedicamento  ,fechaRegistro =fechaRegistro ,  usuarioRegistro_id  =  usuarioRegistro, estadoReg = 'A', frecuencia_id=frecuencia, diasTratamiento=diasTratamiento)
                             er.save()
 
                         consecutivo = consecutivo + 1

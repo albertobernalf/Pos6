@@ -532,8 +532,8 @@ def AdicionarDespachosDispensa(request):
 
                 cantidadMedicamento = key["cantidadMedicamento"].strip()
                 print("cantidadMedicamento=", cantidadMedicamento)
-                diasTratamiento = key["diasTratamiento"]
-                print("diasTratamiento=", diasTratamiento)
+                #diasTratamiento = key["diasTratamiento"]
+                #print("diasTratamiento=", diasTratamiento)
 
                 # Busco historialMediamentos
 
@@ -545,7 +545,7 @@ def AdicionarDespachosDispensa(request):
                     historiaMedicamentos = HistoriaMedicamentos.objects.get(id=farmaciaDetalle.historiaMedicamentos_id)
 
 
-                comando = 'INSERT INTO farmacia_farmaciadespachosdispensa ("dosisCantidad","cantidadOrdenada","fechaRegistro", "estadoReg",despacho_id, "dosisUnidad_id", "farmaciaDetalle_id", "suministro_id","usuarioRegistro_id", "viaAdministracion_id")  VALUES ( ' + "'" + str(dosis) + "','" + str(cantidadMedicamento) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(despachoId) + "','" + str(MedidaDosis.id) + "','" + str(farmaciaDetalleId) + "','" + str(medicamentos) + "','" + str(username_id) + "','" + str(vias.id) +  "') RETURNING 1"
+                comando = 'INSERT INTO farmacia_farmaciadespachosdispensa ("dosisCantidad","cantidadOrdenada","fechaRegistro", "estadoReg",despacho_id, "dosisUnidad_id", "farmaciaDetalle_id", "suministro_id","usuarioRegistro_id", "viaAdministracion_id")  VALUES ( ' + "'" + str(dosis) + "','" + str(cantidadMedicamento) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(despachoId) + "','" + str(MedidaDosis.id) + "','" + str(farmaciaDetalleId) + "','" + str(medicamentos) + "','" + str(username_id) + "','" + str(vias.id) +  "') RETURNING id"
 
                 print(comando)
                 resultado = cur3.execute(comando)
@@ -821,7 +821,7 @@ def Load_dataDevolucionesFarmacia(request, data):
                                        password="123456")
     curx = miConexionx.cursor()
 
-    detalle = 'select dev.id, dev."fechaRegistro" fechaRegistro ,servDevuelve.nombre servicioDevuelve,plantaDevuelve.nombre usuarioDevuelve,servRecibe.nombre servicioRecibe,plantaRecibe.nombre usuarioRecibe FROM enfermeria_enfermeriadevolucion dev INNER JOIN sitios_serviciosadministrativos servDevuelve ON (servDevuelve.id = dev."serviciosAdministrativosDevuelve_id") LEFT JOIN 	sitios_serviciosadministrativos servRecibe ON (servRecibe.id = dev."serviciosAdministrativosRecibe_id" ) INNER JOIN planta_planta plantaDevuelve  ON (plantaDevuelve.id = dev."usuarioDevuelve_id") LEFT JOIN planta_planta plantaRecibe ON (plantaRecibe.id = dev."usuarioRecibe_id") WHERE dev."fechaRegistro" >=' + "'" + str(fechaRegistro) + "'" + ' order by dev.id'
+    detalle = 'select dev.id, dev."fechaRegistro" fechaRegistro ,servDevuelve.nombre servicioDevuelve,plantaDevuelve.nombre usuarioDevuelve,servRecibe.nombre servicioRecibe,plantaRecibe.nombre usuarioRecibe FROM farmacia_farmaciadevolucion dev INNER JOIN sitios_serviciosadministrativos servDevuelve ON (servDevuelve.id = dev."serviciosAdministrativosDevuelve_id") LEFT JOIN 	sitios_serviciosadministrativos servRecibe ON (servRecibe.id = dev."serviciosAdministrativosRecibe_id" ) INNER JOIN planta_planta plantaDevuelve  ON (plantaDevuelve.id = dev."usuarioDevuelve_id") LEFT JOIN planta_planta plantaRecibe ON (plantaRecibe.id = dev."usuarioRecibe_id") WHERE dev."fechaRegistro" >=' + "'" + str(fechaRegistro) + "'" + ' order by dev.id'
 
     print(detalle)
 
@@ -856,8 +856,8 @@ def Load_dataDevolucionesDetalleFarmacia(request, data):
                                        password="123456")
     curx = miConexionx.cursor()
 
-    detalle = 'SELECT devdet.id id,	sum.nombre medicamento,recibe."dosisCantidad" dosis, medida.descripcion unidadMedida, via.nombre via ,  recibe."cantidadDispensada" cantidad, devdet."cantidadDevuelta"	 cantidadDevuelta , devdet.observaciones observaciones 	FROM enfermeria_enfermeriadevoluciondetalle devdet INNER JOIN	enfermeria_enfermeriarecibe recibe ON (recibe.id = devdet."enfermeriaRecibe_id") INNER JOIN facturacion_suministros sum ON (sum.id = recibe.suministro_id) INNER JOIN clinico_viasadministracion via ON (via.id = recibe."viaAdministracion_id") INNER JOIN clinico_unidadesdemedidadosis medida ON (medida.id = recibe."dosisUnidad_id") WHERE devdet."enfermeriaDevolucion_id" = ' + "'" + str(devolucionFarmaciaiaId) + "'"
 
+    detalle = 'SELECT devdet.id id,	sum.nombre medicamento,dispensa."dosisCantidad" dosis, medida.descripcion unidadMedida, via.nombre via , dispensa."cantidadOrdenada" cantidad, devdet."cantidadDevuelta"	 cantidadDevuelta , devdet.observaciones observaciones FROM farmacia_farmaciadevoluciondetalle devdet INNER JOIN	farmacia_farmaciadespachosdispensa dispensa ON (dispensa.id = devdet."farmaciaDespachosDispensa_id") INNER JOIN facturacion_suministros sum ON (sum.id = dispensa.suministro_id) INNER JOIN clinico_viasadministracion via ON (via.id = dispensa."viaAdministracion_id") INNER JOIN clinico_unidadesdemedidadosis medida ON (medida.id = dispensa."dosisUnidad_id") WHERE devdet."farmaciaDevolucion_id" = ' + "'" + str(devolucionFarmaciaId) + "'"
 
     print(detalle)
 

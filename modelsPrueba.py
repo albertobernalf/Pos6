@@ -815,4 +815,4 @@ ojo pendiente en aplicacion de medicamentos arreglar cuando aplica la modal no p
 
 -- ops en enfermeriarecibe campo farmaciadespaciodispensa, se creo nuevo aqui creo hay un error verificar
 -- ops datatable despachos en farmacia no funcion
-
+-- ojo en la pantalla de enfermreria medicamentos y devoluciones creo en el UNION delselect me muestra un folio 0 y los dema
