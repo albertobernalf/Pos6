@@ -487,6 +487,7 @@ class EnfermeriaDevolucion(models.Model):
 class EnfermeriaDevolucionDetalle(models.Model):
     id = models.AutoField(primary_key=True)
     enfermeriaDevolucion = models.ForeignKey('enfermeria.EnfermeriaDevolucion', on_delete=models.PROTECT, blank=True, null=True,  editable=True,  related_name='EnfermeriDevolos261201')
+    enfermeriaRecibe = models.ForeignKey('enfermeria.EnfermeriaRecibe', on_delete=models.PROTECT, blank=True, null=True,  editable=True,  related_name='EnfermeriaRecibe201')
     cantidadDevuelta = models.DecimalField(max_digits=10, decimal_places=0, blank=True, null=True, editable=True)
     observaciones =  models.CharField(max_length=250,  editable=True,  blank=True)
     fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)

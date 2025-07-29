@@ -21,7 +21,7 @@
         <li><a href="#Dietas"><span class="fa-solid fa-user-doctor-message"></span> <span  class="tab-text"> </span> Dietas </a></li>
         <li><a href="#Devoluciones"><span class="fa-solid fa-user-doctor-message"></span> <span  class="tab-text"> </span> Devoluciones </a></li>
     <li><a href="#Turno"><span class="fa-solid fa-user-doctor-message"></span> <span  class="tab-text"> </span> Turnos </a></li>
-
+        <li><a href="#ConsultaDevoluciones"><span class="fa-solid fa-user-doctor-message"></span> <span  class="tab-text"> </span> Consulta Devoluciones </a></li>
     </ul>
 </div>
 
@@ -102,6 +102,74 @@
                                     </div>
                                 </div>
 	</article>
+
+
+<article id="ConsultaDevoluciones">
+		<div class="container my-2" style="width:100%">
+
+
+		<div align="left" height="15px" width="50px">
+			TipoDoc: <span id="nombreTipoDocConsDev"></span>
+			Doc: <span id="documentoConsDev"></span>
+			Paciente: <span id="pacienteConsDev"></span>
+			Ingreso: <span id="consecutivoAdmisionConsDev"></span>
+			Servicio: <span id="servicioConsDev"></span>
+			Hab: <span id="habitacionConsDev"></span>
+
+		</div>
+
+
+
+           		<div class="row" style="width:100%">
+                                        <table id= "tablaConsultaDevolucionesEnfermeria" class="display table table-striped table-sm fs-6 nowrap" style="width:100%">
+                                           <thead>
+                                            <tr>    
+					<bold>    
+	        			    <th>S1</th> 
+				        <th>id</th>
+				        <th>Fecha de Registro</th>
+				        <th>ServicioDevuelve</th>
+                                	<th>Usuario Devuelve</th>
+                                	<th>Servicio Recibe</th>
+	                                <th>Usuario Recibe</th>
+	                        
+					</bold>                                  
+                                            </tr>
+                                            </thead>
+                                            <tbody style="margin-left:0">
+                                            </tbody>
+                                        </table>
+                        </div>
+
+
+           		<div class="row" style="width:100%">
+                                        <table id= "tablaConsultaDevolucionesDetalleEnfermeria" class="display table table-striped table-sm fs-6 nowrap" style="width:100%">
+                                           <thead>
+                                            <tr>    
+					<bold>    
+	        			 
+				        <th>id</th>
+				        <th>Medicamento</th>
+				        <th>dosis</th>
+				        <th>Medida</th>
+				        <th>Via</th>
+				        <th>cantidad</th>
+				        <th>Cantidad Devuelta</th>
+	                               	<th>Observaciones</th>
+					</bold>                                  
+                                            </tr>
+                                            </thead>
+                                            <tbody style="margin-left:0">
+                                            </tbody>
+                                        </table>
+                        </div>
+
+
+
+                </div>
+
+</article>
+
 
 
 <article id="Turno">     	

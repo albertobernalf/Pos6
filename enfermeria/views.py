@@ -735,6 +735,13 @@ def GuardarDevolucionEnfermeria(request):
         cur3.execute(detalle)
         devolucionId =  cur3.fetchone()[0]
 
+        print("aqui lo que llega a farmacia ")
+
+        detalle = 'INSERT INTO farmacia_farmaciadevolucion ("fechaRegistro", "estadoReg", "sedesClinica_id", "serviciosAdministrativosDevuelve_id", "usuarioDevuelve_id",  "usuarioRegistro_id") VALUES (' + "'" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(sede) + "','" + str(servicioAdmonEnfermeria) + "','" + str(username_id)  + "','" + str(username_id) + "') RETURNING id"
+        print(detalle)
+        cur3.execute(detalle)
+        farmaciaId =  cur3.fetchone()[0]
+
 
         for key1 in jsondevolucionEnfermeria:
 
@@ -759,17 +766,49 @@ def GuardarDevolucionEnfermeria(request):
 
                     # Segundo Devolucion detalle
 
-                    detalle = 'INSERT INTO enfermeria_enfermeriadevoluciondetalle ("cantidadDevuelta", "fechaRegistro", "estadoReg", "enfermeriaDevolucion_id", "usuarioRegistro_id", observaciones) VALUES (' + "'" + str(cantidadMedicamento) + "','"  +  str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(devolucionId) + "','" + str(username_id) + "','" + str(observaciones) + "')"
+                    enfermeriaRecibe = EnfermeriaRecibe.objects.get(id=enfermeriaRecibeId)
+
+                    if enfermeriaRecibe.cantidadDevuelta == None:
+                        cantidadDevuelta = 0
+                    else:
+                        cantidadDevuelta = enfermeriaRecibe.cantidadDevuelta
+
+
+                    if enfermeriaRecibe.netoCantidad == None:
+                        netoCantidad = 0
+                    else:
+                        netoCantidad = enfermeriaRecibe.netoCantidad
+
+                    netoCantidad = str(int(netoCantidad) - int(cantidadDevuelta))
+
+                    detalle = 'INSERT INTO enfermeria_enfermeriadevoluciondetalle ("cantidadDevuelta", "fechaRegistro", "estadoReg", "enfermeriaDevolucion_id", "usuarioRegistro_id", observaciones, "enfermeriaRecibe_id") VALUES (' + "'" + str(cantidadMedicamento) + "','"  +  str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(devolucionId) + "','" + str(username_id) + "','" + str(observaciones)  + "','" + str(enfermeriaRecibeId) + "')"
 
                     print(detalle)
                     cur3.execute(detalle)
 
                     # Tercero actualiza totales cantidades
 
-                    detalle = 'UPDATE enfermeria_enfermeriarecibe SET "cantidadDevuelta" = ' + "'" + str(cantidadMedicamento) + "'," + '"netoCantidad" = "netoCantidad") - ' +  int(cantidadMedicamento) + ")" + ' WHERE id = ' + "'" + str(enfermeriaRecibeId) + "'"
+                    detalle = 'UPDATE enfermeria_enfermeriarecibe SET "cantidadDevuelta" = ' + "'" + str(cantidadMedicamento) + "'," + '"netoCantidad" = ' + "'" + str(netoCantidad) + "'"  + ' WHERE id = ' + "'" + str(enfermeriaRecibeId) + "'"
 
                     print(detalle)
                     cur3.execute(detalle)
+
+                    # Cuarto actualiza detalle de farmaciadevolucion
+
+                    if enfermeriaRecibe.farmaciaDespachosDispensa_id == None:
+                        farmaciaDespachosDispensa_id = 0
+                    else:
+                        farmaciaDespachosDispensa_id = enfermeriaRecibe.farmaciaDespachosDispensa_id
+
+                    if observaciones == '':
+                        observaciones='.'
+
+                    detalle = 'INSERT INTO farmacia_farmaciadevoluciondetalle ("cantidadDevuelta", "fechaRegistro", "estadoReg", "farmaciaDespachosDispensa_id", "farmaciaDevolucion_id", "usuarioRegistro_id", observaciones) VALUES (' + "'" + str(cantidadMedicamento) + "','"  +  str(fechaRegistro) + "','" + str(estadoReg) + "','" +  str(farmaciaDespachosDispensa_id)  + "','" + str(farmaciaId) + "','" + str(username_id) + "','" + str(observaciones) +  "')"
+
+                    print(detalle)
+                    cur3.execute(detalle)
+
+
 
         miConexion3.commit()
         miConexion3.close()
@@ -777,7 +816,7 @@ def GuardarDevolucionEnfermeria(request):
         # Tercero actualizamos acumulados
 
 
-        return JsonResponse({'success': True, 'message': 'Devolucion de Enfermeria Creado! ' + str(devolucionId )})
+        return JsonResponse({'success': True, 'message': 'Devolucion de Enfermeria Creado! ' })
 
 
     except psycopg2.DatabaseError as error:
@@ -1148,5 +1187,82 @@ def Load_dataDevolucionEnfermeria(request, data):
 
 
     serialized1 = json.dumps(devolucionEnfermeria, default=str)
+
+    return HttpResponse(serialized1, content_type='application/json')
+
+
+def Load_dataConsultaDevolucionesEnfermeria(request, data):
+    print("Entre Load_dataConsultaDevolucionesEnfermeria")
+
+    context = {}
+    d = json.loads(data)
+
+    fechaRegistro = datetime.datetime.now()
+
+
+    año_actual = fechaRegistro.year  # Puedes cambiar este valor
+    fechaRegistro = date(año_actual, 1, 1)
+
+    print(fechaRegistro)
+
+
+    devolucionesConsultaEnfermeria = []
+
+    miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                       password="123456")
+    curx = miConexionx.cursor()
+
+    detalle = 'select dev.id, dev."fechaRegistro" fechaRegistro ,servDevuelve.nombre servicioDevuelve,plantaDevuelve.nombre usuarioDevuelve,servRecibe.nombre servicioRecibe,plantaRecibe.nombre usuarioRecibe FROM enfermeria_enfermeriadevolucion dev INNER JOIN sitios_serviciosadministrativos servDevuelve ON (servDevuelve.id = dev."serviciosAdministrativosDevuelve_id") LEFT JOIN 	sitios_serviciosadministrativos servRecibe ON (servRecibe.id = dev."serviciosAdministrativosRecibe_id" ) INNER JOIN planta_planta plantaDevuelve  ON (plantaDevuelve.id = dev."usuarioDevuelve_id") LEFT JOIN planta_planta plantaRecibe ON (plantaRecibe.id = dev."usuarioRecibe_id") WHERE dev."fechaRegistro" >=' + "'" + str(fechaRegistro) + "'" + ' order by dev.id'
+
+    print(detalle)
+
+    curx.execute(detalle)
+
+    for id, fechaRegistro, servicioDevuelve, usuarioDevuelve, servicioRecibe,  usuarioRecibe in curx.fetchall():
+            devolucionesConsultaEnfermeria.append({"model": "enfermeria.devoluciones", "pk": id, "fields":
+                {'id': id, 'fechaRegistro': fechaRegistro, 'servicioDevuelve': servicioDevuelve, 'usuarioDevuelve': usuarioDevuelve,
+                 'servicioRecibe': servicioRecibe,   'usuarioRecibe': usuarioRecibe}})
+
+    miConexionx.close()
+    print("devolucionesConsultaEnfermeria = " , devolucionesConsultaEnfermeria)
+
+
+    serialized1 = json.dumps(devolucionesConsultaEnfermeria, default=str)
+
+    return HttpResponse(serialized1, content_type='application/json')
+
+def Load_dataConsultaDevolucionesDetalleEnfermeria(request, data):
+    print("Entre Load_dataConsultaDevolucionesDetalleEnfermeria")
+
+    context = {}
+    d = json.loads(data)
+
+    devolucionEnfermeriaId = d['devolucionEnfermeriaId']
+
+    print ("devolucionEnfermeriaId =", devolucionEnfermeriaId)
+
+    ConsultaDevolucionesDetalleEnfermeria = []
+
+    miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                       password="123456")
+    curx = miConexionx.cursor()
+
+    detalle = 'SELECT devdet.id id,	sum.nombre medicamento,recibe."dosisCantidad" dosis, medida.descripcion unidadMedida, via.nombre via ,  recibe."cantidadDispensada" cantidad, devdet."cantidadDevuelta"	 cantidadDevuelta , devdet.observaciones observaciones 	FROM enfermeria_enfermeriadevoluciondetalle devdet INNER JOIN	enfermeria_enfermeriarecibe recibe ON (recibe.id = devdet."enfermeriaRecibe_id") INNER JOIN facturacion_suministros sum ON (sum.id = recibe.suministro_id) INNER JOIN clinico_viasadministracion via ON (via.id = recibe."viaAdministracion_id") INNER JOIN clinico_unidadesdemedidadosis medida ON (medida.id = recibe."dosisUnidad_id") WHERE devdet."enfermeriaDevolucion_id" = ' + "'" + str(devolucionEnfermeriaId) + "'"
+
+
+    print(detalle)
+
+    curx.execute(detalle)
+
+    for id, medicamento, dosis, unidadMedida, via,  cantidad, cantidadDevuelta, observaciones in curx.fetchall():
+            ConsultaDevolucionesDetalleEnfermeria.append({"model": "enfermeria.devolucionesdetalle", "pk": id, "fields":
+                {'id': id, 'medicamento': medicamento, 'dosis': dosis, 'unidadMedida': unidadMedida,
+                 'via': via,   'cantidad': cantidad, 'cantidadDevuelta':cantidadDevuelta, 'bservaciones':observaciones}})
+
+    miConexionx.close()
+    print("ConsultaDevolucionesDetalleEnfermeria = " , ConsultaDevolucionesDetalleEnfermeria)
+
+
+    serialized1 = json.dumps(ConsultaDevolucionesDetalleEnfermeria, default=str)
 
     return HttpResponse(serialized1, content_type='application/json')

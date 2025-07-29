@@ -19,6 +19,8 @@ let dataTablePlaneacionEnfermeria = false;
 let dataTableDietaEnfermeria = false;
 let dataTableNotasEnfermeria = false;
 let dataTableDevolucionEnfermeriaInitialized = false;
+let dataTableConsultaDevolucionesEnfermeriaInitialized = false;
+let dataTableConsultaDevolucionesDetalleEnfermeriaInitialized = false;
 
 var controlMed = 0;
 var controlDev = 0;
@@ -1124,6 +1126,185 @@ function arrancaEnfermeria(valorTabla,valorData)
 
   }
 
+
+
+    if (valorTabla == 11)
+    {
+        let dataTableOptionsConsultaDevolucionesEnfermeria  ={
+   dom: "<'row mb-1'<'col-sm-3'B><'col-sm-3'><'col-sm-6'f>>" + // B = Botones a la izquierda, f = filtro a la derecha
+             "<'row'<'col-sm-12'tr>>" +
+             "<'row mt-3'<'col-sm-5'i><'col-sm-7'p>>",
+  buttons: [
+    {
+      extend: 'excelHtml5',
+      text: '<i class="fas fa-file-excel"></i> ',
+      titleAttr: 'Exportar a Excel',
+      className: 'btn btn-success',
+    },
+    {
+      extend: 'pdfHtml5',
+      text: '<i class="fas fa-file-pdf"></i> ',
+      titleAttr: 'Exportar a PDF',
+      className: 'btn btn-danger',
+    },
+    {
+      extend: 'print',
+      text: '<i class="fa fa-print"></i> ',
+      titleAttr: 'Imprimir',
+      className: 'btn btn-info',
+    },
+  ],
+  lengthMenu: [2, 4, 15],
+           processing: true,
+            serverSide: false,
+            scrollY: '120px',
+	    scrollX: true,
+	    scrollCollapse: true,
+            paging:false,
+            columnDefs: [
+		{ className: 'centered', targets: [0, 1, 2, 3] },
+	    { width: '10%', targets: [2,3] },
+		{  
+                    "targets": 5
+               }
+            ],
+	 pageLength: 3,
+	  destroy: true,
+	  language: {
+		    processing: 'Procesando...',
+		    lengthMenu: 'Mostrar _MENU_ registros',
+		    zeroRecords: 'No se encontraron resultados',
+		    emptyTable: 'Ningún dato disponible en esta tabla',
+		    infoEmpty: 'Mostrando registros del 0 al 0 de un total de 0 registros',
+		    infoFiltered: '(filtrado de un total de _MAX_ registros)',
+		    search: 'Buscar:',
+		    infoThousands: ',',
+		    loadingRecords: 'Cargando...',
+		    paginate: {
+			      first: 'Primero',
+			      last: 'Último',
+			      next: 'Siguiente',
+			      previous: 'Anterior',
+		    }
+			},
+
+           ajax: {
+                 url:"/load_dataConsultaDevolucionesEnfermeria/" +  data,
+                 type: "POST",
+                 dataSrc: ""
+            },
+            columns: [
+
+	{
+	  "render": function ( data, type, row ) {
+                        var btn = '';
+	  btn = btn + " <input type='radio' name='miConsultaDev'  class='miConsultaDev form-check-input ' data-pk='"  + row.pk + "'>" + "</input>";
+
+
+                       return btn;
+                    },
+
+	},
+           
+                { data: "fields.id"},
+                { data: "fields.fechaRegistro"},
+                { data: "fields.servicioDevuelve"},
+                { data: "fields.usuarioDevuelve"},
+                { data: "fields.servicioRecibe"},
+                { data: "fields.usuarioRecibe"},
+
+                        ]
+            }
+	        
+		   dataTable = $('#tablaConsultaDevolucionesEnfermeria').DataTable(dataTableOptionsConsultaDevolucionesEnfermeria);
+
+
+  }
+
+
+    if (valorTabla == 12)
+    {
+        let dataTableOptionsConsultaDevolucionesDetalleEnfermeria  ={
+   dom: "<'row mb-1'<'col-sm-3'B><'col-sm-3'><'col-sm-6'f>>" + // B = Botones a la izquierda, f = filtro a la derecha
+             "<'row'<'col-sm-12'tr>>" +
+             "<'row mt-3'<'col-sm-5'i><'col-sm-7'p>>",
+  buttons: [
+    {
+      extend: 'excelHtml5',
+      text: '<i class="fas fa-file-excel"></i> ',
+      titleAttr: 'Exportar a Excel',
+      className: 'btn btn-success',
+    },
+    {
+      extend: 'pdfHtml5',
+      text: '<i class="fas fa-file-pdf"></i> ',
+      titleAttr: 'Exportar a PDF',
+      className: 'btn btn-danger',
+    },
+    {
+      extend: 'print',
+      text: '<i class="fa fa-print"></i> ',
+      titleAttr: 'Imprimir',
+      className: 'btn btn-info',
+    },
+  ],
+  lengthMenu: [2, 4, 15],
+           processing: true,
+            serverSide: false,
+            scrollY: '120px',
+	    scrollX: true,
+	    scrollCollapse: true,
+            paging:false,
+            columnDefs: [
+		{ className: 'centered', targets: [0, 1, 2, 3] },
+	    { width: '10%', targets: [2,3] },
+		{  
+                    "targets": 7
+               }
+            ],
+	 pageLength: 3,
+	  destroy: true,
+	  language: {
+		    processing: 'Procesando...',
+		    lengthMenu: 'Mostrar _MENU_ registros',
+		    zeroRecords: 'No se encontraron resultados',
+		    emptyTable: 'Ningún dato disponible en esta tabla',
+		    infoEmpty: 'Mostrando registros del 0 al 0 de un total de 0 registros',
+		    infoFiltered: '(filtrado de un total de _MAX_ registros)',
+		    search: 'Buscar:',
+		    infoThousands: ',',
+		    loadingRecords: 'Cargando...',
+		    paginate: {
+			      first: 'Primero',
+			      last: 'Último',
+			      next: 'Siguiente',
+			      previous: 'Anterior',
+		    }
+			},
+
+           ajax: {
+                 url:"/load_dataConsultaDevolucionesDetalleEnfermeria/" +  data,
+                 type: "POST",
+                 dataSrc: ""
+            },
+            columns: [
+		 { data: "fields.id"},
+                { data: "fields.medicamento"},
+                { data: "fields.dosis"},
+                { data: "fields.unidadMedida"},
+                { data: "fields.via"},
+                { data: "fields.cantidad"},
+                { data: "fields.cantidadDevuelta"},
+                { data: "fields.observaciones"},
+                        ]
+            }
+	        
+		   dataTable = $('#tablaConsultaDevolucionesDetalleEnfermeria').DataTable(dataTableOptionsConsultaDevolucionesDetalleEnfermeria);
+
+  }
+
+
+
   
 }
 
@@ -1247,6 +1428,14 @@ $('#tablaPanelEnfermeria tbody').on('click', '.miIngresoEnfermeriaId', function(
 		document.getElementById("habitacionDev").innerHTML = info[0].fields.cama;
 
 
+		document.getElementById("nombreTipoDocConsDev").innerHTML = info[0].fields.nombreTipoDoc;
+		document.getElementById("documentoConsDev").innerHTML = info[0].fields.documento;
+		document.getElementById("pacienteConsDev").innerHTML = info[0].fields.paciente;
+		document.getElementById("consecutivoAdmisionConsDev").innerHTML = info[0].fields.consecutivoAdmision;
+		document.getElementById("servicioConsDev").innerHTML = info[0].fields.servicio;
+		document.getElementById("habitacionConsDev").innerHTML = info[0].fields.cama;
+
+
 
                 },
             error: function (request, status, error) {
@@ -1289,8 +1478,42 @@ $('#tablaPanelEnfermeria tbody').on('click', '.miIngresoEnfermeriaId', function(
 	     arrancaEnfermeria(10,data);
 	     dataTableDevolucionEnfermeriaInitialized = true;
 
+	    arrancaEnfermeria(11,data);
+	    dataTableConsultaDevolucionesEnfermeriaInitialized = true;
+
       
   });
+
+$('#tablaConsultaDevolucionesEnfermeria tbody').on('click', '.miConsultaDev', function() {
+
+	alert ("A tablaConsultaDevolucionesEnfermeria");
+
+	     var post_id = $(this).data('pk');
+	alert ("post_id = " + post_id);
+	devolucionEnfermeriaId = post_id;
+
+    	var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
+        var username = document.getElementById("username").value;
+        var nombreSede = document.getElementById("nombreSede").value;
+    	var sede = document.getElementById("sede").value;
+        var username_id = document.getElementById("username_id").value;
+	  var username_id = document.getElementById("username_id").value;
+ 
+         var data =  {}   ;
+        data['username'] = username;
+        data['sedeSeleccionada'] = sedeSeleccionada;
+        data['nombreSede'] = nombreSede;
+        data['sede'] = sede;
+        data['username_id'] = username_id;
+        data['devolucionEnfermeriaId'] = devolucionEnfermeriaId;
+
+ 	    data = JSON.stringify(data);
+
+	    arrancaEnfermeria(12,data);
+	    dataTableConsultaDevolucionesDetalleEnfermeriaInitialized = true;
+
+});
+
 
 
 $('#tablaPedidosEnfermeria tbody').on('click', '.miPedidosEnfermeria', function() {
@@ -1464,8 +1687,6 @@ $('#tablaPlaneacionEnfermeria tbody').on('click', '.miAplicacionEnfermeria', fun
 
 
             $('#ModalAplicacionEnfermeria').modal('show');     
-
-
 
 
 

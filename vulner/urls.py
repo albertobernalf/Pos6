@@ -404,6 +404,9 @@ urlpatterns = [
     path('guardarDevolucionEnfermeria/', viewsEnfermeria.GuardarDevolucionEnfermeria, name='GuardarDevolucion_Enfermeria'),
     path('load_dataDevolucionEnfermeria/<str:data>', viewsEnfermeria.Load_dataDevolucionEnfermeria, name='load_dataDevolucionEnfermeria'),
 
+    path('load_dataConsultaDevolucionesEnfermeria/<str:data>', viewsEnfermeria.Load_dataConsultaDevolucionesEnfermeria,      name='load_dataConsulta_DevolucionEnfermeriaa'),
+    path('load_dataConsultaDevolucionesDetalleEnfermeria/<str:data>', viewsEnfermeria.Load_dataConsultaDevolucionesDetalleEnfermeria,name='load_dataConsulta_DevolucionesDetalleEnfermeria'),
+
     # Citas Medicas
 
     # Usuarios
