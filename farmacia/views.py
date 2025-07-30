@@ -203,9 +203,6 @@ def Load_dataFarmaciaDespachos(request, data):
 
     return HttpResponse(serialized1, content_type='application/json')
 
-
-
-
 def Load_dataFarmaciaDespachosDispensa(request, data):
     print("Entre Load_dataFarmaciaDespachosDispensa")
 
@@ -231,7 +228,7 @@ def Load_dataFarmaciaDespachosDispensa(request, data):
                                    password="123456")
     curx = miConexionx.cursor()
 
-    detalle = 'select dispensa.id id, dispensa.despacho_id despacho , sum.nombre suministro, 	dispensa."dosisCantidad" dosis, dosis.descripcion unidadDosis,   vias.nombre via,	dispensa."cantidadOrdenada" cantidad FROM farmacia_farmaciadespachosdispensa dispensa INNER JOIN farmacia_farmaciaDetalle detalle ON (detalle.id = dispensa."farmaciaDetalle_id" ) INNER JOIN facturacion_suministros sum ON (sum.id= dispensa.suministro_id) INNER JOIN clinico_viasadministracion vias ON (vias.id= dispensa."viaAdministracion_id") INNER JOIN clinico_unidadesdemedidadosis dosis ON (dosis.id= dispensa."dosisUnidad_id") WHERE detalle.FARMACIA_ID=' + "'" + str(farmaciaId) + "'" + ' AND detalle.id = ' + "'" + str(farmaciaDetalleId) + "'"
+    detalle = 'select dispensa.id id, dispensa.despacho_id despacho , sum.nombre suministro, 	dispensa."dosisCantidad" dosis, dosis.descripcion unidadDosis,   vias.nombre via,	dispensa."cantidadOrdenada" cantidad FROM farmacia_farmaciadespachosdispensa dispensa INNER JOIN farmacia_farmaciaDetalle detalle ON (detalle.id = dispensa."farmaciaDetalle_id" ) INNER JOIN facturacion_suministros sum ON (sum.id= dispensa.suministro_id) INNER JOIN clinico_viasadministracion vias ON (vias.id= dispensa."viaAdministracion_id") INNER JOIN clinico_unidadesdemedidadosis dosis ON (dosis.id= dispensa."dosisUnidad_id") WHERE detalle.farmacia_id =' + "'" + str(farmaciaId) + "'" + ' AND detalle.id = ' + "'" + str(farmaciaDetalleId) + "'"
 
     print(detalle)
 
@@ -702,21 +699,34 @@ def CambiaEstadoDespacho(request):
 
     #Actualiza estado despacho
 
-    datosPaciente = []
+    miConexion3 = None
+    try:
 
-    miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
-                                   password="123456")
-    curx = miConexionx.cursor()
+        miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                       password="123456")
+        cur3 = miConexion3.cursor()
 
-    detalle = 'UPDATE farmacia_farmacia SET estado_id = ' + "'" + str(estadoFarmaciaDespacho) + "' WHERE id = " +"'" + str(farmaciaId) + "'"
-    print(detalle)
+        detalle = 'UPDATE farmacia_farmacia SET estado_id = ' + "'" + str(estadoFarmaciaDespacho) + "' WHERE id = " + "'" + str(farmaciaId) + "'"
+        print(detalle)
 
-    curx.execute(detalle)
-    miConexionx.commit()
-    miConexionx.close()
-    print(datosPaciente)
+        miConexion3.commit()
+        cur3.close()
+        miConexion3.close()
 
-    return JsonResponse({'success': True, 'message': 'Estado de Despacho Actualizado!'})
+        return JsonResponse({'success': True, 'message': 'Recibida Devolucion Actualizada!'})
+
+    except psycopg2.DatabaseError as error:
+        print("Entre por rollback", error)
+        if miConexion3:
+            print("Entro ha hacer el Rollback")
+            miConexion3.rollback()
+        raise error
+
+    finally:
+        if miConexion3:
+            cur3.close()
+            miConexion3.close()
+
 
 def Load_dataDespachosFarmacia(request, data):
     print("Entre Load_dataDespachosFarmacia")
@@ -814,7 +824,6 @@ def Load_dataDevolucionesFarmacia(request, data):
 
     print(fechaRegistro)
 
-
     devolucionesFarmacia = []
 
     miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
@@ -846,11 +855,11 @@ def Load_dataDevolucionesDetalleFarmacia(request, data):
     context = {}
     d = json.loads(data)
 
-    devolucionFarmaciaiaId = d['devolucionFarmaciaId']
+    devolucionFarmaciaId = d['devolucionFarmaciaId']
 
-    print ("devolucionFarmaciaiaId =", devolucionFarmaciaiaId)
+    print ("devolucionFarmaciaId =", devolucionFarmaciaId)
 
-    DevolucionesDetalleFarmacia = []
+    devolucionesDetalleFarmacia = []
 
     miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
                                        password="123456")
@@ -864,14 +873,103 @@ def Load_dataDevolucionesDetalleFarmacia(request, data):
     curx.execute(detalle)
 
     for id, medicamento, dosis, unidadMedida, via,  cantidad, cantidadDevuelta, observaciones in curx.fetchall():
-            DevolucionesDetalleFarmacia.append({"model": "farmacia.devolucionesdetalle", "pk": id, "fields":
+            devolucionesDetalleFarmacia.append({"model": "farmacia.devolucionesdetalle", "pk": id, "fields":
                 {'id': id, 'medicamento': medicamento, 'dosis': dosis, 'unidadMedida': unidadMedida,
                  'via': via,   'cantidad': cantidad, 'cantidadDevuelta':cantidadDevuelta, 'bservaciones':observaciones}})
 
     miConexionx.close()
-    print("DevolucionesDetalleFarmacia = " , DevolucionesDetalleFarmacia)
+    print("devolucionesDetalleFarmacia = " , devolucionesDetalleFarmacia)
 
 
-    serialized1 = json.dumps(DevolucionesDetalleFarmacia, default=str)
+    serialized1 = json.dumps(devolucionesDetalleFarmacia, default=str)
 
     return HttpResponse(serialized1, content_type='application/json')
+
+
+def RecibirDevolucionFarmacia(request):
+    print("Entre RecibirDevolucionFarmacia")
+
+    username_id = request.POST['username_id']
+    print ("username_id =", username_id)
+    sede = request.POST['sede']
+    print ("sede =", sede)
+    devolucionFarmaciaId = request.POST['devolucionFarmaciaId']
+    print ("devolucionFarmaciaId =", devolucionFarmaciaId)
+    servicioRecibeId = request.POST['servicioRecibeId']
+    print ("servicioRecibeId =", servicioRecibeId)
+    plantaRecibeId = request.POST['plantaRecibeId']
+    print ("plantaRecibeId =", plantaRecibeId)
+
+    miConexion3 = None
+    try:
+
+        miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                       password="123456")
+        cur3 = miConexion3.cursor()
+
+        detalle = 'UPDATE farmacia_farmaciadevolucion SET "serviciosAdministrativosRecibe_id" = ' + "'" + str(servicioRecibeId) + "'," + ' "usuarioRecibe_id" = ' + "'" + str(plantaRecibeId) + "'" + ' WHERE id = ' + "'" + str(devolucionFarmaciaId) + "'"
+        print(detalle)
+
+        miConexion3.commit()
+        cur3.close()
+        miConexion3.close()
+
+        return JsonResponse({'success': True, 'message': 'Recibida Devolucion Actualizada!'})
+
+    except psycopg2.DatabaseError as error:
+        print("Entre por rollback", error)
+        if miConexion3:
+            print("Entro ha hacer el Rollback")
+            miConexion3.rollback()
+        raise error
+
+    finally:
+        if miConexion3:
+            cur3.close()
+            miConexion3.close()
+
+
+
+def RecibirDevolucionDetalleFarmacia(request):
+    print("Entre RecibirDevolucionDetalleFarmacia")
+
+    username_id = request.POST['username_id']
+    print ("username_id =", username_id)
+    sede = request.POST['sede']
+    print ("sede =", sede)
+    devolucionDetalleFarmaciaId = request.POST['devolucionDetalleFarmaciaId']
+    print ("devolucionDetalleFarmaciaId =", devolucionDetalleFarmaciaId)
+    cantidadDevueltaRecibida = request.POST['cantidadDevueltaRecibida']
+    print ("cantidadDevueltaRecibida =", cantidadDevueltaRecibida)
+
+
+    miConexion3 = None
+    try:
+
+        miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                       password="123456")
+        cur3 = miConexion3.cursor()
+
+        detalle = 'UPDATE farmacia_farmaciadevoluciondetalle SET "cantidadDevueltaRecibida" = ' + "'" + str(cantidadDevueltaRecibida) + "'" + ' WHERE id = ' + "'" + str(devolucionDetalleFarmaciaId) + "'"
+        print(detalle)
+
+        miConexion3.commit()
+        cur3.close()
+        miConexion3.close()
+
+        return JsonResponse({'success': True, 'message': 'Recibida Devolucion Detalle Actualizada!'})
+
+    except psycopg2.DatabaseError as error:
+        print("Entre por rollback", error)
+        if miConexion3:
+            print("Entro ha hacer el Rollback")
+            miConexion3.rollback()
+        raise error
+
+    finally:
+        if miConexion3:
+            cur3.close()
+            miConexion3.close()
+
+
+

@@ -729,6 +729,14 @@ function arrancaFarmacia(valorTabla,valorData)
                     },
 
 	},
+	{
+	  "render": function ( data, type, row ) {
+                        var btn = '';
+     btn = btn + " <button class='RecibirDevolucion btn-primary ' data-pk='" + row.pk + "'>" + '<i class="fa-duotone fa-regular fa-thumbs-up"></i>' + "</button>";
+                       return btn;
+                    },
+
+	},
            
                 { data: "fields.id"},
                 { data: "fields.fechaRegistro"},
@@ -812,6 +820,14 @@ function arrancaFarmacia(valorTabla,valorData)
                  dataSrc: ""
             },
             columns: [
+	{
+	  "render": function ( data, type, row ) {
+                        var btn = '';
+     btn = btn + " <button class='RecibirDevolucionDetalle btn-primary ' data-pk='" + row.pk + "'>" + '<i class="fa-duotone fa-regular fa-thumbs-up"></i>' + "</button>";
+                       return btn;
+                    },
+
+	},
 		 { data: "fields.id"},
                 { data: "fields.medicamento"},
                 { data: "fields.dosis"},
@@ -865,8 +881,8 @@ const initDataTablePanelFarmacia = async () => {
 	//    dataTableFarmaciaDespachosDispensaInitialized = true;
 
 
-        arrancaFarmacia(7,data);
-	    dataTableDevolucionesDetalleFarmaciaInitialized = true;
+       // arrancaFarmacia(7,data);
+	 //   dataTableDevolucionesDetalleFarmaciaInitialized = true;
 
 
 }
@@ -893,8 +909,6 @@ $('#tablaPanelFarmacia tbody').on('click', '.miSelFarmacia', function() {
 	alert("farmaciaId = " +  farmaciaId);
 
 	document.getElementById("farmaciaId").value = farmaciaId;
-
-	
 
     	var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
         var username = document.getElementById("username").value;
@@ -946,14 +960,12 @@ $('#tablaPanelFarmacia tbody').on('click', '.miSelFarmacia', function() {
 	     arrancaFarmacia(3,data);
 	     dataTableFarmaciaDetalleInitialized = true;
 
-	     arrancaFarmacia(4,data);
-	     dataTableFarmaciaDespachosDispensaInitialized = true;       
-
 	     arrancaFarmacia(5,data);
 	     dataTableDespachosFarmaciaInitialized = true;
 
-//	     arrancaFarmacia(6,data);
-//	     dataTableDespachosDetalleFarmaciaInitialized = true;
+	     arrancaFarmacia(7,data);
+	     dataTableDespachosFarmaciaInitialized = true;
+
      
   });
 
@@ -987,6 +999,60 @@ $('#tablaDevolucionesFarmacia tbody').on('click', '.miConsultaDev', function() {
 	    dataTableDevolucionesDetalleFarmaciaInitialized = true;
 
 });
+
+$('#tablaDevolucionesFarmacia tbody').on('click', '.RecibirDevolucion', function() {
+
+	alert ("A RecibirDevolucion Farmacia");
+
+	     var post_id = $(this).data('pk');
+	alert ("post_id = " + post_id);
+	devolucionFarmaciaId = post_id;
+	$('#postFormRecibirDevolucionFarmacia').trigger("reset");
+
+	document.getElementById("devolucionNo").innerHTML =devolucionFarmaciaId;
+	document.getElementById("solicitudNo").innerHTML =farmaciaId;
+	document.getElementById("devolucionFarmaciaId").value = devolucionFarmaciaId;
+
+            $('#modelHeadingRecibirDevolucionFarmacia').html("Recibir Devolucion Farmacia");
+            $('#ModalRecibirDevolucionFarmacia').modal('show');  
+
+
+
+});
+
+$('#tablaDevolucionesDetalleFarmacia tbody').on('click', '.RecibirDevolucionDetalle', function() {
+
+	alert ("A RecibirDevolucion Detalle Farmacia");
+
+	     var post_id = $(this).data('pk');
+	alert ("post_id = " + post_id);
+	devolucionDetalleFarmaciaId = post_id;
+	$('#postFormRecibirDevolucionDetalleFarmacia').trigger("reset");
+	var row = $(this).closest('tr'); // Encuentra la fila
+	var table = $('#tablaDevolucionesDetalleFarmacia').DataTable();  // Inicializa el DataTable jquery//
+	
+ 	var rowindex = table.row(row).data(); // Obtiene los datos de la fila
+       console.log("rowindex= " , rowindex);
+
+	    	 dato1 = Object.values(rowindex);
+		console.log(" fila seleccionad d evuelta dato1 = ",  dato1);
+	        dato3 = dato1[2];
+		console.log(" fila selecciona de vuelta dato3 = ",  dato3);
+	        console.log ( "Cantidad es =  = " , dato3.cantidadDevuelta); 
+	
+	document.getElementById("devolucionDetalleNo").innerHTML =devolucionDetalleFarmaciaId;
+	document.getElementById("solicitudDetalleNo").innerHTML =devolucionFarmaciaId;
+	document.getElementById("cantidadDevueltaY").value = dato3.cantidadDevuelta;
+	document.getElementById("cantidadDevueltaRecibidaY").value =0;
+	
+
+
+            $('#modelHeadingRecibirDevolucionDetalleFarmacia').html("Recibir Devolucion Detalle Farmacia ");
+            $('#ModalRecibirDevolucionDetalleFarmacia').modal('show');  
+
+});
+
+
 
 
 
@@ -1225,3 +1291,104 @@ function AdicionarDespachosDispensa()
 }
 
 
+function RecibirDevolucionFarmacia()
+{
+
+	alert("RecibirDevolucionFarmacia");
+    	var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
+        var username = document.getElementById("username").value;
+        var nombreSede = document.getElementById("nombreSede").value;
+    	var sede = document.getElementById("sede").value;
+        var username_id = document.getElementById("username_id").value;
+        // var farmaciaId = document.getElementById("farmaciaId").value;
+        // var farmaciaDetalleId = document.getElementById("farmaciaDetalle").value;
+        var devolucionFarmaciaId = document.getElementById("devolucionNo").innerHTML;
+	alert("devolucionFarmaciaId = " + devolucionFarmaciaId);
+
+	var servicioRecibeId = document.getElementById("servicioRecibe").value;
+	var plantaRecibeId = document.getElementById("plantaRecibe").value;
+
+  $.ajax({
+            	   type: 'POST',
+ 	               url: '/recibirDevolucionFarmacia/',
+  	               data: { 'username':username, 'sede':sede, 'username_id':username_id,'devolucionFarmaciaId':devolucionFarmaciaId,
+                            'servicioRecibeId':servicioRecibeId,'plantaRecibeId':plantaRecibeId},
+ 	      		success: function (data) {
+
+    			    $("#mensajes").html(data.message);
+
+	       $('#ModalRecibirDevolucionFarmacia').modal('hide');  
+	         var data =  {}   ;
+	        data['username'] = username;
+	        data['sedeSeleccionada'] = sedeSeleccionada;
+	        data['nombreSede'] = nombreSede;
+	        data['sede'] = sede;
+	        data['username_id'] = username_id;
+
+	 	    data = JSON.stringify(data);
+
+	  		   arrancaFarmacia(7,data);
+		     	dataTableDevolucionesFarmaciaInitialized = true;
+      
+
+ 	      		}, // cierra function sucess
+ 	      		error: function (request, status, error) {
+ 	      			document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
+ 	      			
+
+ 	      		}, // cierra error function
+  	        });  // cierra ajax
+
+}
+
+function RecibirDevolucionDetalleFarmacia()
+{
+
+	alert("RecibirDevolucionDetalleFarmacia");
+    	var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
+        var username = document.getElementById("username").value;
+        var nombreSede = document.getElementById("nombreSede").value;
+    	var sede = document.getElementById("sede").value;
+        var username_id = document.getElementById("username_id").value;
+        var devolucionFarmaciaId = document.getElementById("devolucionFarmaciaId").value;
+        // var farmaciaId = document.getElementById("farmaciaId").value;
+        // var farmaciaDetalleId = document.getElementById("farmaciaDetalle").value;
+        var devolucionDetalleFarmaciaId = document.getElementById("devolucionDetalleNo").innerHTML;
+	alert("devolucionDetalleFarmaciaId = " + devolucionDetalleFarmaciaId);
+
+	var cantidadDevueltaRecibida = document.getElementById("cantidadDevueltaRecibidaY").value;
+
+
+  $.ajax({
+            	   type: 'POST',
+ 	               url: '/recibirDevolucionDetalleFarmacia/',
+  	               data: { 'username':username, 'sede':sede, 'username_id':username_id,'devolucionDetalleFarmaciaId':devolucionDetalleFarmaciaId,
+                            'cantidadDevueltaRecibida':cantidadDevueltaRecibida},
+ 	      		success: function (data) {
+
+    			    $("#mensajes").html(data.message);
+
+	       $('#ModalRecibirDevolucionDetalleFarmacia').modal('hide');  
+	         var data =  {}   ;
+	        data['username'] = username;
+	        data['sedeSeleccionada'] = sedeSeleccionada;
+	        data['nombreSede'] = nombreSede;
+	        data['sede'] = sede;
+	        data['username_id'] = username_id;
+	        data['devolucionFarmaciaId'] =devolucionFarmaciaId;
+
+	 	    data = JSON.stringify(data);
+
+	  		   arrancaFarmacia(8,data);
+		     	dataTableDevolucionesDetalleFarmaciaInitialized = true;
+      
+
+ 	      		}, // cierra function sucess
+ 	      		error: function (request, status, error) {
+ 	      			document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
+ 	      			
+
+ 	      		}, // cierra error function
+  	        });  // cierra ajax
+
+}

@@ -383,7 +383,8 @@ urlpatterns = [
     path('load_dataDespachosDetalleFarmacia/<str:data>', viewsFarmacia.Load_dataDespachosDetalleFarmacia,    name='load_dataDespachosDetalle_Farmacia'),
     path('load_dataDevolucionesFarmacia/<str:data>', viewsFarmacia.Load_dataDevolucionesFarmacia,  name='load_dataDevoluciones_Farmacia'),
     path('load_dataDevolucionesDetalleFarmacia/<str:data>',  viewsFarmacia.Load_dataDevolucionesDetalleFarmacia,      name='load_dataDevolucionesDetalle_Farmacia'),
-
+    path('recibirDevolucionFarmacia/', viewsFarmacia.RecibirDevolucionFarmacia, name='RecibirDevolucion_Farmacia'),
+    path('recibirDevolucionDetalleFarmacia/', viewsFarmacia.RecibirDevolucionDetalleFarmacia, name='RecibirDevolucionDetalle_Farmacia'),
 
     #Enfermeria
 

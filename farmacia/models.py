@@ -104,6 +104,7 @@ class FarmaciaDevolucionDetalle(models.Model):
     farmaciaDevolucion = models.ForeignKey('farmacia.FarmaciaDevolucion', on_delete=models.PROTECT, blank=True, null=True,  editable=True,  related_name='FarmaciaDevolucion01')
     farmaciaDespachosDispensa = models.ForeignKey('farmacia.FarmaciaDespachosDispensa', on_delete=models.PROTECT, blank=True, null=True,  editable=True,  related_name='FarmaciaDespachos21201')
     cantidadDevuelta = models.DecimalField(max_digits=10, decimal_places=0, blank=True, null=True, editable=True)
+    cantidadDevueltaRecibida = models.DecimalField(max_digits=10, decimal_places=0, blank=True, null=True, editable=True)
     observaciones =  models.CharField(max_length=250,  editable=True,  blank=True)
     fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)
     usuarioRegistro = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True, on_delete=models.PROTECT   , related_name='PlantaFarmaciaDevDet3453')
