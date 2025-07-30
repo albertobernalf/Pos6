@@ -1266,3 +1266,147 @@ def Load_dataConsultaDevolucionesDetalleEnfermeria(request, data):
     serialized1 = json.dumps(ConsultaDevolucionesDetalleEnfermeria, default=str)
 
     return HttpResponse(serialized1, content_type='application/json')
+
+
+
+def Load_dataSignosVitalesEnfermeria(request, data):
+    print("Entre Load_dataSignosVitalesEnfermeria")
+
+    context = {}
+    d = json.loads(data)
+
+    ingresoId = d['ingresoId']
+
+    print ("ingresoId =", ingresoId)
+
+    signosVitalesEnfermeria = []
+
+    miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                       password="123456")
+    curx = miConexionx.cursor()
+
+    detalle = 'SELECT sig.id, sig.fecha, his.folio, "frecCardiaca", "frecRespiratoria", "tensionADiastolica", "tensionASistolica", "tensionAMedia", temperatura, saturacion, glucometria, glasgow, apache, pvc, cuna, ic, "glasgowOcular", "glasgowVerbal", "glasgowMotora", sig.observacion, sig."fechaRegistro",  pla.nombre usuarioRegistro FROM clinico_historiasignosvitales sig INNER JOIN clinico_historia his on (his.id = sig.historia_id) INNER JOIN admisiones_ingresos adm on (adm."tipoDoc_id" = his."tipoDoc_id"  and adm.documento_id=his.documento_id and adm.consec=his."consecAdmision") INNER JOIN planta_planta pla on (pla.id= sig."usuarioRegistro_id")	WHERE adm.id = ' + "'" + str(ingresoId) + "'"
+
+    print(detalle)
+
+    curx.execute(detalle)
+
+    for id, fecha, folio, frecCardiaca, frecRespiratoria, tensionADiastolica, tensionASistolica,  tensionAMedia, temperatura, saturacion, glucometria, glasgow, apache, pvc, cuna, ic, glasgowOcular, glasgowVerbal, glasgowMotora, observacion,  fechaRegistro , usuarioRegistro in curx.fetchall():
+            signosVitalesEnfermeria.append({"model": "enfermeria.signosvitales", "pk": id, "fields":
+                {'id': id, 'fecha':fecha, 'folio':folio, 'frecCardiaca': frecCardiaca, 'frecRespiratoria': frecRespiratoria, 'tensionADiastolica': tensionADiastolica,
+                 'tensionAMedia':tensionAMedia,'temperatura': temperatura,'saturacion':saturacion,'glucometria':glucometria,'glasgow':glasgow,'apache':apache,'pvc':pvc, 'cuna':cuna, 'ic':ic, 'glasgowOcular':glasgowOcular,'glasgowVerbal':glasgowVerbal,'glasgowMotora' :glasgowMotora, 'observacion':observacion, 'usuarioRegistro':usuarioRegistro    }})
+
+    miConexionx.close()
+    print("signosVitalesEnfermeria = " , signosVitalesEnfermeria)
+
+
+    serialized1 = json.dumps(signosVitalesEnfermeria, default=str)
+
+    return HttpResponse(serialized1, content_type='application/json')
+
+def GuardaSignosVitalEnfermeria(request):
+    print("Entre GuardaSignosVitalEnfermeria")
+
+
+    username_id = request.POST['username_id']
+    print ("username_id =", username_id)
+    sede = request.POST['sede']
+    print ("sede =", sede)
+    ingresoId = request.POST['ingresoId']
+    print ("ingresoId =", ingresoId)
+    ingreso = Ingresos.objects.get(id=ingresoId)
+
+    fecha = request.POST['fecha']
+    print ("fecha =", fecha)
+
+    frecCardiaca = request.POST['frecCardiaca']
+    print ("frecCardiaca =", frecCardiaca)
+    frecRespiratoria = request.POST['frecRespiratoria']
+    print ("frecRespiratoria =", frecRespiratoria)
+    tensionADiastolica = request.POST['tensionADiastolica']
+    print ("tensionADiastolica =", tensionADiastolica)
+    tensionASistolica = request.POST['tensionASistolica']
+    print ("tensionASistolica =", tensionASistolica)
+    tensionAMedia = request.POST['tensionAMedia']
+    print ("tensionAMedia =", tensionAMedia)
+    temperatura = request.POST['temperatura']
+    print ("temperatura =", temperatura)
+    saturacion = request.POST['saturacion']
+    print ("saturacion =", saturacion)
+    glucometria = request.POST['glucometria']
+    print ("glucometria =", glucometria)
+
+    glasgow = request.POST['glasgow']
+    print ("glasgow =", glasgow)
+    apache = request.POST['apache']
+    print ("apache =", apache)
+    pvc = request.POST['pvc']
+    print ("pvc =", pvc)
+    cuna = request.POST['cuna']
+    print ("cuna =", cuna)
+    ic = request.POST['ic']
+    print ("ic =", ic)
+    glasgowOcular = request.POST['glasgowOcular']
+    print ("glasgowOcular =", glasgowOcular)
+    glasgowVerbal = request.POST['glasgowVerbal']
+    print ("glasgowVerbal =", glasgowVerbal)
+    glasgowMotora = request.POST['glasgowMotora']
+    print ("glasgowMotora =", glasgowMotora)
+
+    observacion = request.POST['observacion']
+    print ("observacion =", observacion)
+
+    serviciosAdministrativos = request.POST['serviciosAdministrativosSig']
+    print ("serviciosAdministrativos =", serviciosAdministrativos)
+
+    tiposFolio = TiposFolio.objects.get(nombre='ENFERMERIA')
+
+    estadoReg = 'A'
+    fechaRegistro = datetime.datetime.now()
+
+    #Crea El signo vital Enfermeria
+
+    miConexion3 = None
+    try:
+
+        miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                       password="123456")
+        cur3 = miConexion3.cursor()
+
+        # Primero buscamos el numero del folio nuevo
+        ultimofolio = Historia.objects.all().filter(tipoDoc_id=ingreso.tipoDoc_id).filter(documento_id=ingreso.documento_id).aggregate(maximo=Coalesce(Max('folio'), 0))
+
+        print("ultimo folio = ", ultimofolio)
+        print("ultimo folio = ", ultimofolio['maximo'])
+        ultimofolio2 = (ultimofolio['maximo']) + 1
+        print("ultimo folio2 = ", ultimofolio2)
+
+        # Segundo  INSERT en clinico_historial
+
+        detalle = 'INSERT INTO clinico_historia ("consecAdmision", folio, fecha, "fechaRegistro", "estadoReg", documento_id, "tipoDoc_id" , planta_id, "tiposFolio_id" , "usuarioRegistro_id", "sedesClinica_id", "serviciosAdministrativos_id" ) VALUES (' + "'" + str(ingreso.consec) + "','" + str(ultimofolio2) +  "','" + str(fechaRegistro) + "','" + str(fechaRegistro) + "','" + str(estadoReg) +"','" + str(ingreso.documento_id) + "','" + str(ingreso.tipoDoc_id) + "','" + str(username_id)  + "','" + str(tiposFolio.id)  + "','" + str(username_id) + "','" + str(sede) + "','" + str(serviciosAdministrativos) + "') RETURNING id"
+        print(detalle)
+        resultado = cur3.execute(detalle)
+        historiaId = cur3.fetchone()[0]
+        print("historiaId = ", historiaId)
+
+        # Segundo  INSERT en clinico_historialdietas
+
+        detalle = 'INSERT INTO clinico_historiasignosvitales ( fecha, "frecCardiaca", "frecRespiratoria", "tensionADiastolica", "tensionASistolica", "tensionAMedia", temperatura, saturacion, glucometria, glasgow, apache, pvc, cuna, ic, "glasgowOcular", "glasgowVerbal", "glasgowMotora", observacion, "fechaRegistro", "estadoReg", historia_id, "usuarioRegistro_id" )  VALUES (' + "'" + str(fecha) +  "','" + str(frecCardiaca) +"','" + str(frecRespiratoria) + "','" + str(tensionADiastolica) + "','" + str(tensionASistolica) + "','" + str(tensionAMedia) + "','" + str(temperatura) + "','" + str(saturacion) + "','" + str(glucometria) + "','" + str(glasgow) + "','" + str(apache) + "','" + str(pvc) + "','" + str(cuna)  + "','" + str(ic) + "','" + str(glasgowOcular) + "','" + str(glasgowVerbal) + "','" + str(glasgowMotora) + "','" + str(observacion) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(historiaId) +  "','" + str(username_id)   +   "')"
+        print(detalle)
+        cur3.execute(detalle)
+        miConexion3.commit()
+        miConexion3.close()
+
+        return JsonResponse({'success': True, 'message': 'Signo Vital Creado!'})
+
+    except psycopg2.DatabaseError as error:
+        print("Entre por rollback", error)
+        if miConexion3:
+            print("Entro ha hacer el Rollback")
+            miConexion3.rollback()
+        raise error
+
+    finally:
+        if miConexion3:
+            cur3.close()
+            miConexion3.close()

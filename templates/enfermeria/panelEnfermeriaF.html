@@ -70,7 +70,7 @@
 
             <!-- INICIO TABLE DE  EL DATATABLE  -->
 
-		<div class="container my-2" style="width:100%">
+	<div class="container my-2" style="width:100%">
              
    			   <div class="row" style="width:100%">
 
@@ -282,6 +282,180 @@
 
 </article>
 
+<article id="SignosVitales">
+       	<div class="container my-2">
+
+		<div align="left" height="15px" width="50px">
+			TipoDoc: <span id="nombreTipoDocSig"></span>
+			Doc: <span id="documentoSig"></span>
+			Paciente: <span id="pacienteSig"></span>
+			Ingreso: <span id="consecutivoAdmisionSig"></span>
+			Servicio: <span id="servicioSig"></span>
+			Hab: <span id="habitacionSig"></span>
+
+
+                <div class="row row-cols-4 mt-3">
+
+            <div class="col">
+                Fecha:
+                
+		<input type="text" id="fechaSig" name="fechaSig" value="">
+            </div>
+
+            <div class="col">
+                Frecuencia Cardiaca:
+		<input type="text" id="frecCardiaca" name="frecCardiaca" value="">
+
+            </div>
+
+            <div class="col">
+                Frecuencia Respiratoria
+		<input type="text" id="frecRespiratoria" name="frecRespiratoria" value="">
+
+            </div>
+
+            <div class="col">
+                TA Diastolica:
+		<input type="text" id="tensionADiastolica" name="tensionADiastolica" value="">
+            </div>
+            <div class="col">
+                TA Sistolica:
+	<input type="text" id="tensionASistolica" name="tensionADiastolica" value="">
+
+            </div>
+		 <div class="col">
+                TA Media:
+	<input type="text" id="tensionAMedia" name="tensionAMedia" value="">
+
+            </div>
+
+            <div class="col">
+                Temperatura:
+<input type="text" id="temperatura" name="temperatura" value="">
+
+            </div>
+                        <div class="col">
+                saturacion:
+<input type="text" id="saturacion" name="saturacion" value="">
+           
+            </div>
+
+                        <div class="col">
+                Glucometria:
+<input type="text" id="glucometria" name="tensionAMedia" value="">
+
+            </div>
+
+                        <div class="col">
+                Glasgow:
+		<input type="text" id="glasgow" name="glasgow" value="">
+
+            </div>
+
+            <div class="col">
+                Apache:
+
+	<input type="text" id="apache" name="apache" value="">
+
+            </div>
+
+            <div class="col">
+                Pvc:
+
+	<input type="text" id="pvc" name="pvc" value="">
+
+            </div>
+            <div class="col">
+                Cuna:
+
+	<input type="text" id="cuna" name="cuna" value="">
+
+            </div>
+            <div class="col">
+                IC:
+	<input type="text" id="ic" name="ic" value="">
+
+            </div>
+            <div class="col">
+                Glasgow ocular:
+		<input type="text" id="glasgowOcular" name="glasgowOcular" value="">
+            </div>
+            <div class="col">
+                Glasgow verbal:
+		<input type="text" id="glasgowVerbal" name="glasgowVerbal" value="">
+
+            </div>
+            <div class="col">
+                Glasgow motora:
+		<input type="text" id="glasgowMotora" name="glasgowMotora" value="">
+
+            </div>
+	 <div class="col">
+			 <label  for="serviciosAdministrativosSig">Servicio Devuelve:</label>   
+                    							    
+                                                        <select class="select-css" id="serviciosAdministrativosSig"
+                                                                name="serviciosAdministrativosSig">
+                                                            {% for serviciosAdministrativos in ServiciosAdministrativos %}
+                                                            <option value="{{serviciosAdministrativos.id}}">
+                                                                {{serviciosAdministrativos.nombre}}
+                                                            </option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+
+	  <div class="col">
+                Observaciones:
+		<input type="text" id="observacionSig" name="observacionSig" value="">
+
+            </div>
+
+	  <div class="col">
+       		<input type="button" class="btn btn-primary" value="Guardar"  onclick="GuardarSignoVitalEnfermeria()"> 
+		</div>
+         </div>
+
+    <!-- INICIO TABLE DE  EL DATATABLE  -->
+
+		<div class="container my-2" style="width:100%">
+             
+   			   <div class="row" style="width:100%">
+
+                                        <table id= "tablaSignosVitalesEnfermeria" class="display table table-striped table-sm fs-6 nowrap" style="width:100%">
+                                           <thead>
+                                            <tr>    
+					<bold>    
+	        			  
+				        <th>id</th>
+				        <th>Fecha</th>
+				        <th>Folio</th>
+                                	<th>Cardio</th>
+	                                <th>Respi</th>
+        	                        <th>tADiast</th>
+        	                        <th>tASisto</th>
+        	                        <th>tAMedia</th>
+	                                <th>temp</th>
+                	                <th>satura</th>
+                        	        <th>tAMedia</th>
+        	                        <th>glasgow</th>
+                                	<th>apache</th>
+	                                <th>pvc</th>
+        	                        <th>cuna</th>                                                               
+        	                        <th>ic</th>                                                               
+        	                        <th>glasgowOcular</th>                                                               
+        	                        <th>glasgowVerbal</th>                                                               
+        	                        <th>glasgowMotora</th>                                                               
+
+					</bold>                                  
+                                            </tr>
+                                            </thead>
+                                            <tbody style="margin-left:0">
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+         </div>
+
+</article>
 
 <article id="Devoluciones">
         	
@@ -1224,13 +1398,6 @@
 </article>
 
 
-<article id="SignosVitales">
-       	<div class="container my-2">
-           
-         </div>
-	
-
-</article>
 
 
 

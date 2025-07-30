@@ -21,6 +21,7 @@ let dataTableNotasEnfermeria = false;
 let dataTableDevolucionEnfermeriaInitialized = false;
 let dataTableConsultaDevolucionesEnfermeriaInitialized = false;
 let dataTableConsultaDevolucionesDetalleEnfermeriaInitialized = false;
+let dataTableSignosVitalesEnfermeriaInitialized = false;
 
 var controlMed = 0;
 var controlDev = 0;
@@ -1304,6 +1305,99 @@ function arrancaEnfermeria(valorTabla,valorData)
   }
 
 
+    if (valorTabla == 13)
+    {
+        let dataTableOptionsSignosVitalesEnfermeria  ={
+   dom: "<'row mb-1'<'col-sm-3'B><'col-sm-3'><'col-sm-6'f>>" + // B = Botones a la izquierda, f = filtro a la derecha
+             "<'row'<'col-sm-12'tr>>" +
+             "<'row mt-3'<'col-sm-5'i><'col-sm-7'p>>",
+  buttons: [
+    {
+      extend: 'excelHtml5',
+      text: '<i class="fas fa-file-excel"></i> ',
+      titleAttr: 'Exportar a Excel',
+      className: 'btn btn-success',
+    },
+    {
+      extend: 'pdfHtml5',
+      text: '<i class="fas fa-file-pdf"></i> ',
+      titleAttr: 'Exportar a PDF',
+      className: 'btn btn-danger',
+    },
+    {
+      extend: 'print',
+      text: '<i class="fa fa-print"></i> ',
+      titleAttr: 'Imprimir',
+      className: 'btn btn-info',
+    },
+  ],
+  lengthMenu: [2, 4, 15],
+           processing: true,
+            serverSide: false,
+            scrollY: '475px',
+	    scrollX: true,
+	    scrollCollapse: true,
+            paging:false,
+            columnDefs: [
+		{ className: 'centered', targets: [0, 1, 2, 3] },
+	    { width: '10%', targets: [2,3] },
+		{  
+                    "targets": 18
+               }
+            ],
+	 pageLength: 3,
+	  destroy: true,
+	  language: {
+		    processing: 'Procesando...',
+		    lengthMenu: 'Mostrar _MENU_ registros',
+		    zeroRecords: 'No se encontraron resultados',
+		    emptyTable: 'Ningún dato disponible en esta tabla',
+		    infoEmpty: 'Mostrando registros del 0 al 0 de un total de 0 registros',
+		    infoFiltered: '(filtrado de un total de _MAX_ registros)',
+		    search: 'Buscar:',
+		    infoThousands: ',',
+		    loadingRecords: 'Cargando...',
+		    paginate: {
+			      first: 'Primero',
+			      last: 'Último',
+			      next: 'Siguiente',
+			      previous: 'Anterior',
+		    }
+			},
+
+           ajax: {
+                 url:"/load_dataSignosVitalesEnfermeria/" +  data,
+                 type: "POST",
+                 dataSrc: ""
+            },
+            columns: [
+		 { data: "fields.id"},
+                { data: "fields.fecha"},
+                { data: "fields.folio"},
+                { data: "fields.frecCardiaca"},
+                { data: "fields.frecRespiratoria"},
+                { data: "fields.tensionADiastolica"},
+                { data: "fields.tensionADiastolica"},
+                { data: "fields.tensionAMedia"},
+                { data: "fields.temperatura"},
+                { data: "fields.saturacion"},
+                { data: "fields.tensionAMedia"},
+                { data: "fields.glasgow"},
+                { data: "fields.apache"},
+                { data: "fields.pvc"},
+                { data: "fields.cuna"},
+                { data: "fields.ic"},
+		   { data: "fields.glasgowOcular"},
+		   { data: "fields.glasgowVerbal"},
+		   { data: "fields.glasgowMotora"},
+
+                        ]
+            }
+	        
+		   dataTable = $('#tablaSignosVitalesEnfermeria').DataTable(dataTableOptionsSignosVitalesEnfermeria);
+
+  }
+
 
   
 }
@@ -1480,6 +1574,10 @@ $('#tablaPanelEnfermeria tbody').on('click', '.miIngresoEnfermeriaId', function(
 
 	    arrancaEnfermeria(11,data);
 	    dataTableConsultaDevolucionesEnfermeriaInitialized = true;
+
+
+	    arrancaEnfermeria(13,data);
+	    dataTableSignosVitalesEnfermeriaInitialized = true;
 
       
   });
@@ -2311,6 +2409,76 @@ function GuardarDevolucion()
 
 }
 
+function GuardarSignoVitalEnfermeria() 
+{
+	alert ("A GuardarSignoVital");
+
+	  	
+	var ingresoId = document.getElementById("ingresoId").value ;
+   	var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
+        var username = document.getElementById("username").value;
+        var nombreSede = document.getElementById("nombreSede").value;
+    	var sede = document.getElementById("sede").value;
+        var username_id = document.getElementById("username_id").value;
+        var fecha = document.getElementById("fechaSig").value;
+        var frecCardiaca = document.getElementById("frecCardiaca").value;
+        var frecRespiratoria = document.getElementById("frecRespiratoria").value;
+        var tensionADiastolica = document.getElementById("tensionADiastolica").value;
+        var tensionASistolica = document.getElementById("tensionASistolica").value;
+        var tensionAMedia = document.getElementById("tensionAMedia").value;
+        var temperatura = document.getElementById("temperatura").value;
+        var saturacion = document.getElementById("saturacion").value;
+        var glucometria = document.getElementById("glucometria").value;
+        var glasgow = document.getElementById("glasgow").value;
+        var apache = document.getElementById("apache").value;
+        var pvc = document.getElementById("pvc").value;
+        var cuna = document.getElementById("cuna").value;
+        var ic = document.getElementById("ic").value;
+        var glasgowOcular = document.getElementById("glasgowOcular").value;
+        var glasgowVerbal = document.getElementById("glasgowVerbal").value;
+        var glasgowMotora = document.getElementById("glasgowMotora").value;
+        var observacion = document.getElementById("observacionSig").value;
+        var serviciosAdministrativosSig = document.getElementById("serviciosAdministrativosSig").value;
+
+	alert(" ingresoId= " + ingresoId);
+
+
+         var data =  {}   ;
+        data['username'] = username;
+        data['sedeSeleccionada'] = sedeSeleccionada;
+        data['nombreSede'] = nombreSede;
+        data['sede'] = sede;
+        data['username_id'] = username_id;
+	data['ingresoId'] = ingresoId;
+
+ 	    data = JSON.stringify(data);
+
+	  $.ajax({
+                data: {'sede':sede,'username_id':username_id, 'ingresoId':ingresoId,
+         'fecha':fecha,	'frecCardiaca':frecCardiaca,	'frecRespiratoria':frecRespiratoria,
+	'tensionADiastolica':tensionADiastolica,'tensionASistolica':tensionASistolica,'tensionAMedia':tensionAMedia,
+	'temperatura':temperatura,'saturacion':saturacion,'glucometria':glucometria,'glasgow':glasgow,
+	'apache':apache,'pvc':pvc,'cuna':cuna,'ic':ic,'glasgowOcular':glasgowOcular,'glasgowVerbal':glasgowVerbal,
+	'glasgowMotora':glasgowMotora,'observacion':observacion,'serviciosAdministrativosSig':serviciosAdministrativosSig},
+	        url: "/guardaSignosVitalEnfermeria/",
+                type: "POST",
+                dataType: 'json',
+                success: function (info) {
+
+		alert ("llegue listop");
+
+	     arrancaEnfermeria(13,data);
+	     dataTableSignosVitalesEnfermeriaInitialized = true;
+   	document.getElementById("mensajes").innerHTML = info
+                },
+            error: function (request, status, error) {
+		alert("llegue con error ", error);
+		document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error + ' ' + error
+	   	    	}
+            });
+
+      
+  };
 
 
 

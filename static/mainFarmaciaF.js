@@ -984,7 +984,8 @@ $('#tablaDevolucionesFarmacia tbody').on('click', '.miConsultaDev', function() {
     	var sede = document.getElementById("sede").value;
         var username_id = document.getElementById("username_id").value;
 	  var username_id = document.getElementById("username_id").value;
- 
+ document.getElementById("devolucionFarmaciaId").value = devolucionFarmaciaId;
+
          var data =  {}   ;
         data['username'] = username;
         data['sedeSeleccionada'] = sedeSeleccionada;
