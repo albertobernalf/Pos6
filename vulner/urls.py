@@ -101,7 +101,7 @@ urlpatterns = [
     #path('creacionHC/postConsultaHc/<str:id>/edit/', viewsClinico.PostConsultaHc, name='Post_editHc'),
     #path('creacionHC/<str:id>', viewsClinico.PostConsultaHcli),
     path('creacionHc/postConsultaHcli/', viewsClinico.PostConsultaHcli , name='Post_editHc'),
-    path('imprimirHistoriaClinica/<str:documento>', viewsClinico.ImprimirHistoriaClinica),
+    path('imprimirHistoriaClinica/', viewsClinico.ImprimirHistoriaClinica),
 
     # Actividaes Mecanicas
 

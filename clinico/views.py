@@ -3,6 +3,8 @@ from django import forms
 import cv2
 import numpy as np
 from fpdf import FPDF
+from PyPDF2 import PdfReader
+import webbrowser
 import psycopg2
 import json
 import datetime
@@ -51,6 +53,11 @@ import cgi
 
 
 class PDF(FPDF):
+    def __init__(self, documentoId,  *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.documentoId = documentoId
+
+
     def header(self):
         # Logo
         self.image('C:/EntornosPython/Pos6/static/img/MedicalFinal.jpg', 170 ,1, 20 , 20)
@@ -66,7 +73,8 @@ class PDF(FPDF):
 
         curt = miConexiont.cursor()
         #comando = 'select  u."tipoDoc_id" , tip.nombre tipnombre, documento documentoPaciente, u.nombre nombre, case when genero = ' + "'" + str('M') + "'" + ' then ' + "'" + str("Masculino") + "'" + ' when genero= ' + "'" + str('F') + "'" + ' then ' + "'" + str('Femenino') + "'" + ' end as genero, cen.nombre as centro, tu.nombre as tipoUsuario,"fechaNacio", u.direccion direccion, u.telefono telefono from usuarios_usuarios u, usuarios_tiposUsuario tu, sitios_centros cen, usuarios_tiposDocumento tip where tip.id = u."tipoDoc_id"  AND u."tipoDoc_id" = ' +"'" + str('1') + "'" + ' and u.id >= ' + "'" + str('16') + "'" + ' and u."tiposUsuario_id" = tu.id and u."centrosC_id" = cen.id'
-        comando = 'select  u."tipoDoc_id" , tip.nombre tipnombre, u.documento documentoPaciente, u.nombre nombre, case when genero = ' + "'" + str('M') + "'" + ' then ' + "'" + str('Masculino') + "'" + ' when genero= ' + "'" + str('F') + "'" + ' then ' + "'" + str('Femenino') + "'" + ' end as genero, cast((date_part(' + "'" + str('year') + "'" + ', now()) - date_part(' + "'" + str('year') + "'" + ', u."fechaNacio" )) as text) edad,   reg.nombre regimen, convenio.nombre convenio , serv.nombre servicio, cast(now() as text) fecha from admisiones_ingresos adm INNER JOIN 	usuarios_usuarios u ON (u."tipoDoc_id" = adm."tipoDoc_id" and u.id = adm.documento_id) INNER JOIN usuarios_tiposDocumento tip ON (tip.id = u."tipoDoc_id") INNER JOIN facturacion_conveniospacienteingresos  convIngreso ON (convIngreso."tipoDoc_id" = adm."tipoDoc_id" and convIngreso.documento_id = adm.documento_id and convIngreso."consecAdmision" = adm.consec) INNER JOIN contratacion_convenios convenio ON (convenio.id = convIngreso.convenio_id) INNER JOIN facturacion_empresas EMP on (emp.id =convenio.empresa_id ) INNER JOIN clinico_regimenes reg ON (reg.id=emp.regimen_id) INNER JOIN clinico_servicios serv ON (serv.id = adm."serviciosActual_id")	 WHERE adm."tipoDoc_id" = ' + "'" + str('1') + "'" + ' AND adm.documento_id= ' + "'" + str('1') + "'" + ' AND adm.consec = 1  and convenio.id = 1'
+        #comando = 'select  u."tipoDoc_id" , tip.nombre tipnombre, u.documento documentoPaciente, u.nombre nombre, case when genero = ' + "'" + str('M') + "'" + ' then ' + "'" + str('Masculino') + "'" + ' when genero= ' + "'" + str('F') + "'" + ' then ' + "'" + str('Femenino') + "'" + ' end as genero, cast((date_part(' + "'" + str('year') + "'" + ', now()) - date_part(' + "'" + str('year') + "'" + ', u."fechaNacio" )) as text) edad,   reg.nombre regimen, convenio.nombre convenio , serv.nombre servicio, cast(now() as text) fecha from admisiones_ingresos adm INNER JOIN 	usuarios_usuarios u ON (u."tipoDoc_id" = adm."tipoDoc_id" and u.id = adm.documento_id) INNER JOIN usuarios_tiposDocumento tip ON (tip.id = u."tipoDoc_id") INNER JOIN facturacion_conveniospacienteingresos  convIngreso ON (convIngreso."tipoDoc_id" = adm."tipoDoc_id" and convIngreso.documento_id = adm.documento_id and convIngreso."consecAdmision" = adm.consec) INNER JOIN contratacion_convenios convenio ON (convenio.id = convIngreso.convenio_id) INNER JOIN facturacion_empresas EMP on (emp.id =convenio.empresa_id ) INNER JOIN clinico_regimenes reg ON (reg.id=emp.regimen_id) INNER JOIN clinico_servicios serv ON (serv.id = adm."serviciosActual_id")	 WHERE adm."tipoDoc_id" = ' + "'" + str('1') + "'" + ' AND adm.documento_id= ' + "'" + str('1') + "'" + ' AND adm.consec = 1  and convenio.id = 1'
+        comando = 'select  u."tipoDoc_id" , tip.nombre tipnombre, u.documento documentoPaciente, u.nombre nombre, case when genero = ' + "'" + str('M') + "'" + ' then ' + "'" + str('Masculino') + "'" + ' when genero= ' + "'" + str('F') + "'" + ' then ' + "'" + str('Femenino') + "'" + ' end as genero, cast((date_part(' + "'" + str('year') + "'" + ', now()) - date_part(' + "'" + str('year') + "'" + ', u."fechaNacio" )) as text) edad,   reg.nombre regimen, convenio.nombre convenio , serv.nombre servicio, cast(now() as text) fecha from admisiones_ingresos adm INNER JOIN 	usuarios_usuarios u ON (u."tipoDoc_id" = adm."tipoDoc_id" and u.id = adm.documento_id) INNER JOIN usuarios_tiposDocumento tip ON (tip.id = u."tipoDoc_id") INNER JOIN facturacion_conveniospacienteingresos  convIngreso ON (convIngreso."tipoDoc_id" = adm."tipoDoc_id" and convIngreso.documento_id = adm.documento_id and convIngreso."consecAdmision" = adm.consec) INNER JOIN contratacion_convenios convenio ON (convenio.id = convIngreso.convenio_id) INNER JOIN facturacion_empresas EMP on (emp.id =convenio.empresa_id ) INNER JOIN clinico_regimenes reg ON (reg.id=emp.regimen_id) INNER JOIN clinico_servicios serv ON (serv.id = adm."serviciosActual_id") WHERE  adm.documento_id= ' + "'" + str(self.documentoId) + "'" + '  and convenio.id = 1'
 
         curt.execute(comando)
         print(comando)
@@ -3053,9 +3061,34 @@ def PostConsultaHcli(request):
         return JsonResponse({'errors':'Something went wrong!'})
 
 
-def ImprimirHistoriaClinica(request,data):
+def ImprimirHistoriaClinica(request):
     # Instantiation of inherited class
-    pdf = PDF()
+    print("Entre ImprimirHistoriaClinica ")
+
+    ingresoId = request.POST["ingresoId"]
+    print("ingresoId = ", ingresoId)
+
+    print("ingresoId = ", ingresoId)
+    llave = ingresoId.split('-')
+    print("llave = ", llave)
+    print("primero=", llave[0])
+    print("segundo = ", llave[1])
+
+    if (llave[1] == 'INGRESO'):
+        ingresoPaciente = Ingresos.objects.get(id=llave[0])
+
+
+    if (llave[1] == 'TRIAGE'):
+        ingresoPaciente = Triage.objects.get(id=llave[0])
+
+    documentoId =  ingresoPaciente.documento_id
+    print ("documentoId = ",documentoId)
+
+    pacienteId = Usuarios.objects.get(id=documentoId)
+    print("documentoPaciente = ", pacienteId.documento)
+
+
+    pdf = PDF(documentoId)
     pdf.alias_nb_pages()
     pdf.set_margins(left=10, top=5, right=5)
     pdf.add_page()
@@ -3072,8 +3105,7 @@ def ImprimirHistoriaClinica(request,data):
                                    password="123456")
     curt = miConexiont.cursor()
 
-    comando = 'select  h.id HistoriaId, h.folio folioId, h.fecha fechaFolio, h."tiposFolio_id" tipoFolio from clinico_historia h where h.documento_id = ' + "'" + str(
-        '1') + "'" + ' order by id'
+    comando = 'select  h.id HistoriaId, h.folio folioId, h.fecha fechaFolio, h."tiposFolio_id" tipoFolio from clinico_historia h where h.documento_id = ' + "'" + str(documentoId) + "'" + ' order by id'
     curt.execute(comando)
     print(comando)
 
@@ -3109,8 +3141,7 @@ def ImprimirHistoriaClinica(request,data):
                                        password="123456")
         curt = miConexiont.cursor()
 
-        comando = 'select  h.motivo motivo, h.subjetivo subjetivo, h.objetivo objetivo, h.analisis analisis, h.plann plan, h."causasExterna_id" causasExterna    from clinico_historia h where h.id = ' + str(
-            folios[0 + i]['HistoriaId'])
+        comando = 'select  h.motivo motivo, h.subjetivo subjetivo, h.objetivo objetivo, h.analisis analisis, h.plann plan, h."causasExterna_id" causasExterna    from clinico_historia h where h.id = ' + str(folios[0 + i]['HistoriaId'])
 
         curt.execute(comando)
 
@@ -3858,8 +3889,7 @@ def ImprimirHistoriaClinica(request,data):
                                            password="123456")
             curx = miConexionx.cursor()
 
-            comando = 'SELECT medicos."registroMedico", planta.nombre plantaNombre, usu."tipoDoc_id", usu.documento 	FROM clinico_historia historia INNER JOIN planta_planta planta ON (planta.id = historia."usuarioRegistro_id") INNER JOIN clinico_medicos medicos ON (medicos.id = historia."usuarioRegistro_id") INNER JOIN usuarios_usuarios usu ON (usu.id = historia."usuarioRegistro_id")	WHERE historia.id = ' + "'" + str(
-                folios[0 + i]['HistoriaId']) + "'"
+            comando = 'SELECT medicos."registroMedico", planta.nombre plantaNombre, usu."tipoDoc_id", usu.documento 	FROM clinico_historia historia INNER JOIN planta_planta planta ON (planta.id = historia."usuarioRegistro_id") INNER JOIN clinico_medicos medicos ON (medicos.planta_id = planta.id) INNER JOIN usuarios_usuarios usu ON (usu.id = historia.documento_id)	WHERE historia.id = ' + "'" + str(folios[0 + i]['HistoriaId']) + "'"
             curx.execute(comando)
 
             print(comando)
@@ -3891,9 +3921,25 @@ def ImprimirHistoriaClinica(request,data):
             # Page number
             # self.cell(0, 10, 'Page ' + str(self.page_no()) + '/{nb}', 0, 0, 'C')
 
-        pdf.output('C:/EntornosPython/pos6/temporal/hClinica.pdf', 'F')
+    carpeta = 'C:\EntornosPython\Pos6\JSONCLINICA\HistoriasClinicas/'
+    print ("carpeta = ", carpeta)
+
+    archivo = carpeta + '' + str(pacienteId.documento) + '_' + 'HistoriaClinica.pdf'
+    print ("archivo =" , archivo)
+
+    #pdf.output('C:\EntornosPython\Pos6\JSONCLINICA\HistoriasClinicas/hClinica.pdf', 'F')
+    pdf.output(archivo, 'F')
+
+    try:
+        # Intenta abrir el archivo directamente
+        webbrowser.open(archivo)
+    except FileNotFoundError:
+        print(f"Error: Archivo no encontrado en {archivo}")
+    except Exception as e:
+        print(f"Error al abrir el archivo: {e}")
 
 
+    return JsonResponse({'success': True, 'message': 'Historia Clinica impresa!'})
 
 
 

@@ -94,6 +94,16 @@ autoWidth: false,
 
 
 		},
+	{"render": function ( data, type, row ) {
+                        var btn = '';
+
+		 btn = btn + " <button class='ImprimirHc btn-primary ' data-pk='" + row.pk + "'>" + '<i class="fa-duotone fa-solid fa-print"></i>' + "</button>";
+                       return btn;
+                    },
+
+
+		},
+
 
       
                 { data: "fields.id"},
@@ -199,4 +209,31 @@ window.addEventListener('load', async () => {
 
 
 
+$('#tablaClinico tbody').on('click', '.ImprimirHc', function() {
 
+	alert ("Entre tablaClinico ");
+
+	     var post_id = $(this).data('pk');
+	alert ("post_id = " + post_id);
+	var ingresoId = post_id;
+
+$.ajax({
+	           url: '/imprimirHistoriaClinica/',
+	            data : {ingresoId:ingresoId},
+	           type: 'POST',
+	           dataType : 'json',
+	  		success: function (data) {
+
+			 $('#pk').val(data.pk);
+	       	     
+
+                  },
+	   		    error: function (request, status, error) {
+	   			   document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
+	   	    	}
+	     });
+
+
+
+
+    });
