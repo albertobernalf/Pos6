@@ -1377,7 +1377,7 @@ function arrancaEnfermeria(valorTabla,valorData)
                 { data: "fields.frecCardiaca"},
                 { data: "fields.frecRespiratoria"},
                 { data: "fields.tensionADiastolica"},
-                { data: "fields.tensionADiastolica"},
+                { data: "fields.tensionSistolica"},
                 { data: "fields.tensionAMedia"},
                 { data: "fields.temperatura"},
                 { data: "fields.saturacion"},
@@ -1528,6 +1528,20 @@ $('#tablaPanelEnfermeria tbody').on('click', '.miIngresoEnfermeriaId', function(
 		document.getElementById("consecutivoAdmisionConsDev").innerHTML = info[0].fields.consecutivoAdmision;
 		document.getElementById("servicioConsDev").innerHTML = info[0].fields.servicio;
 		document.getElementById("habitacionConsDev").innerHTML = info[0].fields.cama;
+
+		document.getElementById("nombreTipoDocSig").innerHTML = info[0].fields.nombreTipoDoc;
+		document.getElementById("documentoSig").innerHTML = info[0].fields.documento;
+		document.getElementById("pacienteSig").innerHTML = info[0].fields.paciente;
+		document.getElementById("consecutivoAdmisionSig").innerHTML = info[0].fields.consecutivoAdmision;
+		document.getElementById("servicioSig").innerHTML = info[0].fields.servicio;
+		document.getElementById("habitacionSig").innerHTML = info[0].fields.cama;
+
+		document.getElementById("nombreTipoDocPar").innerHTML = info[0].fields.nombreTipoDoc;
+		document.getElementById("documentoPar").innerHTML = info[0].fields.documento;
+		document.getElementById("pacientePar").innerHTML = info[0].fields.paciente;
+		document.getElementById("consecutivoAdmisionPar").innerHTML = info[0].fields.consecutivoAdmision;
+		document.getElementById("servicioPar").innerHTML = info[0].fields.servicio;
+		document.getElementById("habitacionPar").innerHTML = info[0].fields.cama;
 
 
 
@@ -2149,6 +2163,7 @@ function GuardarPedido()
         data['nombreSede'] = nombreSede;
         data['sede'] = sede;
         data['username_id'] = username_id;
+	data['enfermeriaId'] = enfermeriaId;
 
 	    data['ingresoId'] = ingresoId;
  	    data = JSON.stringify(data);
@@ -2162,8 +2177,10 @@ function GuardarPedido()
         // aqui inicializar tablaFormulacion etc
 
         /// Aqui inicializar combos
-        $("servicioAdmonEnfermeria").prop('selectedIndex', 0);
 
+ document.getElementById("serviciosAdmonEnfermeria").selectedIndex = 0;
+
+	// document.getElementById("serviciosAdministrativosN").selectedIndex = 0;
 
         var tabla = $('#tablaFormulacionEnfermeria').DataTable();
         tabla.rows().remove().draw();
@@ -2225,7 +2242,8 @@ function GuardarDietas()
 
 
     /// Aqui inicializar combos
-        $("serviciosAdministrativosD").prop('selectedIndex', 0);
+
+ document.getElementById("serviciosAdministrativosD").selectedIndex = 0;
         $("tiposDietasD").prop('selectedIndex', 0);
 
 
@@ -2292,12 +2310,10 @@ function GuardarNotasEnfermeria()
 
 
     /// Aqui inicializar combos
-        $("serviciosAdministrativosND").prop('selectedIndex', 0);
-        $("tiposDietasN").prop('selectedIndex', 0);
+	 document.getElementById("serviciosAdministrativosN").selectedIndex = 0;
+	document.getElementById("observacionesN").value = '';
 
-
-
-			document.getElementById("mensajes").innerHTML = 'Error Contacte a su Administrador' + ': ' + info
+			document.getElementById("mensajes").innerHTML =  + info
 
                 },
             error: function (request, status, error) {
@@ -2392,7 +2408,8 @@ function GuardarDevolucion()
         // aqui inicializar tablaFormulacion etc
 
         /// Aqui inicializar combos
-        $("servicioAdmonEnfermeriaDev").prop('selectedIndex', 0);
+        // $("servicioAdmonEnfermeriaDev").prop('selectedIndex', 0);
+ document.getElementById("servicioAdmonEnfermeriaDev").selectedIndex = 0;
 
         var tabla = $('#tablaFormulacionDevolucion').DataTable();
         tabla.rows().remove().draw();
@@ -2420,7 +2437,7 @@ function GuardarSignoVitalEnfermeria()
         var nombreSede = document.getElementById("nombreSede").value;
     	var sede = document.getElementById("sede").value;
         var username_id = document.getElementById("username_id").value;
-        var fecha = document.getElementById("fechaSig").value;
+        //var fecha = document.getElementById("fechaSig").value;
         var frecCardiaca = document.getElementById("frecCardiaca").value;
         var frecRespiratoria = document.getElementById("frecRespiratoria").value;
         var tensionADiastolica = document.getElementById("tensionADiastolica").value;
@@ -2455,7 +2472,7 @@ function GuardarSignoVitalEnfermeria()
 
 	  $.ajax({
                 data: {'sede':sede,'username_id':username_id, 'ingresoId':ingresoId,
-         'fecha':fecha,	'frecCardiaca':frecCardiaca,	'frecRespiratoria':frecRespiratoria,
+         'frecCardiaca':frecCardiaca,	'frecRespiratoria':frecRespiratoria,
 	'tensionADiastolica':tensionADiastolica,'tensionASistolica':tensionASistolica,'tensionAMedia':tensionAMedia,
 	'temperatura':temperatura,'saturacion':saturacion,'glucometria':glucometria,'glasgow':glasgow,
 	'apache':apache,'pvc':pvc,'cuna':cuna,'ic':ic,'glasgowOcular':glasgowOcular,'glasgowVerbal':glasgowVerbal,
@@ -2466,6 +2483,28 @@ function GuardarSignoVitalEnfermeria()
                 success: function (info) {
 
 		alert ("llegue listop");
+document.getElementById("frecCardiaca").value = '';
+document.getElementById("frecRespiratoria").value= '';
+document.getElementById("tensionADiastolica").value= '';
+document.getElementById("tensionASistolica").value= '';
+document.getElementById("tensionAMedia").value= '';
+document.getElementById("temperatura").value= '';
+document.getElementById("saturacion").value= '';
+document.getElementById("glucometria").value= '';
+document.getElementById("glasgow").value= '';
+document.getElementById("apache").value= '';
+document.getElementById("pvc").value= '';
+document.getElementById("cuna").value= '';
+document.getElementById("ic").value= '';
+document.getElementById("glasgowOcular").value= '';
+document.getElementById("glasgowVerbal").value= '';
+document.getElementById("glasgowMotora").value= '';
+document.getElementById("observacionSig").value= '';
+
+        /// Aqui inicializar combos
+
+ document.getElementById("serviciosAdministrativosSig").selectedIndex = 0;
+
 
 	     arrancaEnfermeria(13,data);
 	     dataTableSignosVitalesEnfermeriaInitialized = true;

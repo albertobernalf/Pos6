@@ -792,8 +792,6 @@ Cufe: daeeb9343955c6037479b2e1b7bb485526f7524e5b085b4a5eb6e64298b22873bd6ef35b92
 -- Ojo al ingresar un folio si no tiene convenio se revienta verificar
 -- OJO en el ORM esta colocando mal la fecha de registro
 -- OJO con los rollback cuango guarda folio de laboratorio
--- crear modal para despachar
--- solo traer a farmacia los NO DESPACHADOS
 -- cuando dispense al guardar en liquidaciondetalle, tuvoi problema con la escogencia del convenio_id, aquihay problemilla. un ,omento cogio una y en otro momento cogio otro cabezote
 -- ojop tenia dos vancomicinas repetidas
 -- en farmaia no suma bien los totales del cabezote  suministrois y prceimientos OJOP
@@ -802,17 +800,10 @@ Cufe: daeeb9343955c6037479b2e1b7bb485526f7524e5b085b4a5eb6e64298b22873bd6ef35b92
 -- ojo toca mejporar las pántallas en darmacia y enfemeria algo pasa
 - ojo los mensajes de satisfactorio en azul y de error en rojo primero hay que borrarlos y despues si escribir o sio quedan montados
 
-
--- Para el dia lunes 28-julio
-  -- Bueno seguir con lo que traje de clinico a enfermeria datatable dinamico, falta los scripts a mainenfermeria
-  -- devoluciones enfermeria (crear datatable dinamico para registrar las devolucuone y hacer fncion guardar de enfermeria y farmacia a la vez . 
-     y modulo farmacia-devoluciones hacer terminar 
-
 ojo pendiente en aplicacion de medicamentos arreglar cuando aplica la modal no pasa el enfemeriarecibeid a load_dataplaneacionenfermeria
 -- ops no entiendo por que no me inicializa combos en las dietas que pasar
 -- ops no se por que no refresca la grilla de dietas
 -- ojo que pasa con el servicio administrativo en toda la planeacion y la aplicacion de medicamentos
+-- falta algo cuandose recibe la devolucion desde enfermeria, es como conbtar reconmteo de unidades verificar
 
--- ops en enfermeriarecibe campo farmaciadespaciodispensa, se creo nuevo aqui creo hay un error verificar
--- ops datatable despachos en farmacia no funcion
--- ojo en la pantalla de enfermreria medicamentos y devoluciones creo en el UNION delselect me muestra un folio 0 y los dema
+-- ojo tan solo cuando farmacia reciba la devolucion se actualiza cantidadDevuelta en enfermeriarecibe,, corregir no cuando enfereria devuelve que asi esta y eso esta mal. VERIFICAR

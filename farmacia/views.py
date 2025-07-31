@@ -745,13 +745,19 @@ def Load_dataDespachosFarmacia(request, data):
 
     fechaRegistro = datetime.datetime.now()
 
+
+    año_actual = fechaRegistro.year  # Puedes cambiar este valor
+    fechaRegistro = date(año_actual, 1, 1)
+
+    print(fechaRegistro)
+
     despachosFarmacia = []
 
     miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
                                    password="123456")
     curx = miConexionx.cursor()
 
-    detalle = 'select desp.id id, desp.id despacho,serv1.nombre servEntrega ,  pla1.nombre entrega , serv2.nombre servRecibe, pla2.nombre recibe FROM farmacia_farmaciadespachos desp INNER JOIN farmacia_farmaciadespachosdispensa disp ON (disp.despacho_id = desp.id) LEFT JOIN sitios_serviciosadministrativos serv1 ON (serv1.id = desp."serviciosAdministrativosEntrega_id") LEFT JOIN sitios_serviciosadministrativos serv2 ON (serv2.id = desp."serviciosAdministrativosRecibe_id") LEFT JOIN planta_planta pla1 ON (pla1.id = desp."usuarioEntrega_id") LEFT JOIN planta_planta pla2 ON (pla2.id = desp."usuarioRecibe_id") WHERE desp."fechaRegistro" >= ' + "'" + str(fechaRegistro) + "'"
+    detalle = 'select desp.id id, desp.id despacho,serv1.nombre servEntrega ,  pla1.nombre entrega , serv2.nombre servRecibe, pla2.nombre recibe FROM farmacia_farmaciadespachos desp INNER JOIN farmacia_farmacia far ON (far.id = desp.farmacia_id and far."sedesClinica_id" = ' + "'" + str(sede) + "'" + ')  LEFT JOIN sitios_serviciosadministrativos serv1 ON (serv1.id = desp."serviciosAdministrativosEntrega_id") LEFT JOIN sitios_serviciosadministrativos serv2 ON (serv2.id = desp."serviciosAdministrativosRecibe_id") LEFT JOIN planta_planta pla1 ON (pla1.id = desp."usuarioEntrega_id") LEFT JOIN planta_planta pla2 ON (pla2.id = desp."usuarioRecibe_id") WHERE desp."fechaRegistro" >= ' + "'" + str(fechaRegistro) + "'"
 
     print(detalle)
 
@@ -778,6 +784,7 @@ def Load_dataDespachosDetalleFarmacia(request, data):
     username = d['username']
     sede = d['sede']
     username_id = d['username_id']
+    despachoId = d['despachoId']
 
     nombreSede = d['nombreSede']
     print("sede:", sede)
@@ -792,7 +799,7 @@ def Load_dataDespachosDetalleFarmacia(request, data):
                                    password="123456")
     curx = miConexionx.cursor()
 
-    detalle = 'select disp.id id ,disp."dosisCantidad" dosis, med.descripcion  unidadMedida, disp."cantidadOrdenada" cantidad , sum.nombre suministro FROM farmacia_farmaciadespachos desp INNER JOIN farmacia_farmaciadespachosdispensa disp ON (disp.despacho_id = desp.id) LEFT JOIN sitios_serviciosadministrativos serv1 ON (serv1.id = desp."serviciosAdministrativosEntrega_id") LEFT JOIN sitios_serviciosadministrativos serv2 ON (serv2.id = desp."serviciosAdministrativosRecibe_id") LEFT JOIN planta_planta pla1 ON (pla1.id = desp."usuarioEntrega_id") LEFT JOIN planta_planta pla2 ON (pla2.id = desp."usuarioRecibe_id") INNER JOIN clinico_unidadesdemedidadosis med ON (med.id = disp."dosisUnidad_id") INNER JOIN facturacion_suministros sum ON (sum.id = disp.suministro_id) WHERE desp."fechaRegistro" >= ' + "'" + str(fechaRegistro) + "'"
+    detalle = 'select disp.id id ,disp."dosisCantidad" dosis, med.descripcion  unidadMedida, disp."cantidadOrdenada" cantidad , sum.nombre suministro FROM farmacia_farmaciadespachos desp INNER JOIN farmacia_farmaciadespachosdispensa disp ON (disp.despacho_id = desp.id) LEFT JOIN sitios_serviciosadministrativos serv1 ON (serv1.id = desp."serviciosAdministrativosEntrega_id") LEFT JOIN sitios_serviciosadministrativos serv2 ON (serv2.id = desp."serviciosAdministrativosRecibe_id") LEFT JOIN planta_planta pla1 ON (pla1.id = desp."usuarioEntrega_id") LEFT JOIN planta_planta pla2 ON (pla2.id = desp."usuarioRecibe_id") INNER JOIN clinico_unidadesdemedidadosis med ON (med.id = disp."dosisUnidad_id") INNER JOIN facturacion_suministros sum ON (sum.id = disp.suministro_id) WHERE disp.despacho_id = ' + "'" + str(despachoId) + "'"
 
     print(detalle)
 

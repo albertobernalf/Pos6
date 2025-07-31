@@ -595,7 +595,7 @@ function arrancaFarmacia(valorTabla,valorData)
 		{ className: 'centered', targets: [0, 1, 2, 3, 4, 5] },
 	    { width: '10%', targets: [2,3] },
 		{  
-                    "targets": 5
+                    "targets": 4
                }
             ],
 	 pageLength: 3,
@@ -637,9 +637,8 @@ function arrancaFarmacia(valorTabla,valorData)
 	},
 
                 { data: "fields.id"},
-                { data: "fields.despacho"},
-	    	   { data: "fields.dosis"},
-                { data: "fields.medida"},
+              	   { data: "fields.dosis"},
+                { data: "fields.unidadMedida"},
                 { data: "fields.cantidad"},
                 { data: "fields.suministro"},
                         ]
@@ -1108,6 +1107,40 @@ $('#tablaPanelFarmacia tbody').on('click', '.miEditaFarmaciaEstadoDespacho', fun
   });
 
 
+$('#tablaDespachosFarmacia tbody').on('click', '.miDespachoFarmacia2', function() {
+
+		alert("ENTRE tablaDespachosFarmacia");
+
+		     var post_id = $(this).data('pk');
+		despachoId =   post_id;
+	var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
+        var username = document.getElementById("username").value;
+        var nombreSede = document.getElementById("nombreSede").value;
+    	var sede = document.getElementById("sede").value;
+        var username_id = document.getElementById("username_id").value;
+         var data =  {}   ;
+        data['username'] = username;
+        data['sedeSeleccionada'] = sedeSeleccionada;
+        data['nombreSede'] = nombreSede;
+        data['sede'] = sede;
+        data['username_id'] = username_id;
+	data['despachoId'] = despachoId;
+	    data = JSON.stringify(data);
+
+
+		     arrancaFarmacia(6,data);
+		     	dataTableDespachosDetalleFarmaciaInitialized = true;
+
+   
+
+
+
+  });
+
+
+
+
+
 
 function CambiaEstadoDespacho()
 {
@@ -1270,10 +1303,11 @@ function AdicionarDespachosDispensa()
         // aqui inicializar tablaFormulacion etc
 
         /// Aqui inicializar combos
-        $("servicioAdmonEntrega").prop('selectedIndex', 0);
-        $("plantaEntrega").prop('selectedIndex', 0);
-        $("servicioAdmonRecibe").prop('selectedIndex', 0);
-        $("plantaRecibe").prop('selectedIndex', 0);
+
+ document.getElementById("servicioAdmonEntrega").selectedIndex = 0;
+ document.getElementById("plantaEntrega").selectedIndex = 0;
+ document.getElementById("servicioAdmonRecibe").selectedIndex = 0;
+ document.getElementById("plantaRecibe").selectedIndex = 0;
 
 
         var tabla = $('#tablaFormulacion').DataTable();

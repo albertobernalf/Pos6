@@ -138,7 +138,7 @@ def Load_dataMedicamentosEnfermeria(request, data):
                                        password="123456")
     curx = miConexionx.cursor()
 
-    detalle = 'SELECT recibe.id id, tipos.nombre tipoDoc, usu.documento documento, usu.nombre paciente, hist.folio folio,   fardet."consecutivoMedicamento" consecutivoMedicamento, recibe."dosisCantidad" dosis, recibe."cantidadDispensada" cantidad, 	  medida.descripcion UnidadMedida, sum.nombre medicamento, via.nombre via , frec.descripcion frecuencia, enfdet."diasTratamiento" FROM admisiones_ingresos ing INNER JOIN clinico_historia hist ON (hist."tipoDoc_id" = ing."tipoDoc_id" AND hist.documento_id=ing.documento_id AND hist."consecAdmision" = ing.consec) INNER JOIN farmacia_farmacia far ON (far.historia_id= hist.id) INNER JOIN farmacia_farmaciadetalle fardet ON (fardet.farmacia_id = far.id) INNER JOIN	enfermeria_enfermeriarecibe recibe ON (recibe."farmaciaDetalle_id" = fardet.id) INNER JOIN	enfermeria_enfermeriadetalle enfdet ON (enfdet.id = recibe."enfermeriaDetalle_id") INNER JOIN facturacion_suministros sum ON (sum.id = recibe.suministro_id) INNER JOIN clinico_viasadministracion via ON (via.id = recibe."viaAdministracion_id") INNER JOIN clinico_unidadesdemedidadosis medida ON (medida.id = recibe."dosisUnidad_id") LEFT JOIN clinico_frecuenciasaplicacion frec ON (frec.id = enfdet."frecuencia_id") INNER JOIN usuarios_usuarios usu ON (usu.id = ing.documento_id) INNER JOIN usuarios_tiposdocumento tipos ON (tipos.id = usu."tipoDoc_id")	WHERE ing.id=' + "'" + str(ingresoId) + "' UNION " + ' SELECT recibe.id id, tipos.nombre tipoDoc, usu.documento documento, usu.nombre paciente, 0 folio,  fardet."consecutivoMedicamento" consecutivoMedicamento, recibe."dosisCantidad" dosis,  recibe."cantidadDispensada" cantidad, 	  medida.descripcion UnidadMedida, sum.nombre medicamento, via.nombre via , frec.descripcion frecuencia, enfdet."diasTratamiento"  FROM admisiones_ingresos ing INNER JOIN farmacia_farmacia far ON (far."ingresoPaciente_id"= ing.id) INNER JOIN farmacia_farmaciadetalle fardet ON (fardet.farmacia_id = far.id) INNER JOIN enfermeria_enfermeriarecibe recibe ON (recibe."farmaciaDetalle_id" = fardet.id) INNER JOIN	enfermeria_enfermeriadetalle enfdet ON (enfdet.id = recibe."enfermeriaDetalle_id")  INNER JOIN facturacion_suministros sum ON (sum.id = recibe.suministro_id) INNER JOIN clinico_viasadministracion via ON (via.id = recibe."viaAdministracion_id") INNER JOIN clinico_unidadesdemedidadosis medida ON (medida.id = recibe."dosisUnidad_id") LEFT JOIN clinico_frecuenciasaplicacion frec ON (frec.id = enfdet."frecuencia_id") INNER JOIN usuarios_usuarios usu ON (usu.id = ing.documento_id) INNER JOIN usuarios_tiposdocumento tipos ON (tipos.id = usu."tipoDoc_id")	WHERE ing.id=' + "'" + str(ingresoId) + "' ORDER BY 5,6"
+    detalle = 'SELECT recibe.id id, tipos.nombre tipoDoc, usu.documento documento, usu.nombre paciente, hist.folio folio,   fardet."consecutivoMedicamento" consecutivoMedicamento, recibe."dosisCantidad" dosis, recibe."cantidadDispensada" cantidad, 	  medida.descripcion UnidadMedida, sum.nombre medicamento, via.nombre via , frec.descripcion frecuencia, enfdet."diasTratamiento" FROM admisiones_ingresos ing INNER JOIN clinico_historia hist ON (hist."tipoDoc_id" = ing."tipoDoc_id" AND hist.documento_id=ing.documento_id AND hist."consecAdmision" = ing.consec) INNER JOIN farmacia_farmacia far ON (far.historia_id= hist.id) INNER JOIN farmacia_farmaciadetalle fardet ON (fardet.farmacia_id = far.id) INNER JOIN	enfermeria_enfermeriarecibe recibe ON (recibe."farmaciaDetalle_id" = fardet.id) INNER JOIN	enfermeria_enfermeriadetalle enfdet ON (enfdet.id = recibe."enfermeriaDetalle_id") INNER JOIN facturacion_suministros sum ON (sum.id = recibe.suministro_id) INNER JOIN clinico_viasadministracion via ON (via.id = recibe."viaAdministracion_id") INNER JOIN clinico_unidadesdemedidadosis medida ON (medida.id = recibe."dosisUnidad_id") LEFT JOIN clinico_frecuenciasaplicacion frec ON (frec.id = enfdet."frecuencia_id") INNER JOIN usuarios_usuarios usu ON (usu.id = ing.documento_id) INNER JOIN usuarios_tiposdocumento tipos ON (tipos.id = usu."tipoDoc_id")	WHERE ing.id=' + "'" + str(ingresoId) + "' UNION " + ' SELECT recibe.id id, tipos.nombre tipoDoc, usu.documento documento, usu.nombre paciente, 0 folio,  fardet."consecutivoMedicamento" consecutivoMedicamento, recibe."dosisCantidad" dosis,  recibe."cantidadDispensada" cantidad, 	  medida.descripcion UnidadMedida, sum.nombre medicamento, via.nombre via , frec.descripcion frecuencia, enfdet."diasTratamiento"  FROM admisiones_ingresos ing INNER JOIN farmacia_farmacia far ON (far."ingresoPaciente_id"= ing.id and far.historia_id <= 0) INNER JOIN farmacia_farmaciadetalle fardet ON (fardet.farmacia_id = far.id) INNER JOIN enfermeria_enfermeriarecibe recibe ON (recibe."farmaciaDetalle_id" = fardet.id) INNER JOIN	enfermeria_enfermeriadetalle enfdet ON (enfdet.id = recibe."enfermeriaDetalle_id")  INNER JOIN facturacion_suministros sum ON (sum.id = recibe.suministro_id) INNER JOIN clinico_viasadministracion via ON (via.id = recibe."viaAdministracion_id") INNER JOIN clinico_unidadesdemedidadosis medida ON (medida.id = recibe."dosisUnidad_id") LEFT JOIN clinico_frecuenciasaplicacion frec ON (frec.id = enfdet."frecuencia_id") INNER JOIN usuarios_usuarios usu ON (usu.id = ing.documento_id) INNER JOIN usuarios_tiposdocumento tipos ON (tipos.id = usu."tipoDoc_id")	WHERE ing.id=' + "'" + str(ingresoId) + "' ORDER BY 5,6"
 
 
     print(detalle)
@@ -521,7 +521,6 @@ def Load_dataTurnosEnfermeria(request, data):
     d = json.loads(data)
 
     sede = d['sede']
-
     print ("sede =", sede)
 
 
@@ -558,7 +557,6 @@ def Load_dataPlaneacionEnfermeria(request, data):
     d = json.loads(data)
 
     sede = d['sede']
-
     print ("sede =", sede)
 
     ingresoId = d['ingresoId']
@@ -931,6 +929,9 @@ def Load_dataDietasEnfermeria(request, data):
     context = {}
     d = json.loads(data)
 
+    sede = d['sede']
+    print ("sede =", sede)
+
     ingresoId = d['ingresoId']
 
     print ("ingresoId =", ingresoId)
@@ -966,6 +967,7 @@ def Load_dataDietasEnfermeria(request, data):
 
 def GuardaDietasEnfermeria(request):
     print("Entre GuardaDietasEnfermeria")
+
 
 
     username_id = request.POST['username_id']
@@ -1197,6 +1199,9 @@ def Load_dataConsultaDevolucionesEnfermeria(request, data):
     context = {}
     d = json.loads(data)
 
+    sede = d['sede']
+    print ("sede =", sede)
+
     fechaRegistro = datetime.datetime.now()
 
 
@@ -1212,7 +1217,7 @@ def Load_dataConsultaDevolucionesEnfermeria(request, data):
                                        password="123456")
     curx = miConexionx.cursor()
 
-    detalle = 'select dev.id, dev."fechaRegistro" fechaRegistro ,servDevuelve.nombre servicioDevuelve,plantaDevuelve.nombre usuarioDevuelve,servRecibe.nombre servicioRecibe,plantaRecibe.nombre usuarioRecibe FROM enfermeria_enfermeriadevolucion dev INNER JOIN sitios_serviciosadministrativos servDevuelve ON (servDevuelve.id = dev."serviciosAdministrativosDevuelve_id") LEFT JOIN 	sitios_serviciosadministrativos servRecibe ON (servRecibe.id = dev."serviciosAdministrativosRecibe_id" ) INNER JOIN planta_planta plantaDevuelve  ON (plantaDevuelve.id = dev."usuarioDevuelve_id") LEFT JOIN planta_planta plantaRecibe ON (plantaRecibe.id = dev."usuarioRecibe_id") WHERE dev."fechaRegistro" >=' + "'" + str(fechaRegistro) + "'" + ' order by dev.id'
+    detalle = 'select dev.id, dev."fechaRegistro" fechaRegistro ,servDevuelve.nombre servicioDevuelve,plantaDevuelve.nombre usuarioDevuelve,servRecibe.nombre servicioRecibe,plantaRecibe.nombre usuarioRecibe FROM enfermeria_enfermeriadevolucion dev INNER JOIN sitios_serviciosadministrativos servDevuelve ON (servDevuelve.id = dev."serviciosAdministrativosDevuelve_id") LEFT JOIN 	sitios_serviciosadministrativos servRecibe ON (servRecibe.id = dev."serviciosAdministrativosRecibe_id" ) INNER JOIN planta_planta plantaDevuelve  ON (plantaDevuelve.id = dev."usuarioDevuelve_id") LEFT JOIN planta_planta plantaRecibe ON (plantaRecibe.id = dev."usuarioRecibe_id") WHERE dev."sedesClinica_id" = ' + "'" + str(sede) + "'" + ' AND  dev."fechaRegistro" >=' + "'" + str(fechaRegistro) + "'" + ' order by dev.id'
 
     print(detalle)
 
@@ -1316,8 +1321,8 @@ def GuardaSignosVitalEnfermeria(request):
     print ("ingresoId =", ingresoId)
     ingreso = Ingresos.objects.get(id=ingresoId)
 
-    fecha = request.POST['fecha']
-    print ("fecha =", fecha)
+    #fecha = request.POST['fecha']
+    #print ("fecha =", fecha)
 
     frecCardiaca = request.POST['frecCardiaca']
     print ("frecCardiaca =", frecCardiaca)
@@ -1391,7 +1396,7 @@ def GuardaSignosVitalEnfermeria(request):
 
         # Segundo  INSERT en clinico_historialdietas
 
-        detalle = 'INSERT INTO clinico_historiasignosvitales ( fecha, "frecCardiaca", "frecRespiratoria", "tensionADiastolica", "tensionASistolica", "tensionAMedia", temperatura, saturacion, glucometria, glasgow, apache, pvc, cuna, ic, "glasgowOcular", "glasgowVerbal", "glasgowMotora", observacion, "fechaRegistro", "estadoReg", historia_id, "usuarioRegistro_id" )  VALUES (' + "'" + str(fecha) +  "','" + str(frecCardiaca) +"','" + str(frecRespiratoria) + "','" + str(tensionADiastolica) + "','" + str(tensionASistolica) + "','" + str(tensionAMedia) + "','" + str(temperatura) + "','" + str(saturacion) + "','" + str(glucometria) + "','" + str(glasgow) + "','" + str(apache) + "','" + str(pvc) + "','" + str(cuna)  + "','" + str(ic) + "','" + str(glasgowOcular) + "','" + str(glasgowVerbal) + "','" + str(glasgowMotora) + "','" + str(observacion) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(historiaId) +  "','" + str(username_id)   +   "')"
+        detalle = 'INSERT INTO clinico_historiasignosvitales ( fecha, "frecCardiaca", "frecRespiratoria", "tensionADiastolica", "tensionASistolica", "tensionAMedia", temperatura, saturacion, glucometria, glasgow, apache, pvc, cuna, ic, "glasgowOcular", "glasgowVerbal", "glasgowMotora", observacion, "fechaRegistro", "estadoReg", historia_id, "usuarioRegistro_id" )  VALUES (' + "'" + str(fechaRegistro) +  "','" + str(frecCardiaca) +"','" + str(frecRespiratoria) + "','" + str(tensionADiastolica) + "','" + str(tensionASistolica) + "','" + str(tensionAMedia) + "','" + str(temperatura) + "','" + str(saturacion) + "','" + str(glucometria) + "','" + str(glasgow) + "','" + str(apache) + "','" + str(pvc) + "','" + str(cuna)  + "','" + str(ic) + "','" + str(glasgowOcular) + "','" + str(glasgowVerbal) + "','" + str(glasgowMotora) + "','" + str(observacion) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(historiaId) +  "','" + str(username_id)   +   "')"
         print(detalle)
         cur3.execute(detalle)
         miConexion3.commit()

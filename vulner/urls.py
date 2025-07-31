@@ -101,6 +101,7 @@ urlpatterns = [
     #path('creacionHC/postConsultaHc/<str:id>/edit/', viewsClinico.PostConsultaHc, name='Post_editHc'),
     #path('creacionHC/<str:id>', viewsClinico.PostConsultaHcli),
     path('creacionHc/postConsultaHcli/', viewsClinico.PostConsultaHcli , name='Post_editHc'),
+    path('imprimirHistoriaClinica/<str:documento>', viewsClinico.ImprimirHistoriaClinica),
 
     # Actividaes Mecanicas
 
@@ -419,6 +420,7 @@ urlpatterns = [
 
     path('crearUsuarios/', viewsUsuarios.crearUsuarios),
     # Fin Acceso al Programa General Clinico
+
 
 ]
 
