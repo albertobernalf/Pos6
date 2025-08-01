@@ -2,25 +2,34 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d041c887-ab16-4071-a5e4-52a8295bbd5d" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/clinico/viewsReportes.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Lib/site-packages/typing_extensions-3.7.4.3.dist-info/INSTALLER" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Lib/site-packages/typing_extensions-3.7.4.3.dist-info/LICENSE" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Lib/site-packages/typing_extensions-3.7.4.3.dist-info/METADATA" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Lib/site-packages/typing_extensions-3.7.4.3.dist-info/RECORD" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Lib/site-packages/typing_extensions-3.7.4.3.dist-info/REQUESTED" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Lib/site-packages/typing_extensions-3.7.4.3.dist-info/WHEEL" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Lib/site-packages/typing_extensions-3.7.4.3.dist-info/top_level.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Lib/site-packages/typing_extensions.py" beforeDir="false" afterPath="$PROJECT_DIR$/Lib/site-packages/typing_extensions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JSONCLINICA/HistoriasClinicas/1212_HistoriaClinica.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/JSONCLINICA/HistoriasClinicas/123_HistoriaClinica.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/JSONCLINICA/HistoriasClinicas/1567_HistoriaClinica.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/JSONCLINICA/HistoriasClinicas/19465673_HistoriaClinica.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/JSONCLINICA/HistoriasClinicas/19465673_HistoriaClinica.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JSONCLINICA/HistoriasClinicas/202020_HistoriaClinica.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/JSONCLINICA/HistoriasClinicas/303030_HistoriaClinica.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/JSONCLINICA/HistoriasClinicas/313131_HistoriaClinica.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/JSONCLINICA/HistoriasClinicas/313131_HistoriaClinica.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JSONCLINICA/HistoriasClinicas/56789_HistoriaClinica.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/JSONCLINICA/HistoriasClinicas/70700_HistoriaClinica.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/clinico/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/clinico/forms.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/clinico/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/clinico/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/mainClinicoF.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/mainClinicoF.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/clinico/panelClinicoF.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/clinico/panelClinicoF.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/temporal/hClinica.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/temporal/hClinica.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/folioPadreFrancisco.sql" beforeDir="false" afterPath="$PROJECT_DIR$/folioPadreFrancisco.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/temporal/OrdenIncapacidad.py" beforeDir="false" afterPath="$PROJECT_DIR$/temporal/OrdenIncapacidad.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/vulner/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/vulner/urls.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -51,6 +60,17 @@
       <updated>1752495864500</updated>
     </task>
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

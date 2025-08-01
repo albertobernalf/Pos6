@@ -31,6 +31,7 @@ from usuarios import views as viewsUsuarios
 from django.conf  import settings
 from django.conf.urls.static import  static
 from clinico import views as viewsClinico
+from clinico import viewsReportes as viewsClinicoReportes
 from terapeutico import views as viewsApoyoTerapeutico
 from facturacion import views as viewsFacturacion
 from contratacion import views as viewsConvenios
@@ -101,7 +102,9 @@ urlpatterns = [
     #path('creacionHC/postConsultaHc/<str:id>/edit/', viewsClinico.PostConsultaHc, name='Post_editHc'),
     #path('creacionHC/<str:id>', viewsClinico.PostConsultaHcli),
     path('creacionHc/postConsultaHcli/', viewsClinico.PostConsultaHcli , name='Post_editHc'),
-    path('imprimirHistoriaClinica/', viewsClinico.ImprimirHistoriaClinica),
+    path('imprimirHistoriaClinica/', viewsClinicoReportes.ImprimirHistoriaClinica),
+    path('imprimirOrdenIncapacidad/<str:ingresoId> , <str:historiaId>/', viewsClinicoReportes.ImprimirOrdenIncapacidad),
+    path('imprimirOrdenLaboratorio/<str:ingresoId> , <str:historiaId>/', viewsClinicoReportes.ImprimirOrdenLaboratorio),
 
     # Actividaes Mecanicas
 

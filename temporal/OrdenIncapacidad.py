@@ -5,7 +5,7 @@ import json
 import datetime 
 
 
-class PDF(FPDF):
+class PDFIncapacidad(FPDF):
     def header(self):
         # Logo
         self.image('C:/EntornosPython/temporal/temporal/MedicalFinal.jpg', 170 ,1, 20 , 20)
@@ -121,7 +121,7 @@ class PDF(FPDF):
 
 
 # Instantiation of inherited class
-pdf = PDF()
+pdf = PDFIncapacidad()
 pdf.alias_nb_pages()
 pdf.set_margins(left= 10, top= 5, right= 5 )
 pdf.add_page()

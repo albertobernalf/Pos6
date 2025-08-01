@@ -4,7 +4,7 @@ SELECT medicos."registroMedico", planta.nombre plantaNombre, usu."tipoDoc_id", u
 FROM clinico_historia historia
 INNER JOIN planta_planta planta ON (planta.id = historia."usuarioRegistro_id") 
 	INNER JOIN clinico_medicos medicos ON (medicos.planta_id = planta.id)
-	INNER JOIN usuarios_usuarios usu ON (usu.id = historia."usuarioRegistro_id")       
+	INNER JOIN usuarios_usuarios usu ON (usu.id = historia.documento_id)       
 	WHERE historia.id = '771'
 
 select * from clinico_historia where id = 771;
