@@ -105,6 +105,7 @@ urlpatterns = [
     path('imprimirHistoriaClinica/', viewsClinicoReportes.ImprimirHistoriaClinica),
     path('imprimirOrdenIncapacidad/<str:ingresoId> , <str:historiaId>/', viewsClinicoReportes.ImprimirOrdenIncapacidad),
     path('imprimirOrdenLaboratorio/<str:ingresoId> , <str:historiaId>/', viewsClinicoReportes.ImprimirOrdenLaboratorio),
+    path('imprimirOrdenTerapia/<str:ingresoId> , <str:historiaId>/', viewsClinicoReportes.ImprimirOrdenTerapia),
 
     # Actividaes Mecanicas
 

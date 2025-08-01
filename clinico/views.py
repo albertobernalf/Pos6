@@ -54,7 +54,7 @@ import json
 import datetime
 import cgi
 #from clinico import viewsReportes
-from clinico.viewsReportes import ImprimirOrdenLaboratorio, ImprimirOrdenIncapacidad
+from clinico.viewsReportes import ImprimirOrdenLaboratorio, ImprimirOrdenIncapacidad, ImprimirOrdenRadiologia, ImprimirOrdenTerapia
 
 
 # Create your views here.
@@ -851,9 +851,9 @@ def crearHistoriaClinica(request):
 	            # Fin rutina Facturacion
 
 		# Rutina Impresion Ordenes de Laboratorio
+                print ("tamaño matriz laboratorios", len(laboratorios[0]))
 
-
-                if (int(len(jsonLaboratorios))<0):
+                if len(laboratorios[0]) > 1:
                     print("Encontre ordenes de laboratrio")
                     print("Encontre ordenes de laboratrio")
                     ingresoId2=ingresosPaciente.id
@@ -1029,6 +1029,17 @@ def crearHistoriaClinica(request):
 	            # Fin rutina Facturacion
 
                      ## Fin
+                print("tamaño matriz radiologia", len(radiologia[0]))
+
+                if len(radiologia[0]) > 1:
+                    print("Encontre ordenes de radiologia")
+                    print("Encontre ordenes de radiologia")
+                    ingresoId2 = ingresosPaciente.id
+                    ImprimirOrdenRadiologia(ingresoId2, historiaId)
+                else:
+                    print("No Encontre ordenes de radiologia")
+                    print("No Encontre ordenes de radiologia")
+
 
                 # Fin Grabacion Radiologia
 
@@ -1190,7 +1201,7 @@ def crearHistoriaClinica(request):
 
                             miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",                                       password="123456")
                             curt = miConexiont.cursor()
-                            comando = 'INSERT INTO facturacion_liquidaciondetalle (consecutivo,fecha, cantidad, "valorUnitario", "valorTotal",cirugia,"fechaCrea", "fechaRegistro", "estadoRegistro", "examen_id",  "usuarioRegistro_id", liquidacion_id, "tipoRegistro") VALUES (' + "'" +  str(consecLiquidacion)  + "','" + str(fechaRegistro) + "','" + str(cantidad) + "','"  + str(tarifaValor) + "','" + str(TotalTarifa)  + "','" + str('N') + "','" +  str(fechaRegistro) + "','" +  str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(codigoCupsId[0].id) + "','" + str(usuarioRegistro) + "'," + liquidacionId + ",'SISTEMA')"
+                            comando = 'INSERT INTO facturacion_liquidaciondetalle (consecutivo,fecha, cantidad, "valorUnitario", "valorTotal",cirugia_id,"fechaCrea", "fechaRegistro", "estadoRegistro", "examen_id",  "usuarioRegistro_id", liquidacion_id, "tipoRegistro") VALUES (' + "'" +  str(consecLiquidacion)  + "','" + str(fechaRegistro) + "','" + str(cantidad) + "','"  + str(tarifaValor) + "','" + str(TotalTarifa)  + "',null,'" +  str(fechaRegistro) + "','" +  str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(codigoCupsId[0].id) + "','" + str(usuarioRegistro) + "'," + liquidacionId + ",'SISTEMA')"
                             curt.execute(comando)
                             miConexiont.commit()
                             miConexiont.close()
@@ -1201,8 +1212,21 @@ def crearHistoriaClinica(request):
 	            # Fin rutina Facturacion
 
                          ## Fin
+                # Rutina Impresion Ordenes de Laboratorio
+                print("tamaño matriz terapias", len(terapias[0]))
 
-                     # Fin Grabacion Terapias
+                if len(terapias[0]) > 0:
+                    print("Encontre ordenes de terapias")
+                    print("Encontre ordenes de terapias")
+                    ingresoId2 = ingresosPaciente.id
+                    ImprimirOrdenTerapia(ingresoId2, historiaId)
+                else:
+                    print("No Encontre ordenes de terapias")
+                    print("No Encontre ordenes de terapias")
+
+
+
+                   # Fin Grabacion Terapias
 
                      # Grabacion noQx
 
@@ -1560,11 +1584,12 @@ def crearHistoriaClinica(request):
                         g.save()
                         print("ya guarde incapacidad")
 
+                if len(incapForm[0]) > 1:
 
-                if int(len(jsonIncapacidades)<0):
                     print("Entre imprimir incapacidad")
                     ingresoId2=ingresosPaciente.id
                     ImprimirOrdenIncapacidad(ingresoId2, historiaId)
+
 
                 # Fin Grabacion incapacidades
 

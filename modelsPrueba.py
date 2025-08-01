@@ -807,3 +807,7 @@ ojo pendiente en aplicacion de medicamentos arreglar cuando aplica la modal no p
 -- falta algo cuandose recibe la devolucion desde enfermeria, es como conbtar reconmteo de unidades verificar
 
 -- ojo tan solo cuando farmacia reciba la devolucion se actualiza cantidadDevuelta en enfermeriarecibe,, corregir no cuando enfereria devuelve que asi esta y eso esta mal. VERIFICAR
+
+- ojo en Agosto 4
+  -- verifiacar que si no hay lab, terapias, lab, incap no imprima nada hay problema allip
+  -- hacer medicamentos, no qx, cirugia, revx sstemas, sigmnops vitales etc
