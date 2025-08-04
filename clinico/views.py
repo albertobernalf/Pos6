@@ -1584,11 +1584,14 @@ def crearHistoriaClinica(request):
                         g.save()
                         print("ya guarde incapacidad")
 
-                if len(incapForm[0]) > 1:
 
-                    print("Entre imprimir incapacidad")
-                    ingresoId2=ingresosPaciente.id
-                    ImprimirOrdenIncapacidad(ingresoId2, historiaId)
+                    print("Longitud de incapaciddaes = " , len(incapForm[0]))
+
+                    if len(incapForm[0]) > 1:
+
+                        print("Entre imprimir incapacidad")
+                        ingresoId2=ingresosPaciente.id
+                        ImprimirOrdenIncapacidad(ingresoId2, historiaId)
 
 
                 # Fin Grabacion incapacidades
@@ -1743,6 +1746,15 @@ def crearHistoriaClinica(request):
                             er.save()
 
                         consecutivo = consecutivo + 1
+
+                        print("Longitud de Medicamentos = " , len(medicamentos[0]))
+
+                        if len(medicamentos[0]) > 1:
+
+                            print("Entre imprimir Medicamentos")
+                            ingresoId2=ingresosPaciente.id
+                            ImprimirOrdenMedicamentos(ingresoId2, historiaId)
+
 
                         # Fin Grabacion Formulacion
 

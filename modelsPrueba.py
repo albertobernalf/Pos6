@@ -811,3 +811,7 @@ ojo pendiente en aplicacion de medicamentos arreglar cuando aplica la modal no p
 - ojo en Agosto 4
   -- verifiacar que si no hay lab, terapias, lab, incap no imprima nada hay problema allip
   -- hacer medicamentos, no qx, cirugia, revx sstemas, sigmnops vitales etc
+  --  crear formatos, ingresos admisioones, furips,accidente de transito, accidente de trabajo etc
+  -- ojo en Histporia clinica hay que crear espacio para crear ordenes de control - proxima cita de control, especialista
+
+   crear modelos referneica/contrareferencia
