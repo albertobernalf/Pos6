@@ -63,7 +63,7 @@ class PDF(FPDF):
 
     def header(self):
         # Logo
-        self.image('C:/EntornosPython/Pos6/static/img/MedicalFinal.jpg', 170 ,1, 20 , 20)
+        self.image('C:/EntornosPython/Pos6/static/img/MedicalFinal.jpg', 170 ,15, 10 , 5)
         # Arial bold 15
         self.set_font('Times', 'B', 7)
 
@@ -99,9 +99,14 @@ class PDF(FPDF):
 
         # Title
         #
-        self.ln(4)
-        self.cell(25, 1, 'CLINICA MEDICAL',  0, 0, 'L')
-        self.ln(1)
+        self.ln(2)
+        self.cell(195, 1, 'CLINICA MEDICAL',  0, 0, 'C')
+        self.ln(3)
+        self.cell(195, 1, 'HISTORIA CLINICA', 0, 0, 'C')
+        self.ln(2)
+        self.set_line_width(0.5)
+        self.rect(10.0, 15.0, 195.0, 25)  # Coordenadas x, y, ancho, alto
+
         self.set_font('Times', 'B', 7)
         self.cell(25, 11, 'PACIENTE: ', 0, 0, 'L')
         self.set_font('Times', '', 7)
@@ -162,7 +167,7 @@ class PDFOrdenIncapacidad(FPDF):
 
     def header(self):
         # Logo
-        self.image('C:/EntornosPython/Pos6/static/img/MedicalFinal.jpg', 170, 1, 20, 20)
+        self.image('C:/EntornosPython/Pos6/static/img/MedicalFinal.jpg', 170, 20, 10,7)
         # Arial bold 15
         self.set_font('Times', 'B', 7)
 
@@ -212,12 +217,12 @@ class PDFOrdenIncapacidad(FPDF):
         self.cell(25, 1, 'CLINICA MEDICAL', 0, 0, 'L')
         self.ln(1)
         self.set_font('Times', 'B', 7)
-        self.cell(25, 11, 'PACIENTE: ', 0, 0, 'L')
+        self.cell(25, 10, 'PACIENTE: ', 0, 0, 'L')
         self.set_font('Times', '', 7)
 
-        self.cell(25, 11, historia[0]['tipnombre'], 0, 0, 'L')
-        self.cell(25, 11, historia[0]['documentoPaciente'], 0, 0, 'L')
-        self.cell(25, 11, historia[0]['nombre'], 0, 0, 'L')
+        self.cell(25, 10, historia[0]['tipnombre'], 0, 0, 'L')
+        self.cell(25, 10, historia[0]['documentoPaciente'], 0, 0, 'L')
+        self.cell(25, 10, historia[0]['nombre'], 0, 0, 'L')
         self.ln(1)
         self.set_font('Times', 'B', 7)
         self.cell(25, 16, 'EDAD:', 0, 0, 'L')
@@ -902,6 +907,10 @@ def ImprimirHistoriaClinica(request):
     miConexiont.close()
 
     for i in range(0, len(folios)):
+
+        pdf.set_line_width(0.3)
+        pdf.rect(10.0, 35.0, 195.0, 5)  # Coordenadas x, y, ancho, alto
+
 
         pdf.cell(1, 1,
                  '__________________________________________________________________________________________________________________________________________',
