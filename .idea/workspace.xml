@@ -4,6 +4,11 @@
     <list default="true" id="d041c887-ab16-4071-a5e4-52a8295bbd5d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/JSONCLINICA/HistoriasClinicas/19465673_HistoriaClinica.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/JSONCLINICA/HistoriasClinicas/19465673_HistoriaClinica.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JSONCLINICA/HistoriasClinicas/19465673_Incapacidad.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/JSONCLINICA/HistoriasClinicas/19465673_Incapacidad.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JSONCLINICA/HistoriasClinicas/19465673_Laboratorio.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/JSONCLINICA/HistoriasClinicas/19465673_Laboratorio.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JSONCLINICA/HistoriasClinicas/19465673_Radiologia.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/JSONCLINICA/HistoriasClinicas/19465673_Radiologia.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JSONCLINICA/HistoriasClinicas/19465673_Terapia.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/JSONCLINICA/HistoriasClinicas/19465673_Terapia.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clinico/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/clinico/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/clinico/viewsReportes.py" beforeDir="false" afterPath="$PROJECT_DIR$/clinico/viewsReportes.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

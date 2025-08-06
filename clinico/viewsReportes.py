@@ -104,8 +104,11 @@ class PDF(FPDF):
         self.ln(3)
         self.cell(195, 1, 'HISTORIA CLINICA', 0, 0, 'C')
         self.ln(2)
+        self.set_line_width(0.4)
+        self.rect(10.0, 15.0, 195.0, 270.0)  # Coordenadas x, y, ancho, alto
+
         self.set_line_width(0.5)
-        self.rect(10.0, 15.0, 195.0, 25)  # Coordenadas x, y, ancho, alto
+        self.rect(10.0, 15.0, 195.0, 20)  # Coordenadas x, y, ancho, alto
 
         self.set_font('Times', 'B', 7)
         self.cell(25, 11, 'PACIENTE: ', 0, 0, 'L')
@@ -150,7 +153,8 @@ class PDF(FPDF):
     # Page footer
     def footer(self):
         # Position at 1.5 cm from bottom
-        self.set_y(-15)
+        # Position at 3 cm from bottom
+        self.set_y(-30)
         # Arial italic 8
         self.set_font('Times', 'I', 8)
         # Page number
@@ -167,7 +171,7 @@ class PDFOrdenIncapacidad(FPDF):
 
     def header(self):
         # Logo
-        self.image('C:/EntornosPython/Pos6/static/img/MedicalFinal.jpg', 170, 20, 10,7)
+        self.image('C:/EntornosPython/Pos6/static/img/MedicalFinal.jpg', 170 ,15, 10 , 5)
         # Arial bold 15
         self.set_font('Times', 'B', 7)
 
@@ -211,11 +215,18 @@ class PDFOrdenIncapacidad(FPDF):
 
         ## FIN CURSOR
 
-        # Title
-        #
-        self.ln(4)
-        self.cell(25, 1, 'CLINICA MEDICAL', 0, 0, 'L')
-        self.ln(1)
+    	# Define el ancho de línea
+        self.set_line_width(0.4)
+        # Dibuja el borde
+        self.rect(10.0, 15.0, 195.0, 260.0)  # Coordenadas x, y, ancho, alto
+        self.ln(3)
+        self.cell(195, 1, 'CLINICA MEDICAL',  0, 0, 'C')
+        self.ln(3)
+        self.cell(195, 1, 'INCAPACIDAD', 0, 0, 'C')
+        self.ln(2)
+        self.set_line_width(0.5)
+        self.rect(10.0, 15.0, 195.0, 20)  # Coordenadas x, y, ancho, alto
+
         self.set_font('Times', 'B', 7)
         self.cell(25, 10, 'PACIENTE: ', 0, 0, 'L')
         self.set_font('Times', '', 7)
@@ -258,6 +269,7 @@ class PDFOrdenIncapacidad(FPDF):
     # Page footer
     def footer(self):
         # Position at 1.5 cm from bottom
+        #self.set_y(-15)
         self.set_y(-15)
         # Arial italic 8
         self.set_font('Times', 'B', 7)
@@ -281,6 +293,8 @@ class PDFOrdenIncapacidad(FPDF):
                 {'registroMedico': registroMedico, 'plantaNombre': plantaNombre, 'tipoDoc_id': tipoDoc_id, 'documento': documento})
         miConexionii.close()
 
+        self.set_line_width(0.4)
+        self.rect(10, 265.0, 195.0, 15.0)  # Coordenadas x, y, ancho, alto
 
         self.cell(15, 7, 'Firmado Por:', 0, 0, 'L')
         self.cell(25, 7, '' + str(incapacidadesI[0]['tipoDoc_id']), 0, 0, 'L')
@@ -304,7 +318,7 @@ class PDFOrdenLaboratorio(FPDF):
 
     def header(self):
         # Logo
-        self.image('C:/EntornosPython/Pos6/static/img/MedicalFinal.jpg', 170, 1, 20, 20)
+        self.image('C:/EntornosPython/Pos6/static/img/MedicalFinal.jpg', 180 ,20, 10 , 10)
         # Arial bold 15
         self.set_font('Times', 'B', 7)
 
@@ -348,11 +362,19 @@ class PDFOrdenLaboratorio(FPDF):
 
         ## FIN CURSOR
 
-        # Title
-        #
-        self.ln(4)
-        self.cell(25, 1, 'CLINICA MEDICAL', 0, 0, 'L')
-        self.ln(1)
+        # Define el ancho de línea
+        self.set_line_width(0.4)
+        # Dibuja el borde
+
+        self.rect(10.0, 15.0, 195.0, 265.0)  # Coordenadas x, y, ancho, alto
+        self.ln(3)
+        self.cell(195, 1, 'CLINICA MEDICAL', 0, 0, 'C')
+        self.ln(3)
+        self.cell(195, 1, 'LABORATORIOS', 0, 0, 'C')
+        self.ln(2)
+        self.set_line_width(0.5)
+        self.rect(10.0, 15.0, 195.0, 20)  # Coordenadas x, y, ancho, alto
+
         self.set_font('Times', 'B', 7)
         self.cell(25, 11, 'PACIENTE: ', 0, 0, 'L')
         self.set_font('Times', '', 7)
@@ -395,7 +417,7 @@ class PDFOrdenLaboratorio(FPDF):
     # Page footer
     def footer(self):
         # Position at 1.5 cm from bottom
-        self.set_y(-15)
+        self.set_y(-30)
         # Arial italic 8
         self.set_font('Times', 'B', 7)
         self.cell(180, 5, 'MEDICO ORDENA', 0, 0, 'C')
@@ -416,6 +438,9 @@ class PDFOrdenLaboratorio(FPDF):
             registro.append(
                 {'registroMedico': registroMedico, 'plantaNombre': plantaNombre, 'tipoDoc_id': tipoDoc_id, 'documento': documento})
         miConexionii.close()
+
+        self.set_line_width(0.4)
+        self.rect(10, 265.0, 195.0, 15.0)  # Coordenadas x, y, ancho, alto
 
         print('registro =', registro)
         self.cell(15, 7, 'Firmado Por:', 0, 0, 'L')
@@ -441,7 +466,7 @@ class PDFOrdenTerapia(FPDF):
 
     def header(self):
         # Logo
-        self.image('C:/EntornosPython/Pos6/static/img/MedicalFinal.jpg', 170, 1, 20, 20)
+        self.image('C:/EntornosPython/Pos6/static/img/MedicalFinal.jpg', 180 ,20, 10 , 10)
         # Arial bold 15
         self.set_font('Times', 'B', 7)
 
@@ -485,11 +510,19 @@ class PDFOrdenTerapia(FPDF):
 
         ## FIN CURSOR
 
-        # Title
-        #
-        self.ln(4)
-        self.cell(25, 1, 'CLINICA MEDICAL', 0, 0, 'L')
-        self.ln(1)
+        # Define el ancho de línea
+        self.set_line_width(0.4)
+        # Dibuja el borde
+
+        self.rect(10.0, 15.0, 195.0, 265.0)  # Coordenadas x, y, ancho, alto
+        self.ln(3)
+        self.cell(195, 1, 'CLINICA MEDICAL', 0, 0, 'C')
+        self.ln(3)
+        self.cell(195, 1, 'TERAPIAS', 0, 0, 'C')
+        self.ln(2)
+        self.set_line_width(0.5)
+        self.rect(10.0, 15.0, 195.0, 20)  # Coordenadas x, y, ancho, alto
+
         self.set_font('Times', 'B', 7)
         self.cell(25, 11, 'PACIENTE: ', 0, 0, 'L')
         self.set_font('Times', '', 7)
@@ -532,7 +565,7 @@ class PDFOrdenTerapia(FPDF):
     # Page footer
     def footer(self):
         # Position at 1.5 cm from bottom
-        self.set_y(-15)
+        self.set_y(-30)
         # Arial italic 8
         self.set_font('Times', 'B', 7)
         self.cell(180, 5, 'MEDICO ORDENA', 0, 0, 'C')
@@ -553,6 +586,10 @@ class PDFOrdenTerapia(FPDF):
             registro.append(
                 {'registroMedico': registroMedico, 'plantaNombre': plantaNombre, 'tipoDoc_id': tipoDoc_id, 'documento': documento})
         miConexionii.close()
+
+        self.set_line_width(0.4)
+        self.rect(10, 265.0, 195.0, 15.0)  # Coordenadas x, y, ancho, alto
+
 
         print('registro =', registro)
         self.cell(15, 7, 'Firmado Por:', 0, 0, 'L')
@@ -578,7 +615,7 @@ class PDFOrdenRadiologia(FPDF):
 
     def header(self):
         # Logo
-        self.image('C:/EntornosPython/Pos6/static/img/MedicalFinal.jpg', 170, 1, 20, 20)
+        self.image('C:/EntornosPython/Pos6/static/img/MedicalFinal.jpg', 180 ,20, 10 , 10)
         # Arial bold 15
         self.set_font('Times', 'B', 7)
 
@@ -621,12 +658,19 @@ class PDFOrdenRadiologia(FPDF):
         miConexiont.close()
 
         ## FIN CURSOR
+        # Define el ancho de línea
+        self.set_line_width(0.4)
+        # Dibuja el borde
 
-        # Title
-        #
-        self.ln(4)
-        self.cell(25, 1, 'CLINICA MEDICAL', 0, 0, 'L')
-        self.ln(1)
+        self.rect(10.0, 15.0, 195.0, 265.0)  # Coordenadas x, y, ancho, alto
+        self.ln(3)
+        self.cell(195, 1, 'CLINICA MEDICAL', 0, 0, 'C')
+        self.ln(3)
+        self.cell(195, 1, 'RADIOLOGIA', 0, 0, 'C')
+        self.ln(2)
+        self.set_line_width(0.5)
+        self.rect(10.0, 15.0, 195.0, 20)  # Coordenadas x, y, ancho, alto
+
         self.set_font('Times', 'B', 7)
         self.cell(25, 11, 'PACIENTE: ', 0, 0, 'L')
         self.set_font('Times', '', 7)
@@ -669,7 +713,7 @@ class PDFOrdenRadiologia(FPDF):
     # Page footer
     def footer(self):
         # Position at 1.5 cm from bottom
-        self.set_y(-15)
+        self.set_y(-30)
         # Arial italic 8
         self.set_font('Times', 'B', 7)
         self.cell(180, 5, 'MEDICO ORDENA', 0, 0, 'C')
@@ -690,6 +734,9 @@ class PDFOrdenRadiologia(FPDF):
             registro.append(
                 {'registroMedico': registroMedico, 'plantaNombre': plantaNombre, 'tipoDoc_id': tipoDoc_id, 'documento': documento})
         miConexionii.close()
+
+        self.set_line_width(0.4)
+        self.rect(10, 265.0, 195.0, 15.0)  # Coordenadas x, y, ancho, alto
 
         print('registro =', registro)
         self.cell(15, 7, 'Firmado Por:', 0, 0, 'L')
@@ -716,7 +763,7 @@ class PDFOrdenMedicamentos(FPDF):
 
     def header(self):
         # Logo
-        self.image('C:/EntornosPython/Pos6/static/img/MedicalFinal.jpg', 170, 1, 20, 20)
+        self.image('C:/EntornosPython/Pos6/static/img/MedicalFinal.jpg', 180 ,20, 10 , 10)
         # Arial bold 15
         self.set_font('Times', 'B', 7)
 
@@ -759,12 +806,18 @@ class PDFOrdenMedicamentos(FPDF):
         miConexiont.close()
 
         ## FIN CURSOR
+        # Define el ancho de línea
+        self.set_line_width(0.4)
+        # Dibuja el borde
+        self.rect(10.0, 15.0, 195.0, 265.0)  # Coordenadas x, y, ancho, alto
+        self.ln(3)
+        self.cell(195, 1, 'CLINICA MEDICAL', 0, 0, 'C')
+        self.ln(3)
+        self.cell(195, 1, 'FORMULACION MEDICAMENTOS', 0, 0, 'C')
+        self.ln(2)
+        self.set_line_width(0.5)
+        self.rect(10.0, 15.0, 195.0, 20)  # Coordenadas x, y, ancho, alto
 
-        # Title
-        #
-        self.ln(4)
-        self.cell(25, 1, 'CLINICA MEDICAL', 0, 0, 'L')
-        self.ln(1)
         self.set_font('Times', 'B', 7)
         self.cell(25, 11, 'PACIENTE: ', 0, 0, 'L')
         self.set_font('Times', '', 7)
@@ -807,7 +860,7 @@ class PDFOrdenMedicamentos(FPDF):
     # Page footer
     def footer(self):
         # Position at 1.5 cm from bottom
-        self.set_y(-15)
+        self.set_y(-30)
         # Arial italic 8
         self.set_font('Times', 'B', 7)
         self.cell(180, 5, 'MEDICO ORDENA', 0, 0, 'C')
@@ -816,7 +869,8 @@ class PDFOrdenMedicamentos(FPDF):
         miConexionii = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
                                        password="123456")
         curii = miConexionii.cursor()
-        comando = 'SELECT  medicos."registroMedico", planta.nombre plantaNombre, planta."tipoDoc_id", planta.documento FROM clinico_historiaexamenes exa INNER JOIN clinico_historia historia ON (historia.id=exa.historia_id) INNER JOIN planta_planta planta ON (planta.id = historia."usuarioRegistro_id")	INNER JOIN clinico_medicos medicos ON (medicos.planta_id = historia."usuarioRegistro_id") WHERE exa.historia_id = ' + "'" + str(self.historiaId) + "'" + ' group by "registroMedico", plantaNombre, planta."tipoDoc_id", documento'
+
+        comando = 'SELECT  medicos."registroMedico", planta.nombre plantaNombre, planta."tipoDoc_id", planta.documento FROM clinico_historiamedicamentos med INNER JOIN clinico_historia historia ON (historia.id=med.historia_id) INNER JOIN planta_planta planta ON (planta.id = historia."usuarioRegistro_id")	INNER JOIN clinico_medicos medicos ON (medicos.planta_id = historia."usuarioRegistro_id") WHERE med.historia_id = ' + "'" + str(self.historiaId) + "'" + ' group by "registroMedico", plantaNombre, planta."tipoDoc_id", documento'
 
         curii.execute(comando)
 
@@ -828,6 +882,9 @@ class PDFOrdenMedicamentos(FPDF):
             registro.append(
                 {'registroMedico': registroMedico, 'plantaNombre': plantaNombre, 'tipoDoc_id': tipoDoc_id, 'documento': documento})
         miConexionii.close()
+        self.set_line_width(0.4)
+        self.rect(10, 265.0, 195.0, 15.0)  # Coordenadas x, y, ancho, alto
+
 
         print('registro =', registro)
         self.cell(15, 7, 'Firmado Por:', 0, 0, 'L')
@@ -841,8 +898,6 @@ class PDFOrdenMedicamentos(FPDF):
         self.set_font('Times', 'I', 8)
         # Page number
         #self.cell(0, 10, 'Page ' + str(self.page_no()) + '/{nb}', 0, 0, 'C')
-
-
 
 
 def ImprimirHistoriaClinica(request):
@@ -883,8 +938,8 @@ def ImprimirHistoriaClinica(request):
     pdf.set_margins(left=10, top=5, right=5)
     pdf.add_page()
     pdf.set_font('Times', '', 8)
-    pdf.ln(7)
-    linea = 7
+    pdf.ln(5)
+    linea = 5
     totalFolios = 20
 
     # El propgrama debe preguntar desde que Folio hasta cual Y/O desde que fecha y hasta cual fecha
@@ -909,11 +964,11 @@ def ImprimirHistoriaClinica(request):
     for i in range(0, len(folios)):
 
         pdf.set_line_width(0.3)
-        pdf.rect(10.0, 35.0, 195.0, 5)  # Coordenadas x, y, ancho, alto
+        #pdf.rect(10.0, 43.0, 195.0, 5)  # Coordenadas x, y, ancho, alto
 
 
         pdf.cell(1, 1,
-                 '__________________________________________________________________________________________________________________________________________',
+                 '_________________________________________________________________________________________________________________________________________',
                  0, 0, 'L')
         pdf.cell(20, 7, 'Folio No ' + str(folios[0 + i]['folioId']), 0, 0, 'L')
         pdf.cell(80, 7, 'Fecha: ' + str(folios[0 + i]['fechaFolio']), 0, 0, 'L')
@@ -923,7 +978,7 @@ def ImprimirHistoriaClinica(request):
         linea = linea + 1
         pdf.ln(1)
         pdf.cell(1, 10,
-                 '__________________________________________________________________________________________________________________________________________',
+                 '_________________________________________________________________________________________________________________________________________',
                  0, 0, 'L')
 
         linea = linea + 7
@@ -1253,9 +1308,7 @@ def ImprimirHistoriaClinica(request):
                 pdf.cell(25, 1, 'Cantidad: ' + str(laboratorios[0 + l]['cantidad']), 0, 0, 'L')
                 pdf.cell(25, 1, 'Observacion: ' + str(laboratorios[0 + l]['observaciones']), 0, 0, 'L')
                 linea = linea + 3
-                pdf.ln()
-                pdf.ln()
-                pdf.ln()
+                pdf.ln(3)
 
                 # Aquip Resultados del LABORATORIO
 
@@ -1335,8 +1388,8 @@ def ImprimirHistoriaClinica(request):
                 pdf.cell(100, 1, 'Nombre: ' + str(radiologia[0 + l]['nombre']), 0, 0, 'L')
                 pdf.cell(25, 1, 'Cantidad: ' + str(radiologia[0 + l]['cantidad']), 0, 0, 'L')
                 pdf.cell(25, 1, 'Observacion: ' + str(radiologia[0 + l]['observaciones']), 0, 0, 'L')
-                linea = linea + 1
-                pdf.ln()
+                linea = linea + 3
+                pdf.ln(3)
 
                 # Aquip Resultados del RADIOLOGIA
 
@@ -1416,8 +1469,8 @@ def ImprimirHistoriaClinica(request):
                 pdf.cell(100, 1, 'Nombre: ' + str(terapias[0 + l]['nombre']), 0, 0, 'L')
                 pdf.cell(25, 1, 'Cantidad: ' + str(terapias[0 + l]['cantidad']), 0, 0, 'L')
                 pdf.cell(25, 1, 'Observacion: ' + str(terapias[0 + l]['observaciones']), 0, 0, 'L')
-                linea = linea + 1
-                pdf.ln()
+                linea = linea + 3
+                pdf.ln(3)
 
                 # Aquip Resultados del TERAPIAS
 
@@ -1578,13 +1631,13 @@ def ImprimirHistoriaClinica(request):
                 pdf.ln(5)
 
             for z in range(0, len(medicamentos)):
-                pdf.cell(100, 1, 'Medicamento: ' + str(medicamentos[0 + z]['suministro']), 0, 0, 'L')
-                pdf.cell(25, 1, 'Cantidad: ' + str(medicamentos[0 + z]['cantidad']), 0, 0, 'L')
-                pdf.cell(25, 1, 'DiasTratamiento: ' + str(medicamentos[0 + z]['diasTratamiento']), 0, 0, 'L')
-                linea = linea + 3
-                pdf.ln(3)
-                pdf.cell(20, 1, 'Dosis ' + str(medicamentos[0 + z]['dosis']), 0, 0, 'L')
-                pdf.cell(100, 1, 'Medida: ' + str(medicamentos[0 + z]['medida']), 0, 0, 'L')
+                pdf.cell(90, 1, 'Med: ' + str(medicamentos[0 + z]['suministro']), 0, 0, 'L')
+                pdf.cell(15, 1, 'Cant: ' + str(medicamentos[0 + z]['cantidad']), 0, 0, 'L')
+                pdf.cell(15, 1, 'Dias: ' + str(medicamentos[0 + z]['diasTratamiento']), 0, 0, 'L')
+                #linea = linea + 3
+                #pdf.ln(3)
+                pdf.cell(15, 1, 'Dosis ' + str(medicamentos[0 + z]['dosis']), 0, 0, 'L')
+                pdf.cell(15, 1, 'Medida: ' + str(medicamentos[0 + z]['medida']), 0, 0, 'L')
                 pdf.cell(25, 1, 'Via: ' + str(medicamentos[0 + z]['via']), 0, 0, 'L')
 
                 linea = linea + 3
@@ -1620,7 +1673,7 @@ def ImprimirHistoriaClinica(request):
             if (incapacidades != []):
                 linea = linea + 2
                 pdf.ln(2)
-                pdf.cell(180, 1, 'INCAPACIDAD', 0, 0, 'C')
+                pdf.cell(180, 1, 'Incapacidad Medica', 0, 0, 'C')
                 linea = linea + 5
                 pdf.ln(5)
 
@@ -1755,14 +1808,13 @@ def ImprimirOrdenIncapacidad(ingresoId2, historiaId):
     pacienteId = Usuarios.objects.get(id=documentoId)
     print("documentoPaciente = ", pacienteId.documento)
 
-    pdf = PDFOrdenIncapacidad(tipoDocId,documentoId, consec, historiaId)
+    pdf = PDFOrdenIncapacidad(tipoDocId,documentoId, consec, historiaId,format="letter")
     pdf.alias_nb_pages()
     pdf.set_margins(left= 10, top= 5, right= 5 )
     pdf.add_page()
     pdf.set_font('Times', '', 8)
     pdf.ln(7)
     linea = 7
-    totalFolios = 20
 
     #El propgrama debe preguntar desde que Folio hasta cual Y/O desde que fecha y hasta cual fecha
 
@@ -1792,7 +1844,7 @@ def ImprimirOrdenIncapacidad(ingresoId2, historiaId):
        linea = linea + 2
        pdf.ln(2)
        pdf.set_font('Times', 'B', 8)
-       pdf.cell(180, 1, 'INCAPACIDAD' , 0, 0, 'C')
+       pdf.cell(180, 1, 'Incapacidad Medica' , 0, 0, 'C')
        pdf.set_font('Times', '', 8)
        linea = linea + 5
        pdf.ln(5)
@@ -1811,8 +1863,8 @@ def ImprimirOrdenIncapacidad(ingresoId2, historiaId):
        pdf.cell(20, 1,  'Dias: ' + str(incapacidades[0 + z]['dias']), 0, 0, 'L')
        pdf.cell(100, 1 , 'Observacion: ' + str(incapacidades[0 + z]['descripcion']), 0, 0, 'L')
 
-       linea = linea + 3
-       pdf.ln(3)
+       linea = linea + 4
+       pdf.ln(4)
 
     carpeta = 'C:\EntornosPython\Pos6\JSONCLINICA\HistoriasClinicas/'
     print ("carpeta = ", carpeta)
@@ -1898,8 +1950,8 @@ def ImprimirOrdenTerapia(ingresoId2, historiaId):
         pdf.cell(100, 1, 'Nombre: ' + str(terapias[0 + l]['nombre']), 0, 0, 'L')
         pdf.cell(25, 1, 'Cantidad: ' + str(terapias[0 + l]['cantidad']), 0, 0, 'L')
         pdf.cell(25, 1, 'Observacion: ' + str(terapias[0 + l]['observaciones']), 0, 0, 'L')
-        linea = linea + 3
-        pdf.ln(3)
+        linea = linea + 4
+        pdf.ln(4)
 
     carpeta = 'C:\EntornosPython\Pos6\JSONCLINICA\HistoriasClinicas/'
     print ("carpeta = ", carpeta)
@@ -1985,8 +2037,8 @@ def ImprimirOrdenLaboratorio(ingresoId2, historiaId):
         pdf.cell(100, 1, 'Nombre: ' + str(laboratorios[0 + l]['nombre']), 0, 0, 'L')
         pdf.cell(25, 1, 'Cantidad: ' + str(laboratorios[0 + l]['cantidad']), 0, 0, 'L')
         pdf.cell(25, 1, 'Observacion: ' + str(laboratorios[0 + l]['observaciones']), 0, 0, 'L')
-        linea = linea + 3
-        pdf.ln(3)
+        linea = linea + 4
+        pdf.ln(4)
 
     carpeta = 'C:\EntornosPython\Pos6\JSONCLINICA\HistoriasClinicas/'
     print ("carpeta = ", carpeta)
@@ -2073,8 +2125,8 @@ def ImprimirOrdenRadiologia(ingresoId2, historiaId):
         pdf.cell(100, 1, 'Nombre: ' + str(radiologia[0 + l]['nombre']), 0, 0, 'L')
         pdf.cell(25, 1, 'Cantidad: ' + str(radiologia[0 + l]['cantidad']), 0, 0, 'L')
         pdf.cell(25, 1, 'Observacion: ' + str(radiologia[0 + l]['observaciones']), 0, 0, 'L')
-        linea = linea + 3
-        pdf.ln(3)
+        linea = linea + 4
+        pdf.ln(4)
 
     carpeta = 'C:\EntornosPython\Pos6\JSONCLINICA\HistoriasClinicas/'
     print ("carpeta = ", carpeta)
@@ -2132,7 +2184,7 @@ def ImprimirOrdenMedicamentos(ingresoId2, historiaId):
     curt = miConexiont.cursor()
 
 
-    comando = 'select sum.nombre medicamento,med."dosisCantidad" dosis, undmed.descripcion medida, via.nombre via,frec.descripcion frecuencia, med."cantidadOrdenada" cantidad, med."diasTratamiento" dias from clinico_historiamedicamentos med inner join clinico_historia his on (his.id=med.historia_id) inner join facturacion_suministros sum on (sum.id = med.suministro_id) inner join clinico_viasadministracion via on (via.id = med."viaAdministracion_id") inner join clinico_unidadesdemedidadosis undmed on (undmed.id = med."dosisUnidad_id") inner join clinico_frecuenciasaplicacion frec on (frec.id = med."frecuencia_id") WHERE his.id = ' + "'" + str(historiaId) + "'" + ' order by med."consecutivoMedicamento'
+    comando = 'select sum.nombre medicamento,med."dosisCantidad" dosis, undmed.descripcion medida, via.nombre via,frec.descripcion frecuencia, med."cantidadOrdenada" cantidad, med."diasTratamiento" dias from clinico_historiamedicamentos med inner join clinico_historia his on (his.id=med.historia_id) inner join facturacion_suministros sum on (sum.id = med.suministro_id) inner join clinico_viasadministracion via on (via.id = med."viaAdministracion_id") inner join clinico_unidadesdemedidadosis undmed on (undmed.id = med."dosisUnidad_id") inner join clinico_frecuenciasaplicacion frec on (frec.id = med."frecuencia_id") WHERE his.id = ' + "'" + str(historiaId) + "'" + ' order by med."consecutivoMedicamento"'
 
 
     curt.execute(comando)
@@ -2141,33 +2193,33 @@ def ImprimirOrdenMedicamentos(ingresoId2, historiaId):
 
     medicamentos = []
 
-    for codigoCups, nombre, cantidad, observaciones in curt.fetchall():
-        radiologia.append(
-            {'medicamento': medicamento, 'dosis': dosis, 'medida': medida, 'via': via,'descripcion':descripcion, 'cantidad':cantidad, 'dias':dias})
+    for medicamento, dosis, medida, via, frecuencia, cantidad, dias   in curt.fetchall():
+        medicamentos.append(
+            {'medicamento': medicamento, 'dosis': dosis, 'medida': medida, 'via': via,'frecuencia':frecuencia, 'cantidad':cantidad, 'dias':dias})
     miConexiont.close()
 
     print("medicamentos = ", medicamentos)
     print("matriz medicamentos = ", len(medicamentos))
 
-    if (radiologia != []):
+    if (medicamentos != []):
         linea = linea + 2
         pdf.ln(2)
         pdf.set_font('Times', 'B', 8)
         pdf.cell(180, 1, 'FORMULACION MEDICAMENTOS', 0, 0, 'C')
         pdf.set_font('Times', '', 8)
-        linea = linea + 3
-        pdf.ln(4)
+        linea = linea + 5
+        pdf.ln(5)
 
     for l in range(0, len(medicamentos)):
-        pdf.cell(20, 1, 'Medicamento ' + str(medicamentos[0 + l]['medicamento']), 0, 0, 'L')
-        pdf.cell(100, 1, 'Dosis: ' + str(medicamentos[0 + l]['dosis']), 0, 0, 'L')
-        pdf.cell(205, 1, 'Medida: ' + str(medicamentos[0 + l]['medida']), 0, 0, 'L')
-        pdf.cell(20, 1, 'Via: ' + str(medicamentos[0 + l]['via']), 0, 0, 'L')
-        pdf.cell(20, 1, 'Descripcion: ' + str(medicamentos[0 + l]['descripcion']), 0, 0, 'L')
-        pdf.cell(10, 1, 'Cantidad: ' + str(medicamentos[0 + l]['cantidad']), 0, 0, 'L')
-        pdf.cell(10, 1, 'Dias: ' + str(medicamentos[0 + l]['dias']), 0, 0, 'L')
-        linea = linea + 3
-        pdf.ln(3)
+        pdf.cell(80, 1, '' + str(medicamentos[0 + l]['medicamento']), 0, 0, 'L')
+        pdf.cell(18, 1, 'Dosis: ' + str(medicamentos[0 + l]['dosis']), 0, 0, 'L')
+        pdf.cell(10, 1, ' ' + str(medicamentos[0 + l]['medida']), 0, 0, 'L')
+        pdf.cell(30, 1, ' ' + str(medicamentos[0 + l]['via']), 0, 0, 'L')
+        pdf.cell(25, 1, ' ' + str(medicamentos[0 + l]['frecuencia']), 0, 0, 'L')
+        pdf.cell(13, 1, 'Cant: ' + str(medicamentos[0 + l]['cantidad']), 0, 0, 'L')
+        pdf.cell(13, 1, 'Dias: ' + str(medicamentos[0 + l]['dias']), 0, 0, 'L')
+        linea = linea + 4
+        pdf.ln(4)
 
     carpeta = 'C:\EntornosPython\Pos6\JSONCLINICA\HistoriasClinicas/'
     print ("carpeta = ", carpeta)

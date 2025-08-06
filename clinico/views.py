@@ -54,7 +54,7 @@ import json
 import datetime
 import cgi
 #from clinico import viewsReportes
-from clinico.viewsReportes import ImprimirOrdenLaboratorio, ImprimirOrdenIncapacidad, ImprimirOrdenRadiologia, ImprimirOrdenTerapia
+from clinico.viewsReportes import ImprimirOrdenLaboratorio, ImprimirOrdenIncapacidad, ImprimirOrdenRadiologia, ImprimirOrdenTerapia, ImprimirOrdenMedicamentos
 
 
 # Create your views here.
@@ -683,6 +683,8 @@ def crearHistoriaClinica(request):
                 consecutivo=0
                 jsonLaboratorios = json.loads(laboratorios)
 
+                conteoLab=0
+
                 for key in jsonLaboratorios:
 
                     print("key = " ,key)
@@ -703,6 +705,7 @@ def crearHistoriaClinica(request):
 
                         a = HistoriaExamenes(tiposExamen_id= tiposExamen_Id ,codigoCups =  cups,consecutivo=consecutivo, cantidad = cantidad, observaciones=observa,estadoReg='A' , estadoExamenes_id= estadoExamenes_id, anulado="N", historia_id=historiaId, usuaroRegistra_id=usuarioRegistro, consecutivoLiquidacion=consecLiquidacion)
                         a.save()
+                        conteoLab = conteoLab + 1
 
                         ## Desde Aqui rutina de Facturacion
                         #
@@ -853,7 +856,7 @@ def crearHistoriaClinica(request):
 		# Rutina Impresion Ordenes de Laboratorio
                 print ("tamaño matriz laboratorios", len(laboratorios[0]))
 
-                if len(laboratorios[0]) > 1:
+                if conteoLab >= 1:
                     print("Encontre ordenes de laboratrio")
                     print("Encontre ordenes de laboratrio")
                     ingresoId2=ingresosPaciente.id
@@ -873,6 +876,7 @@ def crearHistoriaClinica(request):
                 ## Rutina leer el JSON de laboratorios en python primero
                 consecutivo = 0
                 jsonRadiologia = json.loads(radiologia)
+                conteoRad=0
 
                 for key1 in jsonRadiologia:
 
@@ -896,6 +900,7 @@ def crearHistoriaClinica(request):
                                               estadoExamenes_id=estadoExamenes_id, anulado="N",
                                               historia_id=historiaId, usuaroRegistra_id=usuarioRegistro , consecutivoLiquidacion=consecLiquidacion)
                         b.save()
+                        conteoRad=conteoRad + 1
 
                         # Rutiva busca en convenio el valor de la tarifa CUPS
 
@@ -1031,7 +1036,7 @@ def crearHistoriaClinica(request):
                      ## Fin
                 print("tamaño matriz radiologia", len(radiologia[0]))
 
-                if len(radiologia[0]) > 1:
+                if conteoRad >=  1:
                     print("Encontre ordenes de radiologia")
                     print("Encontre ordenes de radiologia")
                     ingresoId2 = ingresosPaciente.id
@@ -1051,6 +1056,7 @@ def crearHistoriaClinica(request):
                 ## Rutina leer el JSON de laboratorios en python primero
                 consecutivo = 0
                 jsonTerapias = json.loads(terapias)
+                conteoTer=0
 
                 for key2 in jsonTerapias:
 
@@ -1075,6 +1081,7 @@ def crearHistoriaClinica(request):
                                                estadoExamenes_id=estadoExamenes_id, anulado="N",
                                                 historia_id=historiaId, usuaroRegistra_id=usuarioRegistro, consecutivoLiquidacion=consecLiquidacion)
                         c.save()
+                        conteoTer=conteoTer + 1
 
 			## Desde Aqui rutina de Facturacion
                           #
@@ -1215,7 +1222,7 @@ def crearHistoriaClinica(request):
                 # Rutina Impresion Ordenes de Laboratorio
                 print("tamaño matriz terapias", len(terapias[0]))
 
-                if len(terapias[0]) > 0:
+                if conteoTer >= 1:
                     print("Encontre ordenes de terapias")
                     print("Encontre ordenes de terapias")
                     ingresoId2 = ingresosPaciente.id
@@ -1585,13 +1592,13 @@ def crearHistoriaClinica(request):
                         print("ya guarde incapacidad")
 
 
-                    print("Longitud de incapaciddaes = " , len(incapForm[0]))
+                print("Longitud de incapaciddaes = " , len(incapForm[0]))
 
-                    if len(incapForm[0]) > 1:
+                if len(incapForm[0]) >= 1:
 
-                        print("Entre imprimir incapacidad")
-                        ingresoId2=ingresosPaciente.id
-                        ImprimirOrdenIncapacidad(ingresoId2, historiaId)
+                    print("Entre imprimir incapacidad")
+                    ingresoId2=ingresosPaciente.id
+                    ImprimirOrdenIncapacidad(ingresoId2, historiaId)
 
 
                 # Fin Grabacion incapacidades
@@ -1660,8 +1667,8 @@ def crearHistoriaClinica(request):
 
                # Grabacion Formulacion
 
-                formulacion = request.POST['formulacion']
-
+                formulacion = request.POST["formulacion"]
+                print("Longitud de formulacion ANTES DE = ", len(formulacion[0]))
                 print("voy a validar Medicamentos =", formulacion)
 
                 jsonFormulacion = json.loads(formulacion)
@@ -1675,7 +1682,9 @@ def crearHistoriaClinica(request):
                 # Consigue el esato de Farmacia SOLICITUD
 
                 estadoFarmaciaSolicitud = FarmaciaEstados.objects.get(nombre='SOLICITUD')
+
                 print("estadoFarmaciaSolicitud", estadoFarmaciaSolicitud)
+                conteoMed=0
 
                 for key in jsonFormulacion:
 
@@ -1698,9 +1707,10 @@ def crearHistoriaClinica(request):
                     print("diasTratamiento=", diasTratamiento)
 
                     if medicamentos != "":
+                        conteoMed=conteoMed+1
                         i = HistoriaMedicamentos(dosisCantidad=dosis, suministro_id= medicamentos,frecuencia_id=frecuencia,dosisUnidad_id=uMedidaDosis,  
                                                    viaAdministracion_id = vias,  cantidadOrdenada= cantidadMedicamento, diasTratamiento= diasTratamiento,
-                                          historia_id=historiaId,usuarioRegistro_id=usuarioRegistro  , estadoReg='A', fechaRegistro=fechaRegistro , consecutivoLiquidacion=consecLiquidacion, consecutivoMedicamento=consecutivo)
+                                          historia_id=historiaId,usuarioRegistro_id=usuarioRegistro  , estadoReg='A', fechaRegistro=fechaRegistro , consecutivoLiquidacion=0, consecutivoMedicamento=consecutivo)
                         i.save()
 
 
@@ -1746,14 +1756,6 @@ def crearHistoriaClinica(request):
                             er.save()
 
                         consecutivo = consecutivo + 1
-
-                        print("Longitud de Medicamentos = " , len(medicamentos[0]))
-
-                        if len(medicamentos[0]) > 1:
-
-                            print("Entre imprimir Medicamentos")
-                            ingresoId2=ingresosPaciente.id
-                            ImprimirOrdenMedicamentos(ingresoId2, historiaId)
 
 
                         # Fin Grabacion Formulacion
@@ -1892,6 +1894,15 @@ def crearHistoriaClinica(request):
 
 
 	            # Fin rutina Facturacion
+
+
+                if conteoMed >= 1:
+                   print("Entre imprimir Medicamentos")
+                   ingresoId2 = ingresosPaciente.id
+                   ImprimirOrdenMedicamentos(ingresoId2, historiaId)
+
+
+
                     #
                 ## Vamops a actualizar los totales de la Liquidacion:
                 #
