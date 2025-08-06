@@ -1232,9 +1232,6 @@ function guardarAdmisionTriage()
 		      
          		alert ("REGRESE DE GUARDAR Admision triage ");
 
-
-
-
 			 $('#crearAdmTriage').modal('hide');
  	      			document.getElementById("mensajesError").innerHTML = respuesta;
 

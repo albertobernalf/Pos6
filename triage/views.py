@@ -2593,6 +2593,31 @@ def admisionTriageModal(request):
 
     # Fin combo Acompanantes
 
+    # Combo Empresas
+
+    # iConexiont = MySQLdb.connect(host='CMKSISTEPC07', user='sa', passwd='75AAbb??', db='vulnerable')
+    miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                   password="123456")
+    curt = miConexiont.cursor()
+
+    comando = "SELECT c.id id,c.nombre nombre FROM facturacion_empresas c"
+
+    curt.execute(comando)
+    print(comando)
+
+    empresas = []
+
+    for id, nombre in curt.fetchall():
+        empresas.append({'id': id, 'nombre': nombre})
+
+    miConexiont.close()
+    print(empresas)
+
+    response_data['Empresas'] = empresas
+
+    # Fin combo empresas
+
+
     #
     response_data['TiposDoc'] = tiposDoc
     response_data['Documento'] = documento
@@ -2725,7 +2750,7 @@ def guardarAdmisionTriage(request):
         documento_llave = Usuarios.objects.get(documento=documento.strip())
         print("el id del dopcumento = ", documento_llave.id)
 
-        usernameId = Planta.objects.get(documento=username)
+        usernameId = Planta.objects.get(documento=username, sedesClinica_id=sede)
         print("el id del planta = ", usernameId.id)
 
         viasIngreso   = request.POST["viasIngreso"]
@@ -2882,6 +2907,7 @@ def guardarAdmisionTriage(request):
                 grabo2.save()
                 print("yA grabe dependencias historico", grabo2.id)
 
+
                 print("Grabe HISTPRICO DEPENDENCIAS")
 
                 # Actualizo consecutivo de admision en TRIAGE
@@ -2889,6 +2915,25 @@ def guardarAdmisionTriage(request):
                 grabo55 = Triage.objects.filter( tipoDoc_id=idTipoDocFinal,documento_id=documento_llave.id,consecAdmision=0).update(consecAdmision=consecAdmision)
 
                 #grabo55.save()
+
+                #Aqui reporte de inicial URGENCIAS
+
+                servicioUrgencias = Servicios.objects.get(id=busServicio2)
+
+                if servicioUrgencias.nombre == 'URGENCIAS':
+                   print("Entre imprimir inicial UREGNCIAS")
+                   ingresoId2 = grabo.id
+                   ImprimirAtencionInicialUrgencias(ingresoId2)
+
+                # Aqui reporte de Hoja de Admision
+
+                servicioHospitalizacion = Servicios.objects.get(id=busServicio2)
+
+                if servicioHospitalizacion.nombre == 'HOSPITALIZACION':
+                    print("Entre imprimir Hoja de admision paciente")
+                    ingresoId2 = grabo.id
+                    ImprimirHojaDeAdmision(ingresoId2)
+
 
         except Exception as e:
             # Aquí ya se hizo rollback automáticamente

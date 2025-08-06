@@ -815,3 +815,10 @@ ojo pendiente en aplicacion de medicamentos arreglar cuando aplica la modal no p
   -- ojo en Histporia clinica hay que crear espacio para crear ordenes de control - proxima cita de control, especialista
 
    crear modelos referneica/contrareferencia
+
+-- viernes 8 de agosto
+	-- ops me creo dos cohise rodriguez en admisiones
+        -- probar los informes desde crear admisiones desde triage
+        -- ops cuando fui a actualziar en triage crear usuario uodate salio error telefono= '11', contacto= '', "centrosC_id"= 'null', "t...
+        -- ops no me creo el triage cuando actualiza a villabona paciente -- ojo no crea triage ciuando es un paciente nuevo
+       -- umm se pierde cuando va a guardar la admisiontriage

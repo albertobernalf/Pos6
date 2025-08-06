@@ -25,6 +25,7 @@ from Reportes import views as viewsReportes
 
 from admisiones import views as viewsAdmisiones
 from triage import views as viewsTriage
+from triage import viewsReportes as viewsTriageReportes
 
 from usuarios import views as viewsUsuarios
 
@@ -32,6 +33,7 @@ from django.conf  import settings
 from django.conf.urls.static import  static
 from clinico import views as viewsClinico
 from clinico import viewsReportes as viewsClinicoReportes
+from admisiones import viewsReportes as viewsAdmisionesReportes
 from terapeutico import views as viewsApoyoTerapeutico
 from facturacion import views as viewsFacturacion
 from contratacion import views as viewsConvenios
@@ -173,7 +175,7 @@ urlpatterns = [
     path('actualizaAdmision/', viewsAdmisiones.ActualizaAdmision),
     path('load_dataCensoAdmisiones/<str:data>', viewsAdmisiones.Load_dataCensoAdmisiones, name='load_dataCenso_Admisiones'),
     path('load_dataHabitacionesAdmisiones/<str:data>', viewsAdmisiones.Load_dataHabitacionesAdmisiones, name='load_dataHabitaciones_Admisiones'),
-
+    path('imprimirAtencionInicialUrgencias/<str:ingresoId>/', viewsAdmisionesReportes.ImprimirAtencionInicialUrgencias),
 
 
     # Triage
@@ -191,7 +193,7 @@ urlpatterns = [
     path('guardarAdmisionTriage/', viewsTriage.guardarAdmisionTriage),
     path('load_dataTriage/<str:data>', viewsTriage.Load_dataTriage, name='loaddata_Triage'),
     path('buscarEspecialidadesMedicos/', viewsTriage.buscarEspecialidadesMedicos),
-
+    path('imprimirAtencionInicialUrgencias/<str:ingresoId>/', viewsTriageReportes.ImprimirAtencionInicialUrgencias),
 
     # Apoyo Terapeutico
 

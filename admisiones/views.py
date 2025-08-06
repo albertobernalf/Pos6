@@ -25,8 +25,10 @@ from facturacion.models import ConveniosPacienteIngresos, Liquidacion, Liquidaci
 from rips.models import  RipsDestinoEgreso
 from cartera.models import FormasPagos, PagosFacturas
 import datetime
+from clinico.models import Servicios
 from django.db import transaction, IntegrityError
 from django.db.models import Q
+from admisiones.viewsReportes import ImprimirAtencionInicialUrgencias
 
 # Create your views here.
 
@@ -5046,7 +5048,25 @@ def crearAdmisionDef(request):
 
         # HASTA AQUIP TRANSACCIONALIDAD
 
+        # Aqui reporte de inicial URGENCIAS, pero ojo se suspende porque tiene que tener TRIAGE
 
+        #servicioUrgencias = Servicios.objects.get(id=busServicio2)
+
+
+        #if servicioUrgencias.nombre == 'URGENCIAS':
+        #    print("Entre imprimir inicial UREGNCIAS")
+        #    ingresoId2 = grabo.id
+        #    ImprimirAtencionInicialUrgencias(ingresoId2)
+
+        # Aqui reporte de Hoja de Admision
+
+        servicioHospitalizacion = Servicios.objects.get(id=busServicio2)
+
+
+        if servicioHospitalizacion.nombre == 'HOSPITALIZACION':
+            print("Entre imprimir Hoja de admision paciente")
+            ingresoId2 = grabo.id
+            ImprimirHojaDeAdmision(ingresoId2)
 
         # RUTINA ARMADO CONTEXT
         #
@@ -6067,6 +6087,11 @@ def guardarUsuariosModal(request):
     nombre = request.POST["nombre"]
     print("DOCUMENTO = " ,documento)
     print(nombre)
+    primerNombre = request.POST["primerNombre"]
+    segundoNombre = request.POST["segundoNombre"]
+    primerApellido = request.POST["primerApellido"]
+    segundoApellido = request.POST["segundoApellido"]
+
     genero = request.POST["genero"]
     pais = request.POST["pais"]
     departamento = request.POST["departamentos"]
@@ -6118,6 +6143,14 @@ def guardarUsuariosModal(request):
     if ocupaciones == '':
            ocupaciones="null"
 
+    if primerNombre == '':
+           primerNombre="null"
+    if segundoNombre == '':
+           segundoNombre="null"
+    if primerApellido == '':
+           primerApellido="null"
+    if segundoApellido == '':
+           segundoApellido="null"
 
     ocupacion = request.POST['ocupaciones']
     correo = request.POST["correo"]
@@ -6158,12 +6191,12 @@ def guardarUsuariosModal(request):
             if Usuarios == []:
 
                  print("Entre a crear")
-                 comando = 'insert into usuarios_usuarios (nombre, documento, genero, "fechaNacio", pais_id,  departamentos_id, ciudades_id, direccion, telefono, contacto, "centrosC_id", "tipoDoc_id", "tiposUsuario_id", municipio_id, localidad_id, "estadoCivil_id", ocupacion_id, correo ,"fechaRegistro", "estadoReg") values (' + "'" + str(nombre) + "'" + ' , ' + "'" + str(documento) + "'" + ', ' + "'" + str(genero) + "'" + '  , ' + "'" + str(fechaNacio) + "'" +  ', ' + "'" + str(pais) + "'" + ', ' + "'" + str(departamento) + "'" +  '  , ' + "'" +  str(ciudad) + "'" + '  , ' + "'" +  str(direccion) + "'" + ', ' + "'" + str(telefono) + "'" + ', ' + "'" + str(contacto) + "'" + ', ' +  str(centrosc_id) +  ', ' + "'" + str(tipoDoc_id) + "'" + ', ' + str(tiposUsuario_id) + " , " + "'" + str(municipio) + "'" +   ', ' + "'" + str(localidad) + "'" + ", " + str(estadoCivil)  + ", " + str(ocupaciones) + ", " + "'" + str(correo) + "', " +  "'"  + str(fechaRegistro) + "'"  +  ", 'A'"  +      ')'
+                 comando = 'insert into usuarios_usuarios (nombre, documento, genero, "fechaNacio", pais_id,  departamentos_id, ciudades_id, direccion, telefono, contacto, "centrosC_id", "tipoDoc_id", "tiposUsuario_id", municipio_id, localidad_id, "estadoCivil_id", ocupacion_id, correo ,"fechaRegistro", "estadoReg","primerNombre","segundoNombre","primerApellido", "segundoApellido") values (' + "'" + str(nombre) + "'" + ' , ' + "'" + str(documento) + "'" + ', ' + "'" + str(genero) + "'" + '  , ' + "'" + str(fechaNacio) + "'" +  ', ' + "'" + str(pais) + "'" + ', ' + "'" + str(departamento) + "'" +  '  , ' + "'" +  str(ciudad) + "'" + '  , ' + "'" +  str(direccion) + "'" + ', ' + "'" + str(telefono) + "'" + ', ' + "'" + str(contacto) + "'" + ', ' +  str(centrosc_id) +  ', ' + "'" + str(tipoDoc_id) + "'" + ', ' + str(tiposUsuario_id) + " , " + "'" + str(municipio) + "'" +   ', ' + "'" + str(localidad) + "'" + ", " + str(estadoCivil)  + ", " + str(ocupaciones) + ", " + "'" + str(correo) + "', " +  "'"  + str(fechaRegistro) + "'"  +  ", 'A'"  + ",'" + str(primerNombre) + "','" + str(segundoNombre)  +  "','" + str(primerApellido) + "','" + str(primerApellido)  + "','" + str(segundoApellido)   +  "')"
                  print(comando)
 
             else:
                 print("Entre a actualizar")
-                comando = 'update usuarios_usuarios set nombre = ' "'" + str(nombre) +  "'"  + ',ciudades_id = ' + "'" + str(ciudad) + "'"  +    ', direccion  = ' + "'" +  str(direccion) + "'"  + ', pais_id = ' + "'" + str(pais) + "'"     + ', departamentos_id = ' + "'" + str(departamento) + "'" + ', genero = ' + "'" + str(genero) + "'"  + ', "fechaNacio" = ' + "'" + str(fechaNacio) + "'"   + ', telefono= ' + "'" + str(telefono) + "'" +  ', contacto= ' + "'" +  str(contacto) + "'" +  ', "centrosC_id"= ' + str(centrosc_id)  + ', "tiposUsuario_id" = ' + str(tiposUsuario_id) + ","   + ' municipio_id = ' + "'" + str(municipio) + "'" +  ', localidad_id = ' + "'" + str(localidad) + "'" + ', "estadoCivil_id"= '  + str(estadoCivil)  + ', ocupacion_id = ' + str(ocupaciones)  + ', correo = ' + "'" + str(correo) + "'"  + ' WHERE "tipoDoc_id" = ' + str(tipoDoc_id) + ' AND documento = ' + "'" + str(documento) + "'"
+                comando = 'update usuarios_usuarios set nombre = ' "'" + str(nombre) +  "'"  + ',ciudades_id = ' + "'" + str(ciudad) + "'"  +    ', direccion  = ' + "'" +  str(direccion) + "'"  + ', pais_id = ' + "'" + str(pais) + "'"     + ', departamentos_id = ' + "'" + str(departamento) + "'" + ', genero = ' + "'" + str(genero) + "'"  + ', "fechaNacio" = ' + "'" + str(fechaNacio) + "'"   + ', telefono= ' + "'" + str(telefono) + "'" +  ', contacto= ' + "'" +  str(contacto) + "'" +  ', "centrosC_id"= ' + str(centrosc_id)  + ', "tiposUsuario_id" = ' + str(tiposUsuario_id) + ","   + ' municipio_id = ' + "'" + str(municipio) + "'" +  ', localidad_id = ' + "'" + str(localidad) + "'" + ', "estadoCivil_id"= '  + str(estadoCivil)  + ', ocupacion_id = ' + str(ocupaciones)  + ', correo = ' + "'" + str(correo) + "'" + ', "primerNombre" = ' + "'" + str(primerNombre) + "'," + '"segundoNombre" = ' + "'" + str(segundoNombre) + "'," + '"primerApellido"= ' + "'" + str(primerApellido) + "'," + '"segundoApellido" = ' + "'" + str(segundoApellido) +  "'"  + ' WHERE "tipoDoc_id" = ' + str(tipoDoc_id) + ' AND documento = ' + "'" + str(documento) + "'"
                 print(comando)
 
             cur3.execute(comando)

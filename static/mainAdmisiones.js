@@ -1145,6 +1145,11 @@ function AUsuario()
 	var documento = document.getElementById("documento1").value;
 		var busDocumentoSel = document.getElementById("busDocumentoSel").value;
    var nombre = document.getElementById("nombre1").value;
+   var primerNombre = document.getElementById("primerNombre").value;
+   var segundoNombre = document.getElementById("segundoNombre").value;
+   var primerApellido = document.getElementById("primerApellido").value;
+   var segundoApellido = document.getElementById("segundoApellido").value;
+
 
   // alert("Documento = " +  documento);
 
@@ -1261,6 +1266,10 @@ if (genero =='')
 		data: {'tipoDoc':tipoDoc,
 		        'documento':documento,
 		        'nombre':nombre,
+                        'primerNombre':primerNombre,
+			'segundoNombre':segundoNombre,
+			'primerApellido':primerApellido,
+			'segundoApellido':segundoApellido,
 		        'genero':genero,
 		        'fechaNacio':fechaNacio,
 		         'pais':pais,
