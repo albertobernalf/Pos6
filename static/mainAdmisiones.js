@@ -151,6 +151,16 @@ function arrancaAdmisiones(valorTabla,valorData)
 		}
                     },
 
+		{
+		"render": function ( data, type, row ) {
+                        var btn = '';
+
+	  btn = btn + " <button class='ImprimirHojaAdmision btn-primary ' data-pk='" + row.pk + "'>" + '<i class=""fa-duotone fa-solid fa-print""></i>' + "</button>";
+
+                       return btn;
+		}
+                   },
+
                  { data: "fields.id"},
                  { data: "fields.tipoDoc" }, 
                 { data: "fields.Documento"},
@@ -1772,13 +1782,10 @@ $('#tablaDatos tbody').on('click', '.miEditaAdmision', function() {
        			  $('#paciente').val(Usuarios.paciente);
        			      			    $('#empresaE').val(Usuarios.empresa);
       			    $('#busServicio2').val(Usuarios.servicioNombreIng);
-
-
    			    $('#dependenciasIngreso').val(Usuarios.dependenciasIngreso);
-
     			    $('#busEspecialidadP').val(Usuarios.espMedico);
 
-    			    $('#dxIngresoP').val(Usuarios.diagMedico);
+    			    $('#dxIngresoX').val(Usuarios.diagMedico);
     			    $('#viasIngresoT').val(Usuarios.viasIngreso);
     			    $('#causasExternaP').val(Usuarios.causasExterna);
     			    $('#regimenesP').val(Usuarios.regimenes);
@@ -1793,8 +1800,14 @@ $('#tablaDatos tbody').on('click', '.miEditaAdmision', function() {
 
   		  $('#tiposCotizanteP').val(Usuarios.cotizante);
   		  $('#ripsCausaMotivoAtencionX').val(Usuarios.ripsCausaMotivoAtencion);
+  		  $('#ripsGrupoServiciosX').val(Usuarios.ripsGrupoServicios);
+  		  $('#ripsmodalidadGrupoServicioTecSalX').val(Usuarios.ripsmodalidadGrupoServicioTecSal);
+  		  $('#ripsmodalidadGrupoServicioTecSalX').val(Usuarios.ripsmodalidadGrupoServicioTecSal);
+  		  $('#ripsCondicionDestinoUsuarioEgresoX').val(Usuarios.ripsCondicionDestinoUsuarioEgreso);
+  		  $('#ripsViaIngresoServicioSaludX').val(Usuarios.ripsViaIngresoServicioSalud);
+  		  $('#ripsDestinoUsuarioEgresoRecienNacidoX').val(Usuarios.ripsDestinoUsuarioEgresoRecienNacidoX);
+		  $('#ripsServiciosIngX').val(Usuarios.ripsServiciosIng);
 
- 
 
 
   		   $('#modalActualizaAdmision').modal('show');	
@@ -2799,11 +2812,13 @@ function actualizaAdmision()
     var regimenes = document.getElementById("regimenesP").value;
     var tiposCotizante = document.getElementById("tiposCotizanteP").value;
     var acompanantes = document.getElementById("acompanantesP").value;
+    var dxIngreso = document.getElementById("dxIngresoP").value;
     var responsables = document.getElementById("responsablesP").value;
     var remitido = document.getElementById("remitidoP").value;
     var ips = document.getElementById("ipsP").value;
     var numManilla = document.getElementById("numManillaP").value;
     var ingresoId = document.getElementById("ingresoIdActualizar").value;
+	
 
 
 	var username = document.getElementById("username").value;
@@ -2851,6 +2866,7 @@ function actualizaAdmision()
 			 'causasExterna':causasExterna,
 			 'regimenes':regimenes,
 			 'viasIngreso':viasIngreso,
+			 'dxIngreso':dxIngreso,
 			 'medicoIngreso':medicoIngreso,
 			 'busEspecialidad':busEspecialidad,
 			 'empresa':empresa,
@@ -2911,5 +2927,35 @@ function CrearAdm()
 			 document.getElementById('empresaC').focus();
 
 	};
+
+
+
+
+$('#tablaDatos tbody').on('click', '.ImprimirHojaAdmision', function() {
+
+	alert ("Entre ImprimirHojaAdmision ");
+
+	     var post_id = $(this).data('pk');
+	alert ("post_id = " + post_id);
+	var ingresoId = post_id;
+
+	$.ajax({
+	           url: '/imprimirHojaAdmision/',
+	            data : {ingresoId:ingresoId},
+	           type: 'POST',
+	           dataType : 'json',
+	  		success: function (data) {
+
+			 $('#pk').val(data.pk);
+	       	     
+
+                  },
+	   		    error: function (request, status, error) {
+	   			   document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
+	   	    	}
+	     });
+
+
+    });
 
 

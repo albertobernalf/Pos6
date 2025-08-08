@@ -815,11 +815,9 @@ ojo pendiente en aplicacion de medicamentos arreglar cuando aplica la modal no p
 
    crear modelos referneica/contrareferencia
 
--- viernes 8 de agosto
-	-- ops me creo dos cohise rodriguez en admisiones
-        -- probar los informes desde crear admisiones desde triage
-	<div class="modal-dialog modal-fullscreen" role="document">
 
-     -- OPS HAY UN PROBLEMA CUANDOP RECARGA Y ME TRAE DE NUEVO TODOS LOS TRIAGES
-     -- ops tengo un aproblema no me desaparece la ventana grande de triage.. clro loyengo en ajax y devuelvo como una pagina que viene d eun submit
+  -- LUNES 11 DE AGOSTO
+	<div class="modal-dialog modal-fullscreen" role="document">
+      -- ojo para los reportes : tengo causa externa en la tabla admisiones_ingreso de alli los púedo sacar
+      -- seguiir probando laactualziadion editar admision desde admsiion
      -- ops los formatos estan iniciados y hay que revizarlos a fondop
