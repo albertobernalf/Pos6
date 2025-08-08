@@ -1895,6 +1895,53 @@ def escogeAcceso(request, Sede, Username, Profesional, Documento, NombreSede, es
 
         # Fin combo ripsDestinoUsuarioEgresoRecienNacido
 
+        # Combo Empresas
+
+        miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                       password="123456")
+        curt = miConexiont.cursor()
+
+        comando = "SELECT c.id id,c.nombre nombre FROM facturacion_empresas c ORDER BY c.nombre"
+
+        curt.execute(comando)
+        print(comando)
+
+        empresas = []
+        empresas.append({'id': '', 'nombre': ''})
+
+        for id, nombre in curt.fetchall():
+            empresas.append({'id': id, 'nombre': nombre})
+
+        miConexiont.close()
+        print(empresas)
+
+        context['Empresas'] = empresas
+
+        # Fin combo empresas
+
+        # Combo ServiciosAdministrativos
+
+        miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                       password="123456")
+        curt = miConexiont.cursor()
+
+        comando = 'select m.id id, m.nombre||' + "'" + str(' ') + "'||" + ' u.nombre nombre FROM sitios_serviciosAdministrativos m, sitios_ubicaciones u where m.ubicaciones_id= u.id AND m."sedesClinica_id" = ' + str(sede)
+
+        print(comando)
+        curt.execute(comando)
+
+        serviciosAdministrativos = []
+
+        serviciosAdministrativos.append({'id': '', 'nombre': ''})
+
+
+        for id, nombre in curt.fetchall():
+            serviciosAdministrativos.append({'id': id, 'nombre': nombre})
+
+        miConexiont.close()
+        print("ServiciosAdministrativos = " , serviciosAdministrativos)
+        context['ServiciosAdministrativos'] = serviciosAdministrativos
+
         triage1 = []
 
         miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
@@ -6244,20 +6291,20 @@ def encuentraAdmisionModal(request):
                                        password="123456")
         curt = miConexiont.cursor()
 
-        comando = 'SELECT tp.nombre tipoDoc,  u.documento documento, u.nombre  paciente , i.consec consec , i."fechaIngreso" ingreso , i."fechaSalida" salida, ser.nombre servicioNombreIng, dep.nombre dependenciasIngreso ,pla.nombre medicoIngreso, i."especialidadesMedicosIngreso_id" espMedico, diag1.nombre diagMedico, i."ViasIngreso_id" viasIngreso, i."causasExterna_id" causasExterna,i.regimen_id regimenes ,i."tiposCotizante_id"  cotizante,i.remitido remitido,i."ipsRemite_id" ips ,i."numManilla" numManilla, i."dxIngreso_id" dxIngreso, "contactoResponsable_id" responsable, "contactoAcompañante_id" acompanante , i.empresa_id empresa  FROM admisiones_ingresos i inner join usuarios_usuarios u on (u."tipoDoc_id" = i."tipoDoc_id" and u.id = i."documento_id" ) inner join sitios_dependencias dep on (dep."sedesClinica_id" = i."sedesClinica_id" and dep."tipoDoc_id" =  i."tipoDoc_id" and dep.documento_id =i."documento_id"  and dep.consec = i.consec) inner join usuarios_tiposDocumento tp on (tp.id = u."tipoDoc_id") inner join sitios_dependenciastipo deptip on (deptip.id = dep."dependenciasTipo_id") inner join sitios_serviciosSedes sd on (sd."sedesClinica_id" = i."sedesClinica_id") inner join clinico_servicios ser  on (ser.id = sd.servicios_id  and ser.id = i."serviciosIng_id" ) left join clinico_especialidades esp1 on (esp1.id = i."especialidadesMedicosIngreso_id" ) left join clinico_diagnosticos diag1 on (diag1.id = i."dxIngreso_id") left join clinico_medicos med1 on (med1.id =i."medicoIngreso_id") left join planta_planta pla on (pla.id =i."medicoIngreso_id")  left join clinico_viasIngreso vias on (vias.id = i."ViasIngreso_id") left join clinico_causasExterna cexterna on (cexterna.id = i."causasExterna_id") inner join clinico_regimenes reg on (reg.id = i.regimen_id) inner join clinico_tiposcotizante cot on (cot.id = i."tiposCotizante_id") left  join clinico_ips ips on (ips.id =i."ipsRemite_id") WHERE i."sedesClinica_id" = ' + "'" + str(sede) + "'" + ' and u."tipoDoc_id" = ' + "'" + str(Ingreso.tipoDoc_id) + "'" + ' and u.id = ' + "'" + str(Ingreso.documento_id) + "'" + ' and i.consec= ' + "'" + str(Ingreso.consec) + "'" + ' and i."fechaSalida" is null'
+        comando = 'SELECT tp.nombre tipoDoc,  u.documento documento, u.nombre  paciente , i.consec consec , i."fechaIngreso" ingreso , i."fechaSalida" salida, ser.nombre servicioNombreIng, dep.nombre dependenciasIngreso ,pla.nombre medicoIngreso, i."especialidadesMedicosIngreso_id" espMedico, diag1.nombre diagMedico, i."ViasIngreso_id" viasIngreso, i."causasExterna_id" causasExterna,i.regimen_id regimenes ,i."tiposCotizante_id"  cotizante,i.remitido remitido,i."ipsRemite_id" ips ,i."numManilla" numManilla, i."dxIngreso_id" dxIngreso, "contactoResponsable_id" responsable, "contactoAcompañante_id" acompanante , i.empresa_id empresa  , i."ripsCausaMotivoAtencion_id" ripsCausaMotivoAtencion FROM admisiones_ingresos i inner join usuarios_usuarios u on (u."tipoDoc_id" = i."tipoDoc_id" and u.id = i."documento_id" ) inner join sitios_dependencias dep on (dep."sedesClinica_id" = i."sedesClinica_id" and dep."tipoDoc_id" =  i."tipoDoc_id" and dep.documento_id =i."documento_id"  and dep.consec = i.consec) inner join usuarios_tiposDocumento tp on (tp.id = u."tipoDoc_id") inner join sitios_dependenciastipo deptip on (deptip.id = dep."dependenciasTipo_id") inner join sitios_serviciosSedes sd on (sd."sedesClinica_id" = i."sedesClinica_id") inner join clinico_servicios ser  on (ser.id = sd.servicios_id  and ser.id = i."serviciosIng_id" ) left join clinico_especialidades esp1 on (esp1.id = i."especialidadesMedicosIngreso_id" ) left join clinico_diagnosticos diag1 on (diag1.id = i."dxIngreso_id") left join clinico_medicos med1 on (med1.id =i."medicoIngreso_id") left join planta_planta pla on (pla.id =i."medicoIngreso_id")  left join clinico_viasIngreso vias on (vias.id = i."ViasIngreso_id") left join clinico_causasExterna cexterna on (cexterna.id = i."causasExterna_id") inner join clinico_regimenes reg on (reg.id = i.regimen_id) inner join clinico_tiposcotizante cot on (cot.id = i."tiposCotizante_id") left  join clinico_ips ips on (ips.id =i."ipsRemite_id") WHERE i."sedesClinica_id" = ' + "'" + str(sede) + "'" + ' and u."tipoDoc_id" = ' + "'" + str(Ingreso.tipoDoc_id) + "'" + ' and u.id = ' + "'" + str(Ingreso.documento_id) + "'" + ' and i.consec= ' + "'" + str(Ingreso.consec) + "'" + ' and i."fechaSalida" is null'
 
         print(comando)
         curt.execute(comando)
 
         Usuarios = {}
 
-        for tipoDoc,  documento,paciente ,consec ,  ingreso , salida, servicioNombreIng, dependenciasIngreso , medicoIngreso, espMedico,diagMedico, viasIngreso, causasExterna,regimenes, cotizante, remitido,ips , numManilla, dxIngreso,responsable, acompanante, empresa  in curt.fetchall():
+        for tipoDoc,  documento,paciente ,consec ,  ingreso , salida, servicioNombreIng, dependenciasIngreso , medicoIngreso, espMedico,diagMedico, viasIngreso, causasExterna,regimenes, cotizante, remitido,ips , numManilla, dxIngreso,responsable, acompanante, empresa, ripsCausaMotivoAtencion  in curt.fetchall():
             Usuarios = {'tipoDoc': tipoDoc, 'documento': documento, 'paciente': paciente, 'ingreso': ingreso,
                         'salida': salida, 'servicioNombreIng': servicioNombreIng, 'dependenciasIngreso': dependenciasIngreso,
                         'medicoIngreso': medicoIngreso, 'espMedico': espMedico, 'diagMedico': diagMedico,
                         'viasIngreso': viasIngreso, 'causasExterna': causasExterna,
                         'regimenes': regimenes, 'cotizante': cotizante, 'remitido': remitido,
-                        'ips': ips, 'numManilla': numManilla, 'dxIngreso':dxIngreso,'responsable':responsable, 'acompanante':acompanante,'empresa':empresa}
+                        'ips': ips, 'numManilla': numManilla, 'dxIngreso':dxIngreso,'responsable':responsable, 'acompanante':acompanante,'empresa':empresa,'ripsCausaMotivoAtencion':ripsCausaMotivoAtencion}
 
         miConexiont.close()
         print(Usuarios)

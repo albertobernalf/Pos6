@@ -26,6 +26,9 @@ from django.db.models.functions import Cast, Coalesce
 import datetime
 from rips.models import  RipsDestinoEgreso
 from django.db import transaction, IntegrityError
+from django.core.exceptions import ObjectDoesNotExist
+from clinico.models import Servicios
+from triage.viewsReportes import ImprimirAtencionInicialUrgencias
 
 # Create your views here.
 
@@ -140,7 +143,7 @@ def crearTriage(request):
         now = datetime.datetime.now()
         dnow = now.strftime("%Y-%m-%d %H:%M:%S")
         print("NOW  = ", dnow)
-        fechaRegistro = dnow
+        fechaRegistro = datetime.datetime.now()
         print("fechaRegistro  = ", fechaRegistro )
 
         usuarioRegistro = Username_id
@@ -199,7 +202,7 @@ def crearTriage(request):
 
                 grabo.save()
                 print("yA grabe 2", grabo.id)
-                grabo.id
+
                 print("yA grabe" , grabo.id)
 
             # Aqui UPDATE para actualizar la dependencia
@@ -210,11 +213,14 @@ def crearTriage(request):
                 # ejemplo
                 grabo4 =  Dependencias.objects.filter(id = dependencias).update(tipoDoc_id=tipoDoc, documento_id=documento_llave.id, consec=0, disponibilidad='O',fechaRegistro=fechaRegistro, fechaOcupacion= fechaRegistro)
 
+
             # FIN UPDATE actualiza dependencia
 
         except Exception as e:
             # Aquí ya se hizo rollback automáticamente
             print("Se hizo rollback por:", e)
+            return JsonResponse({'success': False, 'message': e})
+
 
 
         # RUTINA ARMADO CONTEXT
@@ -1863,6 +1869,9 @@ def grabaUsuariosTriage(request):
     if estadoCivil == '':
         estadoCivil="null"
 
+    if centrosC == '':
+        centrosC="null"
+
     ocupaciones = request.POST['ocupaciones']
 
     if ocupaciones == '':
@@ -1922,10 +1931,11 @@ def grabaUsuariosTriage(request):
                 #miConexion3 =  MySQLdb.connect(host='CMKSISTEPC07', user='sa', passwd='75AAbb??', db='vulnerable')
                 miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres", password="123456")
                 cur3 = miConexion3.cursor()
-                comando = 'update usuarios_usuarios set nombre = ' "'" + str(nombre) +  "'"   + ', ciudades_id = ' + "'" + str(ciudades) + "'" +  ', direccion  = ' + "'" +  str(direccion) + "'" + ', genero = ' + "'" + str(genero) + "'"  + ', "fechaNacio" = ' + "'" +str(fechaNacio) + "'" +  ', telefono= ' + "'" + str(telefono) + "'" +  ', contacto= ' + "'" +  str(contacto) + "'" +  ', "centrosC_id"= ' + "'" + str(centrosC) + "'"  + ', "tiposUsuario_id" = ' + "'" + str(tiposUsuario) + "' , "   + ' municipio_id = ' + str(municipios) +   ', localidad_id = ' +  str(localidades) +  ', "estadoCivil_id"= ' +  str(estadoCivil) +  ', ocupacion_id = ' +  str(ocupaciones) +  ', correo = ' + "'" + str(correo) + "'" + ' WHERE "tipoDoc_id" = ' + str(tipoDoc) + ' AND documento = ' + "'" + str(documento) + "'"
+                comando = 'update usuarios_usuarios set nombre = ' "'" + str(nombre) +  "'"   + ', ciudades_id = ' + "'" + str(ciudades) + "'" +  ', direccion  = ' + "'" +  str(direccion) + "'" + ', genero = ' + "'" + str(genero) + "'"  + ', "fechaNacio" = ' + "'" +str(fechaNacio) + "'" +  ', telefono= ' + "'" + str(telefono) + "'" +  ', contacto= ' + "'" +  str(contacto) + "'" +  ', "centrosC_id"= ' + str(centrosC)  + ', "tiposUsuario_id" = ' + "'" + str(tiposUsuario) + "' , "   + ' municipio_id = ' + str(municipios) +   ', localidad_id = ' +  str(localidades) +  ', "estadoCivil_id"= ' +  str(estadoCivil) +  ', ocupacion_id = ' +  str(ocupaciones) +  ', correo = ' + "'" + str(correo) + "'" + ' WHERE "tipoDoc_id" = ' + str(tipoDoc) + ' AND documento = ' + "'" + str(documento) + "'"
                 print(comando)
                 cur3.execute(comando)
                 miConexion3.commit()
+
                 miConexion3.close()
                 return HttpResponse("Usuario Actualizado ! ")
 
@@ -2681,6 +2691,9 @@ def guardarAdmisionTriage(request):
         empresa = request.POST["empresasT"]
         print(" empresa = ", empresa)
 
+        servicioAdmTriage = request.POST["servicioAdmTriage"]
+        print(" servicioAdmTriage = ", servicioAdmTriage)
+
 
         # Consigo el Id del Paciente Documento
 
@@ -2699,7 +2712,7 @@ def guardarAdmisionTriage(request):
         print("ultimo ingreso = ", consecAdmision)
 
         #fechaIngreso = request.POST['fechaIngreso']
-        fechaIngreso = dt.datetime.now()
+        fechaIngreso = datetime.datetime.now()
         print("fechaIngreso = ", fechaIngreso)
 
         #fechaIngreso = datetime.strptime(fechaIngreso, "%Y-%m-%dT%H:%M")
@@ -2790,17 +2803,26 @@ def guardarAdmisionTriage(request):
         ripsDestinoUsu1 = RipsDestinoEgreso.objects.get(id=ripsDestinoUsuarioEgresoRecienNacido)
         ripsCondicionDestinoUsuarioEgreso = request.POST["ripsCondicionDestinoUsuarioEgreso"]
 
+
         # Consigo datos de la liquidacion Actual triage o sea la cuenta
+        liq=0
+        rollo=0
+
         try:
             with transaction.atomic():
 
                 liquidacionDesdeId = Liquidacion.objects.get(tipoDoc_id=idTipoDocFinal, documento_id=documento_llave.id, consecAdmision=0)
                 print ("LiquidacionDesdeId.id = ", liquidacionDesdeId.id)
                 liq = liquidacionDesdeId.id
-        except Exception as e:
-            # Aquí ya se hizo rollback automáticamente
-            print("Se hizo rollback por:", e)
-            liq=0
+        except ObjectDoesNotExist:
+                rollo=1
+                print("No existe Id de liquidacion")
+
+        finally:
+            # Este bloque se ejecutara siempre
+                print ("final")
+
+        print("liq = ", liq)
 
         try:
             with transaction.atomic():
@@ -2834,7 +2856,6 @@ def guardarAdmisionTriage(request):
                                  causasExterna_id=causasExterna,
                                  regimen_id=regimenes,
                                  tiposCotizante_id=tiposCotizante,
-                                 #empresa_id=empresaId,
                                  ipsRemite_id=ipsRemite,
                                  numManilla=numManilla,
                                  #contactoAcompañante_id=contactoAcompanante,
@@ -2857,13 +2878,11 @@ def guardarAdmisionTriage(request):
                                  fechaRegistro=fechaRegistro,
                                  usuarioRegistro_id=usernameId.id,
                                  estadoReg=estadoReg,
-
+                                serviciosAdministrativos_id= servicioAdmTriage ,
                 )
                 print("Voy a guardar la INFO")
 
                 grabo.save()
-                print("yA grabe 2", grabo.id)
-                grabo.id
                 print("yA grabe" , grabo.id)
 
                 # Consigo la Dependencia Triage Actual que ocupa
@@ -2884,8 +2903,6 @@ def guardarAdmisionTriage(request):
                 print("Voy a guardar dependencias OJO ESTO ES UN UPDATE")
                 # ejemplo
                 grabo4 =  Dependencias.objects.filter(id = dependenciasIngreso).update(tipoDoc_id=idTipoDocFinal, documento_id=documento_llave.id, consec=consecAdmision, disponibilidad='O',fechaRegistro=fechaRegistro, fechaOcupacion= fechaRegistro)
-
-
 
                 # Grabo Dependencia Historico
 
@@ -2916,28 +2933,12 @@ def guardarAdmisionTriage(request):
 
                 #grabo55.save()
 
-                #Aqui reporte de inicial URGENCIAS
-
-                servicioUrgencias = Servicios.objects.get(id=busServicio2)
-
-                if servicioUrgencias.nombre == 'URGENCIAS':
-                   print("Entre imprimir inicial UREGNCIAS")
-                   ingresoId2 = grabo.id
-                   ImprimirAtencionInicialUrgencias(ingresoId2)
-
-                # Aqui reporte de Hoja de Admision
-
-                servicioHospitalizacion = Servicios.objects.get(id=busServicio2)
-
-                if servicioHospitalizacion.nombre == 'HOSPITALIZACION':
-                    print("Entre imprimir Hoja de admision paciente")
-                    ingresoId2 = grabo.id
-                    ImprimirHojaDeAdmision(ingresoId2)
-
 
         except Exception as e:
             # Aquí ya se hizo rollback automáticamente
             print("Se hizo rollback por:", e)
+            rollo=1
+            raise error
 
         if liq != 0:
 
@@ -2977,6 +2978,32 @@ def guardarAdmisionTriage(request):
 
 
         ## Fin traslado a la nueva Cuenta
+
+        # Aqui reporte de inicial URGENCIAS
+
+        print("Entre rollo=" , rollo)
+
+        if (rollo > 0):
+            print ("Entre rollo=1")
+
+            servicioUrgencias = Servicios.objects.get(id=busServicio2)
+
+            if servicioUrgencias.nombre == 'URGENCIAS':
+                print("Entre rollo=1 URGENCIAS")
+
+                print("Entre imprimir inicial UREGNCIAS")
+                ingresoId2 = grabo.id
+                print("ingresoId2 = ",ingresoId2 )
+                ImprimirAtencionInicialUrgencias(ingresoId2)
+
+                # Aqui reporte de Hoja de Admision
+
+            #servicioHospitalizacion = Servicios.objects.get(id=busServicio2)
+
+            #if servicioHospitalizacion.nombre == 'HOSPITALIZACION':
+            #    print("Entre imprimir Hoja de admision paciente")
+            #    ingresoId2 = grabo.id
+            #    ImprimirHojaDeAdmision(ingresoId2)
 
         # RUTINA ARMADO CONTEXT
 

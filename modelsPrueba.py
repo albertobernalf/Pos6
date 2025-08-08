@@ -809,8 +809,7 @@ ojo pendiente en aplicacion de medicamentos arreglar cuando aplica la modal no p
 -- ojo tan solo cuando farmacia reciba la devolucion se actualiza cantidadDevuelta en enfermeriarecibe,, corregir no cuando enfereria devuelve que asi esta y eso esta mal. VERIFICAR
 
 - ojo en Agosto 4
-  -- verifiacar que si no hay lab, terapias, lab, incap no imprima nada hay problema allip
-  -- hacer medicamentos, no qx, cirugia, revx sstemas, sigmnops vitales etc
+  -- hacer  no qx, cirugia, revx sstemas, sigmnops vitales etc
   --  crear formatos, ingresos admisioones, furips,accidente de transito, accidente de trabajo etc
   -- ojo en Histporia clinica hay que crear espacio para crear ordenes de control - proxima cita de control, especialista
 
@@ -819,6 +818,8 @@ ojo pendiente en aplicacion de medicamentos arreglar cuando aplica la modal no p
 -- viernes 8 de agosto
 	-- ops me creo dos cohise rodriguez en admisiones
         -- probar los informes desde crear admisiones desde triage
-        -- ops cuando fui a actualziar en triage crear usuario uodate salio error telefono= '11', contacto= '', "centrosC_id"= 'null', "t...
-        -- ops no me creo el triage cuando actualiza a villabona paciente -- ojo no crea triage ciuando es un paciente nuevo
-       -- umm se pierde cuando va a guardar la admisiontriage
+	<div class="modal-dialog modal-fullscreen" role="document">
+
+     -- OPS HAY UN PROBLEMA CUANDOP RECARGA Y ME TRAE DE NUEVO TODOS LOS TRIAGES
+     -- ops tengo un aproblema no me desaparece la ventana grande de triage.. clro loyengo en ajax y devuelvo como una pagina que viene d eun submit
+     -- ops los formatos estan iniciados y hay que revizarlos a fondop

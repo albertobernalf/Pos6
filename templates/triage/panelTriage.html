@@ -356,7 +356,7 @@ th ,tr{
                     <form id="AdmisionTriage" method="POST" onsubmit="guardarAdmisionTriage()">
                         <div class="modal fade" id="crearAdmTriage" tabindex="-1" role="dialog"
                              aria-labelledby="exampleModalLabel1" aria-hidden="true" data-bs-backdrop="static">
-                            <div class="modal-dialog  modal-lg modal-dialog-scrollable modal-dialog-center" role="document">
+                            <div class="modal-dialog  modal-fullscreen  modal-dialog-scrollable modal-dialog-center" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                        <div  class="modal-title" id="exampleModalLabel" style="text-align:center;"><font gont-family="Times New roman" size=5">Creacion Admision desde Triage</font> </div>
@@ -379,6 +379,21 @@ th ,tr{
                                                value="{{EscogeModulo}}">
 
                                         <div class="form-row">
+
+					 <div class="col">
+                                                <label for="servicioAdmTriage"
+                                                       class="col-sm-10 col-form-label col-form-label-sm">ServicioAdmon:</label>
+                                                <div class="col-sm-8">
+                                                    <select class="form-select  h-10 w-100 form-control form-control-sm"
+                                                            aria-label="" id="servicioAdmTriage" name="servicioAdmTriage">
+                                                        {% for serviciosAdministrativos in ServiciosAdministrativos %}
+                                                        <option value="{{serviciosAdministrativos.id}}"> {{serviciosAdministrativos.nombre}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+					 </div>
+
+
                                             <div class="col">
                                                 <label for="busServicio2"
                                                        class="col-sm-10 col-form-label col-form-label-sm">Servicio:</label>
@@ -749,8 +764,7 @@ th ,tr{
                                  	  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar   </button>
                                    
 
-                                    <input type="button" class="btn btn-primary" value="save"
-                                           onclick="guardarAdmisionTriage()">
+                                    <input type="button" class="btn btn-primary" value="save"  onclick="guardarAdmisionTriage()">
                                 </div>
                             </div>
                                 </div>

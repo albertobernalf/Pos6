@@ -1116,6 +1116,9 @@ function guardaTriageModal()
     var Username_id = document.getElementById("username_id").value;
     var escogeModulo = document.getElementById("escogeModulo").value;
 
+
+
+
 	$.ajax({
 		type: 'POST',
 		 url: '/grabaTriageModal/',
@@ -1219,8 +1222,19 @@ function guardarAdmisionTriage()
     var ripsNumConsultasCPrenatal = document.getElementById("ripsNumConsultasCPrenatal").value;
     var ripsEdadGestacional = document.getElementById("ripsEdadGestacional").value;
     var ripsDestinoUsuarioEgresoRecienNacido = document.getElementById("ripsDestinoUsuarioEgresoRecienNacido").value;
+    var empresasT = document.getElementById("empresasT").value;
 
-	alert("Voy a guardar crear adnmision TRIAGE");
+	alert("Voy a guardar crear adnmision TRIAGE con empresa = " + empresasT);
+
+	if (empresasT =='')
+		{
+			alert("Error falta ingresar empresas");
+		document.getElementById("mensajesErrorModalCreaAdmisionTriage").innerHTML = 'Suministre Empresa';
+		return;
+		}
+
+	alert("Voy AJAX ");
+
 
 	$.ajax({
      	 data: $('#AdmisionTriage').serialize(),
@@ -1257,7 +1271,7 @@ $(document).on('change', '#busEspecialidad', function(event) {
 	alert("especialidad Nro = " + Esp);
 
 
-        var Sede =  document.getElementById("Sede").value;
+        var Sede =  document.getElementById("sede").value;
        // var Sede1 = document.getElementById("FormBuscar").elements["Sede"];
 	alert("Sede = " + Sede);
 

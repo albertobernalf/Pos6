@@ -175,7 +175,7 @@ class PDFAtencionInicialUrgencias(FPDF):
 
 def ImprimirAtencionInicialUrgencias(ingresoId2):
     # Instantiation of inherited class
-    print("Entre ImprimirOrdenMedicamentos ", ingresoId2)
+    print("Entre ImprimirAtencionInicialUrgencias ", ingresoId2)
 
 
     #ingresoId = request.POST["ingresoId"]
@@ -356,15 +356,15 @@ def ImprimirAtencionInicialUrgencias(ingresoId2):
     pdf.ln(3)
 
     pdf.cell(25, 28, 'Enfermedad Profesional', 0, 0, 'L')
-    if externaUrgencias[0]['causa'] == 'ENFERMEDAD PROFESIONAL':
-        pdf.cell(25, 28, 'X', 0, 0, 'L')
+    #if externaUrgencias[0]['causa'] == 'ENFERMEDAD PROFESIONAL':
+    #    pdf.cell(25, 28, 'X', 0, 0, 'L')
 
     pdf.cell(25, 28, 'Accidente de transito', 0, 0, 'L')
-    if externaUrgencias[0]['causa'] == 'ACCIDENTE DE TRANSITO':
-        pdf.cell(27, 28, 'X', 0, 0, 'L')
+    #if externaUrgencias[0]['causa'] == 'ACCIDENTE DE TRANSITO':
+    #    pdf.cell(27, 28, 'X', 0, 0, 'L')
 
-    if externaUrgencias[0]['causa'] == 'OTROS':
-        pdf.cell(27, 28, 'X', 0, 0, 'L')
+    #if externaUrgencias[0]['causa'] == 'OTROS':
+    #    pdf.cell(27, 28, 'X', 0, 0, 'L')
     pdf.ln(1)
     pdf.cell(70, 28, 'Otro tipo de accidente', 0, 0, 'L')
 

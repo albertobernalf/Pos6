@@ -1791,7 +1791,10 @@ $('#tablaDatos tbody').on('click', '.miEditaAdmision', function() {
     			    $('#responsablesP').val(Usuarios.responsable); 	
     			    $('#acompanantesP').val(Usuarios.acompanante); 	
 
-  		  $('#tiposCotizanteP').val(Usuarios.cotizante); 
+  		  $('#tiposCotizanteP').val(Usuarios.cotizante);
+  		  $('#ripsCausaMotivoAtencionX').val(Usuarios.ripsCausaMotivoAtencion);
+
+ 
 
 
   		   $('#modalActualizaAdmision').modal('show');	
