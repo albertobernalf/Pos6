@@ -301,8 +301,8 @@ def ImprimirAtencionInicialUrgencias(ingresoId2):
                                    password="123456")
     curt = miConexiont.cursor()
 
-    comando = 'select ext.id id ,ext.nombre causa from admisiones_ingresos ing inner join clinico_causasexterna ext on (ext.id=his."causasExterna_id") where ing.id= ' + "'" + str(
-        ingresoId2) 
+    comando = 'select ext.id id ,ext.nombre causa from admisiones_ingresos ing inner join clinico_causasexterna ext on (ext.id=ing."causasExterna_id") where ing.id= ' + "'" + str(ingresoId2) + "'"
+
 
     curt.execute(comando)
 
@@ -325,13 +325,14 @@ def ImprimirAtencionInicialUrgencias(ingresoId2):
 
     print(comando)
 
-    paseexterna
 
     triageUrgencias = []
 
     for id, triage in curt.fetchall():
         triageUrgencias.append(
             {'id': id, 'triage': triage})
+
+    print("triageUrgencias = " , triageUrgencias)
     miConexiont.close()
 
     pdf.cell(200, 25, 'INFORMACION DE LA ATENCION', 0, 0, 'C')
@@ -476,7 +477,7 @@ def ImprimirAtencionInicialUrgencias(ingresoId2):
 
     archivo = carpeta + '' + str(pacienteId.documento) + '_' + 'AtencionInicialUrgencias.pdf'
     print("archivo =", archivo)
-    voyaimprimir
+
     pdf.output(archivo, 'F')
 
     try:

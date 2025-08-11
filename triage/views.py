@@ -2686,7 +2686,7 @@ def admisionTriageModal(request):
 
 
 def guardarAdmisionTriage(request):
-    CARACHASENTRE
+
     print("Entre a Crear Admision desde Triage")
     print ("request.method", request.method)
 
@@ -2695,8 +2695,6 @@ def guardarAdmisionTriage(request):
 
     if request.method == 'POST':
         print("EntrePost Graba Admision Triage")
-
-
 
         #sedesClinica = request.POST['sedesClinica']
         sedesClinica = request.POST['sede']
@@ -2965,11 +2963,16 @@ def guardarAdmisionTriage(request):
                 print("yA grabe dependencias historico", grabo2.id)
 
 
+                #Consigo el consecutivo de admison
+
+                consecParaTriage = Ingresos.objects.get(id=grabo.id)
+
+
                 print("Grabe HISTPRICO DEPENDENCIAS")
 
                 # Actualizo consecutivo de admision en TRIAGE
 
-                grabo55 = Triage.objects.filter( tipoDoc_id=idTipoDocFinal,documento_id=documento_llave.id,consecAdmision=0).update(consecAdmision=consecAdmision)
+                grabo55 = Triage.objects.filter( tipoDoc_id=idTipoDocFinal,documento_id=documento_llave.id,consecAdmision=0).update(consecAdmision=consecParaTriage.consec)
 
                 #grabo55.save()
 
@@ -2981,7 +2984,6 @@ def guardarAdmisionTriage(request):
             raise error
 
 
-        poaquipase
         if liq != 0:
 
                 ## Desde Aqui traslado a la nueva Cuenta
@@ -3024,7 +3026,6 @@ def guardarAdmisionTriage(request):
         # Aqui reporte de inicial URGENCIAS
 
         print("Entre rollo=" , rollo)
-        poaquisali
 
         if (rollo > 0):
             print ("Entre rollo=1")
@@ -3049,7 +3050,6 @@ def guardarAdmisionTriage(request):
             #    ImprimirHojaDeAdmision(ingresoId2)
 
         # RUTINA ARMADO CONTEXT
-        aquitoy
 
         triage1 = []
 

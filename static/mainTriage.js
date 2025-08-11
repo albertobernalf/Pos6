@@ -1242,30 +1242,29 @@ function guardarAdmisionTriage()
 		return;
 		}
 
-//	alert("Voy AJAX ");
+	alert("Voy AJAX ");
+
+	$.ajax({
+     	 data: $('#AdmisionTriage').serialize(),
+	    url: '/guardarAdmisionTriage/',
+		type: 'POST',
+	    dataType: 'json',
+		success: function (respuesta)
+		        {
+		      
+       		alert ("REGRESE DE GUARDAR Admision triage ");
+
+		 $('#crearAdmTriage').modal('hide');
+	      			document.getElementById("mensajesError").innerHTML = respuesta;
 
 
-//	$.ajax({
-//     	 data: $('#AdmisionTriage').serialize(),//
-//	    url: '/guardarAdmisionTriage/',
-//		type: 'POST',
-//	    dataType: 'json',
-//		success: function (respuesta)
-//		        {
-//		      
-  //       		alert ("REGRESE DE GUARDAR Admision triage ");
-//
-//			 $('#crearAdmTriage').modal('hide');
- //	      			document.getElementById("mensajesError").innerHTML = respuesta;
-//
-//
-  //              },
-//	   		    error: function (request, status, error)
-//	   		    {
-//	document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
-//
-//	   	    	}
-//	});
+              },
+	   		    error: function (request, status, error)
+		    {
+	document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
+
+	   	    	}
+	});
 
 };
 
