@@ -417,23 +417,23 @@ def ImprimirAtencionInicialUrgencias(ingresoId2):
     pdf.rect(5.0, 98.0, 200.0, 3.0)  # Coordenadas x, y, ancho, alto
     pdf.set_font('Times', 'B', 7)
 
-    #miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
-    #                               password="123456")
-    #curt = miConexiont.cursor()
+    miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                   password="123456")
+    curt = miConexiont.cursor()
 
-    #comando = 'select ext.id id ,ext.nombre causa from admisiones_ingresos ing inner join clinico_historia his ON (his."tipoDoc_id" = ing."tipoDoc_id" and his.documento_id = ing.documento_id and his."consecAdmision" = ing.consec) inner join clinico_causasexterna ext on (ext.id=his."causasExterna_id") where ing.id= ' + "'" + str(
-    #    ingresoId2) + "'" + ' AND his.id = ' + "'" + str(historiaId) + "'"
+    comando = 'select ext.id id ,ext.nombre causa from admisiones_ingresos ing inner join clinico_causasexterna ext on (ext.id=ing."causasExterna_id") where ing.id= ' + "'" + str(
+        ingresoId2) + "'"
 
-    #curt.execute(comando)
+    curt.execute(comando)
 
-    #print(comando)
+    print(comando)
 
-    #externaUrgencias = []
+    externaUrgencias = []
 
-    #for id, causa in curt.fetchall():
-    #    externaUrgencias.append(
-    #        {'id': id, 'causa': causa})
-    #miConexiont.close()
+    for id, causa in curt.fetchall():
+        externaUrgencias.append(
+            {'id': id, 'causa': causa})
+    miConexiont.close()
 
     miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
                                    password="123456")
@@ -461,14 +461,14 @@ def ImprimirAtencionInicialUrgencias(ingresoId2):
     pdf.ln(2)
     pdf.set_font('Times', '', 7)
     pdf.cell(25, 27, 'Enfermedad General', 0, 0, 'L')
-    #if externaUrgencias[0]['causa'] == 'ENFERMEDAD GENERAL':
-    #    pdf.cell(27, 27, 'X', 0, 0, 'L')
-    #if externaUrgencias[0]['causa'] == 'ACCIDENTE DE TRABAJO':
-    #    pdf.cell(27, 27, 'X', 0, 0, 'L')
-    #pdf.cell(25, 27, 'Accidente de trabajo', 0, 0, 'L')
-    #if externaUrgencias[0]['causa'] == 'EVENTO CATASTROFICO':
-    #    pdf.cell(27, 27, 'X', 0, 0, 'L')
-    #pdf.cell(30, 27, 'Evento Catastrofico', 0, 0, 'L')
+    if externaUrgencias[0]['causa'] == 'ENFERMEDAD GENERAL':
+        pdf.cell(27, 27, 'X', 0, 0, 'L')
+    if externaUrgencias[0]['causa'] == 'ACCIDENTE DE TRABAJO':
+        pdf.cell(27, 27, 'X', 0, 0, 'L')
+    pdf.cell(25, 27, 'Accidente de trabajo', 0, 0, 'L')
+    if externaUrgencias[0]['causa'] == 'EVENTO CATASTROFICO':
+        pdf.cell(27, 27, 'X', 0, 0, 'L')
+    pdf.cell(30, 27, 'Evento Catastrofico', 0, 0, 'L')
     if triageUrgencias[0]['triage'] == '1':
         pdf.cell(5, 27, 'X', 0, 0, 'L')
     pdf.cell(40, 27, '', 0, 0, 'L')

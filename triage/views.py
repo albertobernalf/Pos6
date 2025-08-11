@@ -1110,6 +1110,31 @@ def crearTriage(request):
         context['RipsFinalidadConsulta'] = ripsFinalidadConsulta
 
 
+        # Combo ServiciosAdministrativos
+
+        miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                       password="123456")
+        curt = miConexiont.cursor()
+
+        comando = 'select m.id id, m.nombre||' + "'" + str(' ') + "'||" + ' u.nombre nombre FROM sitios_serviciosAdministrativos m, sitios_ubicaciones u where m.ubicaciones_id= u.id AND m."sedesClinica_id" = ' + str(sede)
+
+        print(comando)
+        curt.execute(comando)
+
+        serviciosAdministrativos = []
+
+        serviciosAdministrativos.append({'id': '', 'nombre': ''})
+
+
+        for id, nombre in curt.fetchall():
+            serviciosAdministrativos.append({'id': id, 'nombre': nombre})
+
+        miConexiont.close()
+        print("ServiciosAdministrativos = " , serviciosAdministrativos)
+        context['ServiciosAdministrativos'] = serviciosAdministrativos
+
+        # Fin combo servicios administrativos
+
         # FIN RUTINA ARMADO CONTEXT
 
     print(triage1)
@@ -1830,6 +1855,10 @@ def grabaUsuariosTriage(request):
     nombre = request.POST["nombre"]
     print("DOCUMENTO = " ,documento)
     print(nombre)
+    primerNombre = request.POST["primerNombre"]
+    segundoNombre = request.POST["segundoNombre"]
+    primerApellido = request.POST["primerApellido"]
+    segundoApellido = request.POST["segundoApellido"]
     genero = request.POST["genero"]
     departamentos = request.POST["departamentos"]
     ciudades = request.POST["ciudades"]
@@ -1871,6 +1900,15 @@ def grabaUsuariosTriage(request):
 
     if centrosC == '':
         centrosC="null"
+
+    if primerNombre == '':
+        primerNombre = "null"
+    if segundoNombre == '':
+        segundoNombre = "null"
+    if primerApellido == '':
+        primerApellido = "null"
+    if segundoApellido == '':
+        segundoApellido = "null"
 
     ocupaciones = request.POST['ocupaciones']
 
@@ -1919,7 +1957,7 @@ def grabaUsuariosTriage(request):
                  #miConexion3 = MySQLdb.connect(host='CMKSISTEPC07', user='sa', passwd='75AAbb??', db='vulnerable')
                  miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres", password="123456")
                  cur3 = miConexion3.cursor()
-                 comando = 'insert into usuarios_usuarios (nombre, documento, genero, "fechaNacio",  departamentos_id, ciudades_id, direccion, telefono, contacto, "centrosC_id", "tipoDoc_id", "tiposUsuario_id", "estadoCivil_id","localidad_id", "municipio_id", "ocupacion_id",  "fechaRegistro", "estadoReg") values (' + "'" + str(nombre) + "'" + ' , ' + "'" + str(documento) + "'" + ', ' + "'" + str(genero) + "'" + '  , ' + "'" + str(fechaNacio) + "'" + ', ' + "'" + str(departamentos) + "'" + '  , ' + "'" + str(ciudades) + "'" + '  , ' + "'" + str(direccion) + "'" + ', ' + "'" + str(telefono) + "'" + ', ' + "'" + str(contacto) + "'" + ', ' +  str(centrosC)  + ', ' + "'" + str(tipoDoc) + "'" + ', ' + "'" + str(tiposUsuario) + "' , '" + str(estadoCivil) + "' , '" + str(localidades) + "' , '"+ str(municipios) + "' , "+ str(ocupaciones) +  " , '"+  str(fechaRegistro) + "'" + ", 'A'" + ')'
+                 comando = 'insert into usuarios_usuarios (nombre, documento, genero, "fechaNacio",  departamentos_id, ciudades_id, direccion, telefono, contacto, "centrosC_id", "tipoDoc_id", "tiposUsuario_id", "estadoCivil_id","localidad_id", "municipio_id", "ocupacion_id",  "fechaRegistro", "estadoReg", "primerNombre", "segundoNombre", "primerApellido", "segundoApellido") values (' + "'" + str(nombre) + "'" + ' , ' + "'" + str(documento) + "'" + ', ' + "'" + str(genero) + "'" + '  , ' + "'" + str(fechaNacio) + "'" + ', ' + "'" + str(departamentos) + "'" + '  , ' + "'" + str(ciudades) + "'" + '  , ' + "'" + str(direccion) + "'" + ', ' + "'" + str(telefono) + "'" + ', ' + "'" + str(contacto) + "'" + ', ' +  str(centrosC)  + ', ' + "'" + str(tipoDoc) + "'" + ', ' + "'" + str(tiposUsuario) + "' , '" + str(estadoCivil) + "' , '" + str(localidades) + "' , '"+ str(municipios) + "' , "+ str(ocupaciones) +  " , '"+  str(fechaRegistro) + "'" + ", 'A'"  + ",'" + str(primerNombre) + "','" + str(segundoNombre)  +  "','" + str(primerApellido) + "','" + str(segundoApellido)   +  "')"
                  print(comando)
                  cur3.execute(comando)
                  miConexion3.commit()
@@ -1931,7 +1969,7 @@ def grabaUsuariosTriage(request):
                 #miConexion3 =  MySQLdb.connect(host='CMKSISTEPC07', user='sa', passwd='75AAbb??', db='vulnerable')
                 miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres", password="123456")
                 cur3 = miConexion3.cursor()
-                comando = 'update usuarios_usuarios set nombre = ' "'" + str(nombre) +  "'"   + ', ciudades_id = ' + "'" + str(ciudades) + "'" +  ', direccion  = ' + "'" +  str(direccion) + "'" + ', genero = ' + "'" + str(genero) + "'"  + ', "fechaNacio" = ' + "'" +str(fechaNacio) + "'" +  ', telefono= ' + "'" + str(telefono) + "'" +  ', contacto= ' + "'" +  str(contacto) + "'" +  ', "centrosC_id"= ' + str(centrosC)  + ', "tiposUsuario_id" = ' + "'" + str(tiposUsuario) + "' , "   + ' municipio_id = ' + str(municipios) +   ', localidad_id = ' +  str(localidades) +  ', "estadoCivil_id"= ' +  str(estadoCivil) +  ', ocupacion_id = ' +  str(ocupaciones) +  ', correo = ' + "'" + str(correo) + "'" + ' WHERE "tipoDoc_id" = ' + str(tipoDoc) + ' AND documento = ' + "'" + str(documento) + "'"
+                comando = 'update usuarios_usuarios set nombre = ' "'" + str(nombre) +  "'"   + ', ciudades_id = ' + "'" + str(ciudades) + "'" +  ', direccion  = ' + "'" +  str(direccion) + "'" + ', genero = ' + "'" + str(genero) + "'"  + ', "fechaNacio" = ' + "'" +str(fechaNacio) + "'" +  ', telefono= ' + "'" + str(telefono) + "'" +  ', contacto= ' + "'" +  str(contacto) + "'" +  ', "centrosC_id"= ' + str(centrosC)  + ', "tiposUsuario_id" = ' + "'" + str(tiposUsuario) + "' , "   + ' municipio_id = ' + str(municipios) +   ', localidad_id = ' +  str(localidades) +  ', "estadoCivil_id"= ' +  str(estadoCivil) +  ', ocupacion_id = ' +  str(ocupaciones) +  ', correo = ' + "'" + str(correo) + "'" +  + ', "primerNombre" = ' + "'" + str(primerNombre) + "'," + '"segundoNombre" = ' + "'" + str(segundoNombre) + "'," + '"primerApellido"= ' + "'" + str(primerApellido) + "'," + '"segundoApellido" = ' + "'" + str(segundoApellido) +  "'"  +  ' WHERE "tipoDoc_id" = ' + str(tipoDoc) + ' AND documento = ' + "'" + str(documento) + "'"
                 print(comando)
                 cur3.execute(comando)
                 miConexion3.commit()
@@ -2648,7 +2686,7 @@ def admisionTriageModal(request):
 
 
 def guardarAdmisionTriage(request):
-
+    CARACHASENTRE
     print("Entre a Crear Admision desde Triage")
     print ("request.method", request.method)
 
@@ -2657,6 +2695,8 @@ def guardarAdmisionTriage(request):
 
     if request.method == 'POST':
         print("EntrePost Graba Admision Triage")
+
+
 
         #sedesClinica = request.POST['sedesClinica']
         sedesClinica = request.POST['sede']
@@ -2940,6 +2980,8 @@ def guardarAdmisionTriage(request):
             rollo=1
             raise error
 
+
+        poaquipase
         if liq != 0:
 
                 ## Desde Aqui traslado a la nueva Cuenta
@@ -2982,6 +3024,7 @@ def guardarAdmisionTriage(request):
         # Aqui reporte de inicial URGENCIAS
 
         print("Entre rollo=" , rollo)
+        poaquisali
 
         if (rollo > 0):
             print ("Entre rollo=1")
@@ -3006,6 +3049,7 @@ def guardarAdmisionTriage(request):
             #    ImprimirHojaDeAdmision(ingresoId2)
 
         # RUTINA ARMADO CONTEXT
+        aquitoy
 
         triage1 = []
 
@@ -3700,6 +3744,31 @@ def guardarAdmisionTriage(request):
         print(ocupaciones)
 
         context['Ocupaciones'] = ocupaciones
+
+
+        # Combo Empresas
+
+        miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                       password="123456")
+        curt = miConexiont.cursor()
+
+        comando = "SELECT c.id id,c.nombre nombre FROM facturacion_empresas c ORDER BY c.nombre"
+
+        curt.execute(comando)
+        print(comando)
+
+        empresas = []
+        empresas.append({'id': '', 'nombre': ''})
+
+        for id, nombre in curt.fetchall():
+            empresas.append({'id': id, 'nombre': nombre})
+
+        miConexiont.close()
+        print(empresas)
+
+        context['Empresas'] = empresas
+
+        # Fin combo empresas
 
         # Fin combo ocupaciones
         # FIN RUTINA ARMADO CONTEXT

@@ -256,6 +256,11 @@ function AUsuarioTriage()
 	var ocupaciones = document.getElementById("ocupaciones").value;
 	var correo = document.getElementById("correo").value;
 	var fechaNacio = document.getElementById("fechaNacio").value;
+	   var primerNombre = document.getElementById("primerNombre").value;
+	   var segundoNombre = document.getElementById("segundoNombre").value;
+	   var primerApellido = document.getElementById("primerApellido").value;
+	   var segundoApellido = document.getElementById("segundoApellido").value;
+
 
 
 	if (departamentos =='')
@@ -309,6 +314,10 @@ if (tiposUsuario =='')
 		data: {'tipoDoc':tipoDoc,
 		       'documento':documento,
                'nombre':nombre,
+		 'primerNombre':primerNombre,
+		'segundoNombre':segundoNombre,
+		'primerApellido':primerApellido,
+		'segundoApellido':segundoApellido,
                'genero':genero,
                'fechaNacio':fechaNacio,
 		       'estadoCivil' : estadoCivil,
@@ -1233,30 +1242,30 @@ function guardarAdmisionTriage()
 		return;
 		}
 
-	alert("Voy AJAX ");
+//	alert("Voy AJAX ");
 
 
-	$.ajax({
-     	 data: $('#AdmisionTriage').serialize(),
-	    url: '/guardarAdmisionTriage/',
-		type: 'POST',
-	    dataType: 'json',
-		success: function (respuesta)
-		        {
-		      
-         		alert ("REGRESE DE GUARDAR Admision triage ");
-
-			 $('#crearAdmTriage').modal('hide');
- 	      			document.getElementById("mensajesError").innerHTML = respuesta;
-
-
-                },
-	   		    error: function (request, status, error)
-	   		    {
-	document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
-
-	   	    	}
-	});
+//	$.ajax({
+//     	 data: $('#AdmisionTriage').serialize(),//
+//	    url: '/guardarAdmisionTriage/',
+//		type: 'POST',
+//	    dataType: 'json',
+//		success: function (respuesta)
+//		        {
+//		      
+  //       		alert ("REGRESE DE GUARDAR Admision triage ");
+//
+//			 $('#crearAdmTriage').modal('hide');
+ //	      			document.getElementById("mensajesError").innerHTML = respuesta;
+//
+//
+  //              },
+//	   		    error: function (request, status, error)
+//	   		    {
+//	document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
+//
+//	   	    	}
+//	});
 
 };
 

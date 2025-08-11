@@ -785,6 +785,7 @@ N.I.T. 830507718-8
 Favor NO efectuar retención de Industria y Comercio e IVA - Somos agentes retenedores de IVA
 Gran Contribuyente Res. 0012220 de 26-12-2022 - Actividad económica 8610
 AUTORETENEDOR EN RENTA RESOLUCION 151 DEL 14-01-2016
+
 Cufe: daeeb9343955c6037479b2e1b7bb485526f7524e5b085b4a5eb6e64298b22873bd6ef35b929221
 
 - Aqui en adelante nueva etapa ENFERMERIA/FARMACIA .ALTO TURMEQUE PAPABEROL
@@ -818,6 +819,10 @@ ojo pendiente en aplicacion de medicamentos arreglar cuando aplica la modal no p
 
   -- LUNES 11 DE AGOSTO
 	<div class="modal-dialog modal-fullscreen" role="document">
-      -- ojo para los reportes : tengo causa externa en la tabla admisiones_ingreso de alli los púedo sacar
-      -- seguiir probando laactualziadion editar admision desde admsiion
+      -- ojo PROBAR para los reportes : tengo causa externa en  reporte urgencias inicla desde admison y desde triage
+      -- seguiir probando la actualziadion editar admision desde admsiion
+      --  comenzar con los reportyes de hojadeadmision y FACTURA
      -- ops los formatos estan iniciados y hay que revizarlos a fondop
+
+-- ops graba mal el historialde dependencias cuando hace la dmision desde triage, coloca fecha de liberacion cuanod debe ser null
+ -- no cloca bien la hora del ingreso desde triage a urgencias
