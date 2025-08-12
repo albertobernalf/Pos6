@@ -175,8 +175,9 @@ urlpatterns = [
     path('actualizaAdmision/', viewsAdmisiones.ActualizaAdmision),
     path('load_dataCensoAdmisiones/<str:data>', viewsAdmisiones.Load_dataCensoAdmisiones, name='load_dataCenso_Admisiones'),
     path('load_dataHabitacionesAdmisiones/<str:data>', viewsAdmisiones.Load_dataHabitacionesAdmisiones, name='load_dataHabitaciones_Admisiones'),
-    path('imprimirAtencionInicialUrgencias/<str:ingresoId>/', viewsAdmisionesReportes.ImprimirAtencionInicialUrgencias),
-    path('imprimirHojaAdmision/<str:ingresoId>/', viewsAdmisionesReportes.ImprimirHojaAdmision),
+    path('imprimirAtencionUrgencias/', viewsAdmisionesReportes.ImprimirAtencionUrgencias),
+    path('imprimirHojaAdmision/', viewsAdmisionesReportes.ImprimirHojaAdmision),
+
 
     # Triage
 

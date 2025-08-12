@@ -28,7 +28,7 @@ import datetime
 from clinico.models import Servicios
 from django.db import transaction, IntegrityError
 from django.db.models import Q
-from admisiones.viewsReportes import ImprimirAtencionInicialUrgencias, ImprimirHojaAdmision
+from admisiones.viewsReportes import ImprimirAtencionUrgencias, ImprimirHojaAdmision
 
 # Create your views here.
 
