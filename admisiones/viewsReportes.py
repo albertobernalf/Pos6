@@ -590,8 +590,9 @@ def ImprimirHojaAdmision(request):
                                    password="123456")
     curt = miConexiont.cursor()
 
-    comando = 'select ext.id id ,ext.nombre causa from admisiones_ingresos ing inner join clinico_causasexterna ext on (ext.id=ing."causasExterna_id") where ing.id= ' + "'" + str(ingresoId) + "'"
+    comando = 'SELECT to_char(ing."fechaIngreso",' + "'" + str('YYYY-MM-DD') + "')" + ' fechaIngreso, to_char (ing."fechaIngreso" , ' + "'" + str('HH:MM:SS') + "')" + '  horaIngreso, dep.numero cama, serv.nombre servIngreso, ext.nombre causaExterna,ing."numManilla" manilla, usu.nombre nombrePaciente, tipDoc.nombre tipDoc, usu.documento documento, ocupa.nombre ocupacion, estCivil.nombre estadoCivil, regimen.nombre regimen, mun.nombre municipio,  local.nombre localidad,usu.direccion direccion ,usu.telefono telefono, usu.correo correo, diag.nombre diagnostico , to_char(usu."fechaNacio", ' + "'" + str('YYYY-MM-DD')  + "')" + ' nacio, cast((cast(now() as date)  - cast(usu."fechaNacio" as date)) as text)   edad, usu.genero sexo  FROM admisiones_ingresos ing INNER JOIN sitios_dependencias dep ON (dep."tipoDoc_id" = ing."tipoDoc_id" AND dep.documento_id = ing.documento_id AND ing.consec=dep.consec) INNER JOIN clinico_servicios serv ON (serv.id = ing."serviciosIng_id") LEFT JOIN clinico_causasexterna ext ON (ext.id = ing."causasExterna_id") INNER JOIN usuarios_usuarios usu ON (usu.id=ing.documento_id) LEFT JOIN usuarios_tiposdocumento tipDoc ON (tipDoc.id = ing."tipoDoc_id") LEFT JOIN basicas_ocupaciones ocupa ON (ocupa.id = usu.ocupacion_id) LEFT JOIN basicas_estadocivil estCivil ON (estCivil.id = usu."estadoCivil_id") LEFT JOIN clinico_regimenes regimen ON (regimen.id = ing.regimen_id)	LEFT JOIN sitios_municipios mun ON (mun.id=usu.municipio_id)	LEFT JOIN sitios_localidades local ON (local.id=usu.localidad_id) LEFT JOIN clinico_diagnosticos diag ON (diag.id=ing."dxIngreso_id") WHERE ing.id = ' + "'" + str(ingresoId) + "'"
 
+    print(comando)
 
     curt.execute(comando)
 
@@ -599,10 +600,16 @@ def ImprimirHojaAdmision(request):
 
     hospitalizacion = []
 
-    for id, causa in curt.fetchall():
+    for fechaIngreso, horaIngreso, cama, servIngreso,causaExterna,manilla,nombrePaciente,tipDoc, documento, ocupacion, estadoCivil, regimen, municipio, localidad, direccion, telefono, correo, diagnostico ,nacio, edad, sexo in curt.fetchall():
         hospitalizacion.append(
-            {'id': id, 'causa': causa})
+            {'fechaIngreso': fechaIngreso, 'horaIngreso': horaIngreso,'cama':cama,'servIngreso':servIngreso,'causaExterna':causaExterna,
+             'manilla': manilla,'nombrePaciente':nombrePaciente,'tipDoc':tipDoc,'documento':documento,  'ocupacion':ocupacion,'estadoCivil':estadoCivil,
+             'regimen':regimen,'municipio':municipio, 'localidad':localidad,'direccion':direccion, 'telefono':telefono,'correo':correo,'diagnostico':diagnostico,
+             'nacio':nacio, 'edad':edad,'sexo':sexo
+             })
+
     miConexiont.close()
+    print("hospitalizacion = ",hospitalizacion )
 
 
     # Define el ancho de línea
@@ -622,43 +629,85 @@ def ImprimirHojaAdmision(request):
     pdf.cell(25, 25, 'Admision:', 0, 0, 'L')
     pdf.ln(3)
     #pdf.rect(200.0, 26, 200.0, 15.0)  # Coordenadas x, y, ancho, alto
-    pdf.cell(25, 26, 'Fecha Ingreso:', 0, 0, 'L')
-    pdf.cell(25, 26, 'Hora Ingreso:', 0, 0, 'L')
-    pdf.cell(25, 26, 'Servicio:', 0, 0, 'L')
-    pdf.cell(25, 26, 'Cama:', 0, 0, 'L')
+    pdf.cell(15, 26, 'Fecha Ingreso:', 0, 0, 'L')
+    pdf.cell(15, 26, hospitalizacion[0]['fechaIngreso'], 0, 0, 'L')
+
+    pdf.cell(15, 26, 'Hora Ingreso:', 0, 0, 'L')
+    pdf.cell(15, 26, hospitalizacion[0]['horaIngreso'], 0, 0, 'L')
+    pdf.cell(15, 26, 'Servicio:', 0, 0, 'L')
+    pdf.cell(15, 26, hospitalizacion[0]['servIngreso'], 0, 0, 'L')
+
+    pdf.cell(15, 26, 'Cama:', 0, 0, 'L')
+    pdf.cell(15, 26, hospitalizacion[0]['cama'], 0, 0, 'L')
     pdf.ln(3)
     pdf.set_font('Times', '', 7)
     #pdf.rect(200.0, 27, 200.0, 15.0)  # Coordenadas x, y, ancho, alto
     pdf.cell(25, 28, 'Via Ingreso:', 0, 0, 'L')
-    pdf.cell(25, 28, 'Causa Externa:', 0, 0, 'L')
-    pdf.cell(25, 28, 'Manilla de Identificacion#:', 0, 0, 'L')
+    pdf.cell(15, 28, 'Causa Externa:', 0, 0, 'L')
+    pdf.cell(15, 28, hospitalizacion[0]['causaExterna'], 0, 0, 'L')
+    pdf.cell(20, 28, 'Manilla de Identificacion#:', 0, 0, 'L')
+    pdf.cell(15, 28, hospitalizacion[0]['manilla'], 0, 0, 'L')
     pdf.set_font('Times', 'B', 7)
     pdf.ln(3)
     #pdf.rect(200.0, 29, 200.0, 50.0)  # Coordenadas x, y, ancho, alto
 
     pdf.cell(100, 29, 'Apellidos y Nombres:', 0, 0, 'L')
-
+    pdf.cell(40, 29, hospitalizacion[0]['nombrePaciente'], 0, 0, 'L')
     pdf.cell(100, 30, 'Historia Clinica:', 0, 0, 'L')
+    pdf.cell(10, 30, hospitalizacion[0]['tipDoc'], 0, 0, 'L')
+    pdf.cell(10, 30, hospitalizacion[0]['documento'], 0, 0, 'L')
     pdf.cell(100, 31, 'Fecha de Nacimiento:', 0, 0, 'L')
-    pdf.cell(25, 31, 'Edad:', 0, 0, 'L')
-    pdf.cell(25, 31, 'Sexo:', 0, 0, 'L')
+    pdf.cell(10, 31, hospitalizacion[0]['nacio'], 0, 0, 'L')
+    pdf.cell(15, 31, 'Edad:', 0, 0, 'L')
+    pdf.cell(10, 31, hospitalizacion[0]['edad'], 0, 0, 'L')
+    pdf.cell(15, 31, 'Sexo:', 0, 0, 'L')
+    pdf.cell(10, 31, hospitalizacion[0]['sexo'], 0, 0, 'L')
     pdf.ln(3)
-    pdf.cell(100, 30, 'Ocupacion:', 0, 0, 'L')
-    pdf.cell(100, 30, 'Estado Civil:', 0, 0, 'L')
+    pdf.cell(100, 32, 'Ocupacion:', 0, 0, 'L')
+    pdf.cell(10, 32, hospitalizacion[0]['ocupacion'], 0, 0, 'L')
+    pdf.cell(100, 32, 'Estado Civil:', 0, 0, 'L')
+    pdf.cell(10, 32, hospitalizacion[0]['estadoCivil'], 0, 0, 'L')
     pdf.ln(3)
-    pdf.cell(100, 31, 'SEGURIDAD SOCIAL:', 0, 0, 'L')
-    pdf.cell(100, 32, 'Regimen:', 0, 0, 'L')
-    pdf.cell(100, 33, 'Usuario:', 0, 0, 'L')
+    pdf.cell(100, 33, 'SEGURIDAD SOCIAL:', 0, 0, 'L')
+    pdf.cell(100, 34, 'Regimen:', 0, 0, 'L')
+    pdf.cell(10, 34, hospitalizacion[0]['regimen'], 0, 0, 'L')
+    pdf.cell(100, 34, 'Usuario:', 0, 0, 'L')
+    pdf.cell(10, 34, '', 0, 0, 'L')
     pdf.ln(3)
     pdf.cell(100, 34, 'Nivel:', 0, 0, 'L')
     pdf.cell(100, 35, 'Poblacion especial:', 0, 0, 'L')
 
+    ## ENTIDADES RESPONSABLE
+
+    miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                   password="123456")
+    curt = miConexiont.cursor()
+
+
+    comando = 'SELECT conv.nombre convenio FROM admisiones_ingresos ing LEFT JOIN facturacion_conveniospacienteingresos convPac ON (convPac."tipoDoc_id" = ing."tipoDoc_id" AND convPac.documento_id = ing.documento_id AND convPac."consecAdmision" = ing.consec) LEFT JOIN contratacion_convenios conv ON (conv.id = convPac.convenio_id) WHERE ing.id= ' + "'" + str(ingresoId) + "'"
+
+    curt.execute(comando)
+
+    print(comando)
+
+    entidadesResponsables = []
+
+    for convenio  in curt.fetchall():
+        entidadesResponsables.append(
+            {'convenio': convenio })
+
+    miConexiont.close()
+
     pdf.ln(3)
     pdf.cell(100, 36, 'ENTIDADES RESPONSABLES:', 0, 0, 'L')
     pdf.cell(100, 37, '1.-', 0, 0, 'L')
+    #pdf.cell(10, 37, entidadesResponsables[0]['convenio'], 0, 0, 'L')
     pdf.cell(100, 38, '2.-', 0, 0, 'L')
+    #pdf.cell(10, 38, entidadesResponsables[0]['convenio'], 0, 0, 'L')
     pdf.cell(100, 39, '3.-', 0, 0, 'L')
+    #pdf.cell(10, 39, entidadesResponsables[0]['convenio'], 0, 0, 'L')
     pdf.cell(100, 40, '4.-', 0, 0, 'L')
+    #pdf.cell(10, 40, entidadesResponsables[0]['convenio'], 0, 0, 'L')
     pdf.ln(3)
     pdf.cell(100, 41, 'Direccion del sitio de vivienda:', 0, 0, 'L')
     pdf.cell(20, 41, 'Telefono:', 0, 0, 'L')
@@ -675,14 +724,37 @@ def ImprimirHojaAdmision(request):
     pdf.cell(100, 48, 'Descripcion del accidente', 0, 0, 'L')
     pdf.ln(3)
     pdf.cell(100, 50, 'Impresion Dx comentada', 0, 0, 'L')
+    pdf.cell(10, 50, hospitalizacion[0]['diagnostico'], 0, 0, 'L')
     pdf.cell(100, 51, 'Servicio solicitado', 0, 0, 'L')
     pdf.ln(2)
+
+    miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                   password="123456")
+    curt = miConexiont.cursor()
+
+    comando = 'SELECT usuContacto.nombre nombre, usuContacto.direccion direccion,usuContacto.telefono telefono,tiposFamilia.nombre tiposFamilia  FROM admisiones_ingresos ing LEFT JOIN usuarios_usuarioscontacto usuContacto ON (usuContacto.id = ing."contactoResponsable_id") LEFT JOIN basicas_tiposfamilia tiposFamilia ON (tiposFamilia.id = usuContacto."tiposFamilia_id") WHERE ing.id= ' + "'" + str(ingresoId) + "'"
+    print(comando)
+    curt.execute(comando)
+
+
+    responsablePaciente = []
+
+    for nombre, direccion, telefono, tiposFamilia in curt.fetchall():
+        responsablePaciente.append(
+            {'nombre': nombre,'direccion':direccion,'telefono':telefono, 'tiposFamilia':tiposFamilia  })
+
+    miConexiont.close()
+
     pdf.cell(100, 53, 'Responsable del paciente', 0, 0, 'L')
+    #pdf.cell(10, 53, responsablePaciente[0]['nombre'], 0, 0, 'L')
     pdf.cell(100, 53, 'L.D', 0, 0, 'L')
     pdf.cell(100, 53, 'Parentesco', 0, 0, 'L')
+    #pdf.cell(10, 53, responsablePaciente[0]['tiposFamilia'], 0, 0, 'L')
     pdf.ln(3)
     pdf.cell(100, 54, 'Direccion:', 0, 0, 'L')
+    #pdf.cell(10, 54, responsablePaciente[0]['direccion'], 0, 0, 'L')
     pdf.cell(100, 54, 'Telefono:', 0, 0, 'L')
+    #pdf.cell(10, 54, responsablePaciente[0]['telefono'], 0, 0, 'L')
     pdf.ln(3)
     pdf.cell(100, 55, 'Usuario Capitado:', 0, 0, 'L')
     pdf.cell(100, 55, 'Responsable Admision:', 0, 0, 'L')
@@ -719,11 +791,11 @@ def ImprimirHojaAdmision(request):
     pdf.cell(200, 63,
              '- Mediante la firma de esta declaración, confirma la veracidad y exactitud de las declaraciones que formula, manifestando que nada ha ocultado ,omitido o alterado y se da por enterado que esta declaración constituye para la Compañía prestadora de servcicios en salud información determinante del siniestro y en consecuencia, de incurrir en un enexcusable error, reticencia o inexactitud, el asegurador tendrá derechoa rechazar el siniestro, de acuerdo a lo dispuesto en el artículo 524 y 534 del código de Comercio y en las Condiciones Generales y particulares de la póliza contratada. - Así mismo, le hacemos presente que, el que maliciosamente obtenga el pago indebido de un seguro, simulando la existencia de un siniestro , provocándolo intencionalmente, presentándolo ante el asegurador como ocurrido por causas o en circunstancias distintas a las verdaderas, ocultando la cosa asegurada o aumentando fraudulentamente las pérdidas efectivamente sufridas, incurre en el delito de fraude al seguro establecido en el artículo 470, número 10 del código final',
              0, 0, 'C')
-    pdf.ln(2)
+    pdf.ln(3)
     pdf.cell(200, 64,
              'Yo:',
              0, 0, 'L')
-    pdf.ln(2)
+    pdf.ln(3)
     pdf.cell(200, 65,
              'o en mi representacion __________________________________________ identificado con ___________________ Declaro que he sido informado de las condiciones generales para las prestación de los servicios y autorizo mi atención en la Clinica Medical S.A.S.:',
              0, 0, 'L')
@@ -734,21 +806,23 @@ def ImprimirHojaAdmision(request):
 
 
 
-    pdf.ln(2)
+    pdf.ln(5)
     pdf.cell(200, 67,
              'Nombre Completo:',
              0, 0, 'L')
+    pdf.cell(40, 67, hospitalizacion[0]['nombrePaciente'], 0, 0, 'L')
 
     pdf.ln(2)
     pdf.cell(200, 68,
              'Identificacion:',
              0, 0, 'L')
+    pdf.cell(40, 68, hospitalizacion[0]['documento'], 0, 0, 'L')
 
     pdf.ln(2)
     pdf.cell(200, 69,
              'Parentesco:',
              0, 0, 'L')
-
+    pdf.cell(40, 29, 'PACIENTE', 0, 0, 'L')
 
     pdf.output('C:/EntornosPython/temporal/temporal/hojaAdmision.pdf', 'F')
 
