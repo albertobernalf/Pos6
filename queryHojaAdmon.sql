@@ -57,5 +57,34 @@ select * from usuarios_usuarioscontacto
 comado = 'SELECT usuContacto.nombre, usuContacto.direccion,usuContacto.telefono,tiposFamilia.nombre FROM admisiones_ingresos ing LEFT JOIN usuarios_usuarioscontacto usuContacto ON (usuContacto.id = ing."contactoResponsable_id") LEFT JOIN basicas_tiposfamilia tiposFamilia ON (tiposFamilia.id = usuContacto."tiposFamilia_id") WHERE ing.id= ' + "'" + str(ingresoId) + "'" 
 
 
-	
+SELECT date(ing."fechaIngreso") fechaIngreso, cast (ing."fechaIngreso" as time) horaIngreso, dep.numero cama, serv.nombre servIngreso, ext.nombre causaExterna,ing."numManilla" manilla, usu.nombre nombrePaciente, tipDoc.nombre tipDoc, usu.documento documento, ocupa.nombre ocupacion, estCivil.nombre estadoCivil, regimen.nombre regimen, mun.nombre municipio,  local.nombre localidad,usu.direccion direccion ,usu.telefono telefono, usu.correo correo, diag.nombre diagnostico , usu."fechaNacio" nacio, (now() - usu."fechaNacio") edad, usu.genero sexo  FROM admisiones_ingresos ing INNER JOIN sitios_dependencias dep ON (dep."tipoDoc_id" = ing."tipoDoc_id" AND dep.documento_id = ing.documento_id AND ing.consec=dep.consec) INNER JOIN clinico_servicios serv ON (serv.id = ing."serviciosIng_id") LEFT JOIN clinico_causasexterna ext ON (ext.id = ing."causasExterna_id") INNER JOIN usuarios_usuarios usu ON (usu.id=ing.documento_id) LEFT JOIN usuarios_tiposdocumento tipDoc ON (tipDoc.id = ing."tipoDoc_id") LEFT JOIN basicas_ocupaciones ocupa ON (ocupa.id = usu.ocupacion_id) LEFT JOIN basicas_estadocivil estCivil ON (estCivil.id = usu."estadoCivil_id") LEFT JOIN clinico_regimenes regimen ON (regimen.id = ing.regimen_id)       LEFT JOIN sitios_municipios mun ON (mun.id=usu.municipio_id)    LEFT JOIN sitios_localidades local ON (local.id=usu.localidad_id) LEFT JOIN clinico_diagnosticos diag ON (diag.id=ing."dxIngreso_id") WHERE ing.id = '50177'	
 
+
+SELECT to_char(ing."fechaIngreso",'YYYY-MM-DD') fechaIngreso, to_char (ing."fechaIngreso" , 'HH:MM:SS')  horaIngreso, dep.numero cama, serv.nombre servIngreso, ext.nombre causaExterna,ing."numManilla" manilla, usu.nombre nombrePaciente, tipDoc.nombre tipDoc, usu.documento documento, ocupa.nombre ocupacion, estCivil.nombre estadoCivil, regimen.nombre regimen, mun.nombre municipio,  local.nombre localidad,usu.direccion direccion ,usu.telefono telefono, usu.correo correo, diag.nombre diagnostico , to_char(usu."fechaNacio", 'YYYY-MM-DD') nacio, 
+	(to_char(now(),'YYYY-MM-DD')  - to_char(usu."fechaNacio", 'YYYY-MM-DD'))  edad, usu.genero sexo 
+	FROM admisiones_ingresos ing 
+	INNER JOIN sitios_dependencias dep ON (dep."tipoDoc_id" = ing."tipoDoc_id" AND dep.documento_id = ing.documento_id AND ing.consec=dep.consec) 
+	INNER JOIN clinico_servicios serv ON (serv.id = ing."serviciosIng_id") 
+	LEFT JOIN clinico_causasexterna ext ON (ext.id = ing."causasExterna_id") 
+	INNER JOIN usuarios_usuarios usu ON (usu.id=ing.documento_id)
+	LEFT JOIN usuarios_tiposdocumento tipDoc ON (tipDoc.id = ing."tipoDoc_id") 
+	LEFT JOIN basicas_ocupaciones ocupa ON (ocupa.id = usu.ocupacion_id) 
+	LEFT JOIN basicas_estadocivil estCivil ON (estCivil.id = usu."estadoCivil_id")
+	LEFT JOIN clinico_regimenes regimen ON (regimen.id = ing.regimen_id)       
+	LEFT JOIN sitios_municipios mun ON (mun.id=usu.municipio_id)   
+	LEFT JOIN sitios_localidades local ON (local.id=usu.localidad_id) 
+	LEFT JOIN clinico_diagnosticos diag ON (diag.id=ing."dxIngreso_id")
+	WHERE ing.id = '50177'
+
+
+select usu."fechaNacio", (cast(now()  as date) - cast(usu."fechaNacio" as date))/365 edd
+from usuarios_usuarios usu
+
+
+SELECT to_char(ing."fechaIngreso",'YYYY-MM-DD') fechaIngreso, to_char (ing."fechaIngreso" , 'HH:MM:SS')  horaIngreso, dep.numero cama, serv.nombre servIngreso,
+	ext.nombre causaExterna,ing."numManilla" manilla, usu.nombre nombrePaciente, tipDoc.nombre tipDoc, usu.documento documento,
+	ocupa.nombre ocupacion, estCivil.nombre estadoCivil, regimen.nombre regimen, mun.nombre municipio, 
+	local.nombre localidad,usu.direccion direccion ,usu.telefono telefono, usu.correo correo, diag.nombre diagnostico ,
+	to_char(usu."fechaNacio", 'YYYY-MM-DD') nacio, cast((cast(now() as date)  - cast(usu."fechaNacio" as date)) as text) edad,
+	usu.genero sexo  FROM admisiones_ingresos ing INNER JOIN sitios_dependencias dep ON (dep."tipoDoc_id" = ing."tipoDoc_id" AND dep.documento_id = ing.documento_id AND ing.consec=dep.consec) INNER JOIN clinico_servicios serv ON (serv.id = ing."serviciosIng_id") LEFT JOIN clinico_causasexterna ext ON (ext.id = ing."causasExterna_id") INNER JOIN usuarios_usuarios usu ON (usu.id=ing.documento_id) LEFT JOIN usuarios_tiposdocumento tipDoc ON (tipDoc.id = ing."tipoDoc_id") LEFT JOIN basicas_ocupaciones ocupa ON (ocupa.id = usu.ocupacion_id) LEFT JOIN basicas_estadocivil estCivil ON (estCivil.id = usu."estadoCivil_id") LEFT JOIN clinico_regimenes regimen ON (regimen.id = ing.regimen_id) LEFT JOIN sitios_municipios mun ON (mun.id=usu.municipio_id)
+        LEFT JOIN sitios_localidades local ON (local.id=usu.localidad_id) LEFT JOIN clinico_diagnosticos diag ON (diag.id=ing."dxIngreso_id") WHERE ing.id = '50177'

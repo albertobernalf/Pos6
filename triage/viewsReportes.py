@@ -665,114 +665,305 @@ def ImprimirAtencionInicialUrgencias(ingresoId2):
     return JsonResponse({'success': True, 'message': 'Atencion Inicial de Urgencias impresa!'})
 
 
-def ImprimirHojaAdmision(ingresoId2):
+def ImprimirHojaAdmision(request):
     # Instantiation of inherited class
-    print("Entre ImprimirHojaAdmision ", ingresoId2)
+    ingresoId = request.POST["ingresoId"]
+    print("ingresoId = ", ingresoId)
+
+    print("Entre ImprimirHojaAdmision ", ingresoId)
     #ingresoId = request.POST["ingresoId"]
-    print("ingresoId2 = ", ingresoId2)
-    ingresoId = ingresoId2
 
     ingresoPaciente = Ingresos.objects.get(id=ingresoId)
     tipoDocId = ingresoPaciente.tipoDoc_id
     print("tipoDocId = ", tipoDocId)
     documentoId = ingresoPaciente.documento_id
     print("documentoId = ", documentoId)
-    consec =  ingresoPaciente.consec
-    print ("consec = ",consec)
+    consec = ingresoPaciente.consec
+    print("consec = ", consec)
     pacienteId = Usuarios.objects.get(id=documentoId)
     print("documentoPaciente = ", pacienteId.documento)
 
-    pdf = PDFHojaAdmision(tipoDocId, documentoId, consec)
-    #pdf = PDFAtencionInicialUrgencias()
+    pdf = PDFHojaAdmision(tipoDocId, documentoId, consec, ingresoId)
     pdf.alias_nb_pages()
     pdf.set_margins(left=10, top=5, right=5)
     pdf.add_page()
     pdf.set_font('Times', '', 8)
     pdf.ln(1)
     linea = 7
+
+    miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                   password="123456")
+    curt = miConexiont.cursor()
+
+    comando = 'SELECT ing.id id , to_char(ing."fechaIngreso",' + "'" + str('YYYY-MM-DD') + "')" + ' fechaIngreso, to_char (ing."fechaIngreso" , ' + "'" + str('HH:MM:SS') + "')" + '  horaIngreso, dep.numero cama, serv.nombre servIngreso, ext.nombre causaExterna,ing."numManilla" manilla, usu.nombre nombrePaciente, tipDoc.nombre tipDoc, usu.documento documento, ocupa.nombre ocupacion, estCivil.nombre estadoCivil, regimen.nombre regimen, mun.nombre municipio,  local.nombre localidad,usu.direccion direccion ,usu.telefono telefono, usu.correo correo, diag.nombre diagnostico , to_char(usu."fechaNacio", ' + "'" + str('YYYY-MM-DD')  + "')" + ' nacio, cast((cast(now() as date)  - cast(usu."fechaNacio" as date)) as text)   edad, usu.genero sexo  FROM admisiones_ingresos ing INNER JOIN sitios_dependencias dep ON (dep."tipoDoc_id" = ing."tipoDoc_id" AND dep.documento_id = ing.documento_id AND ing.consec=dep.consec) INNER JOIN clinico_servicios serv ON (serv.id = ing."serviciosIng_id") LEFT JOIN clinico_causasexterna ext ON (ext.id = ing."causasExterna_id") INNER JOIN usuarios_usuarios usu ON (usu.id=ing.documento_id) LEFT JOIN usuarios_tiposdocumento tipDoc ON (tipDoc.id = ing."tipoDoc_id") LEFT JOIN basicas_ocupaciones ocupa ON (ocupa.id = usu.ocupacion_id) LEFT JOIN basicas_estadocivil estCivil ON (estCivil.id = usu."estadoCivil_id") LEFT JOIN clinico_regimenes regimen ON (regimen.id = ing.regimen_id)	LEFT JOIN sitios_municipios mun ON (mun.id=usu.municipio_id)	LEFT JOIN sitios_localidades local ON (local.id=usu.localidad_id) LEFT JOIN clinico_diagnosticos diag ON (diag.id=ing."dxIngreso_id") WHERE ing.id = ' + "'" + str(ingresoId) + "'"
+
+    print(comando)
+
+    curt.execute(comando)
+
+    print(comando)
+
+    hospitalizacion = []
+
+    for id, fechaIngreso, horaIngreso, cama, servIngreso,causaExterna,manilla,nombrePaciente,tipDoc, documento, ocupacion, estadoCivil, regimen, municipio, localidad, direccion, telefono, correo, diagnostico ,nacio, edad, sexo in curt.fetchall():
+        hospitalizacion.append(
+            {'id':id, 'fechaIngreso': fechaIngreso, 'horaIngreso': horaIngreso,'cama':cama,'servIngreso':servIngreso,'causaExterna':causaExterna,
+             'manilla': manilla,'nombrePaciente':nombrePaciente,'tipDoc':tipDoc,'documento':documento,  'ocupacion':ocupacion,'estadoCivil':estadoCivil,
+             'regimen':regimen,'municipio':municipio, 'localidad':localidad,'direccion':direccion, 'telefono':telefono,'correo':correo,'diagnostico':diagnostico,
+             'nacio':nacio, 'edad':edad,'sexo':sexo
+             })
+
+    miConexiont.close()
+    print("hospitalizacion = ",hospitalizacion )
+
+
+    # Define el ancho de línea
+    pdf.set_line_width(0.4)
+    # Dibuja el borde
+    pdf.rect(5.0, 18.0, 200.0, 185.0)  # Coordenadas x, y, ancho, alto
+    # Logo
+    pdf.image('C:/EntornosPython/Pos6/static/img/MedicalFinal.jpg', 7, 19, 11, 11)
+    # Arial bold 15
+    pdf.set_font('Times', 'B', 9)
+    pdf.ln(3)
     pdf.cell(200, 25, 'HOJA DE ADMISION DEL PACIENTE', 0, 0, 'C')
     pdf.set_font('Times', '', 7)
+    pdf.ln(1)
+
+    pdf.cell(15, 25, 'Admision:', 0, 0, 'L')
+    pdf.cell(15, 25, str(hospitalizacion[0]['id']), 0, 0, 'L')
+
     pdf.ln(3)
-    pdf.rect(5.0, 102.0, 200.0, 30.0)  # Coordenadas x, y, ancho, alto
+    #pdf.rect(5.0, 102.0, 200.0, 30.0)  # Coordenadas x, y, ancho, alto
     pdf.set_font('Times', 'B', 7)
-    pdf.cell(25, 25, 'Admision:', 0, 0, 'L')
-    pdf.ln(2)
-    pdf.rect(200.0, 26, 200.0, 15.0)  # Coordenadas x, y, ancho, alto
-    pdf.cell(25, 26, 'Fecha Ingreso:', 0, 0, 'L')
-    pdf.cell(25, 26, 'Hora Ingreso:', 0, 0, 'L')
-    pdf.cell(25, 26, 'Servicio:', 0, 0, 'L')
-    pdf.cell(25, 26, 'Cama:', 0, 0, 'L')
-    pdf.ln(2)
+    #pdf.cell(25, 25, 'Admision:', 0, 0, 'L')
+    #pdf.ln(3)
+    #pdf.rect(200.0, 26, 200.0, 15.0)  # Coordenadas x, y, ancho, alto
+    pdf.cell(30, 26, 'Fecha Ingreso:', 0, 0, 'L')
+    pdf.cell(15, 26, hospitalizacion[0]['fechaIngreso'], 0, 0, 'L')
+
+    pdf.cell(20, 26, 'Hora Ingreso:', 0, 0, 'L')
+    pdf.cell(15, 26, hospitalizacion[0]['horaIngreso'], 0, 0, 'L')
+    pdf.cell(20, 26, 'Servicio:', 0, 0, 'L')
+    pdf.cell(35, 26, hospitalizacion[0]['servIngreso'], 0, 0, 'L')
+
+    pdf.cell(15, 26, 'Cama:', 0, 0, 'L')
+    pdf.cell(25, 26, hospitalizacion[0]['cama'], 0, 0, 'L')
+    pdf.ln(3)
     pdf.set_font('Times', '', 7)
-    pdf.rect(200.0, 27, 200.0, 15.0)  # Coordenadas x, y, ancho, alto
+    #pdf.rect(200.0, 27, 200.0, 15.0)  # Coordenadas x, y, ancho, alto
     pdf.cell(25, 28, 'Via Ingreso:', 0, 0, 'L')
-    pdf.cell(25, 28, 'Causa Externa:', 0, 0, 'L')
-    pdf.cell(25, 28, 'Manilla de Identificacion:', 0, 0, 'L')
+    pdf.cell(20, 28, 'Causa Externa:', 0, 0, 'L')
+    pdf.cell(80, 28, hospitalizacion[0]['causaExterna'], 0, 0, 'L')
+    pdf.cell(230, 28, 'Manilla de Identificacion#:', 0, 0, 'L')
+    pdf.cell(20, 28, hospitalizacion[0]['manilla'], 0, 0, 'L')
     pdf.set_font('Times', 'B', 7)
-    pdf.ln(1)
-    pdf.rect(200.0, 29, 200.0, 50.0)  # Coordenadas x, y, ancho, alto
+    pdf.ln(3)
+    #pdf.rect(200.0, 29, 200.0, 50.0)  # Coordenadas x, y, ancho, alto
 
-    pdf.cell(100, 29, 'Apellidos y Nombres:', 0, 0, 'L')
+    pdf.cell(30, 29, 'Apellidos y Nombres:', 0, 0, 'L')
+    pdf.cell(100, 29, hospitalizacion[0]['nombrePaciente'], 0, 0, 'L')
+    pdf.ln(3)
+    pdf.cell(50, 30, 'Historia Clinica:', 0, 0, 'L')
+    pdf.cell(30, 30, hospitalizacion[0]['tipDoc'], 0, 0, 'L')
+    pdf.cell(20, 30, hospitalizacion[0]['documento'], 0, 0, 'L')
+    pdf.ln(3)
+    pdf.image('C:/EntornosPython/Pos6/static/img/CIRUGIAFINAL.JPG', 140, 45, 30, 30)
+    pdf.cell(50, 31, 'Fecha de Nacimiento:', 0, 0, 'L')
+    pdf.cell(20, 31, hospitalizacion[0]['nacio'], 0, 0, 'L')
+    pdf.cell(8, 31, 'Edad:', 0, 0, 'L')
+    pdf.cell(5, 31, hospitalizacion[0]['edad'], 0, 0, 'L')
+    pdf.cell(8, 31, 'Sexo:', 0, 0, 'L')
+    pdf.cell(5, 31, hospitalizacion[0]['sexo'], 0, 0, 'L')
+    pdf.ln(3)
+    pdf.cell(50, 32, 'Ocupacion:', 0, 0, 'L')
+    pdf.cell(30, 32, hospitalizacion[0]['ocupacion'], 0, 0, 'L')
+    pdf.cell(15, 32, 'Estado Civil:', 0, 0, 'L')
+    pdf.cell(30, 32, hospitalizacion[0]['estadoCivil'], 0, 0, 'L')
+    pdf.ln(3)
+    pdf.cell(100, 33, 'SEGURIDAD SOCIAL:', 0, 0, 'L')
+    pdf.ln(3)
+    pdf.cell(50, 34, 'Regimen:', 0, 0, 'L')
+    pdf.cell(20, 34, hospitalizacion[0]['regimen'], 0, 0, 'L')
+    pdf.cell(50, 34, 'Usuario:', 0, 0, 'L')
+    pdf.cell(10, 34, '', 0, 0, 'L')
+    pdf.ln(3)
+    pdf.cell(50, 34, 'Nivel:', 0, 0, 'L')
+    pdf.cell(50, 35, 'Poblacion especial:', 0, 0, 'L')
 
-    pdf.cell(100, 30, 'Historia Clinica:', 0, 0, 'L')
-    pdf.cell(100, 31, 'Fecha de Nacimiento:', 0, 0, 'L')
-    pdf.cell(25, 31, 'Edad:', 0, 0, 'L')
-    pdf.cell(25, 31, 'Sexo:', 0, 0, 'L')
-    pdf.ln(2)
-    pdf.cell(100, 30, 'Ocupacion:', 0, 0, 'L')
-    pdf.cell(100, 30, 'Estado Civil:', 0, 0, 'L')
-    pdf.ln(2)
-    pdf.cell(100, 31, 'SEGURIDAD SOCIAL:', 0, 0, 'L')
-    pdf.cell(100, 32, 'Regimen:', 0, 0, 'L')
-    pdf.cell(100, 33, 'Usuario:', 0, 0, 'L')
-    pdf.ln(1)
-    pdf.cell(100, 34, 'Nivel:', 0, 0, 'L')
-    pdf.cell(100, 35, 'Poblacion especial:', 0, 0, 'L')
+    ## ENTIDADES RESPONSABLE
 
-    pdf.ln(2)
-    pdf.cell(100, 36, 'ENTIDADES RESPONSABLES:', 0, 0, 'L')
-    pdf.cell(100, 37, '1.-', 0, 0, 'L')
-    pdf.cell(100, 38, '2.-', 0, 0, 'L')
-    pdf.cell(100, 39, '3.-', 0, 0, 'L')
-    pdf.cell(100, 40, '4.-', 0, 0, 'L')
-    pdf.ln(2)
-    pdf.cell(100, 41, 'Direccion del sitio de vivienda:', 0, 0, 'L')
+    miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                   password="123456")
+    curt = miConexiont.cursor()
+
+
+    comando = 'SELECT conv.nombre convenio FROM admisiones_ingresos ing LEFT JOIN facturacion_conveniospacienteingresos convPac ON (convPac."tipoDoc_id" = ing."tipoDoc_id" AND convPac.documento_id = ing.documento_id AND convPac."consecAdmision" = ing.consec) LEFT JOIN contratacion_convenios conv ON (conv.id = convPac.convenio_id) WHERE ing.id= ' + "'" + str(ingresoId) + "'"
+
+    curt.execute(comando)
+
+    print(comando)
+
+    entidadesResponsables = []
+
+    for convenio  in curt.fetchall():
+        entidadesResponsables.append(
+            {'convenio': convenio })
+
+    miConexiont.close()
+
+    pdf.ln(12)
+    pdf.cell(50, 36, 'ENTIDADES RESPONSABLES:', 0, 0, 'L')
+    pdf.cell(50, 37, '1.-', 0, 0, 'L')
+    #pdf.cell(10, 37, entidadesResponsables[0]['convenio'], 0, 0, 'L')
+    pdf.ln(3)
+    pdf.cell(50, 38, '2.-', 0, 0, 'L')
+    #pdf.cell(10, 38, entidadesResponsables[0]['convenio'], 0, 0, 'L')
+    pdf.ln(3)
+    pdf.cell(50, 39, '3.-', 0, 0, 'L')
+    #pdf.cell(10, 39, entidadesResponsables[0]['convenio'], 0, 0, 'L')
+    pdf.ln(3)
+    pdf.cell(50, 40, '4.-', 0, 0, 'L')
+    #pdf.cell(10, 40, entidadesResponsables[0]['convenio'], 0, 0, 'L')
+    pdf.ln(3)
+    pdf.cell(30, 41, 'Direccion del sitio de vivienda:', 0, 0, 'L')
+    pdf.cell(30, 41, hospitalizacion[0]['direccion'], 0, 0, 'L')
+    pdf.ln(3)
     pdf.cell(20, 41, 'Telefono:', 0, 0, 'L')
+    pdf.cell(30, 41, hospitalizacion[0]['telefono'], 0, 0, 'L')
     pdf.cell(30, 41, 'Municipio:', 0, 0, 'L')
+    pdf.cell(30, 41, hospitalizacion[0]['municipio'], 0, 0, 'L')
     pdf.cell(30, 41, 'Zona:', 0, 0, 'L')
-    pdf.ln(2)
+    pdf.cell(30, 41, hospitalizacion[0]['localidad'], 0, 0, 'L')
+    pdf.ln(3)
     pdf.cell(100, 42, 'Localidad:', 0, 0, 'L')
+    pdf.cell(30, 42, hospitalizacion[0]['localidad'], 0, 0, 'L')
     pdf.cell(20, 43, 'Correo Electronico:', 0, 0, 'L')
-    pdf.ln(2)
+    pdf.cell(30, 43, str(hospitalizacion[0]['correo']), 0, 0, 'L')
+    pdf.ln(3)
     pdf.cell(100, 45, 'DATOS DEL ACCIDENTE:', 0, 0, 'L')
     pdf.cell(100, 46, 'Direccion del accidente', 0, 0, 'L')
     pdf.cell(100, 47, 'Municipio del accidente', 0, 0, 'L')
     pdf.cell(100, 47, 'Condiciones del accidentado', 0, 0, 'L')
     pdf.cell(100, 48, 'Descripcion del accidente', 0, 0, 'L')
+    pdf.ln(3)
+    pdf.cell(30, 50, 'Impresion Dx comentada', 0, 0, 'L')
+    pdf.cell(100, 50, hospitalizacion[0]['diagnostico'], 0, 0, 'L')
+    pdf.cell(30, 51, 'Servicio solicitado', 0, 0, 'L')
     pdf.ln(2)
-    pdf.cell(100, 50, 'Impresion Dx comentada', 0, 0, 'L')
-    pdf.cell(100, 51, 'Servicio solicitado', 0, 0, 'L')
-    pdf.ln(2)
+
+    miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                   password="123456")
+    curt = miConexiont.cursor()
+
+    comando = 'SELECT usuContacto.nombre nombre, usuContacto.direccion direccion,usuContacto.telefono telefono,tiposFamilia.nombre tiposFamilia  FROM admisiones_ingresos ing LEFT JOIN usuarios_usuarioscontacto usuContacto ON (usuContacto.id = ing."contactoResponsable_id") LEFT JOIN basicas_tiposfamilia tiposFamilia ON (tiposFamilia.id = usuContacto."tiposFamilia_id") WHERE ing.id= ' + "'" + str(ingresoId) + "'"
+    print(comando)
+    curt.execute(comando)
+
+
+    responsablePaciente = []
+
+    for nombre, direccion, telefono, tiposFamilia in curt.fetchall():
+        responsablePaciente.append(
+            {'nombre': nombre,'direccion':direccion,'telefono':telefono, 'tiposFamilia':tiposFamilia  })
+
+    miConexiont.close()
+
     pdf.cell(100, 53, 'Responsable del paciente', 0, 0, 'L')
+    #pdf.cell(10, 53, responsablePaciente[0]['nombre'], 0, 0, 'L')
     pdf.cell(100, 53, 'L.D', 0, 0, 'L')
     pdf.cell(100, 53, 'Parentesco', 0, 0, 'L')
-    pdf.ln(1)
+    #pdf.cell(10, 53, responsablePaciente[0]['tiposFamilia'], 0, 0, 'L')
+    pdf.ln(3)
     pdf.cell(100, 54, 'Direccion:', 0, 0, 'L')
+    #pdf.cell(10, 54, responsablePaciente[0]['direccion'], 0, 0, 'L')
     pdf.cell(100, 54, 'Telefono:', 0, 0, 'L')
-    pdf.ln(1)
+    #pdf.cell(10, 54, responsablePaciente[0]['telefono'], 0, 0, 'L')
+    pdf.ln(3)
     pdf.cell(100, 55, 'Usuario Capitado:', 0, 0, 'L')
     pdf.cell(100, 55, 'Responsable Admision:', 0, 0, 'L')
+    pdf.ln(8)
+    #pdf.rect(200.0, 49, 200.0, 100.0)  # Coordenadas x, y, ancho, alto
+
+    pdf.set_font('Times', 'B', 9)
+    pdf.cell(200, 57,
+             '(Ley 1438 del 2011 Art. 143 Según Circular externa 0000033 de 2011 del MINISTERIO DE LA PROTECCION SOCIAL y Resolución 1915 del 2008)',
+             0, 0, 'L')
     pdf.ln(2)
-    pdf.rect(200.0, 49, 200.0, 100.0)  # Coordenadas x, y, ancho, alto
-    pdf.cell(200, 57, '(Ley 1438 del 2011 Art. 143 Según Circular externa 0000033 de 2011 del MINISTERIO DE LA PROTECCION SOCIAL y Resolución 1915 del 2008)', 0, 0, 'L')         
-    pdf.cell(200, 58, 'La informacion aquí registrada del evento catalogado como accidente de transito, es declarada bajo la gravedad de juramento por el usuario:', 0, 0, 'L')
-   
+    pdf.cell(200, 58,
+             'La informacion aquí registrada del evento catalogado como accidente de transito, es declarada bajo la gravedad de juramento por el usuario:',
+             0, 0, 'L')
+    pdf.ln(2)
+    pdf.cell(200, 59,
+             'con documento de identificación numero:',
+             0, 0, 'L')
+    pdf.ln(2)
+    pdf.cell(200, 60,
+             'quien reside en la dirección:',
+             0, 0, 'L')
+    pdf.ln(2)
+    pdf.cell(200, 61,
+             'barrio:',
+             0, 0, 'L')
+    pdf.ln(2)
+    pdf.cell(200, 62,
+             'del municipio de:',
+             0, 0, 'L')
+    pdf.ln(2)
+    pdf.cell(200, 63,
+             'en calidad de paciente y/o acudiente del paciente:___________________________ con documento de identificación numero:_______________, ',
+             0, 0, 'L')
+    pdf.ln(2)
+    pdf.cell(200, 64,
+             'donde resulto afectado por vehiculo automotor en movimiento.: - Mediante la firma de esta declaración, confirma la veracidad y exactitud de las declaraciones que formulay  ',
+             0, 0, 'L')
+    pdf.ln(2)
+    pdf.cell(200, 64,
+             ', manifestando que nada ha ocultado ,omitido o alterado y se da por enterado que esta declaración constituye para la Compañía prestadora de servcicios en salud información determinante del siniestro  ',
+             0, 0, 'L')
+    pdf.ln(2)
+    pdf.cell(200, 64,
+             ', provocándolo intencionalmente, presentándolo ante el asegurador como ocurrido por causas o en circunstancias distintas a las verdaderas, ocultando la cosa asegurada o aumentando fraudulentamente las pérdidas efectivamente sufridas, incurre en el delito de fraude al seguro establecido en el artículo 470, número 10 del código final',
+             0, 0, 'L')
 
 
-    pdf.output('C:/EntornosPython/temporal/temporal/hojaAdmision.pdf', 'F')
+    pdf.ln(3)
+    pdf.cell(200, 65,
+             'Yo:',
+             0, 0, 'L')
+    pdf.ln(3)
+    pdf.cell(200, 66,
+             'o en mi representacion __________________________________________ identificado con ___________________ ',
+             0, 0, 'L')
+    pdf.ln(2)
+    #pdf.cell(200, 67,
+    #         'Declaro que la informacion y/o documentacion aportada y consignada en el presente formato es cierta, veraz y verificable; razón por la cual autorizo su posterior verificacion por parte de la aseguradora y de la misma institucion. Teniendo en cuenta el artículo 9 de la Ley 1581 de 2012 “Por la cual se dictan disposiciones generales para la proteccion de datos personales”, autorizo expresamente a la Clínica Medical S.A.S. a divulgar la informacion aqui reposada tanto internamente como a EPS, aseguradoras, entes de control y demas entidades que la requieran y que esten autorizadas para tal fin, siempre y cuando dicha divulgacion este relacionada con los motivos por los cuales recibí tratamiento en esta Institucion prestadora de salud. De igual',
+    #         0, 0, 'C')
+
+
+
+    pdf.ln(4)
+    pdf.cell(30, 68,
+             'Nombre Completo:',
+             0, 0, 'L')
+    pdf.cell(40, 68, hospitalizacion[0]['nombrePaciente'], 0, 0, 'L')
+
+    pdf.ln(4)
+    pdf.cell(30, 69,
+             'Identificacion:',
+             0, 0, 'L')
+    pdf.cell(40, 69, hospitalizacion[0]['documento'], 0, 0, 'L')
+
+    pdf.ln(4)
+    pdf.cell(30, 70,
+             'Parentesco:',
+             0, 0, 'L')
+    pdf.cell(40, 70, 'PACIENTE', 0, 0, 'L')
+
+    #pdf.output('C:/EntornosPython/temporal/temporal/hojaAdmision.pdf', 'F')
 
     linea = linea + 3
-    pdf.ln(3)
+    pdf.ln(5)
 
     carpeta = 'C:\EntornosPython\Pos6\JSONCLINICA\HistoriasClinicas/'
     print("carpeta = ", carpeta)
@@ -791,6 +982,8 @@ def ImprimirHojaAdmision(ingresoId2):
         print(f"Error al abrir el archivo: {e}")
 
     return JsonResponse({'success': True, 'message': 'Hoja Admsision impresa!'})
+
+
 
 
 

@@ -195,6 +195,8 @@ urlpatterns = [
     path('load_dataTriage/<str:data>', viewsTriage.Load_dataTriage, name='loaddata_Triage'),
     path('buscarEspecialidadesMedicos/', viewsTriage.buscarEspecialidadesMedicos),
     path('imprimirAtencionInicialUrgencias/<str:ingresoId>/', viewsTriageReportes.ImprimirAtencionInicialUrgencias),
+    #path('imprimirAtencionUrgencias/', viewsTriageReportes.ImprimirAtencionUrgencias),
+    path('imprimirHojaAdmision/', viewsTriageReportes.ImprimirHojaAdmision),
 
     # Apoyo Terapeutico
 

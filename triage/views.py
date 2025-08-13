@@ -3031,7 +3031,7 @@ def guardarAdmisionTriage(request):
             print ("Entre rollo=1")
 
             servicioUrgencias = Servicios.objects.get(id=busServicio2)
-
+            anttesde
             if servicioUrgencias.nombre == 'URGENCIAS':
                 print("Entre rollo=1 URGENCIAS")
 
@@ -3041,13 +3041,13 @@ def guardarAdmisionTriage(request):
                 ImprimirAtencionInicialUrgencias(ingresoId2)
 
                 # Aqui reporte de Hoja de Admision
+            anttesdeHospitalizacion
+            servicioHospitalizacion = Servicios.objects.get(id=busServicio2)
 
-            #servicioHospitalizacion = Servicios.objects.get(id=busServicio2)
-
-            #if servicioHospitalizacion.nombre == 'HOSPITALIZACION':
-            #    print("Entre imprimir Hoja de admision paciente")
-            #    ingresoId2 = grabo.id
-            #    ImprimirHojaDeAdmision(ingresoId2)
+            if servicioHospitalizacion.nombre == 'HOSPITALIZACION':
+                print("Entre imprimir Hoja de admision paciente")
+                ingresoId2 = grabo.id
+                ImprimirHojaAdmision(ingresoId2)
 
         # RUTINA ARMADO CONTEXT
 
