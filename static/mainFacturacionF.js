@@ -94,6 +94,16 @@ function arrancaLiquidacion(valorTabla,valorData)
                  dataSrc: ""
             },
             columns: [
+		{
+		"render": function ( data, type, row ) {
+                        var btn = '';
+
+	  btn = btn + " <button class='ImprimirFactura btn-primary ' data-pk='" + row.pk + "'>" + '<i class=""fa-duotone fa-solid fa-print""></i>' + "</button>";
+
+                       return btn;
+		}
+                   },
+
                 { data: "fields.id"},
                 { data: "fields.tipoDoc"},
                 { data: "fields.documento"},
@@ -869,6 +879,41 @@ window.addEventListener('load', async () => {
 	     });
 
         });
+
+
+        $('body').on('click', '.ImprimirFactura', function () {
+
+	          var post_id = $(this).data('pk');
+		var row = $(this).closest('tr'); // Encuentra la fila
+
+		 alert("ImprimirFactura entre pk = " + post_id);
+
+	var ingresoId = post_id;
+
+	$.ajax({
+	           url: '/imprimirFactura/',
+	            data : {ingresoId:ingresoId},
+	           type: 'POST',
+	           dataType : 'json',
+	  		success: function (data) {
+
+			 $('#pk').val(data.pk);
+	       	     
+
+                  },
+	   		    error: function (request, status, error) {
+	   			   document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
+	   	    	}
+	     });
+
+
+
+
+
+
+        });
+
+
 
 
 

@@ -2,13 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d041c887-ab16-4071-a5e4-52a8295bbd5d" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/facturacion/viewsReportes.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Formatos/AtencionInicialUrgencias.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/Formatos/AtencionInicialUrgencias.pdf" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/admisiones/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/admisiones/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/admisiones/viewsReportes.py" beforeDir="false" afterPath="$PROJECT_DIR$/admisiones/viewsReportes.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/static/mainAdmisiones.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/mainAdmisiones.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/mainTriage.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/mainTriage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/admisiones/panelAdmisiones.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/admisiones/panelAdmisiones.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/triage/panelTriage.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/triage/panelTriage.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/mainFacturacionF.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/mainFacturacionF.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/triage/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/triage/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/triage/viewsReportes.py" beforeDir="false" afterPath="$PROJECT_DIR$/triage/viewsReportes.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/vulner/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/vulner/urls.py" afterDir="false" />
@@ -76,7 +76,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/admisiones/viewsReportes.py</url>
-          <line>367</line>
+          <line>389</line>
           <option name="timeStamp" value="2" />
         </line-breakpoint>
       </breakpoints>

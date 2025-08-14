@@ -24,18 +24,18 @@ from camara import  views as viewsCamara
 from Reportes import views as viewsReportes
 
 from admisiones import views as viewsAdmisiones
+from admisiones import viewsReportes as viewsAdmisionesReportes
 from triage import views as viewsTriage
 from triage import viewsReportes as viewsTriageReportes
-
 from usuarios import views as viewsUsuarios
 
 from django.conf  import settings
 from django.conf.urls.static import  static
 from clinico import views as viewsClinico
 from clinico import viewsReportes as viewsClinicoReportes
-from admisiones import viewsReportes as viewsAdmisionesReportes
 from terapeutico import views as viewsApoyoTerapeutico
 from facturacion import views as viewsFacturacion
+from facturacion import viewsReportes as viewsFacturacionReportes
 from contratacion import views as viewsConvenios
 from tarifarios import views as viewsTarifarios
 from rips import views as viewsRips
@@ -172,6 +172,7 @@ urlpatterns = [
     path('postDeleteAbonosAdmision/', viewsAdmisiones.PostDeleteAbonosAdmision, name='postDeleteAbonosAdmision'),
     path('guardaFurips/', viewsAdmisiones.GuardaFurips, name='guardaFurips'),
     #path('encuentraAdmisionModal/<str:tipoDoc> , <str:documento> , <str:consec> , <str:sede>/', viewsAdmisiones.encuentraAdmisionModal, name='encuentraAdmisionModal'),
+    path('impresionManilla/', viewsAdmisionesReportes.ImpresionManilla),
     path('encuentraAdmisionModal/', viewsAdmisiones.encuentraAdmisionModal),
     path('load_dataAdmisiones/<str:data>', viewsAdmisiones.load_dataAdmisiones,   name='loaddata_Admisiones'),
     path('load_dataAutorizacionesAdmisiones/<str:data>', viewsAdmisiones.Load_dataAutorizacionesAdmisiones, name='loaddata_AutorizacionesAdmisiones'),
@@ -200,7 +201,7 @@ urlpatterns = [
     path('imprimirAtencionInicialUrgencias/<str:ingresoId>/', viewsTriageReportes.ImprimirAtencionInicialUrgencias),
     #path('imprimirAtencionUrgencias/', viewsTriageReportes.ImprimirAtencionUrgencias),
     path('imprimirHojaAdmision/<str:ingresoId>/', viewsTriageReportes.ImprimirHojaAdmision),
-
+    path('imprimirManilla/<str:ingresoId>/', viewsTriageReportes.ImprimirManilla),
     path('buscarMunicipios/', viewsTriage.buscarMunicipios),
     path('buscarCiudades/', viewsTriage.buscarCiudades),
     path('buscarLocalidades/', viewsTriage.buscarLocalidades),
@@ -239,6 +240,7 @@ urlpatterns = [
     path('guardaApliqueAbonosFacturacion/', viewsFacturacion.GuardaApliqueAbonosFacturacion, name='guardaApliqueAbonosFacturacion'),
     path('trasladarConvenio/', viewsFacturacion.TrasladarConvenio, name='trasladarConvenio'),
     path('buscoAbono/', viewsFacturacion.BuscoAbono, name='buscoAbono'),
+    path('imprimirFactura/', viewsFacturacionReportes.ImprimirFactura),
 
     # Rips
 

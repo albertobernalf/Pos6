@@ -28,7 +28,7 @@ from rips.models import  RipsDestinoEgreso
 from django.db import transaction, IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 from clinico.models import Servicios
-from triage.viewsReportes import ImprimirAtencionInicialUrgencias, ImprimirHojaAdmision
+from triage.viewsReportes import ImprimirAtencionInicialUrgencias, ImprimirHojaAdmision, ImprimirManilla
 
 # Create your views here.
 
@@ -3076,6 +3076,10 @@ def guardarAdmisionTriage(request):
                 print("Entre imprimir Hoja de admision paciente")
                 ingresoId2 = grabo.id
                 ImprimirHojaAdmision(ingresoId2)
+                print("Entre imprimir MaNILLA  paciente")
+                ingresoId2 = grabo.id
+                ImprimirManilla(ingresoId2)
+
 
         # RUTINA ARMADO CONTEXT
 
