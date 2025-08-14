@@ -1869,6 +1869,106 @@ $('.eBtn').on('click',function(event)
 
 $(document).on('change', '#departamentos', function(event) {
 
+
+
+
+       var Departamento =   $(this).val()
+
+
+        $.ajax({
+	           url: '/buscarCiudades/',
+	            data : {Departamento:Departamento},
+	           type: 'GET',
+	           dataType : 'json',
+
+	  		success: function (respuesta) {
+
+	  		   var options = '<option value="=================="></option>';
+
+	  		  var dato = JSON.parse(respuesta);
+
+
+                     const $id7 = document.querySelector("#ciudades");
+
+
+ 	      		     $("#ciudades").empty();
+
+
+	                 $.each(dato, function(key,value) {
+                                    options +='<option value="' + value.id + '">' + value.nombre + '</option>';
+                                    option = document.createElement("option");
+                                    option.value = value.id;
+                                    option.text = value.nombre;
+                                    $id7.appendChild(option);
+ 	      		      });
+
+
+
+
+
+                    },
+	   		    error: function (request, status, error) {
+
+	document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
+
+	   	    	}
+
+	     });
+
+// AJAX DE MUNICIPIOS
+
+
+
+$.ajax({
+	           url: '/buscarMunicipios/',
+	            data : {Departamento:Departamento},
+	           type: 'GET',
+	           dataType : 'json',
+
+	  		success: function (respuesta) {
+			alert("regrese de buscar municipios " + respuesta );
+
+	  		   var options = '<option value="=================="></option>';
+
+	  		  var dato = JSON.parse(respuesta);
+
+
+                     const $id3 = document.querySelector("#municipios");
+
+
+ 	      		     $("#municipios").empty();
+
+
+	                 $.each(dato, function(key,value) {
+                                    options +='<option value="' + value.id + '">' + value.nombre + '</option>';
+                                    option = document.createElement("option");
+                                    option.value = value.id;
+                                    option.text = value.nombre;
+                                    $id3.appendChild(option);
+ 	      		      });
+
+
+
+
+
+                    },
+	   		    error: function (request, status, error) {
+
+	document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
+
+	   	    	}
+
+	     });
+
+
+});
+
+
+
+
+
+$(document).on('change', '#departamentosViejo', function(event) {
+
         alert("Entre cambio Departamento");
 
 
@@ -2997,3 +3097,57 @@ $('#tablaDatos tbody').on('click', '.ImprimirAtencionInicialUrgencias', function
 
 
     });
+
+$(document).on('change', '#municipios', function(event) {
+
+
+
+       var Municipio =   $(this).val()
+
+
+
+
+
+        $.ajax({
+	           url: '/buscarLocalidades/',
+	            data : {Municipio:Municipio},
+	           type: 'GET',
+	           dataType : 'json',
+
+	  		success: function (respuesta) {
+
+	  		   var options = '<option value="=================="></option>';
+
+	  		  var dato = JSON.parse(respuesta);
+
+
+                     const $id7 = document.querySelector("#localidades");
+
+
+ 	      		     $("#localidades").empty();
+
+
+	                 $.each(dato, function(key,value) {
+                                    options +='<option value="' + value.id + '">' + value.nombre + '</option>';
+                                    option = document.createElement("option");
+                                    option.value = value.id;
+                                    option.text = value.nombre;
+                                    $id7.appendChild(option);
+ 	      		      });
+
+
+
+
+
+                    },
+	   		    error: function (request, status, error) {
+
+	document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
+
+	   	    	}
+
+	     });
+     });
+
+
+

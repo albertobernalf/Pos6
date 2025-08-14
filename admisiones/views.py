@@ -5113,7 +5113,7 @@ def crearAdmisionDef(request):
         if servicioHospitalizacion.nombre == 'HOSPITALIZACION':
             print("Entre imprimir Hoja de admision paciente")
             ingresoId2 = grabo.id
-            ImprimirHojaDeAdmision(ingresoId2)
+            ImprimirHojaAdmision(ingresoId2)
 
         # RUTINA ARMADO CONTEXT
         #
@@ -5181,28 +5181,28 @@ def crearAdmisionDef(request):
 
         # Combo Accesos usuario
 
-        miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
-                                       password="123456")
-        curt = miConexiont.cursor()
+        #miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+        #                               password="123456")
+        #curt = miConexiont.cursor()
 
         # comando = "select opc.id id_opc, opc.perfilesClinicaId_id id_perfilesClinica,opc.modulosElementosDefId_id id_elmentosDef, elem_nombre, elem.url url ,modelem.nombre nombreElemento from seguridad_perfilesusu usu, seguridad_perfilesclinicaopciones opc, planta_planta planta, seguridad_moduloselementosdef elem, seguridad_moduloselementos modelem where usu.estadoReg = 'A' and usu.plantaId_id =  planta.id and planta.documento = '" + str(username) + "' and opc.id = usu.perfilesclinicaOpcionesId_id and elem.id =opc.modulosElementosDefId_id and modelem.id = opc.modulosElementosDefId_id "
-        comando = 'select opc.id id_opc, opc."perfilesClinicaId_id" id_perfilesClinica,opc."modulosElementosDefId_id" id_elmentosDef,modulos.nombre nombre_modulo ,elem.nombre nombre_defelemento , elem.url url ,modelem.nombre nombreElemento from seguridad_perfilesusu usu, seguridad_perfilesclinicaopciones opc, planta_planta planta, seguridad_moduloselementosdef elem, seguridad_moduloselementos modelem , seguridad_perfilesclinica perfcli, seguridad_perfilesgralusu gralusu, seguridad_modulos modulos, sitios_sedesClinica  sedes where gralusu."perfilesClinicaId_id" = perfcli.id and usu."plantaId_id" = gralusu."plantaId_id" and usu."plantaId_id" =  planta.id and usu."estadoReg" = ' + "'" + 'A' + "'" + ' and  opc.id = usu."perfilesClinicaOpcionesId_id" and elem.id =opc."modulosElementosDefId_id" and modulos.id = perfcli."modulosId_id" and elem."modulosId_id" = perfcli."modulosId_id"  and sedes.id = planta."sedesClinica_id"  and planta.documento =  ' + "'"  + '19465673' + "'" + ' AND gral."plantaId_id"=planta.id AND planta."sedesClinica_id"=' + "'" + str(sede) + "'"
+        #comando = 'select opc.id id_opc, opc."perfilesClinicaId_id" id_perfilesClinica,opc."modulosElementosDefId_id" id_elmentosDef,modulos.nombre nombre_modulo ,elem.nombre nombre_defelemento , elem.url url ,modelem.nombre nombreElemento from seguridad_perfilesusu usu, seguridad_perfilesclinicaopciones opc, planta_planta planta, seguridad_moduloselementosdef elem, seguridad_moduloselementos modelem , seguridad_perfilesclinica perfcli, seguridad_perfilesgralusu gralusu, seguridad_modulos modulos, sitios_sedesClinica  sedes where gralusu."perfilesClinicaId_id" = perfcli.id and usu."plantaId_id" = gralusu."plantaId_id" and usu."plantaId_id" =  planta.id and usu."estadoReg" = ' + "'" + 'A' + "'" + ' and  opc.id = usu."perfilesClinicaOpcionesId_id" and elem.id =opc."modulosElementosDefId_id" and modulos.id = perfcli."modulosId_id" and elem."modulosId_id" = perfcli."modulosId_id"  and sedes.id = planta."sedesClinica_id"  and planta.documento =  ' + "'"  + '19465673' + "'" + ' AND gral."plantaId_id"=planta.id AND planta."sedesClinica_id"=' + "'" + str(sede) + "'"
 
-        curt.execute(comando)
-        print(comando)
+        #curt.execute(comando)
+        #print(comando)
 
-        accesosUsuario = []
+        #accesosUsuario = []
 
-        for id_opc, id_perfilesClinica, id_elmentosDef, nombre_modulo, nombre_defelemento, url, nombreElemento in curt.fetchall():
-            accesosUsuario.append(
-                {'id_opc': id_opc, 'id_perfilesClinica': id_perfilesClinica, 'id_elmentosDef': id_elmentosDef,
-                 'nombre_modulo': nombre_modulo, 'nombre_defelemento': nombre_defelemento, 'url': url,
-                 'nombreElemento': nombreElemento})
+        #for id_opc, id_perfilesClinica, id_elmentosDef, nombre_modulo, nombre_defelemento, url, nombreElemento in curt.fetchall():
+        #    accesosUsuario.append(
+        #        {'id_opc': id_opc, 'id_perfilesClinica': id_perfilesClinica, 'id_elmentosDef': id_elmentosDef,
+        #         'nombre_modulo': nombre_modulo, 'nombre_defelemento': nombre_defelemento, 'url': url,
+        #         'nombreElemento': nombreElemento})
 
-        miConexiont.close()
-        print(accesosUsuario)
+        #miConexiont.close()
+        #print(accesosUsuario)
 
-        context['AccesosUsuario '] = accesosUsuario
+        #context['AccesosUsuario '] = accesosUsuario
 
         # Fin Accesos usuario
 
@@ -6238,7 +6238,7 @@ def guardarUsuariosModal(request):
             if Usuarios == []:
 
                  print("Entre a crear")
-                 comando = 'insert into usuarios_usuarios (nombre, documento, genero, "fechaNacio", pais_id,  departamentos_id, ciudades_id, direccion, telefono, contacto, "centrosC_id", "tipoDoc_id", "tiposUsuario_id", municipio_id, localidad_id, "estadoCivil_id", ocupacion_id, correo ,"fechaRegistro", "estadoReg","primerNombre","segundoNombre","primerApellido", "segundoApellido") values (' + "'" + str(nombre) + "'" + ' , ' + "'" + str(documento) + "'" + ', ' + "'" + str(genero) + "'" + '  , ' + "'" + str(fechaNacio) + "'" +  ', ' + "'" + str(pais) + "'" + ', ' + "'" + str(departamento) + "'" +  '  , ' + "'" +  str(ciudad) + "'" + '  , ' + "'" +  str(direccion) + "'" + ', ' + "'" + str(telefono) + "'" + ', ' + "'" + str(contacto) + "'" + ', ' +  str(centrosc_id) +  ', ' + "'" + str(tipoDoc_id) + "'" + ', ' + str(tiposUsuario_id) + " , " + "'" + str(municipio) + "'" +   ', ' + "'" + str(localidad) + "'" + ", " + str(estadoCivil)  + ", " + str(ocupaciones) + ", " + "'" + str(correo) + "', " +  "'"  + str(fechaRegistro) + "'"  +  ", 'A'"  + ",'" + str(primerNombre) + "','" + str(segundoNombre)  +  "','" + str(primerApellido) + "','" + str(primerApellido)  + "','" + str(segundoApellido)   +  "')"
+                 comando = 'insert into usuarios_usuarios (nombre, documento, genero, "fechaNacio", pais_id,  departamentos_id, ciudades_id, direccion, telefono, contacto, "centrosC_id", "tipoDoc_id", "tiposUsuario_id", municipio_id, localidad_id, "estadoCivil_id", ocupacion_id, correo ,"fechaRegistro", "estadoReg","primerNombre","segundoNombre","primerApellido", "segundoApellido") values (' + "'" + str(nombre) + "'" + ' , ' + "'" + str(documento) + "'" + ', ' + "'" + str(genero) + "'" + '  , ' + "'" + str(fechaNacio) + "'" +  ', ' + "'" + str(pais) + "'" + ', ' + "'" + str(departamento) + "'" +  '  , ' + "'" +  str(ciudad) + "'" + '  , ' + "'" +  str(direccion) + "'" + ', ' + "'" + str(telefono) + "'" + ', ' + "'" + str(contacto) + "'" + ', ' +  str(centrosc_id) +  ', ' + "'" + str(tipoDoc_id) + "'" + ', ' + str(tiposUsuario_id) + " , " + "'" + str(municipio) + "'" +   ', ' + "'" + str(localidad) + "'" + ", " + str(estadoCivil)  + ", " + str(ocupaciones) + ", " + "'" + str(correo) + "', " +  "'"  + str(fechaRegistro) + "'"  +  ", 'A'"  + ",'" + str(primerNombre) + "','" + str(segundoNombre)  +  "','" + str(primerApellido) + "','" + str(segundoApellido)   +  "')"
                  print(comando)
 
             else:
@@ -7565,3 +7565,67 @@ def Load_dataHabitacionesAdmisiones(request, data):
     serialized1 = json.dumps(habitaciones, default=str)
 
     return HttpResponse(serialized1, content_type='application/json')
+
+def buscarMunicipios(request):
+    context = {}
+    Departamento = request.GET["Departamento"]
+
+    print ("Entre buscar  Municipio del Depto  =",Departamento)
+
+
+    # Combo de Medicos Especialidades
+
+
+    miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres", password="123456")
+    curt = miConexiont.cursor()
+
+    comando = "SELECT c.id id, c.nombre  nombre FROM sitios_departamentos d, sitios_municipios c WHERE c.departamento_id = d.id and d.id = '" + str(Departamento) + "' ORDER BY c.nombre"
+
+    curt.execute(comando)
+    print(comando)
+
+    municipios = []
+
+    for id, nombre in curt.fetchall():
+        municipios.append({'id': id, 'nombre': nombre})
+
+    miConexiont.close()
+    print(municipios)
+
+
+    context['Municipios'] = municipios
+
+
+    return JsonResponse(json.dumps(municipios), safe=False)
+
+def buscarLocalidades(request):
+    context = {}
+    municipio = request.GET["Municipio"]
+
+    print ("Entre buscar  Localidades  de la municipio  =",municipio)
+
+
+    # Combo de Medicos Especialidades
+
+
+    miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres", password="123456")
+    curt = miConexiont.cursor()
+
+    comando = "SELECT c.id id, c.nombre  nombre FROM sitios_municipios d, sitios_localidades c WHERE c.municipio_id = d.id and d.id = '" + str(municipio) + "' ORDER BY c.nombre"
+
+    curt.execute(comando)
+    print(comando)
+
+    localidades = []
+
+    for id, nombre in curt.fetchall():
+        localidades.append({'id': id, 'nombre': nombre})
+
+    miConexiont.close()
+    print(localidades)
+
+
+    context['Localidades'] = localidades
+
+
+    return JsonResponse(json.dumps(localidades), safe=False)

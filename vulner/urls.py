@@ -146,6 +146,9 @@ urlpatterns = [
     path('buscarEspecialidadesMedicos/', viewsAdmisiones.buscarEspecialidadesMedicos),
     path('buscarCiudades/', viewsAdmisiones.buscarCiudades),
     path('buscarHabitaciones/', viewsAdmisiones.buscarHabitaciones),
+    path('buscarMunicipios/', viewsAdmisiones.buscarMunicipios),
+
+    path('buscarLocalidades/', viewsAdmisiones.buscarLocalidades),
 
     path('buscarSubServicios/', viewsAdmisiones.buscarSubServicios),
     # path('crearAdmision/<str:Sede>,<str:Perfil>, <str:Username>, <str:Username_id>', viewsAdmisiones.crearAdmision.as_view()),
@@ -176,7 +179,7 @@ urlpatterns = [
     path('load_dataCensoAdmisiones/<str:data>', viewsAdmisiones.Load_dataCensoAdmisiones, name='load_dataCenso_Admisiones'),
     path('load_dataHabitacionesAdmisiones/<str:data>', viewsAdmisiones.Load_dataHabitacionesAdmisiones, name='load_dataHabitaciones_Admisiones'),
     path('imprimirAtencionUrgencias/', viewsAdmisionesReportes.ImprimirAtencionUrgencias),
-    path('imprimirHojaAdmision/', viewsAdmisionesReportes.ImprimirHojaAdmision),
+    path('imprimirHojaAdmision/<str:ingresoId/', viewsAdmisionesReportes.ImprimirHojaAdmision),
 
 
     # Triage
@@ -196,7 +199,11 @@ urlpatterns = [
     path('buscarEspecialidadesMedicos/', viewsTriage.buscarEspecialidadesMedicos),
     path('imprimirAtencionInicialUrgencias/<str:ingresoId>/', viewsTriageReportes.ImprimirAtencionInicialUrgencias),
     #path('imprimirAtencionUrgencias/', viewsTriageReportes.ImprimirAtencionUrgencias),
-    path('imprimirHojaAdmision/', viewsTriageReportes.ImprimirHojaAdmision),
+    path('imprimirHojaAdmision/<str:ingresoId>/', viewsTriageReportes.ImprimirHojaAdmision),
+
+    path('buscarMunicipios/', viewsTriage.buscarMunicipios),
+    path('buscarCiudades/', viewsTriage.buscarCiudades),
+    path('buscarLocalidades/', viewsTriage.buscarLocalidades),
 
     # Apoyo Terapeutico
 

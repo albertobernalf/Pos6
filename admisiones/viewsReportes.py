@@ -560,9 +560,9 @@ def ImprimirAtencionUrgencias(request):
     return JsonResponse({'success': True, 'message': 'Atencion Inicial de Urgencias impresa!'})
 
 
-def ImprimirHojaAdmision(request):
+def ImprimirHojaAdmision(ingresoId):
     # Instantiation of inherited class
-    ingresoId = request.POST["ingresoId"]
+    #ingresoId = request.POST["ingresoId"]
     print("ingresoId = ", ingresoId)
 
     print("Entre ImprimirHojaAdmision ", ingresoId)

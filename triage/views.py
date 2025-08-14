@@ -28,7 +28,7 @@ from rips.models import  RipsDestinoEgreso
 from django.db import transaction, IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 from clinico.models import Servicios
-from triage.viewsReportes import ImprimirAtencionInicialUrgencias
+from triage.viewsReportes import ImprimirAtencionInicialUrgencias, ImprimirHojaAdmision
 
 # Create your views here.
 
@@ -250,6 +250,29 @@ def crearTriage(request):
 
         ## ojo desde aquip
 
+        # Combo Empresas
+
+        # iConexiont = MySQLdb.connect(host='CMKSISTEPC07', user='sa', passwd='75AAbb??', db='vulnerable')
+        miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                       password="123456")
+        curt = miConexiont.cursor()
+
+        comando = "SELECT c.id id,c.nombre nombre FROM facturacion_empresas c"
+
+        curt.execute(comando)
+        print(comando)
+
+        empresas = []
+
+        for id, nombre in curt.fetchall():
+            empresas.append({'id': id, 'nombre': nombre})
+
+        miConexiont.close()
+        print(empresas)
+
+        context['Empresas'] = empresas
+
+        # Fin combo empresas
 
         # Combo PermisosGrales
 
@@ -1969,7 +1992,7 @@ def grabaUsuariosTriage(request):
                 #miConexion3 =  MySQLdb.connect(host='CMKSISTEPC07', user='sa', passwd='75AAbb??', db='vulnerable')
                 miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres", password="123456")
                 cur3 = miConexion3.cursor()
-                comando = 'update usuarios_usuarios set nombre = ' "'" + str(nombre) +  "'"   + ', ciudades_id = ' + "'" + str(ciudades) + "'" +  ', direccion  = ' + "'" +  str(direccion) + "'" + ', genero = ' + "'" + str(genero) + "'"  + ', "fechaNacio" = ' + "'" +str(fechaNacio) + "'" +  ', telefono= ' + "'" + str(telefono) + "'" +  ', contacto= ' + "'" +  str(contacto) + "'" +  ', "centrosC_id"= ' + str(centrosC)  + ', "tiposUsuario_id" = ' + "'" + str(tiposUsuario) + "' , "   + ' municipio_id = ' + str(municipios) +   ', localidad_id = ' +  str(localidades) +  ', "estadoCivil_id"= ' +  str(estadoCivil) +  ', ocupacion_id = ' +  str(ocupaciones) +  ', correo = ' + "'" + str(correo) + "'" +  + ', "primerNombre" = ' + "'" + str(primerNombre) + "'," + '"segundoNombre" = ' + "'" + str(segundoNombre) + "'," + '"primerApellido"= ' + "'" + str(primerApellido) + "'," + '"segundoApellido" = ' + "'" + str(segundoApellido) +  "'"  +  ' WHERE "tipoDoc_id" = ' + str(tipoDoc) + ' AND documento = ' + "'" + str(documento) + "'"
+                comando = 'update usuarios_usuarios set nombre = ' "'" + str(nombre) +  "'"   + ', ciudades_id = ' + "'" + str(ciudades) + "'" +  ', direccion  = ' + "'" +  str(direccion) + "'" + ', genero = ' + "'" + str(genero) + "'"  + ', "fechaNacio" = ' + "'" +str(fechaNacio) + "'" +  ', telefono= ' + "'" + str(telefono) + "'" +  ', contacto= ' + "'" +  str(contacto) + "'" +  ', "centrosC_id"= ' + str(centrosC)  + ', "tiposUsuario_id" = ' + "'" + str(tiposUsuario) + "' , "   + ' municipio_id = ' + str(municipios) +   ', localidad_id = ' +  str(localidades) +  ', "estadoCivil_id"= ' +  str(estadoCivil) +  ', ocupacion_id = ' +  str(ocupaciones) +  ', correo = ' + "'" + str(correo) + "'" + ', "primerNombre" = ' + "'" + str(primerNombre) + "'," + '"segundoNombre" = ' + "'" + str(segundoNombre) + "'," + '"primerApellido"= ' + "'" + str(primerApellido) + "'," + '"segundoApellido" = ' + "'" + str(segundoApellido) +  "'"  +  ' WHERE "tipoDoc_id" = ' + str(tipoDoc) + ' AND documento = ' + "'" + str(documento) + "'"
                 print(comando)
                 cur3.execute(comando)
                 miConexion3.commit()
@@ -2692,6 +2715,7 @@ def guardarAdmisionTriage(request):
 
     data = {}
     context = {}
+    response_data = {}
 
     if request.method == 'POST':
         print("EntrePost Graba Admision Triage")
@@ -2855,6 +2879,9 @@ def guardarAdmisionTriage(request):
         except ObjectDoesNotExist:
                 rollo=1
                 print("No existe Id de liquidacion")
+                datos = {'Mensaje': 'No existe Id de liquidacion'}
+                #return JsonResponse(datos, safe=False)
+
 
         finally:
             # Este bloque se ejecutara siempre
@@ -2981,7 +3008,9 @@ def guardarAdmisionTriage(request):
             # Aquí ya se hizo rollback automáticamente
             print("Se hizo rollback por:", e)
             rollo=1
-            raise error
+            datos = {'Mensaje': e}
+            return JsonResponse(datos, safe=False)
+            #raise error
 
 
         if liq != 0:
@@ -3010,16 +3039,15 @@ def guardarAdmisionTriage(request):
                     if miConexion3:
                         print("Entro ha hacer el Rollback")
                         miConexion3.rollback()
-                    raise error
-                    #print("Voy a hacer el jsonresponde")
-                    #return JsonResponse({'success': False, 'Mensaje': error})
+                    #raise error
+                    datos = {'Mensaje': error}
+                    return JsonResponse(datos, safe=False)
+
 
                 finally:
                     if miConexion3:
                         cur3.close()
                         miConexion3.close()
-
-
 
         ## Fin traslado a la nueva Cuenta
 
@@ -3031,7 +3059,7 @@ def guardarAdmisionTriage(request):
             print ("Entre rollo=1")
 
             servicioUrgencias = Servicios.objects.get(id=busServicio2)
-            anttesde
+
             if servicioUrgencias.nombre == 'URGENCIAS':
                 print("Entre rollo=1 URGENCIAS")
 
@@ -3041,7 +3069,7 @@ def guardarAdmisionTriage(request):
                 ImprimirAtencionInicialUrgencias(ingresoId2)
 
                 # Aqui reporte de Hoja de Admision
-            anttesdeHospitalizacion
+
             servicioHospitalizacion = Servicios.objects.get(id=busServicio2)
 
             if servicioHospitalizacion.nombre == 'HOSPITALIZACION':
@@ -3767,14 +3795,17 @@ def guardarAdmisionTriage(request):
         print(empresas)
 
         context['Empresas'] = empresas
+        response_data['Empresas'] = empresas
+
+        response_data['Mensaje'] = 'Admision Creada desde Triage !'
 
         # Fin combo empresas
 
         # Fin combo ocupaciones
         # FIN RUTINA ARMADO CONTEXT
 
-
-    return render(request, "triage/panelTriage.html", context)
+    return JsonResponse(response_data, safe=False)
+    #return render(request, "triage/panelTriage.html", context)
 
 
 
@@ -3857,3 +3888,98 @@ def buscarEspecialidadesMedicos(request):
     return JsonResponse(json.dumps(medicosEspecialidades), safe=False)
 
 
+def buscarCiudades(request):
+    context = {}
+    Departamento = request.GET["Departamento"]
+
+    print ("Entre buscar  Ciudades del Depto  =",Departamento)
+
+
+    # Combo de Medicos Especialidades
+
+
+    miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres", password="123456")
+    curt = miConexiont.cursor()
+
+    comando = "SELECT c.id id, c.nombre  nombre FROM sitios_departamentos d, sitios_ciudades c WHERE c.departamentos_id = d.id and d.id = '" + str(Departamento) + "' ORDER BY c.nombre"
+
+    curt.execute(comando)
+    print(comando)
+
+    ciudades = []
+
+    for id, nombre in curt.fetchall():
+        ciudades.append({'id': id, 'nombre': nombre})
+
+    miConexiont.close()
+    print(ciudades)
+
+
+    context['Ciudades'] = ciudades
+
+
+    return JsonResponse(json.dumps(ciudades), safe=False)
+
+def buscarMunicipios(request):
+    context = {}
+    Departamento = request.GET["Departamento"]
+
+    print ("Entre buscar  Municipio del Depto  =",Departamento)
+
+
+    # Combo de Medicos Especialidades
+
+
+    miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres", password="123456")
+    curt = miConexiont.cursor()
+
+    comando = "SELECT c.id id, c.nombre  nombre FROM sitios_departamentos d, sitios_municipios c WHERE c.departamento_id = d.id and d.id = '" + str(Departamento) + "' ORDER BY c.nombre"
+
+    curt.execute(comando)
+    print(comando)
+
+    municipios = []
+
+    for id, nombre in curt.fetchall():
+        municipios.append({'id': id, 'nombre': nombre})
+
+    miConexiont.close()
+    print(municipios)
+
+
+    context['Municipios'] = municipios
+
+
+    return JsonResponse(json.dumps(municipios), safe=False)
+
+def buscarLocalidades(request):
+    context = {}
+    municipio = request.GET["Municipio"]
+
+    print ("Entre buscar  Localidades  de la municipio  =",municipio)
+
+
+    # Combo de Medicos Especialidades
+
+
+    miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres", password="123456")
+    curt = miConexiont.cursor()
+
+    comando = "SELECT c.id id, c.nombre  nombre FROM sitios_municipios d, sitios_localidades c WHERE c.municipio_id = d.id and d.id = '" + str(municipio) + "' ORDER BY c.nombre"
+
+    curt.execute(comando)
+    print(comando)
+
+    localidades = []
+
+    for id, nombre in curt.fetchall():
+        localidades.append({'id': id, 'nombre': nombre})
+
+    miConexiont.close()
+    print(localidades)
+
+
+    context['Localidades'] = localidades
+
+
+    return JsonResponse(json.dumps(localidades), safe=False)

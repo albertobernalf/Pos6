@@ -481,18 +481,13 @@ document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Admini
 
 
 
-
-
-
-
-
 $('#tablaDatosTriage tbody').on('click', '.miTriage', function() {
 
  
 	 var post_id = $(this).data('pk');
 	var row = $(this).closest('tr'); // Encuentra la fila
-	alert("post_id=" + post_id);
-	alert("row=" + row);
+	// alert("post_id=" + post_id);
+	// alert("row=" + row);
 	var triageId= post_id;
 	 var sede =  document.getElementById("sede").value;
 	 var username =  document.getElementById("username").value;
@@ -505,13 +500,13 @@ $('#tablaDatosTriage tbody').on('click', '.miTriage', function() {
         dato3 = dato1[2];
 	console.log(" fila selecciona de vuelta dato3 = ",  dato3);
 	console.log(" fila selecciona de vuelta dato3 = ",  dato3);
-	alert(" fila selecciona de vuelta dato3  glosaId= " +   dato3.Documento);
-	alert(" fila selecciona de vuelta dato3 factura = " + dato3.tipoDoc);
+	//alert(" fila selecciona de vuelta dato3  glosaId= " +   dato3.Documento);
+	//alert(" fila selecciona de vuelta dato3 factura = " + dato3.tipoDoc);
 
 
 	// Aqui es la creacion de la Admision para el triage
 
-	alert ("Entre a crear la admision Triage");
+//	alert ("Entre a crear la admision Triage");
 
   	var username = document.getElementById("username").value;
   	alert ("username = " + username);
@@ -537,7 +532,7 @@ $('#tablaDatosTriage tbody').on('click', '.miTriage', function() {
  	      		      });
 
 
-			alert("voy para SubServicios  = " + response_data['SubServicios']);
+			// alert("voy para SubServicios  = " + response_data['SubServicios']);
 
           	    //$('#busSubServicio2').val(response_data['SubServicios']);
 
@@ -574,7 +569,7 @@ $('#tablaDatosTriage tbody').on('click', '.miTriage', function() {
                                     $id4.appendChild(option);
  	      		      });
 				
-				alert("response_data COMPLETA que viene  = "  + JSON.stringify(response_data));
+				// alert("response_data COMPLETA que viene  = "  + JSON.stringify(response_data));
 
 				$('#medicoIngreso').val(response_data['Medicos']);
 				$('#viasIngreso').val(response_data['ViasIngreso']);
@@ -632,16 +627,64 @@ $('#tablaDatosTriage tbody').on('click', '.miTriage', function() {
 
 			  });
 
+$(document).on('change', '#municipios', function(event) {
+
+
+
+       var Municipio =   $(this).val()
+
+
+
+
+
+        $.ajax({
+	           url: '/buscarLocalidades/',
+	            data : {Municipio:Municipio},
+	           type: 'GET',
+	           dataType : 'json',
+
+	  		success: function (respuesta) {
+
+	  		   var options = '<option value="=================="></option>';
+
+	  		  var dato = JSON.parse(respuesta);
+
+
+                     const $id7 = document.querySelector("#localidades");
+
+
+ 	      		     $("#localidades").empty();
+
+
+	                 $.each(dato, function(key,value) {
+                                    options +='<option value="' + value.id + '">' + value.nombre + '</option>';
+                                    option = document.createElement("option");
+                                    option.value = value.id;
+                                    option.text = value.nombre;
+                                    $id7.appendChild(option);
+ 	      		      });
+
+
+
+
+
+                    },
+	   		    error: function (request, status, error) {
+
+	document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
+
+	   	    	}
+
+	     });
+     });
+
 
 $(document).on('change', '#departamentos', function(event) {
 
-       // alert("Entre cambio Departamento");
+
 
 
        var Departamento =   $(this).val()
-
-      // alert("Departamento = " + Departamento);
-
 
 
         $.ajax({
@@ -657,7 +700,7 @@ $(document).on('change', '#departamentos', function(event) {
 	  		  var dato = JSON.parse(respuesta);
 
 
-                     const $id2 = document.querySelector("#ciudades");
+                     const $id7 = document.querySelector("#ciudades");
 
 
  	      		     $("#ciudades").empty();
@@ -668,7 +711,7 @@ $(document).on('change', '#departamentos', function(event) {
                                     option = document.createElement("option");
                                     option.value = value.id;
                                     option.text = value.nombre;
-                                    $id2.appendChild(option);
+                                    $id7.appendChild(option);
  	      		      });
 
 
@@ -683,6 +726,53 @@ $(document).on('change', '#departamentos', function(event) {
 	   	    	}
 
 	     });
+
+// AJAX DE MUNICIPIOS
+
+
+
+$.ajax({
+	           url: '/buscarMunicipios/',
+	            data : {Departamento:Departamento},
+	           type: 'GET',
+	           dataType : 'json',
+
+	  		success: function (respuesta) {
+			alert("regrese de buscar municipios " + respuesta );
+
+	  		   var options = '<option value="=================="></option>';
+
+	  		  var dato = JSON.parse(respuesta);
+
+
+                     const $id3 = document.querySelector("#municipios");
+
+
+ 	      		     $("#municipios").empty();
+
+
+	                 $.each(dato, function(key,value) {
+                                    options +='<option value="' + value.id + '">' + value.nombre + '</option>';
+                                    option = document.createElement("option");
+                                    option.value = value.id;
+                                    option.text = value.nombre;
+                                    $id3.appendChild(option);
+ 	      		      });
+
+
+
+
+
+                    },
+	   		    error: function (request, status, error) {
+
+	document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
+
+	   	    	}
+
+	     });
+
+
 });
 
 
@@ -971,21 +1061,21 @@ $(document).on('change', '#busSubServicioT', function(event) {
 
 $(document).on('change', '#busSubServicio2', function(event) {
 
-        alert("Entre a busSubServicio2");
+       // alert("Entre a busSubServicio2");
 
         var select = document.getElementById('busServicio2'); /*Obtener el SELECT */
 
         var serv = select.options[select.selectedIndex].value; /* Obtener el valor */
 
-        alert("servicio = " + serv);
+//        alert("servicio = " + serv);
 
         var subServ =   $(this).val();
 
-        alert("subServ = " + subServ);
+//        alert("subServ = " + subServ);
 
         var sede =  document.getElementById("sede").value;
 
-         alert("Sede = " + sede);
+//         alert("Sede = " + sede);
 //        alert("Entre para llamar a buscar SubServiciosTriage : " + subServ);
   //      alert("Entre para llamar a buscar Sede : " + sede);
 
@@ -1252,10 +1342,10 @@ function guardarAdmisionTriage()
 		success: function (respuesta)
 		        {
 		      
-       		alert ("REGRESE DE GUARDAR Admision triage ");
-
+       		
 		 $('#crearAdmTriage').modal('hide');
-	      			document.getElementById("mensajesError").innerHTML = respuesta;
+	      	document.getElementById("mensajesError").innerHTML = respuesta['Mensaje'];
+		window.location.reload();
 
 
               },

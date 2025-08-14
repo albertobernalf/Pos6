@@ -19,7 +19,7 @@ from django.utils.timezone import now
 from django.db.models import Avg, Max, Min
 #from .forms import historiaForm, historiaExamenesForm
 from datetime import datetime
-from clinico.models import Historia, HistoriaExamenes, Examenes, TiposExamen, EspecialidadesMedicos, Medicos, Especialidades, TiposFolio, CausasExterna, EstadoExamenes, HistorialAntecedentes, HistorialDiagnosticos, HistorialInterconsultas, EstadosInterconsulta, HistorialIncapacidades,  HistoriaSignosVitales, HistoriaRevisionSistemas, HistoriaMedicamentos
+from clinico.models import Historia, HistoriaExamenes, Examenes, TiposExamen, EspecialidadesMedicos, Medicos, Especialidades, TiposFolio, CausasExterna, EstadoExamenes, HistorialAntecedentes, HistorialDiagnosticos, HistorialInterconsultas, EstadosInterconsulta, HistorialIncapacidades,  HistoriaSignosVitales, HistoriaRevisionSistemas, HistoriaMedicamentos , Regimenes
 from sitios.models import Dependencias
 from planta.models import Planta
 from facturacion.models import Liquidacion, LiquidacionDetalle, Suministros, TiposSuministro
@@ -125,7 +125,7 @@ class PDFAtencionInicialUrgencias(FPDF):
         #self.rect(135.0, 29.0, 13.0, 3.0)  # Coordenadas x, y, ancho, alto
 
         #self.cell(15, 11, '527733', 0, 0, 'L')
-        self.cell(15, 11, self.ingresoId, 0, 0, 'L')
+        self.cell(15, 11, str(self.ingresoId), 0, 0, 'L')
         self.set_font('Times', 'B', 7)
         self.cell(10, 11, 'Fecha: ', 0, 0, 'L')
         self.set_font('Times', '', 7)
@@ -179,12 +179,13 @@ class PDFAtencionInicialUrgencias(FPDF):
 
 
 class PDFHojaAdmision(FPDF):
-    def __init__(self, tipoDocId, documentoId, consec,  *args, **kwargs):
+    def __init__(self, tipoDocId, documentoId, consec, ingresoId,  *args, **kwargs):
     #def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.tipoDocId = tipoDocId
         self.documentoId = documentoId
         self.consec = consec
+        self.ingresoId = ingresoId
 
 
     def header(self):
@@ -193,106 +194,6 @@ class PDFHojaAdmision(FPDF):
 
         ## CURSOR PARA LEER ENCABEZADO
         #
-        miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
-                                       password="123456")
-
-        curt = miConexiont.cursor()
-
-        comando = 'select ' + "'" + str('Paciente en trauma') + "'" + ' seInforma, substring(cast(current_timestamp as text),1,10) fecha , substring(cast(current_time as text), 1,5) as time,emp.nombre nombreEmpresa, substring(sed.nit,1,9) nit, substring(sed.nit,9,1) nitVerificacion, sed."codigoHabilitacion" habilita,emp.direccion direccionPrestador, emp.telefono telefonoPrestador, dep.nombre departamentoPrestador, dep."departamentoCodigoDian" codigoDepartamentoPrestador, mun.nombre municipioPrestador FROM facturacion_empresas emp INNER JOIN sitios_sedesclinica sed ON (sed.id=1) INNER JOIN sitios_departamentos dep ON (dep.id=emp.departamento_id) INNER JOIN sitios_municipios mun ON (mun.id = emp.municipio_id) WHERE emp. nombre like (' + "'" + str('%MEDICAL%') + "')"
-
-        curt.execute(comando)
-        print(comando)
-
-        historia = []
-
-        for seInforma, fecha, time, nombreEmpresa, nit, nitVerificacion, habilita, direccionPrestador, telefonoPrestador, departamentoPrestador, codigoDepartamentoPrestador, municipioPrestador in curt.fetchall():
-            historia.append(
-                {'seInforma': seInforma, 'fecha': fecha, 'time': time, 'nombreEmpresa': nombreEmpresa,
-                 'nit': nit, 'nitVerificacion': nitVerificacion, 'habilita': habilita,
-                 'direccionPrestador': direccionPrestador, 'telefonoPrestador': telefonoPrestador,
-                 'departamentoPrestador': departamentoPrestador,
-                 'codigoDepartamentoPrestador': codigoDepartamentoPrestador, 'municipioPrestador': municipioPrestador})
-
-        miConexiont.close()
-
-        ## FIN CURSOR
-
-        # Title
-        #
-        self.ln(4)
-        self.set_font('Times', 'B', 7)
-        self.cell(180, 1, 'ANEXO TECNICO No. 2345678', 0, 0, 'C')
-        self.ln(1)
-        self.cell(180, 11, 'INFORME DE LA ATENCION INICIAL DE URGENCIAS: ', 0, 0, 'C')
-        self.set_font('Times', '', 7)
-
-        # Define el ancho de línea
-        self.set_line_width(0.4)
-        # Dibuja el borde
-        self.rect(5.0, 18.0, 200.0, 180.0)  # Coordenadas x, y, ancho, alto
-        self.ln(3)
-        # Logo
-        self.image('C:/EntornosPython/Pos6/static/img/MedicalFinal.jpg', 7, 19, 11, 11)
-        # Arial bold 15
-        self.set_font('Times', 'B', 7)
-        self.ln(3)
-        self.cell(180, 11, 'MINISTERIO DE LA PROTECCION SOCIAL: ', 0, 0, 'C')
-        self.ln(3)
-        self.cell(180, 11, 'INFORME DE LA ATENCION INICIAL DE URGENCIAS: ', 0, 0, 'C')
-        self.ln(6)
-        self.set_font('Times', 'B', 7)
-        self.cell(80, 11, 'INFORMACION DEL PRESTADOR: ', 0, 0, 'L')
-
-        self.cell(45, 11, 'NUMERO DE ATENCION: ', 0, 0, 'L')
-        self.set_font('Times', '', 7)
-        self.set_line_width(0.3)
-        self.rect(135.0, 29.0, 13.0, 3.0)  # Coordenadas x, y, ancho, alto
-        self.cell(15, 11, '527733', 0, 0, 'L')
-        self.set_font('Times', 'B', 7)
-        self.cell(10, 11, 'Fecha: ', 0, 0, 'L')
-        self.set_font('Times', '', 7)
-        self.cell(25, 11, historia[0]['fecha'], 0, 0, 'L')
-        self.set_font('Times', 'B', 7)
-        self.cell(10, 11, 'Hora: ', 0, 0, 'L')
-        self.set_font('Times', '', 7)
-        self.cell(25, 11, historia[0]['time'], 0, 0, 'L')
-        self.ln(1)
-        self.set_line_width(0.3)
-        self.rect(5.0, 36.0, 100.0, 3.0)  # Coordenadas x, y, ancho, alto
-        self.cell(120, 23, historia[0]['nombreEmpresa'], 0, 0, 'L')
-        self.cell(25, 23, 'Nit: ', 0, 0, 'L')
-        self.cell(25, 23, 'X', 0, 0, 'L')
-        self.cell(20, 23, historia[0]['nit'], 0, 0, 'L')
-        self.cell(20, 23, historia[0]['nitVerificacion'], 0, 0, 'L')
-        self.cell(25, 23, 'CC', 0, 0, 'L')
-        self.cell(25, 23, 'Numero', 0, 0, 'L')
-        self.cell(25, 23, 'DV', 0, 0, 'L')
-        self.ln(3)
-        self.set_line_width(0.3)
-        self.rect(5.0, 39.0, 200.0, 6.0)  # Coordenadas x, y, ancho, alto
-
-        self.cell(25, 23, 'Codigo:', 0, 0, 'L')
-        self.cell(25, 23, historia[0]['habilita'], 0, 0, 'L')
-        self.cell(25, 23, 'Direccion Prestador:', 0, 0, 'L')
-        self.cell(25, 23, historia[0]['direccionPrestador'], 0, 0, 'L')
-        self.ln(3)
-        self.cell(25, 23, 'Telefono:', 0, 0, 'L')
-        self.cell(25, 23, historia[0]['telefonoPrestador'], 0, 0, 'L')
-        self.ln(3)
-        self.set_line_width(0.3)
-        self.rect(5.0, 45.0, 200.0, 3.0)  # Coordenadas x, y, ancho, alto
-        self.cell(25, 23, 'Indicativo:', 0, 0, 'L')
-        self.cell(25, 23, 'Numero:', 0, 0, 'L')
-        self.cell(25, 23, 'Departamento:', 0, 0, 'L')
-        self.cell(25, 23, historia[0]['departamentoPrestador'], 0, 0, 'L')
-        self.cell(25, 23, historia[0]['codigoDepartamentoPrestador'], 0, 0, 'L')
-        self.cell(25, 23, 'Municipio:', 0, 0, 'L')
-        self.cell(25, 23, historia[0]['municipioPrestador'], 0, 0, 'L')
-        self.ln(3)
-        self.cell(85, 23, 'Entidad a ala que se le informa (Pagador):', 0, 0, 'L')
-        self.cell(25, 23, historia[0]['seInforma'], 0, 0, 'L')
-        self.cell(25, 23, 'Codigo):', 0, 0, 'L')
-        self.ln(3)
 
         # Line break
         self.ln(10)
@@ -665,9 +566,9 @@ def ImprimirAtencionInicialUrgencias(ingresoId2):
     return JsonResponse({'success': True, 'message': 'Atencion Inicial de Urgencias impresa!'})
 
 
-def ImprimirHojaAdmision(request):
+def ImprimirHojaAdmision(ingresoId):
     # Instantiation of inherited class
-    ingresoId = request.POST["ingresoId"]
+
     print("ingresoId = ", ingresoId)
 
     print("Entre ImprimirHojaAdmision ", ingresoId)

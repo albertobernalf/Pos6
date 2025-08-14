@@ -556,12 +556,12 @@ Ambulatorios:  <span id="amb" name="amb" style='color:red'>{{Ambulatorios}} </sp
 
                                 {% endif %}
 
-                                <div class="row row-cols-10 mt-1">
+                                <div class="row row-cols-10 ">
 
 				      <div class="col">
                                         <label for="empresaC" class="col-sm-1 col-form-label col-form-label-sm">Empresa:</label>
-                                        <div class="col-sm-8">
-                                            <select autofocus   class="select-css h-40 w-20" tabindex= "0" 
+                                        <div class="col">
+                                            <select autofocus   class="select-css " tabindex= "0" 
                                                     aria-label="" id="empresaC"
                                                     name="empresaC" required>
                                                 {% for empresas in Empresas %}
@@ -576,8 +576,8 @@ Ambulatorios:  <span id="amb" name="amb" style='color:red'>{{Ambulatorios}} </sp
                                     <div class="col">
                                         <label for="busServicio22"
                                                class="col-sm-1 col-form-label col-form-label-sm">Servicio:</label>
-                                        <div class="col-sm-8">
-                                            <select class="select-css h-40 w-20"
+                                        <div class="col">
+                                            <select class="select-css "
                                                     aria-label="" id="busServicio22" tabindex= "0"
                                                     name="busServicio22" required>
                                                 {% for servicios in Servicios %}
@@ -588,7 +588,7 @@ Ambulatorios:  <span id="amb" name="amb" style='color:red'>{{Ambulatorios}} </sp
                                     </div>
                                     <div class="col">
                                         <label for="busSubServicio22" class="col-sm-1 control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SubServicios:</label>
-                                        <div class="col-sm-8">
+                                        <div class="col">
                                             <select class="select-css h-40 w-20" id="busSubServicio22"  tabindex= "0"
                                                     name="busSubServicio22"
                                                     required>
@@ -601,11 +601,10 @@ Ambulatorios:  <span id="amb" name="amb" style='color:red'>{{Ambulatorios}} </sp
                                     </div>
 
                                     <div class="col">
+                                       <label for="dependenciasIngreso22"  class="col-sm-1 control-label">Dependencias:</label>
 
-                                        <label for="dependenciasIngreso22"  class="col-sm-1 control-label">Dependencias:</label>
-
-                                        <div class="col-sm-8">
-                                            <select class="select-css h-40 w-20"
+                                        <div class="col">
+                                            <select class="select-css "
                                                     aria-label="" id="dependenciasIngreso22" tabindex= "0"
                                                     name="dependenciasIngreso22"
                                                     required>
@@ -619,8 +618,9 @@ Ambulatorios:  <span id="amb" name="amb" style='color:red'>{{Ambulatorios}} </sp
 
 				  <div class="col">
                                         <label for="serviciosAdministrativos" class="col-sm-1 control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SeviciosAdmon:</label>
-                                        <div class="col-sm-8">
-                                            <select class="select-css h-40 w-20" id="serviciosAdministrativos"  tabindex= "0"
+                                        <div class="col">
+                                            <select class="select-css h-40 w-20"
+                                                    aria-label="" id="serviciosAdministrativos"  tabindex= "0"
                                                     name="serviciosAdministrativos"
                                                     required>
                                                 {% for serviciosAdministrativos in ServiciosAdministrativos %}
@@ -636,7 +636,7 @@ Ambulatorios:  <span id="amb" name="amb" style='color:red'>{{Ambulatorios}} </sp
                                     <div class="col">
 
                                         <label for="tipoDoc22" class="col-sm-1 control-label">TipoDoc:</label>
-                                        <div class="col-sm-8">
+                                        <div class="col">
                                             <select class="select-css h-40 w-20" id="tipoDoc22"  tabindex= "0"
                                                     name="tipoDoc22" required>
                                                 {% for tiposDocumento in TiposDocumento %}
@@ -659,7 +659,7 @@ Ambulatorios:  <span id="amb" name="amb" style='color:red'>{{Ambulatorios}} </sp
                                     <div class="col">
 
                                         <label for="dxIngreso" class="col-sm-1 control-label">Diagnosticos:</label>
-                                        <div class="col-sm-8">
+                                        <div class="col">
                                             <select class="form-select  h-40 w-10" aria-label="" id="dxIngreso" tabindex= "0"
                                                     name="dxIngreso" required>
                                                 {% for diagnosticos in Diagnosticos %}
@@ -674,7 +674,7 @@ Ambulatorios:  <span id="amb" name="amb" style='color:red'>{{Ambulatorios}} </sp
                                         <label for="busEspecialidad" class="col-sm-1 control-label">Especialidad:
                                         </label>
 
-                                        <div class="col-sm-8">
+                                        <div class="col">
                                             <select class="form-select" aria-label="" id="busEspecialidad" tabindex= "0"
                                                     name="busEspecialidad"
                                                     required>
@@ -692,24 +692,11 @@ Ambulatorios:  <span id="amb" name="amb" style='color:red'>{{Ambulatorios}} </sp
 
                                         <label for="medicoIngresoPP" class="col-sm-1 control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Medico:
                                             &nbsp;&nbsp;&nbsp;</label>
-                                        <div class="col-sm-8">
+                                        <div class="col">
                                             <select class="form-select " aria-label="" id="medicoIngresoPP" tabindex= "0"
                                                     name="medicoIngresoPP" required>
                                                 {% for medicos in Medicos %}
                                                 <option value="{{medicos.id}}"> {{medicos.nombre}}</option>
-                                                {% endfor %}
-                                            </select>
-                                        </div>
-
-                                    </div>
-                                    <div class="col">
-
-                                        <label for="viasIngreso" class="col-sm-1 control-label">ViasDeIngreso:</label>
-                                        <div class="col-sm-4">
-                                            <select class="select-css" tabindex= "0"
-                                                    name="viasIngreso" required>
-                                                {% for viasIngreso in ViasIngreso %}
-                                                <option value="{{viasIngreso.id}}"> {{viasIngreso.nombre}}</option>
                                                 {% endfor %}
                                             </select>
                                         </div>
@@ -720,12 +707,27 @@ Ambulatorios:  <span id="amb" name="amb" style='color:red'>{{Ambulatorios}} </sp
 
                                 <div class="row row-cols-10 mt-1">
 
+                                    <div class="col">
+
+                                        <label for="viasIngreso" class="col-sm-1 control-label">ViasDeIngreso:</label>
+                                        <div class="col">
+                                            <select class="select-css" tabindex= "0"
+                                                    name="viasIngreso" required>
+                                                {% for viasIngreso in ViasIngreso %}
+                                                <option value="{{viasIngreso.id}}"> {{viasIngreso.nombre}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+
+                                    </div>
+
+
 
                                     <div class="col">
                                         <label for="causasExterna" class="col-sm-1 control-label">CausaExterna:
                                         </label>
 
-                                        <div class="col-sm-8">
+                                        <div class="col">
                                             <select class="form-select  h-40 w-20" aria-label="" id="causasExterna" tabindex= "0"
                                                     name="causasExterna"
                                                     required>
@@ -739,7 +741,7 @@ Ambulatorios:  <span id="amb" name="amb" style='color:red'>{{Ambulatorios}} </sp
                                     <div class="col">
                                         <label for="regimenes" class="col-sm-1 control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Regimen:
                                             &nbsp;&nbsp;&nbsp;</label>
-                                        <div class="col-sm-8">
+                                        <div class="col">
                                             <select class="form-select  h-40 w-20" aria-label="" id="regimenes" tabindex= "0"
                                                     name="regimenes" required>
                                                 {% for regimenes in Regimenes %}
@@ -772,7 +774,7 @@ Ambulatorios:  <span id="amb" name="amb" style='color:red'>{{Ambulatorios}} </sp
                                     <div class="col">
                                         <label for="ips" class="col-sm-1 col-form-label col-form-label-sm">IPS:
                                             &nbsp;&nbsp;&nbsp;</label>
-                                        <div class="col-sm-8">
+                                        <div class="col">
                                             <select class="form-select  h-40 w-20" aria-label="" id="ips" name="ips" tabindex= "0"
                                                     required>
                                                 {% for ips in Ips %}
@@ -785,7 +787,7 @@ Ambulatorios:  <span id="amb" name="amb" style='color:red'>{{Ambulatorios}} </sp
 
                                     <div class="col">
                                         <label for="numManilla" class="col-sm-2 col-form-label col-form-label-sm">NumeroManilla:&nbsp;&nbsp;</label>
-                                        <div class="col-sm-8">
+                                        <div class="col">
                                             <input type="text" class="form-control form-control-sm" tabindex= "0" id="numManilla"
                                                    name="numManilla" value="">
                                         </div>
@@ -799,7 +801,7 @@ Ambulatorios:  <span id="amb" name="amb" style='color:red'>{{Ambulatorios}} </sp
 
                                                                 <label for="ripsDestinoUsuarioEgresoRecienNacido" class="col-sm-1 col-form-label col-form-label-sm">DestEgreso:
                                             &nbsp;&nbsp;&nbsp;</label>
-                                        <div class="col-sm-8">
+                                        <div class="col">
                                             <select class="form-select  h-40 w-20" aria-label="" id="ripsDestinoUsuarioEgresoRecienNacido" tabindex= "0" name="ripsDestinoUsuarioEgresoRecienNacido"
                                                     required>
                                                 {% for ripsDestinoUsuarioEgresoRecienNacido in RipsDestinoUsuarioEgresoRecienNacido %}
@@ -813,7 +815,7 @@ Ambulatorios:  <span id="amb" name="amb" style='color:red'>{{Ambulatorios}} </sp
 
                                     <div class="col">
                                          <label for="ripsEdadGestacional" class="col-sm-2 col-form-label col-form-label-sm">RN Edad Gestacional:&nbsp;&nbsp;</label>
-                                        <div class="col-sm-8">
+                                        <div class="col">
                                             <input type="text" class="form-control form-control-sm" id="ripsEdadGestacional" tabindex= "0"
                                                    name="ripsEdadGestacional" value="">
                                         </div>
@@ -826,7 +828,7 @@ Ambulatorios:  <span id="amb" name="amb" style='color:red'>{{Ambulatorios}} </sp
                                 <div class="row row-cols-11 mt-1">
                                     <div class="col">
                                           <label for="ripsNumConsultasCPrenatal" class="col-sm-2 col-form-label col-form-label-sm">NumeroConsultaPrenatal:&nbsp;&nbsp;</label>
-                                        <div class="col-sm-8">
+                                        <div class="col">
                                             <input type="text" class="form-control form-control-sm" id="ripsNumConsultasCPrenatal" tabindex= "0"
                                                    name="ripsNumConsultasCPrenatal" value="">
                                         </div>
@@ -834,7 +836,7 @@ Ambulatorios:  <span id="amb" name="amb" style='color:red'>{{Ambulatorios}} </sp
 
                                         <div class="col">
                                                 <label for="ripsPesoRecienNacido" class="col-sm-2 col-form-label col-form-label-sm">RN peso:&nbsp;&nbsp;</label>
-                                        <div class="col-sm-8">
+                                        <div class="col">
                                             <input type="text" class="form-control form-control-sm" id="ripsPesoRecienNacido" tabindex= "0"
                                                    name="ripsPesoRecienNacido" value="">
                                         </div>
@@ -842,7 +844,7 @@ Ambulatorios:  <span id="amb" name="amb" style='color:red'>{{Ambulatorios}} </sp
 
                                         <div class="col">
                                              <label for="ripsRecienNacido" class="col-sm-2 col-form-label col-form-label-sm">Recien Nacido:&nbsp;&nbsp;</label>
-                                        <div class="col-sm-8">
+                                        <div class="col8">
                                             <input type="text" class="form-control form-control-sm" id="ripsRecienNacido" tabindex= "0"
                                                    name="ripsRecienNacido" value="">
                                         </div>
@@ -851,7 +853,7 @@ Ambulatorios:  <span id="amb" name="amb" style='color:red'>{{Ambulatorios}} </sp
                                         <div class="col">
                                             <label for="ripsCausaMotivoAtencion" class="col-sm-1 col-form-label col-form-label-sm">CausaAtencion:
                                             &nbsp;&nbsp;&nbsp;</label>
-                                        <div class="col-sm-8">
+                                        <div class="col">
                                             <select class="form-select  h-40 w-20" aria-label="" id="ripsCausaMotivoAtencion" tabindex= "0" name="ripsCausaMotivoAtencion"
                                                     required>
                                                 {% for ripsCausaMotivoAtencion in RipsCausaMotivoAtencion %}
@@ -865,7 +867,7 @@ Ambulatorios:  <span id="amb" name="amb" style='color:red'>{{Ambulatorios}} </sp
                                         <div class="col">
                                               <label for="ripsCondicionDestinoUsuarioEgreso" class="col-sm-1 col-form-label col-form-label-sm">UsuarioDestinoegreso:
                                             &nbsp;&nbsp;&nbsp;</label>
-                                        <div class="col-sm-8">
+                                        <div class="col">
                                             <select class="form-select  h-40 w-20" aria-label="" id="ripsCondicionDestinoUsuarioEgreso" tabindex= "0" name="ripsCondicionDestinoUsuarioEgreso"
                                                     required>
                                                 {% for ripsCondicionDestinoUsuarioEgreso in RipsCondicionDestinoUsuarioEgreso %}
@@ -878,7 +880,7 @@ Ambulatorios:  <span id="amb" name="amb" style='color:red'>{{Ambulatorios}} </sp
                                         <div class="col">
                                                <label for="ripsGrupoServicios" class="col-sm-1 col-form-label col-form-label-sm">GrupoDeServicios:
                                             &nbsp;&nbsp;&nbsp;</label>
-                                        <div class="col-sm-8">
+                                        <div class="col">
                                             <select class="form-select  h-40 w-20" aria-label="" id="ripsGrupoServicios" tabindex= "0" name="ripsGrupoServicios"
                                                     required>
                                                 {% for ripsGrupoServicios in RipsGrupoServicios %}
@@ -891,7 +893,7 @@ Ambulatorios:  <span id="amb" name="amb" style='color:red'>{{Ambulatorios}} </sp
                                         <div class="col">
                                                        <label for="ripsViaIngresoServicioSalud" class="col-sm-1 col-form-label col-form-label-sm">ViaIngreso:
                                             &nbsp;&nbsp;&nbsp;</label>
-                                        <div class="col-sm-8">
+                                        <div class="col">
                                             <select class="form-select  h-40 w-20" aria-label="" id="ripsViaIngresoServicioSalud" tabindex= "0" name="ripsViaIngresoServicioSalud"
                                                     required>
                                                 {% for ripsViaIngresoServicioSalud in RipsViaIngresoServicioSalud %}
@@ -904,7 +906,7 @@ Ambulatorios:  <span id="amb" name="amb" style='color:red'>{{Ambulatorios}} </sp
                                         <div class="col">
                                                        <label for="ripsmodalidadGrupoServicioTecSal" class="col-sm-1 col-form-label col-form-label-sm">ModalidadGrupoServ:
                                             &nbsp;&nbsp;&nbsp;</label>
-                                        <div class="col-sm-8">
+                                        <div class="col">
                                             <select class="form-select  h-40 w-20" aria-label="" id="ripsmodalidadGrupoServicioTecSal" tabindex= "0"  name="ripsmodalidadGrupoServicioTecSal"
                                                     required>
                                                 {% for ripsmodalidadGrupoServicioTecSal in RipsmodalidadGrupoServicioTecSal %}
@@ -917,7 +919,7 @@ Ambulatorios:  <span id="amb" name="amb" style='color:red'>{{Ambulatorios}} </sp
 					<div class="col">
                                                        <label for="ripsFinalidadConsulta" class="col-sm-1 col-form-label col-form-label-sm">FinalidadConsulta:
                                             &nbsp;&nbsp;&nbsp;</label>
-                                        <div class="col-sm-8">
+                                        <div class="col">
                                             <select class="form-select  h-40 w-20" aria-label="" id="ripsFinalidadConsulta" tabindex= "0" name="ripsFinalidadConsulta"
                                                     required>
                                                 {% for ripsFinalidadConsulta in RipsFinalidadConsulta %}
@@ -931,7 +933,7 @@ Ambulatorios:  <span id="amb" name="amb" style='color:red'>{{Ambulatorios}} </sp
                                     <div class="col">
                                                          <label for="ripsServiciosIng" class="col-sm-1 col-form-label col-form-label-sm">ServicioIngreso:
                                             &nbsp;&nbsp;&nbsp;</label>
-                                        <div class="col-sm-8">
+                                        <div class="col">
                                             <select class="form-select  h-40 w-20" aria-label="" id="ripsServiciosIng" tabindex= "0" name="ripsServiciosIng"
                                                     required>
                                                 {% for ripsServiciosIng in RipsServiciosIng %}
@@ -943,7 +945,7 @@ Ambulatorios:  <span id="amb" name="amb" style='color:red'>{{Ambulatorios}} </sp
 
                                         <div class="col">
 				  <label for="guardarAdmision" class="col-sm-1 col-form-label col-form-label-sm"></label>
-					<div class="col-sm-8">
+					<div class="col">
                                             <input type="submit" id="guardarAdmision" name="guardarAdmision" value="Guardar Admision"></input>
                                                                      </div>
                                     </div>
@@ -978,7 +980,7 @@ Ambulatorios:  <span id="amb" name="amb" style='color:red'>{{Ambulatorios}} </sp
                         <div class="modal fade" id="usuariosModal" tabindex="-1"
                              role="dialog" aria-labelledby="exampleModalLabel"
                              aria-hidden="true" data-bs-backdrop="static">
-                            <div class="modal-dialog modal-lg modal-dialog-scrollable" modal-dialog-center role="document">
+                            <div class="modal-dialog modal-fullscreen modal-dialog-scrollable" modal-dialog-center role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                        <div  class="modal-title" id="exampleModalLabel" style="text-align:center;"><font gont-family="Times New roman" size=5">Crear o actualizar usuario</font> </div>

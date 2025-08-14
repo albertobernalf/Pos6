@@ -353,13 +353,13 @@ th ,tr{
         <div class="container">
             <div class="card">
                 <div class="myForm">
-                    <form id="AdmisionTriage" method="POST" onsubmit="guardarAdmisionTriage()" >
+                    <form id="AdmisionTriage" method="POST"  >
                         <div class="modal fade" id="crearAdmTriage" tabindex="-1" role="dialog"
                              aria-labelledby="exampleModalLabel1" aria-hidden="true" data-bs-backdrop="static">
                             <div class="modal-dialog  modal-fullscreen  modal-dialog-scrollable modal-dialog-center" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                       <div  class="modal-title" id="exampleModalLabel" style="text-align:center;"><font gont-family="Times New roman" size=5">Creacion Admision desde Triage</font> </div>
+                                       <div  class="modal-title" id="exampleModalLabel" style="text-align:center;"><font gont-family="Times New roman" size=3"><center>Creacion Admision desde Triage</center></font> </div>
                                         <button type="button" class="close" data-bs-dismiss="modal"  aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
@@ -537,8 +537,7 @@ th ,tr{
                                                 </div>
 
 
-                                            <div class="row row-cols-8 mt-3">
-
+                                            
                                                 <div class="col">
                                                     <label for="regimenes"
                                                            class="col-sm-10 col-form-label col-form-label-sm">Regimen:</label>
@@ -598,7 +597,9 @@ th ,tr{
                                                            name="numManilla">
                                                 </div>
 
-                                                I N F O R M A C I O N RIPS:
+                                               	  <div class="col">
+					 I N F O R M A C I O N RIPS:
+				</div>
 
                                                 <div class="col">
 
@@ -632,6 +633,7 @@ th ,tr{
                                             </div>
 
                                             <div class="row row-cols-8 mt-3">
+			      
                                                 <div class="col">
                                                     <label for="ripsNumConsultasCPrenatal"
                                                            class="col-sm-7 col-form-label col-form-label-sm">NumeroConsultaPrenatal:&nbsp;&nbsp;</label>
@@ -763,8 +765,8 @@ th ,tr{
 
                                  	  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar   </button>
                                    
-				<input type="submit" class="btn btn-primary" value="save">
-                          <!--     <input type="button" class="btn btn-primary" value="save"  onclick="guardarAdmisionTriage()">  -->
+			<!-- 	<input type="submit" class="btn btn-primary" value="save"> -->
+                               <input type="button" class="btn btn-primary" value="save"  onclick="guardarAdmisionTriage()">  
                                   
                                 </div>
                             </div>
@@ -805,8 +807,8 @@ th ,tr{
                                 <input type="hidden" id="sede" name="sede" value="{{Sede}}">
                                 <input type="hidden" id="Servicio" name="Servicio" value="{{Servicio}}">
                                 <input type="hidden" id="documento" name="documento" value="{{Documento}}">
-                                <input type="text" id="username" name="username" value="{{Username}}">
-                                <input type="text" id="username_id" name="username_id" value="{{Username_id}}">
+                                <input type="hidden" id="username" name="username" value="{{Username}}">
+                                <input type="hidden" id="username_id" name="username_id" value="{{Username_id}}">
                                 <input type="hidden" id="Profesional" name="Profesional" value="{{Profesional}}">
                                 <input type="hidden" id="nombreSede" name="nombreSede" value="{{NombreSede}}">
                                 <input type="hidden" id="escogeModulo" name="escogeModulo" value="{{EscogeModulo}}">
@@ -821,13 +823,15 @@ th ,tr{
                                 <div class="row justify-content-center">
                                     <div class="form-row">
                                         <div class="col">
-                                            <label for="busServicioX" class="col-sm-1 col-form-label col-form-label-sm">Servicio:</label>
+						<div class="col-sm-8">					
+                                            <label for="busServicioX" class="col-sm-1 control-label">Servicio:</label>
                                             <select class="form-select  h-10 w-100 form-control form-control-sm"
                                                     aria-label="" id="busServicioX" name="busServicioX">
                                                 {% for servicios in Servicios %}
                                                 <option value="{{servicios.id}}"> {{servicios.nombre}}</option>
                                                 {% endfor %}
                                             </select>
+                                        	</div>
                                         </div>
 
                                         <div class="col">
@@ -874,9 +878,9 @@ th ,tr{
                                         </div>
 
 				  <div class="col">
-                                        <label for="serviciosAdministrativos" class="col-sm-1 control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SeviciosAdmon:</label>
+                                        <label for="serviciosAdministrativos" class="col-sm-1 control-label">SeviciosAdmon:</label>
                                         <div class="col-sm-8">
-                                            <select class="select-css h-40 w-20" id="serviciosAdministrativos"  tabindex= "0"
+                                            <select class="select-css h-40 w-10" id="serviciosAdministrativos"  tabindex= "0"
                                                     name="serviciosAdministrativos"
                                                     required>
                                                 {% for serviciosAdministrativos in ServiciosAdministrativos %}
@@ -977,6 +981,8 @@ th ,tr{
                                     </div>
 
                                     <div class="form-row">
+					<div class="col">
+					</div>
                                         <div class="col">
                                             <label class="col-sm-1 control-label" for="clasificacionTriage">ClasificacionTriage:</label>
                                             <select class="form-select  h-10 w-50 form-control form-control-sm"
@@ -988,11 +994,11 @@ th ,tr{
                                             </select>
                                         </div>
                                         <div class="col">
-                                            <center>
+
 
                                                 <input type="submit" id="guardarTriage" name="guardarTriage"
-                                                       value="GUARDAR"></input>
-                                            </center>
+                                                       value="Guardar Informacion"></input>
+
                                         </div>
                                     </div>
 
@@ -1016,12 +1022,6 @@ th ,tr{
 
 
 
-
-
-
-
-
-
 <!-- FIN Espacio para Modales  -->
 
         <!-- Creacion Modal usuario  para Triage-->
@@ -1040,7 +1040,7 @@ th ,tr{
                                     <div class="modal-body">
                                         <div class="row row-cols-8 mt-3">
                                             <div class="col">
-                                                <label for="tipoDocTriageModal"  class="col-sm-10 col-form-label col-form-label-sm">TipoDoc:</label>
+                                                <label for="tipoDocTriageModal"  class="col-sm-10 col-form-label col-form-label-sm"></label>
                                                 <select class="form-select  h-10 w-100 form-control form-control-sm" aria-label="" id="tipoDocTriageModal" name="tipoDocTriageModal">
                                                     {% for tiposDoc in TiposDoc %}
                                                     <option value="{{tiposDoc.id}}"> {{tiposDoc.nombre}}
@@ -1055,36 +1055,32 @@ th ,tr{
 
                                             <div class="col">
                                                 <label for="nombre" class="col-form-label"> Paciente :</label>
-                                                <input type="text" class="form-control" id="nombre" name="nombre"  value="">
+                                                <input type="text" class="form-control" id="nombre" name="nombre"  size="40" value="">
                                             </div>
 					 <div class="col">
-                                            <label for="primerNombre" class="col-sm-6 control-label">Nombre_1 :</label>
+                                            <label for="primerNombre" class="col-form-label">Nombre_1 :</label>
 
-                                            <input  type="text" class="form-control form-control-sm" id="primerNombre" tabindex="1" 
+                                            <input  type="text" class="form-control form-control-sm" id="primerNombre" size="20" 
                                                    name="primerNombre"  autofocus  = ""  required>
                                        </div>
 					 <div class="col">
-                                            <label for="segundoNombre" class="col-sm-6 control-label">Nombre_2:</label>
+                                            <label for="segundoNombre" class="col-form-label">Nombre_2:</label>
 
-                                            <input  type="text" class="form-control form-control-sm" id="segundoNombre" tabindex="1" 
+                                            <input  type="text" class="form-control form-control-sm" id="segundoNombre" size="20"  
                                                    name="segundoNombre"  autofocus  = ""  required>
                                        </div>
 					 <div class="col">
-                                            <label for="primerApellido" class="col-sm-6 control-label">Apellido_1:</label>
+                                            <label for="primerApellido" class="col-form-label">Apellido_1:</label>
 
-                                            <input  type="text" class="form-control form-control-sm" id="primerApellido" tabindex="1" 
+                                            <input  type="text" class="form-control form-control-sm" id="primerApellido" size="20"  
                                                    name="primerApellido"  autofocus  = ""  required>
                                        </div>
 				 <div class="col">
-                                            <label for="segundoApellido" class="col-sm-6 control-label">Apellido_2:</label>
+                                            <label for="segundoApellido" class="col-form-label">Apellido_2:</label>
 
-                                            <input  type="text" class="form-control form-control-sm" id="segundoApellido" tabindex="1" 
+                                            <input  type="text" class="form-control form-control-sm" id="segundoApellido" size="20" 
                                                    name="segundoApellido"  autofocus  = ""  required>
                                        </div>
-
-
-
-
 
                                             <div class="col">
                                                 <label for="genero" class="col-form-label">Genero:</label>
@@ -1125,15 +1121,6 @@ th ,tr{
                                         <div class="row row-cols-8 mt-3">
 
                                             <div class="col">
-                                                <label for="localidades" class="col-form-label">Localidad:</label>
-                                                <select class="form-select  h-10 w-100 form-control form-control-sm" id="localidades" name="localidades" required>
-                                                    {% for localidades in Localidades %}
-                                                    <option value="{{localidades.id}}"> {{localidades.nombre}}
-                                                    </option>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-                                            <div class="col">
                                                 <label for="ciudades" class="col-form-label">Ciudad:</label>
                                                 <select class="form-select  h-10 w-100 form-control form-control-sm"  id="ciudades" name="ciudades" required>
                                                     {% for ciudades in Ciudades %}
@@ -1143,6 +1130,16 @@ th ,tr{
                                                 </select>
                                             </div>
 
+
+                                            <div class="col">
+                                                <label for="localidades" class="col-form-label">Localidad:</label>
+                                                <select class="form-select  h-10 w-100 form-control form-control-sm" id="localidades" name="localidades" required>
+                                                    {% for localidades in Localidades %}
+                                                    <option value="{{localidades.id}}"> {{localidades.nombre}}
+                                                    </option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
                                             <div class="col">
                                                 <label for="direccion" class="col-form-label">Direccion:</label>
                                                 <input type="text" class="form-control" id="direccion" name="direccion" value="" required>
@@ -1232,7 +1229,7 @@ th ,tr{
 
 {% block mensajeria %}
 <div class="marco">
-     <span id="mensajes" name="mensajes" style= "color:blue; font-size:18px; line-height:35px; font-family: Calibri;" > </span>
+     <span id="mensajes" name="mensajes" style= "color:blue; font-size:18px; line-height:35px; font-family: Calibri;" >{{Mensajes}} </span>
      <span id="mensajesError" name="mensajesError" style= "color:red; font-size:18px; line-height:35px; font-family: Calibri;" > </span>
 
 </div>
