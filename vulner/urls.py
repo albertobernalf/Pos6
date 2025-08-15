@@ -45,6 +45,8 @@ from farmacia import views as viewsFarmacia
 from enfermeria import views as viewsEnfermeria
 
 from autorizaciones import views as viewsAutorizaciones
+from autorizaciones import viewsReportes as viewsAutorizacionesReportes
+
 #from mecanicosPacientes import views as viewsmecanicosPacientes
 
 
@@ -205,7 +207,7 @@ urlpatterns = [
     path('buscarMunicipios/', viewsTriage.buscarMunicipios),
     path('buscarCiudades/', viewsTriage.buscarCiudades),
     path('buscarLocalidades/', viewsTriage.buscarLocalidades),
-
+    path('imprimirTriage/', viewsTriageReportes.ImprimirTriage),
     # Apoyo Terapeutico
 
     path('load_dataApoyoTerapeutico/<str:data>', viewsApoyoTerapeutico.load_dataApoyoTerapeutico, name='loaddataApoyoTerapeutico'),
@@ -271,7 +273,7 @@ urlpatterns = [
     path('load_dataAutorizacionesDetalle/<str:data>', viewsAutorizaciones.load_dataAutorizacionesDetalle, name='loaddataAutorizacionesDetalle'),
     path('actualizarAutorizacionDetalle/', viewsAutorizaciones.ActualizarAutorizacionDetalle, name='actualizarAutorizacionDetalle'),
     path('leerDetalleAutorizacion/', viewsAutorizaciones.LeerDetalleAutorizacion,  name='LeerDetalleAutorizacion'),
-
+    path('imprimirAutorizaciones/', viewsAutorizacionesReportes.ImprimirAutorizaciones),
     # Cartera - Glosas
 
     path('load_dataGlosas/<str:data>', viewsCartera.load_dataGlosas, name='loaddataGlosas'),

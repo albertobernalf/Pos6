@@ -1,66 +1,74 @@
-﻿
--- delete from clinico_historiaresultados; -- ok
--- delete from clinico_historiaexamenes;  -- ok 64
-
--- delete from facturacion_refacturacion; -- ok 2
--- delete from facturacion_facturaciondetalle; -- ok 65
--- delete from facturacion_liquidaciondetalle; -- ok 52
- -- delete from facturacion_liquidacion; -- ok 8
-
-
-
-
-
--- delete from clinico_historialantecedentes; -- ok 4
--- delete from clinico_historialdiagnosticos; -- ok 129
--- delete from clinico_historialincapacidades; -- ok 1
--- delete from clinico_historialinterconsultas; -- ok 0
--- delete from clinico_historiamedicamentos; -- ok 29
--- delete from clinico_historiaoxigeno; -- ok 0
--- delete from clinico_historiarevisionsistemas; --ok 0
--- delete from clinico_historiasignosvitales; --ok 0
--- delete from clinico_historiarevisionsistemas; --ok 0
-
-delete from autorizaciones_autorizaciones; -- ok 7
-delete from autorizaciones_autorizacionesdetalle;  -- ok 7
--- delete from clinico_historia; --ok 98
--- delete from sitios_historialdependencias; --ok 16
-
--- update sitios_dependencias set "tipoDoc_id" = null, documento_id=null,consec = null,"fechaLiberacion"=null,"fechaOcupacion"=null,disponibilidad='L' --ok
-delete from cartera_pagosfacturas;  -- ok 7
--- delete from cartera_pagos; --ok 14
- 
--- delete from admisiones_furips; --ok 0
--- delete from admisiones_ingresos; -- ok 10
--- delete from triage_triage - ok 1
--- delete from facturacion_conveniospacienteingresos; -- ok 11
+﻿delete from clinico_historiaresultados; 
+delete from clinico_historiaexamenes;   
+delete from facturacion_refacturacion;  
+delete from facturacion_facturaciondetalle;  
+delete from facturacion_liquidaciondetalle;  
+delete from facturacion_liquidacion;  
+delete from clinico_historialantecedentes;  
+delete from clinico_historialdiagnosticos;  
+delete from clinico_historialincapacidades;  
+delete from clinico_historialinterconsultas;  
+delete from clinico_historiamedicamentos;  
+delete from clinico_historiaoxigeno;  
+delete from clinico_historiarevisionsistemas;  
+delete from clinico_historiasignosvitales;  
+delete from clinico_historiarevisionsistemas;  
+delete from autorizaciones_autorizaciones;  
+delete from autorizaciones_autorizacionesdetalle;   
+delete from clinico_historia;  
+delete from sitios_historialdependencias;  
+update sitios_dependencias set "tipoDoc_id" = null, documento_id=null,consec = null,"fechaLiberacion"=null,"fechaOcupacion"=null,disponibilidad='L' 
+delete from cartera_pagosfacturas;   
+delete from cartera_pagos;  
+delete from admisiones_furips;  
+delete from admisiones_ingresos;  
+delete from triage_triage - ok 
+delete from autorizaciones_autorizacionesdetalle;
+delete from autorizaciones_autorizacionescirugias;
+delete from autorizaciones_autorizaciones;
+delete from cartera_
+delete from cartera_
+delete from cartera_
+delete from cartera_
+delete from cartera_
+delete from facturacion_conveniospacienteingresos;  
 delete from facturacion_liquidaciondetalle;
 delete from facturacion_liquidacion;
-delete from facturacion_refacturacion; -- ok 0
-
-delete from rips_ripsprocedimientos;  -- ok 15
-delete from rips_ripshospitalizacion; -- ok 0
-
-
-delete from rips_ripsmedicamentos; -- ok 4
-delete from rips_ripsotrosservicios; -- ok 0
-delete from rips_ripsreciennacido; -- ok 2
-delete from rips_ripsurgenciasobservacion; -- ok 2
-delete from rips_ripsusuarios; -- ok 2
-
-delete from rips_ripsdetalle; -- ok 2
-
-delete from cartera_glosas; -- ok 1
-delete from facturacion_facturacion; -- ok 11
-delete from rips_ripstransaccion; -- ok 2
-delete from rips_ripsenvios; -- ok 2
-delete from triage_triage; -- ok 2
-delete from clinico_historialinterconsultas; -- ok 0
-delete from clinico_historiamedicamentos;  -- ok 0
-delete from clinico_historiarevisionsistemas; -- ok 0
-delete from clinico_historiasignosvitales; -- ok 0
-
-
+delete from facturacion_refacturacion;  
+delete from rips_ripsprocedimientos;   
+delete from rips_ripshospitalizacion;  
+delete from rips_ripsmedicamentos;  
+delete from rips_ripsotrosservicios;  
+delete from rips_ripsreciennacido;  
+delete from rips_ripsurgenciasobservacion;  
+delete from rips_ripsusuarios;  
+delete from rips_ripsdetalle;  
+delete from cartera_glosas;  
+delete from facturacion_facturacion;  
+delete from rips_ripstransaccion;  
+delete from rips_ripsenvios;  
+delete from triage_triage;  
+delete from clinico_historialinterconsultas;  
+delete from clinico_historiamedicamentos;   
+delete from clinico_historiarevisionsistemas;  
+delete from clinico_historiasignosvitales;  
+delete from cirugia_cirugiasmaterialqx;
+delete from cirugia_cirugiasparticipantes;
+delete from cirugia_cirugiasprocedimientos;
+delete from cirugia_programacioncirugias;
+delete from enfermeria_enfermeriarecibe;
+delete from enfermeria_enfermeriadetalle;
+delete from enfermeria_enfermeriadevolucion;
+delete from enfermeria_enfermeriadevoluciondetalle;
+delete from enfermeria_notasenfermeria;
+delete from enfermeria_signosenfermeria;
+delete from enfermeria_turnosenfermeria;
+delete from farmacia_detalle;
+delete from farmacia_despachosdispensa;
+delete from farmacia_devoluciondetalle;
+delete from farmacia_devolucion;
+delete from farmacia_farmaciadespachos;
+delete from farmacia_famacia;
 select * from sitios_dependencias;
 
 UPDATE sitios_dependencias

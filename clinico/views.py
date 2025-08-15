@@ -476,7 +476,7 @@ def crearHistoriaClinica(request):
                 data2 = data2.replace("\'", "\"")
                 data = json.loads(str(data2))
 
-                return JsonResponse({'success': True,'Mensaje':'NO', 'message': 'Favor suministrar diagnostico Obligatorios!'})
+                return JsonResponse({'success': True,'Mensaje2':'NO', 'Mensaje': 'Favor suministrar diagnostico Obligatorios!'})
 
 
             else:

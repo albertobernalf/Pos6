@@ -134,7 +134,7 @@ def TraerConvenio(request):
 
 
 
-    return JsonResponse({'success': True, 'message': 'Tarifario Sabana creado !'})
+    return JsonResponse({'success': True, 'Mensaje': 'Tarifario Sabana creado !'})
 
 
 def EditarGuardarConvenios(request):
@@ -268,7 +268,7 @@ def EditarGuardarConvenios(request):
         curt.close()
         miConexiont.close()
 
-        return JsonResponse({'success': True, 'message': 'Convenio Actualizado satisfactoriamente!'})
+        return JsonResponse({'success': True, 'Mensaje': 'Convenio Actualizado satisfactoriamente!'})
 
     except psycopg2.DatabaseError as error:
         print ("Entre por rollback" , error)
@@ -419,7 +419,7 @@ def CrearGuardarConvenios(request):
         curt.close()
         miConexiont.close()
 
-        return JsonResponse({'success': True, 'message': 'Convenio Creada satisfactoriamente!'})
+        return JsonResponse({'success': True, 'Mensaje': 'Convenio Creada satisfactoriamente!'})
 
     except psycopg2.DatabaseError as error:
         print ("Entre por rollback" , error)
@@ -811,13 +811,13 @@ def GuardarConveniosProcedimientos( request):
 
             print("Error = " ,error)
             #serialized1 = json.dumps(error)
-            return JsonResponse({'success': True, 'message': 'Registro ya existe ¡'})
+            return JsonResponse({'success': True, 'Mensaje': 'Registro ya existe ¡'})
 
         miConexiont.commit()
         curt.close()
         miConexiont.close()
 
-        return JsonResponse({'success': True, 'message': 'Tarifa de convenio Creada satisfactoriamente!'})
+        return JsonResponse({'success': True, 'Mensaje': 'Tarifa de convenio Creada satisfactoriamente!'})
 
 
 
@@ -892,7 +892,7 @@ def GuardarConvenio( request):
             curt.close()
             miConexiont.close()
 
-            return JsonResponse({'success': True, 'message': 'Convenio Creado satisfactoriamente!'})
+            return JsonResponse({'success': True, 'Mensaje': 'Convenio Creado satisfactoriamente!'})
 
         except psycopg2.DatabaseError as error:
 
@@ -989,7 +989,7 @@ def GuardarConvenio1( request):
             curt.close()
             miConexiont.close()
 
-            return JsonResponse({'success': True, 'message': 'Convenio Creado satisfactoriamente!'})
+            return JsonResponse({'success': True, 'Mensaje': 'Convenio Creado satisfactoriamente!'})
 
         except psycopg2.DatabaseError as error:
             print ("Entre por rollback" , error)
@@ -1121,7 +1121,7 @@ def DeleteConveniosProcedimientos(request):
     except Exception as e:
         # Aquí ya se hizo rollback automáticamente
         print("Se hizo rollback por:", e)
-
+        return JsonResponse({'success': False, 'message': e})
 
 # Create your views here.
 def load_dataConveniosSuministros(request, data):
@@ -1222,7 +1222,7 @@ def GuardarConveniosSuministros( request):
                 print("Entro ha hacer el Rollback")
                 miConexiont.rollback()
             raise error
-
+            return JsonResponse({'success': False, 'message': error})
 
         finally:
             if miConexiont:
@@ -1320,7 +1320,7 @@ def GrabarSuministro( request):
                 print("Entro ha hacer el Rollback")
                 miConexiont.rollback()
             raise error
-
+            return JsonResponse({'success': False, 'message': error})
 
         finally:
             if miConexiont:
@@ -1359,6 +1359,7 @@ def DeleteConveniosHonorarios(request):
     except Exception as e:
         # Aquí ya se hizo rollback automáticamente
         print("Se hizo rollback por:", e)
+        return JsonResponse({'success': False, 'message':e})
 
 
 def GrabarHonorarios( request):

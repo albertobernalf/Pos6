@@ -914,11 +914,6 @@ window.addEventListener('load', async () => {
 	   	    	}
 	     });
 
-
-
-
-
-
         });
 
 

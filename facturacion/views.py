@@ -1272,7 +1272,7 @@ def FacturarCuenta(request):
     totalCirugias = Cirugias.objects.filter(tipoDoc_id=usuarioId.tipoDoc_id , documento_id=usuarioId.documento_id ,consec=usuarioId.consecAdmision, estadoCirugia_id= estadoCirugiaRealizada.id )
 
     if (cirugias >=1):
-        return JsonResponse( {'success': True, 'message': 'No es posible facturar. Paciente con Facturas No realizadas !', 'Factura': 0})
+        return JsonResponse( {'success': True, 'Mensaje': 'No es posible facturar. Paciente con Facturas No realizadas !', 'Factura': 0})
 
     # RUTINA ACUMULAR ABONOS RECIBIDOS
 
@@ -1390,7 +1390,7 @@ def FacturarCuenta(request):
         cur3.close()
         miConexion3.close()
 
-        return JsonResponse({'success': True, 'message': 'Factura Elaborada!', 'Factura' : facturacionId})
+        return JsonResponse({'success': True, 'Mensaje': 'Factura Elaborada!', 'Factura' : facturacionId})
 
     except psycopg2.DatabaseError as error:
 
@@ -1576,7 +1576,7 @@ def AnularFactura(request):
             miConexion3.close()
 
 
-        return JsonResponse({'success': True, 'message': 'Factura Anulada!'})
+        return JsonResponse({'success': True, 'Mensaje': 'Factura Anulada!'})
 
 
 def ReFacturar(request):
@@ -1645,7 +1645,7 @@ def ReFacturar(request):
                 cur3.close()
                 miConexion3.close()
 
-                return JsonResponse({'success': True, 'message': 'Factura Refacturada!'})
+                return JsonResponse({'success': True, 'Mensaje': 'Factura Refacturada!'})
 
     except psycopg2.DatabaseError as error:
         print ("Entre por rollback" , error)
@@ -1733,7 +1733,7 @@ def GuardaApliqueAbonosFacturacion(request):
 
             grabo4 = Liquidacion.objects.filter(id=liquidacionId).update(valorApagar  = F('totalProcedimientos') + F('totalSuministros') - F('totalRecibido'))
 
-            return JsonResponse({'success': True, 'message': 'Valor abono en curso guardado satisfactoriamente!'})
+            return JsonResponse({'success': True, 'Mensaje': 'Valor abono en curso guardado satisfactoriamente!'})
 
     except Exception as e:
         # Aquí ya se hizo rollback automáticamente
@@ -1925,7 +1925,7 @@ def TrasladarConvenio(request):
 
         # Rutina Guarda en cabezote los totales
 
-        return JsonResponse({'success': True, 'message': 'Traslado realizado satisfactoriamente!'})
+        return JsonResponse({'success': True, 'Mensaje': 'Traslado realizado satisfactoriamente!'})
 
     except psycopg2.DatabaseError as error:
         print("Entre por rollback", error)

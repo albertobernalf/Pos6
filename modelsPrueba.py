@@ -826,3 +826,9 @@ ojo pendiente en aplicacion de medicamentos arreglar cuando aplica la modal no p
 
 -- ops graba mal el historialde dependencias cuando hace la dmision desde triage, coloca fecha de liberacion cuanod debe ser null
  -- no cloca bien la hora del ingreso desde triage a urgencias
+
+-- ojo martes 18-agoiso
+  -- comenzar de ceros borrara todas las tablas
+  -- hacer imprimr autorizaciones, triage, PROBARLOS Y HACERLOS YA ESTA LA BASE
+  -- hacer todos los JSONRESPONSE con dat. Mensaje Erro y no erro
+  -- Hacer prueba totale grales y arregklar a la lata

@@ -318,7 +318,7 @@ def ActualizarAutorizacionDetalle(request):
     # FIN FACTURACIONDETALLE
 
 
-    return JsonResponse({'success': True, 'message': 'Detalle de Autorizacion actualizado satisfactoriamente!'})
+    return JsonResponse({'success': True, 'Mensaje': 'Detalle de Autorizacion actualizado satisfactoriamente!'})
 
 
 def LeerDetalleAutorizacion(request):

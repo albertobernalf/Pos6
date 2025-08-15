@@ -661,7 +661,7 @@ def AdicionarDespachosDispensa(request):
         cur3.close()
         miConexion3.close()
 
-        return JsonResponse({'success': True, 'message': 'Despacho creado satisfactoriamente!' })
+        return JsonResponse({'success': True, 'Mensaje': 'Despacho creado satisfactoriamente!' })
 
 
     except psycopg2.DatabaseError as error:
@@ -713,7 +713,7 @@ def CambiaEstadoDespacho(request):
         cur3.close()
         miConexion3.close()
 
-        return JsonResponse({'success': True, 'message': 'Recibida Devolucion Actualizada!'})
+        return JsonResponse({'success': True, 'Mensaje': 'Recibida Devolucion Actualizada!'})
 
     except psycopg2.DatabaseError as error:
         print("Entre por rollback", error)
@@ -921,7 +921,7 @@ def RecibirDevolucionFarmacia(request):
         cur3.close()
         miConexion3.close()
 
-        return JsonResponse({'success': True, 'message': 'Recibida Devolucion Actualizada!'})
+        return JsonResponse({'success': True, 'Mensaje': 'Recibida Devolucion Actualizada!'})
 
     except psycopg2.DatabaseError as error:
         print("Entre por rollback", error)
@@ -964,7 +964,7 @@ def RecibirDevolucionDetalleFarmacia(request):
         cur3.close()
         miConexion3.close()
 
-        return JsonResponse({'success': True, 'message': 'Recibida Devolucion Detalle Actualizada!'})
+        return JsonResponse({'success': True, 'Mensaje': 'Recibida Devolucion Detalle Actualizada!'})
 
     except psycopg2.DatabaseError as error:
         print("Entre por rollback", error)

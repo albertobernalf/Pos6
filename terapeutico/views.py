@@ -899,7 +899,7 @@ def GuardarResultadoRasgo ( request):
 
 
 
-                return JsonResponse({'success': True, 'message': 'Responsable Actualizado satisfactoriamente!'})
+                return JsonResponse({'success': True, 'Mensaje': 'Responsable Actualizado satisfactoriamente!'})
 
         except psycopg2.DatabaseError as error:
             print ("Entre por rollback" , error)

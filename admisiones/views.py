@@ -6263,7 +6263,10 @@ def guardarUsuariosModal(request):
 
         raise error
         #print ("Voy a hacer el jsonresponde")
-        #return JsonResponse({'success': False, 'Mensaje': error})
+        datos = {'Mensaje': error}
+        return JsonResponse(datos, safe=False)
+
+
 
     finally:
         print("Finally")
@@ -6913,8 +6916,10 @@ def GuardaConvenioAdmision(request):
             cur3.execute(comando2)
             miConexion3.commit()
             cur3.close()
+            datos = {'Mensaje': 'Convenio Actualizado satisfactoriamente!'}
+            return JsonResponse(datos, safe=False)
 
-            return JsonResponse({'success': True, 'Mensaje': 'Convenio Actualizado satisfactoriamente!'})
+            #return JsonResponse({'success': True, 'Mensaje': 'Convenio Actualizado satisfactoriamente!'})
 
 
     except psycopg2.DatabaseError as error:
@@ -6923,8 +6928,8 @@ def GuardaConvenioAdmision(request):
             print("Entro ha hacer el Rollback")
             miConexion3.rollback()
         raise error
-        #print ("Voy a hacer el jsonresponde")
-        #return JsonResponse({'success': False, 'Mensaje': error})
+
+        return JsonResponse({'success': False, 'Mensaje': error})
 
     finally:
         if miConexion3:
@@ -6986,7 +6991,7 @@ def GuardaAbonosAdmision(request):
         miConexion3.commit()
         cur3.close()
 
-        return JsonResponse({'success': True, 'message': 'Abono Creado satisfactoriamente!'})
+        return JsonResponse({'success': True, 'Mensaje': 'Abono Creado satisfactoriamente!'})
 
     except psycopg2.DatabaseError as error:
         print ("Entre por rollback" , error)
@@ -6995,7 +7000,7 @@ def GuardaAbonosAdmision(request):
             miConexion3.rollback()
         raise error
         #print ("Voy a hacer el jsonresponde")
-        #return JsonResponse({'success': False, 'Mensaje': error})
+        return JsonResponse({'success': False, 'Mensaje': error})
 
     finally:
         if miConexion3:
@@ -7018,7 +7023,7 @@ def PostDeleteConveniosAdmision(request):
         post = ConveniosPacienteIngresos.objects.get(id=id)
         post.delete()
 
-        return JsonResponse({'success': True, 'message': 'Convenio borrado!'})
+        return JsonResponse({'success': True, 'Mensaje': 'Convenio borrado!'})
 
 
     except Exception as e:
@@ -7043,7 +7048,7 @@ def PostDeleteAbonosAdmision(request):
 
     if (valorSaldo.saldo > 0):
 
-        return JsonResponse({'success': False, 'message': 'No se puede anular Abono con Facturas relacionadas!'})
+        return JsonResponse({'success': False, 'Mensaje': 'No se puede anular Abono con Facturas relacionadas!'})
 
         # Aqui Manejo Transaccionalidad
 
@@ -7058,7 +7063,7 @@ def PostDeleteAbonosAdmision(request):
             miConexion3.commit()
             cur3.close()
 
-            return JsonResponse({'success': True, 'message': 'Abono Cancelado!'})
+            return JsonResponse({'success': True, 'Mensaje': 'Abono Cancelado!'})
 
     except psycopg2.DatabaseError as error:
         print ("Entre por rollback" , error)
@@ -7067,7 +7072,7 @@ def PostDeleteAbonosAdmision(request):
             miConexion3.rollback()
         raise error
         #print ("Voy a hacer el jsonresponde")
-        #return JsonResponse({'success': False, 'Mensaje': error})
+        return JsonResponse({'success': False, 'Mensaje': error})
 
     finally:
             if miConexion3:
@@ -7102,7 +7107,7 @@ def GuardarResponsableAdmision(request):
         miConexion3.commit()
         cur3.close()
 
-        return JsonResponse({'success': True, 'message': 'Responsable Actualizado satisfactoriamente!'})
+        return JsonResponse({'success': True, 'Mensaje': 'Responsable Actualizado satisfactoriamente!'})
 
     except psycopg2.DatabaseError as error:
         print ("Entre por rollback" , error)
@@ -7111,7 +7116,7 @@ def GuardarResponsableAdmision(request):
             miConexion3.rollback()
         raise error
         #print ("Voy a hacer el jsonresponde")
-        #return JsonResponse({'success': False, 'Mensaje': error})
+        return JsonResponse({'success': False, 'Mensaje': error})
 
 
 
@@ -7149,7 +7154,7 @@ def GuardarAcompananteAdmision(request):
         miConexion3.commit()
         cur3.close()
 
-        return JsonResponse({'success': True, 'message': 'Responsable Actualizado satisfactoriamente!'})
+        return JsonResponse({'success': True, 'Mensaje': 'Responsable Actualizado satisfactoriamente!'})
 
     except psycopg2.DatabaseError as error:
         print ("Entre por rollback" , error)
@@ -7158,7 +7163,7 @@ def GuardarAcompananteAdmision(request):
             miConexion3.rollback()
         raise error
         #print ("Voy a hacer el jsonresponde")
-        #return JsonResponse({'success': False, 'Mensaje': error})
+        return JsonResponse({'success': False, 'Mensaje': error})
 
 
 
@@ -7217,7 +7222,7 @@ def GuardaFurips(request):
             miConexion3.rollback()
         raise error
         #print ("Voy a hacer el jsonresponde")
-        #return JsonResponse({'success': False, 'Mensaje': error})
+        return JsonResponse({'success': False, 'Mensaje': error})
 
     finally:
         if miConexion3:
@@ -7489,7 +7494,7 @@ def ActualizaAdmision(request):
             miConexion3.rollback()
         raise error
         #print ("Voy a hacer el jsonresponde")
-        #return JsonResponse({'success': False, 'Mensaje': error})
+        return JsonResponse({'success': False, 'Mensaje': error})
 
     finally:
         print("Finally")

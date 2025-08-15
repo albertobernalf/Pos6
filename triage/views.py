@@ -219,7 +219,7 @@ def crearTriage(request):
         except Exception as e:
             # Aquí ya se hizo rollback automáticamente
             print("Se hizo rollback por:", e)
-            return JsonResponse({'success': False, 'message': e})
+            return JsonResponse({'success': False, 'Mensaje': e})
 
 
 
@@ -1161,7 +1161,12 @@ def crearTriage(request):
         # FIN RUTINA ARMADO CONTEXT
 
     print(triage1)
-    context['Mensajes'] = 'Triage Creado ... '	
+    context['Mensajes'] = 'Triage Creado ... '
+
+    print("Entre imprimir Triage")
+    triageId = grabo.id
+    ImprimirTriage(triageId)
+
 
     return render(request, "triage/panelTriage.html", context)
 
@@ -2880,7 +2885,8 @@ def guardarAdmisionTriage(request):
                 rollo=1
                 print("No existe Id de liquidacion")
                 datos = {'Mensaje': 'No existe Id de liquidacion'}
-                #return JsonResponse(datos, safe=False)
+                return JsonResponse(datos, safe=False)
+
 
 
         finally:

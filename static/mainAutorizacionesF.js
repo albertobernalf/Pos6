@@ -50,7 +50,7 @@ function arrancaAutorizaciones(valorTabla,valorData)
 	    { width: '10%', targets: [2,3] },
 	    { width: '10%', targets: [9,15] },
 		{    
-                    "targets": 16
+                    "targets": 17
                }
             ],
 	 pageLength: 3,
@@ -89,9 +89,17 @@ function arrancaAutorizaciones(valorTabla,valorData)
 
                        return btn;
                     },
+                 },
+        {
+		"render": function ( data, type, row ) {
+                        var btn = '';
 
+	 	 btn = btn + " <button class='ImprimirAutorizacion btn-primary ' data-pk='" + row.pk + "'>" + '<i class=""fa-duotone fa-solid fa-print""></i>' + "</button>";
 
-		},
+                       return btn;
+		}
+                   },
+
                 { data: "fields.id"},
                 { data: "fields.sedesClinica_id"},
 
@@ -398,3 +406,30 @@ function CerrarModalJson()
 
             $('#crearModelRipsJson').modal('hide');
 }
+
+        $('body').on('click', '.ImprimirAutorizacion', function () {
+
+	          var post_id = $(this).data('pk');
+		var row = $(this).closest('tr'); // Encuentra la fila
+
+		 alert("ImprimirAutorizacion entre pk = " + post_id);
+
+	var autorizacionId = post_id;
+
+	$.ajax({
+	           url: '/imprimirAutorizaciones/',
+	            data : {autorizacionId:autorizacionId},
+	           type: 'POST',
+	           dataType : 'json',
+	  		success: function (data) {
+
+			 $('#pk').val(data.pk);
+	       	     
+
+                  },
+	   		    error: function (request, status, error) {
+	   			   document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
+	   	    	}
+	     });
+
+        });
