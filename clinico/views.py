@@ -670,6 +670,8 @@ def crearHistoriaClinica(request):
                 #
                 contratacion = Convenios.objects.get(id=convenioId)
 
+                print("OJOO contratacion.tarifariosDescripcionProc_id = " , contratacion.tarifariosDescripcionProc_id)
+
                 columnaALeer = TarifariosDescripcion.objects.get(id=contratacion.tarifariosDescripcionProc_id)
 
                 print ("Columna a leer = ", columnaALeer.columna)
@@ -1594,7 +1596,7 @@ def crearHistoriaClinica(request):
 
                 print("Longitud de incapaciddaes = " , len(incapForm[0]))
 
-                if len(incapForm[0]) >= 1:
+                if len(incapForm[0]) > 1:
 
                     print("Entre imprimir incapacidad")
                     ingresoId2=ingresosPaciente.id

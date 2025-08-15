@@ -58,13 +58,12 @@ function arrancaLiquidacion(valorTabla,valorData)
             columnDefs: [
 		{ className: 'centered', targets: [0, 1, 2, 3, 4, 5] },
 	    { width: '10%', targets: [2,3] },
-
 		{     "render": function ( data, type, row ) {
                         var btn = '';
                           btn = btn + " <input type='radio'  name='miLiquidacion' class='form-check-input editPostLiquidacion' data-pk='"  + row.pk + "'>" + "</input>";
                        return btn;
                     },
-                    "targets": 10
+                    "targets": 11
                }
             ],
 	 pageLength: 3,
@@ -98,7 +97,7 @@ function arrancaLiquidacion(valorTabla,valorData)
 		"render": function ( data, type, row ) {
                         var btn = '';
 
-	  btn = btn + " <button class='ImprimirFactura btn-primary ' data-pk='" + row.pk + "'>" + '<i class=""fa-duotone fa-solid fa-print""></i>' + "</button>";
+	  btn = btn + " <button class='ImprimirCuenta btn-primary ' data-pk='" + row.pk + "'>" + '<i class=""fa-duotone fa-solid fa-print""></i>' + "</button>";
 
                        return btn;
 		}
@@ -351,6 +350,15 @@ function arrancaLiquidacion(valorTabla,valorData)
                  dataSrc: ""
             },
             columns: [
+{
+		"render": function ( data, type, row ) {
+                        var btn = '';
+
+	  btn = btn + " <button class='ImprimirFactura btn-primary ' data-pk='" + row.pk + "'>" + '<i class=""fa-duotone fa-solid fa-print""></i>' + "</button>";
+
+                       return btn;
+		}
+                   },
                   { data: "fields.id"},
                 { data: "fields.fechaFactura"},
                 { data: "fields.tipoDoc"},

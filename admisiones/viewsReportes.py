@@ -954,30 +954,34 @@ def ImpresionManilla(request):
     # Define el ancho de línea
     pdf.set_line_width(0.4)
     # Dibuja el borde
-    pdf.rect(5.0, 15.0, 200.0, 50.0)  # Coordenadas x, y, ancho, alto
+    pdf.rect(50.0, 15.0, 80.0, 30.0)  # Coordenadas x, y, ancho, alto
 
     pdf.set_font('Times', 'B', 9)
     pdf.ln(3)
-    pdf.cell(5, 30, 'Nombres:', 0, 0, 'C')
+    pdf.cell(50, 30, '', 0, 0, 'C')
+    pdf.cell(10, 30, 'Nombres:', 0, 0, 'C')
     pdf.set_font('Times', '', 7)
     pdf.cell(25, 30, str(manilla[0]['primerNombre']), 0, 0, 'L')
     pdf.cell(25, 30, str(manilla[0]['segundoNombre']), 0, 0, 'L')
-    pdf.cell(5, 30, 'Apellidos:', 0, 0, 'C')
+    pdf.cell(10, 30, 'Apellidos:', 0, 0, 'C')
     pdf.set_font('Times', '', 7)
     pdf.cell(25, 30, str(manilla[0]['primerApellido']), 0, 0, 'L')
     pdf.cell(35, 30, str(manilla[0]['segundoApellido']), 0, 0, 'L')
     pdf.set_font('Times', 'B', 9)
-    pdf.cell(100, 30, 'Riesgo:', 0, 0, 'C')
+    pdf.cell(50, 30, 'Riesgo:', 0, 0, 'C')
     pdf.ln(3)
+    pdf.cell(50, 33, '', 0, 0, 'C')
     pdf.cell(15, 33, 'Identificacion:', 0, 0, 'C')
     pdf.cell(15, 33, str(manilla[0]['documento']), 0, 0, 'L')
     pdf.cell(15, 33, str(manilla[0]['edad']), 0, 0, 'L')
     pdf.cell(15, 33, str(manilla[0]['sexo']), 0, 0, 'L')
     pdf.ln(3)
+    pdf.cell(50, 35, '', 0, 0, 'C')
     pdf.cell(30, 35, 'Fecha Hora de Ingreso:', 0, 0, 'C')
     pdf.cell(15, 35, str(manilla[0]['fechaIngreso']), 0, 0, 'L')
     pdf.ln(3)
-    pdf.cell(5, 35, 'Alergias:', 0, 0, 'C')
+    pdf.cell(50, 36, '', 0, 0, 'C')
+    pdf.cell(5, 36, 'Alergias:', 0, 0, 'C')
 
     carpeta = 'C:\EntornosPython\Pos6\JSONCLINICA\HistoriasClinicas/'
     print("carpeta = ", carpeta)
