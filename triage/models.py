@@ -61,7 +61,7 @@ class Triage(models.Model):
 
 
     class Meta:
-        unique_together = (('tipoDoc', 'documento'),)
+        unique_together = (('tipoDoc', 'documento','consecAdmision'),)
 
     def __str__(self):
             return self.nombre

@@ -207,7 +207,9 @@ urlpatterns = [
     path('buscarMunicipios/', viewsTriage.buscarMunicipios),
     path('buscarCiudades/', viewsTriage.buscarCiudades),
     path('buscarLocalidades/', viewsTriage.buscarLocalidades),
+    path('imprimirTriage/<str:triageId>/', viewsTriageReportes.ImprimirTriage),
     path('imprimirTriage/', viewsTriageReportes.ImprimirTriage),
+
     # Apoyo Terapeutico
 
     path('load_dataApoyoTerapeutico/<str:data>', viewsApoyoTerapeutico.load_dataApoyoTerapeutico, name='loaddataApoyoTerapeutico'),

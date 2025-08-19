@@ -391,6 +391,10 @@ $(document).on('change', '#busDocumentoSelTriage', function(event) {
 				// $('#tipoDocTriageModal').val(Usuarios.tipoDoc);
 				// $('#documentoTriageModal').val(Usuarios.documento);
 				$('#nombre').val(Usuarios.nombre);
+				$('#primerNombre').val(Usuarios.primerNombre);
+				$('#segundoNombre').val(Usuarios.segundoNombre);
+				$('#primerApellido').val(Usuarios.primerApellido);
+				$('#segundoApellido').val(Usuarios.segundoApellido);
 				$('#genero').val(Usuarios.genero);
 				$('#departamentos').val(Usuarios.departamentos);
 				$('#fechaNacio').val(Usuarios.fechaNacio);
@@ -643,10 +647,6 @@ $(document).on('change', '#municipios', function(event) {
 
        var Municipio =   $(this).val()
 
-
-
-
-
         $.ajax({
 	           url: '/buscarLocalidades/',
 	            data : {Municipio:Municipio},
@@ -690,8 +690,6 @@ $(document).on('change', '#municipios', function(event) {
 
 
 $(document).on('change', '#departamentos', function(event) {
-
-
 
 
        var Departamento =   $(this).val()
@@ -1433,13 +1431,12 @@ $('#tablaDatosTriage tbody').on('click', '.ImprimirTriage', function() {
 
 	$.ajax({
 	           url: '/imprimirTriage/',
-	            data : {triageId:triageId},
+		   data : {triageId:triageId},	            
 	           type: 'POST',
 	           dataType : 'json',
 	  		success: function (data) {
 
-			 $('#pk').val(data.pk);
-	       	     
+			 $('#pk').val(data.pk);      	     
 
                   },
 	   		    error: function (request, status, error) {
