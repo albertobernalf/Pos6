@@ -37,6 +37,7 @@ from admisiones.models import Ingresos
 from farmacia.models import Farmacia, FarmaciaDetalle, FarmaciaEstados
 from enfermeria.models import Enfermeria, EnfermeriaDetalle
 from facturacion.models import ConveniosPacienteIngresos
+from triage.models import Triage
 
 from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect, HttpResponse, HttpResponseRedirect
@@ -54,13 +55,13 @@ import cgi
 
 
 class PDFTriage(FPDF):
-    def __init__(self, tipoDocId, documentoId, consec, ingresoId,  *args, **kwargs):
+    def __init__(self, tipoDocId, documentoId, consec, triageId,  *args, **kwargs):
     #def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.tipoDocId = tipoDocId
         self.documentoId = documentoId
         self.consec = consec
-        self.ingresoId = ingresoId
+        self.triageId = triageId
 
 
     def header(self):
@@ -1052,7 +1053,7 @@ def ImprimirTriage(request):
     curt = miConexiont.cursor()
 
     comando = 'SELECT tipo.abreviatura abrev, usu.documento documento, usu."primerNombre",usu."segundoNombre",usu."primerApellido", usu."segundoApellido", cast((cast(now() as date)  - cast(usu."fechaNacio" as date)) as text)   edad , usu.genero sexo, ing."fechaIngreso" fechaIngreso FROM admisiones_ingresos ing INNER JOIN usuarios_usuarios usu ON (usu.id=ing.documento_id) INNER JOIN usuarios_tiposdocumento tipo ON (tipo.id = usu."tipoDoc_id") WHERE ing.id= ' + "'" + str(
-        ingresoId) + "'"
+        triageId) + "'"
     print(comando)
 
     curt.execute(comando)
@@ -1070,7 +1071,7 @@ def ImprimirTriage(request):
     miConexiont.close()
     print("manilla = ", manilla)
 
-    pdf = PDFTriage(tipoDocId, documentoId, consec, ingresoId)
+    pdf = PDFTriage(tipoDocId, documentoId, consec, triageId)
     pdf.alias_nb_pages()
     pdf.set_margins(left=10, top=5, right=5)
     pdf.add_page()

@@ -112,7 +112,7 @@ autoWidth: false,
                        return btn;
                     },
 
-                    "targets": 10
+                    "targets": 11
                }
             ],
 	 pageLength: 3,
@@ -142,6 +142,16 @@ autoWidth: false,
                  dataSrc: ""
             },
             columns: [
+
+		{
+		"render": function ( data, type, row ) {
+                        var btn = '';
+
+	  btn = btn + " <button class='ImprimirTriage btn-primary ' data-pk='" + row.pk + "'>" + '<i class=""fa-duotone fa-solid fa-print""></i>' + "</button>";
+
+                       return btn;
+		}
+                   },
                 { data: "fields.id"},
                 { data: "fields.tipoDoc"},
                 { data: "fields.Documento"},
@@ -1412,3 +1422,30 @@ $(document).on('change', '#busEspecialidad', function(event) {
 
 	     });
 });
+
+$('#tablaDatosTriage tbody').on('click', '.ImprimirTriage', function() {
+
+	alert ("Entre ImprimirTriage ");
+
+	     var post_id = $(this).data('pk');
+	alert ("post_id = " + post_id);
+	var triageId = post_id;
+
+	$.ajax({
+	           url: '/imprimirTriage/',
+	            data : {triageId:triageId},
+	           type: 'POST',
+	           dataType : 'json',
+	  		success: function (data) {
+
+			 $('#pk').val(data.pk);
+	       	     
+
+                  },
+	   		    error: function (request, status, error) {
+	   			   document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
+	   	    	}
+	     });
+
+
+    });
