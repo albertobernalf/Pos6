@@ -4,13 +4,23 @@
     <list default="true" id="d041c887-ab16-4071-a5e4-52a8295bbd5d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/JSONCLINICA/HistoriasClinicas/19465673_Triage.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/JSONCLINICA/HistoriasClinicas/19465673_Triage.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/admisiones/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/admisiones/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JSONCLINICA/HistoriasClinicas/51872242_Triage.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/JSONCLINICA/HistoriasClinicas/51872242_Triage.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Lib/site-packages/psycopg2/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Lib/site-packages/psycopg2/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Lib/site-packages/psycopg2/_ipaddress.py" beforeDir="false" afterPath="$PROJECT_DIR$/Lib/site-packages/psycopg2/_ipaddress.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Lib/site-packages/psycopg2/_json.py" beforeDir="false" afterPath="$PROJECT_DIR$/Lib/site-packages/psycopg2/_json.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Lib/site-packages/psycopg2/_psycopg.cp39-win_amd64.pyd" beforeDir="false" afterPath="$PROJECT_DIR$/Lib/site-packages/psycopg2/_psycopg.cp39-win_amd64.pyd" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Lib/site-packages/psycopg2/_range.py" beforeDir="false" afterPath="$PROJECT_DIR$/Lib/site-packages/psycopg2/_range.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Lib/site-packages/psycopg2/errorcodes.py" beforeDir="false" afterPath="$PROJECT_DIR$/Lib/site-packages/psycopg2/errorcodes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Lib/site-packages/psycopg2/errors.py" beforeDir="false" afterPath="$PROJECT_DIR$/Lib/site-packages/psycopg2/errors.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Lib/site-packages/psycopg2/extensions.py" beforeDir="false" afterPath="$PROJECT_DIR$/Lib/site-packages/psycopg2/extensions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Lib/site-packages/psycopg2/extras.py" beforeDir="false" afterPath="$PROJECT_DIR$/Lib/site-packages/psycopg2/extras.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Lib/site-packages/psycopg2/pool.py" beforeDir="false" afterPath="$PROJECT_DIR$/Lib/site-packages/psycopg2/pool.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Lib/site-packages/psycopg2/sql.py" beforeDir="false" afterPath="$PROJECT_DIR$/Lib/site-packages/psycopg2/sql.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Lib/site-packages/psycopg2/tz.py" beforeDir="false" afterPath="$PROJECT_DIR$/Lib/site-packages/psycopg2/tz.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/admisiones/viewsReportes.py" beforeDir="false" afterPath="$PROJECT_DIR$/admisiones/viewsReportes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modelsPrueba.py" beforeDir="false" afterPath="$PROJECT_DIR$/modelsPrueba.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/static/mainTriage.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/mainTriage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/triage/panelTriage.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/triage/panelTriage.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/triage/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/triage/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/triage/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/triage/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/triage/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/triage/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/triage/viewsReportes.py" beforeDir="false" afterPath="$PROJECT_DIR$/triage/viewsReportes.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/vulner/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/vulner/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/vulner/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/vulner/urls.py" afterDir="false" />
     </list>

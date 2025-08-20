@@ -819,16 +819,18 @@ ojo pendiente en aplicacion de medicamentos arreglar cuando aplica la modal no p
 
   -- LUNES 11 DE AGOSTO
 	<div class="modal-dialog modal-fullscreen" role="document">
-      -- ojo PROBAR para los reportes : tengo causa externa en  reporte urgencias inicla desde admison y desde triage
+
       -- seguiir probando la actualziadion editar admision desde admsiion
       --  comenzar con los reportyes de hojadeadmision y FACTURA
      -- ops los formatos estan iniciados y hay que revizarlos a fondop
 
--- ops graba mal el historialde dependencias cuando hace la dmision desde triage, coloca fecha de liberacion cuanod debe ser null
  -- no cloca bien la hora del ingreso desde triage a urgencias
 
 -- ojo martes 18-agoiso
-  -- comenzar de ceros borrara todas las tablas
-  -- hacer imprimr autorizaciones, triage, PROBARLOS Y HACERLOS YA ESTA LA BASE
   -- hacer todos los JSONRESPONSE con dat. Mensaje Erro y no erro
   -- Hacer prueba totale grales y arregklar a la lata
+
+
+-- ojo historicode habitaciones en admsioes arreglar
+-- los combos sin seleccion de rips despues de que se crea un admison estan con inicio en blanco
+-- ojo sale mensaje que pacinte ya esta en la clinica cuando nop por elcotext ver como arreglar

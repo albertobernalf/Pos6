@@ -15,7 +15,7 @@ from django.db.models.functions import Cast, Coalesce
 import pytz
 import tzlocal
 import datetime as dt
-
+from django.utils import timezone
 from sitios.models import  HistorialDependencias, Dependencias
 from usuarios.models import Usuarios, TiposDocumento
 from facturacion.models import Liquidacion
@@ -43,6 +43,7 @@ def crearTriage(request):
         print("EntrePost Graba Crea TRIAGE ")
         data = {}
         context = {}
+
 
         #sedesClinica = request.POST['sedesClinica']
         sedesClinica = request.POST['sede']
@@ -74,10 +75,13 @@ def crearTriage(request):
 
         # Consigo el Id del Paciente Documento
 
-        DocumentoId = Usuarios.objects.get(documento=documento)
+        DocumentoId = Usuarios.objects.get(documento=documento,tipoDoc_id=tipoDoc)
         idPacienteFinal = DocumentoId.id
 
         print("idPacienteFinal", idPacienteFinal)
+
+        ## AQui si esta hospitali o en urgencias pailas
+
 
         # Combo Empresas
 
@@ -1054,7 +1058,7 @@ def crearTriage(request):
         print("clasificacionTriage= ", clasificacionTriage)
 
 
-        fechaRegistro = datetime.datetime.now()
+        fechaRegistro = timezone.now()
         print("fechaRegistro  = ", fechaRegistro )
 
         usuarioRegistro = Username_id
@@ -1067,12 +1071,23 @@ def crearTriage(request):
 
         # Consigo ID de Documento
 
-        documento_llave = Usuarios.objects.get(documento=documento)
+        documento_llave = Usuarios.objects.get(documento=documento, tipoDoc_id=tipoDoc)
         print("el id del documento = ", documento_llave.id)
 
         usernameId = Planta.objects.get(documento=username, sedesClinica_id=sede)
         print("el id del planta = ", usernameId.id)
 
+
+        try:
+            with transaction.atomic():
+                estaElPaciente = Dependencias.objects.get(documento_id=idPacienteFinal)
+
+                if (estaElPaciente.id >0):
+                    context['Mensajes'] = 'Paciente se encuentra eh Clinica. Verificar.!'
+                    return render(request, "triage/panelTriage.html", context)
+
+        except Exception as e:
+            print ("todo bien")
 
         try:
             with transaction.atomic():
@@ -1104,7 +1119,7 @@ def crearTriage(request):
                                  #tipoIngreso=tipoIngreso,
                                  observaciones=observaciones,
                                  clasificacionTriage_id=clasificacionTriage,
-                                 #fechaRegistro=fechaRegistro,
+                                 fechaRegistro=fechaRegistro,
                                  usuarioCrea_id=usernameId.id,
                                  consecAdmision=0,
                                  #estadoReg=estadoReg,
@@ -1123,7 +1138,7 @@ def crearTriage(request):
 
                 print("Voy a guardar dependencias OJO ESTO ES UN UPDATE")
                 # ejemplo
-                grabo4 =  Dependencias.objects.filter(id = dependencias).update(tipoDoc_id=tipoDoc, documento_id=documento_llave.id, consec=0, disponibilidad='O',fechaRegistro=fechaRegistro, fechaOcupacion= fechaRegistro)
+                grabo4 =  Dependencias.objects.filter(id = dependencias).update(tipoDoc_id=tipoDoc, documento_id=documento_llave.id, consec=0, disponibilidad='O',fechaRegistro=fechaRegistro, fechaLiberacion=None,fechaOcupacion= fechaRegistro)
 
 
                 print("yA grabe Dependencias  Triage # ", grabo4)
@@ -2814,7 +2829,8 @@ def guardarAdmisionTriage(request):
         print("ultimo ingreso = ", consecAdmision)
 
         #fechaIngreso = request.POST['fechaIngreso']
-        fechaIngreso = datetime.datetime.now()
+        #fechaIngreso = datetime.datetime.now()
+        fechaIngreso = timezone.now()
         print("fechaIngreso = ", fechaIngreso)
 
         #fechaIngreso = datetime.strptime(fechaIngreso, "%Y-%m-%dT%H:%M")
@@ -2919,8 +2935,8 @@ def guardarAdmisionTriage(request):
         except ObjectDoesNotExist:
                 rollo=1
                 print("No existe Id de liquidacion")
-                datos = {'Mensaje': 'No existe Id de liquidacion'}
-                return JsonResponse(datos, safe=False)
+                datos = {'Mensajes': 'No existe Id de liquidacion'}
+                #return JsonResponse(datos, safe=False)
 
 
 
@@ -2984,7 +3000,7 @@ def guardarAdmisionTriage(request):
                                  fechaRegistro=fechaRegistro,
                                  usuarioRegistro_id=usernameId.id,
                                  estadoReg=estadoReg,
-                                serviciosAdministrativos_id= servicioAdmTriage ,
+                                 serviciosAdministrativos_id= servicioAdmTriage ,
                 )
                 print("Voy a guardar la INFO-ADMISION-TRIAGE")
 
@@ -2996,19 +3012,38 @@ def guardarAdmisionTriage(request):
                 depActual = Dependencias.objects.get(documento_id=idPacienteFinal)
                 print ("dependencia Triage = ", depActual.id)
 
-                # Grabo Desmarcar la Dependencias triage
+                # Grabo la Dependencias triage
 
                 print("Voy a guardar dependencias OJO ESTO ES UN UPDATE")
                 # ejemplo
-                grabo5 = Dependencias.objects.filter(id=depActual.id).update(tipoDoc_id='',documento_id='',consec=0, disponibilidad='L', fechaRegistro=fechaRegistro, fechaOcupacion=fechaRegistro)
+                grabo5 = Dependencias.objects.filter(id=depActual.id).update(tipoDoc_id='',documento_id='',consec=0, disponibilidad='L', fechaRegistro=fechaRegistro, fechaLiberacion=None, fechaOcupacion=None)
 
                 # Fin Grabo Desmarcar la Dependencias triage
+
+                print("Voy a guardar HISTORICO dependencias para TRIAGE ")
+
+                grabo6 = HistorialDependencias(
+                    tipoDoc_id=idTipoDocFinal,
+                    documento_id=documento_llave.id,
+                    consec=0,
+                    dependencias_id=depActual.id,
+                    disponibilidad='L',
+                    fechaRegistro=fechaRegistro,
+                    usuarioRegistro_id=usernameId.id,
+                    fechaLiberacion=fechaRegistro,
+                    fechaOcupacion=None,
+                    estadoReg=estadoReg
+
+                )
+                grabo6.save()
+                print("yA grabe dependencias historico para triage", grabo6.id)
+
 
                 # Grabo Dependencias
 
                 print("Voy a guardar dependencias OJO ESTO ES UN UPDATE")
                 # ejemplo
-                grabo4 =  Dependencias.objects.filter(id = dependenciasIngreso).update(tipoDoc_id=idTipoDocFinal, documento_id=documento_llave.id, consec=consecAdmision, disponibilidad='O',fechaRegistro=fechaRegistro, fechaOcupacion= fechaRegistro)
+                grabo4 =  Dependencias.objects.filter(id = dependenciasIngreso).update(tipoDoc_id=idTipoDocFinal, documento_id=documento_llave.id, consec=consecAdmision, disponibilidad='O',fechaRegistro=fechaRegistro, fechaLiberacion = None,fechaOcupacion= fechaRegistro)
 
                 # Grabo Dependencia Historico
 
@@ -3022,7 +3057,7 @@ def guardarAdmisionTriage(request):
                     disponibilidad='O',
                     fechaRegistro=fechaRegistro,
                     usuarioRegistro_id=usernameId.id,
-                    #fechaLiberacion=NULL,
+                    fechaLiberacion=None,
                     fechaOcupacion=fechaRegistro,
                     estadoReg=estadoReg
 
@@ -3040,7 +3075,7 @@ def guardarAdmisionTriage(request):
 
                 # Actualizo consecutivo de admision en TRIAGE
 
-                grabo55 = Triage.objects.filter( tipoDoc_id=idTipoDocFinal,documento_id=documento_llave.id,consecAdmision=0).update(consecAdmision=consecParaTriage.consec)
+                grabo55 = Triage.objects.filter( tipoDoc_id=idTipoDocFinal,documento_id=documento_llave.id,consec=0).update(consecAdmision=consecParaTriage.consec)
 
                 #grabo55.save()
 
@@ -3049,7 +3084,7 @@ def guardarAdmisionTriage(request):
             # Aquí ya se hizo rollback automáticamente
             print("Se hizo rollback por:", e)
             rollo=1
-            datos = {'Mensaje': e}
+            datos = {'Mensajes': e}
             return JsonResponse(datos, safe=False)
             #raise error
 
@@ -3814,7 +3849,7 @@ def guardarAdmisionTriage(request):
             ocupaciones.append({'id': id, 'nombre': nombre})
 
         miConexiont.close()
-        print(ocupaciones)
+        #print(ocupaciones)
 
         context['Ocupaciones'] = ocupaciones
 
@@ -3842,7 +3877,7 @@ def guardarAdmisionTriage(request):
         context['Empresas'] = empresas
         response_data['Empresas'] = empresas
 
-        response_data['Mensaje'] = 'Admision Creada desde Triage !'
+        response_data['Mensajes'] = 'Admision Creada desde Triage !'
 
         # Fin combo empresas
 

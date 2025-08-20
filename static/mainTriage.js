@@ -1340,12 +1340,14 @@ function guardarAdmisionTriage()
 	    dataType: 'json',
 		success: function (respuesta)
 		        {
-		      
+		      	alert("respuesta = " + JSON.stringify(respuesta));
+			alert("Mensajes en repuesta  = " + respuesta['Mensajes']);
        		
 		 $('#crearAdmTriage').modal('hide');
-	      	document.getElementById("mensajesError").innerHTML = respuesta['Mensaje'];
+	      	document.getElementById("mensajes").innerHTML = respuesta['Mensajes'];
 		window.location.reload();
 
+		document.getElementById("mensajes").innerHTML = respuesta['Mensajes'];
 
               },
 	   		    error: function (request, status, error)
