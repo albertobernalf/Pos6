@@ -368,7 +368,7 @@ def escogeAcceso(request, Sede, Username, Profesional, Documento, NombreSede, es
                                    password="123456")
     curt = miConexiont.cursor()
     comando = 'SELECT sub.id id ,sub.nombre nombre  FROM sitios_serviciosSedes sed, clinico_servicios ser  , sitios_subserviciossedes sub Where sed."sedesClinica_id" =' + "'" + str(
-        sede) + "'" + ' AND sed."servicios_id" = ser.id and  sed."sedesClinica_id" = sub."sedesClinica_id" and sed."servicios_id" = sub."serviciosSedes_id"'
+        sede) + "'" + ' AND sed."servicios_id" = ser.id and  sed."sedesClinica_id" = sub."sedesClinica_id" and sed.id = sub."serviciosSedes_id"'
     curt.execute(comando)
     print(comando)
 

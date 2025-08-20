@@ -7,8 +7,8 @@ from triage.models import Triage
 
 @admin.register(Triage)
 class triageAdmin(admin.ModelAdmin):
-    list_display = ("id", "sedesClinica","fechaSolicita", "fechaAtendio", "tipoDoc","documento","hClinica","regimen","tiposCotizante","motivo")
-    search_fields = ("id", "sedesClinica","fechaSolicita", "fechaAtendio", "tipoDoc","documento","hClinica","regimen","tiposCotizante","motivo")
+    list_display = ("id", "sedesClinica","fechaSolicita", "fechaAtendio", "tipoDoc","documento","hClinica","regimen","motivo")
+    search_fields = ("id", "sedesClinica","fechaSolicita", "fechaAtendio", "tipoDoc","documento","hClinica","regimen","motivo")
     # Filtrar
-    list_filter =("id", "sedesClinica","fechaSolicita", "fechaAtendio", "tipoDoc","documento","hClinica","regimen","tiposCotizante","motivo")
+    list_filter =("id", "sedesClinica","fechaSolicita", "fechaAtendio", "tipoDoc","documento","hClinica","regimen","motivo")
 

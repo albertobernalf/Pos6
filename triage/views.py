@@ -28,7 +28,7 @@ from rips.models import  RipsDestinoEgreso
 from django.db import transaction, IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 from clinico.models import Servicios
-from triage.viewsReportes import ImprimirAtencionInicialUrgencias, ImprimirHojaAdmision, ImprimirManilla, ImprimirTriage
+from triage.viewsReportes import ImprimirAtencionInicialUrgencias, ImprimirHojaAdmision, ImprimirManilla, ImprimirTriage, ImprimirTriageParametro
 
 # Create your views here.
 
@@ -141,12 +141,12 @@ def crearTriage(request):
         # aqui la manada de combos organizarlo segun necesidades
 
         # Combo de Servicios
-        # miConexiont = MySQLdb.connect(host='CMKSISTEPC07', user='sa', passwd='75AAbb??', db='vulnerable')
+
         miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
                                        password="123456")
         curt = miConexiont.cursor()
-        comando = 'SELECT ser.id id ,ser.nombre nombre FROM sitios_serviciosSedes sed, clinico_servicios ser Where sed."sedesClinica_id" =' + "'" + str(
-            sede) + "'" + ' AND sed."servicios_id" = ser.id AND ser.nombre =' + "'" + str('TRIAGE') + "'"
+        comando = 'SELECT sed.id id ,ser.nombre nombre FROM sitios_serviciosSedes sed, clinico_servicios ser Where sed."sedesClinica_id" =' + "'" + str(
+            sede) + "'" + ' AND sed."servicios_id" = ser.id AND ser.nombre = ' + "'" + str('TRIAGE') + "'"
         curt.execute(comando)
         print(comando)
 
@@ -169,8 +169,7 @@ def crearTriage(request):
                                        password="123456")
         curt = miConexiont.cursor()
         comando = 'SELECT sub.id id ,sub.nombre nombre  FROM sitios_serviciosSedes sed, clinico_servicios ser  , sitios_subserviciossedes sub Where sed."sedesClinica_id" =' + "'" + str(
-            sede) + "'" + ' AND sed."servicios_id" = ser.id and  sed."sedesClinica_id" = sub."sedesClinica_id" and sed."servicios_id" = sub."serviciosSedes_id"' + ' AND ser.nombre = ' + "'" + str(
-            'TRIAGE') + "'"
+            sede) + "'" + ' AND sed."servicios_id" = ser.id and  sed."sedesClinica_id" = sub."sedesClinica_id" and sed.id = sub."serviciosSedes_id"  AND ser.nombre = ' + "'" + str('TRIAGE') +"'"
         curt.execute(comando)
         print(comando)
 
@@ -181,7 +180,7 @@ def crearTriage(request):
             subServicios.append({'id': id, 'nombre': nombre})
 
         miConexiont.close()
-        print(subServicios)
+        print("subservicios = " , subServicios)
 
         context['SubServicios'] = subServicios
 
@@ -419,7 +418,7 @@ def crearTriage(request):
             diagnosticos.append({'id': id, 'nombre': nombre})
 
         miConexiont.close()
-        print(diagnosticos)
+        #print(diagnosticos)
 
         context['Diagnosticos'] = diagnosticos
 
@@ -970,6 +969,29 @@ def crearTriage(request):
 
         # Fin combo servicios administrativos
 
+        # Combo de TiposTriage
+        # miConexiont = MySQLdb.connect(host='CMKSISTEPC07', user='sa', passwd='75AAbb??', db='vulnerable')
+        miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                       password="123456")
+        curt = miConexiont.cursor()
+        #comando = 'SELECT sub.id id ,sub.nombre nombre  FROM sitios_serviciosSedes sed, clinico_servicios ser  , sitios_subserviciossedes sub Where sed."sedesClinica_id" =' + "'" + str(sede) + "'" + ' AND sed."servicios_id" = ser.id and  sed."sedesClinica_id" = sub."sedesClinica_id" and sed."servicios_id" = sub."serviciosSedes_id"'
+        comando = 'SELECT id, nombre FROM clinico_tipostriage order by id'
+        curt.execute(comando)
+        print(comando)
+
+        tiposTriage = []
+        tiposTriage.append({'id': '', 'nombre': ''})
+
+        for id, nombre in curt.fetchall():
+            tiposTriage.append({'id': id, 'nombre': nombre})
+
+        miConexiont.close()
+        print(tiposTriage)
+
+        context['TiposTriage'] = tiposTriage
+        # Fin combo TiposTriage
+
+
         ## FIN ARMADO CONTEXTO
 
         Profesional = request.POST["Profesional"]
@@ -1032,9 +1054,6 @@ def crearTriage(request):
         print("clasificacionTriage= ", clasificacionTriage)
 
 
-        now = datetime.datetime.now()
-        dnow = now.strftime("%Y-%m-%d %H:%M:%S")
-        print("NOW  = ", dnow)
         fechaRegistro = datetime.datetime.now()
         print("fechaRegistro  = ", fechaRegistro )
 
@@ -1085,7 +1104,7 @@ def crearTriage(request):
                                  #tipoIngreso=tipoIngreso,
                                  observaciones=observaciones,
                                  clasificacionTriage_id=clasificacionTriage,
-                                 fechaRegistro=fechaRegistro,
+                                 #fechaRegistro=fechaRegistro,
                                  usuarioCrea_id=usernameId.id,
                                  consecAdmision=0,
                                  #estadoReg=estadoReg,
@@ -1178,7 +1197,7 @@ def crearTriage(request):
 
         print("Entre imprimir Triage")
         triageId = grabo.id
-        ImprimirTriage(triageId)
+        ImprimirTriageParametro(triageId)
 
         return render(request, "triage/panelTriage.html", context)
 
@@ -1645,7 +1664,7 @@ def buscarTriage(request):
 
 def buscarSubServiciosTriage(request):
     context = {}
-    Serv = request.GET["serv"]
+    Serv = request.GET["Serv"]
     Sede = request.GET["sede"]
     print ("Entre buscar  Subservicios del servicio  =",Serv)
     print ("Sede = ", Sede)
@@ -1760,7 +1779,7 @@ def buscarHabitacionesTriage(request):
     else:
 
 
-       comando = 'SELECT dep.id id ,dep.numero nombre  FROM sitios_serviciosSedes sed,  sitios_subserviciossedes sub , sitios_dependencias dep, clinico_servicios ser  Where sed."sedesClinica_id" = ' + "'" + str(Sede) + "'" + ' AND sed."sedesClinica_id" = sub."sedesClinica_id" and sub."serviciosSedes_id" = sed.id and dep."sedesClinica_id"=sed."sedesClinica_id" and dep."serviciosSedes_id"= sed.id and dep."subServiciosSedes_id" = sub.id  and ser.id = sed.servicios_id   and ser.nombre = ' + "'" + str('TRIAGE') + "'" + ' AND  dep."subServiciosSedes_id" = ' + "'" + str(SubServ) + "'"
+       comando = 'SELECT dep.id id ,dep.numero nombre  FROM sitios_serviciosSedes sed,  sitios_subserviciossedes sub , sitios_dependencias dep, clinico_servicios ser  Where sed."sedesClinica_id" = ' + "'" + str(Sede) + "'" + ' AND sed."sedesClinica_id" = sub."sedesClinica_id" and sub."serviciosSedes_id" = sed.id and dep."sedesClinica_id"=sed."sedesClinica_id" and dep."serviciosSedes_id"= sed.id and dep."subServiciosSedes_id" = sub.id  and ser.id = sed.servicios_id   and ser.nombre = ' + "'" + str('TRIAGE') + "'" + ' AND  dep."subServiciosSedes_id" = ' + "'" + str(SubServ) + "' and dep.disponibilidad ='L'"
 
     curt.execute(comando)
     print(comando)
@@ -1890,6 +1909,7 @@ def UsuariosModalTriage(request):
 def grabaUsuariosTriage(request):
     print("Entre a grabar Usuarios Modal")
     tipoDoc = request.POST["tipoDoc"]
+    print("tipoDoc = ", tipoDoc)
     documento = request.POST["documento"]
     nombre = request.POST["nombre"]
     print("DOCUMENTO = " ,documento)
@@ -2727,6 +2747,10 @@ def admisionTriageModal(request):
 def guardarAdmisionTriage(request):
 
     print("Entre a Crear Admision desde Triage")
+    print("Entre a Crear Admision desde Triage")
+    print("Entre a Crear Admision desde Triage")
+    print("Entre a Crear Admision desde Triage")
+
     print ("request.method", request.method)
 
     data = {}
@@ -3473,7 +3497,7 @@ def guardarAdmisionTriage(request):
             diagnosticos.append({'id': id, 'nombre': nombre})
 
         miConexiont.close()
-        print(diagnosticos)
+        #print(diagnosticos)
 
         context['Diagnosticos'] = diagnosticos
 

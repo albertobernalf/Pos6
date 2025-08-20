@@ -151,7 +151,7 @@ th ,tr{
                                                 <label for="busServicioT"
                                                        class="col-sm-8 col-form-label col-form-label-sm">Servicio:</label>
                                                 <select class="form-select  h-10 w-100 form-control form-control-sm"
-                                                        aria-label="" id="busServicioT" name="busServicioT" disabled>
+                                                        aria-label="" id="busServicioT" name="busServicioT" disabled >
                                                     {% for servicios in Servicios %}
                                                     <option value="{{servicios.id}}"> {{servicios.nombre}}</option>
                                                     {% endfor %}
@@ -1041,7 +1041,7 @@ th ,tr{
                                             <div class="col">
                                                 <label for="tipoDocTriageModal"  class="col-sm-10 col-form-label col-form-label-sm"></label>
                                                 <select class="form-select  h-10 w-100 form-control form-control-sm" aria-label="" id="tipoDocTriageModal" name="tipoDocTriageModal">
-                                                    {% for tiposDoc in TiposDoc %}
+                                                    {% for tiposDoc in TiposDocumento %}
                                                     <option value="{{tiposDoc.id}}"> {{tiposDoc.nombre}}
                                                     </option>
                                                     {% endfor %}

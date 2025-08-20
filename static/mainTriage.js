@@ -345,7 +345,7 @@ if (tiposUsuario =='')
 		       'correo':correo},
 		success: function (respuesta) {
 
-                $('#mensaje1').html('<span> respuesta</span>');
+              
 	document.getElementById("mensajes").innerHTML = respuesta;
                 $('#usuariosModalTriage').modal('hide');		     
 
@@ -366,7 +366,7 @@ $(document).on('change', '#busDocumentoSelTriage', function(event) {
     var tipoDoc = select.options[select.selectedIndex].value; /* Obtener el valor */
 
    documento = document.getElementById("busDocumentoSelTriage").value;
-  // alert( "Este es el documento : " + tipoDoc +  " " + documento);
+   alert( "Este es el documento : " + tipoDoc +  " " + documento);
 
 	$.ajax({
 		type: 'POST',
@@ -374,22 +374,12 @@ $(document).on('change', '#busDocumentoSelTriage', function(event) {
 		data: {'tipoDoc':tipoDoc,'documento':documento},
 		success: function (Usuarios) {
 
-			// alert("REGRESE DATOS MODAL2 = " + Usuarios.tipoDoc + " " +  Usuarios.documento);
+			 alert("REGRESE DATOS MODAL2 = " + Usuarios.tipoDoc + " " +  Usuarios.documento);
 
-				if (Usuarios.tipoDoc == null ) 
-					{
-                                       
-					$('#tipoDocTriageModal').val(tipoDoc);
-					$('#documentoTriageModal').val(documento);
-					}
-				else
-					{
-					$('#tipoDocTriageModal').val(Usuarios.tipoDoc);
-					$('#documentoTriageModal').val(Usuarios.documento);
-					}
+				
 
-				// $('#tipoDocTriageModal').val(Usuarios.tipoDoc);
-				// $('#documentoTriageModal').val(Usuarios.documento);
+				$('#tipoDocTriageModal').val(Usuarios.tipoDoc);
+				$('#documentoTriageModal').val(Usuarios.documento);
 				$('#nombre').val(Usuarios.nombre);
 				$('#primerNombre').val(Usuarios.primerNombre);
 				$('#segundoNombre').val(Usuarios.segundoNombre);
@@ -1287,6 +1277,7 @@ function guardaTriageModal()
 
 function guardarAdmisionTriage()
 {
+	alert("VOY A GUSRDAR ADMISION DESDE TRIAGE");
 
 	var tiposDoc = document.getElementById("tiposDoc2").value;
 	alert("tiposDoc = " +  tiposDoc);
@@ -1429,11 +1420,15 @@ $('#tablaDatosTriage tbody').on('click', '.ImprimirTriage', function() {
 	alert ("post_id = " + post_id);
 	var triageId = post_id;
 
+	   var data =  {}   ;
+        data['triageId'] = triageId;
+ 	    data = JSON.stringify(data);
+
 	$.ajax({
 	           url: '/imprimirTriage/',
-		   data : {triageId:triageId},	            
-	           type: 'POST',
-	           dataType : 'json',
+	            data : {triageId:triageId},
+		  type: "POST",
+		  dataType : 'json',      
 	  		success: function (data) {
 
 			 $('#pk').val(data.pk);      	     
@@ -1446,3 +1441,52 @@ $('#tablaDatosTriage tbody').on('click', '.ImprimirTriage', function() {
 
 
     });
+
+$(document).on('change', '#busServicioX', function(event) {
+
+       let ServId = document.getElementById('busServicioX');
+	let Serv = ServId.value;
+       // var Serv =   $(this).val()
+
+	alert("Entre para llamar a buscarServiciosTriage : " + Serv)
+
+        var Sede =  document.getElementById("sede").value;
+
+        $.ajax({
+	           url: '/buscarSubServiciosTriage',
+	            data : {Serv:Serv, Sede:Sede},
+	           type: 'GET',
+	           dataType : 'json',
+
+	  		success: function (respuesta) {
+
+	  		   var options = '<option value="=================="></option>';
+
+	  		  var dato = JSON.parse(respuesta);
+
+
+                     const $id2 = document.querySelector("#busSubServicioT");
+
+
+ 	      		     $("#busSubServicioT").empty();
+
+
+	                 $.each(dato, function(key,value) {
+                                    options +='<option value="' + value.id + '">' + value.nombre + '</option>';
+                                    option = document.createElement("option");
+                                    option.value = value.id;
+                                    option.text = value.nombre;
+                                    $id2.appendChild(option);
+ 	      		      });
+
+                    },
+	   		    error: function (request, status, error) {
+
+	   			    	document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
+
+	   	    	}
+
+	     });
+});
+
+

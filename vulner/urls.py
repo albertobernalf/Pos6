@@ -207,7 +207,7 @@ urlpatterns = [
     path('buscarMunicipios/', viewsTriage.buscarMunicipios),
     path('buscarCiudades/', viewsTriage.buscarCiudades),
     path('buscarLocalidades/', viewsTriage.buscarLocalidades),
-    path('imprimirTriage/<str:triageId>/', viewsTriageReportes.ImprimirTriage),
+    path('imprimirTriageParametro/<str:data>/', viewsTriageReportes.ImprimirTriageParametro),
     path('imprimirTriage/', viewsTriageReportes.ImprimirTriage),
 
     # Apoyo Terapeutico

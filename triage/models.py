@@ -1,5 +1,7 @@
 from django.db import models
 
+from django.utils import timezone
+
 # Create your models here.
 
 
@@ -26,7 +28,7 @@ class Triage(models.Model):
     consecAdmision = models.IntegerField(default=0)
     hClinica       = models.CharField(max_length=50,  blank=True, null=True, editable=True,)
     regimen        = models.ForeignKey('clinico.Regimenes', blank=True,null= True, editable=True, on_delete=models.PROTECT)
-    tiposCotizante  = models.ForeignKey('clinico.TiposCotizante', blank=True,null= True, editable=True, on_delete=models.PROTECT)
+
     enfermedaActual= models.ForeignKey('clinico.Enfermedades', blank=True,null= True, editable=True, on_delete=models.PROTECT)
     motivo         = models.CharField(max_length=1000,  blank=True, null=True, editable=True,)
     examenFisico   = models.CharField(max_length=5000,  blank=True, null=True, editable=True,)
@@ -54,7 +56,7 @@ class Triage(models.Model):
     fechaModanexo = models.DateTimeField(editable=True, null=True, blank=True)
     observaciones = models.CharField(max_length=200, default='', editable=True)
     alergiasTriage = models.CharField(max_length=50, default='', editable=True)
-    fechaRegistro  = models.DateTimeField(editable=True, null=True, blank=True)
+    fechaRegistro  = models.DateTimeField(editable=True, null=True, blank=True, default=timezone.now)
     usuarioCrea = models.ForeignKey('planta.Planta', blank=True,null= True, editable=True, on_delete=models.PROTECT ,  related_name='Documento3')
     usuarioAtiende = models.ForeignKey('planta.Planta', blank=True,null= True, editable=True, on_delete=models.PROTECT ,  related_name='Documento2')
     estadoReg = models.CharField(max_length=1, default='A', editable=False ,choices = TIPO_CHOICES)
