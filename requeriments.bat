@@ -69,6 +69,7 @@ pip install pyodbc
 pip install django-mssql-backend
 pip install mssql-django
 pip install psycopg2
+pip install psycopg2-binary==2.8.6
 pip install pygresql
 pip install reportlab
 pip install openpyxl

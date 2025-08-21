@@ -1405,20 +1405,27 @@ def escogeAcceso(request, Sede, Username, Profesional, Documento, NombreSede, es
         curt = miConexiont.cursor()
 
 
-        comando = 'SELECT ser.nombre, count(*) total FROM admisiones_ingresos i, usuarios_usuarios u, sitios_dependencias dep , clinico_servicios ser ,usuarios_tiposDocumento tp , sitios_dependenciastipo deptip  , clinico_Diagnosticos diag , sitios_serviciosSedes sd  WHERE sd."sedesClinica_id" = i."sedesClinica_id"  and sd.servicios_id  = ser.id and i."sedesClinica_id" = dep."sedesClinica_id" AND i."sedesClinica_id" = ' + "'" + str(sede) + "'" + ' AND  deptip.id = dep."dependenciasTipo_id" and i."serviciosActual_id" = ser.id AND dep.disponibilidad = ' + "'" + str('O') + "'" + ' AND i."salidaDefinitiva" = ' + "'" + str('N') + "'" + ' and tp.id = u."tipoDoc_id" and  i."tipoDoc_id" = u."tipoDoc_id" and u.id = i."documento_id" and diag.id = i."dxActual_id" and i."fechaSalida" is null and dep."serviciosSedes_id" = sd.id and dep.id = i."dependenciasActual_id"  group by ser.nombre UNION SELECT ser.nombre, count(*) total FROM triage_triage t, usuarios_usuarios u, sitios_dependencias dep , usuarios_tiposDocumento tp , sitios_dependenciastipo deptip  , sitios_serviciosSedes sd, clinico_servicios ser WHERE sd."sedesClinica_id" = t."sedesClinica_id"  and t."sedesClinica_id" = dep."sedesClinica_id" AND  t."sedesClinica_id" =  ' + "'" + str(sede) + "'" + ' AND dep."sedesClinica_id" =  sd."sedesClinica_id" AND dep.id = t.dependencias_id AND  t."serviciosSedes_id" = sd.id  AND deptip.id = dep."dependenciasTipo_id" and  tp.id = u."tipoDoc_id" and  t."tipoDoc_id" = u."tipoDoc_id" and u.id = t."documento_id"  and ser.id = sd.servicios_id and  dep."serviciosSedes_id" = sd.id and t."serviciosSedes_id" = sd.id and dep."tipoDoc_id" = t."tipoDoc_id" and  t."consecAdmision" = 0 and dep."documento_id" = t."documento_id" and ser.nombre = '  + "'" + str('TRIAGE') + "'" + ' group by ser.nombre'
+        comando = 'SELECT ser.nombre nombre, count(*) total FROM admisiones_ingresos i, usuarios_usuarios u, sitios_dependencias dep , clinico_servicios ser ,usuarios_tiposDocumento tp , sitios_dependenciastipo deptip  , clinico_Diagnosticos diag , sitios_serviciosSedes sd  WHERE sd."sedesClinica_id" = i."sedesClinica_id"  and sd.servicios_id  = ser.id and i."sedesClinica_id" = dep."sedesClinica_id" AND i."sedesClinica_id" = ' + "'" + str(sede) + "'" + ' AND  deptip.id = dep."dependenciasTipo_id" and i."serviciosActual_id" = ser.id AND dep.disponibilidad = ' + "'" + str('O') + "'" + ' AND i."salidaDefinitiva" = ' + "'" + str('N') + "'" + ' and tp.id = u."tipoDoc_id" and  i."tipoDoc_id" = u."tipoDoc_id" and u.id = i."documento_id" and diag.id = i."dxActual_id" and i."fechaSalida" is null and dep."serviciosSedes_id" = sd.id and dep.id = i."dependenciasActual_id"  group by ser.nombre UNION SELECT ser.nombre, count(*) total FROM triage_triage t, usuarios_usuarios u, sitios_dependencias dep , usuarios_tiposDocumento tp , sitios_dependenciastipo deptip  , sitios_serviciosSedes sd, clinico_servicios ser WHERE sd."sedesClinica_id" = t."sedesClinica_id"  and t."sedesClinica_id" = dep."sedesClinica_id" AND  t."sedesClinica_id" =  ' + "'" + str(sede) + "'" + ' AND dep."sedesClinica_id" =  sd."sedesClinica_id" AND dep.id = t.dependencias_id AND  t."serviciosSedes_id" = sd.id  AND deptip.id = dep."dependenciasTipo_id" and  tp.id = u."tipoDoc_id" and  t."tipoDoc_id" = u."tipoDoc_id" and u.id = t."documento_id"  and ser.id = sd.servicios_id and  dep."serviciosSedes_id" = sd.id and t."serviciosSedes_id" = sd.id and dep."tipoDoc_id" = t."tipoDoc_id" and  t."consecAdmision" = 0 and dep."documento_id" = t."documento_id" and ser.nombre = '  + "'" + str('TRIAGE') + "'" + ' group by ser.nombre'
 
         curt.execute(comando)
         print(comando)
 
         indicadores = []
 
-        for id, nombre in curt.fetchall():
-            indicadores.append({'id': id, 'nombre': nombre})
+        for nombre, total in curt.fetchall():
+            indicadores.append({'nombre': nombre, 'total':total})
+            if (nombre == 'HOSPITALIZACION' ):
+                context['Hospitalizados'] = total
+            if (nombre == 'TRIAGE'):
+                context['Triage'] = total
+            if (nombre == 'URGENCIAS'):
+                context['Urgencias'] = total
+            if (nombre == 'AMBULATORIO'):
+                context['Ambulatorios'] = total
 
         miConexiont.close()
         print(indicadores)
 
-        
         context['Indicadores'] = indicadores
 
         total = len(indicadores)
@@ -1427,30 +1434,8 @@ def escogeAcceso(request, Sede, Username, Profesional, Documento, NombreSede, es
 
         print("YA PASE INDICADORES")
 
-        if (total >0):     
-
-          print("Indicadores = ", indicadores)
-          print("Indicadores PRIMERO = ", indicadores[0]['nombre'])
-
-          if (0<total):
-            if (indicadores[0]['id'] == 'HOSPITALIZACION' ):
-                context['Hospitalizados'] = indicadores[0]['nombre']
-                print("hospitalizado = ", indicadores[0]['nombre'])
-          if (1 < total):
-            if (indicadores[1]['id'] == 'TRIAGE' ):
-                context['Triage'] = indicadores[1]['nombre']
-                print("Triage = ", indicadores[1]['nombre'])
-          if (2 < total):
-            if (indicadores[2]['id'] == 'URGENCIAS' ):
-                context['Urgencias']= indicadores[2]['nombre']
-                print("URGENCIAS = ", indicadores[2]['nombre'])
-          if (3 < total):
-            if (indicadores[3]['id'] == 'AMBULATORIO' ):
-                context['Ambulatorios'] = indicadores[3]['nombre']
-                print("Ambulatorios = ", indicadores[3]['nombre'])
-
-
     # Fin combo Indicadores
+
         print ("Listo voy a RENDERIZAR LA PAGINA")
 
         ## FIN CONTEXTO solo Admisiones
@@ -6075,7 +6060,50 @@ def crearAdmisionDef(request):
 
         # Fin combo ripsFinalidadConsulta
 
-        # FIN RUTINA ARMADO CONTEXT
+        # Combo Indicadores
+
+        miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                       password="123456")
+        curt = miConexiont.cursor()
+
+        comando = 'SELECT ser.nombre nombre, count(*) total FROM admisiones_ingresos i, usuarios_usuarios u, sitios_dependencias dep , clinico_servicios ser ,usuarios_tiposDocumento tp , sitios_dependenciastipo deptip  , clinico_Diagnosticos diag , sitios_serviciosSedes sd  WHERE sd."sedesClinica_id" = i."sedesClinica_id"  and sd.servicios_id  = ser.id and i."sedesClinica_id" = dep."sedesClinica_id" AND i."sedesClinica_id" = ' + "'" + str(
+            sede) + "'" + ' AND  deptip.id = dep."dependenciasTipo_id" and i."serviciosActual_id" = ser.id AND dep.disponibilidad = ' + "'" + str(
+            'O') + "'" + ' AND i."salidaDefinitiva" = ' + "'" + str(
+            'N') + "'" + ' and tp.id = u."tipoDoc_id" and  i."tipoDoc_id" = u."tipoDoc_id" and u.id = i."documento_id" and diag.id = i."dxActual_id" and i."fechaSalida" is null and dep."serviciosSedes_id" = sd.id and dep.id = i."dependenciasActual_id"  group by ser.nombre UNION SELECT ser.nombre, count(*) total FROM triage_triage t, usuarios_usuarios u, sitios_dependencias dep , usuarios_tiposDocumento tp , sitios_dependenciastipo deptip  , sitios_serviciosSedes sd, clinico_servicios ser WHERE sd."sedesClinica_id" = t."sedesClinica_id"  and t."sedesClinica_id" = dep."sedesClinica_id" AND  t."sedesClinica_id" =  ' + "'" + str(
+            sede) + "'" + ' AND dep."sedesClinica_id" =  sd."sedesClinica_id" AND dep.id = t.dependencias_id AND  t."serviciosSedes_id" = sd.id  AND deptip.id = dep."dependenciasTipo_id" and  tp.id = u."tipoDoc_id" and  t."tipoDoc_id" = u."tipoDoc_id" and u.id = t."documento_id"  and ser.id = sd.servicios_id and  dep."serviciosSedes_id" = sd.id and t."serviciosSedes_id" = sd.id and dep."tipoDoc_id" = t."tipoDoc_id" and  t."consecAdmision" = 0 and dep."documento_id" = t."documento_id" and ser.nombre = ' + "'" + str(
+            'TRIAGE') + "'" + ' group by ser.nombre'
+
+        curt.execute(comando)
+        print(comando)
+
+        indicadores = []
+
+        for nombre, total in curt.fetchall():
+            indicadores.append({'nombre': nombre, 'total': total})
+            if (nombre == 'HOSPITALIZACION'):
+                context['Hospitalizados'] = total
+            if (nombre == 'TRIAGE'):
+                context['Triage'] = total
+            if (nombre == 'URGENCIAS'):
+                context['Urgencias'] = total
+            if (nombre == 'AMBULATORIO'):
+                context['Ambulatorios'] = total
+
+        miConexiont.close()
+        print(indicadores)
+
+        context['Indicadores'] = indicadores
+
+        total = len(indicadores)
+
+        print("total ", total)
+
+        print("YA PASE INDICADORES")
+
+    # Fin combo Indicadores
+
+
+    # FIN RUTINA ARMADO CONTEXT
 
 
     return render(request, "admisiones/panelAdmisiones.html", context)
@@ -6294,16 +6322,16 @@ def encuentraAdmisionModal(request):
                                        password="123456")
         curt = miConexiont.cursor()
 
-        comando = 'SELECT tp.nombre tipoDoc,  u.documento documento, u.nombre  paciente , i.consec consec , i."fechaIngreso" ingreso , i."fechaSalida" salida, ser.nombre servicioNombreIng, dep.nombre dependenciasIngreso ,pla.nombre medicoIngreso, i."especialidadesMedicosIngreso_id" espMedico, diag1.nombre diagMedico, i."ViasIngreso_id" viasIngreso, i."causasExterna_id" causasExterna,i.regimen_id regimenes ,i."tiposCotizante_id"  cotizante,i.remitido remitido,i."ipsRemite_id" ips ,i."numManilla" numManilla, i."dxIngreso_id" dxIngreso, "contactoResponsable_id" responsable, "contactoAcompañante_id" acompanante , i.empresa_id empresa  , i."ripsCausaMotivoAtencion_id" ripsCausaMotivoAtencion , "ripsGrupoServicios_id" ripsGrupoServicios, i."ripsmodalidadGrupoServicioTecSal_id" ripsmodalidadGrupoServicioTecSal  , i."ripsViaIngresoServicioSalud_id" ripsViaIngresoServicioSalud , i."ripsServiciosIng_id" ripsServiciosIng, i."ripsCondicionDestinoUsuarioEgreso_id" ripsCondicionDestinoUsuarioEgreso, i."ripsViaIngresoServicioSalud_id" ripsViaIngresoServicioSalud ,i."ripsDestinoUsuarioEgresoRecienNacido_id" ripsDestinoUsuarioEgresoRecienNacido  FROM admisiones_ingresos i inner join usuarios_usuarios u on (u."tipoDoc_id" = i."tipoDoc_id" and u.id = i."documento_id" ) inner join sitios_dependencias dep on (dep."sedesClinica_id" = i."sedesClinica_id" and dep."tipoDoc_id" =  i."tipoDoc_id" and dep.documento_id =i."documento_id"  and dep.consec = i.consec) inner join usuarios_tiposDocumento tp on (tp.id = u."tipoDoc_id") inner join sitios_dependenciastipo deptip on (deptip.id = dep."dependenciasTipo_id") inner join sitios_serviciosSedes sd on (sd."sedesClinica_id" = i."sedesClinica_id") inner join clinico_servicios ser  on (ser.id = sd.servicios_id  and ser.id = i."serviciosIng_id" ) left join clinico_especialidades esp1 on (esp1.id = i."especialidadesMedicosIngreso_id" ) left join clinico_diagnosticos diag1 on (diag1.id = i."dxIngreso_id") left join clinico_medicos med1 on (med1.id =i."medicoIngreso_id") left join planta_planta pla on (pla.id =i."medicoIngreso_id")  left join clinico_viasIngreso vias on (vias.id = i."ViasIngreso_id") left join clinico_causasExterna cexterna on (cexterna.id = i."causasExterna_id") inner join clinico_regimenes reg on (reg.id = i.regimen_id) inner join clinico_tiposcotizante cot on (cot.id = i."tiposCotizante_id") left  join clinico_ips ips on (ips.id =i."ipsRemite_id") WHERE i."sedesClinica_id" = ' + "'" + str(sede) + "'" + ' and u."tipoDoc_id" = ' + "'" + str(Ingreso.tipoDoc_id) + "'" + ' and u.id = ' + "'" + str(Ingreso.documento_id) + "'" + ' and i.consec= ' + "'" + str(Ingreso.consec) + "'" + ' and i."fechaSalida" is null'
+        comando = 'SELECT tp.nombre tipoDoc,  u.documento documento, u.nombre  paciente , i.consec consec , i."fechaIngreso" ingreso , i."fechaSalida" salida, ser.nombre servicioNombreIng,subserv.nombre subServicioNombreIng, dep.nombre dependenciasIngreso ,i."medicoIngreso_id" medicoIngreso, i."especialidadesMedicosIngreso_id" espMedico, diag1.nombre diagMedico, i."ViasIngreso_id" viasIngreso, i."causasExterna_id" causasExterna,i.regimen_id regimenes ,i."tiposCotizante_id"  cotizante,i.remitido remitido,i."ipsRemite_id" ips ,i."numManilla" numManilla, i."dxIngreso_id" dxIngreso, "contactoResponsable_id" responsable, "contactoAcompañante_id" acompanante , i.empresa_id empresa  , i."ripsCausaMotivoAtencion_id" ripsCausaMotivoAtencion , "ripsGrupoServicios_id" ripsGrupoServicios, i."ripsmodalidadGrupoServicioTecSal_id" ripsmodalidadGrupoServicioTecSal  , i."ripsViaIngresoServicioSalud_id" ripsViaIngresoServicioSalud , i."ripsServiciosIng_id" ripsServiciosIng, i."ripsCondicionDestinoUsuarioEgreso_id" ripsCondicionDestinoUsuarioEgreso, i."ripsViaIngresoServicioSalud_id" ripsViaIngresoServicioSalud ,i."ripsDestinoUsuarioEgresoRecienNacido_id" ripsDestinoUsuarioEgresoRecienNacido  FROM admisiones_ingresos i inner join usuarios_usuarios u on (u."tipoDoc_id" = i."tipoDoc_id" and u.id = i."documento_id" ) inner join sitios_dependencias dep on (dep."sedesClinica_id" = i."sedesClinica_id" and dep."tipoDoc_id" =  i."tipoDoc_id" and dep.documento_id =i."documento_id"  and dep.consec = i.consec) inner join usuarios_tiposDocumento tp on (tp.id = u."tipoDoc_id") inner join sitios_dependenciastipo deptip on (deptip.id = dep."dependenciasTipo_id") inner join sitios_subserviciossedes subServ ON (subserv.id = dep."subServiciosSedes_id") inner join sitios_serviciosSedes sd on (sd."sedesClinica_id" = i."sedesClinica_id") inner join clinico_servicios ser  on (ser.id = sd.servicios_id  and ser.id = i."serviciosIng_id" ) left join clinico_especialidades esp1 on (esp1.id = i."especialidadesMedicosIngreso_id" ) left join clinico_diagnosticos diag1 on (diag1.id = i."dxIngreso_id") left join clinico_medicos med1 on (med1.id =i."medicoIngreso_id") left join planta_planta pla on (pla.id =i."medicoIngreso_id")  left join clinico_viasIngreso vias on (vias.id = i."ViasIngreso_id") left join clinico_causasExterna cexterna on (cexterna.id = i."causasExterna_id") inner join clinico_regimenes reg on (reg.id = i.regimen_id) inner join clinico_tiposcotizante cot on (cot.id = i."tiposCotizante_id") left  join clinico_ips ips on (ips.id =i."ipsRemite_id") WHERE i."sedesClinica_id" = ' + "'" + str(sede) + "'" + ' and u."tipoDoc_id" = ' + "'" + str(Ingreso.tipoDoc_id) + "'" + ' and u.id = ' + "'" + str(Ingreso.documento_id) + "'" + ' and i.consec= ' + "'" + str(Ingreso.consec) + "'" + ' and i."fechaSalida" is null'
 
         print(comando)
         curt.execute(comando)
 
         Usuarios = {}
 
-        for tipoDoc,  documento,paciente ,consec ,  ingreso , salida, servicioNombreIng, dependenciasIngreso , medicoIngreso, espMedico,diagMedico, viasIngreso, causasExterna,regimenes, cotizante, remitido,ips , numManilla, dxIngreso,responsable, acompanante, empresa, ripsCausaMotivoAtencion ,ripsGrupoServicios, ripsmodalidadGrupoServicioTecSal, ripsViaIngresoServicioSalud , ripsServiciosIng , ripsCondicionDestinoUsuarioEgreso , ripsViaIngresoServicioSalud, ripsDestinoUsuarioEgresoRecienNacido  in curt.fetchall():
+        for tipoDoc,  documento,paciente ,consec ,  ingreso , salida, servicioNombreIng,subServicioNombreIng, dependenciasIngreso , medicoIngreso, espMedico, diagMedico, viasIngreso, causasExterna,regimenes, cotizante, remitido,ips , numManilla, dxIngreso,responsable, acompanante, empresa, ripsCausaMotivoAtencion ,ripsGrupoServicios, ripsmodalidadGrupoServicioTecSal, ripsViaIngresoServicioSalud , ripsServiciosIng , ripsCondicionDestinoUsuarioEgreso , ripsViaIngresoServicioSalud, ripsDestinoUsuarioEgresoRecienNacido  in curt.fetchall():
             Usuarios = {'tipoDoc': tipoDoc, 'documento': documento, 'paciente': paciente, 'ingreso': ingreso,
-                        'salida': salida, 'servicioNombreIng': servicioNombreIng, 'dependenciasIngreso': dependenciasIngreso,
+                        'salida': salida, 'servicioNombreIng': servicioNombreIng, 'subServicioNombreIng':subServicioNombreIng, 'dependenciasIngreso': dependenciasIngreso,
                         'medicoIngreso': medicoIngreso, 'espMedico': espMedico, 'diagMedico': diagMedico,
                         'viasIngreso': viasIngreso, 'causasExterna': causasExterna,
                         'regimenes': regimenes, 'cotizante': cotizante, 'remitido': remitido,
@@ -6709,8 +6737,28 @@ def guardaCambioServicio(request):
                                                                                    consec=consec, disponibilidad="L",
                                                                                    fechaRegistro=fechaRegistro,
                                                                                    fechaLiberacion=fechaRegistro)
-            grabo04.save()
-            print("yA grabe dependencias historico", grabo04.id)
+            #grabo04.save()
+            #print("yA grabe dependencias historico", grabo04.id)
+
+
+
+            # Registro PRIMERO el historico de dependencia LA QUE LIBERO
+
+            grabo07 = HistorialDependencias(
+                tipoDoc_id=tipoDocId.id,
+                documento_id=documentoId.id,
+                consec=consec,
+                dependencias_id=dependenciaActualId.id,
+                disponibilidad='L',
+                fechaRegistro=fechaRegistro,
+                usuarioRegistro_id=username_id,
+                fechaLiberacion=fechaRegistro,
+                fechaOcupacion=None,
+                estadoReg='A'
+            )
+            grabo07.save()
+            print("yA grabe dependencias historico la que libere", grabo07.id)
+
 
 
             # Registro el historico la nueca dependencia si es un INSERT
@@ -6728,7 +6776,7 @@ def guardaCambioServicio(request):
                 estadoReg='A'
             )
             grabo05.save()
-            print("yA grabe dependencias historico", grabo04.id)
+            print("yA grabe dependencias historico", grabo05.id)
 
 
             return JsonResponse(CambioServicio, safe=False)
@@ -7547,6 +7595,10 @@ def Load_dataHabitacionesAdmisiones(request, data):
 
     sede = d['sede']
     print("sede = ", sede)
+    ingresoId = d['ingresoId']
+    print("ingresoId = ", ingresoId)
+
+    ingreso = Ingresos.objects.get(id=ingresoId)
 
     habitaciones = []
 
@@ -7554,7 +7606,8 @@ def Load_dataHabitacionesAdmisiones(request, data):
                                        password="123456")
     curx = miConexionx.cursor()
 
-    detalle = 'select dep.id id,sed.nombre, serv.nombre, subserv.nombre, dep.numero numero,   case when his.disponibilidad = ' + "'" + str('L') + "'" + ' then ' + "'" + str('Libera') + "'" + ' else ' + "'" + str('Ocupa') + "'" + ' end accion,  case when his.disponibilidad =' + "'" + str('O') + "'" + ' then  his."fechaOcupacion" else  his."fechaLiberacion" end  fecha, tp.nombre tipoDoc 	,	u.documento documento, 	u.nombre paciente FROM sitios_dependencias dep, usuarios_usuarios u, usuarios_tiposdocumento tp,sitios_sedesclinica sed, 	sitios_serviciossedes serv, sitios_subserviciossedes subserv, sitios_historialdependencias his WHERE his.dependencias_id = dep.id AND dep."sedesClinica_id"  = ' + "'" + str(sede) + "'" + ' AND sed.id=dep."sedesClinica_id" AND sed.id = serv."sedesClinica_id" AND sed.id = subserv."sedesClinica_id" AND dep."serviciosSedes_id" = serv.id and dep."subServiciosSedes_id" = subserv.id AND dep."tipoDoc_id" = u."tipoDoc_id" and dep.documento_id = u.id and u."tipoDoc_id" = tp.id  ORDER By dep.numero, dep."fechaOcupacion"'
+    #detalle = 'select dep.id id,sed.nombre, serv.nombre, subserv.nombre, dep.numero numero,   case when his.disponibilidad = ' + "'" + str('L') + "'" + ' then ' + "'" + str('Libera') + "'" + ' else ' + "'" + str('Ocupa') + "'" + ' end accion,  case when his.disponibilidad =' + "'" + str('O') + "'" + ' then  his."fechaOcupacion" else  his."fechaLiberacion" end  fecha, tp.nombre tipoDoc 	,	u.documento documento, 	u.nombre paciente FROM sitios_dependencias dep, usuarios_usuarios u, usuarios_tiposdocumento tp,sitios_sedesclinica sed, 	sitios_serviciossedes serv, sitios_subserviciossedes subserv, sitios_historialdependencias his WHERE his.dependencias_id = dep.id AND dep."sedesClinica_id"  = ' + "'" + str(sede) + "'" + ' AND sed.id=dep."sedesClinica_id" AND sed.id = serv."sedesClinica_id" AND sed.id = subserv."sedesClinica_id" AND dep."serviciosSedes_id" = serv.id and dep."subServiciosSedes_id" = subserv.id AND dep."tipoDoc_id" = u."tipoDoc_id" and dep.documento_id = u.id and u."tipoDoc_id" = tp.id  ORDER By dep.numero, dep."fechaOcupacion"'
+    detalle = 'select dep.id id,sed.nombre, serv.nombre, subserv.nombre, dep.numero numero,  case when his.disponibilidad = ' + "'" + str('L') + "'" + ' then ' + "'" + str('Libera') + "'" + ' else ' + "'" + str('Ocupa') + "'" + ' end accion, 	case when his.disponibilidad =' + "'" + str('O') + "'" + ' then  his."fechaOcupacion" else  his."fechaLiberacion" end fecha, tp.nombre tipoDoc 	,	u.documento documento, 	u.nombre paciente  	FROM  sitios_dependencias dep, usuarios_usuarios u, usuarios_tiposdocumento tp,sitios_sedesclinica sed, sitios_serviciossedes serv, sitios_subserviciossedes subserv, sitios_historialdependencias his WHERE	his.dependencias_id = dep.id AND dep."sedesClinica_id"  = ' + "'" + str(sede) + "'" + ' AND sed.id=dep."sedesClinica_id" AND sed.id = serv."sedesClinica_id" and  sed.id = subserv."sedesClinica_id" AND dep."serviciosSedes_id" =  serv.id and dep."subServiciosSedes_id" = subserv.id AND his."tipoDoc_id" = u."tipoDoc_id" and his.documento_id = u.id and u."tipoDoc_id" = tp.id  and his."tipoDoc_id" =' + "'" + str(ingreso.tipoDoc_id) + "'" + ' AND his.documento_id = ' + "'" + str(ingreso.documento_id) + "'" + ' ORDER By  his.id,his."fechaOcupacion", dep.numero'
     print(detalle)
 
     curx.execute(detalle)

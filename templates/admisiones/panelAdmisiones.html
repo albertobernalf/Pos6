@@ -233,8 +233,8 @@ Ambulatorios:  <span id="amb" name="amb" style='color:red'>{{Ambulatorios}} </sp
                                             <input type="text" class="form-control" id="busDocumentoSel"  name="busDocumentoSel" disabled="disabled">
                                         </div>
                                         <div class="col">
-                                            <label for="dxIngresoP" class="col-sm-12 control-label">Diagnosticos:</label>
-                                            <select class="form-select " aria-label="" id="dxIngresoP" name="dxIngresoP" required>
+                                            <label for="dxIngresoPX" class="col-sm-12 control-label">Diagnosticos:</label>
+                                            <select class="form-select " aria-label="" id="dxIngresoPX" name="dxIngresoPX" required>
                                                 {% for diagnosticos in Diagnosticos %}
                                                 <option value="{{diagnosticos.id}}"> {{diagnosticos.nombre}}
                                                 </option>
@@ -259,8 +259,8 @@ Ambulatorios:  <span id="amb" name="amb" style='color:red'>{{Ambulatorios}} </sp
 
                                         <div class="col">
 
-                                            <label for="medicoIngresoP" class="col-sm-12 control-label">Medico: nbsp;&nbsp;&nbsp;</label>
-                                            <select class="form-select " aria-label=""  id="medicoIngresoP" name="medicoIngresoP" required>
+                                            <label for="medicoIngresoPPX" class="col-sm-12 control-label">Medico: nbsp;&nbsp;&nbsp;</label>
+                                            <select class="form-select " aria-label=""  id="medicoIngresoPPX" name="medicoIngresoPPX" required>
                                                 {% for medicos in Medicos %}
                                                 <option value="{{medicos.id}}"> {{medicos.nombre}}</option>
                                                 {% endfor %}
@@ -1367,8 +1367,8 @@ function cargarTablaConmveniosPaciente()
                     {% csrf_token %}
                     <input type="hidden" name="post_id" id="post_id">
                     <input type="hidden" id="sede2" name="sede2" value = "{{Sede}}">
-                     <input type="text" id="ingresoId2" name="ingresoId2" value ="">
- 			<input type="hiddent" id="username33_id" name="username33_id" value ="{{Username_id}}">
+                     <input type="text" id="ingresoId2" name="ingresoId2" value ="" readonly>
+ 			<input type="hidden" id="username33_id" name="username33_id" value ="{{Username_id}}">
 
 			<div class="form-group">
                         <label for="convenio" class="col-sm-2 control-label">Convenio:</label>
@@ -1704,22 +1704,24 @@ function cargarTablaAbonosPaciente()
 
                 <div class="form-row">
                     A D E P E N D E N C I A:
-                    <div class="form-group col-sm-3">
+                    <div class="form-row">
 
-                        <label for="servicioCambio" class="col-sm-4 control-label">Serv:</label>
-                        <div class="col-sm-1">
-                            <select class="form-select  h-100 w-200" aria-label="" id="servicioCambio"
+			<div class="col">
+                        <div class="col-sm-8">
+                        <label for="servicioCambio" class="col-sm-1 control-label">Serv:</label>
+                            <select class="form-select  h-100 w-100" aria-label="" id="servicioCambio"
                                     name="servicioCambio">
                                 {% for servicios in Servicios %}
                                 <option value="{{servicios.id}}"> {{servicios.nombre}}</option>
                                 {% endfor %}
                             </select>
                         </div>
-                    </div>
-                    <div class="form-group col-sm-3">
-                        <label for="subServicioCambio" class="col-sm-4 control-label">SubServ:</label>
-                        <div class="col-sm-1">
-                            <select class="form-select  h-100 w-200" aria-label="" id="subServicioCambio"
+                        </div>
+
+                    <div class="col">
+                       <div class="col-sm-8">
+                        <label for="subServicioCambio" class="col-sm-1 control-label">SubServ:</label>
+                            <select class="form-select  h-100 w-100" aria-label="" id="subServicioCambio"
                                     name="subServicioCambio">
                                 {% for subServicios in SubServicios %}
                                 <option value="{{subServicios.id}}"> {{subServicios.nombre}}</option>
@@ -1727,10 +1729,12 @@ function cargarTablaAbonosPaciente()
                             </select>
                         </div>
                     </div>
-                    <div class="form-group col-sm-3">
+
+
+                    <div class="col">
+                        <div class="col-sm-8">
                         <label for="dependenciaCambio" class="col-sm-4 control-label">Habitacion:</label>
-                        <div class="col-sm-1">
-                            <select class="form-select  h-100 w-200" aria-label="" id="dependenciaCambio"
+                            <select class="form-select  h-100 w-100" aria-label="" id="dependenciaCambio"
                                     name="dependenciaCambio">
                                 {% for habitaciones in Habitaciones %}
                                 <option value="{{habitaciones.id}}"> {{habitaciones.nombre}}</option>
@@ -1738,14 +1742,14 @@ function cargarTablaAbonosPaciente()
                             </select>
                         </div>
 
-                </div>
-		  <div class="form-row">
+	                </div>
 
-                    <div class="form-group col-sm-12">
+			<div class="col">
+                     
                         <input type="button" class="btn btn-primary" value="Guardar" onclick="guardaCambioServicio()">
-                    </div>
+	                </div>			
+	               </div>			
 
-		</div>
 
             </form>
               </table>

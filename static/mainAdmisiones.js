@@ -719,8 +719,8 @@ const initDataTableAdmisiones = async () => {
 	    dataTableCensoInitialized = true;
 
 
-        arrancaAdmisiones(6,data);
-	    dataTableHabitacionesInitialized = true;
+        // arrancaAdmisiones(6,data);
+	//    dataTableHabitacionesInitialized = true;
 
 
 
@@ -875,8 +875,8 @@ window.addEventListener('load', async () => {
 
             $.ajax({
                 data: $('#postFormCrearConvenio').serialize(),
-               // url: "{% url '/guardaConvenioAdmision' %}",
-		  url: "/guardaConvenioAdmision/",
+
+		  url: '/guardaConvenioAdmision/',
                 type: "POST",
                 dataType: 'json',
                 success: function (data) {
@@ -1081,6 +1081,10 @@ $('#tablaDatos tbody').on('change', '.miIngresoId', function() {
 	    dataTableAutorizacionesInitialized = true;
 
 
+         arrancaAdmisiones(6,data);
+	    dataTableHabitacionesInitialized = true;
+
+
 
 	$.ajax({
 		type: 'POST',
@@ -1101,7 +1105,6 @@ $('#tablaDatos tbody').on('change', '.miIngresoId', function() {
 		 $('#subServicioCambio').val(cambioServicio['SubServicios']);
 		 $('#dependenciaCambio').val(cambioServicio['DependenciasActual'].habitaciones);
 
-
 		 $('#convTipoDoc').val(cambioServicio['Usuarios'].tipoDoc);
 		 $('#convNumdoc').val(cambioServicio['Usuarios'].documento);
 		$('#convPaciente').val(cambioServicio['Usuarios'].paciente);		
@@ -1112,10 +1115,8 @@ $('#tablaDatos tbody').on('change', '.miIngresoId', function() {
 		 $('#convPacienteA').val(cambioServicio['Usuarios'].paciente);
 		 $('#convConsecA').val(cambioServicio['Usuarios'].consec);
 
-
 		 $('#responsablesC').val(cambioServicio['Usuarios'].responsable);
 		  $('#acompananteC').val(cambioServicio['Usuarios'].acompanante);
-
 
 
                      // Desde aquip FURIPS
@@ -1341,7 +1342,7 @@ if (genero =='')
 
 // Aqui combos para Cambio de servicio
 
-$(document).on('click', '#servicioCambio', function(event) {
+$(document).on('change', '#servicioCambio', function(event) {
 
     alert (" Entre cambio Servicio");
     var serv =   $(this).val()
@@ -1379,7 +1380,7 @@ $(document).on('click', '#servicioCambio', function(event) {
 
 
 
-$(document).on('click', '#subServicioCambio', function(event) {
+$(document).on('change', '#subServicioCambio', function(event) {
     alert (" Entre cambio Habitacion Servicio");
        var select = document.getElementById("servicioCambio"); /*Obtener el SELECT */
        var serv = select.options[select.selectedIndex].value; /* Obtener el valor */
@@ -1783,6 +1784,10 @@ $('#tablaDatos tbody').on('click', '.miEditaAdmision', function() {
       	data: {'ingresoId':ingresoId, 'sede':sede},
 		success: function (Usuarios) {
 
+alert("llegue diagMedico = " + Usuarios.diagMedico);
+alert("llegue medicoIngreso = " + Usuarios.medicoIngreso);
+
+
 			  var options = '<option value="=================="></option>';
 
 
@@ -1802,21 +1807,27 @@ $('#tablaDatos tbody').on('click', '.miEditaAdmision', function() {
        			  $('#paciente').val(Usuarios.paciente);
        			      			    $('#empresaE').val(Usuarios.empresa);
       			    $('#busServicio2').val(Usuarios.servicioNombreIng);
+      			    $('#busSubServicio2').val(Usuarios.subServicioNombreIng);
+
+
+
    			    $('#dependenciasIngreso').val(Usuarios.dependenciasIngreso);
     			    $('#busEspecialidadP').val(Usuarios.espMedico);
 
-    			    $('#dxIngresoX').val(Usuarios.diagMedico);
-    			    $('#viasIngresoT').val(Usuarios.viasIngreso);
+    			    $('#dxIngresoPX').val(Usuarios.dxIngreso);
+    			    $('#viasIngresoP').val(Usuarios.viasIngreso);
     			    $('#causasExternaP').val(Usuarios.causasExterna);
     			    $('#regimenesP').val(Usuarios.regimenes);
     			    $('#tiposCotizanteP').val(Usuarios.cotizante);
     			    $('#remitidoP').val(Usuarios.remitido);
     			    $('#numManillaP').val(Usuarios.numManilla);
 
-    			    $('#medicoIngresoP').val(Usuarios.medicoIngreso); 	
+    			    $('#medicoIngresoPPX').val(Usuarios.medicoIngreso); 	
 
     			    $('#responsablesP').val(Usuarios.responsable); 	
     			    $('#acompanantesP').val(Usuarios.acompanante); 	
+			$('#ipsP').val(Usuarios.ips); 	
+
 
   		  $('#tiposCotizanteP').val(Usuarios.cotizante);
   		  $('#ripsCausaMotivoAtencionX').val(Usuarios.ripsCausaMotivoAtencion);
@@ -1832,6 +1843,7 @@ $('#tablaDatos tbody').on('click', '.miEditaAdmision', function() {
 
   		   $('#modalActualizaAdmision').modal('show');	
 
+    		
 
 
 
@@ -2112,10 +2124,10 @@ $(document).on('change', '#busEspecialidadP', function(event) {
 	  		  var dato = JSON.parse(respuesta);
 
 
-                     const $id2 = document.querySelector("#medicoIngresoP");
+                     const $id2 = document.querySelector("#medicoIngresoPPX");
 
 
- 	      		     $("#medicoIngresoP").empty();
+ 	      		     $("#medicoIngresoPPX").empty();
 
 
 	                 $.each(dato, function(key,value) {
@@ -2610,18 +2622,13 @@ function findOneAdmision(tipoDoc,Documento,consec, sede)
 				$('#ips').val(Usuarios.ips);
 
 				$('#numManilla').val(Usuarios.numManilla);
-				$('#dxIngreso').val(Usuarios.dxIngreso);
+				$('#dxIngresoPX').val(Usuarios.dxIngreso);
 				$('#paciente').val(Usuarios.paciente);
 				$('#ingreso').val(Usuarios.ingreso);
 				$('#salida').val(Usuarios.salida);
-				$('#medicoIngreso').val(Usuarios.medicoIngreso);
+				$('#medicoIngresoPPX').val(Usuarios.medicoIngreso);
 				$('#espMedico').val(Usuarios.espMedico);
 				$('#diagMedico').val(Usuarios.diagMedico);
-
-	  	
-
-
-
 
 
 				 $('#modalActualizaAdmision').modal({show:true});
@@ -2924,7 +2931,7 @@ function actualizaAdmision()
 
 	var empresa = document.getElementById("empresaE").value;
 	var busEspecialidad = document.getElementById("busEspecialidadP").value;
-	var medicoIngreso = document.getElementById("medicoIngresoP").value;
+	var medicoIngreso = document.getElementById("medicoIngresoPPX").value;
 	var sede= document.getElementById("sede").value;
 
 	var viasIngreso = document.getElementById("viasIngresoP").value;
@@ -2932,7 +2939,7 @@ function actualizaAdmision()
     var regimenes = document.getElementById("regimenesP").value;
     var tiposCotizante = document.getElementById("tiposCotizanteP").value;
     var acompanantes = document.getElementById("acompanantesP").value;
-    var dxIngreso = document.getElementById("dxIngresoP").value;
+    var dxIngreso = document.getElementById("dxIngresoPX").value;
     var responsables = document.getElementById("responsablesP").value;
     var remitido = document.getElementById("remitidoP").value;
     var ips = document.getElementById("ipsP").value;
@@ -3067,11 +3074,14 @@ $('#tablaDatos tbody').on('click', '.ImprimirHojaAdmision', function() {
 	  		success: function (data) {
 
 			 $('#pk').val(data.pk);
+			   info = data['message']
+
+ 		        document.getElementById("mensajes").innerHTML = 'Revize la informacion completa de la Hoja de Admision '  + info;
 	       	     
 
                   },
 	   		    error: function (request, status, error) {
-	   			   document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
+	   			   document.getElementById("mensajesError").innerHTML = 'Revize la informacion completa de la Hoja de Admsion ' +  error;
 	   	    	}
 	     });
 

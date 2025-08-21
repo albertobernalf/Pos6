@@ -1047,6 +1047,15 @@ def ImprimirHojaAdmision(request):
 
     miConexiont.close()
 
+    print("entidadesResponsables", entidadesResponsables[0]['convenio'])
+    print("tamaño", len(entidadesResponsables))
+
+    if (len(entidadesResponsables)<1):
+        print("Entre")
+
+        return JsonResponse({'success': False, 'message': 'Favor ingresar Convenio Paciente!'})
+
+
     pdf.ln(12)
     pdf.cell(50, 36, 'ENTIDADES RESPONSABLES:', 0, 0, 'L')
     pdf.cell(50, 37, '1.-', 0, 0, 'L')

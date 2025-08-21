@@ -831,6 +831,13 @@ ojo pendiente en aplicacion de medicamentos arreglar cuando aplica la modal no p
   -- Hacer prueba totale grales y arregklar a la lata
 
 
--- ojo historicode habitaciones en admsioes arreglar
+
 -- los combos sin seleccion de rips despues de que se crea un admison estan con inicio en blanco
 -- ojo sale mensaje que pacinte ya esta en la clinica cuando nop por elcotext ver como arreglar
+
+-- ops como asi me borro un acetaminofeen de liquidaciondetalle verificar ???
+-- ops agregfue tan solo un aceaminfen y no me refrescon totales no grabo en cabezpote facturacion_lquidacion un registro manul de acetaminofen
+-- hice una admision desde el triage a utrgencias y no me imprimio la hoja de urgecias
+-- ojop hay un registro de laliquiacin de eumelia con cums_id y examen_id ala vae en loqudacindetalle ERROR Y ESO COMO PASO ??
+
+-- ops cuando crre el ambulatorio perdi los indicadores y el modulo en el que estaba trabajando

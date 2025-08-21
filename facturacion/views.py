@@ -20,6 +20,7 @@ import pyodbc
 import psycopg2
 import json 
 import datetime
+from django.utils import timezone
 from decimal import Decimal
 from admisiones.models import Ingresos
 from facturacion.models import ConveniosPacienteIngresos, Liquidacion, LiquidacionDetalle, Facturacion, FacturacionDetalle
@@ -259,9 +260,8 @@ def PostConsultaLiquidacion(request):
 
 
     estadoReg= 'A'
-    now = datetime.datetime.now()
-    print("NOW  = ", now)
-    fechaRegistro = now
+
+    fechaRegistro = timezone.now()
     usuarioRegistro = ''
 
     # Primero colocamos el convenio en la tabla facturacion_facturacionliquidacion
@@ -731,7 +731,8 @@ def GuardaAbonosFacturacion(request):
     print ("liquidacionId  = ", liquidacionId )
     # print("sede = ", sede)
 
-    fechaRegistro = datetime.datetime.now()
+
+    fechaRegistro = timezone.now()
 
     registroId = Liquidacion.objects.get(id=liquidacionId)
     print  ("registroId documento =" , registroId.documento_id)
@@ -856,7 +857,8 @@ def GuardarLiquidacionDetalle(request):
            inicialCups = valorTotal
 
  
-    fechaRegistro = datetime.datetime.now()
+
+    fechaRegistro = timezone.now()
 
     registroId = Liquidacion.objects.get(id=liquidacionId)
     print  ("registroId documento =" , registroId.documento_id)
@@ -1098,7 +1100,8 @@ def EditarGuardarLiquidacionDetalle(request):
            suministros="null"
 
 
-    fechaRegistro = datetime.datetime.now()
+
+    fechaRegistro = timezone.now()
 
     registroId = LiquidacionDetalle.objects.get(id=liquidacionDetalleId)
     print  ("liquiacion_id =" , registroId.liquidacion_id)
@@ -1242,9 +1245,8 @@ def FacturarCuenta(request):
     print ("TipoDoc", usuarioId.tipoDoc_id)
     print ("Consec", usuarioId.consecAdmision)
 
-    now = datetime.datetime.now()
-    print("NOW  = ", now)
-    fechaRegistro = now
+
+    fechaRegistro = timezone.now()
 	
     liquidacionDatos = Liquidacion.objects.get(id=liquidacionId)
     print("convenio de la liquidacion = " , liquidacionDatos.convenio_id);
@@ -1589,9 +1591,8 @@ def ReFacturar(request):
 
     facturacionId2 = Facturacion.objects.get(id=facturacionId)
 
-    now = datetime.datetime.now()
-    print("NOW  = ", now)
-    fechaRegistro = now
+
+    fechaRegistro = timezone.now()
 
     miConexion3 = None
     try:
@@ -1679,7 +1680,8 @@ def GuardaApliqueAbonosFacturacion(request):
 
     print("aformaPago = ", aformaPago)
 
-    fechaRegistro = datetime.datetime.now()
+
+    fechaRegistro = timezone.now()
 
     registroId = Liquidacion.objects.get(id=liquidacionId)
     print  ("registroId documento =" , registroId.documento_id)
@@ -1753,7 +1755,8 @@ def TrasladarConvenio(request):
     convenioIdHacia = request.POST['convenioIdHacia']
     print ("convenioIdHacia = ", convenioIdHacia)
 
-    fechaRegistro = datetime.datetime.now()
+
+    fechaRegistro = timezone.now()
     estadoReg= 'A'
 
     registroId = Liquidacion.objects.get(id=liquidacionId)
