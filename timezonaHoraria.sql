@@ -5,10 +5,10 @@ select * from clinico_servicios;
 select * from sitios_serviciosSedes;
 select * from sitios_subserviciossedes
 select "tipoDoc_id", * from usuarios_usuarios order by documento;
-  
-select * from admisiones_ingresos;
+   
+select documento_id,* from admisiones_ingresos;
  
-select * from sitios_dependencias where documento_id=18;;
+select * from sitios_dependencias order by id
 select * from sitios_historialdependencias where documento_id=18;
 
 SELECT sed.id id ,ser.nombre nombre
@@ -25,10 +25,7 @@ ALTER DATABASE vulner6 SET TIMEZONE = 'UTC';
 SHOW TIMEZONE  -- ESTABA "America/Bogota"
 	SELECT * FROM pg_timezone_names;
 	
-select * from sitios_dependencias;
-select * from clinico_servicios;
-select * from sitios_serviciosSedes;
-select * from sitios_subserviciossedes
+
  
 	-- OPS AQUI HAY ALGO DE FONDO VERIFICAR MAÑANA
  
@@ -61,7 +58,39 @@ FROM triage_triage t, usuarios_usuarios u, sitios_dependencias dep , usuarios_ti
 group by ser.nombre
 
 
+select * from clinico_especialidades;
+	select * from clinico_especialidadesmedicos;
 select documento_id,* from admisiones_ingresos;
 
 select * from clinico_medicos;
 select * from clinico_especialidades; --dx, via de ingreso, medico no los muestra en editar admisiones, no muestra la ips
+select * from sitios_dependencias;
+select * from clinico_servicios;
+select * from sitios_serviciosSedes;
+select * from sitios_subserviciossedes
+
+	SELECT tp.nombre tipoDoc,  u.documento documento, u.nombre  paciente , i.consec consec , i."fechaIngreso" ingreso ,
+	i."fechaSalida" salida, ser.nombre servicioNombreIng,subserv.nombre subServicioNombreIng, dep.nombre dependenciasIngreso ,
+	i."medicoIngreso_id" medicoIngreso, i."especialidadesMedicosIngreso_id" espMedico, diag1.nombre diagMedico, i."ViasIngreso_id" viasIngreso, i."causasExterna_id" causasExterna,i.regimen_id regimenes ,i."tiposCotizante_id"  cotizante,i.remitido remitido,i."ipsRemite_id" ips ,i."numManilla" numManilla, i."dxIngreso_id" dxIngreso, "contactoResponsable_id" responsable, "contactoAcompañante_id" acompanante , i.empresa_id empresa  , i."ripsCausaMotivoAtencion_id" ripsCausaMotivoAtencion , "ripsGrupoServicios_id" ripsGrupoServicios, i."ripsmodalidadGrupoServicioTecSal_id" ripsmodalidadGrupoServicioTecSal  , i."ripsViaIngresoServicioSalud_id" ripsViaIngresoServicioSalud , i."ripsServiciosIng_id" ripsServiciosIng, i."ripsCondicionDestinoUsuarioEgreso_id" ripsCondicionDestinoUsuarioEgreso, i."ripsViaIngresoServicioSalud_id" ripsViaIngresoServicioSalud ,i."ripsDestinoUsuarioEgresoRecienNacido_id" ripsDestinoUsuarioEgresoRecienNacido  
+	FROM admisiones_ingresos i 
+	inner join usuarios_usuarios u on (u."tipoDoc_id" = i."tipoDoc_id" and u.id = i."documento_id" ) 
+	inner join sitios_dependencias dep on (dep."sedesClinica_id" = i."sedesClinica_id" and dep."tipoDoc_id" =  i."tipoDoc_id" and dep.documento_id =i."documento_id"  and dep.consec = i.consec) 
+	inner join usuarios_tiposDocumento tp on (tp.id = u."tipoDoc_id") 
+	inner join sitios_dependenciastipo deptip on (deptip.id = dep."dependenciasTipo_id")
+	inner join sitios_subserviciossedes subServ ON (subserv.id = dep."subServiciosSedes_id") 
+	inner join sitios_serviciosSedes sd on (sd."sedesClinica_id" = i."sedesClinica_id") 
+	inner join clinico_servicios ser  on (ser.id = sd.servicios_id  and ser.id = i."serviciosIng_id" )
+	left join clinico_especialidades esp1 on (esp1.id = i."especialidadesMedicosIngreso_id" ) 
+	left join clinico_diagnosticos diag1 on (diag1.id = i."dxIngreso_id") 
+	left join clinico_medicos med1 on (med1.id =i."medicoIngreso_id") 
+	left join planta_planta pla on (pla.id =i."medicoIngreso_id")  
+	left join clinico_viasIngreso vias on (vias.id = i."ViasIngreso_id") 
+	left join clinico_causasExterna cexterna on (cexterna.id = i."causasExterna_id") 
+	inner join clinico_regimenes reg on (reg.id = i.regimen_id) 
+	inner join clinico_tiposcotizante cot on (cot.id = i."tiposCotizante_id") 
+	left  join clinico_ips ips on (ips.id =i."ipsRemite_id")
+	WHERE i."sedesClinica_id" = '1' and u."tipoDoc_id" = '1' and u.id = '1' and i.consec= '1' and i."fechaSalida" is null
+
+SELECT conv.nombre convenio FROM admisiones_ingresos ing LEFT JOIN facturacion_conveniospacienteingresos convPac ON (convPac."tipoDoc_id" = ing."tipoDoc_id" AND convPac.documento_id = ing.documento_id AND convPac."consecAdmision" = ing.consec) LEFT JOIN contratacion_convenios conv ON (conv.id = convPac.convenio_id) WHERE ing.id= '50250'
+
+select * from facturacion_liquidacion;

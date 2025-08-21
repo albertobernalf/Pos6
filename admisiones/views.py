@@ -25,6 +25,7 @@ from facturacion.models import ConveniosPacienteIngresos, Liquidacion, Liquidaci
 from rips.models import  RipsDestinoEgreso
 from cartera.models import FormasPagos, PagosFacturas
 import datetime
+from django.utils import timezone
 from clinico.models import Servicios
 from django.db import transaction, IntegrityError
 from django.db.models import Q
@@ -344,7 +345,7 @@ def escogeAcceso(request, Sede, Username, Profesional, Documento, NombreSede, es
     miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
                                    password="123456")
     curt = miConexiont.cursor()
-    comando = 'SELECT ser.id id ,ser.nombre nombre FROM sitios_serviciosSedes sed, clinico_servicios ser Where sed."sedesClinica_id" =' + "'" + str(
+    comando = 'SELECT sed.id id ,ser.nombre nombre FROM sitios_serviciosSedes sed, clinico_servicios ser Where sed."sedesClinica_id" =' + "'" + str(
         sede) + "'" + ' AND sed."servicios_id" = ser.id AND ser.nombre != ' + "'" + str('TRIAGE') + "'"
     curt.execute(comando)
     print(comando)
@@ -4669,15 +4670,15 @@ def buscarSubServicios(request):
     context = {}
     Serv = request.GET["serv"]
     Sede = request.GET["sede"]
-    print ("Entre buscar  Subservicios del servicio  =",Serv)
+    print ("Entre buscar  Subservicios PLAS del servicio  =",Serv)
     print ("Sede = ", Sede)
 
     # Combo de SubServicios
 
     miConexiont =psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres", password="123456")
     curt = miConexiont.cursor()
-    #comando = 'SELECT sub.id id ,sub.nombre nombre FROM sitios_serviciosSedes sed ,sitios_subserviciossedes sub Where sed."sedesClinica_id" = ' + "'" + str(Sede) + "'" + '  and sed."sedesClinica_id" = sub."sedesClinica_id" and sed.id = sub."serviciosSedes_id" and sub."serviciosSedes_id" = ' + "'" + str(Serv) + "'"
-    comando = 'SELECT sub.id id ,sub.nombre nombre FROM sitios_serviciosSedes sed ,sitios_subserviciossedes sub , clinico_servicios serv Where sed."sedesClinica_id" = ' + "'" + str(Sede) + "'" + ' and sed."sedesClinica_id" = sub."sedesClinica_id" and sed.id = sub."serviciosSedes_id"  and sed.servicios_id = ' + "'" + str(Serv) + "'" + ' and sub."serviciosSedes_id" = sed.id and serv.id = ' + "'" + str(Serv) + "'"
+
+    comando = 'SELECT sub.id id ,sub.nombre nombre FROM sitios_serviciosSedes sed ,sitios_subserviciossedes sub , clinico_servicios serv Where sed."sedesClinica_id" = ' + "'" + str(Sede) + "'" + ' and sed."sedesClinica_id" = sub."sedesClinica_id" and sed.id = sub."serviciosSedes_id"  and sed.id = ' + "'" + str(Serv) + "'" + ' and sub."serviciosSedes_id" = sed.id and serv.id = sed.servicios_id'
     curt.execute(comando)
     print(comando)
 
@@ -4887,9 +4888,7 @@ def crearAdmisionDef(request):
         print("ultimo ingreso = ", consecAdmision)
 
 
-        now = datetime.datetime.now()
-        print("NOW  = ", now)
-        fechaRegistro = now
+        fechaRegistro = timezone.now()
 
 
         fechaIngreso = fechaRegistro
@@ -6252,7 +6251,7 @@ def guardarUsuariosModal(request):
 
     miConexion11.close()
 
-    fechaRegistro = datetime.datetime.now()
+    fechaRegistro = timezone.now()
 
     print ("Usuarios = ", Usuarios)
 
@@ -6545,8 +6544,10 @@ def guardaCambioServicio(request):
     servicioFin = request.POST["servicioCambio"]
     subServicioFin = request.POST["subServicioCambio"]
     dependenciaFin = request.POST["dependenciaCambio"]
+    print("dependenciaFin = ", dependenciaFin)
+
     fechaOcupacion = datetime.datetime.now()
-    fechaRegistro= fechaOcupacion
+    fechaRegistro = timezone.now()
 
     CambioServicio['TipoDocx'] = tipoDoc
     CambioServicio['Documentox'] = documento
@@ -6569,11 +6570,11 @@ def guardaCambioServicio(request):
 
     servicioFinId = ServiciosSedes.objects.get(id=servicioFin)
     print("servicioFinId = ", servicioFinId.id)
-
-    documentoId = Usuarios.objects.get(documento=documento)
-    print("el id del documento es : ", documentoId.id)
     tipoDocId = TiposDocumento.objects.get(nombre=tipoDoc)
     print("el id del tipo del  documento es : ", tipoDocId.id)
+
+    documentoId = Usuarios.objects.get(documento=documento, tipoDoc_id=tipoDocId.id)
+    print("el id del documento es : ", documentoId.id)
 
     dependenciaActualId = Dependencias.objects.get(documento_id=documentoId.id , tipoDoc_id=tipoDocId.id , consec=consec)
     print("el id del dependenciaActualId es : ", dependenciaActualId.id)
@@ -6703,8 +6704,9 @@ def guardaCambioServicio(request):
             grabo01 = Dependencias.objects.filter(id=dependenciaActualId.id).update(tipoDoc_id='', documento_id='',
                                                                                     consec=0, disponibilidad="L",
                                                                                     fechaRegistro=fechaRegistro,
-                                                                                    fechaLiberacion=fechaOcupacion)
-            print("pase grabo01", grabo01)
+                                                                                    fechaLiberacion=None,
+                                                                                    fechaOcupacion=None)
+            print("pase YA grabo01", grabo01)
 
             # Actualiza la dependencia Nueva
 
@@ -6714,13 +6716,14 @@ def guardaCambioServicio(request):
             print("consec =", consec )
 
 
-            #Aqui Ocupa la que tenia ocupada creonueva cama
+            #Aqui Ocupa la nueva cama
 
             grabo02 = Dependencias.objects.filter(id=dependenciaFinalId.id).update(tipoDoc_id=tipoDocId.id,
                                                                                    documento_id=documentoId.id,
                                                                                    consec=consec, disponibilidad="O",
                                                                                    fechaRegistro=fechaRegistro,
-                                                                                   fechaOcupacion=fechaOcupacion)
+                                                                                   fechaOcupacion=fechaRegistro,
+                                                                                   fechaLiberacion=None)
             print("pase grabo02", grabo02)
             # Inserta en dependeciasHistoricos
 
@@ -6730,19 +6733,8 @@ def guardaCambioServicio(request):
                                                                             serviciosActual_id=servicioFinalId.servicios_id)
             print("pase grabo03", grabo03)
 
-            # Registro el historico de dependencias Esto para la dependencia que desocupa
-
-            grabo04 = Dependencias.objects.filter(id=dependenciaActualId.id).update(tipoDoc_id=tipoDocId.id,
-                                                                                   documento_id=documentoId.id,
-                                                                                   consec=consec, disponibilidad="L",
-                                                                                   fechaRegistro=fechaRegistro,
-                                                                                   fechaLiberacion=fechaRegistro)
-            #grabo04.save()
-            #print("yA grabe dependencias historico", grabo04.id)
-
-
-
             # Registro PRIMERO el historico de dependencia LA QUE LIBERO
+
 
             grabo07 = HistorialDependencias(
                 tipoDoc_id=tipoDocId.id,
@@ -6761,18 +6753,18 @@ def guardaCambioServicio(request):
 
 
 
-            # Registro el historico la nueca dependencia si es un INSERT
+            # Registro el historico la nueva dependencia si es un INSERT
 
             grabo05 = HistorialDependencias(
                 tipoDoc_id=tipoDocId.id,
                 documento_id=documentoId.id,
                 consec=consec,
-                dependencias_id=servicioFinalId.id,
+                dependencias_id=dependenciaFinalId.id,
                 disponibilidad='O',
                 fechaRegistro=fechaRegistro,
                 usuarioRegistro_id=username_id,
                 #fechaLiberacion=fechaRegistro,
-                fechaOcupacion=dependenciaActualId.fechaOcupacion,
+                fechaOcupacion=fechaRegistro,
                 estadoReg='A'
             )
             grabo05.save()
@@ -6914,7 +6906,7 @@ def GuardaConvenioAdmision(request):
     print("convenio = ", convenio)
     print("username_id = ", username_id)
 
-    fechaRegistro = datetime.datetime.now()
+    fechaRegistro = timezone.now()
 
     registroId = Ingresos.objects.get(id=ingresoId)
     estadoReg='A'
@@ -7003,7 +6995,7 @@ def GuardaAbonosAdmision(request):
     print ("convenioPaciente = ", convenioPaciente)
 
     estadoReg = 'A'
-    fechaRegistro = datetime.datetime.now()
+    fechaRegistro = timezone.now()
 
     registroId = Ingresos.objects.get(id=ingresoId)
     print  ("registroId documento =" , registroId.documento_id)
@@ -7231,7 +7223,7 @@ def GuardaFurips(request):
     sede = request.POST["sede"]
     print ("ingresoId = ", ingresoId)
     print("sede = ", sede)
-    fechaRegistro = datetime.datetime.now()
+    fechaRegistro = timezone.now()
     registroId = Ingresos.objects.get(id=ingresoId)
     print  ("registroId documento =" , registroId.documento_id)
 
@@ -7433,9 +7425,7 @@ def ActualizaAdmision(request):
         tiposCotizante='null'
 
 
-
-    fecha = datetime.datetime.now()
-    fechaRegistro = fecha
+    fechaRegistro = timezone.now()
     causasExterna = request.POST["causasExterna"]
     if causasExterna=='':
         causasExterna='null'

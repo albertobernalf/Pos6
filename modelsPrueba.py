@@ -841,3 +841,8 @@ ojo pendiente en aplicacion de medicamentos arreglar cuando aplica la modal no p
 -- ojop hay un registro de laliquiacin de eumelia con cums_id y examen_id ala vae en loqudacindetalle ERROR Y ESO COMO PASO ??
 
 -- ops cuando crre el ambulatorio perdi los indicadores y el modulo en el que estaba trabajando
+-- ojo: al borrar un responsable, borrarlo de liquidacion_detalle, liquidacio tambien si no hay nada
+-- Veriicar dependencias duplicidad en o que estaba hacendo en cambio de servicio
+-- ojo colocar mensaje de cambo de servicio realizado
+-- cuando hay cambio de responsable hay que actualizar el datattable del censo y del hsotoriadependencias
+

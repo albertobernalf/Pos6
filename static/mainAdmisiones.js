@@ -1344,10 +1344,10 @@ if (genero =='')
 
 $(document).on('change', '#servicioCambio', function(event) {
 
-    alert (" Entre cambio Servicio");
+    
     var serv =   $(this).val()
+	alert (" Entre cambio Servicio" + serv);
     var sede =  document.getElementById("sede").value;
-    //alert ("envio = " + serv + "   " + sede);
 
 
         $.ajax({
@@ -2647,7 +2647,7 @@ function findOneAdmision(tipoDoc,Documento,consec, sede)
 function guardaCambioServicio()
 {
 
-
+	
 	var tipoDocx = document.getElementById("tipoDocx").value;
 	var documentox = document.getElementById("documentox").value;
 	var pacientex = document.getElementById("pacientex").value;
@@ -2661,6 +2661,8 @@ function guardaCambioServicio()
 
 	var select = document.getElementById("servicioCambio");
     var servicioCambio = select.options[select.selectedIndex].value;
+alert("servicio cambio = " +  servicioCambio);
+
 	var select = document.getElementById("subServicioCambio");
     var subServicioCambio = select.options[select.selectedIndex].value;
 	var select = document.getElementById("dependenciaCambio");
