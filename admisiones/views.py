@@ -4695,6 +4695,38 @@ def buscarSubServicios(request):
 
     return JsonResponse(json.dumps(subServicios), safe=False)
 
+def buscarPaises(request):
+    context = {}
+    Pais = request.GET["Pais"]
+
+    print ("Entre buscar  deptos del Pais    =",Pais)
+
+
+    # Combo de Medicos Especialidades
+
+
+    miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres", password="123456")
+    curt = miConexiont.cursor()
+
+    comando = "SELECT c.id id, c.nombre  nombre FROM sitios_paises d, sitios_departamentos c WHERE c.pais_id = d.id and d.id = '" + str(Pais) + "' ORDER BY c.nombre"
+
+    curt.execute(comando)
+    print(comando)
+
+    deptos = []
+
+    for id, nombre in curt.fetchall():
+        deptos.append({'id': id, 'nombre': nombre})
+
+    miConexiont.close()
+    print(deptos)
+
+
+    context['Departamentos'] = deptos
+
+
+    return JsonResponse(json.dumps(deptos), safe=False)
+
 
 def buscarCiudades(request):
     context = {}

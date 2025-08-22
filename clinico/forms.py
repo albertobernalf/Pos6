@@ -156,6 +156,7 @@ class historiaForm(forms.ModelForm):
         ordenMedicaMed = forms.CharField(max_length=30)
         ordenMedicaOxi = forms.CharField(max_length=30)
         ordenMedicaInt = forms.CharField(max_length=30)
+
         fechaRegistro =  forms.DateTimeField()
         usuarioRegistro = forms.ModelChoiceField(queryset=Usuarios.objects.all())
 
@@ -168,6 +169,7 @@ class historiaForm(forms.ModelForm):
             'objetivo':  forms.Textarea(attrs={'class': 'form-control', 'width': "100%", 'cols': "40", 'rows': "4", 'placeholder': "Objetivo"}),
             'analisis':  forms.Textarea(attrs={'class': 'form-control', 'width': "100%", 'cols': "40", 'rows': "4", 'placeholder': "Analisis"}),
             'plann':     forms.Textarea(attrs={'class': 'form-control', 'width': "100%", 'cols': "40", 'rows': "4", 'placeholder': "Plan"}),
+            'ordenDeControl': forms.Textarea(attrs={'class': 'form-control', 'width': "100%", 'cols': "40", 'rows': "6", 'placeholder': "Orden De Control"}),
             'textoNotaAclaratoria':     forms.Textarea(attrs={'class': 'form-control', 'width': "50%", 'cols': "10", 'rows': "2", 'placeholder': "textoNotaAclaratoria"}),
             'examenFisico':     forms.Textarea(attrs={'class': 'form-control', 'width': "50%", 'cols': "10", 'rows': "2", 'placeholder': "examenFisico"}),
             'observaciones':     forms.Textarea(attrs={'class': 'form-control', 'width': "50%", 'cols': "10", 'rows': "2", 'placeholder': "observaciones"}),

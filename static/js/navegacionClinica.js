@@ -1366,6 +1366,7 @@ formHistoriaClinica.addEventListener('submit', e=>{
          var objetivo   =  document.getElementById("id_objetivo").value;
          var analisis   =  document.getElementById("id_analisis").value;
          var plan 	=  document.getElementById("id_plann").value;
+	 var ordenDeControl	=  document.getElementById("id_ordenDeControl").value;
 
 
           var apache2 =  document.getElementById("id_apache2").value;
@@ -1578,6 +1579,7 @@ formHistoriaClinica.addEventListener('submit', e=>{
 	                       'tipoDocCirugia':tipoDocCirugia,
 	                        'documentoCirugia':documentoCirugia,
 	                        'consecutivoIngresoCirugia':consecutivoIngresoCirugia,
+				'ordenDeControl':ordenDeControl,
 
 				   },
  	      		success: function (respuesta2) {

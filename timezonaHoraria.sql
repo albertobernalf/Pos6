@@ -128,6 +128,7 @@ select "serviciosIng_id", "serviciosActual_id", "serviciosSalida_id","dependenci
 
 delete from facturacion_liquidacion where id=184;
 
+select * from triage_triage;
 select * from facturacion_conveniospacienteingresos;
 SELECT * FROM admisiones_ingresos;
 select * from sitios_serviciosSedes;
@@ -142,36 +143,23 @@ SELECT i.id id, tp.nombre tipoDoc,  u.documento documento, u.nombre  nombre , i.
 	(select count(*)  from facturacion_conveniospacienteingresos conv where conv."tipoDoc_id" = i."tipoDoc_id" and conv.documento_id=i.documento_id  and conv."consecAdmision"=i.consec) numConvenios,
 	(select count(*)  from cartera_pagos pag where pag."tipoDoc_id" = i."tipoDoc_id" and pag.documento_id=i.documento_id  and pag.consec=i.consec) numPagos,	empresa.nombre Empresa,
 	date_part('YEAR' ,  AGE(CURRENT_DATE , U."fechaNacio")) edad, i."salidaClinica" salidaClinica 
-	FROM admisiones_ingresos i
-	inner join usuarios_usuarios u on ( u."tipoDoc_id" = i."tipoDoc_id"  and u.id = i."documento_id" )
-	left join facturacion_empresas empresa on (empresa.id = i.empresa_id) 
-	inner join sitios_dependencias dep on (dep.id = i."dependenciasActual_id" and dep."sedesClinica_id" =  i."sedesClinica_id" AND dep.disponibilidad = 'O') 
-	inner join usuarios_tiposDocumento tp on (tp.id = u."tipoDoc_id") 
-	inner join sitios_dependenciastipo deptip on ( deptip.id = dep."dependenciasTipo_id")
-	left join  clinico_Diagnosticos diag on (diag.id = i."dxActual_id") 
-	inner join sitios_serviciosSedes sd on (sd."sedesClinica_id" = i."sedesClinica_id" and sd.id= dep."serviciosSedes_id"	and sd.id  = i."serviciosActual_id") 
-	inner join clinico_servicios ser on (ser.id = sd.servicios_id  and ser.nombre != 'TRIAGE')
-	WHERE  i."sedesClinica_id" = '1' AND i."salidaDefinitiva" = 'N' AND i."fechaSalida" is null 
+select * from admisiones_ingresos;
 
-UPDATE admisiones_ingresos SET "serviciosIng_id" =7, "serviciosActual_id" = 7	where id=50252
-select "serviciosIng_id", "serviciosActual_id", "serviciosSalida_id","dependenciasIngreso_id",documento_id,EMPRESA_ID,* from admisiones_ingresos;
+select * from sitios_dependencias order by id;
  
-select * from clinico_servicios;
+select * from facturacion_liquidacion -- id=188 a borrar
+select * from facturacion_liquidaciondetalle
+	select * from contratacion_convenios where id in ('7','21','1')
 
-        SELECT ser.nombre nombre, count(*) total 
-		FROM admisiones_ingresos i, usuarios_usuarios u, sitios_dependencias dep , clinico_servicios ser ,
-			usuarios_tiposDocumento tp , sitios_dependenciastipo deptip  , clinico_Diagnosticos diag , 
-			sitios_serviciosSedes sd  
-		WHERE sd."sedesClinica_id" = i."sedesClinica_id"  and sd.servicios_id  = ser.id and
-			i."sedesClinica_id" = dep."sedesClinica_id" AND i."sedesClinica_id" = '1' AND 
-			deptip.id = dep."dependenciasTipo_id" and i."serviciosActual_id" = sd.id AND
-			dep.disponibilidad = 'O' AND i."salidaDefinitiva" = 'N' and tp.id = u."tipoDoc_id" and 
-			i."tipoDoc_id" = u."tipoDoc_id" and u.id = i."documento_id" and diag.id = i."dxActual_id" and
-			i."fechaSalida" is null and dep."serviciosSedes_id" = sd.id and dep.id = i."dependenciasActual_id" 
-		group by ser.nombre
+delete from facturacion_liquidaciondetalle where liquidacion_id  <= 183
 
-			
-			UNION 
-			SELECT ser.nombre, count(*) total FROM triage_triage t, usuarios_usuarios u, sitios_dependencias dep , usuarios_tiposDocumento tp , sitios_dependenciastipo deptip  , sitios_serviciosSedes sd, clinico_servicios ser WHERE sd."sedesClinica_id" = t."sedesClinica_id"  and t."sedesClinica_id" = dep."sedesClinica_id" AND  t."sedesClinica_id" =  ' + "'" + str(sede) + "'" + ' AND dep."sedesClinica_id" =  sd."sedesClinica_id" AND dep.id = t.dependencias_id AND  t."serviciosSedes_id" = sd.id  AND deptip.id = dep."dependenciasTipo_id" and  tp.id = u."tipoDoc_id" and  t."tipoDoc_id" = u."tipoDoc_id" and u.id = t."documento_id"  and ser.id = sd.servicios_id and  dep."serviciosSedes_id" = sd.id and t."serviciosSedes_id" = sd.id and dep."tipoDoc_id" = t."tipoDoc_id" and  t."consecAdmision" = 0 and dep."documento_id" = t."documento_id" and ser.nombre = '  + "'" + str('TRIAGE') + "'" + ' group by ser.nombre'
+	select * from facturacion_ConveniosPacienteIngresos;
+"S"	"902004"	1	"ANTICOAGULANTE LUPICO"
 
+	select * from clinico_historia;
 
+select * from autorizaciones_autorizaciones;
+select * from autorizaciones_autorizacionesdetalle;
+
+select "requiereAutorizacion","codigoCups","TiposExamen_id",nombre, * from clinico_examenes order by "requiereAutorizacion" desc;
+delete from facturacion_liquidacion where id  <= 183

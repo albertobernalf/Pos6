@@ -843,3 +843,6 @@ ojo pendiente en aplicacion de medicamentos arreglar cuando aplica la modal no p
 	EN LA TARDE HACER HCLINICA, COLOCAR EL CUADRO ORDENDECONTROL Y LA IMRESION
 
 
+-- el dika lune 25 de agosto
+  -- comenzar clinico ojo tpods los try-cartch por ejemplo de archivoas abierton como hacerlo ? No me funciono archivo abierto ordendecontrol
+  -- ops porque coloca lka palabra cups en orden de control al imprimir

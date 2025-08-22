@@ -110,6 +110,8 @@ urlpatterns = [
     path('imprimirOrdenIncapacidad/<str:ingresoId> , <str:historiaId>/', viewsClinicoReportes.ImprimirOrdenIncapacidad),
     path('imprimirOrdenLaboratorio/<str:ingresoId> , <str:historiaId>/', viewsClinicoReportes.ImprimirOrdenLaboratorio),
     path('imprimirOrdenTerapia/<str:ingresoId> , <str:historiaId>/', viewsClinicoReportes.ImprimirOrdenTerapia),
+    path('imprimirOrdenDeControl/<str:ingresoId> , <str:historiaId>/', viewsClinicoReportes.ImprimirOrdenDeControl),
+    path('imprimirOrdenRadiologia/<str:ingresoId> , <str:historiaId>/', viewsClinicoReportes.ImprimirOrdenRadiologia),
 
     # Actividaes Mecanicas
 
@@ -146,6 +148,7 @@ urlpatterns = [
     path('buscarAdmision/', viewsAdmisiones.buscarAdmision),
 
     path('buscarEspecialidadesMedicos/', viewsAdmisiones.buscarEspecialidadesMedicos),
+    path('buscarPaises/', viewsAdmisiones.buscarPaises),
     path('buscarCiudades/', viewsAdmisiones.buscarCiudades),
     path('buscarHabitaciones/', viewsAdmisiones.buscarHabitaciones),
     path('buscarMunicipios/', viewsAdmisiones.buscarMunicipios),

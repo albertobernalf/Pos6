@@ -38,6 +38,9 @@
             </a></li>
             <li><a href="#Formulacion"><span class="fa-solid fa-hand-holding-medical"></span> <span
                     class="tab-text"> </span>Formulacion </a></li>
+            <li><a href="#OrdenDeControl"><span class="fa-solid fa-hand-holding-medical"></span> <span
+                    class="tab-text"> </span>Orden De Control </a></li>
+
             <li><a href="#Consulta"><span class="fa-solid fa-hand-holding-medical"></span> <span
                     class="tab-text"> </span>Historia Clinica</a></li>
             <li><a href="#Clinica"><span class="fa-solid fa-hand-holding-medical"></span> <span
@@ -259,6 +262,22 @@ Ambulatorios: <img class="manImg" src={% static 'img/iloveimg-converted/poste-in
 <!--  fin segunda fila -->
 
     </article>
+
+<article id="OrdenDeControl">
+
+        <center><h3>Orden De Control</h3></center>
+
+
+ <div class="row row-cols-2 mt-3">
+            <div class="col">
+                </div>
+
+            <div class="col">
+                {{ historiaForm.ordenDeControl.label }} Consulta
+                {{ historiaForm.ordenDeControl }}
+            </div>
+  </div>
+</article>
 
     <article id="CausaExterna">
         <center>
