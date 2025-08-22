@@ -184,7 +184,7 @@ urlpatterns = [
     path('imprimirAtencionUrgencias/', viewsAdmisionesReportes.ImprimirAtencionUrgencias),
     path('imprimirHojaAdmision/', viewsAdmisionesReportes.ImprimirHojaAdmision),
     path('imprimirHojaAdmisionParametro/<str:ingresoId/', viewsAdmisionesReportes.ImprimirHojaAdmisionParametro),
-
+    path('imprimirAutorizacionesAdm/', viewsAdmisionesReportes.ImprimirAutorizacionesAdm),
 
     # Triage
 

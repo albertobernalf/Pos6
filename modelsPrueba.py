@@ -830,19 +830,16 @@ ojo pendiente en aplicacion de medicamentos arreglar cuando aplica la modal no p
   -- hacer todos los JSONRESPONSE con dat. Mensaje Erro y no erro
   -- Hacer prueba totale grales y arregklar a la lata
 
-
-
 -- los combos sin seleccion de rips despues de que se crea un admison estan con inicio en blanco
 -- ojo sale mensaje que pacinte ya esta en la clinica cuando nop por elcotext ver como arreglar
-
 -- ops como asi me borro un acetaminofeen de liquidaciondetalle verificar ???
 -- ops agregfue tan solo un aceaminfen y no me refrescon totales no grabo en cabezpote facturacion_lquidacion un registro manul de acetaminofen
--- hice una admision desde el triage a utrgencias y no me imprimio la hoja de urgecias
 -- ojop hay un registro de laliquiacin de eumelia con cums_id y examen_id ala vae en loqudacindetalle ERROR Y ESO COMO PASO ??
 
--- ops cuando crre el ambulatorio perdi los indicadores y el modulo en el que estaba trabajando
--- ojo: al borrar un responsable, borrarlo de liquidacion_detalle, liquidacio tambien si no hay nada
--- Veriicar dependencias duplicidad en o que estaba hacendo en cambio de servicio
--- ojo colocar mensaje de cambo de servicio realizado
--- cuando hay cambio de responsable hay que actualizar el datattable del censo y del hsotoriadependencias
+
+-- AL CREAR UNA ADMISION DESDE ADMSIONES PROBLEMAS EN COMBOS, PAIS, DEPTO, CIUDAD,LOCALIDADES , 5077
+    CUANDO SELECCIONO EL PAIS SI NOHAY MUNICIPIOS O CIUDADES BLAMQUEAR
+     CUANDO CAMBIO EL DEPTO DEBE BLANQUEAR LAS LOCALIDADES
+	EN LA TARDE HACER HCLINICA, COLOCAR EL CUADRO ORDENDECONTROL Y LA IMRESION
+
 

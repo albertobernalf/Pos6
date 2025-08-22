@@ -326,6 +326,7 @@ class Historia(models.Model):
     ordenMedicaMed = models.CharField(max_length=30, blank=True, null=True)
     ordenMedicaOxi = models.CharField(max_length=30, blank=True, null=True)
     ordenMedicaInt = models.CharField(max_length=30, blank=True, null=True)
+    ordenDeControl = models.CharField(max_length=20000,  blank=True, null=True,)
     enfermedadActual = models.CharField(max_length=5000,  blank=True, null=True,)
     ingestaAlcohol = models.CharField(max_length=5000,  blank=True, null=True,)
     monitoreo = models.CharField(max_length=1,  blank=True, null=True,choices=TIPO_CHOICES,)

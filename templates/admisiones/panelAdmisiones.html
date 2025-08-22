@@ -55,14 +55,22 @@ table.dataTable tbody tr {
             Ingresos Clinicos </a></li>
         <li><a href="#CrearAdmision"><span id="CrearAdm" name="CrearAdm" onclick="CrearAdm()" class="fa-solid fa-user-doctor-message"></span> <span
                 class="tab-text"> </span> Crear Admision </a></li>
+    <li><a href="#Convenios"><span class="fa-solid fa-user-doctor-message"></span> <span
+                class="tab-text"> </span> Convenios </a></li>
+        <li><a href="#Abonos"><span class="fa-solid fa-user-doctor-message"></span> <span
+                class="tab-text"> </span> Abonos </a></li>
+        <li><a href="#CambioServicio"><span class="fa-solid fa-user-doctor-message"></span> <span
+                class="tab-text"> </span>Actualizar servicio </a></li>
         <li><a href="#Furips"><span class="fa-solid fa-user-doctor-message"></span> <span
                 class="tab-text"> </span> Furips </a></li>
         <li><a href="#Reversar"><span class="fa-solid fa-user-doctor-message"></span> <span
-                class="tab-text"> </span> Reversar Salida Clinica </a></li>
+                class="tab-text"> </span>Reversar Salida Clinica </a></li>
         <li><a href="#Autorizaciones"><span class="fa-solid fa-user-doctor-message"></span> <span
                 class="tab-text"> </span> Autorizaciones </a></li>
-	 <li><a href="#Acompañantes"><span class="fa-solid fa-user-doctor-message"></span> <span
-                class="tab-text"> </span> Acompañantes Paciente </a></li>
+        <li><a href="#Responsables"><span class="fa-solid fa-user-doctor-message"></span> <span
+                class="tab-text"> </span> Responsables
+           </a></li>
+
     </ul>
 </div>
 
@@ -1817,7 +1825,9 @@ function cargarTablaAbonosPaciente()
                                         <table  id= "tablaAutorizaciones" class="display table table-striped table-sm fs-6 nowrap" style="width: 100%;">
                                            <thead>
                                             <tr>    
+
 					<bold>                                  
+					<th>Sel</th>
 				        <th>id</th>
 					<th>fechaSolicitud</th> 
 					<th>numeroAutorizacion</th>
@@ -2507,12 +2517,7 @@ function cargarTablaAbonosPaciente()
 
 <div class="wrap">
     <ul class="tabs">
-        <li><a href="#Convenios"><span class="fa-solid fa-user-doctor-message"></span> <span
-                class="tab-text"> </span> Convenios </a></li>
-        <li><a href="#Abonos"><span class="fa-solid fa-user-doctor-message"></span> <span
-                class="tab-text"> </span> Abonos </a></li>
-        <li><a href="#CambioServicio"><span class="fa-solid fa-user-doctor-message"></span> <span
-                class="tab-text"> </span> Cambio de servicio </a></li>
+    
         <li><a href="#Censo"><span class="fa-solid fa-user-doctor-message"></span> <span
                 class="tab-text"> </span> Censo Pacientes
            </a></li>
@@ -2520,9 +2525,9 @@ function cargarTablaAbonosPaciente()
         <li><a href="#Habitaciones"><span class="fa-solid fa-user-doctor-message"></span> <span
                 class="tab-text"> </span> Historico Habitaciones
            </a></li>
-        <li><a href="#Responsables"><span class="fa-solid fa-user-doctor-message"></span> <span
-                class="tab-text"> </span> Responsables
-           </a></li>
+	 <li><a href="#Acompañantes"><span class="fa-solid fa-user-doctor-message"></span> <span
+                class="tab-text"> </span> Acompañantes </a></li>
+
     </ul>
 
 </div>

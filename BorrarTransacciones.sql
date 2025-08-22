@@ -33,7 +33,7 @@ delete from enfermeria_signosenfermeria; - 0
 delete from enfermeria_turnosenfermeria; -- 3
 delete from enfermeria_enfermeria; -- 62
 delete from clinico_historia;   -- 275
-
+ 
 delete from sitios_historialdependencias;   -- 94
 update sitios_dependencias set "tipoDoc_id" = null, documento_id=null,consec = null,"fechaLiberacion"=null,"fechaOcupacion"=null,disponibilidad='L'  -- 44
 delete from cartera_pagosfacturas;    -- 5

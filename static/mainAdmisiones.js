@@ -430,7 +430,7 @@ function arrancaAdmisiones(valorTabla,valorData)
                         var btn = '';
                       return btn;
                     },
-                    "targets": 12
+                    "targets": 13
                }            
 			],
 	 pageLength: 3,
@@ -458,6 +458,15 @@ function arrancaAdmisiones(valorTabla,valorData)
                  dataSrc: ""
             },
             columns: [
+  {
+		"render": function ( data, type, row ) {
+                        var btn = '';
+
+	 	 btn = btn + " <button class='ImprimirAutorizacion btn-primary ' data-pk='" + row.pk + "'>" + '<i class=""fa-duotone fa-solid fa-print""></i>' + "</button>";
+
+                       return btn;
+		}
+                   },
                  { data: "fields.id"},
                  { data: "fields.fechaSolicitud" }, 
                 { data: "fields.numeroAutorizacion"},
@@ -967,9 +976,10 @@ window.addEventListener('load', async () => {
 	           type: 'POST',
 	           dataType : 'json',
 	  		success: function (data) {
+				
+				document.getElementById("mensajes").innerHTML =   data['Mensaje'];
+			
 
-		        	  $('.success-msg').css('display','block');
-                        $('.success-msg').text(data.message);
 			            var table = $('#tablaConveniosAdmisiones').DataTable(); // accede de nuevo a la DataTable.
 		                table.ajax.reload();
                     },
@@ -2765,6 +2775,31 @@ alert("servicio cambio = " +  servicioCambio);
 			
 					
                      document.getElementById("mensajes").innerText=CambioServicio.Mensaje;
+var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
+        var username = document.getElementById("username").value;
+        var nombreSede = document.getElementById("nombreSede").value;
+    	var sede = document.getElementById("sede").value;
+        var username_id = document.getElementById("username_id").value;
+
+
+    	var ingresoId = document.getElementById("ingresoId1").value;
+
+         var data =  {}   ;
+         data['username'] = username;
+         data['sedeSeleccionada'] = sedeSeleccionada;
+         data['nombreSede'] = nombreSede;
+         data['sede'] = sede;
+         data['username_id'] = username_id;
+	 data['ingresoId'] = ingresoId;
+	 data = JSON.stringify(data);
+	
+
+         arrancaAdmisiones(5,data);
+         dataTableCensoInitialized = true;
+
+         arrancaAdmisiones(6,data);
+	 dataTableHabitacionesInitialized = true;
+
 
 
 
@@ -3200,4 +3235,29 @@ $(document).on('change', '#municipios', function(event) {
      });
 
 
+    $('body').on('click', '.ImprimirAutorizacion', function () {
 
+	          var post_id = $(this).data('pk');
+		var row = $(this).closest('tr'); // Encuentra la fila
+
+		 alert("ImprimirAutorizacion desd admisiones = " + post_id);
+
+	var autorizacionId = post_id;
+
+	$.ajax({
+	           url: '/imprimirAutorizacionesAdm/',
+	            data : {autorizacionId:autorizacionId},
+	           type: 'POST',
+	           dataType : 'json',
+	  		success: function (data) {
+
+			 $('#pk').val(data.pk);
+	       	     
+
+                  },
+	   		    error: function (request, status, error) {
+	   			   document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
+	   	    	}
+	     });
+
+        });

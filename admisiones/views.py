@@ -272,10 +272,6 @@ def escogeAcceso(request, Sede, Username, Profesional, Documento, NombreSede, es
     usernameLlave = Planta.objects.get(documento=username.strip() , sedesClinica_id=sede)
     username_id= usernameLlave.id
 
-
-
-
-
     # Combo PermisosGrales
 
     miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
@@ -1406,7 +1402,7 @@ def escogeAcceso(request, Sede, Username, Profesional, Documento, NombreSede, es
         curt = miConexiont.cursor()
 
 
-        comando = 'SELECT ser.nombre nombre, count(*) total FROM admisiones_ingresos i, usuarios_usuarios u, sitios_dependencias dep , clinico_servicios ser ,usuarios_tiposDocumento tp , sitios_dependenciastipo deptip  , clinico_Diagnosticos diag , sitios_serviciosSedes sd  WHERE sd."sedesClinica_id" = i."sedesClinica_id"  and sd.servicios_id  = ser.id and i."sedesClinica_id" = dep."sedesClinica_id" AND i."sedesClinica_id" = ' + "'" + str(sede) + "'" + ' AND  deptip.id = dep."dependenciasTipo_id" and i."serviciosActual_id" = ser.id AND dep.disponibilidad = ' + "'" + str('O') + "'" + ' AND i."salidaDefinitiva" = ' + "'" + str('N') + "'" + ' and tp.id = u."tipoDoc_id" and  i."tipoDoc_id" = u."tipoDoc_id" and u.id = i."documento_id" and diag.id = i."dxActual_id" and i."fechaSalida" is null and dep."serviciosSedes_id" = sd.id and dep.id = i."dependenciasActual_id"  group by ser.nombre UNION SELECT ser.nombre, count(*) total FROM triage_triage t, usuarios_usuarios u, sitios_dependencias dep , usuarios_tiposDocumento tp , sitios_dependenciastipo deptip  , sitios_serviciosSedes sd, clinico_servicios ser WHERE sd."sedesClinica_id" = t."sedesClinica_id"  and t."sedesClinica_id" = dep."sedesClinica_id" AND  t."sedesClinica_id" =  ' + "'" + str(sede) + "'" + ' AND dep."sedesClinica_id" =  sd."sedesClinica_id" AND dep.id = t.dependencias_id AND  t."serviciosSedes_id" = sd.id  AND deptip.id = dep."dependenciasTipo_id" and  tp.id = u."tipoDoc_id" and  t."tipoDoc_id" = u."tipoDoc_id" and u.id = t."documento_id"  and ser.id = sd.servicios_id and  dep."serviciosSedes_id" = sd.id and t."serviciosSedes_id" = sd.id and dep."tipoDoc_id" = t."tipoDoc_id" and  t."consecAdmision" = 0 and dep."documento_id" = t."documento_id" and ser.nombre = '  + "'" + str('TRIAGE') + "'" + ' group by ser.nombre'
+        comando = 'SELECT ser.nombre nombre, count(*) total FROM admisiones_ingresos i, usuarios_usuarios u, sitios_dependencias dep , clinico_servicios ser ,usuarios_tiposDocumento tp , sitios_dependenciastipo deptip  , clinico_Diagnosticos diag , sitios_serviciosSedes sd  WHERE sd."sedesClinica_id" = i."sedesClinica_id"  and sd.servicios_id  = ser.id and i."sedesClinica_id" = dep."sedesClinica_id" AND i."sedesClinica_id" = ' + "'" + str(sede) + "'" + ' AND  deptip.id = dep."dependenciasTipo_id" and i."serviciosActual_id" = sd.id AND dep.disponibilidad = ' + "'" + str('O') + "'" + ' AND i."salidaDefinitiva" = ' + "'" + str('N') + "'" + ' and tp.id = u."tipoDoc_id" and  i."tipoDoc_id" = u."tipoDoc_id" and u.id = i."documento_id" and diag.id = i."dxActual_id" and i."fechaSalida" is null and dep."serviciosSedes_id" = sd.id and dep.id = i."dependenciasActual_id"  group by ser.nombre UNION SELECT ser.nombre, count(*) total FROM triage_triage t, usuarios_usuarios u, sitios_dependencias dep , usuarios_tiposDocumento tp , sitios_dependenciastipo deptip  , sitios_serviciosSedes sd, clinico_servicios ser WHERE sd."sedesClinica_id" = t."sedesClinica_id"  and t."sedesClinica_id" = dep."sedesClinica_id" AND  t."sedesClinica_id" =  ' + "'" + str(sede) + "'" + ' AND dep."sedesClinica_id" =  sd."sedesClinica_id" AND dep.id = t.dependencias_id AND  t."serviciosSedes_id" = sd.id  AND deptip.id = dep."dependenciasTipo_id" and  tp.id = u."tipoDoc_id" and  t."tipoDoc_id" = u."tipoDoc_id" and u.id = t."documento_id"  and ser.id = sd.servicios_id and  dep."serviciosSedes_id" = sd.id and t."serviciosSedes_id" = sd.id and dep."tipoDoc_id" = t."tipoDoc_id" and  t."consecAdmision" = 0 and dep."documento_id" = t."documento_id" and ser.nombre = '  + "'" + str('TRIAGE') + "'" + ' group by ser.nombre'
 
         curt.execute(comando)
         print(comando)
@@ -5074,7 +5070,8 @@ def crearAdmisionDef(request):
         except Exception as e:
             # Aquí ya se hizo rollback automáticamente
             print("Se hizo rollback por:", e)
-            raise Exception("¡Ha ocurrido un error ENVIADO DESDE DJANGO!")
+            return JsonResponse({'success': False, 'Mensaje': e})
+            #raise Exception("¡Ha ocurrido un error ENVIADO DESDE DJANGO!")
 
 
         # HASTA AQUIP TRANSACCIONALIDAD
@@ -5091,7 +5088,7 @@ def crearAdmisionDef(request):
 
         # Aqui reporte de Hoja de Admision
 
-        servicioHospitalizacion = Servicios.objects.get(id=busServicio2)
+        servicioHospitalizacion = ServiciosSedes.objects.get(id=busServicio2)
 
 
         if servicioHospitalizacion.nombre == 'HOSPITALIZACION':
@@ -6576,8 +6573,18 @@ def guardaCambioServicio(request):
     documentoId = Usuarios.objects.get(documento=documento, tipoDoc_id=tipoDocId.id)
     print("el id del documento es : ", documentoId.id)
 
-    dependenciaActualId = Dependencias.objects.get(documento_id=documentoId.id , tipoDoc_id=tipoDocId.id , consec=consec)
-    print("el id del dependenciaActualId es : ", dependenciaActualId.id)
+    try:
+        with transaction.atomic():
+
+            dependenciaActualId = Dependencias.objects.get(documento_id=documentoId.id, tipoDoc_id=tipoDocId.id, consec=consec)
+            print("el id del dependenciaActualId es : ", dependenciaActualId.id)
+
+    except Exception as e:
+        # Aquí ya se hizo rollback automáticamente
+        print("Se hizo rollback por:", e)
+        return JsonResponse({'success': False, 'Mensaje': e})
+
+
     dependenciaFinalId = Dependencias.objects.get(serviciosSedes_id=servicioFin , subServiciosSedes_id=subServicioFin , id=dependenciaFin)
     print("el id del dependenciaFinalId es : ", dependenciaFinalId.id)
     ingresoActualId = Ingresos.objects.get(documento_id=documentoId.id , tipoDoc_id=tipoDocId.id , consec=consec)
@@ -7054,14 +7061,42 @@ def PostDeleteConveniosAdmision(request):
 
     id = request.POST["id"]
     print ("el id es = ", id)
-    # Aqui Manejo Transaccionalidad
+    # Aqui Filtramos que se borre el convenio que no tenga registros en liquidaciondetalle
 
-    miConexion3 = None
+    convenio = ConveniosPacienteIngresos.objects.get(id=id)
+    print("convenio_id = ", convenio.convenio_id)
+
+    cantidadRegistros=0
+    try:
+      with transaction.atomic():
+
+        registrosFacturacion = Liquidacion.objects.get(tipoDoc_id=convenio.tipoDoc_id, documento_id=convenio.documento_id, consecAdmision=convenio.consecAdmision, convenio_id=convenio.convenio_id)
+        print("liquidacion = ", registrosFacturacion.id)
+        cantidadRegistros = LiquidacionDetalle.objects.filter(liquidacion_id=registrosFacturacion.id).count()
+        print("Cantidad Registros liquidacion Detalle = ", cantidadRegistros)
+
+        if (cantidadRegistros>=1):
+            return JsonResponse({'success': False, 'Mensaje': 'Convenio con registros de liqudacion Activos No es posible borrarlo!'})
+
+    except Exception as e:
+        # Aquí ya se hizo rollback automáticamente
+        print("Se hizo rollback por:", e)
+        return JsonResponse({'success': False, 'Mensaje':  e})
+
+    finally:
+        print("Cleanup operations or final logging.")
+
+
+    #miConexion3 = None
+
     try:
       with transaction.atomic():	
 
         post = ConveniosPacienteIngresos.objects.get(id=id)
         post.delete()
+        ## Borra cabezote de Facturacion
+        post1 = Liquidacion.objects.get(id=registrosFacturacion.id)
+        post1.delete()
 
         return JsonResponse({'success': True, 'Mensaje': 'Convenio borrado!'})
 
@@ -7289,7 +7324,7 @@ def load_dataAdmisiones(request, data):
 
     #detalle = 'SELECT i.id id, tp.nombre tipoDoc,  u.documento documento, u.nombre  nombre , i.consec consec , i."fechaIngreso" , ser.nombre servicioNombreIng, dep.nombre camaNombreIng , diag.nombre dxActual, (select count(*)  from facturacion_conveniospacienteingresos conv where conv."tipoDoc_id" = i."tipoDoc_id" and conv.documento_id=i.documento_id  and conv."consecAdmision"=i.consec) numConvenios,(select count(*)  from cartera_pagos pag where pag."tipoDoc_id" = i."tipoDoc_id" and pag.documento_id=i.documento_id  and pag.consec=i.consec) numPagos, empresa.nombre Empresa  FROM admisiones_ingresos i, usuarios_usuarios u, facturacion_empresas empresa , sitios_dependencias dep , clinico_servicios ser ,usuarios_tiposDocumento tp , sitios_dependenciastipo deptip  , clinico_Diagnosticos diag , sitios_serviciosSedes sd WHERE sd."sedesClinica_id" = i."sedesClinica_id"  and empresa.id = i.empresa_id AND sd.servicios_id  = ser.id and  i."sedesClinica_id" = dep."sedesClinica_id" AND i."sedesClinica_id" = ' + "'" + str(
     #        Sede) + "'" + ' AND  deptip.id = dep."dependenciasTipo_id" and i."serviciosActual_id" = ser.id AND dep.disponibilidad = ' + "'" + 'O' + "'" + ' AND i."salidaDefinitiva" = ' + "'" + 'N' + "'" + ' and tp.id = u."tipoDoc_id" and i."tipoDoc_id" = u."tipoDoc_id" and u.id = i."documento_id" and diag.id = i."dxActual_id" and i."fechaSalida" is null and ser.nombre != ' + "'" + str('TRIAGE') + "'" + ' AND dep."serviciosSedes_id" = sd.id and dep.id = i."dependenciasActual_id"'
-    detalle = 'SELECT i.id id, tp.nombre tipoDoc,  u.documento documento, u.nombre  nombre , i.consec consec , i."fechaIngreso" , ser.nombre servicioNombreIng, dep.nombre camaNombreIng , diag.nombre dxActual, (select count(*)  from facturacion_conveniospacienteingresos conv where conv."tipoDoc_id" = i."tipoDoc_id" and conv.documento_id=i.documento_id  and conv."consecAdmision"=i.consec) numConvenios,	(select count(*)  from cartera_pagos pag where pag."tipoDoc_id" = i."tipoDoc_id" and pag.documento_id=i.documento_id  and pag.consec=i.consec) numPagos,	empresa.nombre Empresa, date_part(' + "'" + str('YEAR') + "'" + ' ,  AGE(CURRENT_DATE , U."fechaNacio")) edad, i."salidaClinica" salidaClinica FROM admisiones_ingresos i inner join usuarios_usuarios u on ( u."tipoDoc_id" = i."tipoDoc_id"  and u.id = i."documento_id" ) left join facturacion_empresas empresa on (empresa.id = i.empresa_id) inner join sitios_dependencias dep on (dep.id = i."dependenciasActual_id" and dep."sedesClinica_id" =  i."sedesClinica_id" AND dep.disponibilidad = ' + "'" + str('O') + "')"  + ' inner join clinico_servicios ser on (ser.id = i."serviciosActual_id" and ser.nombre != ' + "'" + str('TRIAGE') + "')" + ' inner join usuarios_tiposDocumento tp on (tp.id = u."tipoDoc_id") inner join sitios_dependenciastipo deptip on ( deptip.id = dep."dependenciasTipo_id") left join  clinico_Diagnosticos diag on (diag.id = i."dxActual_id") inner join sitios_serviciosSedes sd on (sd."sedesClinica_id" = i."sedesClinica_id" and sd.id= dep."serviciosSedes_id" and sd.servicios_id  = ser.id) WHERE  i."sedesClinica_id" = ' + "'" + str(Sede) + "'" + ' AND i."salidaDefinitiva" = ' + "'" + str('N') + "'" + ' AND i."fechaSalida" is null '
+    detalle = 'SELECT i.id id, tp.nombre tipoDoc,  u.documento documento, u.nombre  nombre , i.consec consec , i."fechaIngreso" , sd.nombre servicioNombreIng, dep.nombre camaNombreIng , diag.nombre dxActual, (select count(*)  from facturacion_conveniospacienteingresos conv where conv."tipoDoc_id" = i."tipoDoc_id" and conv.documento_id=i.documento_id  and conv."consecAdmision"=i.consec) numConvenios,	(select count(*)  from cartera_pagos pag where pag."tipoDoc_id" = i."tipoDoc_id" and pag.documento_id=i.documento_id  and pag.consec=i.consec) numPagos,	empresa.nombre Empresa, date_part(' + "'" + str('YEAR') + "'" + ' ,  AGE(CURRENT_DATE , U."fechaNacio")) edad, i."salidaClinica" salidaClinica FROM admisiones_ingresos i inner join usuarios_usuarios u on ( u."tipoDoc_id" = i."tipoDoc_id"  and u.id = i."documento_id" ) left join facturacion_empresas empresa on (empresa.id = i.empresa_id) inner join sitios_dependencias dep on (dep.id = i."dependenciasActual_id" and dep."sedesClinica_id" =  i."sedesClinica_id" AND dep.disponibilidad = ' + "'" + str('O') + "')"  + ' inner join sitios_serviciosSedes sd on (sd."sedesClinica_id" = i."sedesClinica_id" and sd.id= dep."serviciosSedes_id" and sd.id  = i."serviciosActual_id")  inner join clinico_servicios ser on (ser.id = sd.servicios_id and ser.nombre != ' + "'" + str('TRIAGE') + "')" + ' inner join usuarios_tiposDocumento tp on (tp.id = u."tipoDoc_id") inner join sitios_dependenciastipo deptip on ( deptip.id = dep."dependenciasTipo_id") left join  clinico_Diagnosticos diag on (diag.id = i."dxActual_id")  WHERE  i."sedesClinica_id" = ' + "'" + str(Sede) + "'" + ' AND i."salidaDefinitiva" = ' + "'" + str('N') + "'" + ' AND i."fechaSalida" is null '
     print(detalle)
 
     curx.execute(detalle)
