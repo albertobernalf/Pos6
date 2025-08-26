@@ -1,4 +1,4 @@
-$(document).ready(function() {
+	$(document).ready(function() {
 	var $ = jQuery;
 	console.log('Hola Alberto Hi!')
 	var controlLab = 0;
@@ -1593,8 +1593,15 @@ formHistoriaClinica.addEventListener('submit', e=>{
 
 				   },
  	      		success: function (data) {
+
+		// alert("data = " + JSON.stringify(data));
+
+				
                     dato = data;
                     var dataRespuesta = JSON.parse(dato);
+
+			alert("dataRespuesta = ", dataRespuesta);
+
                   var dato = dataRespuesta['Mensaje'];
 
 
@@ -1614,6 +1621,8 @@ formHistoriaClinica.addEventListener('submit', e=>{
 
  	      		}, // cierra function sucess
  	      		error: function (request, status, error) {
+		
+
  	      			document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
  	      			
 

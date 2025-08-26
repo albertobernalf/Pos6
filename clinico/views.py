@@ -57,6 +57,8 @@ import cgi
 #from clinico import viewsReportes
 from clinico.viewsReportes import ImprimirOrdenLaboratorio, ImprimirOrdenIncapacidad, ImprimirOrdenRadiologia, ImprimirOrdenTerapia, ImprimirOrdenMedicamentos, ImprimirOrdenDeControl
 from django.db import transaction
+import traceback
+from django.db import transaction, IntegrityError
 
 # Create your views here.
 
@@ -717,19 +719,31 @@ def crearHistoriaClinica(request):
 		
 		    # RUTINA encuentra columna de dondel LEER la tarifa.
                 #
-                contratacion = Convenios.objects.get(id=convenioId)
-
-                print("OJOO contratacion.tarifariosDescripcionProc_id = " , contratacion.tarifariosDescripcionProc_id)
 
                 try:
                     with transaction.atomic():
+
+                        contratacion = Convenios.objects.get(id=convenioId)
+
+                        print("OJOO contratacion.tarifariosDescripcionProc_id = " , contratacion.tarifariosDescripcionProc_id)
 
                         columnaALeer = TarifariosDescripcion.objects.get(id=contratacion.tarifariosDescripcionProc_id)
 
                 except Exception as e:
                     # Aquí ya se hizo rollback automáticamente
-                    print("Se hizo rollback por:", e)
-                    return JsonResponse({'success': False, 'Mensaje': e})
+                    print("Se hizo rollback de Convenio TarifarioDescripcion por:", e)
+                    error_data = {
+                        'type': type(e).__name__,
+                        'message': str(e),
+                        'traceback': traceback.format_exc()
+                    }
+                    #raise
+                    #return JsonResponse({"status": "error", "error": f"Failed: {e}"}, status=400)
+                    #return Response({"status": "failed", "message": "Something went wrong."})
+                    #return JsonResponse({'success': False, 'Mensaje': error_data})
+
+                    #return HttpResponse({'Mensaje':'Convenio sin tarifario de Procedimeintos definido'})
+                    #return HttpResponse({'error_data': error_data})
                     # raise Exception("¡Ha ocurrido un error ENVIADO DESDE DJANGO!")
 
                 finally:
@@ -848,6 +862,7 @@ def crearHistoriaClinica(request):
                         TotalTarifa = float(tarifaValor) * float(cantidad)
 
 
+
                         if (codigoCupsId[0].requiereAutorizacion == 'S'):
 
                             miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432",
@@ -918,6 +933,7 @@ def crearHistoriaClinica(request):
                             miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",                                       password="123456")
                             curt = miConexiont.cursor()
                             comando = 'INSERT INTO facturacion_liquidaciondetalle (consecutivo,fecha, cantidad, "valorUnitario", "valorTotal",cirugia_id,"fechaCrea", "fechaRegistro", "estadoRegistro", "examen_id",  "usuarioRegistro_id", liquidacion_id, "tipoRegistro") VALUES (' + "'" +  str(consecLiquidacion)  + "','" + str(fechaRegistro) + "','" + str(cantidad) + "','"  + str(tarifaValor) + "','" + str(TotalTarifa)  + "',null,'"  +  str(fechaRegistro) + "','" +  str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(codigoCupsId[0].id) + "','" + str(usuarioRegistro) + "'," + liquidacionId + ",'SISTEMA')"
+                            print("comando de insercio" , comando)
                             curt.execute(comando)
                             miConexiont.commit()
                             miConexiont.close()

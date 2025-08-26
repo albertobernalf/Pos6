@@ -29,6 +29,9 @@ from django.db import transaction, IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 from clinico.models import Servicios
 from triage.viewsReportes import ImprimirAtencionInicialUrgencias, ImprimirHojaAdmision, ImprimirManilla, ImprimirTriage, ImprimirTriageParametro
+from facturacion.models import ConveniosPacienteIngresos
+from contratacion.models import Convenios
+
 
 # Create your views here.
 
@@ -2866,8 +2869,8 @@ def guardarAdmisionTriage(request):
 
         print("usuarioRegistro =", usuarioRegistro)
 
-
-        fechaRegistro = fechaIngreso
+        fechaRegistro = timezone.now()
+        print("fechaRegistro  = ", fechaRegistro )
 
         estadoReg = "A"
         print("estadoRegistro =", estadoReg)
@@ -3079,6 +3082,34 @@ def guardarAdmisionTriage(request):
 
                 #grabo55.save()
 
+		        #Aqui vamos a ver si tiene creado el conveNio PARTICULAR o si no lo creamos
+                #
+                try:
+            	    with transaction.atomic():
+
+                        grabo66 = ConveniosPacienteIngresos.objects.get(tipoDoc_id=idTipoDocFinal,documento_id=documento_llave.id,consecAdmision=0)
+                        grabo67 = ConveniosPacienteIngresos.objects.filter(tipoDoc_id=idTipoDocFinal,documento_id=documento_llave.id,consecAdmision=0).update(consecAdmision=consecAdmision)
+
+                except Exception as e:
+
+                        print("Se hizo rollback HAY QUE  CREAR PATRICULAR :", e)
+                        convenioParticular = Convenios.objects.get(particular='S')
+                        print ("convenioParticular =", convenioParticular.id)
+
+                        grabo68 = ConveniosPacienteIngresos(
+                        consecAdmision=consecAdmision,
+                        convenio_id=convenioParticular.id,
+                                    tipoDoc_id=idTipoDocFinal,
+                                    documento_id=documento_llave.id,
+                                    consec=consecAdmision,
+                                    fechaRegistro=fechaRegistro,
+                                    usuarioRegistro_id=usernameId.id,
+                                    estadoReg=estadoReg)
+                        grabo68.save()
+                        print("yA grabe ConveniosPacienteIngresos", grabo68.id)
+
+                finally:
+                	print("No haga nada")	
 
         except Exception as e:
             # Aquí ya se hizo rollback automáticamente
@@ -3087,6 +3118,9 @@ def guardarAdmisionTriage(request):
             datos = {'Mensajes': e}
             return JsonResponse(datos, safe=False)
             #raise error
+
+        finally:
+                print("No haga nada")
 
 
         if liq != 0:
@@ -3106,7 +3140,6 @@ def guardarAdmisionTriage(request):
                     cur3.execute(comando1)
                     miConexion3.commit()
                     cur3.close()
-
 
                     ## PENDIENTE ACTUALIZAR cONVENIOS USUARIOS Y ABONOS USUARIOS
 
