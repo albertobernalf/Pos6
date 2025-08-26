@@ -814,3 +814,10 @@ ojo pendiente en aplicacion de medicamentos arreglar cuando aplica la modal no p
 -- ojo en tarifarios, paramettizar la ruta de crague de procedimientos, suminis, honoraro en tabla parametros
 
 -- ops ojop en admisiones crear conevnios le creo un cabezote particular error no debio habero creado si ya etysab acreado VERIFICAR
+-- OPS OJO CUANDO PASE DE TRIAGE A ADMISION SI NO TIENE CONVENIO DEBE CREAR UNO PARTICULAR
+-- AUNQUE CREO LACAGO CUANDO INGRESO EL LAB Y NO LA,CEO
+-- ops pero el convenio si esta creado algo falta en el query de facturacion verificar,
+ -- ops en la gtabla convenioingresos no ecxiste que paso ?? si ypo la veo en la tabla convenio ingesols
+-- op el lio es el conscuivoAdmision que se deb actulizar al momento de pasar lel triage al convenio
+    -- primero si no existe convenio crea particular con el nvo consecutivo
+    --- segundo actualiza elconsecutivo
