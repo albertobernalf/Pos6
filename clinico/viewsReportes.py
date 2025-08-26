@@ -37,7 +37,7 @@ from admisiones.models import Ingresos
 from farmacia.models import Farmacia, FarmaciaDetalle, FarmaciaEstados
 from enfermeria.models import Enfermeria, EnfermeriaDetalle
 from facturacion.models import ConveniosPacienteIngresos
-
+from triage.models import Triage
 from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect, HttpResponse, HttpResponseRedirect
 from django.core.exceptions import ValidationError
@@ -51,7 +51,7 @@ import psycopg2
 import json
 import datetime
 import cgi
-
+from django.db import transaction
 
 class PDF(FPDF):
     def __init__(self, tipoDocId,documentoId, consec, *args, **kwargs):
@@ -162,12 +162,13 @@ class PDF(FPDF):
 
 
 class PDFOrdenIncapacidad(FPDF):
-    def __init__(self, tipoDocId, documentoId, consec,historiaId,  *args, **kwargs):
+    def __init__(self, tipoDocId, documentoId, consec,historiaId , *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.tipoDocId = tipoDocId
         self.documentoId = documentoId
         self.consec = consec
         self.historiaId = historiaId
+
 
     def header(self):
         # Logo
@@ -178,11 +179,10 @@ class PDFOrdenIncapacidad(FPDF):
         # Move to the right
         # self.cell(12)
 
-        convenioId = ConveniosPacienteIngresos.objects.filter(tipoDoc_id=self.tipoDocId, documento_id=self.documentoId,
-                                                              consecAdmision=self.consec).aggregate(Max('convenio_id'))
+        #convenioId = Convenios.objects.filter(id=self.liquidacionId)
 
-        print("convenioId = ", convenioId['convenio_id__max'])
-        convenio = convenioId['convenio_id__max']
+        print("convenioId = ", self.convenioId)
+        convenio = self.convenioId
 
         ## CURSOR PARA LEER ENCABEZADO
         #
@@ -309,12 +309,14 @@ class PDFOrdenIncapacidad(FPDF):
         #self.cell(0, 10, 'Page ' + str(self.page_no()) + '/{nb}', 0, 0, 'C')
 
 class PDFOrdenLaboratorio(FPDF):
-    def __init__(self, tipoDocId, documentoId, consec, historiaId, *args, **kwargs):
+    def __init__(self, tipoDocId, documentoId, consec, historiaId, convenioId, tipoAdmision, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.tipoDocId = tipoDocId
         self.documentoId = documentoId
         self.consec = consec
         self.historiaId = historiaId
+        self.convenioId = convenioId
+        self.tipoAdmision = tipoAdmision
 
     def header(self):
         # Logo
@@ -325,11 +327,11 @@ class PDFOrdenLaboratorio(FPDF):
         # Move to the right
         # self.cell(12)
 
-        convenioId = ConveniosPacienteIngresos.objects.filter(tipoDoc_id=self.tipoDocId, documento_id=self.documentoId,
-                                                              consecAdmision=self.consec).aggregate(Max('convenio_id'))
+        convenio=self.convenioId
 
-        print("convenioId = ", convenioId['convenio_id__max'])
-        convenio = convenioId['convenio_id__max']
+        print("ULTIMO valor de convenioId= ", convenio)
+
+        ## pRIMERO AVERIGUAMOS SI ES UN TRIAGE UNA ADMISION
 
         ## CURSOR PARA LEER ENCABEZADO
         #
@@ -338,14 +340,27 @@ class PDFOrdenLaboratorio(FPDF):
 
         curt = miConexiont.cursor()
 
-        comando = 'select  u."tipoDoc_id" , tip.nombre tipnombre, u.documento documentoPaciente, u.nombre nombre, case when genero = ' + "'" + str(
-            'M') + "'" + ' then ' + "'" + str('Masculino') + "'" + ' when genero= ' + "'" + str(
-            'F') + "'" + ' then ' + "'" + str('Femenino') + "'" + ' end as genero, cast((date_part(' + "'" + str(
-            'year') + "'" + ', now()) - date_part(' + "'" + str(
-            'year') + "'" + ', u."fechaNacio" )) as text) edad,   reg.nombre regimen, convenio.nombre convenio , serv.nombre servicio, cast(now() as text) fecha from admisiones_ingresos adm INNER JOIN 	usuarios_usuarios u ON (u."tipoDoc_id" = adm."tipoDoc_id" and u.id = adm.documento_id) INNER JOIN usuarios_tiposDocumento tip ON (tip.id = u."tipoDoc_id") INNER JOIN facturacion_conveniospacienteingresos  convIngreso ON (convIngreso."tipoDoc_id" = adm."tipoDoc_id" and convIngreso.documento_id = adm.documento_id and convIngreso."consecAdmision" = adm.consec) INNER JOIN contratacion_convenios convenio ON (convenio.id = convIngreso.convenio_id) INNER JOIN facturacion_empresas EMP on (emp.id =convenio.empresa_id ) INNER JOIN clinico_regimenes reg ON (reg.id=emp.regimen_id) INNER JOIN clinico_servicios serv ON (serv.id = adm."serviciosActual_id")	 WHERE adm."tipoDoc_id" = ' + "'" + str(
-            self.tipoDocId) + "'" + ' AND adm.documento_id= ' + "'" + str(
-            self.documentoId) + "'" + ' AND adm.consec = ' + "'" + str(
-            self.consec) + "'" + ' and convenio.id = ' + "'" + str(convenio) + "'"
+        if (self.tipoAdmision=='ADMISION'):
+
+            comando = 'select  u."tipoDoc_id" , tip.nombre tipnombre, u.documento documentoPaciente, u.nombre nombre, case when genero = ' + "'" + str(
+                'M') + "'" + ' then ' + "'" + str('Masculino') + "'" + ' when genero= ' + "'" + str(
+                'F') + "'" + ' then ' + "'" + str('Femenino') + "'" + ' end as genero, cast((date_part(' + "'" + str(
+                'year') + "'" + ', now()) - date_part(' + "'" + str(
+                'year') + "'" + ', u."fechaNacio" )) as text) edad,   reg.nombre regimen, convenio.nombre convenio , serv.nombre servicio, cast(now() as text) fecha from admisiones_ingresos adm INNER JOIN 	usuarios_usuarios u ON (u."tipoDoc_id" = adm."tipoDoc_id" and u.id = adm.documento_id) INNER JOIN usuarios_tiposDocumento tip ON (tip.id = u."tipoDoc_id") LEFT JOIN facturacion_conveniospacienteingresos  convIngreso ON (convIngreso."tipoDoc_id" = adm."tipoDoc_id" and convIngreso.documento_id = adm.documento_id and convIngreso."consecAdmision" = adm.consec) LEFT JOIN contratacion_convenios convenio ON (convenio.id = convIngreso.convenio_id AND convenio.id = ' + "'" + str(convenio) + "')" +  ' LEFT JOIN facturacion_empresas EMP on (emp.id =convenio.empresa_id ) LEFT JOIN clinico_regimenes reg ON (reg.id=emp.regimen_id) INNER JOIN sitios_serviciosSedes serv ON (serv.id = adm."serviciosActual_id")	 WHERE adm."tipoDoc_id" = ' + "'" + str(
+                self.tipoDocId) + "'" + ' AND adm.documento_id= ' + "'" + str(
+                self.documentoId) + "'" + ' AND adm.consec = ' + "'" + str(
+                self.consec) + "'"
+        else:
+
+            comando = 'select  u."tipoDoc_id" , tip.nombre tipnombre, u.documento documentoPaciente, u.nombre nombre, case when genero = ' + "'" + str(
+                'M') + "'" + ' then ' + "'" + str('Masculino') + "'" + ' when genero= ' + "'" + str(
+                'F') + "'" + ' then ' + "'" + str('Femenino') + "'" + ' end as genero, cast((date_part(' + "'" + str(
+                'year') + "'" + ', now()) - date_part(' + "'" + str(
+                'year') + "'" + ', u."fechaNacio" )) as text) edad,   reg.nombre regimen, convenio.nombre convenio , serv.nombre servicio, cast(now() as text) fecha from triage_triage tri INNER JOIN 	usuarios_usuarios u ON (u."tipoDoc_id" = tri."tipoDoc_id" and u.id = tri.documento_id) INNER JOIN usuarios_tiposDocumento tip ON (tip.id = u."tipoDoc_id") LEFT JOIN facturacion_conveniospacienteingresos  convIngreso ON (convIngreso."tipoDoc_id" = tri."tipoDoc_id" and convIngreso.documento_id = tri.documento_id and convIngreso."consecAdmision" = tri.consec) LEFT JOIN contratacion_convenios convenio ON (convenio.id = convIngreso.convenio_id AND convenio.id = ' + "'" + str(convenio) + "')" +  ' LEFT JOIN facturacion_empresas EMP on (emp.id =convenio.empresa_id ) LEFT JOIN clinico_regimenes reg ON (reg.id=emp.regimen_id) INNER JOIN sitios_serviciosSedes serv ON (serv.id = tri."serviciosSedes_id") WHERE tri."tipoDoc_id" = ' + "'" + str(
+                self.tipoDocId) + "'" + ' AND tri.documento_id= ' + "'" + str(
+                self.documentoId) + "'" + ' AND tri.consec = ' + "'" + str(
+                self.consec) + "'"
+
 
         curt.execute(comando)
         print(comando)
@@ -390,17 +405,19 @@ class PDFOrdenLaboratorio(FPDF):
         self.set_font('Times', 'B', 7)
         self.cell(25, 16, 'GENERO:', 0, 0, 'L')
         self.set_font('Times', '', 7)
-        self.cell(50, 16, historia[0]['genero'], 0, 0, 'L')
+        self.cell(50, 16, str(historia[0]['genero']), 0, 0, 'L')
         self.ln(2)
         self.set_font('Times', 'B', 7)
         self.cell(25, 18, 'REGIMEN:', 0, 0, 'L')
         self.set_font('Times', '', 7)
-        self.cell(50, 18, historia[0]['regimen'], 0, 0, 'L')
+        print("regimen = ", historia[0]['regimen'])
+
+        self.cell(50, 18, str(historia[0]['regimen']), 0, 0, 'L')
         self.ln(2)
         self.set_font('Times', 'B', 7)
         self.cell(25, 20, 'CONVENIO:', 0, 0, 'L')
         self.set_font('Times', '', 7)
-        self.cell(25, 20, historia[0]['convenio'], 0, 0, 'L')
+        self.cell(25, 20, str(historia[0]['convenio']), 0, 0, 'L')
         self.ln(2)
         self.set_font('Times', 'B', 7)
         self.cell(25, 21, 'SERVICIO:', 0, 0, 'L')
@@ -1275,7 +1292,7 @@ def ImprimirHistoriaClinica(request):
 
             for l in range(0, len(revisionSistemas)):
                 pdf.cell(50, 1, 'Sistema ' + str(revisionSistemas[0 + l]['sistema']), 0, 0, 'L')
-                pdf.cell(100, 1, 'Observacion: ' + str(revisionSistemas[0 + l]['observacio']), 0, 0, 'L')
+                pdf.cell(100, 1, 'Observacion: ' + str(revisionSistemas[0 + l]['observacion']), 0, 0, 'L')
 
                 linea = linea + 3
                 pdf.ln(3)
@@ -1936,9 +1953,9 @@ def ImprimirHistoriaClinica(request):
     return JsonResponse({'success': True, 'message': 'Historia Clinica impresa!'})
 
 
-def ImprimirOrdenIncapacidad(ingresoId2, historiaId):
+def ImprimirOrdenIncapacidad(ingresoId2, historiaId,convenioId):
     # Instantiation of inherited class
-    print("Entre ImprimirOrdenLaboratorio ")
+    print("Entre ImprimirOrdenIncapacidad ")
 
     #ingresoId = request.POST["ingresoId"]
     #print("ingresoId = ", ingresoId)
@@ -1955,7 +1972,7 @@ def ImprimirOrdenIncapacidad(ingresoId2, historiaId):
     pacienteId = Usuarios.objects.get(id=documentoId)
     print("documentoPaciente = ", pacienteId.documento)
 
-    pdf = PDFOrdenIncapacidad(tipoDocId,documentoId, consec, historiaId,format="letter")
+    pdf = PDFOrdenIncapacidad(tipoDocId,documentoId, consec, historiaId, convenioId, format="letter")
     pdf.alias_nb_pages()
     pdf.set_margins(left= 10, top= 5, right= 5 )
     pdf.add_page()
@@ -2118,7 +2135,7 @@ def ImprimirOrdenTerapia(ingresoId2, historiaId):
 
     return JsonResponse({'success': True, 'message': 'Orden Terapia impresa!'})
 
-def ImprimirOrdenLaboratorio(ingresoId2, historiaId):
+def ImprimirOrdenLaboratorio(ingresoId2, historiaId, convenioId, tipoAdmision):
     # Instantiation of inherited class
     print("Entre ImprimirOrdenLaboratorio " , ingresoId2)
     print("Entre ImprimirOrdenLaboratorio historiaId ", historiaId)
@@ -2127,7 +2144,20 @@ def ImprimirOrdenLaboratorio(ingresoId2, historiaId):
     #print("ingresoId = ", ingresoId)
     ingresoId = ingresoId2
 
-    ingresoPaciente = Ingresos.objects.get(id=ingresoId)
+    try:
+        with transaction.atomic():
+            ingresoPaciente = Ingresos.objects.get(id=ingresoId)
+            print(" ingresosPaciente = ", ingresoPaciente.id)
+    except Exception as e:
+            # Aquí ya se hizo rollback automáticamente
+            print("Se hizo rollback INGRESO por:", e)
+            ingresoPaciente = Triage.objects.get(id=ingresoId)
+            print(" ingresosPaciente = ", ingresoPaciente.id)
+    finally:
+            print("Finally")
+
+    print("ingresosPaciente = ", ingresoPaciente.id)
+
     tipoDocId = ingresoPaciente.tipoDoc_id
     print("tipoDocId = ", tipoDocId)
     documentoId = ingresoPaciente.documento_id
@@ -2137,7 +2167,7 @@ def ImprimirOrdenLaboratorio(ingresoId2, historiaId):
     pacienteId = Usuarios.objects.get(id=documentoId)
     print("documentoPaciente = ", pacienteId.documento)
 
-    pdf = PDFOrdenLaboratorio(tipoDocId,documentoId, consec, historiaId)
+    pdf = PDFOrdenLaboratorio(tipoDocId,documentoId, consec, historiaId, convenioId, tipoAdmision)
     pdf.alias_nb_pages()
     pdf.set_margins(left=10, top=5, right=5)
     pdf.add_page()

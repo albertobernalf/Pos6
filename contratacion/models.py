@@ -35,6 +35,7 @@ class Convenios (models.Model):
     copago = models.CharField(max_length=1, blank=True,null= True, editable=True)
     moderadora = models.CharField(max_length=1, blank=True,null= True, editable=True)
     tipofactura  = models.CharField(max_length=1, blank=True,null= True, editable=True)
+    particular  = models.CharField(max_length=1, blank=True,null= True, editable=True)
     agrupada = models.CharField(max_length=1, blank=True,null= True, editable=True)
     facturacionSuministros = models.CharField(max_length=1, blank=True,null= True, editable=True)
     facturacionCups  = models.CharField(max_length=1, blank=True,null= True, editable=True)

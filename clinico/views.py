@@ -39,7 +39,8 @@ from usuarios.models import Usuarios, TiposDocumento
 from admisiones.models import Ingresos
 from farmacia.models import Farmacia, FarmaciaDetalle, FarmaciaEstados
 from enfermeria.models import Enfermeria, EnfermeriaDetalle
-
+from facturacion.models import ConveniosPacienteIngresos
+from triage.models import Triage
 from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect, HttpResponse, HttpResponseRedirect
 from django.core.exceptions import ValidationError
@@ -55,7 +56,7 @@ import datetime
 import cgi
 #from clinico import viewsReportes
 from clinico.viewsReportes import ImprimirOrdenLaboratorio, ImprimirOrdenIncapacidad, ImprimirOrdenRadiologia, ImprimirOrdenTerapia, ImprimirOrdenMedicamentos, ImprimirOrdenDeControl
-
+from django.db import transaction
 
 # Create your views here.
 
@@ -312,11 +313,31 @@ def crearHistoriaClinica(request):
             documentoId = Usuarios.objects.get(tipoDoc_id=tipoDocId.id, documento=documento)
             print("documentoId =", documentoId)
 
-	    # Aqui se consigue el ingreso del paciente	
-            ingresosPaciente = Ingresos.objects.get(tipoDoc_id=tipoDocId.id ,  documento_id=documentoId.id , consec= ingresoPaciente)
+	        # Aqui se consigue el ingreso del paciente
+            tipoAdmision=''
+            try:
+                with transaction.atomic():
+                    ingresosPaciente = Ingresos.objects.get(tipoDoc_id=tipoDocId.id, documento_id=documentoId.id,  consec=ingresoPaciente)
+                    print(" ingresosPaciente = ", ingresosPaciente)
+                    tipoAdmision='ADMISION'
 
-            print(" ingresosPaciente = ", ingresosPaciente)
+            except Exception as e:
+                # Aquí ya se hizo rollback automáticamente
+                print("Se hizo rollback INGRESO por:", e)
+                ingresosPaciente = Triage.objects.get(tipoDoc_id=tipoDocId.id, documento_id=documentoId.id,  consec=ingresoPaciente)
+                print(" ingresosPaciente = ", ingresosPaciente.id)
+                tipoAdmision = 'TRIAGE'
 
+                #return HttpResponse(json.dumps(data))
+
+                    #return JsonResponse({'success': False, 'Mensaje': e})
+                    # raise Exception("¡Ha ocurrido un error ENVIADO DESDE DJANGO!")
+            finally:
+                print("Finally")
+
+
+            print("ingresosPaciente = ", ingresosPaciente.id)
+            print("tipoAdmision = ", tipoAdmision)
 
             motivo = request.POST["motivo"]
             objetivo = request.POST["objetivo"]
@@ -455,13 +476,9 @@ def crearHistoriaClinica(request):
             if (causasExterna == ''):
 
                 print("Entre GRAVES campos vacios")
-                data1 = {'Mensaje': 'Favor suministrar Causa externa Obligatorio'}
-                data2 = json.dumps(data1)
+                data = {'Mensaje': 'Favor suministrar Causa externa Obligatorio'}
+                return HttpResponse(json.dumps(data))
 
-                data2 = data2.replace("\'", "\"")
-                data = json.loads(str(data2))
-
-                return JsonResponse(data)
 
             jsonDDiagnosticos = json.loads(diagnosticos)
             elementosDiagnosticos = len (jsonDDiagnosticos)
@@ -472,13 +489,8 @@ def crearHistoriaClinica(request):
             if (elementosDiagnosticos== 1):
 
                 print("Entre GRAVES campos vacios")
-                data1 = {'Mensaje': 'Favor suministrar diagnostico Obligatorios'}
-                data2 = json.dumps(data1)
-
-                data2 = data2.replace("\'", "\"")
-                data = json.loads(str(data2))
-
-                return JsonResponse({'success': True,'Mensaje2':'NO', 'Mensaje': 'Favor suministrar diagnostico Obligatorios!'})
+                data = {'Mensaje': 'Favor suministrar diagnostico Obligatorios!'}
+                return HttpResponse(json.dumps(data))
 
 
             else:
@@ -541,6 +553,10 @@ def crearHistoriaClinica(request):
                         miConexiont.close()
 
 
+
+                convenioParticular = Convenios.objects.get(particular='S')
+                print ("convenioParticular =", convenioParticular)
+
                 # Fin Grabacion Historia
 		
 		# Aqui rutina busca Convenio del Paciente
@@ -548,7 +564,7 @@ def crearHistoriaClinica(request):
                 miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",        password="123456")
                 curt = miConexiont.cursor()
 
-                comando = 'SELECT min(p.convenio_id) id FROM facturacion_conveniospacienteingresos p WHERE "tipoDoc_id" = ' + "'" + str(tipoDocId.id) + "'" + ' AND documento_id = ' + "'" + str(documentoId.id) + "'" + ' AND "consecAdmision" = ' + "'" + str(ingresoPaciente) + "'"
+                comando = 'SELECT min(p.convenio_id) id FROM facturacion_conveniospacienteingresos p WHERE "tipoDoc_id" = ' + "'" + str(tipoDocId.id) + "'" + ' AND documento_id = ' + "'" + str(documentoId.id) + "'" + ' AND "consecAdmision" = ' + "'" + str(ingresoPaciente) + "' AND convenio_id != " + "'" + str(convenioParticular.id) + "'"
 
                 curt.execute(comando)
 
@@ -576,9 +592,44 @@ def crearHistoriaClinica(request):
 
                 print("sin espacioos convenioId =", convenioId)
 
+
                 if convenioId.strip()=='None':
-                   convenioId=0
-                   print ("Entre a MODIFICAR convenioID") 
+                   #convenioId=0
+                   convenioId= convenioParticular.id
+                   ## Aqui si no hay convenio particular creado en facturacion_conveniospacioenteingreso anton crearlo
+
+                   try:
+                       with transaction.atomic():
+
+                           conveniospacienteingresos = ConveniosPacienteIngresos.objects.get(tipoDoc_id=tipoDocId.id,documento_id=documentoId.id,                                                                         consecAdmision=ingresoPaciente, convenio_id=convenioParticular.id)
+
+                   except Exception as e:
+                       # Aquí ya se hizo rollback automáticamente
+                       print("Se hizo rollback por:", e)
+                       print("ppor aqui se le crea el convenio Particular al paciente")
+
+                       grabo88 = ConveniosPacienteIngresos(
+                           tipoDoc_id=tipoDocId.id,
+                           documento_id=documentoId.id,
+                           consecAdmision=ingresoPaciente,
+                           convenio_id=convenioParticular.id,
+                           fechaRegistro = fechaRegistro,
+                           usuarioRegistro_id = usuarioRegistro,
+                           estadoReg = estadoReg
+                       )
+                       grabo88.save()
+                       grabo88.id
+                       print("yA grabe", grabo88.id)
+
+                   finally:
+                       print("Cleanup operations or final logging.")
+
+
+
+
+
+
+                   print ("Entre a MODIFICAR convenioID")
 
                 print("ULTIMO valor de convenioId= ", convenioId)
 
@@ -591,7 +642,7 @@ def crearHistoriaClinica(request):
                 curt = miConexiont.cursor()
                 comando = 'SELECT id FROM facturacion_liquidacion WHERE "tipoDoc_id" = ' + "'" + str(
                     tipoDocId.id) + "' AND documento_id = " + "'" + str(
-                    documentoId.id) + "'" + ' AND "consecAdmision" = ' + "'" + str(ingresoPaciente) + "'"
+                    documentoId.id) + "'" + ' AND "consecAdmision" = ' + "'" + str(ingresoPaciente) + "' AND convenio_id = '" + str(convenioId) + "'"
                 curt.execute(comando)
 
                 cabezoteLiquidacion = []
@@ -674,10 +725,21 @@ def crearHistoriaClinica(request):
 
                 print("OJOO contratacion.tarifariosDescripcionProc_id = " , contratacion.tarifariosDescripcionProc_id)
 
-                columnaALeer = TarifariosDescripcion.objects.get(id=contratacion.tarifariosDescripcionProc_id)
+                try:
+                    with transaction.atomic():
+
+                        columnaALeer = TarifariosDescripcion.objects.get(id=contratacion.tarifariosDescripcionProc_id)
+
+                except Exception as e:
+                    # Aquí ya se hizo rollback automáticamente
+                    print("Se hizo rollback por:", e)
+                    return JsonResponse({'success': False, 'Mensaje': e})
+                    # raise Exception("¡Ha ocurrido un error ENVIADO DESDE DJANGO!")
+
+                finally:
+                    print("Finally")
 
                 print ("Columna a leer = ", columnaALeer.columna)
-
 
                 #Grabacion Laboratorios
             #
@@ -715,66 +777,81 @@ def crearHistoriaClinica(request):
                         #
                         codigoCupsId = Examenes.objects.filter(codigoCups=cups)
                         print ("codigoCupsId", codigoCupsId[0].id)
-                     
-                        miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432",
-                                                       user="postgres", password="123456")
 
-                        curt = miConexiont.cursor()
-                        #comando = 'SELECT conv.convenio_id convenio ,proc.cups_id cups, proc.valor tarifaValor FROM facturacion_conveniospacienteingresos conv, contratacion_conveniosprocedimientos proc WHERE conv."tipoDoc_id" = ' + "'" +  str(tipoDocId.id) + "' AND conv.documento_id = " + "'" + str(documentoId.id) + "'" + ' AND conv."consecAdmision" = ' + "'" + str(ingresoPaciente) + "' AND conv.convenio_id = proc.convenio_id AND proc.cups_id = " + "'" +  str(codigoCupsId[0].id) + "'"
-                        comando = 'SELECT conv.convenio_id id ,exa."codigoCups" cups, proc."' + str(columnaALeer.columna) + '"' + ' valor FROM facturacion_conveniospacienteingresos conv, tarifarios_tarifariosdescripcion des, tarifarios_tarifariosprocedimientos proc, clinico_examenes exa, contratacion_convenios conv1 , tarifarios_tipostarifa tiptar WHERE conv."tipoDoc_id" = ' + "'" + str(tipoDocId.id) + "'" + ' AND conv.documento_id = ' + "'" + str(documentoId.id) + "'" + ' AND conv."consecAdmision" = ' + "'" + str(ingresoPaciente) + "'" + ' AND conv.convenio_id = conv1.id AND des.id = conv1."tarifariosDescripcionProc_id" AND proc."codigoCups_id" = exa.id  And exa.id = ' + "'" + str(codigoCupsId[0].id) + "'" + ' AND des."tiposTarifa_id" = tiptar.id and proc."tiposTarifa_id" = tiptar.id'
-                        print("comando = ", comando)
+                        miConexion3 = None
+                        try:
 
-                        curt.execute(comando)
+                            miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432",
+                                                           user="postgres", password="123456")
 
-                        convenioValor = []
-
-                        for id, cups,tarifaValor   in curt.fetchall():
-                            convenioValor.append({'id': id, 'cups':cups, 'valor':tarifaValor})
-
-                        miConexiont.close()
-                        print("columnaALeer.columna", columnaALeer.columna)
-                        print("convenioValor = " ,convenioValor)
-                        print("codigoCupsId[0].id = ", codigoCupsId[0].id)
-
-			            # Aqui analiza si es necesario que caiga en la tabla de Autorizaciones
-
-                        print("el cups :", cups)
-
-                        print ("autorizacion para el CUPS es ", codigoCupsId[0].requiereAutorizacion)
-
-                        # Aqui saca valores pata tarifas
-
-                        if convenioValor != []:
-
-                            print ("Cups = "  , convenioValor[0]['cups'])
-                            tarifaValor = convenioValor[0]['valor']
-                            tarifaValor = str(tarifaValor)
-                            print("tarifaValor = ", tarifaValor)
-                            tarifaValor = tarifaValor.replace("None", ' ')
-                            tarifaValor = tarifaValor.replace("(", ' ')
-                            tarifaValor = tarifaValor.replace(")", ' ')
-                            tarifaValor = tarifaValor.replace(",", ' ')
-                            tarifaValor = tarifaValor.replace(" ", '')
-                            print ("tarifaValor = ", tarifaValor)
-                            #cupsId = convenioValor[0]['cups']
-                            #cupsId = str(cupsId)
-                            #print("cupsId = ", cupsId)
-                            #cupsId = cupsId.replace("(", ' ')
-                            #cupsId = cupsId.replace(")", ' ')
-                            #cupsId = cupsId.replace(",", ' ')
-                            #print("cupsId = ", cupsId)
-                            #
-                        else:
-                            tarifaValor=0
+                            curt = miConexiont.cursor()
+                            #comando = 'SELECT conv.convenio_id convenio ,proc.cups_id cups, proc.valor tarifaValor FROM facturacion_conveniospacienteingresos conv, contratacion_conveniosprocedimientos proc WHERE conv."tipoDoc_id" = ' + "'" +  str(tipoDocId.id) + "' AND conv.documento_id = " + "'" + str(documentoId.id) + "'" + ' AND conv."consecAdmision" = ' + "'" + str(ingresoPaciente) + "' AND conv.convenio_id = proc.convenio_id AND proc.cups_id = " + "'" +  str(codigoCupsId[0].id) + "'"
 
 
-                        if tarifaValor == '':
-                            print ("Entre cambiar tarufa Valor" ,  tarifaValor)
-                            tarifaValor=0
+                            if (convenioId == convenioParticular):
+
+                                comando = 'SELECT conv.convenio_id id ,exa."codigoCups" cups, proc."' + str(columnaALeer.columna) + '"' + ' valor FROM facturacion_conveniospacienteingresos conv, tarifarios_tarifariosdescripcion des, tarifarios_tarifariosprocedimientos proc, clinico_examenes exa, contratacion_convenios conv1 , tarifarios_tipostarifa tiptar WHERE conv."tipoDoc_id" = ' + "'" + str(tipoDocId.id) + "'" + ' AND conv.documento_id = ' + "'" + str(documentoId.id) + "'" + ' AND conv."consecAdmision" = ' + "'" + str(ingresoPaciente) + "'" + ' AND conv.convenio_id = conv1.id AND des.id = conv1."tarifariosDescripcionProc_id" AND proc."codigoCups_id" = exa.id  And exa.id = ' + "'" + str(codigoCupsId[0].id) + "'" + ' AND des."tiposTarifa_id" = tiptar.id and proc."tiposTarifa_id" = tiptar.id'
+                            else:
+                                comando = 'SELECT conv1.id ,exa."codigoCups" cups, proc."' + str(columnaALeer.columna) + '"' + ' valor FROM tarifarios_tarifariosdescripcion des, tarifarios_tarifariosprocedimientos proc, clinico_examenes exa, contratacion_convenios conv1 , tarifarios_tipostarifa tiptar WHERE conv1.id = ' +"'" + str(convenioParticular.id) + "'" + '  AND des.id = conv1."tarifariosDescripcionProc_id" AND proc."codigoCups_id" = exa.id  And exa.id = ' + "'" + str(
+                                codigoCupsId[
+                                    0].id) + "'" + ' AND des."tiposTarifa_id" = tiptar.id and proc."tiposTarifa_id" = tiptar.id'
+
+
+                            print("comando = ", comando)
+
+                            curt.execute(comando)
+
+                            convenioValor = []
+
+                            for id, cups,tarifaValor   in curt.fetchall():
+                                convenioValor.append({'id': id, 'cups':cups, 'valor':tarifaValor})
+
+                            miConexiont.close()
+                            print("columnaALeer.columna", columnaALeer.columna)
+                            print("convenioValor = " ,convenioValor)
+                            print("codigoCupsId[0].id = ", codigoCupsId[0].id)
+
+                            # Aqui analiza si es necesario que caiga en la tabla de Autorizaciones
+
+                            print("el cups :", cups)
+
+                            print ("autorizacion para el CUPS es ", codigoCupsId[0].requiereAutorizacion)
+
+                            # Aqui saca valores pata tarifas
+
+                            if convenioValor != []:
+
+                                print ("Cups = "  , convenioValor[0]['cups'])
+                                tarifaValor = convenioValor[0]['valor']
+                                tarifaValor = str(tarifaValor)
+                                print("tarifaValor = ", tarifaValor)
+                                tarifaValor = tarifaValor.replace("None", ' ')
+                                tarifaValor = tarifaValor.replace("(", ' ')
+                                tarifaValor = tarifaValor.replace(")", ' ')
+                                tarifaValor = tarifaValor.replace(",", ' ')
+                                tarifaValor = tarifaValor.replace(" ", '')
+                                print ("tarifaValor = ", tarifaValor)
+                            else:
+                                tarifaValor=0
+
+
+                            if tarifaValor == '':
+                                print ("Entre cambiar tarufa Valor" ,  tarifaValor)
+                                tarifaValor=0
+
+                        except psycopg2.DatabaseError as error:
+                            print("Entre por rollback", error)
+                            if miConexion3:
+                                print("Entro ha hacer el Rollback")
+                                miConexion3.rollback()
+                                tarifaValor = 0
+
+                        finally:
+                            if miConexion3:
+                                cur3.close()
+                                miConexion3.close()
 
                         TotalTarifa = float(tarifaValor) * float(cantidad)
-
-
 
                         if (codigoCupsId[0].requiereAutorizacion == 'S'):
 
@@ -838,8 +915,6 @@ def crearHistoriaClinica(request):
 
                             # Fin tema Autorizaciones
 
-
-
                     # Aqui Rutina FACTURACION crea en liquidaciondetalle el registro con la tarifa, con campo cups y convenio
                     #
 
@@ -864,7 +939,7 @@ def crearHistoriaClinica(request):
                     print("Encontre ordenes de laboratrio")
                     print("Encontre ordenes de laboratrio")
                     ingresoId2=ingresosPaciente.id
-                    ImprimirOrdenLaboratorio(ingresoId2, historiaId)
+                    ImprimirOrdenLaboratorio(ingresoId2, historiaId, convenioId, tipoAdmision)
                 else:
                     print("No Encontre ordenes de laboratrio")
                     print("No Encontre ordenes de laboratrio")
@@ -2182,6 +2257,8 @@ def crearHistoriaClinica(request):
 
         alert("Entre por solo POST falta el context");
 
+        context['Mensaje'] = 'Folio de Historia Clinica guardado !'
+
         return render(request, 'clinico/panelClinico.html', context);
 
 	
@@ -2963,28 +3040,42 @@ def load_dataClinico(request, data):
 
     # Combo Indicadores
 
-    # iConexiont = MySQLdb.connect(host='CMKSISTEPC07', user='sa', passwd='75AAbb??', db='vulnerable')
     miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
-                                       password="123456")
+                                   password="123456")
     curt = miConexiont.cursor()
 
-    #comando = "SELECT c.id id,c.nombre nombre FROM clinico_viasAdministracion c"
-    comando = 'SELECT ser.nombre, count(*) total FROM admisiones_ingresos i, usuarios_usuarios u, sitios_dependencias dep , clinico_servicios ser ,usuarios_tiposDocumento tp , sitios_dependenciastipo deptip  , clinico_Diagnosticos diag , sitios_serviciosSedes sd  WHERE sd."sedesClinica_id" = i."sedesClinica_id"  and sd.servicios_id  = ser.id and i."sedesClinica_id" = dep."sedesClinica_id" AND i."sedesClinica_id" = ' + "'" + str(sede) + "'" + ' AND  deptip.id = dep."dependenciasTipo_id" and i."serviciosActual_id" = ser.id AND dep.disponibilidad = ' + "'" + str('O') + "'" + ' AND i."salidaDefinitiva" = ' + "'" + str('N') + "'" + ' and tp.id = u."tipoDoc_id" and  i."tipoDoc_id" = u."tipoDoc_id" and u.id = i."documento_id" and diag.id = i."dxActual_id" and i."fechaSalida" is null and dep."serviciosSedes_id" = sd.id and dep.id = i."dependenciasActual_id"  group by ser.nombre UNION SELECT ser.nombre, count(*) total FROM triage_triage t, usuarios_usuarios u, sitios_dependencias dep , usuarios_tiposDocumento tp , sitios_dependenciastipo deptip  , sitios_serviciosSedes sd, clinico_servicios ser WHERE sd."sedesClinica_id" = t."sedesClinica_id"  and t."sedesClinica_id" = dep."sedesClinica_id" AND  t."sedesClinica_id" =  ' + "'" + str(sede) + "'" + ' AND dep."sedesClinica_id" =  sd."sedesClinica_id" AND dep.id = t.dependencias_id AND  t."serviciosSedes_id" = sd.id  AND deptip.id = dep."dependenciasTipo_id" and  tp.id = u."tipoDoc_id" and  t."tipoDoc_id" = u."tipoDoc_id" and u.id = t."documento_id"  and ser.id = sd.servicios_id and  dep."serviciosSedes_id" = sd.id and t."serviciosSedes_id" = sd.id and dep."tipoDoc_id" = t."tipoDoc_id" and  t."consecAdmision" = 0 and dep."documento_id" = t."documento_id" and ser.nombre = '  + "'" + str('TRIAGE') + "'" + ' group by ser.nombre'
+
+    comando = 'SELECT ser.nombre nombre, count(*) total FROM admisiones_ingresos i, usuarios_usuarios u, sitios_dependencias dep , clinico_servicios ser ,usuarios_tiposDocumento tp , sitios_dependenciastipo deptip  , clinico_Diagnosticos diag , sitios_serviciosSedes sd  WHERE sd."sedesClinica_id" = i."sedesClinica_id"  and sd.servicios_id  = ser.id and i."sedesClinica_id" = dep."sedesClinica_id" AND i."sedesClinica_id" = ' + "'" + str(sede) + "'" + ' AND  deptip.id = dep."dependenciasTipo_id" and i."serviciosActual_id" = sd.id AND dep.disponibilidad = ' + "'" + str('O') + "'" + ' AND i."salidaDefinitiva" = ' + "'" + str('N') + "'" + ' and tp.id = u."tipoDoc_id" and  i."tipoDoc_id" = u."tipoDoc_id" and u.id = i."documento_id" and diag.id = i."dxActual_id" and i."fechaSalida" is null and dep."serviciosSedes_id" = sd.id and dep.id = i."dependenciasActual_id"  group by ser.nombre UNION SELECT ser.nombre, count(*) total FROM triage_triage t, usuarios_usuarios u, sitios_dependencias dep , usuarios_tiposDocumento tp , sitios_dependenciastipo deptip  , sitios_serviciosSedes sd, clinico_servicios ser WHERE sd."sedesClinica_id" = t."sedesClinica_id"  and t."sedesClinica_id" = dep."sedesClinica_id" AND  t."sedesClinica_id" =  ' + "'" + str(sede) + "'" + ' AND dep."sedesClinica_id" =  sd."sedesClinica_id" AND dep.id = t.dependencias_id AND  t."serviciosSedes_id" = sd.id  AND deptip.id = dep."dependenciasTipo_id" and  tp.id = u."tipoDoc_id" and  t."tipoDoc_id" = u."tipoDoc_id" and u.id = t."documento_id"  and ser.id = sd.servicios_id and  dep."serviciosSedes_id" = sd.id and t."serviciosSedes_id" = sd.id and dep."tipoDoc_id" = t."tipoDoc_id" and  t."consecAdmision" = 0 and dep."documento_id" = t."documento_id" and ser.nombre = '  + "'" + str('TRIAGE') + "'" + ' group by ser.nombre'
 
     curt.execute(comando)
     print(comando)
 
     indicadores = []
 
-    for id, nombre in curt.fetchall():
-            indicadores.append({'id': id, 'nombre': nombre})
+    for nombre, total in curt.fetchall():
+        indicadores.append({'nombre': nombre, 'total':total})
+        if (nombre == 'HOSPITALIZACION' ):
+            context['Hospitalizados'] = total
+        if (nombre == 'TRIAGE'):
+            context['Triage'] = total
+        if (nombre == 'URGENCIAS'):
+            context['Urgencias'] = total
+        if (nombre == 'AMBULATORIO'):
+            context['Ambulatorios'] = total
 
     miConexiont.close()
     print(indicadores)
 
     context['Indicadores'] = indicadores
 
-    # Fin combo Indicadores
+    total = len(indicadores)
+
+    print ("total ", total)
+
+    print("YA PASE INDICADORES")
+
+# Fin combo Indicadores
+
 
 
     ingresos = []

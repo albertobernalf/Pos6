@@ -19,14 +19,14 @@
             </a></li>
             <li><a href="#CausaExterna"><span class="fa-solid fa-truck-medical"></span> <span class="tab-text"> </span>CausaExterna
             </a>
+            <li><a href="#Diagnosticos"><span class="fa fa-home"></span> <span class="tab-text"> </span>Diagnosticos
+            </a>
+            </li>
             <li><a href="#RevisionSistemas"><span class="fa-solid fa-truck-medical"></span> <span
-                    class="tab-text"> </span>RevisionSistemas
+                    class="tab-text"> </span>Rev-Sistemas
             </a>
             </li>
-            <li><a href="#SignosVitales"><span class="fa-solid fa-wave-pulse"></span> <span class="tab-text"> </span>Signos
-                Vitales
-            </a>
-            </li>
+
 
             <li><a href="#Laboratorios"><span class="fa-solid fa-bong"></span> <span class="tab-text"> </span>Laboratorios
             </a>
@@ -43,8 +43,12 @@
 
             <li><a href="#Consulta"><span class="fa-solid fa-hand-holding-medical"></span> <span
                     class="tab-text"> </span>Historia Clinica</a></li>
-            <li><a href="#Clinica"><span class="fa-solid fa-hand-holding-medical"></span> <span
-                    class="tab-text"> </span>Clinica paciente </a></li>
+            <li><a href="#GuardarFolio"><span class="fa fa-home"></span> <span class="tab-text"> </span>GuardarFolio
+            </a>
+            </li>
+            <li><a href="#Retornar"><span class="fa fa-home"></span> <span class="tab-text"> </span>Retornar
+            </a></li>
+
         </ul>
 <!--    </div> -->
 </div>
@@ -129,7 +133,26 @@
   Usuario:
             {{Profesional}}
 
-                                        <label for="serviciosAdministrativos" class="col-sm-1 control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SeviciosAdmon:</label>
+        </div>
+    </div>
+<!-- </div> -->
+
+{% endfor %}
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="marco">
+
+<div class="secciones">
+    <article id="Evoluciones">
+
+        <center><h3>Evolucion</h3></center>
+
+
+        <div class="row row-cols-9 mt-3">
+            <div class="col-sm-3">
+                                        <label for="serviciosAdministrativos" class="col-sm-1 control-label">Sevicio Admon:</label>
                                         <div class="col-sm-8">
                                             <select class="select-css h-40 w-20" id="serviciosAdministrativos"  tabindex= "0"
                                                     name="serviciosAdministrativos"
@@ -139,69 +162,35 @@
                                                 {% endfor %}
                                             </select>
 				        </div>        
-        </div>
-    </div>
-<!-- </div> -->
 
-{% endfor %}
-</div>
-{% endblock %}
-
-
-{% block indicadores %}
-
-<span style="padding-right:3px; padding-top: 3px; display:inline-block;">
-Alta Medica: <img class="manImg" src={% static 'img/iloveimg-converted/poste-indicador3.png' %}></img>
-Hospitalizados: <img class="manImg" src={% static 'img/iloveimg-converted/icons8-enfermera-48.png' %}></img>
-Urgencias: <img class="manImg" src={% static 'img/iloveimg-converted/icons8-enfermera-48.png' %}></img>
-Triage: <img class="manImg" src={% static 'img/iloveimg-converted/poste-indicador3.png' %}></img>
-Ambulatorios: <img class="manImg" src={% static 'img/iloveimg-converted/poste-indicador3.png' %}></img>
-
-</span>
-
-
-{% endblock %}
-
-
-{% block content %}
-<div class="marco">
-
-<div class="secciones">
-    <article id="Evoluciones">
-
-        <center><h3>Evoluciones</h3></center>
-
-
-        <div class="row row-cols-9 mt-3">
-            <div class="col">
                 </div>
 
-            <div class="col">
+            <div class="col-sm-3">
                 {{ historiaForm.motivo.label }} Consulta
                 {{ historiaForm.motivo }}
             </div>
 
-            <div class="col">
+            <div class="col-sm-3">
                 {{ historiaForm.objetivo.label }}
                 {{ historiaForm.objetivo }}
             </div>
 
-            <div class="col">
+            <div class="col-sm-3">
                 {{ historiaForm.subjetivo.label }}
                 {{ historiaForm.subjetivo }}
             </div>
 
-            <div class="col">
+            <div class="col-sm-3">
                 {{ historiaForm.analisis.label }}
                 {{ historiaForm.analisis }}
             </div>
 
-            <div class="col">
+            <div class="col-sm-3">
                 {{ historiaForm.plann.label }}
                 {{ historiaForm.plann }}
             </div>
       
-            <div class="col">
+            <div class="col-sm-3">
                 {{ historiaForm.tratamiento.label }}
                 {{ historiaForm.tratamiento }}
             </div>
@@ -268,10 +257,7 @@ Ambulatorios: <img class="manImg" src={% static 'img/iloveimg-converted/poste-in
         <center><h3>Orden De Control</h3></center>
 
 
- <div class="row row-cols-2 mt-3">
-            <div class="col">
-                </div>
-
+ <div class="row row-cols-1 mt-3">
             <div class="col">
                 {{ historiaForm.ordenDeControl.label }} Consulta
                 {{ historiaForm.ordenDeControl }}
@@ -339,14 +325,8 @@ Ambulatorios: <img class="manImg" src={% static 'img/iloveimg-converted/poste-in
                                         <div class="card-header" style="height:50px;">
                                             <center>
                                                 <div class="row">
-                                                    <div class="col-sm-1">
-
-                                                    </div>
-
-                                                    <div class="col-sm-3">
-
-                                                        <select class="select-css"  id="rev"
-                                                                name="rev">
+                                                    <div class="col-sm-6">
+                                                        <select class="select-css"  id="rev"          name="rev">
                                                             {% for revisionSistemas in RevisionSistemas %}
                                                             <option value="{{revisionSistemas.id}}"> {{revisionSistemas.nombre}}
                                                             </option>
@@ -354,8 +334,7 @@ Ambulatorios: <img class="manImg" src={% static 'img/iloveimg-converted/poste-in
                                                         </select>
                                                     </div>
 
-                                                    
-                                                    <div class="col-sm-3">
+                                                    <div class="col-sm-4">
 							Observaciones:
                                                         <input type="text" id="observa9" name="observa9" value="">
                                                     </div>
@@ -532,7 +511,7 @@ Ambulatorios: <img class="manImg" src={% static 'img/iloveimg-converted/poste-in
                                             <center>
                                                 <div class="row">
 
-                                                    <div class="col">
+                                                    <div class="col-sm-4">
                                                         <select class="select-css" id="lab" name="lab">
                                                             {% for laboratorios in Laboratorios %}
                                                             <option value="{{laboratorios.cups}}">
@@ -541,15 +520,15 @@ Ambulatorios: <img class="manImg" src={% static 'img/iloveimg-converted/poste-in
                                                             {% endfor %}
                                                         </select>
                                                     </div>
-                                                    <div class="col">
+                                                    <div class="col-sm-1">
                                                         Cant:
                                                         <input type="text" id="cantidad" name="cantidad" value="1">
                                                     </div>
-                                                    <div class="col">
+                                                    <div class="col-sm-5">
                                                         Observaciones:
                                                         <input type="text" id="observa" name="observa" value="">
                                                     </div>
-                                                    <div class="col">
+                                                    <div class="col-sm-2">
                                                         <span class="text-secondary">Adicionar</span>
                                                         <a class="btn btn-success" href="javascript:void(0)"
                                                            id="BtnAdicionarLaboratorio"> <i
@@ -634,11 +613,7 @@ Ambulatorios: <img class="manImg" src={% static 'img/iloveimg-converted/poste-in
                                         <div class="card-header" style="height:50px;">
                                             <center>
                                                 <div class="row">
-                                                    <div class="col-sm-1">
-
-                                                    </div>
-
-                                                    <div class="col-sm-3">
+                                                    <div class="col-sm-4">
 
                                                         <select class="select-css"  id="rad"
                                                                 name="rad">
@@ -649,7 +624,7 @@ Ambulatorios: <img class="manImg" src={% static 'img/iloveimg-converted/poste-in
                                                         </select>
                                                     </div>
 
-                                                    <div class="col-sm-2">
+                                                    <div class="col-sm-1">
                                                         Cantidad:
                                                         <input type="text" id="cantidad3" name="cantidad3" value="1">
 
@@ -657,7 +632,7 @@ Ambulatorios: <img class="manImg" src={% static 'img/iloveimg-converted/poste-in
                                                     </div>
 
 
-                                                    <div class="col-sm-3">
+                                                    <div class="col-sm-5">
 							Observaciones:
                                                         <input type="text" id="observa3" name="observa3" value="">
                                                     </div>
@@ -742,11 +717,7 @@ Ambulatorios: <img class="manImg" src={% static 'img/iloveimg-converted/poste-in
                                         <div class="card-header" style="height:50px;">
                                             <center>
                                                 <div class="row">
-                                                    <div class="col-sm-1">
-
-                                                    </div>
-
-                                                    <div class="col-sm-3">
+                                                    <div class="col-sm-4">
                                                 	
                                                         <select class="select-css"  id="ter"
                                                                 name="ter">
@@ -758,7 +729,7 @@ Ambulatorios: <img class="manImg" src={% static 'img/iloveimg-converted/poste-in
                                                         </select>
                                                     </div>
 
-                                                    <div class="col-sm-2">
+                                                    <div class="col-sm-1">
 							Cantidad:
                                                         <input type="text" id="cantidad4" name="cantidad4" value="1">
 
@@ -766,7 +737,7 @@ Ambulatorios: <img class="manImg" src={% static 'img/iloveimg-converted/poste-in
                                                     </div>
 
 
-                                                    <div class="col-sm-3">
+                                                    <div class="col-sm-5">
 							Observaciones:
                                                         <input type="text" id="observa4" name="observa4" value="">
                                                     </div>
@@ -850,9 +821,6 @@ Ambulatorios: <img class="manImg" src={% static 'img/iloveimg-converted/poste-in
                                         <div class="card-header" style="height:100px;">
                                             <center>
                                                 <div class="row">
-                                                    <div class="col-sm-1">
-
-                                                   </div>
                                                     <div class="col-sm-2">
                     							    Medicamento
                                                         <select class="select-css"  id="medicamentos"
@@ -866,7 +834,7 @@ Ambulatorios: <img class="manImg" src={% static 'img/iloveimg-converted/poste-in
                                                     </div>
                                                     <div class="col-sm-1">
 					                                		Dosis:
-                                                        <input type="text" id="dosis" name="dosis" value="">
+                                                        <input type="text" id="dosis" name="dosis" value="" size="2">
                                                     </div>
 
                                                     <div class="col-sm-1">
@@ -880,7 +848,7 @@ Ambulatorios: <img class="manImg" src={% static 'img/iloveimg-converted/poste-in
                                                             {% endfor %}
                                                         </select>
                                                     </div>
-                                                    <div class="col-sm-1">
+                                                    <div class="col-sm-2">
 							                    Forma Farma:
                                                         <select class="select-css" id="formaFarma"
                                                                 name="formaFarma">
@@ -903,7 +871,7 @@ Ambulatorios: <img class="manImg" src={% static 'img/iloveimg-converted/poste-in
                                                         </select>
                                                     </div>
 
-						 <div class="col-sm-1">
+						                <div class="col-sm-2">
 							                        Vias Adm
                                                         <select class="select-css" id="vias"
                                                                 name="vias">
@@ -918,11 +886,11 @@ Ambulatorios: <img class="manImg" src={% static 'img/iloveimg-converted/poste-in
 
 						                            <div class="col-sm-1">
 							                        Cantidad:
-                                                        <input type="text" id="cantidadMedicamento" name="cantidadMedicamento" value="">
+                                                        <input type="text" id="cantidadMedicamento" name="cantidadMedicamento" value="" size="1">
                                                     </div>
 						                            <div class="col-sm-1">
 							                            DiasTratamiento:
-                                                        <input type="text" id="diasTratamiento" name="diasTratamiento" value="">
+                                                        <input type="text" id="diasTratamiento" name="diasTratamiento" value="" size="1">
                                                     </div>
 
                                                     <div class="col-sm-1 text-end">
@@ -1383,12 +1351,8 @@ Ambulatorios: <img class="manImg" src={% static 'img/iloveimg-converted/poste-in
                                         <div class="card-header" style="height:50px;">
                                             <center>
                                                 <div class="row">
-                                                    <div class="col-sm-1">
 
-
-                                                    </div>
-
-                                                    <div class="col-sm-3">
+                                                    <div class="col-sm-5">
 
                                                         <select class="select-css"  id="noQx"
                                                                 name="noQx">
@@ -1492,13 +1456,7 @@ Ambulatorios: <img class="manImg" src={% static 'img/iloveimg-converted/poste-in
                                         <div class="card-header" style="height:50px;">
                                             <center>
                                                 <div class="row">
-                                                    <div class="col-sm-1">
-
-                                                    </div>
-
-
-                                                    <div class="col-sm-3">
-
+                                                    <div class="col-sm-2">
                                                         <select class="select-css"  id="tiposDiagnosticos"
                                                                 name="tiposDiagnosticos">
                                                             {% for tiposDiagnostico in TiposDiagnostico %}
@@ -1508,9 +1466,7 @@ Ambulatorios: <img class="manImg" src={% static 'img/iloveimg-converted/poste-in
                                                             {% endfor %}
                                                         </select>
                                                     </div>
-
-
-                                                    <div class="col-sm-2">
+                                                    <div class="col-sm-4">
 
                                                         <select class="select-css" id="diagnosticos"
                                                                 name="diagnosticos">
@@ -1522,13 +1478,10 @@ Ambulatorios: <img class="manImg" src={% static 'img/iloveimg-converted/poste-in
                                                         </select>
                                                     </div>
 
-
-                                                    <div class="col-sm-3">
+                                                    <div class="col-sm-4">
 							Observaciones:
                                                         <input type="text" id="observa7" name="observa7" value="">
-                                                    </div>
-
-
+                                                   </div>
                                                     <div class="col-sm-2 text-end">
                                                         <span class="text-secondary">Adicionar</span>
                                                         <a class="btn btn-success" href="javascript:void(0)"
@@ -1613,12 +1566,7 @@ Ambulatorios: <img class="manImg" src={% static 'img/iloveimg-converted/poste-in
                                         <div class="card-header" style="height:50px;">
                                             <center>
                                                 <div class="row">
-                                                    <div class="col-sm-1">
-
-
-                                                    </div>
-
-                                                    <div class="col-sm-3">
+                                                    <div class="col-sm-5">
 
                                                         <select class="select-css"  id="antecedentes"
                                                                 name="antecedentes">
@@ -1629,9 +1577,6 @@ Ambulatorios: <img class="manImg" src={% static 'img/iloveimg-converted/poste-in
                                                             {% endfor %}
                                                         </select>
                                                     </div>
-
-
-
 
                                                     <div class="col-sm-3">
 							Observaciones:
@@ -1698,30 +1643,30 @@ Ambulatorios: <img class="manImg" src={% static 'img/iloveimg-converted/poste-in
 	<div class="container">
 
             <form   method="POST"  id="formIncapacidades">
-             <div class="row row-cols-4 mt-3">
+             <div class="row row-cols-6 mt-3">
 
-            <div class="col">
+            <div class="col-sm-2">
                 Tipo Incapacidad:
                 {{IncapacidadesForm.tiposIncapacidad}}
             </div>
 
-            <div class="col">
+            <div class="col-sm-2">
                 Diagnostico:
                 {{IncapacidadesForm.diagnosticosIncapacidad}}
             </div>
-            <div class="col">
+            <div class="col-sm-2">
                 Inicia:
                 {{IncapacidadesForm.desdeFecha}}
             </div>
-            <div class="col">
+            <div class="col-sm-2">
                 Termina:
                 {{IncapacidadesForm.hastaFecha}}
             </div>
-    		 <div class="col">
+    		 <div class="col-sm-1">
                 Numero de dias:
                 {{IncapacidadesForm.numDias}}
             </div>
-            <div class="col">
+            <div class="col-sm-3">
                 Descripcion:
                 {{IncapacidadesForm.descripcion}}
             </div>
@@ -1782,7 +1727,7 @@ Ambulatorios: <img class="manImg" src={% static 'img/iloveimg-converted/poste-in
                                                     </div>
 
 
-                                                    <div class="col-sm-1">
+                                                    <div class="col-sm-2">
                                                         <label for="medicoConsultado"
                                                                class="col-sm-12 control-label">Medico consultado:</label>
                                                         <select class="select-css" aria-label="" id="medicoConsultado" name="medicoConsultado">
@@ -1802,7 +1747,7 @@ Ambulatorios: <img class="manImg" src={% static 'img/iloveimg-converted/poste-in
 
 
 
-                                                    <div class="col-sm-1">
+                                                    <div class="col-sm-2">
                                                         Diagnostico:
                                                         <select class="select-css" aria-label="" id="diagnosticosI"
                                                                 name="diagnosticosI">
@@ -1887,9 +1832,8 @@ Ambulatorios: <img class="manImg" src={% static 'img/iloveimg-converted/poste-in
     <article id="SalidaClinica">
 		
 	   <div class="row">
-			                <div class="col">
-			                 </div>
-                                                   <div class="col">
+
+                                                   <div class="col-sm-4">
 							Tipo salida:
                                                         <select class="select-css"  id="tiposSalidas"  name="tiposSalidas">
                                                             {% for tiposSalidas in TiposSalidas %}
@@ -1899,7 +1843,7 @@ Ambulatorios: <img class="manImg" src={% static 'img/iloveimg-converted/poste-in
                                                             {% endfor %}
                                                         </select>
                                                     </div>
-						<div class="col">
+						<div class="col-sm-4">
 								Dx de complicacion:
                                                         <select class="select-css"  id="dxComplicacion"  name="dxComplicacion">
                                                             {% for dxComplicacion in DxComplicacion %}
@@ -1909,8 +1853,8 @@ Ambulatorios: <img class="manImg" src={% static 'img/iloveimg-converted/poste-in
                                                             {% endfor %}
                                                         </select>
                                                     </div>
-			                <div class="col">
-						<input type="checkbox" id="salClinica" name="salClinica"/>
+			                <div class="col-sm-4">
+						Seleccione:<input type="checkbox" id="salClinica" name="salClinica"/>
 			                 </div>
 
 	</div>
@@ -1931,9 +1875,9 @@ Ambulatorios: <img class="manImg" src={% static 'img/iloveimg-converted/poste-in
 	    <input type="hidden" id="perfil" name="perfil" value="{{perfil}}"> </input>
 	    <input type="hidden" id="profesional" name="profesional" value="{{Profesional}}"> </input>
 	    <input type="hidden" id="fechaRegistro" name="fechaRegistro" value=""> </input>
-	    <input type="text" id="tipoDocPaciente1" name="tipoDocPaciente1" value="{{TipoDocPaciente}}">
-	    <input type="text" id="documentoPaciente1" name="documentoPaciente1" value="{{DocumentoPaciente}}">
-	    <input type="text" id="ingresoPaciente1" name="ingresoPaciente1" value="{{IngresoPaciente}}">
+	    <input type="hidden" id="tipoDocPaciente1" name="tipoDocPaciente1" value="{{TipoDocPaciente}}">
+	    <input type="hidden" id="documentoPaciente1" name="documentoPaciente1" value="{{DocumentoPaciente}}">
+	    <input type="hidden" id="ingresoPaciente1" name="ingresoPaciente1" value="{{IngresoPaciente}}">
      	    <input type="hidden" id="tipoDocPaciente" name="tipoDocPaciente" value="{{TipoDocPaciente}}">
 	    <input type="hidden" id="documentoPaciente" name="documentoPaciente" value="{{DocumentoPaciente}}">
 	    <input type="hidden" id="ingresoPaciente" name="ingresoPaciente" value="{{IngresoPaciente}}">
@@ -1953,7 +1897,6 @@ Ambulatorios: <img class="manImg" src={% static 'img/iloveimg-converted/poste-in
 	<input type="hidden" id="permisosGrales" name="permisosGrales" value = "{{PermisosGrales}}">
 	<input type="hidden" id="permisosDetalle" name="permisosDetalle" value = "{{PermisosDetalle}}">
 	<input type="hidden" id="escogeModulo" name="escogeModulo" value = "{{EscogeModulo}}">
-
             <input type="submit" id="btnCrearFolio" name="btnCrearFolio" value="Registrar Folio"> </input>
 
 
@@ -1979,9 +1922,9 @@ Ambulatorios: <img class="manImg" src={% static 'img/iloveimg-converted/poste-in
 	    <input type="hidden" id="numreporte" name="numreporte" value = "{{numreporte}}">
 	    <input type="hidden" id="grupo" name="grupo" value = "{{Grupo}}">
 	    <input type="hidden" id="subGrupo" name="subGrupo" value = "{{SubGrupo}}">
-            <input type="text" id="tipoDocPaciente2" name="tipoDocPaciente2" value="{{TipoDocPaciente}}">
-	    <input type="text" id="documentoPaciente2" name="documentoPaciente2" value="{{DocumentoPaciente}}">
-	    <input type="text" id="ingresoPaciente2" name="ingresoPaciente2" value="{{IngresoPaciente}}">
+            <input type="hidden" id="tipoDocPaciente2" name="tipoDocPaciente2" value="{{TipoDocPaciente}}">
+	    <input type="hidden" id="documentoPaciente2" name="documentoPaciente2" value="{{DocumentoPaciente}}">
+	    <input type="hidden id="ingresoPaciente2" name="ingresoPaciente2" value="{{IngresoPaciente}}">
             <input type="hidden" id="espMedico" name="espMedico" value="{{EspMedico}}"> </input>
 	    <input type="hidden" id="tiposFolio" name="tiposFolio" value="{{TiposFolio}}"> </input>
 	    <input type="hidden" id="tiposFolioEscogido" name="tiposFolioEscogido" value="{{TiposFolioEscogido}}"> </input>
@@ -2041,9 +1984,9 @@ Ambulatorios: <img class="manImg" src={% static 'img/iloveimg-converted/poste-in
 </div>
 
 {% endblock %}
+
 {% block mensajeria %}
 <div class="marco">
-<span> Avisos ... </span>
        <span id="mensajes" name="mensajes" style= "color:blue; font-size:18px; line-height:35px; font-family: Calibri;" > </span>
      <span id="mensajesError" name="mensajesError" style= "color:red; font-size:18px; line-height:35px; font-family: Calibri;" > </span>
 
@@ -2055,13 +1998,17 @@ Ambulatorios: <img class="manImg" src={% static 'img/iloveimg-converted/poste-in
 <div class="marco">
 <!--    <div class="wrap">  -->
         <ul class="tabs">
+            <li><a href="#Clinica"><span class="fa-solid fa-hand-holding-medical"></span> <span
+                    class="tab-text"> </span>Clinica paciente </a></li>
+            <li><a href="#SignosVitales"><span class="fa-solid fa-wave-pulse"></span> <span class="tab-text"> </span>Signos
+                Vitales
+            </a>
+            </li>
 
             <li><a href="#Cirugias"><span class="fa fa-home"></span> <span class="tab-text"> </span>Cirugias </a></li>
             <li><a href="#ProcedimientosNoQx"><span class="fa fa-home"></span> <span class="tab-text"> </span>ProcedimientosNoQx
-            </a></li>
-            <li><a href="#Diagnosticos"><span class="fa fa-home"></span> <span class="tab-text"> </span>Diagnosticos
             </a>
-            </li>
+	</li>
             <li><a href="#Antecedentes"><span class="fa fa-home"></span> <span class="tab-text"> </span>Antecedentes
             </a>
             </li>
@@ -2074,11 +2021,7 @@ Ambulatorios: <img class="manImg" src={% static 'img/iloveimg-converted/poste-in
             <li><a href="#SalidaClinica"><span class="fa fa-home"></span> <span class="tab-text"> </span>SalidaClinica
             </a>
             </li>
-            <li><a href="#GuardarFolio"><span class="fa fa-home"></span> <span class="tab-text"> </span>GuardarFolio
-            </a>
-            </li>
-            <li><a href="#Retornar"><span class="fa fa-home"></span> <span class="tab-text"> </span>Retornar
-            </a></li>
+
         </ul>
 <!--    </div> -->
 </div>

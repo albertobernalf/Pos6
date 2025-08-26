@@ -21,24 +21,10 @@ Podria ser FuripsClinico, FuripsLegal
 -- Acabo de detectar algo recontra DURO, los querys SQL, mundo aparte su complejidad es aparte de la armadura general del programa,.. No debe retrazar el desarrollo
    se deja hasta bun buen termino y se sigue con la armadura(desarrollo-software)
 
-Terminar Clinico, buscar alog de farmacia, inventarios, compras
-
--- Ojo un usuario no puede tener dis (2) Triages
--- No me modifico el usuario creado desde la modal de triage-usuario. 
-  -- Habitaciones (Mantenimiento)
   -- Hay que revisar Ingresos={}, poruqe hay dos diferentes querys y no puede actualziar
-     en muchos de ellos la dependenciaActual_id. OJOOO 
-   -- Colocar un control en guardar el cambio de servicio so no hay seleccionados datos en la ventana. para mantener robusta la Aplicacion..
-
    colocar mensaje bonito cuando no se escibe causa externa o diagnostico ojop
    busacar capturav ronum de la tabla laboratorios , creop en paneladmisiones ,    implementa delete no funciona en ambos lab-rayx
-   el tiposFolio aun no funciona solo trae 1 , no he podido pailas 
-   crear prioridad en clinico examenes y clinico_prioridad
-   tiposfolio (Pendiente que guarde y no se bloquee no se que pasa)
 
-   Para el lunes 16-sept
-
-   5.que crajop pasa con las fechas-hora
    6. algo pasda con el grid de revsion de sistemas/historia clinica
    
 
@@ -49,25 +35,11 @@ Terminar Clinico, buscar alog de farmacia, inventarios, compras
 1  probar insert de clinicos
   cuando grabo se fuel por otra cosa y noreargo la pagina de ingresos clinicos ojop
   ojo No hay una dependencia llave foranea de la historia con el ingreso
-5 ojo no funciona mensajeria cuando actualiza un trige 
-  ojo no cierra la modal cuando acatualiza un triege
-  ojo No me edita por nada la Admision para actualziar Mo encuentraAdmisonModal URL ???
-10ojo como manejamos las habitacione triage, desocupamos ???
-  ojo en historia clinica coge bien la fecha-hora de la historia , popruq en admisiones y panel nop ??? Nop. Validar
-  ojo en admisiones cuando hay cambio de servicio y graba hay que hacer refresh del tablero de admisiones para que miestre el cambio o sino pailas , toca hacerlo manual  .. Umm verificar creo esta bien
-  ojo ops en admisiones error al crear conveniop (se debe siempre tener seleccionado un convenio papabero)
-   ojo obligar siempre a ingresar diagnosticos en HC .. Nop  validar
-15 ojo cuando se ingresa diagnostico se desplaza hacia abajo se pierde presentacion
-   OJO ARREGLA PANTALA PROC Noqx 2 renglones
    ojo pestaña antecedentes. revsistemas impiden acceso footer pagina
    ojo calcular numero dias en incapacidad y solo readonly el campo numDIas
    ojo la fecha-hora de signos vitales pailas  .. Nop fecha en signos vitales no deb ir es la fecha del folio
 20 ojo verificar los medico consulta e interconsultado , creop esta mal
-21 ojo Problemas error al guardar null en acompanantes y responsables
 22 El mensaje no sale de responsable actualizao por cua ?.
-23. Ojo hay un erro al cargar la paginma admisione. es en cambioServico.change se activa pero no hay sede , por cua? no hay sede?
-24. Toca arregalr el tema de los ingresoIDxx, sedexx de acompanantes, responsable y abonos. ORGANIZAR bien
-
 
     No me marca o me selecciona el primer registro de la tabla en admiisones NOSE POR CUA
     Apenas arregle todo esto si crearFURIPs. Se debe crear enarticle copiao de crearadmisiones a bloc de notas , se maquilla con datos FURIPS, se envian combos alarticle y opcion guardar
@@ -90,7 +62,7 @@ Terminar Clinico, buscar alog de farmacia, inventarios, compras
        Falta colocar el nombre del paciente en respuestas apoyo terapeutico
 
        hoy
-	1. indicadores (como enviarlo por load_ en ajax estos valores)
+
         2. delete terapeutico
         3. consulta resultados (solo falta al momento de ingresar selccinar un registro)
         4. furips
@@ -835,14 +807,10 @@ ojo pendiente en aplicacion de medicamentos arreglar cuando aplica la modal no p
 -- ops como asi me borro un acetaminofeen de liquidaciondetalle verificar ???
 -- ops agregfue tan solo un aceaminfen y no me refrescon totales no grabo en cabezpote facturacion_lquidacion un registro manul de acetaminofen
 -- ojop hay un registro de laliquiacin de eumelia con cums_id y examen_id ala vae en loqudacindetalle ERROR Y ESO COMO PASO ??
-
-
--- AL CREAR UNA ADMISION DESDE ADMSIONES PROBLEMAS EN COMBOS, PAIS, DEPTO, CIUDAD,LOCALIDADES , 5077
-    CUANDO SELECCIONO EL PAIS SI NOHAY MUNICIPIOS O CIUDADES BLAMQUEAR
-     CUANDO CAMBIO EL DEPTO DEBE BLANQUEAR LAS LOCALIDADES
-	EN LA TARDE HACER HCLINICA, COLOCAR EL CUADRO ORDENDECONTROL Y LA IMRESION
-
-
 -- el dika lune 25 de agosto
   -- comenzar clinico ojo tpods los try-cartch por ejemplo de archivoas abierton como hacerlo ? No me funciono archivo abierto ordendecontrol
-  -- ops porque coloca lka palabra cups en orden de control al imprimir
+
+
+-- ojo en tarifarios, paramettizar la ruta de crague de procedimientos, suminis, honoraro en tabla parametros
+
+-- ops ojop en admisiones crear conevnios le creo un cabezote particular error no debio habero creado si ya etysab acreado VERIFICAR

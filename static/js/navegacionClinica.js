@@ -1029,7 +1029,18 @@ function tableActionsFormulacion() {
 // FIN MEDICAMENTOS
 
 formHistoriaClinica.addEventListener('submit', e=>{
-            confirm("Confirma Guardar Folio !");
+           const respuestaUsuario =  confirm("Confirma Guardar Folio !");
+	
+	if (respuestaUsuario) {
+		
+  console.log("El usuario confirmó la acción.");
+
+	} else {
+	event.preventDefault();
+		return;
+	  console.log("El usuario canceló la acción.");
+
+	}
 
 
         e.preventDefault()
@@ -1206,7 +1217,6 @@ formHistoriaClinica.addEventListener('submit', e=>{
 	   };
 
 	    interconsultas  = JSON.stringify(interconsultas);
-        alert("y por que no llegamos aqui");
 
  	// Fin Interconsulta
 
@@ -1282,7 +1292,7 @@ formHistoriaClinica.addEventListener('submit', e=>{
             "glasgowMotora" :glasgowMotora});
 
 
-	alert("signos = final  = " + JSON.stringify(signos));
+	// alert("signos = final  = " + JSON.stringify(signos));
 	signos  = JSON.stringify(signos);
 
  	// Fin Signos vitales
@@ -1353,7 +1363,7 @@ formHistoriaClinica.addEventListener('submit', e=>{
 
 
 	 var salidaClinicax    =  document.getElementById("salClinica").value
-	 alert ("salidaClinicax = " + salidaClinicax);
+	 // alert ("salidaClinicax = " + salidaClinicax);
       
 
 	 var sede    =  document.getElementById("sede").value
@@ -1411,9 +1421,9 @@ formHistoriaClinica.addEventListener('submit', e=>{
          var ingresoPaciente=document.getElementById("ingresoPaciente1").value;
 
          var tiposFolioEscogido  =  document.getElementById("tiposFolioEscogido").value;
-         alert("tiposFolioEscogido =" + tiposFolioEscogido);
+        // alert("tiposFolioEscogido =" + tiposFolioEscogido);
          var profesional = document.getElementById("profesional").value;
-         alert("Profesional = ", profesional);
+         // alert("Profesional = ", profesional);
 
    	    var espMedico  =  document.getElementById("espMedico").value;
 
@@ -1424,7 +1434,7 @@ formHistoriaClinica.addEventListener('submit', e=>{
          var tipoIng = document.getElementById("tipoIng").value;
 
 	 var tiposSalidas  =  document.getElementById("tiposSalidas").value;
-         alert("tiposSalidas =" + tiposSalidas);
+         // alert("tiposSalidas =" + tiposSalidas);
 
 	var dxComplicacion =  document.getElementById("dxComplicacion").value;
 	var mipres =  document.getElementById("id_mipres").value;
@@ -1439,9 +1449,9 @@ formHistoriaClinica.addEventListener('submit', e=>{
 
 
      var cBoxCirugia = document.getElementById("cBoxCirugia").checked;
-     alert("cboxcirugia = " + cBoxCirugia);
+     // alert("cboxcirugia = " + cBoxCirugia);
      var solicitaSangre =  document.getElementById("solicitaSangre").value;
-          alert("solicitaSangre = " + solicitaSangre);
+      //    alert("solicitaSangre = " + solicitaSangre);
      var describeSangre =  document.getElementById("describeSangre").value;
      var cantidadSangre =  document.getElementById("cantidadSangre").value;
      var solicitaCamaUci =  document.getElementById("solicitaCamaUci").value;
@@ -1582,24 +1592,25 @@ formHistoriaClinica.addEventListener('submit', e=>{
 				'ordenDeControl':ordenDeControl,
 
 				   },
- 	      		success: function (respuesta2) {
- 	      		        var data = JSON.parse(respuesta2);
-				// var data  = respuesta2;
- 	      		      
-     			    $("#mensajes").html(data.message);
+ 	      		success: function (data) {
+                    dato = data;
+                    var dataRespuesta = JSON.parse(dato);
+                  var dato = dataRespuesta['Mensaje'];
 
-		        if ( data['Mensaje'] == 'OK')
+
+		        if ( dato == 'OK')
 		            {
-				
+
 		            $("#formHistoriaClinicaT").submit();
+
 		            }
 		        else
 		            {
-		           $("#mensajes").html(data.message);
-			document.getElementById("mensajes").innerHTML = data.message;
+		           $("#mensajes").html(dato);
+
 		            }
 	
-			// location.reload();  Con el submit ya no seria necesariorecargar la pagina
+
 
  	      		}, // cierra function sucess
  	      		error: function (request, status, error) {

@@ -911,7 +911,7 @@ function GuardarDescripcionProcedimientos()
             $.ajax({
 
 	        url: "/guardarDescripcionProcedimientos/",
-		data: {'tiposTarifa_id':tiposTarifa_id,'columna':columna, 'descripcion':descripcion'serviciosAdministrativos':serviciosAdministrativos},
+		    data: {'tiposTarifa_id':tiposTarifa_id,'columna':columna, 'descripcion':descripcion,'serviciosAdministrativos':serviciosAdministrativos},
                 type: "POST",
                 dataType: 'json',
                 success: function (data2) {
@@ -976,7 +976,7 @@ function CrearTarifarioProcedimientos()
             $.ajax({
 
 	        url: "/crearTarifarioProcedimientos/",
-    		data: {'tiposTarifa_id':tiposTarifa1_id,'username_id':username_id,'serviciosAdministrativosC_id';serviciosAdministrativosC_id},
+    		data: {'tiposTarifa_id':tiposTarifa1_id,'username_id':username_id,'serviciosAdministrativosC_id':serviciosAdministrativosC_id},
                 type: "POST",
                 dataType: 'json',
                 success: function (data2) {

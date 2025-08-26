@@ -678,6 +678,53 @@ $(document).on('change', '#municipios', function(event) {
 	     });
      });
 
+$(document).on('change', '#pais', function(event) {
+
+       var Pais =   $(this).val()
+	alert("entre Pais");
+
+
+        $.ajax({
+	           url: '/buscarPaises/',
+	            data : {Pais:Pais},
+	           type: 'GET',
+	           dataType : 'json',
+
+	  		success: function (respuesta) {
+
+	  		   var options = '<option value="=================="></option>';
+
+	  		  var dato = JSON.parse(respuesta);
+
+
+                     const $id78 = document.querySelector("#departamentos");
+
+
+ 	      		     $("#departamentos").empty();
+
+
+	                 $.each(dato, function(key,value) {
+                                    options +='<option value="' + value.id + '">' + value.nombre + '</option>';
+                                    option = document.createElement("option");
+                                    option.value = value.id;
+                                    option.text = value.nombre;
+                                    $id78.appendChild(option);
+ 	      		      });
+
+
+                    },
+	   		    error: function (request, status, error) {
+
+	document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
+
+	   	    	}
+
+	     });
+
+});
+
+
+
 
 $(document).on('change', '#departamentos', function(event) {
 
@@ -769,6 +816,10 @@ $.ajax({
 	   	    	}
 
 	     });
+
+// aclara las localidades
+
+     $("#localidades").empty();
 
 
 });

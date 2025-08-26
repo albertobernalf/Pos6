@@ -38,17 +38,14 @@ function RefrescarPantalla() {
 
 {% block indicadores %}
 
-<span style="padding-right:3px; padding-top: 3px; display:inline-block;">
-Alta Medica: <img class="manImg" src={% static 'img/iloveimg-converted/poste-indicador31.JPG' %}></img>
-Hospitalizados: <img class="manImg" src={% static 'img/iloveimg-converted/icons8-enfermera-48_X.JPGg' %}></img> <span id="hosp" name="hosp" style='color:red'>Indicador1= </span>
-Urgencias: <img class="manImg" src={% static 'img/iloveimg-converted/icons8-enfermera-48_X.JPG' %}></img> <span id="urg" name="urg" style='color:red'>Indicador2 = </span>
-Triage: <img class="manImg" src={% static 'img/iloveimg-converted/poste-indicador31.JPG' %}></img>
-Ambulatorios: <img class="manImg" src={% static 'img/iloveimg-converted/poste-indicador31.JPG' %}></img>
+
+<span style="padding-left:8px; padding-right:3px; padding-top: 3px; display:inline-block;">
+Alta Medica:  <span id="alta" name="alta" style='color:red'>{{altaMedica}} </span>
+Hospitalizados:  <span id="hosp" name="hosp" style='color:red'>{{Hospitalizados}}</span> <img class="manImg" src={% static 'img/iloveimg-converted/icons8-enfermera-48_X.JPG' %}></img>
+Urgencias:  <span id="urg" name="urg" style='color:red'>{{Urgencias}} </span> <img class="manImg" src={% static 'img/iloveimg-converted/icons8-enfermera-48_X.JPG' %}></img>
+Triage:  <span id="tria" name="tria" style='color:red'>{{Triage}} </span> <img class="manImg" src={% static 'img/iloveimg-converted/icons8-enfermera-48_X.JPG' %}></img>
+Ambulatorios:  <span id="amb" name="amb" style='color:red'>{{Ambulatorios}} </span> <img class="manImg" src={% static 'img/iloveimg-converted/icons8-enfermera-48_X.JPG' %}></img>
 </span>
-
-
-
-
 
 {% endblock %}
 
@@ -95,7 +92,7 @@ Ambulatorios: <img class="manImg" src={% static 'img/iloveimg-converted/poste-in
 	        <input type="hidden" id="tipoIng" name="tipoIng" value="{{tipoIng}}">
 
 		 <table class="table " id="tablaClinicobottom"
-                           style="height: 10px; background-color:LightGray; border: 1px solid black; border-radius: 10px;width:95%;">
+                           style="height: 3px; background-color:LightGray; border: 1px solid black; border-radius: 10px;width:95%;">
                         <tr>
                             <td>
                                 <label for="espMedico" class="col-sm-3 control-label">Especialidad :</label>
@@ -165,8 +162,7 @@ Ambulatorios: <img class="manImg" src={% static 'img/iloveimg-converted/poste-in
 
 {% block mensajeria %}
 <div class="marco">
-<span> Avisos ... </span> 
-     <span id="mensajes" name="mensajes" style= "color:blue; font-size:18px; line-height:35px; font-family: Calibri;" > </span>
+     <span id="mensajes" name="mensajes" style= "color:blue; font-size:18px; line-height:35px; font-family: Calibri;" >{{Mensaje}} </span>
      <span id="mensajesError" name="mensajesError" style= "color:red; font-size:18px; line-height:35px; font-family: Calibri;" > </span>
 
 </div>

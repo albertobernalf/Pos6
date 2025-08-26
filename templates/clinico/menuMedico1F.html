@@ -115,9 +115,7 @@ font-family: Calibri;
 margin-left:400px;
  float: right;
 }
-
-
-    </style>
+ </style>
 
 
 </head>
@@ -183,10 +181,19 @@ window.onload = function(){
 {% endblock %}
 
 {% block paciente  %}
-{% endblock %}
-{% block indicadores  %}
+<span style="padding-left:8px; padding-right:3px; padding-top: 3px; display:inline-block;">
+Alta Medica:  <span id="alta" name="alta" style='color:red'>{{altaMedica}} </span>
+Hospitalizados:  <span id="hosp" name="hosp" style='color:red'>{{Hospitalizados}}</span> <img class="manImg" src={% static 'img/iloveimg-converted/icons8-enfermera-48_X.JPG' %}></img>
+Urgencias:  <span id="urg" name="urg" style='color:red'>{{Urgencias}} </span> <img class="manImg" src={% static 'img/iloveimg-converted/icons8-enfermera-48_X.JPG' %}></img>
+Triage:  <span id="tria" name="tria" style='color:red'>{{Triage}} </span> <img class="manImg" src={% static 'img/iloveimg-converted/icons8-enfermera-48_X.JPG' %}></img>
+Ambulatorios:  <span id="amb" name="amb" style='color:red'>{{Ambulatorios}} </span> <img class="manImg" src={% static 'img/iloveimg-converted/icons8-enfermera-48_X.JPG' %}></img>
+</span>
 
 {% endblock %}
+
+
+
+
 {% block content  %}
 {% endblock %}
 {% block mensajeria  %}

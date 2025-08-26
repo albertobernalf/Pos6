@@ -51,7 +51,7 @@ import psycopg2
 import json
 import datetime
 import cgi
-
+from django.db import transaction
 
 class PDFAtencionInicialUrgencias(FPDF):
     def __init__(self, tipoDocId, documentoId, consec,ingresoId,  *args, **kwargs):

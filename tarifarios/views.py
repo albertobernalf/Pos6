@@ -75,7 +75,7 @@ def Load_dataTarifariosProcedimientos(request, data):
     curx = miConexionx.cursor()
    
     #detalle = 'select id, "codigoHomologado", "colValorBase", "colValor1", "colValor2", "colValor3", "colValor4", "colValor5", "colValor6", "colValor7", "colValor8", "colValor9", "colValor10", "fechaRegistro", "estadoReg", "codigoCups_id", concepto_id, "tiposTarifa_id", "usuarioRegistro_id" from tarifarios_tarifariosprocedimientos'
-    detalle = 'select tarproc.id id, tiptar.nombre tipoTarifa, exa."codigoCups" cups, tarproc."codigoHomologado" codigoHomologado, exa.nombre exaNombre, tarproc."colValorBase", tarproc."colValor1", tarproc."colValor2" , tarproc."colValor3"	, tarproc."colValor4"	, tarproc."colValor5"	, tarproc."colValor6"	, tarproc."colValor7"	, tarproc."colValor8"	, tarproc."colValor9" , tarproc."colValor10"from tarifarios_tipostarifaProducto tarprod, tarifarios_tipostarifa tiptar, tarifarios_TarifariosDescripcion tardes, tarifarios_tarifariosprocedimientos tarproc, clinico_examenes exa where tarprod.id = tiptar."tiposTarifaProducto_id" and tiptar.id = tardes."tiposTarifa_id" and tarproc."tiposTarifa_id" = tiptar.id and tardes.columna=' + "'" + str('colValorBase') + "'" + ' and exa.id = tarproc."codigoCups_id" and tarproc."tiposTarifa_id" =' + "'" + str(tiposTarifa) + "'"
+    detalle = 'select tarproc.id id, tiptar.nombre tipoTarifa, exa."codigoCups" cups, tarproc."codigoHomologado" codigoHomologado, exa.nombre exaNombre, tarproc."colValorBase", tarproc."colValor1", tarproc."colValor2" , tarproc."colValor3"	, tarproc."colValor4"	, tarproc."colValor5"	, tarproc."colValor6"	, tarproc."colValor7"	, tarproc."colValor8"	, tarproc."colValor9" , tarproc."colValor10" from tarifarios_tipostarifaProducto tarprod, tarifarios_tipostarifa tiptar, tarifarios_TarifariosDescripcion tardes, tarifarios_tarifariosprocedimientos tarproc, clinico_examenes exa where tarprod.id = tiptar."tiposTarifaProducto_id" and tiptar.id = tardes."tiposTarifa_id" and tarproc."tiposTarifa_id" = tiptar.id and tardes.columna=' + "'" + str('colValorBase') + "'" + ' and exa.id = tarproc."codigoCups_id" and tarproc."tiposTarifa_id" =' + "'" + str(tiposTarifa) + "'"
 
 
     print(detalle)
@@ -237,7 +237,7 @@ def CrearTarifarioProcedimientos(request):
                                            password="123456")
             cur3 = miConexion3.cursor()
 
-            comando = 'INSERT INTO tarifarios_tarifariosDescripcion (columna, descripcion, "fechaRegistro", "estadoReg", "tiposTarifa_id","serviciosAdministrativos__id") VALUES (' + "'" + str(
+            comando = 'INSERT INTO tarifarios_tarifariosDescripcion (columna, descripcion, "fechaRegistro", "estadoReg", "tiposTarifa_id","serviciosAdministrativos_id") VALUES (' + "'" + str(
                 'colValorBase') + "'," + "'" + str(descripcion.nombre) + "',"  "'" + str(fechaRegistro) + "',"  "'" + str(
                 estadoReg) + "','" + str(descripcion.id) + "'," + str(serviciosAdministrativos_id) + ')'
 
@@ -247,7 +247,7 @@ def CrearTarifarioProcedimientos(request):
 
             # Aqui Rutina carga archivo Excel
 
-            archivo_excel = 'c:\\Entornospython\\Pos3\\vulner\\JSONCLINICA\\CargaProcedimientos\\datos1.xlsx'
+            archivo_excel = 'c:\\Entornospython\\Pos6\\JSONCLINICA\\CargaProcedimientos\\datosParticular.xlsx'
             df = pd.read_excel(archivo_excel)
 
 
@@ -293,10 +293,18 @@ def CrearItemTarifario(request):
     codigoCupsItem_id = request.POST.get('codigoCupsItem_id')
     print ("codigoCupsItem_id =", codigoCupsItem_id)
 
+    if (codigoCupsItem_id ==''):
+        codigoCupsItem_id='null'
+
+
     conceptoId = Conceptos.objects.get(nombre='PROCEDIMIENTOS')
 
     colValorBaseItem = request.POST.get('colValorBaseItem')
     print ("colValorBaseItem =", colValorBaseItem)
+
+    if (colValorBaseItem ==''):
+        colValorBaseItem='null'
+
 
     username_id = request.POST.get('username_id')
     print ("username_id =", username_id)
@@ -319,7 +327,7 @@ def CrearItemTarifario(request):
         miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",  password="123456")
         cur3 = miConexion3.cursor()
 
-        comando = 'INSERT INTO tarifarios_tarifariosprocedimientos ("codigoHomologado", "colValorBase", "fechaRegistro", "estadoReg", "codigoCups_id", concepto_id , "tiposTarifa_id", "usuarioRegistro_id","serviciosAdministrativos_id") VALUES ( ' + "'" + str(codigoHomologadoItem) + "'," + "'" + str( colValorBaseItem) + "',"  + "'" + str( fechaRegistro) + "'," + "'" + str( estadoReg) + "'," + "'" + str( codigoCupsItem_id) + "'," + "'" + str( conceptoId.id) + "',"  + "'" + str( tiposTarifaItem_id) + "'," + "'" + str( username_id) + "'," + str(serviciosAdministrativos_id) + ")"
+        comando = 'INSERT INTO tarifarios_tarifariosprocedimientos ("codigoHomologado", "colValorBase", "fechaRegistro", "estadoReg", "codigoCups_id", concepto_id , "tiposTarifa_id", "usuarioRegistro_id","serviciosAdministrativos_id") VALUES ( ' + "'" + str(codigoHomologadoItem) + "'," + str( colValorBaseItem) + ","  + "'" + str( fechaRegistro) + "'," + "'" + str( estadoReg) + "'," + "'" + str( codigoCupsItem_id) + "'," + "'" + str( conceptoId.id) + "',"  + "'" + str( tiposTarifaItem_id) + "'," + "'" + str( username_id) + "'," + str(serviciosAdministrativos_id) + ")"
 
         print(comando)
 

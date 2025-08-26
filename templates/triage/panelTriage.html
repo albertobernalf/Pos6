@@ -1095,6 +1095,20 @@ th ,tr{
                                                        name="fechaNacio">
                                             </div>
 
+					 <div class="col">
+                                            <label for="pais"
+                                                   class="col-sm-10 control-label">Pais:</label>
+                                            <select class="form-select  h-40 w-20" id="pais" tabindex="6"
+                                                    name="pais" required>
+                                                {% for pais in Pais %}
+                                                <option value="{{pais.id}}"> {{pais.nombre}}
+                                                </option>
+                                                {% endfor %}
+                                           </select>
+                                        </div>
+
+
+
                                             <div class="col">
                                                 <label for="departamentos" class="col-form-label">Departamento:</label>
                                                 <select class="form-select  h-10 w-100 form-control form-control-sm" id="departamentos" name="departamentos" required>
