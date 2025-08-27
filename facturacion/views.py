@@ -836,6 +836,8 @@ def GuardarLiquidacionDetalle(request):
     suministros = request.POST["suministros"]
     cantidad = request.POST["cantidad"]
     valorUnitario = request.POST['valorUnitario']
+    print("cantidad =",cantidad )
+    print("valorUnitario =", valorUnitario)
     valorTotal =  float(cantidad)  * float(valorUnitario)
     observaciones = request.POST['observaciones']
     username_id = request.POST['username_id']

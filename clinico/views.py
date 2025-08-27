@@ -805,14 +805,14 @@ def crearHistoriaClinica(request):
 
                             print("columnaALeer.columna", columnaALeerPropia)
                             print("convenioValor = " ,convenioValor)
-                            print("codigoCupsId[0].id = ", codigoCupsId[0].id)
+                            print("convenioValor[0].cups = ", convenioValor[0].cups)
 
 
                             # Aqui analiza si es necesario que caiga en la tabla de Autorizaciones
 
-                            print("el cups :", cups)
+                            #print("el cups :", cups)
 
-                            print ("autorizacion para el CUPS es ", codigoCupsId[0].requiereAutorizacion)
+                            #print ("autorizacion para el CUPS es ", codigoCupsId[0].requiereAutorizacion)
 
                             # Aqui saca valores pata tarifas
 
@@ -2097,7 +2097,8 @@ def crearHistoriaClinica(request):
                 # Rutina Guarda en cabezote los totales
 
                 print ("Voy a grabar el cabezote")
-                EXAMINARDATOS
+                print ("liquidacionId = ", liquidacionId)
+
                 miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",                                       password="123456")
                 curt = miConexiont.cursor()
                 comando = 'UPDATE facturacion_liquidacion SET "totalSuministros" = ' +  "'" +  str(totalSuministros) + "'" + ',"totalProcedimientos" = ' + "'" +  str(totalProcedimientos) + "'"  + ', "totalCopagos" = ' + "'" +  str(totalCopagos) + "'"  + ' , "totalCuotaModeradora" = ' + "'" +  str(totalCuotaModeradora) + "'" + ', anticipos = ' + "'" +  str(totalAnticipos) + "'"  + ' ,"totalAbonos" = ' + "'" + str(totalAbonos) + "'" + ', "totalLiquidacion" = ' + "'" + str(totalLiquidacion) + "'" + ', "valorApagar" = ' + "'" + str(totalApagar) + "'"   + ', "totalRecibido" = ' + "'" + str(totalRecibido) + "'"  + ' WHERE id =' + str(liquidacionId)

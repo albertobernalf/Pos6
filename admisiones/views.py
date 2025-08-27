@@ -7167,7 +7167,7 @@ def PostDeleteConveniosAdmision(request):
 
         registrosFacturacion = Liquidacion.objects.get(tipoDoc_id=convenio.tipoDoc_id, documento_id=convenio.documento_id, consecAdmision=convenio.consecAdmision, convenio_id=convenio.convenio_id)
         print("liquidacion = ", registrosFacturacion.id)
-        cantidadRegistros = LiquidacionDetalle.objects.filter(liquidacion_id=registrosFacturacion.id).count()
+        cantidadRegistros = LiquidacionDetalle.objects.filter(liquidacion_id=registrosFacturacion.id).exclude(estadoRegistro='N').count()
         print("Cantidad Registros liquidacion Detalle = ", cantidadRegistros)
 
         if (cantidadRegistros>=1):
@@ -7187,11 +7187,18 @@ def PostDeleteConveniosAdmision(request):
     try:
       with transaction.atomic():	
 
-        post = ConveniosPacienteIngresos.objects.get(id=id)
-        post.delete()
+        ## Borra cabezote de Facturacion
+
+        post2 = LiquidacionDetalle.objects.filter(liquidacion_id=registrosFacturacion.id)
+        post2.delete()
+
+
         ## Borra cabezote de Facturacion
         post1 = Liquidacion.objects.get(id=registrosFacturacion.id)
         post1.delete()
+
+        post = ConveniosPacienteIngresos.objects.get(id=id)
+        post.delete()
 
         return JsonResponse({'success': True, 'Mensaje': 'Convenio borrado!'})
 

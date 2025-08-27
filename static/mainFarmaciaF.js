@@ -1230,11 +1230,12 @@ function AdicionarDespachosDispensa()
         var sede = document.getElementById("sede").value;
         var username_id = document.getElementById("username_id").value;
         var farmaciaDetalleId = document.getElementById("farmaciaDetalle").value;
-        var servicioAdmonEntrega = document.getElementById("servicioAdmonEntrega").value;
-        var servicioAdmonRecibe = document.getElementById("servicioAdmonRecibe").value;
-        var plantaEntrega = document.getElementById("plantaEntrega").value;
-        var plantaRecibe = document.getElementById("plantaRecibe").value;
+        var servicioAdmonEntrega = document.getElementById("servicioAdmonEntregaF").value;
+        var servicioAdmonRecibe = document.getElementById("servicioAdmonRecibeF").value;
+        var plantaEntrega = document.getElementById("plantaEntregaF").value;
+        var plantaRecibe = document.getElementById("plantaRecibeF").value;
         var farmaciaId = document.getElementById("farmaciaId").value;
+	alert("plantaRecibe = " + plantaRecibe );
 
 
     const table10 = $('#tablaFormulacion').DataTable();
@@ -1315,11 +1316,18 @@ function AdicionarDespachosDispensa()
 
 
  	      		}, // cierra function sucess
- 	      		error: function (request, status, error) {
- 	      			document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
- 	      			
+			 error: function(data){
+		           alert(data.status); // the status code
+		           alert(data.responseJSON.error); // the message
+		document.getElementById("mensajesError").innerHTML =  data.responseJSON.error
+			        },
 
- 	      		}, // cierra error function
+
+ 	      		//error: function (request, status, error) {
+ 	      		//	document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
+ 	      		//	
+			//
+ 	      	//	}, // cierra error function
   	        });  // cierra ajax
 
 

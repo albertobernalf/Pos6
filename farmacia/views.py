@@ -24,6 +24,7 @@ import pyodbc
 import psycopg2
 import json
 import datetime
+from django.utils import timezone
 from datetime import date, timedelta
 import time
 from decimal import Decimal
@@ -41,6 +42,7 @@ from contratacion.models import Convenios
 from cartera.models import Pagos
 from django.db.models import Min, Max, Avg
 from django.db.models import F
+from django.db import transaction, IntegrityError
 
 # Create your views here.
 
@@ -355,7 +357,8 @@ def AdicionarDespachosDispensa(request):
     print("voy a validar JSONMedicamentos =", jsonFormulacion)
     medicamentos= ""
     estadoReg = 'A'
-    fechaRegistro = datetime.datetime.now()
+
+    fechaRegistro = timezone.now()
 
     miConexion3 = None
     try:
@@ -378,17 +381,17 @@ def AdicionarDespachosDispensa(request):
 
         cur3.execute(comando)
 
-
-
         ##############################################
         ##############################################
         ## DESDE AQUI CABEZOTE LIQUIDACION
         ## El UNICO PROBLEMA ES SI OPRIME DISMENSAR Y NMO VA NINGUN DESPACHO OJO CONTROLAR ESTO CON JAVASCRIPT EN EL MANI
-
         # Aqui rutina busca Convenio del Paciente
 
+        convenioParticular = Convenios.objects.get(particular='S')
+        print("convenioParticular =", convenioParticular)
 
-        comando = 'SELECT min(p.convenio_id) id FROM facturacion_conveniospacienteingresos p WHERE "tipoDoc_id" = ' + "'" + str(tipoDocId) + "'" + ' AND documento_id = ' + "'" + str(documentoId) + "'" + ' AND "consecAdmision" = ' + "'" + str(ingresoPaciente) + "'"
+        #comando = 'SELECT min(p.convenio_id) id FROM facturacion_conveniospacienteingresos p WHERE "tipoDoc_id" = ' + "'" + str(tipoDocId) + "'" + ' AND documento_id = ' + "'" + str(documentoId) + "'" + ' AND "consecAdmision" = ' + "'" + str(ingresoPaciente) + "'"
+        comando = 'SELECT min(p.convenio_id) id FROM facturacion_conveniospacienteingresos p WHERE "tipoDoc_id" = ' + "'" + str(tipoDocId) + "'" + ' AND documento_id = ' + "'" + str(documentoId) + "'" + ' AND "consecAdmision" = ' + "'" + str(ingresoPaciente) + "' AND convenio_id != " + "'" + str(convenioParticular.id) + "'"
         cur3.execute(comando)
 
         print(comando)
@@ -415,8 +418,35 @@ def AdicionarDespachosDispensa(request):
         print("sin espacioos convenioId =", convenioId)
 
         if convenioId.strip() == 'None':
-            convenioId = 0
+            convenioId = convenioParticular.id
             print("Entre a MODIFICAR convenioID")
+
+            try:
+                with transaction.atomic():
+
+                    conveniospacienteingresos = ConveniosPacienteIngresos.objects.get(tipoDoc_id=tipoDocId,documento_id=documentoId, consecAdmision=ingresoPaciente, convenio_id=convenioParticular.id)
+
+            except Exception as e:
+                # Aquí ya se hizo rollback automáticamente
+                print("Se hizo rollback por:", e)
+                print("ppor aqui se le crea el convenio Particular al paciente")
+
+                grabo88 = ConveniosPacienteIngresos(
+                    tipoDoc_id=tipoDocId,
+                    documento_id=documentoId,
+                    consecAdmision=ingresoPaciente,
+                    convenio_id=convenioParticular.id,
+                    fechaRegistro=fechaRegistro,
+                    usuarioRegistro_id=username_id,
+                    estadoReg=estadoReg
+                )
+                grabo88.save()
+                grabo88.id
+                print("yA grabe", grabo88.id)
+
+            finally:
+                print("Cleanup operations or final logging.")
+
 
         print("ULTIMO valor de convenioId= ", convenioId)
 
@@ -424,7 +454,7 @@ def AdicionarDespachosDispensa(request):
 
         # Validacion si existe o No existe CABEZOTE
 
-        comando = 'SELECT id FROM facturacion_liquidacion WHERE "tipoDoc_id" = ' + "'" + str(tipoDocId) + "' AND documento_id = " + "'" + str(documentoId) + "'" + ' AND "consecAdmision" = ' + "'" + str(ingresoPaciente) + "'"
+        comando = 'SELECT id FROM facturacion_liquidacion WHERE "tipoDoc_id" = ' + "'" + str(tipoDocId) + "' AND documento_id = " + "'" + str(documentoId) + "'" + ' AND "consecAdmision" = ' + "'" + str(ingresoPaciente) + "' AND convenio_id = '" + str(convenioId) + "'"
         cur3.execute(comando)
 
         cabezoteLiquidacion = []
@@ -491,11 +521,35 @@ def AdicionarDespachosDispensa(request):
 
         # RUTINA encuentra columna de dondel LEER la tarifa.
         #
-        contratacion = Convenios.objects.get(id=convenioId)
+        try:
+            with transaction.atomic():
 
-        columnaALeer = TarifariosDescripcion.objects.get(id=contratacion.tarifariosDescripcionProc_id)
+                contratacion = Convenios.objects.get(id=convenioId)
 
-        print("Columna a leer = ", columnaALeer.columna)
+                print("OJOO contratacion.tarifariosDescripcionProc_id = ", contratacion.tarifariosDescripcionProc_id)
+
+                columnaALeer = TarifariosDescripcion.objects.get(id=contratacion.tarifariosDescripcionProc_id)
+                columnaALeerPropia = columnaALeer.columna
+
+        except Exception as e:
+            # Aquí ya se hizo rollback automáticamente
+            print("Se hizo rollback de Convenio TarifarioDescripcion por:", e)
+            error_data = {
+                'type': type(e).__name__,
+                'message': str(e),
+                'traceback': traceback.format_exc()
+            }
+            columnaALeerPropia = ''
+            # response = JsonResponse({"error": 'No hay definicion Convenio TarifarioDescripcion'})
+            # response.status_code = 403 # To announce that the user isn't allowed to publish
+            # Sreturn response
+
+            # raise error_data
+
+        finally:
+            print("Finally")
+
+        print("Columna a leer = ", columnaALeerPropia)
 
         ## FIN CABEZOTE DE LIQUIDACION
         #############################################
@@ -567,20 +621,45 @@ def AdicionarDespachosDispensa(request):
                 ## Desde Aqui rutina de Facturacion Para Medicamentos
                 #
 
-                comando = 'SELECT conv.convenio_id id ,exa.cums cums, sum."' + str(columnaALeer.columna) + '"' + ' tarifaValor FROM facturacion_conveniospacienteingresos conv, tarifarios_tarifariosdescripcion des, tarifarios_tarifariossuministros sum, facturacion_suministros exa, contratacion_convenios conv1 , tarifarios_tipostarifa tiptar WHERE conv."tipoDoc_id" = ' + "'" + str(tipoDocId) + "'" + ' AND conv.documento_id = ' + "'" + str(documentoId) + "'" + ' AND conv."consecAdmision" = ' + "'" + str(ingresoPaciente) + "'" + ' AND conv.convenio_id = conv1.id AND des.id = conv1."tarifariosDescripcionSum_id" AND sum."codigoCum_id" = exa.id  And exa.id = ' + "'" + str(medicamentos) + "'" + ' AND des."tiposTarifa_id" = tiptar.id and sum."tiposTarifa_id" = tiptar.id'
+                miConexiont = None
+                try:
+                    if (columnaALeerPropia != ''):
 
-                print("comando =", comando)
+                        miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432",
+                                                       user="postgres", password="123456")
 
-                cur3.execute(comando)
-                convenioValor = []
+                        curt = miConexiont.cursor()
+                        # comando = 'SELECT conv.convenio_id id ,exa."codigoCups" cups, proc."' + str(columnaALeer.columna) + '"' + ' valor FROM facturacion_conveniospacienteingresos conv, tarifarios_tarifariosdescripcion des, tarifarios_tarifariosprocedimientos proc, clinico_examenes exa, contratacion_convenios conv1 , tarifarios_tipostarifa tiptar WHERE conv."tipoDoc_id" = ' + "'" + str(tipoDocId.id) + "'" + ' AND conv.documento_id = ' + "'" + str(documentoId.id) + "'" + ' AND conv."consecAdmision" = ' + "'" + str(ingresoPaciente) + "'" + ' AND conv.convenio_id = conv1.id AND des.id = conv1."tarifariosDescripcionProc_id" AND proc."codigoCups_id" = exa.id  And exa.id = ' + "'" + str(codigoCupsId[0].id) + "'" + ' AND des."tiposTarifa_id" = tiptar.id and proc."tiposTarifa_id" = tiptar.id'
+                        comando = 'SELECT conv.convenio_id id ,exa.cums cums, sum."' + str(columnaALeer.columna) + '"' + ' tarifaValor FROM facturacion_conveniospacienteingresos conv, tarifarios_tarifariosdescripcion des, tarifarios_tarifariossuministros sum, facturacion_suministros exa, contratacion_convenios conv1 , tarifarios_tipostarifa tiptar WHERE conv."tipoDoc_id" = ' + "'" + str(tipoDocId) + "'" + ' AND conv.documento_id = ' + "'" + str(documentoId) + "'" + ' AND conv."consecAdmision" = ' + "'" + str(ingresoPaciente) + "'" + ' AND conv.convenio_id = conv1.id AND des.id = conv1."tarifariosDescripcionSum_id" AND sum."codigoCum_id" = exa.id  And exa.id = ' + "'" + str(medicamentos) + "'" + ' AND des."tiposTarifa_id" = tiptar.id and sum."tiposTarifa_id" = tiptar.id'
 
-                for id, sum, tarifaValor in cur3.fetchall():
-                    convenioValor.append({'id': id, 'sum': sum, 'valor': tarifaValor})
+                        print("comando = ", comando)
+                        curt.execute(comando)
+
+                        convenioValor = []
+
+                        for id, sum, tarifaValor in curt.fetchall():
+                            convenioValor.append({'id': id, 'sum': sum, 'valor': tarifaValor})
+
+                        miConexiont.close()
+                    else:
+                        convenioValor = []
+
+                    print("columnaALeer.columna", columnaALeerPropia)
+                    print("convenioValor = ", convenioValor)
+                    #print("convenioValor[0].sum = ", convenioValor[0].sum)
 
 
-                if (convenioValor != []):
-                    print("convenioValor[0]['valor'] = ", convenioValor[0]['valor'])
-                    print("convenioValor[0]['sum'] = ", convenioValor[0]['sum'])
+                except psycopg2.DatabaseError as error:
+                    print("Entre por rollback", error)
+                    if miConexiont:
+                        print("Entro ha hacer el Rollback")
+                        miConexiont.rollback()
+                        tarifaValor = 0
+
+                finally:
+                    if miConexiont:
+                        curt.close()
+                        miConexiont.close()
 
                 if (convenioValor != []):
 
@@ -598,7 +677,8 @@ def AdicionarDespachosDispensa(request):
                 else:
                     tarifaValor = 0
 
-                if tarifaValor == None:
+                if tarifaValor == '':
+                    print("Entre cambiar tarufa Valor", tarifaValor)
                     tarifaValor = 0
 
                 TotalTarifa = float(tarifaValor) * float(cantidadMedicamento)
@@ -613,6 +693,11 @@ def AdicionarDespachosDispensa(request):
                 cur3.execute(comando)
 
                 consecLiquidacion = int(consecLiquidacion) + 1
+
+
+        ## OJOOOO
+        ## AQUI FALTA UN except
+
 
             # Fin rutina Facturacion Medicamentos detalle
 
@@ -652,7 +737,7 @@ def AdicionarDespachosDispensa(request):
 
         print("Voy a grabar el cabezote")
 
-        comando = 'UPDATE facturacion_liquidacion SET "totalSuministros" = ' + str(totalSuministros) + ',"totalProcedimientos" = ' + str(totalProcedimientos) + ', "totalCopagos" = ' + str(totalCopagos) + ' , "totalCuotaModeradora" = ' + str(totalCuotaModeradora) + ', anticipos = ' + str(totalAnticipos) + ' ,"totalAbonos" = ' + str(totalAbonos) + ', "totalLiquidacion" = ' + str(totalLiquidacion) + ', "valorApagar" = ' + str(totalApagar) + ', "totalRecibido" = ' + str(totalRecibido) + ' WHERE id =' + str(liquidacionId)
+        comando = 'UPDATE facturacion_liquidacion SET "totalSuministros" = ' + "'" + str(totalSuministros) + "'" + ',"totalProcedimientos" = ' + "'" + str(totalProcedimientos) + "'"  + ', "totalCopagos" = ' + "'"  + str(totalCopagos) + "'" + ' , "totalCuotaModeradora" = ' + "'"  + str(totalCuotaModeradora) + "'"  + ', anticipos = ' + "'" + str(totalAnticipos) + "'" + ' ,"totalAbonos" = ' + "'" + str(totalAbonos) + "'"  + ', "totalLiquidacion" = ' + "'" + str(totalLiquidacion) + "'" + ', "valorApagar" = ' + "'"  + str(totalApagar) + "'" + ', "totalRecibido" = ' + "'" + str(totalRecibido) + "'" + ' WHERE id =' + str(liquidacionId)
         cur3.execute(comando)
 
         ## FIN rutina de Facturacion Para Medicamentos Total
@@ -743,11 +828,12 @@ def Load_dataDespachosFarmacia(request, data):
     print("username:", username)
     print("username_id:", username_id)
 
-    fechaRegistro = datetime.datetime.now()
+
+    fechaRegistro = timezone.now()
 
 
     año_actual = fechaRegistro.year  # Puedes cambiar este valor
-    fechaRegistro = date(año_actual, 1, 1)
+    #fechaRegistro = date(año_actual, 1, 1)
 
     print(fechaRegistro)
 
@@ -792,6 +878,7 @@ def Load_dataDespachosDetalleFarmacia(request, data):
     print("username_id:", username_id)
 
     fechaRegistro = datetime.datetime.now()
+    fechaRegistro = timezone.now()
 
     despachosDetalleFarmacia = []
 
@@ -823,7 +910,8 @@ def Load_dataDevolucionesFarmacia(request, data):
     context = {}
     d = json.loads(data)
 
-    fechaRegistro = datetime.datetime.now()
+
+    fechaRegistro = timezone.now()
 
 
     año_actual = fechaRegistro.year  # Puedes cambiar este valor

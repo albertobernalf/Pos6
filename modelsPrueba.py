@@ -807,20 +807,11 @@ ojo pendiente en aplicacion de medicamentos arreglar cuando aplica la modal no p
 -- ops como asi me borro un acetaminofeen de liquidaciondetalle verificar ???
 -- ops agregfue tan solo un aceaminfen y no me refrescon totales no grabo en cabezpote facturacion_lquidacion un registro manul de acetaminofen
 -- ojop hay un registro de laliquiacin de eumelia con cums_id y examen_id ala vae en loqudacindetalle ERROR Y ESO COMO PASO ??
--- el dika lune 25 de agosto
-  -- comenzar clinico ojo tpods los try-cartch por ejemplo de archivoas abierton como hacerlo ? No me funciono archivo abierto ordendecontrol
-
-
 -- ojo en tarifarios, paramettizar la ruta de crague de procedimientos, suminis, honoraro en tabla parametros
-
--- ops ojop en admisiones crear conevnios le creo un cabezote particular error no debio habero creado si ya etysab acreado VERIFICAR
--- OPS OJO CUANDO PASE DE TRIAGE A ADMISION SI NO TIENE CONVENIO DEBE CREAR UNO PARTICULAR
--- AUNQUE CREO LACAGO CUANDO INGRESO EL LAB Y NO LA,CEO
--- ops pero el convenio si esta creado algo falta en el query de facturacion verificar,
- -- ops en la gtabla convenioingresos no ecxiste que paso ?? si ypo la veo en la tabla convenio ingesols
 -- op el lio es el conscuivoAdmision que se deb actulizar al momento de pasar lel triage al convenio
     -- primero si no existe convenio crea particular con el nvo consecutivo
     --- segundo actualiza elconsecutivo
 
 -- ojo verificar cuando se crea admision desde triage si hay consec=0 de conveno parricular lo pase a consec=1 en pacientesconveniosIngresos
-- que passa si tengo una cuenta con valor ceros o sea en ceros la cuenta y quero borrar su responsable no me deja
+
+-- OPS ESTA GRABANDO MAL EL TOTAL DE LOS SUMINISTROPS DESDE FARMACIA Y CREO DEMAS 
