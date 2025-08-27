@@ -1616,17 +1616,17 @@ formHistoriaClinica.addEventListener('submit', e=>{
 		           $("#mensajes").html(dato);
 
 		            }
-	
 
 
  	      		}, // cierra function sucess
- 	      		error: function (request, status, error) {
-		
 
- 	      			document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
- 	      			
+			 error: function(data){
+		           alert(data.status); // the status code
+		           alert(data.responseJSON.error); // the message
+		document.getElementById("mensajesError").innerHTML =  data.responseJSON.error
+			        },
 
- 	      		}, // cierra error function
+
   	        });  // cierra ajax
 
 });  // cierra commit

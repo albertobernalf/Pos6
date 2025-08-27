@@ -2811,17 +2811,22 @@ def guardarAdmisionTriage(request):
         empresa = request.POST["empresasT"]
         print(" empresa = ", empresa)
 
+
+        convenio = request.POST["conveniosT"]
+        print(" convenio = ", convenio)
+
         servicioAdmTriage = request.POST["servicioAdmTriage"]
         print(" servicioAdmTriage = ", servicioAdmTriage)
 
 
         # Consigo el Id del Paciente Documento
 
-        DocumentoId = Usuarios.objects.get(documento=documento.strip())
-        idPacienteFinal = DocumentoId.id
-
         tiposDocId = TiposDocumento.objects.get(nombre=tiposDoc)
         idTipoDocFinal = tiposDocId.id
+
+        DocumentoId = Usuarios.objects.get(documento=documento.strip(), tipoDoc_id=idTipoDocFinal)
+        idPacienteFinal = DocumentoId.id
+
 
 
         print("idPacienteFinal", idPacienteFinal)
@@ -2881,7 +2886,7 @@ def guardarAdmisionTriage(request):
 
         # Consigo ID de Documento
 
-        documento_llave = Usuarios.objects.get(documento=documento.strip())
+        documento_llave = Usuarios.objects.get(documento=documento.strip() , tipoDoc_id=idTipoDocFinal)
         print("el id del dopcumento = ", documento_llave.id)
 
         usernameId = Planta.objects.get(documento=username, sedesClinica_id=sede)
@@ -3082,34 +3087,43 @@ def guardarAdmisionTriage(request):
 
                 #grabo55.save()
 
-		        #Aqui vamos a ver si tiene creado el conveNio PARTICULAR o si no lo creamos
-                #
-                try:
-            	    with transaction.atomic():
 
-                        grabo66 = ConveniosPacienteIngresos.objects.get(tipoDoc_id=idTipoDocFinal,documento_id=documento_llave.id,consecAdmision=0)
-                        grabo67 = ConveniosPacienteIngresos.objects.filter(tipoDoc_id=idTipoDocFinal,documento_id=documento_llave.id,consecAdmision=0).update(consecAdmision=consecAdmision)
+
+		## aqui guarda el convenio que llega desde la pantalla de triage convenio
+
+                grabo88 = ConveniosPacienteIngresos(
+                          tipoDoc_id=idTipoDocFinal,
+                          documento_id=documento_llave.id,
+                          consecAdmision=consecAdmision,
+                          convenio_id=convenio,
+                          fechaRegistro = fechaRegistro,
+                          usuarioRegistro_id = usernameId.id,
+                          estadoReg = estadoReg
+                       )
+                grabo88.save()
+                grabo88.id
+                print("yA grabe pacientes ingresos", grabo88.id)
+
+                try:
+                    with transaction.atomic():
+
+                        grabo66 = ConveniosPacienteIngresos.objects.get(tipoDoc_id=idTipoDocFinal,
+                                                                        documento_id=documento_llave.id,
+                                                                        consecAdmision=0)
+                        grabo67 = ConveniosPacienteIngresos.objects.filter(tipoDoc_id=idTipoDocFinal,
+                                                                           documento_id=documento_llave.id,
+                                                                           consecAdmision=0).update(
+                            consecAdmision=consecAdmision)
 
                 except Exception as e:
 
-                        print("Se hizo rollback HAY QUE  CREAR PATRICULAR :", e)
-                        convenioParticular = Convenios.objects.get(particular='S')
-                        print ("convenioParticular =", convenioParticular.id)
-
-                        grabo68 = ConveniosPacienteIngresos(
-                        consecAdmision=consecAdmision,
-                        convenio_id=convenioParticular.id,
-                                    tipoDoc_id=idTipoDocFinal,
-                                    documento_id=documento_llave.id,
-                                    consec=consecAdmision,
-                                    fechaRegistro=fechaRegistro,
-                                    usuarioRegistro_id=usernameId.id,
-                                    estadoReg=estadoReg)
-                        grabo68.save()
-                        print("yA grabe ConveniosPacienteIngresos", grabo68.id)
+                    print("Se hizo rollback HAY QUE  CREAR PATRICULAR :", e)
+                    convenioParticular = Convenios.objects.get(particular='S')
+                    print("convenioParticular =", convenioParticular.id)
 
                 finally:
-                	print("No haga nada")	
+                    print("No haga nada")
+
 
         except Exception as e:
             # Aquí ya se hizo rollback automáticamente
@@ -4129,3 +4143,37 @@ def buscarLocalidades(request):
 
 
     return JsonResponse(json.dumps(localidades), safe=False)
+
+
+def buscarConvenioEmpresa(request):
+    context = {}
+    empresaId = request.GET["empresaId"]
+
+    print ("Entre buscar  Convenios de la empresa  =", empresaId)
+
+
+    # Combo de Medicos Especialidades
+
+
+    miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres", password="123456")
+    curt = miConexiont.cursor()
+
+    comando = 'SELECT d.id id, d.nombre  nombre FROM contratacion_convenios d, facturacion_empresas c WHERE d.empresa_id = c.id AND c.id = ' + "'" + str(empresaId) + "'" + ' ORDER BY d.nombre'
+
+    curt.execute(comando)
+    print(comando)
+
+    conveniosEmpresas = []
+
+    for id, nombre in curt.fetchall():
+        conveniosEmpresas.append({'id': id, 'nombre': nombre})
+
+    miConexiont.close()
+    print(conveniosEmpresas)
+
+
+    context['ConveniosEmpresas'] = conveniosEmpresas
+
+
+    return JsonResponse(json.dumps(conveniosEmpresas), safe=False)
+

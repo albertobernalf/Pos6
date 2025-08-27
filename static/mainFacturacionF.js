@@ -190,36 +190,40 @@ function arrancaLiquidacion(valorTabla,valorData)
     {
 
         let dataTableOptionsLiquidacionDetalle  ={
-   dom: 'Bfrtilp',
+   dom: "<'row mb-1'<'col-sm-3'B><'col-sm-3'><'col-sm-6'f>>" + // B = Botones a la izquierda, f = filtro a la derecha
+             "<'row'<'col-sm-12'tr>>" +
+             "<'row mt-3'<'col-sm-5'i><'col-sm-7'p>>",
   buttons: [
     {
       extend: 'excelHtml5',
       text: '<i class="fas fa-file-excel"></i> ',
+	// text: '<i class="bi bi-file-earmark-excel-fill"></i> Exportar Excel',
       titleAttr: 'Exportar a Excel',
-      className: 'btn btn-success',
+      className: 'btn btn-success btn-sm',
     },
     {
       extend: 'pdfHtml5',
       text: '<i class="fas fa-file-pdf"></i> ',
       titleAttr: 'Exportar a PDF',
-      className: 'btn btn-danger',
+      className: 'btn btn-danger btn-sm',
     },
     {
       extend: 'print',
       text: '<i class="fa fa-print"></i> ',
       titleAttr: 'Imprimir',
-      className: 'btn btn-info',
+      className: 'btn btn-info btn-sm',
     },
   ],
+autoWidth: false,
   lengthMenu: [2, 4, 15],
            processing: true,
             serverSide: false,
-            scrollY: '150px',
+            scrollY: '200px',
 	    scrollX: true,
 	    scrollCollapse: true,
             paging:false,
             columnDefs: [
-		  { width: '15%', targets: 0 },
+		  { width: '15%',  targets: [2,3] },
 		{     "render": function ( data, type, row ) {
                         var btn = '';
                          btn = btn + " <button   class='btn btn-primary editPostLiquidacionDetalle' data-pk='" + row.pk + "'>" + "</button>";
@@ -729,19 +733,31 @@ window.addEventListener('load', async () => {
 			$('#triageId').val(data.triageId1);
 		}
 
-		$('#fecha').val(data.fecha);
-		$('#tipoDoc_id').val(data.tipoDoc_id);
-		$('#documento_id').val(data.documento_id);
-		$('#tipoDoc').val(data.tipoDocumento);
-		$('#pdocumento').val(data.documento);
-		$('#paciente').val(data.paciente);
-		$('#consecAdmision').val(data.consecAdmision);
-		$('#nombreConvenio').val(data.nombreConvenio);
-		$('#convenioId').val(data.convenioId);
-		$('#observaciones').val(data.observaciones);
-		$('#cama').val(data.dependenciaNombre);
-		$('#servicio').val(data.servicioNombre);
-		$('#salidaClinica').val(data.salidaClinica);
+		//( $('#fecha').val(data.fecha);
+		document.getElementById("fecha").innerHTML = data.fecha;
+		//$('#tipoDoc_id').val(data.tipoDoc_id);
+		document.getElementById("tipoDoc").innerHTML = data.tipoDocumento;
+		// $('#documento_id').val(data.documento_id);
+		document.getElementById("pdocumento").innerHTML = data.documento;
+		//$('#tipoDoc').val(data.tipoDocumento);
+		//$('#pdocumento').val(data.documento);
+
+		//$('#paciente').val(data.paciente);
+		document.getElementById("paciente").innerHTML = data.paciente;
+		//$('#consecAdmision').val(data.consecAdmision);
+		document.getElementById("consecAdmision").innerHTML = data.consecAdmision;
+		//$('#nombreConvenio').val(data.nombreConvenio);
+		document.getElementById("nombreConvenio").innerHTML = data.nombreConvenio;
+		//$('#convenioId').val(data.convenioId);
+		document.getElementById("convenioId").innerHTML = data.convenioId;
+		//$('#observaciones').val(data.observaciones);
+		document.getElementById("observaciones").innerHTML = data.observaciones;
+		//$('#cama').val(data.dependenciaNombre);
+		document.getElementById("cama").innerHTML = data.dependenciaNombre;
+		//$('#servicio').val(data.servicioNombre);
+		document.getElementById("servicio").innerHTML = data.servicioNombre;
+		// $('#salidaClinica').val(data.salidaClinica);
+		document.getElementById("salidaClinica").innerHTML = data.salidaClinica;
 
 
 			// Colocar Totales

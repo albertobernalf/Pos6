@@ -247,8 +247,7 @@ def crearHistoriaClinica(request):
             print("documento = ", documento)
             ingresoPaciente = request.POST["ingresoPaciente"]
             print("ingresoPaciente = ", ingresoPaciente)
-
-	    
+   
 
             tiposFolio = request.POST["tiposFolioEscogido"]
             print("tiposFolioEscogido = ", tiposFolio)
@@ -280,13 +279,10 @@ def crearHistoriaClinica(request):
             dxComplicacion = request.POST["dxComplicacion"]
             print ("dxComplicacion = " , dxComplicacion)
 
-
-
             print ("tiposfolios Seleccionado = " , tiposFolio)
             #dependenciasRealizado = request.POST["dependenciasRealizado"]
             serviciosAdministrativos = request.POST["serviciosAdministrativos"]
             print("serviciosAdministrativos", serviciosAdministrativos)
-
 
             if (serviciosAdministrativos==''):
                 serviciosAdministrativos="null"
@@ -728,6 +724,7 @@ def crearHistoriaClinica(request):
                         print("OJOO contratacion.tarifariosDescripcionProc_id = " , contratacion.tarifariosDescripcionProc_id)
 
                         columnaALeer = TarifariosDescripcion.objects.get(id=contratacion.tarifariosDescripcionProc_id)
+                        columnaALeerPropia  = columnaALeer.columna
 
                 except Exception as e:
                     # Aquí ya se hizo rollback automáticamente
@@ -737,19 +734,17 @@ def crearHistoriaClinica(request):
                         'message': str(e),
                         'traceback': traceback.format_exc()
                     }
-                    #raise
-                    #return JsonResponse({"status": "error", "error": f"Failed: {e}"}, status=400)
-                    #return Response({"status": "failed", "message": "Something went wrong."})
-                    #return JsonResponse({'success': False, 'Mensaje': error_data})
+                    columnaALeerPropia =''
+                    #response = JsonResponse({"error": 'No hay definicion Convenio TarifarioDescripcion'})
+                    #response.status_code = 403 # To announce that the user isn't allowed to publish
+                    #Sreturn response
 
-                    #return HttpResponse({'Mensaje':'Convenio sin tarifario de Procedimeintos definido'})
-                    #return HttpResponse({'error_data': error_data})
-                    # raise Exception("¡Ha ocurrido un error ENVIADO DESDE DJANGO!")
+                    #raise error_data
 
                 finally:
                     print("Finally")
 
-                print ("Columna a leer = ", columnaALeer.columna)
+                print ("Columna a leer = ", columnaALeerPropia)
 
                 #Grabacion Laboratorios
             #
@@ -790,34 +785,28 @@ def crearHistoriaClinica(request):
 
                         miConexion3 = None
                         try:
+                            if (columnaALeerPropia != ''):
 
-                            miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432",
-                                                           user="postgres", password="123456")
+                                miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432",   user="postgres", password="123456")
 
-                            curt = miConexiont.cursor()
-                            #comando = 'SELECT conv.convenio_id convenio ,proc.cups_id cups, proc.valor tarifaValor FROM facturacion_conveniospacienteingresos conv, contratacion_conveniosprocedimientos proc WHERE conv."tipoDoc_id" = ' + "'" +  str(tipoDocId.id) + "' AND conv.documento_id = " + "'" + str(documentoId.id) + "'" + ' AND conv."consecAdmision" = ' + "'" + str(ingresoPaciente) + "' AND conv.convenio_id = proc.convenio_id AND proc.cups_id = " + "'" +  str(codigoCupsId[0].id) + "'"
-
-
-                            if (convenioId != convenioParticular):
-
+                                curt = miConexiont.cursor()
                                 comando = 'SELECT conv.convenio_id id ,exa."codigoCups" cups, proc."' + str(columnaALeer.columna) + '"' + ' valor FROM facturacion_conveniospacienteingresos conv, tarifarios_tarifariosdescripcion des, tarifarios_tarifariosprocedimientos proc, clinico_examenes exa, contratacion_convenios conv1 , tarifarios_tipostarifa tiptar WHERE conv."tipoDoc_id" = ' + "'" + str(tipoDocId.id) + "'" + ' AND conv.documento_id = ' + "'" + str(documentoId.id) + "'" + ' AND conv."consecAdmision" = ' + "'" + str(ingresoPaciente) + "'" + ' AND conv.convenio_id = conv1.id AND des.id = conv1."tarifariosDescripcionProc_id" AND proc."codigoCups_id" = exa.id  And exa.id = ' + "'" + str(codigoCupsId[0].id) + "'" + ' AND des."tiposTarifa_id" = tiptar.id and proc."tiposTarifa_id" = tiptar.id'
+                                print("comando = ", comando)
+                                curt.execute(comando)
+
+                                convenioValor = []
+
+                                for id, cups,tarifaValor   in curt.fetchall():
+         	                               convenioValor.append({'id': id, 'cups':cups, 'valor':tarifaValor})
+
+                                miConexiont.close()
                             else:
-                                comando = 'SELECT conv1.id ,exa."codigoCups" cups, proc."' + str(columnaALeer.columna) + '"' + ' valor FROM tarifarios_tarifariosdescripcion des, tarifarios_tarifariosprocedimientos proc, clinico_examenes exa, contratacion_convenios conv1 , tarifarios_tipostarifa tiptar WHERE conv1.id = ' +"'" + str(convenioParticular.id) + "'" + '  AND des.id = conv1."tarifariosDescripcionProc_id" AND proc."codigoCups_id" = exa.id  And exa.id = ' + "'" + str(
-                                codigoCupsId[0].id) + "'" + ' AND des."tiposTarifa_id" = tiptar.id and proc."tiposTarifa_id" = tiptar.id'
+                                convenioValor = []
 
-                            print("comando = ", comando)
-
-                            curt.execute(comando)
-
-                            convenioValor = []
-
-                            for id, cups,tarifaValor   in curt.fetchall():
-                                convenioValor.append({'id': id, 'cups':cups, 'valor':tarifaValor})
-
-                            miConexiont.close()
-                            print("columnaALeer.columna", columnaALeer.columna)
+                            print("columnaALeer.columna", columnaALeerPropia)
                             print("convenioValor = " ,convenioValor)
                             print("codigoCupsId[0].id = ", codigoCupsId[0].id)
+
 
                             # Aqui analiza si es necesario que caiga en la tabla de Autorizaciones
 
@@ -860,8 +849,6 @@ def crearHistoriaClinica(request):
                                 miConexion3.close()
 
                         TotalTarifa = float(tarifaValor) * float(cantidad)
-
-
 
                         if (codigoCupsId[0].requiereAutorizacion == 'S'):
 
@@ -996,54 +983,77 @@ def crearHistoriaClinica(request):
 
                         codigoCupsId = Examenes.objects.filter(codigoCups=cups)
                         print("codigoCupsId", codigoCupsId[0].id)
-
-
                         print("liquidacionId = ", liquidacionId)
 
+                        miConexion3 = None
+                        try:
+                            if (columnaALeerPropia != ''):
 
+                                miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432",
+                                                               user="postgres", password="123456")
 
-                        miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432",
-                                                       user="postgres", password="123456")
+                                curt = miConexiont.cursor()
+                                comando = 'SELECT conv.convenio_id id ,exa."codigoCups" cups, proc."' + str(
+                                    columnaALeer.columna) + '"' + ' valor FROM facturacion_conveniospacienteingresos conv, tarifarios_tarifariosdescripcion des, tarifarios_tarifariosprocedimientos proc, clinico_examenes exa, contratacion_convenios conv1 , tarifarios_tipostarifa tiptar WHERE conv."tipoDoc_id" = ' + "'" + str(
+                                    tipoDocId.id) + "'" + ' AND conv.documento_id = ' + "'" + str(
+                                    documentoId.id) + "'" + ' AND conv."consecAdmision" = ' + "'" + str(
+                                    ingresoPaciente) + "'" + ' AND conv.convenio_id = conv1.id AND des.id = conv1."tarifariosDescripcionProc_id" AND proc."codigoCups_id" = exa.id  And exa.id = ' + "'" + str(
+                                    codigoCupsId[
+                                        0].id) + "'" + ' AND des."tiposTarifa_id" = tiptar.id and proc."tiposTarifa_id" = tiptar.id'
+                                print("comando = ", comando)
+                                curt.execute(comando)
 
-                        curt = miConexiont.cursor()
-                        #comando = 'SELECT conv.convenio_id convenio ,proc.cups_id cups, proc.valor tarifaValor FROM facturacion_conveniospacienteingresos conv, contratacion_conveniosprocedimientos proc WHERE conv."tipoDoc_id" = ' + "'" +  str(tipoDocId.id) + "' AND conv.documento_id = " + "'" + str(documentoId.id) + "'" + ' AND conv."consecAdmision" = ' + "'" + str(ingresoPaciente) + "' AND conv.convenio_id = proc.convenio_id AND proc.cups_id = " + "'" +  str(codigoCupsId[0].id) + "'"
-                        comando = 'SELECT conv.convenio_id id ,exa."codigoCups" cups, proc."' + str(columnaALeer.columna) + '"' + ' tarifaValor FROM facturacion_conveniospacienteingresos conv, tarifarios_tarifariosdescripcion des, tarifarios_tarifariosprocedimientos proc, clinico_examenes exa, contratacion_convenios conv1 , tarifarios_tipostarifa tiptar WHERE conv."tipoDoc_id" = ' + "'" + str(tipoDocId.id) + "'" + ' AND conv.documento_id = ' + "'" + str(documentoId.id) + "'" + ' AND conv."consecAdmision" = ' + "'" + str(ingresoPaciente) + "'" + ' AND conv.convenio_id = conv1.id AND des.id = conv1."tarifariosDescripcionProc_id" AND  proc."codigoCups_id" = exa.id  And exa.id = ' + "'" + str(codigoCupsId[0].id) + "'" + ' AND des."tiposTarifa_id" = tiptar.id and proc."tiposTarifa_id" = tiptar.id'
+                                convenioValor = []
 
-                        curt.execute(comando)
-                        convenioValor = []
+                                for id, cups, tarifaValor in curt.fetchall():
+                                    convenioValor.append({'id': id, 'cups': cups, 'valor': tarifaValor})
 
-                        for id, cups,tarifaValor   in curt.fetchall():
-                            convenioValor.append({'id': id, 'cups':cups, 'valor':tarifaValor})
+                                miConexiont.close()
+                            else:
+                                convenioValor = []
 
-                        miConexiont.close()
+                            print("columnaALeer.columna", columnaALeerPropia)
+                            print("convenioValor = ", convenioValor)
+                            print("codigoCupsId[0].id = ", codigoCupsId[0].id)
 
+                            # Aqui analiza si es necesario que caiga en la tabla de Autorizaciones
 
-                        if convenioValor != []:
+                            print("el cups :", cups)
 
-                            print ("Cups = "  , convenioValor[0]['cups'])
-                            tarifaValor = convenioValor[0]['valor']
-                            tarifaValor = str(tarifaValor)
-                            print("tarifaValor = ", tarifaValor)
-                            tarifaValor = tarifaValor.replace("None", ' ')
-                            tarifaValor = tarifaValor.replace("(", ' ')
-                            tarifaValor = tarifaValor.replace(")", ' ')
-                            tarifaValor = tarifaValor.replace(",", ' ')
-                            tarifaValor = tarifaValor.replace(" ", '')
-                            print ("tarifaValor = ", tarifaValor)
-                            #cupsId = convenioValor[0]['cups']
-                            #cupsId = str(cupsId)
-                            #print("cupsId = ", cupsId)
-                            #cupsId = cupsId.replace("(", ' ')
-                            #cupsId = cupsId.replace(")", ' ')
-                            #cupsId = cupsId.replace(",", ' ')
-                            #print("cupsId = ", cupsId)
-                            #
+                            print("autorizacion para el CUPS es ", codigoCupsId[0].requiereAutorizacion)
 
-                        else:
-                            tarifaValor=0
+                            # Aqui saca valores pata tarifas
 
-                        if tarifaValor == None:
-                            tarifaValor=0
+                            if convenioValor != []:
+
+                                print("Cups = ", convenioValor[0]['cups'])
+                                tarifaValor = convenioValor[0]['valor']
+                                tarifaValor = str(tarifaValor)
+                                print("tarifaValor = ", tarifaValor)
+                                tarifaValor = tarifaValor.replace("None", ' ')
+                                tarifaValor = tarifaValor.replace("(", ' ')
+                                tarifaValor = tarifaValor.replace(")", ' ')
+                                tarifaValor = tarifaValor.replace(",", ' ')
+                                tarifaValor = tarifaValor.replace(" ", '')
+                                print("tarifaValor = ", tarifaValor)
+                            else:
+                                tarifaValor = 0
+
+                            if tarifaValor == '':
+                                print("Entre cambiar tarufa Valor", tarifaValor)
+                                tarifaValor = 0
+
+                        except psycopg2.DatabaseError as error:
+                            print("Entre por rollback", error)
+                            if miConexion3:
+                                print("Entro ha hacer el Rollback")
+                                miConexion3.rollback()
+                                tarifaValor = 0
+
+                        finally:
+                            if miConexion3:
+                                cur3.close()
+                                miConexion3.close()
 
                         TotalTarifa = float(tarifaValor) * float(cantidad)
 
@@ -1130,7 +1140,7 @@ def crearHistoriaClinica(request):
                     print("Encontre ordenes de radiologia")
                     print("Encontre ordenes de radiologia")
                     ingresoId2 = ingresosPaciente.id
-                    ImprimirOrdenRadiologia(ingresoId2, historiaId)
+                    ImprimirOrdenRadiologia(ingresoId2, historiaId, convenioId, tipoAdmision)
                 else:
                     print("No Encontre ordenes de radiologia")
                     print("No Encontre ordenes de radiologia")
@@ -1180,51 +1190,77 @@ def crearHistoriaClinica(request):
 
                         # Rutiva busca en convenio el valor de la tarifa CUPS
                         print("liquidacionId = ", liquidacionId)
-
                         print ("cups no id = ",cups)
 
-                        miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432",
-                                                       user="postgres", password="123456")
+                        miConexion3 = None
+                        try:
+                            if (columnaALeerPropia != ''):
 
-                        curt = miConexiont.cursor()
-                        #comando = 'SELECT conv.convenio_id convenio ,proc.cups_id cups, proc.valor tarifaValor FROM facturacion_conveniospacienteingresos conv, contratacion_conveniosprocedimientos proc WHERE conv."tipoDoc_id" = ' + "'" +  str(tipoDocId.id) + "' AND conv.documento_id = " + "'" + str(documentoId.id) + "'" + ' AND conv."consecAdmision" = ' + "'" + str(ingresoPaciente) + "' AND conv.convenio_id = proc.convenio_id AND proc.cups_id = " + "'" +  str(codigoCupsId[0].id) + "'"
-                        comando = 'SELECT conv.convenio_id id ,exa."codigoCups" cups, proc."' + str(columnaALeer.columna) + '"' + ' tarifaValor FROM facturacion_conveniospacienteingresos conv, tarifarios_tarifariosdescripcion des, tarifarios_tarifariosprocedimientos proc, clinico_examenes exa, contratacion_convenios conv1 , tarifarios_tipostarifa tiptar WHERE conv."tipoDoc_id" = ' + "'" + str(tipoDocId.id) + "'" + ' AND conv.documento_id = ' + "'" + str(documentoId.id) + "'" + ' AND conv."consecAdmision" = ' + "'" + str(ingresoPaciente) + "'" + ' AND conv.convenio_id = conv1.id AND des.id = conv1."tarifariosDescripcionProc_id" AND proc."codigoCups_id" = exa.id  And exa.id = ' + "'" + str(codigoCupsId[0].id) + "'" + ' AND des."tiposTarifa_id" = tiptar.id and proc."tiposTarifa_id" = tiptar.id'
+                                miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432",
+                                                               user="postgres", password="123456")
 
-                        curt.execute(comando)
-                        convenioValor = []
+                                curt = miConexiont.cursor()
+                                comando = 'SELECT conv.convenio_id id ,exa."codigoCups" cups, proc."' + str(
+                                    columnaALeer.columna) + '"' + ' valor FROM facturacion_conveniospacienteingresos conv, tarifarios_tarifariosdescripcion des, tarifarios_tarifariosprocedimientos proc, clinico_examenes exa, contratacion_convenios conv1 , tarifarios_tipostarifa tiptar WHERE conv."tipoDoc_id" = ' + "'" + str(
+                                    tipoDocId.id) + "'" + ' AND conv.documento_id = ' + "'" + str(
+                                    documentoId.id) + "'" + ' AND conv."consecAdmision" = ' + "'" + str(
+                                    ingresoPaciente) + "'" + ' AND conv.convenio_id = conv1.id AND des.id = conv1."tarifariosDescripcionProc_id" AND proc."codigoCups_id" = exa.id  And exa.id = ' + "'" + str(
+                                    codigoCupsId[
+                                        0].id) + "'" + ' AND des."tiposTarifa_id" = tiptar.id and proc."tiposTarifa_id" = tiptar.id'
+                                print("comando = ", comando)
+                                curt.execute(comando)
 
-                        for id, cups,tarifaValor   in curt.fetchall():
-                            convenioValor.append({'id': id, 'cups':cups, 'valor':tarifaValor})
+                                convenioValor = []
 
-                        miConexiont.close()
+                                for id, cups, tarifaValor in curt.fetchall():
+                                    convenioValor.append({'id': id, 'cups': cups, 'valor': tarifaValor})
 
-                        if convenioValor != []:
+                                miConexiont.close()
+                            else:
+                                convenioValor = []
 
-                            print ("Cups = "  , convenioValor[0]['cups'])
-                            tarifaValor = convenioValor[0]['valor']
-                            tarifaValor = str(tarifaValor)
-                            print("tarifaValor = ", tarifaValor)
-                            tarifaValor = tarifaValor.replace("None", ' ')
-                            tarifaValor = tarifaValor.replace("(", ' ')
-                            tarifaValor = tarifaValor.replace(")", ' ')
-                            tarifaValor = tarifaValor.replace(",", ' ')
-                            tarifaValor = tarifaValor.replace(" ", '')
-                            print ("tarifaValor = ", tarifaValor)
+                            print("columnaALeer.columna", columnaALeerPropia)
+                            print("convenioValor = ", convenioValor)
+                            print("codigoCupsId[0].id = ", codigoCupsId[0].id)
 
+                            # Aqui analiza si es necesario que caiga en la tabla de Autorizaciones
 
-                            #cupsId = convenioValor[0]['cups']
-                            #cupsId = str(cupsId)
-                            #print("cupsId = ", cupsId)
-                            #cupsId = cupsId.replace("(", ' ')
-                            #cupsId = cupsId.replace(")", ' ')
-                            #cupsId = cupsId.replace(",", ' ')
-                            #print("cupsId = ", cupsId)
-                        else:
+                            print("el cups :", cups)
 
-                            tarifaValor=0
+                            print("autorizacion para el CUPS es ", codigoCupsId[0].requiereAutorizacion)
 
-                        if tarifaValor == None:
-                            tarifaValor=0
+                            # Aqui saca valores pata tarifas
+
+                            if convenioValor != []:
+
+                                print("Cups = ", convenioValor[0]['cups'])
+                                tarifaValor = convenioValor[0]['valor']
+                                tarifaValor = str(tarifaValor)
+                                print("tarifaValor = ", tarifaValor)
+                                tarifaValor = tarifaValor.replace("None", ' ')
+                                tarifaValor = tarifaValor.replace("(", ' ')
+                                tarifaValor = tarifaValor.replace(")", ' ')
+                                tarifaValor = tarifaValor.replace(",", ' ')
+                                tarifaValor = tarifaValor.replace(" ", '')
+                                print("tarifaValor = ", tarifaValor)
+                            else:
+                                tarifaValor = 0
+
+                            if tarifaValor == '':
+                                print("Entre cambiar tarufa Valor", tarifaValor)
+                                tarifaValor = 0
+
+                        except psycopg2.DatabaseError as error:
+                            print("Entre por rollback", error)
+                            if miConexion3:
+                                print("Entro ha hacer el Rollback")
+                                miConexion3.rollback()
+                                tarifaValor = 0
+
+                        finally:
+                            if miConexion3:
+                                cur3.close()
+                                miConexion3.close()
 
 
                         TotalTarifa = float(tarifaValor) * float(cantidad)
@@ -1316,7 +1352,7 @@ def crearHistoriaClinica(request):
                     print("Encontre ordenes de terapias")
                     print("Encontre ordenes de terapias")
                     ingresoId2 = ingresosPaciente.id
-                    ImprimirOrdenTerapia(ingresoId2, historiaId)
+                    ImprimirOrdenTerapia(ingresoId2, historiaId, convenioId, tipoAdmision)
                 else:
                     print("No Encontre ordenes de terapias")
                     print("No Encontre ordenes de terapias")
@@ -1364,41 +1400,76 @@ def crearHistoriaClinica(request):
                           codigoCupsId = Examenes.objects.filter(codigoCups=cups)
                           print ("codigoCupsId", codigoCupsId[0].id)
 
-                        
+                          miConexion3 = None
+                          try:
+                              if (columnaALeerPropia != ''):
 
-                          miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432",
-                                                         user="postgres", password="123456")
+                                  miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432",
+                                                                 user="postgres", password="123456")
 
-                          curt = miConexiont.cursor()
-                          #comando = 'SELECT conv.convenio_id convenio ,proc.cups_id cups, proc.valor tarifaValor FROM facturacion_conveniospacienteingresos conv, contratacion_conveniosprocedimientos proc WHERE conv."tipoDoc_id" = ' + "'" +  str(tipoDocId.id) + "' AND conv.documento_id = " + "'" + str(documentoId.id) + "'" + ' AND conv."consecAdmision" = ' + "'" + str(ingresoPaciente) + "' AND conv.convenio_id = proc.convenio_id AND proc.cups_id = " + "'" +  str(codigoCupsId[0].id) + "'"
-                          comando = 'SELECT conv.convenio_id id ,exa."codigoCups" cups, proc."' + str(columnaALeer.columna) + '"' + ' tarifaValor FROM facturacion_conveniospacienteingresos conv, tarifarios_tarifariosdescripcion des, tarifarios_tarifariosprocedimientos proc, clinico_examenes exa, contratacion_convenios conv1 , tarifarios_tipostarifa tiptar WHERE conv."tipoDoc_id" = ' + "'" + str(tipoDocId.id) + "'" + ' AND conv.documento_id = ' + "'" + str(documentoId.id) + "'" + ' AND conv."consecAdmision" = ' + "'" + str(ingresoPaciente) + "'" + ' AND conv.convenio_id = conv1.id AND des.id = conv1."tarifariosDescripcionProc_id"  AND proc."codigoCups_id" = exa.id  And exa.id = ' + "'" + str(codigoCupsId[0].id) + "'" + ' AND des."tiposTarifa_id" = tiptar.id and proc."tiposTarifa_id" = tiptar.id'
-                          curt.execute(comando)
-                          convenioValor = []
+                                  curt = miConexiont.cursor()
+                                  comando = 'SELECT conv.convenio_id id ,exa."codigoCups" cups, proc."' + str(
+                                      columnaALeer.columna) + '"' + ' valor FROM facturacion_conveniospacienteingresos conv, tarifarios_tarifariosdescripcion des, tarifarios_tarifariosprocedimientos proc, clinico_examenes exa, contratacion_convenios conv1 , tarifarios_tipostarifa tiptar WHERE conv."tipoDoc_id" = ' + "'" + str(
+                                      tipoDocId.id) + "'" + ' AND conv.documento_id = ' + "'" + str(
+                                      documentoId.id) + "'" + ' AND conv."consecAdmision" = ' + "'" + str(
+                                      ingresoPaciente) + "'" + ' AND conv.convenio_id = conv1.id AND des.id = conv1."tarifariosDescripcionProc_id" AND proc."codigoCups_id" = exa.id  And exa.id = ' + "'" + str(
+                                      codigoCupsId[
+                                          0].id) + "'" + ' AND des."tiposTarifa_id" = tiptar.id and proc."tiposTarifa_id" = tiptar.id'
+                                  print("comando = ", comando)
+                                  curt.execute(comando)
 
-                          for id, cups,tarifaValor   in curt.fetchall():
-                              convenioValor.append({'id': id, 'cups':cups, 'valor':tarifaValor})
+                                  convenioValor = []
 
-                          miConexiont.close()
+                                  for id, cups, tarifaValor in curt.fetchall():
+                                      convenioValor.append({'id': id, 'cups': cups, 'valor': tarifaValor})
 
-                          if convenioValor != []:
+                                  miConexiont.close()
+                              else:
+                                  convenioValor = []
 
-                            print ("Cups = "  , convenioValor[0]['cups'])
-                            tarifaValor = convenioValor[0]['valor']
-                            tarifaValor = str(tarifaValor)
-                            print("tarifaValor = ", tarifaValor)
-                            tarifaValor = tarifaValor.replace("None", ' ')
-                            tarifaValor = tarifaValor.replace("(", ' ')
-                            tarifaValor = tarifaValor.replace(")", ' ')
-                            tarifaValor = tarifaValor.replace(",", ' ')
-                            tarifaValor = tarifaValor.replace(" ", '')
-                            print ("tarifaValor = ", tarifaValor)
+                              print("columnaALeer.columna", columnaALeerPropia)
+                              print("convenioValor = ", convenioValor)
+                              print("codigoCupsId[0].id = ", codigoCupsId[0].id)
 
-                            #
-                          else:
-                            tarifaValor=0
+                              # Aqui analiza si es necesario que caiga en la tabla de Autorizaciones
 
-                          if tarifaValor == None:
-                              tarifaValor = 0
+                              print("el cups :", cups)
+
+                              print("autorizacion para el CUPS es ", codigoCupsId[0].requiereAutorizacion)
+
+                              # Aqui saca valores pata tarifas
+
+                              if convenioValor != []:
+
+                                  print("Cups = ", convenioValor[0]['cups'])
+                                  tarifaValor = convenioValor[0]['valor']
+                                  tarifaValor = str(tarifaValor)
+                                  print("tarifaValor = ", tarifaValor)
+                                  tarifaValor = tarifaValor.replace("None", ' ')
+                                  tarifaValor = tarifaValor.replace("(", ' ')
+                                  tarifaValor = tarifaValor.replace(")", ' ')
+                                  tarifaValor = tarifaValor.replace(",", ' ')
+                                  tarifaValor = tarifaValor.replace(" ", '')
+                                  print("tarifaValor = ", tarifaValor)
+                              else:
+                                  tarifaValor = 0
+
+                              if tarifaValor == '':
+                                  print("Entre cambiar tarufa Valor", tarifaValor)
+                                  tarifaValor = 0
+
+                          except psycopg2.DatabaseError as error:
+                              print("Entre por rollback", error)
+                              if miConexion3:
+                                  print("Entro ha hacer el Rollback")
+                                  miConexion3.rollback()
+                                  tarifaValor = 0
+
+                          finally:
+                              if miConexion3:
+                                  cur3.close()
+                                  miConexion3.close()
+
 
                           TotalTarifa = float(tarifaValor) * float(cantidad)
 
@@ -1876,9 +1947,6 @@ def crearHistoriaClinica(request):
                             print("convenioValor[0]['valor'] = ", convenioValor[0]['valor'])
                             print("convenioValor[0]['sum'] = ", convenioValor[0]['sum'])
 
-
-
-
                         # Aqui analiza si es necesario que caiga en la tabla de Autorizaciones
 
 
@@ -1989,7 +2057,7 @@ def crearHistoriaClinica(request):
                 if conteoMed >= 1:
                    print("Entre imprimir Medicamentos")
                    ingresoId2 = ingresosPaciente.id
-                   ImprimirOrdenMedicamentos(ingresoId2, historiaId)
+                   ImprimirOrdenMedicamentos(ingresoId2, historiaId, convenioId, tipoAdmision)
 
 
 
@@ -2005,7 +2073,6 @@ def crearHistoriaClinica(request):
                 registroPago = Liquidacion.objects.get(id=liquidacionId)
 
 		    # Continua Aqui
-
 
                 totalCopagos = Pagos.objects.all().filter(tipoDoc_id=tipoDocId.id).filter(documento_id=documentoId.id).filter(consec=ingresoPaciente).filter(formaPago_id=4).exclude(estadoReg='N').aggregate(totalC=Coalesce(Sum('valor'), 0))
                 totalCopagos = (totalCopagos['totalC']) + 0
@@ -2030,10 +2097,11 @@ def crearHistoriaClinica(request):
                 # Rutina Guarda en cabezote los totales
 
                 print ("Voy a grabar el cabezote")
-
+                EXAMINARDATOS
                 miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",                                       password="123456")
                 curt = miConexiont.cursor()
-                comando = 'UPDATE facturacion_liquidacion SET "totalSuministros" = ' + str(totalSuministros) + ',"totalProcedimientos" = ' + str(totalProcedimientos) + ', "totalCopagos" = ' + str(totalCopagos) + ' , "totalCuotaModeradora" = ' + str(totalCuotaModeradora) + ', anticipos = ' +  str(totalAnticipos) + ' ,"totalAbonos" = ' + str(totalAbonos) + ', "totalLiquidacion" = ' + str(totalLiquidacion) + ', "valorApagar" = ' + str(totalApagar)  + ', "totalRecibido" = ' + str(totalRecibido) + ' WHERE id =' + str(liquidacionId)
+                comando = 'UPDATE facturacion_liquidacion SET "totalSuministros" = ' +  "'" +  str(totalSuministros) + "'" + ',"totalProcedimientos" = ' + "'" +  str(totalProcedimientos) + "'"  + ', "totalCopagos" = ' + "'" +  str(totalCopagos) + "'"  + ' , "totalCuotaModeradora" = ' + "'" +  str(totalCuotaModeradora) + "'" + ', anticipos = ' + "'" +  str(totalAnticipos) + "'"  + ' ,"totalAbonos" = ' + "'" + str(totalAbonos) + "'" + ', "totalLiquidacion" = ' + "'" + str(totalLiquidacion) + "'" + ', "valorApagar" = ' + "'" + str(totalApagar) + "'"   + ', "totalRecibido" = ' + "'" + str(totalRecibido) + "'"  + ' WHERE id =' + str(liquidacionId)
+                print("COMANDO = " , comando)
                 curt.execute(comando)
                 miConexiont.commit()
                 miConexiont.close()
@@ -2246,7 +2314,7 @@ def crearHistoriaClinica(request):
                     print("Entre imprimir orden de control")
                     ingresoId2=ingresosPaciente.id
                     try:
-                        ImprimirOrdenDeControl(ingresoId2, historiaId)
+                        ImprimirOrdenDeControl(ingresoId2, historiaId, convenioId, tipoAdmision)
                     except psycopg2.DatabaseError as error:
                         print("Entre por rollback", error)
 

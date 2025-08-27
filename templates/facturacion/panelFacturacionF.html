@@ -12,10 +12,10 @@
 <div class="marco">
     <ul class="tabs">
 
-        <li><a href="#Liquidacion"><span class="fa-solid fa-user-doctor-message"></span> <span class="tab-text"> </span> Liquidacion Cuentas Clinica </a></li>
-        <li><a href="#LiquidacionDetalle"><span class="fa-solid fa-user-doctor-message"></span> <span   class="tab-text"> </span> Liquidacion Detalle Cuentas</a></li>
-        <li><a href="#Abonos"><span class="fa-solid fa-user-doctor-message"></span> <span  class="tab-text"> </span> Abonos Liquidacion Pacientes </a></li>
-        <li><a href="#Traslados"><span class="fa-solid fa-user-doctor-message"></span> <span  class="tab-text"> </span>Traslados Liquidacion pagador </a></li>
+        <li><a href="#Liquidacion"><span class="fa-solid fa-user-doctor-message"></span> <span class="tab-text"> </span>Cuentas</a></li>
+        <li><a href="#LiquidacionDetalle"><span class="fa-solid fa-user-doctor-message"></span> <span   class="tab-text"> </span>Detalle Cuentas</a></li>
+        <li><a href="#Abonos"><span class="fa-solid fa-user-doctor-message"></span> <span  class="tab-text"> </span>Abonos</a></li>
+        <li><a href="#Traslados"><span class="fa-solid fa-user-doctor-message"></span> <span  class="tab-text"> </span>Traslados</a></li>
 
     </ul>
 </div>
@@ -375,99 +375,107 @@ div.dataTables_filter input {
 		        <input type="hidden" id="liquidacionId1" name="liquidacionId1" value="0" readonly>
 			<input type="hidden" id="tipoFactura" name="tipoFactura" value="FACTURA" readonly>
 
-		       <div class="row row-cols-11" style="height=20px;">
+		       <div class="row row-cols-10" style="height=30px;">
 						
 					<div class="col">
-			  		     <div class="form-group row">
+			  		   
 						 Fecha:
-						 <div class="col-sm-5">
-							  <input type="text" id="fecha" name="fecha" value="0" readonly>
-	                                        </div>
-          	                            </div>
+						
+								<span id="fecha" name="fecha"></span>
+							<!--  <input type="text" id="fecha" name="fecha" value="0" readonly> -->
+	                                
+          	                          
                                       </div>
 
 					<div class="col">
-			  		     <div class="form-group row">
-						TipoDoc:
-						 <div class="col-sm-2">
-							  <input type="text" id="tipoDoc" name="tipoDoc" value="0" readonly>
-	                                        </div>
-          	                            </div>
+
+						Doc:
+						
+							<span id="tipoDoc" name="tipoDoc"></span>
+							<!--   <input type="text" id="tipoDoc" name="tipoDoc" value="0" readonly> -->
+
+          	                           
                                       </div>
 
 					<div class="col">
-			  		     <div class="form-group row">
-						 DocNo:
-						 <div class="col-sm-1">
-							  <input type="text" id="pdocumento" name="pdocumento" value="0" readonly>
-	                                        </div>
-          	                            </div>
+
+						
+							<span id="pdocumento" name="pdocumento"></span>
+							<!--  <input type="text" id="pdocumento" name="pdocumento" value="0" readonly> -->
+
+          	                          
                                       </div>
 
 					<div class="col">
-			  		     <div class="form-group row">
-					 Paciente:
-						 <div class="col-sm-4">
-							  <input type="text" id="paciente" name="paciente" value="0" readonly>
-	                                        </div>
-          	                            </div>
+
+					 Nombre:
+						
+					<span id="paciente" name="paciente"></span>
+							<!--  <input type="text" id="paciente" name="paciente" value="0" readonly> -->
+
+          	                           
                                       </div>
 
 					<div class="col">
-			  		     <div class="form-group row">
+
 						 Consec:
-						 <div class="col-sm-1">
-							  <input type="text" id="consecAdmision" name="consecAdmision" value="0" readonly>
-	                                        </div>
-          	                            </div>
+						
+						<span id="consecAdmision" name="consecAdmision"></span>
+							<!--  <input type="text" id="consecAdmision" name="consecAdmision" value="0" readonly> -->
+
+          	                           
                                       </div>
 
 					<div class="col">
-			  		     <div class="form-group row">
+
 						 Convenio:
-						 <div class="col-sm-4">
-							  <input type="text" id="nombreConvenio" name="nombreConvenio" value="0" readonly>
-	                                        </div>
-          	                            </div>
+
+							<span id="nombreConvenio" name="nombreConvenio"></span>
+							<!--  <input type="text" id="nombreConvenio" name="nombreConvenio" value="0" readonly> -->
+
+
                                       </div>
 
 					<div class="col">
-			  		     <div class="form-group row">
+
 						Cama:
 
-						 <div class="col-sm-3">
-							  <input type="text" id="cama" name="cama" value="0" readonly>
-	                                        </div>
-          	                            </div>
+
+						<span id="cama" name="cama"></span>
+							<!--  <input type="text" id="cama" name="cama" value="0" readonly> -->
+
+
                                       </div>
 
 					<div class="col">
-			  		     <div class="form-group row">
+
 						salidaClinica:
-						 <div class="col-sm-1">
-							  <input type="text" id="salidaClinica" name="salidaClinica" value="0" readonly>
-	                                        </div>
-          	                            </div>
+						 
+							<span id="salidaClinica" name="salidaClinica"></span>
+							<!--  <input type="text" id="salidaClinica" name="salidaClinica" value="0" readonly> -->
+
+
                                       </div>
 
 
 
 					<div class="col">
-			  		     <div class="form-group row">
+
 						Servicio:
-						 <div class="col-sm-3">
-							  <input type="text" id="servicio" name="servicio" value="0" readonly>
-	                                        </div>
-          	                            </div>
+							<span id="servicio" name="servicio"></span>
+							<!--  <input type="text" id="servicio" name="servicio" value="0" readonly> -->
+
+
                                       </div>
 
 					<div class="col">
-			  		     <div class="form-group row">
-						 observaciones
-						
-							  <input type="hidden" id="observaciones" name="observaciones" value="0" readonly>
 
-          	                            </div>
+						 observaciones
+							<span id="observaciones" name="observaciones"></span>
+						
+							<!--  <input type="hidden" id="observaciones" name="observaciones" value="0" readonly> -->
+
+
                                      </div>
 
 
@@ -483,86 +491,80 @@ div.dataTables_filter input {
 				  <input type="hidden" id="tipoRegistro" name="tipoRegistro" value="MANUAL">
 				  <input type="hidden" id="valorTotal" name="valorTotal" value="0" >
 
-
-					<div class="col">
-					<div class="form-group row">
-				                <label for="lcups" class="col-form-label col-sm-3">Cups:</label>
-				              <div class="col-sm-4">
+					<div class="col-sm-2">
+					
+				                <label for="lcups" class="col-sm-1">Cups:</label>
+				       
 					             <select class="select-css"  id="lcups" name="lcups">
                                                     {% for cups in Cups %}
                                                             <option value="{{cups.id}}"> {{cups.nombre}}
                                                             </option>
                                                             {% endfor %}
                                             </select>
-				              </div>
-				           </div>
+				        
 					 </div>
 
-					<div class="col">
-					<div class="form-group row">
-				                <label for="lsuministros" class="col-form-label col-sm-5">Suministro:</label>
-				              <div class="col-sm-4">
+					<div class="col-sm-2">
+
+				                <label for="lsuministros" class="col-sm-1">Suministro:</label>
+
 					             <select class="select-css"  id="lsuministros" name="lsuministros">
                                                     {% for suministros in Suministros %}
                                                             <option value="{{suministros.id}}"> {{suministros.nombre}}
                                                             </option>
                                                             {% endfor %}
                                             </select>
-				              </div>
-				        </div>
+
+
 					 </div>
 
-					<div class="col">
+					<div class="col-sm-1">
 
-						 <label for="cantidad" class="col-form-label col-sm-8">Cantidad:</label>
-						 <div class="col-sm-4">
+						 <label for="cantidad" class="col-sm-1">Cantidad:</label>
+						
 							  <input type="text" id="cantidad" name="cantidad" value="0" >
-	                                        </div>
+	                                     
 
                                       </div>
 					
-					<div class="col">
+					<div class="col-sm-1">
 
-						 <label for="valorUnitario" class="col-form-label col-sm-8">VrUnitario:</label>
-						 <div class="col-sm-4">
+						 <label for="valorUnitario" class="col-sm-1">VrUnitario:</label>
+
 							  <input type="text" id="valorUnitario" name="valorUnitario" value="0" >
-	                                        </div>
 
                                       </div>
 
-					<div class="col">
+					<div class="col-sm-2">
 
-						 <label for="lobservaciones" class="col-form-label col-sm-8">Observa:</label>
-						 <div class="col-sm-4">
+						 <label for="lobservaciones" class="col-sm-1">Observa:</label>
+
 							  <input type="text" id="lobservaciones" name="lobservaciones" value="" >
-	                                        </div>
+
 
                                       </div>
 
 				
-				 <div class="col">
-					<div class="form-group row">
-					 <label for="BtnAdicionarLiquidacion" class="col-form-label col-sm-2"> + </label>
+				 <div class="col-sm-1">
+
+					 <label for="BtnAdicionarLiquidacion" class="col-sm-1"> + </label>
 
 			                        <input type="button" class="form-control form-control-sm" id="BtnAdicionarLiquidacion"  name="BtnAdicionarLiquidacion" value="Adicionar" onclick="AdicionarLiquidacion()">
 
-					</div>
 				</div>
 
 		
-				 <div class="col">
-					<div class="form-group row">2
-					 <label for="BtnRefrescarLiquidacionDetalle" class="col-form-label col-sm-2">  </label>
+				 <div class="col-sm-1">
+
+					 <label for="BtnRefrescarLiquidacionDetalle" class="col-sm-1">  </label>
 			                        <input type="button" class="form-control form-control-sm" id="BtnRefrescarLiquidacionDetalle"  name="BtnRefrescarLiquidacionDetalle" value="Refrescar" onclick="RefrescarLiquidacionDetalle()">
-					</div>
 				</div>
 
-					<div class="col">
-			  		     <div class="form-group row">
+					<div class="col-sm-1">
+
 					<span style="padding-left:8px; padding-right:3px; padding-top: 3px; display:inline-block;">
 						Facturar: <img class="manImg" src={% static 'img/iloveimg-converted/Facturar.JPG' %} onclick="AFacturar()"></img> <span id="alta" name="alta" style='color:red'>Facturar </span>
 					</span>
-	                                        </div>
           	                            </div>
 
 
@@ -570,7 +572,6 @@ div.dataTables_filter input {
        </div>		<!- Cierra ro de 8 columnas -->
 
 			<!-- FIN campos a adicionar valors -->
-
 
 			<div class="container my-2">
              		   <div class="row">
@@ -1174,7 +1175,6 @@ div.dataTables_filter input {
 
 {% block mensajeria %}
 <div class="marco">
-<span> ... </span>
      <span id="mensajes" name="mensajes" style= "color:blue; font-size:18px; line-height:35px; font-family: Calibri;" > </span>
      <span id="mensajesError" name="mensajesError" style= "color:red; font-size:18px; line-height:35px; font-family: Calibri;" > </span>
 

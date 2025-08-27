@@ -1,0 +1,30 @@
+
+
+		        #Aqui vamos a ver si tiene creado el conveNio PARTICULAR o si no lo creamos
+                #
+                try:
+            	    with transaction.atomic():
+
+                        grabo66 = ConveniosPacienteIngresos.objects.get(tipoDoc_id=idTipoDocFinal,documento_id=documento_llave.id,consecAdmision=0)
+                        grabo67 = ConveniosPacienteIngresos.objects.filter(tipoDoc_id=idTipoDocFinal,documento_id=documento_llave.id,consecAdmision=0).update(consecAdmision=consecAdmision)
+
+                except Exception as e:
+
+                        print("Se hizo rollback HAY QUE  CREAR PATRICULAR :", e)
+                        convenioParticular = Convenios.objects.get(particular='S')
+                        print ("convenioParticular =", convenioParticular.id)
+
+                        grabo68 = ConveniosPacienteIngresos(
+                                     consecAdmision=consecAdmision,
+                                    convenio_id=convenioParticular.id,
+                                    tipoDoc_id=idTipoDocFinal,
+                                    documento_id=documento_llave.id,
+                                    consec=consecAdmision,
+                                    fechaRegistro=fechaRegistro,
+                                    usuarioRegistro_id=usernameId.id,
+                                    estadoReg=estadoReg)
+                        grabo68.save()
+                        print("yA grabe ConveniosPacienteIngresos", grabo68.id)
+
+                finally:
+                	print("No haga nada")	

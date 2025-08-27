@@ -821,3 +821,6 @@ ojo pendiente en aplicacion de medicamentos arreglar cuando aplica la modal no p
 -- op el lio es el conscuivoAdmision que se deb actulizar al momento de pasar lel triage al convenio
     -- primero si no existe convenio crea particular con el nvo consecutivo
     --- segundo actualiza elconsecutivo
+
+-- ojo verificar cuando se crea admision desde triage si hay consec=0 de conveno parricular lo pase a consec=1 en pacientesconveniosIngresos
+- que passa si tengo una cuenta con valor ceros o sea en ceros la cuenta y quero borrar su responsable no me deja

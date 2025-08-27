@@ -2535,7 +2535,7 @@ $(document).on('change', '#busSubServicio22', function(event) {
       //  alert("Entre a cambiar el subservicio");
 
        var select = document.getElementById("busServicio22"); /*Obtener el SELECT */
-       var serv = select.options[select .selectedIndex].value; /* Obtener el valor */
+       var serv = select.options[select.selectedIndex].value; /* Obtener el valor */
        var subServ =   $(this).val()
 
         var sede =  document.getElementById("sede").value;
@@ -3312,3 +3312,50 @@ $(document).on('change', '#municipios', function(event) {
 	     });
 
         });
+
+$(document).on('change', '#empresaC', function(event) {
+
+       var select = document.getElementById("empresaC"); /*Obtener el SELECT */
+       var empresaId  = select.options[select.selectedIndex].value; /* Obtener el valor */
+
+	alert("Entre para llamar a buscarConvenios de Empresa : " + empresaId)
+
+        $.ajax({
+	           url: '/buscarConvenioEmpresa',
+	            data : {empresaId:empresaId},
+	           type: 'GET',
+	           dataType : 'json',
+
+	  		success: function (respuesta) {
+
+	  		   var options = '<option value="=================="></option>';
+
+	  		  var dato = JSON.parse(respuesta);
+
+
+                     const $id2 = document.querySelector("#conveniosC");
+
+
+ 	      		     $("#conveniosC").empty();
+
+
+	                 $.each(dato, function(key,value) {
+                                    options +='<option value="' + value.id + '">' + value.nombre + '</option>';
+                                    option = document.createElement("option");
+                                    option.value = value.id;
+                                    option.text = value.nombre;
+                                    $id2.appendChild(option);
+ 	      		      });
+
+                    },
+	   		    error: function (request, status, error) {
+
+	   			    	document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
+
+	   	    	}
+
+	     });
+});
+
+
+

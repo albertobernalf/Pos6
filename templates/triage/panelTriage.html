@@ -537,6 +537,20 @@ th ,tr{
                                                     </div>
                                                 </div>
 
+				<div class="col">
+                                        <label for="conveniosT" class="col-sm-1 col-form-label col-form-label-sm">Convenio:</label>
+                                        <div class="col-sm-4">
+                                            <select autofocus   class="select-css " tabindex= "0" 
+                                                    aria-label="" id="conveniosT"
+                                                    name="conveniosT" required>
+                                                {% for conveniosEmpresas in ConveniosEmpresas %}
+                                                <option value="{{conveniosEmpresas.id}}"> {{conveniosEmpresas.nombre}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+
+
 
                                             
                                                 <div class="col">

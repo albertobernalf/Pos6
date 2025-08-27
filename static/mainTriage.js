@@ -1382,6 +1382,14 @@ function guardarAdmisionTriage()
 		return;
 		}
 
+	if (conveniosT =='')
+		{
+			alert("Error falta ingresar convenio");
+		document.getElementById("mensajesErrorModalCreaAdmisionTriage").innerHTML = 'Suministre Convenio';
+		return;
+		}
+
+
 	alert("Voy AJAX ");
 
 	$.ajax({
@@ -1522,6 +1530,55 @@ $(document).on('change', '#busServicioX', function(event) {
 
 
  	      		     $("#busSubServicioT").empty();
+
+
+	                 $.each(dato, function(key,value) {
+                                    options +='<option value="' + value.id + '">' + value.nombre + '</option>';
+                                    option = document.createElement("option");
+                                    option.value = value.id;
+                                    option.text = value.nombre;
+                                    $id2.appendChild(option);
+ 	      		      });
+
+                    },
+	   		    error: function (request, status, error) {
+
+	   			    	document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
+
+	   	    	}
+
+	     });
+});
+
+
+
+
+$(document).on('change', '#empresasT', function(event) {
+
+
+       var select = document.getElementById("empresasT"); /*Obtener el SELECT */
+       var empresaId  = select.options[select.selectedIndex].value; /* Obtener el valor */
+
+
+	alert("Entre para llamar a buscarConvenios de Empresa : " + empresaId)
+
+        $.ajax({
+	           url: '/buscarConvenioEmpresa',
+	            data : {empresaId:empresaId},
+	           type: 'GET',
+	           dataType : 'json',
+
+	  		success: function (respuesta) {
+
+	  		   var options = '<option value="=================="></option>';
+
+	  		  var dato = JSON.parse(respuesta);
+
+
+                     const $id2 = document.querySelector("#conveniosT");
+
+
+ 	      		     $("#conveniosT").empty();
 
 
 	                 $.each(dato, function(key,value) {

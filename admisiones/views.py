@@ -4925,6 +4925,8 @@ def crearAdmisionDef(request):
         empresa = request.POST["empresaC"]
         print(" empresa = ", empresa)
 
+        convenio = request.POST["conveniosC"]
+        print(" convenio = ", convenio)
 
         serviciosAdministrativos = request.POST["serviciosAdministrativos"]
         print(" serviciosAdministrativos = ", serviciosAdministrativos)
@@ -5138,7 +5140,22 @@ def crearAdmisionDef(request):
                 grabo2.save()
                 print("yA grabe dependencias historico", grabo2.id)
 
-                print("Grabe HISTPRICO DEPENDENCIAS")
+                grabo88 = ConveniosPacienteIngresos(
+                          tipoDoc_id=tipoDoc,
+                          documento_id=documento_llave.id,
+                          consecAdmision=consecAdmision,
+                          convenio_id=convenio,
+                          fechaRegistro = fechaRegistro,
+                          usuarioRegistro_id = usernameId.id,
+                          estadoReg = estadoReg
+                       )
+                grabo88.save()
+                grabo88.id
+                print("yA grabe pacientes ingresos", grabo88.id)
+
+
+
+                print("Grabe HISTORICO DEPENDENCIAS")
 
         except Exception as e:
             # Aquí ya se hizo rollback automáticamente
@@ -7790,3 +7807,37 @@ def buscarLocalidades(request):
 
 
     return JsonResponse(json.dumps(localidades), safe=False)
+
+
+def buscarConvenioEmpresa(request):
+    context = {}
+    empresaId = request.GET["empresaId"]
+
+    print ("Entre buscar  Convenios de la empresa  =", empresaId)
+
+
+    # Combo de Medicos Especialidades
+
+
+    miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres", password="123456")
+    curt = miConexiont.cursor()
+
+    comando = 'SELECT d.id id, d.nombre  nombre FROM contratacion_convenios d, facturacion_empresas c WHERE d.empresa_id = c.id AND c.id = ' + "'" + str(empresaId) + "'" + ' ORDER BY d.nombre '
+
+    curt.execute(comando)
+    print(comando)
+
+    conveniosEmpresas = []
+
+    for id, nombre in curt.fetchall():
+        conveniosEmpresas.append({'id': id, 'nombre': nombre})
+
+    miConexiont.close()
+    print(conveniosEmpresas)
+
+
+    context['ConveniosEmpresas'] = conveniosEmpresas
+
+
+    return JsonResponse(json.dumps(conveniosEmpresas), safe=False)
+

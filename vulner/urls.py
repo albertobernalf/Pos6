@@ -109,9 +109,9 @@ urlpatterns = [
     path('imprimirHistoriaClinica/', viewsClinicoReportes.ImprimirHistoriaClinica),
     path('imprimirOrdenIncapacidad/<str:ingresoId> , <str:historiaId>/', viewsClinicoReportes.ImprimirOrdenIncapacidad),
     path('imprimirOrdenLaboratorio/<str:ingresoId> , <str:historiaId>, <str:convenioId>,<str:tipoAdmision>/', viewsClinicoReportes.ImprimirOrdenLaboratorio),
-    path('imprimirOrdenTerapia/<str:ingresoId> , <str:historiaId>/', viewsClinicoReportes.ImprimirOrdenTerapia),
-    path('imprimirOrdenDeControl/<str:ingresoId> , <str:historiaId>/', viewsClinicoReportes.ImprimirOrdenDeControl),
-    path('imprimirOrdenRadiologia/<str:ingresoId> , <str:historiaId>/', viewsClinicoReportes.ImprimirOrdenRadiologia),
+    path('imprimirOrdenTerapia/<str:ingresoId> , <str:historiaId>, <str:convenioId>,<str:tipoAdmision>/', viewsClinicoReportes.ImprimirOrdenTerapia),
+    path('imprimirOrdenDeControl/<str:ingresoId> , <str:historiaId>, <str:convenioId>,<str:tipoAdmision>/', viewsClinicoReportes.ImprimirOrdenDeControl),
+    path('imprimirOrdenRadiologia/<str:ingresoId> , <str:historiaId>, <str:convenioId>,<str:tipoAdmision>/', viewsClinicoReportes.ImprimirOrdenRadiologia),
 
     # Actividaes Mecanicas
 
@@ -188,6 +188,7 @@ urlpatterns = [
     path('imprimirHojaAdmision/', viewsAdmisionesReportes.ImprimirHojaAdmision),
     path('imprimirHojaAdmisionParametro/<str:ingresoId/', viewsAdmisionesReportes.ImprimirHojaAdmisionParametro),
     path('imprimirAutorizacionesAdm/', viewsAdmisionesReportes.ImprimirAutorizacionesAdm),
+    path('buscarConvenioEmpresa/', viewsAdmisiones.buscarConvenioEmpresa),
 
     # Triage
 
@@ -215,6 +216,7 @@ urlpatterns = [
     path('buscarLocalidades/', viewsTriage.buscarLocalidades),
     path('imprimirTriageParametro/<str:data>/', viewsTriageReportes.ImprimirTriageParametro),
     path('imprimirTriage/', viewsTriageReportes.ImprimirTriage),
+    path('buscarConvenioEmpresa/', viewsTriage.buscarConvenioEmpresa),
 
     # Apoyo Terapeutico
 

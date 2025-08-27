@@ -578,6 +578,19 @@ Ambulatorios:  <span id="amb" name="amb" style='color:red'>{{Ambulatorios}} </sp
                                             </select>
                                         </div>
                                     </div>
+				<div class="col">
+                                        <label for="conveniosC" class="col-sm-1 col-form-label col-form-label-sm">Convenio:</label>
+                                        <div class="col">
+                                            <select autofocus   class="select-css " tabindex= "0" 
+                                                    aria-label="" id="conveniosC"
+                                                    name="conveniosC" required>
+                                                {% for conveniosEmpresas in ConveniosEmpresas %}
+                                                <option value="{{conveniosEmpresas.id}}"> {{conveniosEmpresas.nombre}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+
 
 
 
