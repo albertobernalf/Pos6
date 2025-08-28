@@ -361,9 +361,9 @@ def ImprimirFactura(request):
     miConexiont.close()
 
     ## Aquip totales
-    self.ln(4)
-    self.cell(30, 26, 'Valor en letras', 0, 0, 'L')
-    self.ln(4)
+    pdf.ln(4)
+    pdf.cell(30, 26, 'Valor en letras', 0, 0, 'L')
+    pdf.ln(4)
 
     carpeta = 'C:\EntornosPython\Pos6\JSONCLINICA\HistoriasClinicas/'
     print("carpeta = ", carpeta)

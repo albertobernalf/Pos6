@@ -659,8 +659,8 @@ const initDataTableLiquidacion = async () => {
         arrancaLiquidacion(3,data);
 	    dataTableFacturacionInitialized = true;
 
-        arrancaLiquidacion(4,data);
-	    dataTableFacAbonosInitialized = true;
+        //arrancaLiquidacion(4,data);
+	//    dataTableFacAbonosInitialized = true;
 
 	 $('#tablaLiquidacion tbody tr:eq(0) .miLiquidacion').prop('checked', true);  // Checkprimera fila el checkbox creo solo javascript
 	alert("se supone ya seleeciode liquidacion");
@@ -1534,12 +1534,10 @@ function AFacturar()
 			    dataTableFacturacionInitialized = true;
 
 			 window.location.reload();
-			
-			}
+		
+		}
 
-
-
-document.getElementById("mensajesError").innerHTML = data.message;
+		document.getElementById("mensajesError").innerHTML = data.message;
                   },
 	   		    error: function (request, status, error) {
 		document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error

@@ -819,3 +819,9 @@ ojo pendiente en aplicacion de medicamentos arreglar cuando aplica la modal no p
 
 -- OPS ESTABA EN ABONOS Y ME INSERTO UN liquidacion_detalle,, de mi papa LUIS ERBNESTO BERNAL,
 -- que fue lo que paso
+-- OJO PENDIENTE VALIDAR CUANDO CAMBIE EL VALOR D ELOS PROCED O SUMINSYROS EN LA CUENTRA DEL PACIENTE NO DESCUADRE TOTAL PROCE Y TOTAL SUMINI Y TOTAL LIQUIDACIO Y APAGAR ETC
+
+-- cosas por hacer
+  -- los abonos pistear totally
+  -- facturar, pistear abonos
+  -- crear en detalle factura los pagos, con totales de factura etc

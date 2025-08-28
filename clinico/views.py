@@ -2131,7 +2131,6 @@ def crearHistoriaClinica(request):
                 print("cBoxCirugia =", cBoxCirugia)
 
 
-
                 if cBoxCirugia == 'true':
 
                         serviciosAdministrativos = request.POST.get("serviciosAdministrativos")

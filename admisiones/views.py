@@ -7170,55 +7170,55 @@ def GuardaAbonosAdmision(request):
         totalCopagos = Pagos.objects.all().filter(tipoDoc_id=ingresos.tipoDoc_id).filter(documento_id=ingresos.documento_id).filter(consec=ingresos.consec).filter(formaPago_id=4).exclude(estadoReg='N').aggregate(totalC=Coalesce(Sum('valor'), 0))
         totalCopagos = (totalCopagos['totalC']) + 0
 
-        if (float(formaCopago.id) == float(formaPago)):
-            print("totalCopagos", totalCopagos)
-            totalCopagos = float(totalCopagos) + float(valor)
-            print("totalCopagos", totalCopagos)
+        #if (float(formaCopago.id) == float(formaPago)):
+        #    print("totalCopagos", totalCopagos)
+        #    totalCopagos = float(totalCopagos) + float(valor)
+        #    print("totalCopagos", totalCopagos)
 
 
 
-        totalCuotaModeradora = Pagos.objects.all().filter(tipoDoc_id=ingresos.tipoDoc_id).filter(documento_id=ingresos.documento_id).filter(consec=ingresos.consec).filter(formaPago_id=3).exclude(estadoReg='N').aggregate(totalM=Coalesce(Sum('valor'), 0))
-        totalCuotaModeradora = (totalCuotaModeradora['totalM']) + 0
-        if (float(formaModeradora.id) == float(formaPago)):
-                totalCuotaModeradora = float(totalCuotaModeradora) + float(valor)
-                print("totalCuotaModeradora", totalCuotaModeradora)
+        #totalCuotaModeradora = Pagos.objects.all().filter(tipoDoc_id=ingresos.tipoDoc_id).filter(documento_id=ingresos.documento_id).filter(consec=ingresos.consec).filter(formaPago_id=3).exclude(estadoReg='N').aggregate(totalM=Coalesce(Sum('valor'), 0))
+        #totalCuotaModeradora = (totalCuotaModeradora['totalM']) + 0
+        #if (float(formaModeradora.id) == float(formaPago)):
+        #        totalCuotaModeradora = float(totalCuotaModeradora) + float(valor)
+        #        print("totalCuotaModeradora", totalCuotaModeradora)
 
 
 
-        totalAnticipos = Pagos.objects.all().filter(tipoDoc_id=ingresos.tipoDoc_id).filter(documento_id=ingresos.documento_id).filter(consec=ingresos.consec).filter(formaPago_id=1).exclude(estadoReg='N').aggregate(Anticipos=Coalesce(Sum('valor'), 0))
-        totalAnticipos = (totalAnticipos['Anticipos']) + 0
+        #totalAnticipos = Pagos.objects.all().filter(tipoDoc_id=ingresos.tipoDoc_id).filter(documento_id=ingresos.documento_id).filter(consec=ingresos.consec).filter(formaPago_id=1).exclude(estadoReg='N').aggregate(Anticipos=Coalesce(Sum('valor'), 0))
+        #totalAnticipos = (totalAnticipos['Anticipos']) + 0
 
-        if (float(formaAnticipo.id) == float(formaPago)):
-            totalAnticipos = float(totalAnticipos) + float(valor)
-            print("totalAnticipos", totalAnticipos)
+        #if (float(formaAnticipo.id) == float(formaPago)):
+        #    totalAnticipos = float(totalAnticipos) + float(valor)
+        #    print("totalAnticipos", totalAnticipos)
 
-        totalAbonos = Pagos.objects.all().filter(tipoDoc_id=ingresos.tipoDoc_id).filter(documento_id=ingresos.documento_id).filter(consec=ingresos.consec).filter(formaPago_id=2).exclude(estadoReg='N').aggregate(totalAb=Coalesce(Sum('valor'), 0))
-        totalAbonos = (totalAbonos['totalAb']) + 0
+        #totalAbonos = Pagos.objects.all().filter(tipoDoc_id=ingresos.tipoDoc_id).filter(documento_id=ingresos.documento_id).filter(consec=ingresos.consec).filter(formaPago_id=2).exclude(estadoReg='N').aggregate(totalAb=Coalesce(Sum('valor'), 0))
+        #totalAbonos = (totalAbonos['totalAb']) + 0
 
-        print("totalAbonos =", totalAbonos )
+        #print("totalAbonos =", totalAbonos )
 
-        print("formaAbono.id",formaAbono.id )
-        print("formaPago", formaPago)
+        #print("formaAbono.id",formaAbono.id )
+        #print("formaPago", formaPago)
 
-        if (float(formaAbono.id) == float(formaPago)):
-            print("ENTRE ABONO")
-            totalAbonos = float(totalAbonos) + float(valor)
-            print("totalAbonos", totalAbonos)
+        #if (float(formaAbono.id) == float(formaPago)):
+        #    print("ENTRE ABONO")
+        #    totalAbonos = float(totalAbonos) + float(valor)
+        #    print("totalAbonos", totalAbonos)
 
-        totalRecibido = float(totalCopagos) + float(totalCuotaModeradora) + float(totalAnticipos) + float(totalAbonos)
-        totalApagar = float(totalSuministros) + float(totalProcedimientos) - float(totalRecibido)
-        totalLiquidacion = float(totalSuministros) + float(totalProcedimientos)
-        print("totalLiquidacion", totalLiquidacion)
-        print("totalAPagar", totalApagar)
+        #totalRecibido = float(totalCopagos) + float(totalCuotaModeradora) + float(totalAnticipos) + float(totalAbonos)
+        #totalApagar = float(totalSuministros) + float(totalProcedimientos) - float(totalRecibido)
+        #totalLiquidacion = float(totalSuministros) + float(totalProcedimientos)
+        #print("totalLiquidacion", totalLiquidacion)
+        #print("totalAPagar", totalApagar)
 
         # Rutina Guarda en cabezote los totales
 
-        print("Voy a grabar el cabezote")
+        #print("Voy a grabar el cabezote")
 
 
-        comando = 'UPDATE facturacion_liquidacion SET "totalSuministros" = ' + "'" + str(totalSuministros) + "'" + ',"totalProcedimientos" = ' + "'" + str(totalProcedimientos) + "'"  + ', "totalCopagos" = ' + "'"  + str(totalCopagos) + "'" + ' , "totalCuotaModeradora" = ' + "'"  + str(totalCuotaModeradora) + "'"  + ', anticipos = ' + "'" + str(totalAnticipos) + "'" + ' ,"totalAbonos" = ' + "'" + str(totalAbonos) + "'"  + ', "totalLiquidacion" = ' + "'" + str(totalLiquidacion) + "'" + ', "valorApagar" = ' + "'"  + str(totalApagar) + "'" + ', "totalRecibido" = ' + "'" + str(totalRecibido) + "'" + ' WHERE id =' + str(liquidacionId)
-        print("ACTUALIZADO", comando)
-        cur3.execute(comando)
+        #comando = 'UPDATE facturacion_liquidacion SET "totalSuministros" = ' + "'" + str(totalSuministros) + "'" + ',"totalProcedimientos" = ' + "'" + str(totalProcedimientos) + "'"  + ', "totalCopagos" = ' + "'"  + str(totalCopagos) + "'" + ' , "totalCuotaModeradora" = ' + "'"  + str(totalCuotaModeradora) + "'"  + ', anticipos = ' + "'" + str(totalAnticipos) + "'" + ' ,"totalAbonos" = ' + "'" + str(totalAbonos) + "'"  + ', "totalLiquidacion" = ' + "'" + str(totalLiquidacion) + "'" + ', "valorApagar" = ' + "'"  + str(totalApagar) + "'" + ', "totalRecibido" = ' + "'" + str(totalRecibido) + "'" + ' WHERE id =' + str(liquidacionId)
+        #print("ACTUALIZADO", comando)
+        #cur3.execute(comando)
 
         miConexion3.commit()
         cur3.close()
@@ -7363,80 +7363,80 @@ def PostDeleteAbonosAdmision(request):
 
             ## Vamops a actualizar los totales de la Liquidacion:
             #
-            totalSuministros = LiquidacionDetalle.objects.all().filter(liquidacion_id=liquidacionId).filter(
-                examen_id=None).exclude(estadoRegistro='N').aggregate(totalS=Coalesce(Sum('valorTotal'), 0))
-            totalSuministros = (totalSuministros['totalS']) + 0
-            print("totalSuministros", totalSuministros)
-            totalProcedimientos = LiquidacionDetalle.objects.all().filter(liquidacion_id=liquidacionId).filter(
-                cums_id=None).exclude(estadoRegistro='N').aggregate(totalP=Coalesce(Sum('valorTotal'), 0))
-            totalProcedimientos = (totalProcedimientos['totalP']) + 0
-            print("totalProcedimientos", totalProcedimientos)
+            #totalSuministros = LiquidacionDetalle.objects.all().filter(liquidacion_id=liquidacionId).filter(
+            #    examen_id=None).exclude(estadoRegistro='N').aggregate(totalS=Coalesce(Sum('valorTotal'), 0))
+            #totalSuministros = (totalSuministros['totalS']) + 0
+            #print("totalSuministros", totalSuministros)
+            #totalProcedimientos = LiquidacionDetalle.objects.all().filter(liquidacion_id=liquidacionId).filter(
+            #    cums_id=None).exclude(estadoRegistro='N').aggregate(totalP=Coalesce(Sum('valorTotal'), 0))
+            #totalProcedimientos = (totalProcedimientos['totalP']) + 0
+            #print("totalProcedimientos", totalProcedimientos)
             registroPago = Liquidacion.objects.get(id=liquidacionId)
 
             # Continua Aqui
 
-            totalCopagos = Pagos.objects.all().filter(tipoDoc_id=pagos.tipoDoc_id).filter(
-                documento_id=pagos.documento_id).filter(consec=pagos.consec).filter(formaPago_id=4).exclude(
-                estadoReg='N').aggregate(totalC=Coalesce(Sum('valor'), 0))
-            totalCopagos = (totalCopagos['totalC']) + 0
-            if (float(formaCopago.id) == float(formaPago)):
-                totalCopagos = float(totalCopagos) + float(pagos.valor)
-                print("totalCopagos", totalCopagos)
+            #totalCopagos = Pagos.objects.all().filter(tipoDoc_id=pagos.tipoDoc_id).filter(
+            #    documento_id=pagos.documento_id).filter(consec=pagos.consec).filter(formaPago_id=4).exclude(
+            #    estadoReg='N').aggregate(totalC=Coalesce(Sum('valor'), 0))
+            #totalCopagos = (totalCopagos['totalC']) + 0
+            #if (float(formaCopago.id) == float(formaPago)):
+            #    totalCopagos = float(totalCopagos) + float(pagos.valor)
+            #    print("totalCopagos", totalCopagos)
 
-            totalCuotaModeradora = Pagos.objects.all().filter(tipoDoc_id=pagos.tipoDoc_id).filter(
-                documento_id=pagos.documento_id).filter(consec=pagos.consec).filter(formaPago_id=3).exclude(
-                estadoReg='N').aggregate(totalM=Coalesce(Sum('valor'), 0))
-            totalCuotaModeradora = (totalCuotaModeradora['totalM']) + 0
-            if (float(formaModeradora.id) == float(formaPago)):
-                totalCuotaModeradora = float(totalCuotaModeradora) + float(pagos.valor)
-                print("totalCuotaModeradora", totalCuotaModeradora)
+            #totalCuotaModeradora = Pagos.objects.all().filter(tipoDoc_id=pagos.tipoDoc_id).filter(
+            #    documento_id=pagos.documento_id).filter(consec=pagos.consec).filter(formaPago_id=3).exclude(
+            #    estadoReg='N').aggregate(totalM=Coalesce(Sum('valor'), 0))
+            #totalCuotaModeradora = (totalCuotaModeradora['totalM']) + 0
+            #if (float(formaModeradora.id) == float(formaPago)):
+            #    totalCuotaModeradora = float(totalCuotaModeradora) + float(pagos.valor)
+            #    print("totalCuotaModeradora", totalCuotaModeradora)
 
-            totalAnticipos = Pagos.objects.all().filter(tipoDoc_id=pagos.tipoDoc_id).filter(
-                documento_id=pagos.documento_id).filter(consec=pagos.consec).filter(formaPago_id=1).exclude(
-                estadoReg='N').aggregate(Anticipos=Coalesce(Sum('valor'), 0))
-            totalAnticipos = (totalAnticipos['Anticipos']) + 0
+            #totalAnticipos = Pagos.objects.all().filter(tipoDoc_id=pagos.tipoDoc_id).filter(
+            #    documento_id=pagos.documento_id).filter(consec=pagos.consec).filter(formaPago_id=1).exclude(
+            #    estadoReg='N').aggregate(Anticipos=Coalesce(Sum('valor'), 0))
+            #totalAnticipos = (totalAnticipos['Anticipos']) + 0
 
-            if (float(formaAnticipo.id) == float(formaPago)):
-                totalAnticipos = float(totalAnticipos) + float(pagos.valor)
-                print("totalAnticipos", totalAnticipos)
+            #if (float(formaAnticipo.id) == float(formaPago)):
+            #    totalAnticipos = float(totalAnticipos) + float(pagos.valor)
+            #    print("totalAnticipos", totalAnticipos)
 
-            totalAbonos = Pagos.objects.all().filter(tipoDoc_id=pagos.tipoDoc_id).filter(
-                documento_id=pagos.documento_id).filter(consec=pagos.consec).filter(formaPago_id=2).exclude(
-                estadoReg='N').aggregate(totalAb=Coalesce(Sum('valor'), 0))
-            totalAbonos = (totalAbonos['totalAb']) + 0
+            #totalAbonos = Pagos.objects.all().filter(tipoDoc_id=pagos.tipoDoc_id).filter(
+            #    documento_id=pagos.documento_id).filter(consec=pagos.consec).filter(formaPago_id=2).exclude(
+            #    estadoReg='N').aggregate(totalAb=Coalesce(Sum('valor'), 0))
+            #totalAbonos = (totalAbonos['totalAb']) + 0
 
-            print("totalAbonos =", totalAbonos)
+            #print("totalAbonos =", totalAbonos)
 
-            print("formaAbono.id", formaAbono.id)
-            print("formaPago", formaPago)
+            #print("formaAbono.id", formaAbono.id)
+            #print("formaPago", formaPago)
 
-            if (float(formaAbono.id) == float(formaPago)):
-                print("ENTRE ABONO")
-                totalAbonos = float(totalAbonos) + float(pagos.valor)
-                print("totalAbonos", totalAbonos)
+            #if (float(formaAbono.id) == float(formaPago)):
+            #    print("ENTRE ABONO")
+            #    totalAbonos = float(totalAbonos) + float(pagos.valor)
+            #    print("totalAbonos", totalAbonos)
 
-            totalRecibido = float(totalCopagos) + float(totalCuotaModeradora) + float(totalAnticipos) + float(totalAbonos)
-            totalApagar = float(totalSuministros) + float(totalProcedimientos) - float(totalRecibido)
-            totalLiquidacion = float(totalSuministros) + float(totalProcedimientos)
-            print("totalLiquidacion", totalLiquidacion)
-            print("totalAPagar", totalApagar)
+            #totalRecibido = float(totalCopagos) + float(totalCuotaModeradora) + float(totalAnticipos) + float(totalAbonos)
+            #totalApagar = float(totalSuministros) + float(totalProcedimientos) - float(totalRecibido)
+            #totalLiquidacion = float(totalSuministros) + float(totalProcedimientos)
+            #print("totalLiquidacion", totalLiquidacion)
+            #print("totalAPagar", totalApagar)
 
             # Rutina Guarda en cabezote los totales
 
-            print("Voy a grabar el cabezote")
+            #print("Voy a grabar el cabezote")
 
-            comando = 'UPDATE facturacion_liquidacion SET "totalSuministros" = ' + "'" + str(
-                totalSuministros) + "'" + ',"totalProcedimientos" = ' + "'" + str(
-                totalProcedimientos) + "'" + ', "totalCopagos" = ' + "'" + str(
-                totalCopagos) + "'" + ' , "totalCuotaModeradora" = ' + "'" + str(
-                totalCuotaModeradora) + "'" + ', anticipos = ' + "'" + str(
-                totalAnticipos) + "'" + ' ,"totalAbonos" = ' + "'" + str(
-                totalAbonos) + "'" + ', "totalLiquidacion" = ' + "'" + str(
-                totalLiquidacion) + "'" + ', "valorApagar" = ' + "'" + str(
-                totalApagar) + "'" + ', "totalRecibido" = ' + "'" + str(totalRecibido) + "'" + ' WHERE id =' + str(
-                liquidacionId)
-            print("ACTUALIZADO", comando)
-            cur3.execute(comando)
+            #comando = 'UPDATE facturacion_liquidacion SET "totalSuministros" = ' + "'" + str(
+            #    totalSuministros) + "'" + ',"totalProcedimientos" = ' + "'" + str(
+            #    totalProcedimientos) + "'" + ', "totalCopagos" = ' + "'" + str(
+            #    totalCopagos) + "'" + ' , "totalCuotaModeradora" = ' + "'" + str(
+            #    totalCuotaModeradora) + "'" + ', anticipos = ' + "'" + str(
+            #    totalAnticipos) + "'" + ' ,"totalAbonos" = ' + "'" + str(
+            #    totalAbonos) + "'" + ', "totalLiquidacion" = ' + "'" + str(
+            #    totalLiquidacion) + "'" + ', "valorApagar" = ' + "'" + str(
+            #    totalApagar) + "'" + ', "totalRecibido" = ' + "'" + str(totalRecibido) + "'" + ' WHERE id =' + str(
+            #    liquidacionId)
+            #print("ACTUALIZADO", comando)
+            #cur3.execute(comando)
             miConexion3.commit()
             cur3.close()
             miConexion3.close()

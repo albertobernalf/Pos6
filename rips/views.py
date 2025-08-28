@@ -68,7 +68,7 @@ def load_dataEnviosRips(request, data):
 
     # Combo Indicadores
 
-    miConexiont = psycopg2.connect(host="192.168.37.133", database="vulner2", port="5432", user="postgres",
+    miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
                                    password="123456")
     curt = miConexiont.cursor()
 
@@ -96,7 +96,7 @@ def load_dataEnviosRips(request, data):
 
     enviosRips = []
 
-    miConexionx = psycopg2.connect(host="192.168.37.133", database="vulner2", port="5432", user="postgres",
+    miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
                                    password="123456")
     curx = miConexionx.cursor()
 
@@ -163,7 +163,7 @@ def GuardaEnviosRips(request):
     try:
 
 
-        miConexion3 = psycopg2.connect(host="192.168.37.133", database="vulner2", port="5432", user="postgres",  password="123456")
+        miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",  password="123456")
         cur3 = miConexion3.cursor()
         comando = 'insert into rips_ripsEnvios  ("fechaEnvio","cantidadFacturas", "cantidadPasaron", "cantidadRechazadas","ripsEstados_id", "fechaRegistro", "estadoReg", "usuarioRegistro_id", empresa_id, "sedesClinica_id", "ripsTiposNotas_id", "fechaCreacion","serviciosAdministrativos_id") values ('  + "'" + str(fechaEnvio) + "',"  +  "'" + str(cantidadFacturas) + "'" + ' , '  + "'" + str(cantidadPasaron) + "'" + ', ' + "'" + str(cantidadRechazadas) + "'" + '  , ' + "'" + str(estadoRips.id) + "'" + '  , '  "'" + str(fechaRegistro) + "','"   + str(estadoReg) + "'," + "'" + str(usuarioRegistro_id) + "','" + str(empresa_id) + "','" + str(sedesClinica_id) + "','" + str(tipoRips) +  "','" + str(fechaRegistro) + "','" + str(serviciosAdministrativos) + "'" + ');'
         print(comando)
@@ -208,7 +208,7 @@ def load_dataDetalleRips(request, data):
 
     detalleRips = []
 
-    miConexionx = psycopg2.connect(host="192.168.37.133", database="vulner2", port="5432", user="postgres",
+    miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
                                    password="123456")
     curx = miConexionx.cursor()
 
@@ -282,7 +282,7 @@ def GuardaDetalleRips(request):
     try:
 
 
-        miConexion3 = psycopg2.connect(host="192.168.37.133", database="vulner2", port="5432", user="postgres",  password="123456")
+        miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",  password="123456")
         cur3 = miConexion3.cursor()
         comando = 'UPDATE  rips_ripsdetalle SET cuv =  ' +  "'" + str(cuv) + "'," +  '"estadoPasoMinisterio" = ' + "'" + str(estadoPasoMinisterio) +  "'," + '"rutaJsonRespuesta"  = ' + "'" + str(rutaJsonRespuesta) + "'" + ',"rutaJsonFactura" = '  + "'" + str(rutaJsonFactura) + "'," +  ' "fechaRegistro" = ' + "'" + str(fechaRegistro) + "',"   + ' "estadoReg" = ' + "'" + str('A') + "'," + '"usuarioRegistro_id" =' + "'" + str(usuarioRegistro_id) + "'," + '"rutaPdf" = ' + "'" +str(rutaPdf) + "'," + '"rutaZip" =  ' + "'" + str(rutaZip)  + "' WHERE id =" + detalleRipsId
 
@@ -323,7 +323,7 @@ def load_dataDetalleRipsAdicionar(request, data):
 
     detalleRipsAdicion = []
 
-    miConexionx = psycopg2.connect(host="192.168.37.133", database="vulner2", port="5432", user="postgres",
+    miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
                                    password="123456")
     curx = miConexionx.cursor()
 
@@ -391,7 +391,7 @@ def ActualizarEmpresaDetalleRips(request):
 
             #Primero el UPDATE
 
-            miConexion3 = psycopg2.connect(host="192.168.37.133", database="vulner2", port="5432", user="postgres",
+            miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
                                            password="123456")
             cur3 = miConexion3.cursor()
 
@@ -457,7 +457,7 @@ def TraeDetalleRips(request):
 
     enviarDetalleRips = []
 
-    miConexionx = psycopg2.connect(host="192.168.37.133", database="vulner2", port="5432", user="postgres",
+    miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
                                    password="123456")
     curx = miConexionx.cursor()
     
@@ -522,7 +522,7 @@ def GenerarJsonRips(request):
     miConexionx = None
     try:
 
-            miConexionx = psycopg2.connect(host="192.168.37.133", database="vulner2", port="5432", user="postgres",  password="123456")
+            miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",  password="123456")
             curx = miConexionx.cursor()
 
             # Primero Borra RIPS USUARIOS
@@ -598,7 +598,7 @@ def GenerarJsonRips(request):
 
     barridoFacturas = []
 
-    miConexionx = psycopg2.connect(host="192.168.37.133", database="vulner2", port="5432", user="postgres",
+    miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
                                    password="123456")
     curx = miConexionx.cursor()
 
@@ -640,7 +640,7 @@ def GenerarJsonRips(request):
 
 	    ### RIPS TRANSACCION
         #
-        miConexionx = psycopg2.connect(host="192.168.37.133", database="vulner2", port="5432", user="postgres", password="123456")
+        miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres", password="123456")
 
         curx = miConexionx.cursor()
 
@@ -669,7 +669,7 @@ def GenerarJsonRips(request):
 	    ## OJO FALTA CREAR LA RUTINA SI TIENE O NO INCAPACIDAD
 	    ## HACER UN QUERY POR APARTE
         #
-        miConexionx = psycopg2.connect(host="192.168.37.133", database="vulner2", port="5432", user="postgres", password="123456")
+        miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres", password="123456")
         curx = miConexionx.cursor()
 
         if (tipoRips == 'Factura'):
@@ -716,7 +716,7 @@ def GenerarJsonRips(request):
 
         # RIPS PROCEDIMIENTOS
         #
-        miConexionx = psycopg2.connect(host="192.168.37.133", database="vulner2", port="5432", user="postgres", password="123456")
+        miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres", password="123456")
         curx = miConexionx.cursor()
 
         if (tipoRips == 'Factura'):
@@ -739,7 +739,7 @@ def GenerarJsonRips(request):
 
         # RIPS HOSPITALIZACION
         #
-        miConexionx = psycopg2.connect(host="192.168.37.133", database="vulner2", port="5432", user="postgres",   password="123456")
+        miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",   password="123456")
 
         curx = miConexionx.cursor()
 
@@ -763,7 +763,7 @@ def GenerarJsonRips(request):
 
 	    # RIPS URGENCIAS
         #
-        miConexionx = psycopg2.connect(host="192.168.37.133", database="vulner2", port="5432", user="postgres",    password="123456")
+        miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",    password="123456")
 
         curx = miConexionx.cursor()
 
@@ -786,7 +786,7 @@ def GenerarJsonRips(request):
         #
         # RIPS MEDICAMENTOS
         #
-        miConexionx = psycopg2.connect(host="192.168.37.133", database="vulner2", port="5432", user="postgres",    password="123456")
+        miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",    password="123456")
         curx = miConexionx.cursor()
 
         if (tipoRips == 'Factura'):
@@ -809,7 +809,7 @@ def GenerarJsonRips(request):
 
 	    # RIPS RECIEN NACIDOS
         #
-        miConexionx = psycopg2.connect(host="192.168.37.133", database="vulner2", port="5432", user="postgres",    password="123456")
+        miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",    password="123456")
 
         curx = miConexionx.cursor()
 
@@ -836,7 +836,7 @@ def GenerarJsonRips(request):
 
 	    # Aqui generamos los JSON de la Factura
         #
-        miConexiony = psycopg2.connect(host="192.168.37.133", database="vulner2", port="5432", user="postgres", password="123456")
+        miConexiony = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres", password="123456")
 
         cury = miConexiony.cursor()
         funcionJson = []
@@ -863,12 +863,12 @@ def GenerarJsonRips(request):
         if (tipoRips == 'Factura'):
             print("Factura = ", elemento)
             archivo = 'Fac' + str(elemento) + '.txt'
-            nombreCarpeta = 'C:\\EntornosPython\\Pos3\\vulner\\JSONCLINICA\\' + str(archivo)
+            nombreCarpeta = 'C:\\EntornosPython\\Pos6\\JSONCLINICA\\' + str(archivo)
 
         if (tipoRips == 'Glosa'):
             print("Glosa = ", elemento)
             archivo = 'Glo' + str(elemento) + '.txt'
-            nombreCarpeta = 'C:\\EntornosPython\\Pos3\\vulner\\JSONCLINICA\\' + str(archivo)
+            nombreCarpeta = 'C:\\EntornosPython\\Pos6\\JSONCLINICA\\' + str(archivo)
 
 
         print("ruta =", nombreCarpeta)
@@ -882,7 +882,7 @@ def GenerarJsonRips(request):
 
         # Aqui Actualiza la ruta en la tabla rips_ripsdetalle
 
-        miConexiont = psycopg2.connect(host="192.168.37.133", database="vulner2", port="5432", user="postgres",  password="123456")
+        miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",  password="123456")
 
         curt = miConexiont.cursor()
 
@@ -903,7 +903,7 @@ def GenerarJsonRips(request):
 
     # Aqui generamos el JSON GLOBAL DE TODOS LOS ELEMENTOS (Facturas o Glosas) DEL ENVIO
         #
-    miConexiony = psycopg2.connect(host="192.168.37.133", database="vulner2", port="5432", user="postgres",  password="123456")
+    miConexiony = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",  password="123456")
     cury = miConexiony.cursor()
 
     funcionGlobalJson = []
@@ -923,7 +923,7 @@ def GenerarJsonRips(request):
 
     miConexiony.close()
     archivo = 'Env' + str(envioRipsId) + '.txt'
-    nombreCarpeta = 'C:\\EntornosPython\\Pos3\\vulner\\JSONCLINICA\\' + str(archivo)
+    nombreCarpeta = 'C:\\EntornosPython\\Pos6\\JSONCLINICA\\' + str(archivo)
 
     for y in funcionGlobalJson[0]['dato']:
 
@@ -942,7 +942,7 @@ def GenerarJsonRips(request):
     # Aqui grabo la ruta del JSON GLOBAL
 
 
-    miConexiont = psycopg2.connect(host="192.168.37.133", database="vulner2", port="5432", user="postgres",
+    miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
                                    password="123456")
 
     curt = miConexiont.cursor()
@@ -969,7 +969,7 @@ def Load_tablaRipsTransaccion(request, data):
 
     transaccionRips = []
 
-    miConexionx = psycopg2.connect(host="192.168.37.133", database="vulner2", port="5432", user="postgres",
+    miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
                                    password="123456")
     curx = miConexionx.cursor()
 
@@ -1009,7 +1009,7 @@ def Load_tablaRipsUsuarios(request, data):
 
     usuariosRips = []
 
-    miConexionx = psycopg2.connect(host="192.168.37.133", database="vulner2", port="5432", user="postgres",
+    miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
                                    password="123456")
     curx = miConexionx.cursor()
 
@@ -1068,7 +1068,7 @@ def EnviarJsonRips(request):
     miConexionx = None
     try:
 
-        miConexionx = psycopg2.connect(host="192.168.37.133", database="vulner2", port="5432", user="postgres",
+        miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
                                        password="123456")
         curx = miConexionx.cursor()
 
@@ -1108,7 +1108,7 @@ def Load_tablaRipsProcedimientos(request, data):
 
     procedimientosRips = []
 
-    miConexionx = psycopg2.connect(host="192.168.37.133", database="vulner2", port="5432", user="postgres",
+    miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
                                    password="123456")
     curx = miConexionx.cursor()
 
@@ -1148,7 +1148,7 @@ def Load_tablaRipsHospitalizacion(request, data):
 
     hospitalizacionRips = []
 
-    miConexionx = psycopg2.connect(host="192.168.37.133", database="vulner2", port="5432", user="postgres",
+    miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
                                    password="123456")
     curx = miConexionx.cursor()
 
@@ -1191,7 +1191,7 @@ def Load_tablaRipsUrgenciasObs(request, data):
 
     urgenciasObsRips = []
 
-    miConexionx = psycopg2.connect(host="192.168.37.133", database="vulner2", port="5432", user="postgres",
+    miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
                                    password="123456")
     curx = miConexionx.cursor()
 
@@ -1234,7 +1234,7 @@ def Load_tablaRipsMedicamentos(request, data):
 
     medicamentosRips = []
 
-    miConexionx = psycopg2.connect(host="192.168.37.133", database="vulner2", port="5432", user="postgres",
+    miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
                                    password="123456")
     curx = miConexionx.cursor()
 
@@ -1283,7 +1283,7 @@ def TraerJsonRips(request):
 
     jsonRips = []
 
-    miConexionx = psycopg2.connect(host="192.168.37.133", database="vulner2", port="5432", user="postgres",
+    miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
                                    password="123456")
     curx = miConexionx.cursor()
 
@@ -1326,7 +1326,7 @@ def TraerJsonEnvioRips(request):
 
     jsonRips = []
 
-    miConexionx = psycopg2.connect(host="192.168.37.133", database="vulner2", port="5432", user="postgres",
+    miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
                                    password="123456")
     curx = miConexionx.cursor()
 
@@ -1408,7 +1408,7 @@ def BorrarDetalleRips(request):
     try:
 
 
-        miConexion3 = psycopg2.connect(host="192.168.37.133", database="vulner2", port="5432", user="postgres",  password="123456")
+        miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",  password="123456")
         cur3 = miConexion3.cursor()
 
         comando = 'DELETE FROM rips_ripsdetalle WHERE id = '  + "'" + str(envioDetalleRipsId) + "'"
@@ -1455,7 +1455,7 @@ def GuardarRadicacionRips(request):
     miConexion3 = None
     try:
 
-        miConexion3 = psycopg2.connect(host="192.168.37.133", database="vulner2", port="5432", user="postgres",  password="123456")
+        miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",  password="123456")
         cur3 = miConexion3.cursor()
         comando = 'UPDATE rips_ripsEnvios  SET "fechaRadicacion" = ' + "'" +str(fechaRadicacion) + "'," + '"usuarioRadicacion_id" = ' + "'" + str(username_id) + "' WHERE id =" + str(envioRipsId)
         print(comando)

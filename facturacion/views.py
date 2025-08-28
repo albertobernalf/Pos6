@@ -1253,7 +1253,7 @@ def FacturarCuenta(request):
 
     if (liquidacionDatos.convenio_id =='' and tipoFactura == 'FACTURA'):
             print("ENTRE convenio de la liquidacion = " + liquidacionDatos.convenio_id)
-            return JsonResponse({'success': True, 'message': 'Favor ingresar Convenio a Facturar !', 'Factura' : 0 })
+            return JsonResponse({'success': False, 'message': 'Favor ingresar Convenio a Facturar !', 'Factura' : 0 })
 
 
     servicioAmb = Servicios.objects.get(nombre='AMBULATORIO')
@@ -1262,19 +1262,20 @@ def FacturarCuenta(request):
     print ("ingresoId = ", ingresoId.id)
 
     if (ingresoId.salidaClinica=='N' and ingresoId.serviciosIng_id != servicioAmb.id  ):
-	    return JsonResponse({'success': True, 'message': 'Paciente NO tiene Salida Clinica. Consultar medico tratante !', 'Factura' : 0 })
+	    return JsonResponse({'success': False, 'message': 'Paciente NO tiene Salida Clinica. Consultar medico tratante !', 'Factura' : 0 })
 
 
     # AQUI VALDAR SI HAY CIRUGIAS QUE NO ESTEN REALIZADAS  ## OPS ESTO SI HAY QUE REVIZARLO
     
     estadoCirugiaRealizada = EstadosCirugias.objects.get(nombre='REALIZADA')
 
-    cirugiaId = Cirugias.objects.filter(tipoDoc_id=usuarioId.tipoDoc_id , documento_id=usuarioId.documento_id ,consec=usuarioId.consecAdmision, estadoCirugia_id= estadoCirugiaRealizada.id )
-    cirugias = Cirugias.objects.filter(tipoDoc_id=usuarioId.tipoDoc_id , documento_id=usuarioId.documento_id ,consec=usuarioId.consecAdmision, estadoCirugia_id__lte= estadoCirugiaRealizada.id )
-    totalCirugias = Cirugias.objects.filter(tipoDoc_id=usuarioId.tipoDoc_id , documento_id=usuarioId.documento_id ,consec=usuarioId.consecAdmision, estadoCirugia_id= estadoCirugiaRealizada.id )
+    #cirugiaId = Cirugias.objects.filter(tipoDoc_id=usuarioId.tipoDoc_id , documento_id=usuarioId.documento_id ,consec=usuarioId.consecAdmision, estadoCirugia_id= estadoCirugiaRealizada.id )
+    #print("cirugiaId =", cirugiaId )
 
-    if (cirugias >=1):
-        return JsonResponse( {'success': True, 'Mensaje': 'No es posible facturar. Paciente con Facturas No realizadas !', 'Factura': 0})
+    #totalCirugias = Cirugias.objects.filter(tipoDoc_id=usuarioId.tipoDoc_id , documento_id=usuarioId.documento_id ,consec=usuarioId.consecAdmision, estadoCirugia_id= estadoCirugiaRealizada.id )
+
+    #if (cirugias >=1):
+    #    return JsonResponse( {'success': True, 'Mensaje': 'No es posible facturar. Paciente con Cirugias No realizadas !', 'Factura': 0})
 
     # RUTINA ACUMULAR ABONOS RECIBIDOS
 
@@ -1283,7 +1284,6 @@ def FacturarCuenta(request):
     #OJO SI SE REFACTURA NO REALIZA LOS SIGTES 3 QUERYS Y continua con los de insercion de cabezote/detalle en facturacion_facturacion
 
     ## RUTINA ACTUALIZA DX, SERV , MEDIODE AMBULATORIOS
-
 
     miConexion3 = None
     try:
@@ -1308,7 +1308,7 @@ def FacturarCuenta(request):
 
                ## AQUI RUTINA DESOCUPAR CAMA-DEPENDENCIA
 
-               comando2 = 'UPDATE sitios_dependencias SET disponibilidad = ' + "'" + str('L') + "'," + ' "tipoDoc_id" = null , documento_id = null,  consec= null, "fechaLiberacion" = ' + "'" + str(fechaRegistro) + "'"  + ' WHERE "tipoDoc_id" = ' + "'" + str(ingresoId.tipoDoc_id) + "'" + ' AND documento_id = ' + "'" + str(ingresoId.documento_id) + "'" + ' AND consec = ' + str(ingresoId.consec)
+               comando2 = 'UPDATE sitios_dependencias SET disponibilidad = ' + "'" + str('L') + "'," + ' "tipoDoc_id" = null , documento_id = null,  consec= null, "fechaLiberacion" = null , "fechaOcupacion" = null  WHERE "tipoDoc_id" = ' + "'" + str(ingresoId.tipoDoc_id) + "'" + ' AND documento_id = ' + "'" + str(ingresoId.documento_id) + "'" + ' AND consec = ' + str(ingresoId.consec)
                print(comando2)
                cur3.execute(comando2)
 
@@ -1319,7 +1319,7 @@ def FacturarCuenta(request):
 
             # PRIMERO EL CABEZOTE
 
-        comando3 = 'INSERT INTO facturacion_facturacion ("sedesClinica_id", documento_id, "consecAdmision", "fechaFactura", "totalCopagos", "totalCuotaModeradora","totalProcedimientos",   "totalSuministros", "totalFactura", "valorApagar", anulado, anticipos, "fechaRegistro", "estadoReg", "fechaAnulacion", observaciones, "fechaCorte",convenio_id, "tipoDoc_id","usuarioAnula_id","usuarioRegistro_id") SELECT ' "'" + str(sede) + "'" + ', documento_id, "consecAdmision", ' + "'" + str(fechaRegistro) + "'" + ' , "totalCopagos", "totalCuotaModeradora", "totalProcedimientos",  "totalSuministros", "totalLiquidacion", "valorApagar", anulado, anticipos, ' + "'" + str(fechaRegistro) + "'" + ' ,  ' + "'" + str('A') + "'" + ' , "fechaAnulacion", observaciones, "fechaCorte",convenio_id, "tipoDoc_id","usuarioAnula_id", ' + "'" + str(username_id) + "'" + ' FROM facturacion_liquidacion WHERE id =  ' + liquidacionId + ' RETURNING id  '
+        comando3 = 'INSERT INTO facturacion_facturacion ("sedesClinica_id", documento_id, "consecAdmision", "fechaFactura", "totalCopagos", "totalCuotaModeradora","totalProcedimientos",   "totalSuministros", "totalFactura", "valorApagar", anulado, anticipos, "fechaRegistro", "estadoReg", "fechaAnulacion", observaciones, "fechaCorte",convenio_id, "tipoDoc_id","usuarioAnula_id","usuarioRegistro_id",  "totalAbonos", "totalRecibido") SELECT ' "'" + str(sede) + "'" + ', documento_id, "consecAdmision", ' + "'" + str(fechaRegistro) + "'" + ' , "totalCopagos", "totalCuotaModeradora", "totalProcedimientos",  "totalSuministros", "totalLiquidacion", "valorApagar", anulado, anticipos, ' + "'" + str(fechaRegistro) + "'" + ' ,  ' + "'" + str('A') + "'" + ' , "fechaAnulacion", observaciones, "fechaCorte",convenio_id, "tipoDoc_id","usuarioAnula_id", ' + "'" + str(username_id) + "'" + '  , "totalAbonos", "totalRecibido"  FROM facturacion_liquidacion WHERE id =  ' + liquidacionId + ' RETURNING id  '
 
         print(comando3)
         cur3.execute(comando3)
@@ -1343,7 +1343,7 @@ def FacturarCuenta(request):
 
         # AHORA EL DETALLE
 
-        comando5 = 'INSERT INTO facturacion_facturaciondetalle ("consecutivoFactura", fecha, cantidad, "valorUnitario", "valorTotal",  cirugia, "fechaCrea", "fechaModifica", observaciones, "fechaRegistro", "estadoRegistro", "examen_id", cums_id, "usuarioModifica_id", "usuarioRegistro_id", facturacion_id, "tipoHonorario_id", "tipoRegistro") SELECT  consecutivo, fecha, cantidad, "valorUnitario", "valorTotal",  cirUgia, "fechaCrea", "fechaModifica", observaciones, "fechaRegistro", "estadoRegistro", "examen_id", cums_id, "usuarioModifica_id", "usuarioRegistro_id", ' + str(facturacionId) + ', "tipoHonorario_id", "tipoRegistro" FROM facturacion_liquidaciondetalle WHERE liquidacion_id =  ' + liquidacionId
+        comando5 = 'INSERT INTO facturacion_facturaciondetalle ("consecutivoFactura", fecha, cantidad, "valorUnitario", "valorTotal",  cirugia_id , "fechaCrea", "fechaModifica", observaciones, "fechaRegistro", "estadoRegistro", "examen_id", cums_id, "usuarioModifica_id", "usuarioRegistro_id", facturacion_id, "tipoHonorario_id", "tipoRegistro") SELECT  consecutivo, fecha, cantidad, "valorUnitario", "valorTotal",  cirugia_id , "fechaCrea", "fechaModifica", observaciones, "fechaRegistro", "estadoRegistro", "examen_id", cums_id, "usuarioModifica_id", "usuarioRegistro_id", ' + str(facturacionId) + ', "tipoHonorario_id", "tipoRegistro" FROM facturacion_liquidaciondetalle WHERE liquidacion_id =  ' + liquidacionId
         print(comando5)
         cur3.execute(comando5)
 
@@ -1381,12 +1381,12 @@ def FacturarCuenta(request):
 
         # AQUI ACTUALIZAMOS EL ESTADO DE LA CIRUGIA SI ES CIRUGIA
 
-        if (totalCirugias) >= 1:
-            estadoCirugiaFacturada = EstadosCirugias.objects.get(nombre='FACTURADA')
+        #if (totalCirugias) >= 1:
+        #    estadoCirugiaFacturada = EstadosCirugias.objects.get(nombre='FACTURADA')
 
-            comando10= 'UPDATE cirugia_cirugias SET "estadoCirugia_id" = ' + "'" + str(estadoCirugiaFacturada) + "' WHERE id = " + "'" + str(cirugiaId.id) + "'"
-            print(comando10)
-            cur3.execute(comando10)
+        #    comando10= 'UPDATE cirugia_cirugias SET "estadoCirugia_id" = ' + "'" + str(estadoCirugiaFacturada) + "' WHERE id = " + "'" + str(cirugiaId.id) + "'"
+        #    print(comando10)
+        #    cur3.execute(comando10)
 
         miConexion3.commit()
         cur3.close()
@@ -1457,6 +1457,7 @@ def load_dataFacturacion(request, data):
 
     desdeFecha = d['desdeFecha']
     hastaFecha = d['hastaFecha']
+    hastaFecha = timezone.now()
     desdeFactura = d['desdeFactura']
     hastaFactura = d['hastaFactura']
     bandera = d['bandera']
@@ -2053,7 +2054,7 @@ def load_dataFacturacionDetalle(request, data):
                                    password="123456")
     cur = miConexionx.cursor()
 
-    comando = 'select liq.id id,"consecutivoFactura" consecutivo ,  cast(date(fecha)||\' \'||to_char(fecha, \'HH:MI:SS\') as text) fecha  ,  liq.cantidad ,  "valorUnitario" ,  "valorTotal" ,  cirugia ,  cast(date("fechaCrea")||\' \'||to_char("fechaCrea", \'HH:MI:SS\') as text)  fechaCrea , liq.observaciones ,  "estadoRegistro" ,  "examen_id" ,  cums_id , exa.nombre  nombreExamen  ,  facturacion_id ,  liq."tipoHonorario_id" ,  "tipoRegistro" , liq."estadoRegistro" estadoReg FROM facturacion_facturaciondetalle liq inner join clinico_examenes exa on (exa.id = liq."examen_id")  where facturacion_id= ' + "'" +  str(liquidacionId) + "'" +  ' UNION select liq.id id,"consecutivoFactura"  consecutivo, cast(date(fecha)||\' \'||to_char(fecha, \'HH:MI:SS\') as text) fecha  ,  liq.cantidad ,  "valorUnitario" ,  "valorTotal" ,  cirugia ,  cast(date("fechaCrea")||\' \'||to_char("fechaCrea", \'HH:MI:SS\') as text)  fechaCrea , liq.observaciones ,  "estadoRegistro" ,  "examen_id" ,  cums_id , sum.nombre  nombreExamen  ,  facturacion_id ,  liq."tipoHonorario_id" ,  "tipoRegistro" , liq."estadoRegistro" estadoReg FROM facturacion_facturaciondetalle liq inner join facturacion_suministros sum on (sum.id = liq.cums_id)  where facturacion_id= '  + "'" +  str(liquidacionId) + "'" + ' AND "estadorRegistro" = ' + "'" + str('A') + "'" + ' order by consecutivo'
+    comando = 'select liq.id id,"consecutivoFactura" consecutivo ,  cast(date(fecha)||\' \'||to_char(fecha, \'HH:MI:SS\') as text) fecha  ,  liq.cantidad ,  "valorUnitario" ,  "valorTotal" ,  cirugia_id ,  cast(date("fechaCrea")||\' \'||to_char("fechaCrea", \'HH:MI:SS\') as text)  fechaCrea , liq.observaciones ,  "estadoRegistro" ,  "examen_id" ,  cums_id , exa.nombre  nombreExamen  ,  facturacion_id ,  liq."tipoHonorario_id" ,  "tipoRegistro" , liq."estadoRegistro" estadoReg FROM facturacion_facturaciondetalle liq inner join clinico_examenes exa on (exa.id = liq."examen_id")  where facturacion_id= ' + "'" +  str(liquidacionId) + "'" +  ' UNION select liq.id id,"consecutivoFactura"  consecutivo, cast(date(fecha)||\' \'||to_char(fecha, \'HH:MI:SS\') as text) fecha  ,  liq.cantidad ,  "valorUnitario" ,  "valorTotal" ,  cirugia_id ,  cast(date("fechaCrea")||\' \'||to_char("fechaCrea", \'HH:MI:SS\') as text)  fechaCrea , liq.observaciones ,  "estadoRegistro" ,  "examen_id" ,  cums_id , sum.nombre  nombreExamen  ,  facturacion_id ,  liq."tipoHonorario_id" ,  "tipoRegistro" , liq."estadoRegistro" estadoReg FROM facturacion_facturaciondetalle liq inner join facturacion_suministros sum on (sum.id = liq.cums_id)  where facturacion_id= '  + "'" +  str(liquidacionId) + "'" + ' AND "estadoRegistro" = ' + "'" + str('A') + "'" + ' order by consecutivo'
 
     print(comando)
 
