@@ -815,3 +815,7 @@ ojo pendiente en aplicacion de medicamentos arreglar cuando aplica la modal no p
 -- ojo verificar cuando se crea admision desde triage si hay consec=0 de conveno parricular lo pase a consec=1 en pacientesconveniosIngresos
 
 -- OPS ESTA GRABANDO MAL EL TOTAL DE LOS SUMINISTROPS DESDE FARMACIA Y CREO DEMAS 
+
+
+-- OPS ESTABA EN ABONOS Y ME INSERTO UN liquidacion_detalle,, de mi papa LUIS ERBNESTO BERNAL,
+-- que fue lo que paso

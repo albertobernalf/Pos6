@@ -695,9 +695,9 @@ def AdicionarDespachosDispensa(request):
                 consecLiquidacion = int(consecLiquidacion) + 1
 
 
-        ## OJOOOO
-        ## AQUI FALTA UN except
-
+        miConexion3.commit()
+        #cur3.close()
+        #miConexion3.close()
 
             # Fin rutina Facturacion Medicamentos detalle
 
@@ -740,11 +740,16 @@ def AdicionarDespachosDispensa(request):
         comando = 'UPDATE facturacion_liquidacion SET "totalSuministros" = ' + "'" + str(totalSuministros) + "'" + ',"totalProcedimientos" = ' + "'" + str(totalProcedimientos) + "'"  + ', "totalCopagos" = ' + "'"  + str(totalCopagos) + "'" + ' , "totalCuotaModeradora" = ' + "'"  + str(totalCuotaModeradora) + "'"  + ', anticipos = ' + "'" + str(totalAnticipos) + "'" + ' ,"totalAbonos" = ' + "'" + str(totalAbonos) + "'"  + ', "totalLiquidacion" = ' + "'" + str(totalLiquidacion) + "'" + ', "valorApagar" = ' + "'"  + str(totalApagar) + "'" + ', "totalRecibido" = ' + "'" + str(totalRecibido) + "'" + ' WHERE id =' + str(liquidacionId)
         cur3.execute(comando)
 
-        ## FIN rutina de Facturacion Para Medicamentos Total
-
         miConexion3.commit()
         cur3.close()
         miConexion3.close()
+
+
+        ## FIN rutina de Facturacion Para Medicamentos Total
+
+
+        ## OJOOOO
+        ## AQUI FALTA UN except
 
         return JsonResponse({'success': True, 'Mensaje': 'Despacho creado satisfactoriamente!' })
 

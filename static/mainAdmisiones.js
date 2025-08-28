@@ -333,7 +333,7 @@ function arrancaAdmisiones(valorTabla,valorData)
                        return btn;
                     },
 
-                    "targets": 7
+                    "targets": 8
                }
             ],
 	 pageLength: 3,
@@ -377,6 +377,7 @@ function arrancaAdmisiones(valorTabla,valorData)
                 { data: "fields.nombreFormaPago"},
                 { data: "fields.valor"},
                 { data: "fields.descripcion"},
+		{ data: "fields.estadoReg"},
             ]
              }
 
