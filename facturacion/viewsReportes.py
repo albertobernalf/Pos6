@@ -12,10 +12,10 @@ import datetime
 # import onnx as onnx
 # import onnxruntime as ort
 import pyttsx3
+
 import speech_recognition as sr
 from django.core.serializers import serialize
 from django.db.models.functions import Cast, Coalesce
-from django.utils.timezone import now
 from django.db.models import Avg, Max, Min
 #from .forms import historiaForm, historiaExamenesForm
 from datetime import datetime
@@ -51,6 +51,7 @@ import psycopg2
 import json
 import datetime
 import cgi
+from django.utils import timezone
 
 class PDFFacturacion(FPDF):
     def __init__(self, tipoDocId, documentoId, consec, ingresoId, factura, *args, **kwargs):
@@ -90,20 +91,23 @@ class PDFFacturacion(FPDF):
 
         miConexiont.close()
 
-        ## FIN CURSOR
+        factura = Facturacion.objects.get(id=self.factura)
 
+
+        ## FIN CURSOR
+        self.image(factura.codigoQr, 180, 5, 20, 10)
 
         self.ln(4)
         self.set_font('Times', 'B', 8)
         self.cell(180, 1, empresa[0]['nombreEmpresa'], 0, 0, 'C')
         self.ln(1)
-        self.cell(80, 11, '', 0, 0, 'L')
+        self.cell(77, 11, '', 0, 0, 'L')
         self.cell(10, 11, 'N.I.T: ', 0, 0, 'C')
         self.cell(13, 11, empresa[0]['nit'], 0, 0, 'L')
         self.cell(20, 11, empresa[0]['nitVerificacion'], 0, 0, 'L')
 
         self.ln(5)
-        self.cell(70, 11, '', 0, 0, 'L')
+        self.cell(60, 12, '', 0, 0, 'L')
         self.cell(30, 12, empresa[0]['direccionPrestador'], 0, 0, 'C')
         self.cell(5, 11, 'Tel:', 0, 0, 'L')
         self.cell(25, 12, empresa[0]['telefonoPrestador'], 0, 0, 'C')
@@ -119,37 +123,42 @@ class PDFFacturacion(FPDF):
         # Arial bold 15
         self.set_font('Times', 'B', 7)
         self.ln(3)
-        self.cell(120, 13, 'Cufe : 6b7dd1910792ec82b16f5a30d83da5c8f10895b42e3a685a8ee0f0edfc9e32e087576ba23525a50091a6eeb5bd9a9c5e ', 0, 0, 'L')
+        #self.cell(120, 13, 'Cufe : 6b7dd1910792ec82b16f5a30d83da5c8f10895b42e3a685a8ee0f0edfc9e32e087576ba23525a50091a6eeb5bd9a9c5e ', 0, 0, 'L')
+        self.cell(7, 13,'Cufe : ', 0, 0, 'L')
+        self.cell(120, 13, str(factura.cufeDefinitivo), 0, 0, 'L')
+
         self.ln(3)
-        self.cell(30, 14, 'FACTURA DE VENTA:', 0, 0, 'L')
+        self.set_font('Times', 'B', 8)
+        self.cell(60, 14, 'FACTURA ELECTRONICA DE VENTA:', 0, 0, 'L')
         self.cell(25, 14, str(self.factura), 0, 0, 'L')
-        self.cell(60, 14, '', 0, 0, 'L')
+        self.cell(20, 14, '', 0, 0, 'L')
         parametro1 = Parametros.objects.get(nombre='Factura_1')
-        self.cell(70, 14, str(parametro1.parametro1), 0, 0, 'L')
+        self.cell(60, 14, str(parametro1.parametro1), 0, 0, 'L')
         #self.cell(70, 14, 'AUTORETENEDOR EN RENTA RESOLUCION 151 DEL 14-01-2016', 0, 0, 'L')
         self.ln(3)
-        self.cell(40, 11, '', 0, 0, 'L')
+        self.set_font('Times', '', 7)
+        self.cell(105, 15, '', 0, 0, 'L')
         parametro2 = Parametros.objects.get(nombre='Factura_2')
-        self.cell(60, 14, str(parametro2.parametro1), 0, 0, 'L')
+        self.cell(60, 15, str(parametro2.parametro1), 0, 0, 'L')
         #self.cell(60, 14, 'Gran Contribuyente Res. 0012220 de 26-12-2022 - Actividad económica 8610', 0, 0, 'L')
         self.ln(3)
-        self.cell(30, 15, '', 0, 0, 'L')
+        self.cell(10, 15, '', 0, 0, 'L')
         fechaExpedicion = datetime.datetime.now()
         self.cell(25, 15, 'Fecha de Expedición:', 0, 0, 'L')
-        self.cell(30, 15, str(fechaExpedicion), 0, 0, 'L')
+        self.cell(40, 15, str(fechaExpedicion), 0, 0, 'L')
 
-        self.cell(50, 15, 'Fecha de Vencimiento (Cartera):', 0, 0, 'L')
+        self.cell(95, 15, 'Fecha de Vencimiento (Cartera):', 0, 0, 'L')
         #self.cell(30, 15, 'Pagina 1 de 4', 0, 0, 'L')
         self.cell(30, 15, 'Pagina ' + str(self.page_no()) + '/{nb}', 0, 0, 'C')
         self.ln(3)
         self.cell(30, 16, '', 0, 0, 'C')
         parametro3 = Parametros.objects.get(nombre='Factura_3')
-        self.cell(100, 16, str(parametro3.parametro1), 0, 0, 'L')
+        self.cell(130, 16, str(parametro3.parametro1), 0, 0, 'C')
         #self.cell(100, 16, 'Favor NO efectuar retención de Industria y Comercio e IVA - Somos agentes retenedores de IVA', 0, 0, 'L')
         self.ln(3)
         self.cell(30, 17, '', 0, 0, 'L')
-        parametro4 = Parametros.objects.get(nombre='Factura_2')
-        self.cell(100, 17, str(parametro4.parametro1), 0, 0, 'L')
+        parametro4 = Parametros.objects.get(nombre='Factura_4')
+        self.cell(130, 17, str(parametro4.parametro1), 0, 0, 'C')
         #self.cell(100, 17, 'Resolución DIAN # 18764069407849 del 22/04/2024 al 22/10/2025 de la CME342.410,00 a la CME500.000,00', 0, 0, 'L')
         self.set_line_width(0.4)
         # Dibuja el borde
@@ -180,40 +189,40 @@ class PDFFacturacion(FPDF):
         miConexiont.close()
 
         ## FIN CURSOR
-        self.cell(25, 20, 'Nombre del Paciente:', 0, 0, 'L')
+        self.cell(30, 20, 'Nombre del Paciente:', 0, 0, 'L')
         self.set_font('Times', '', 9)
 
-        self.cell(30, 20, paciente[0]['nombre'], 0, 0, 'C')
+        self.cell(130, 20, paciente[0]['nombre'], 0, 0, 'L')
         self.set_font('Times', 'B', 7)
-        self.cell(25, 20, 'Admision:', 0, 0, 'L')
+        self.cell(15, 20, 'Admision:', 0, 0, 'L')
         self.set_font('Times', '', 9)
-        self.cell(20, 20, str(paciente[0]['ingreso']), 0, 0, 'C')
+        self.cell(15, 20, str(paciente[0]['ingreso']), 0, 0, 'L')
         self.ln(3)
         self.set_font('Times', 'B', 7)
-        self.cell(25, 21, 'Identificación:', 0, 0, 'L')
+        self.cell(30, 21, 'Identificación:', 0, 0, 'L')
         self.set_font('Times', '', 9)
-        self.cell(5, 21, paciente[0]['abreviatura'], 0, 0, 'C')
-        self.cell(30, 21, paciente[0]['documento'], 0, 0, 'C')
+        self.cell(5, 21, paciente[0]['abreviatura'], 0, 0, 'L')
+        self.cell(50, 21, paciente[0]['documento'], 0, 0, 'L')
         self.set_font('Times', 'B', 7)
-        self.cell(15, 21, 'Edad:', 0, 0, 'L')
-        self.cell(25, 21, str(paciente[0]['edad']), 0, 0, 'C')
+        self.cell(17, 21, 'Edad:', 0, 0, 'L')
+        self.cell(25, 21, str(paciente[0]['edad']), 0, 0, 'L')
         self.cell(20, 21, 'Fec. Ingreso:', 0, 0, 'L')
-        self.cell(20, 21, str(paciente[0]['fechaIngreso']), 0, 0, 'C')
+        self.cell(20, 21, str(paciente[0]['fechaIngreso']), 0, 0, 'L')
         self.ln(3)
-        self.cell(25, 22, 'Dirección:', 0, 0, 'L')
-        self.cell(50, 22, paciente[0]['direccion'], 0, 0, 'C')
-        self.cell(10, 22, 'Teléfono:', 0, 0, 'L')
-        self.cell(20, 22, paciente[0]['telefono'], 0, 0, 'C')
+        self.cell(30, 22, 'Dirección:', 0, 0, 'L')
+        self.cell(55, 22, paciente[0]['direccion'], 0, 0, 'L')
+        self.cell(17, 22, 'Teléfono:', 0, 0, 'L')
+        self.cell(25, 22, paciente[0]['telefono'], 0, 0, 'L')
         self.cell(20, 22, 'Fec. Egreso:', 0, 0, 'L')
-        self.cell(20, 22, str(paciente[0]['fechaSalida']), 0, 0, 'C')
+        self.cell(20, 22, str(paciente[0]['fechaSalida']), 0, 0, 'L')
         self.ln(3)
-        self.cell(25, 23, 'Municipio:', 0, 0, 'L')
-        self.cell(5, 23, paciente[0]['municipioPaciente'], 0, 0, 'C')
+        self.cell(30, 23, 'Municipio:', 0, 0, 'L')
+        self.cell(50, 23, paciente[0]['municipioPaciente'], 0, 0, 'L')
         self.ln(3)
-        self.cell(25, 23, 'Responsable:', 0, 0, 'L')
-        self.cell(60, 24, paciente[0]['nombreEmpresa'], 0, 0, 'C')
-        self.cell(8, 24, 'Nit:', 0, 0, 'L')
-        self.cell(15, 24, paciente[0]['nit'], 0, 0, 'C')
+        self.cell(30, 23, 'Responsable:', 0, 0, 'L')
+        self.cell(55, 24, paciente[0]['nombreEmpresa'], 0, 0, 'L')
+        self.cell(17, 24, 'Nit:', 0, 0, 'L')
+        self.cell(15, 24, paciente[0]['nit'], 0, 0, 'L')
         self.set_line_width(0.4)
         # Dibuja el borde
         self.rect(5.0,64.0, 200.0, 5.0)  # Coordenadas x, y, ancho, alto
@@ -261,6 +270,9 @@ def ImprimirFactura(request):
     pacienteId = Usuarios.objects.get(id=documentoId)
     print("documentoPaciente = ", pacienteId.documento)
 
+    #fechaRegistro = timezone.now()
+    fechaRegistro = timezone.now()
+
     miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
                                    password="123456")
 
@@ -306,7 +318,6 @@ def ImprimirFactura(request):
     print(comando)
     lineaConcepto=1
     conceptos = []
-
 
     for id, nombreConcepto in curt.fetchall():
         conceptos.append(
@@ -360,10 +371,75 @@ def ImprimirFactura(request):
 
     miConexiont.close()
 
+
+    miConexiony = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                   password="123456")
+    cury = miConexiony.cursor()
+
+    comando = 'SELECT "totalFactura" , ("totalRecibido"  - anticipos) abonos, anticipos, ' + "'" + str('0') + "'" + ' descuentos, "valorApagar" , "valorAPagarLetras" , planta.nombre usuario FROM facturacion_facturacion fac INNER JOIN planta_planta planta ON (planta.id="usuarioRegistro_id")   WHERE fac.id= ' + "'" + str(factura) + "'"
+
+
+    cury.execute(comando)
+
+    factura = []
+    lineaDetalle=lineaDetalle +2
+
+    for totalFactura, abonos, anticipos, descuentos, valorApagar, valorAPagarLetras, usuario in cury.fetchall():
+        factura.append(
+            {'totalFactura': totalFactura, 'abonos': abonos, 'anticipos': anticipos, 'descuentos': descuentos,
+             'valorApagar': valorApagar,'valorAPagarLetras':valorAPagarLetras,'usuario':usuario})
+
+    pdf.set_line_width(0.4)
+    # Dibuja el borde
+    pdf.rect(5.0, 90.0, 200.0, 25)  # Coordenadas x, y, ancho, alto
+
     ## Aquip totales
+    pdf.set_font('Times', 'B', 7)
     pdf.ln(4)
-    pdf.cell(30, 26, 'Valor en letras', 0, 0, 'L')
-    pdf.ln(4)
+    pdf.cell(140, 26, 'Valor en letras', 0, 0, 'L')
+    pdf.cell(30, 26, 'SubTotal Cargos:', 0, 0, 'L')
+    pdf.cell(30, 26 , str(totalFactura), 0, 0, 'L')
+    pdf.ln(3)
+    lineaDetalle = lineaDetalle + 1
+    pdf.cell(140, 27 , str(valorAPagarLetras), 0, 0, 'L')
+    pdf.cell(30, 27, 'Abonos o Cuota:', 0, 0, 'L')
+    pdf.cell(30, 27 , str(abonos), 0, 0, 'L')
+    pdf.ln(3)
+    lineaDetalle = lineaDetalle + 1
+    pdf.cell(140, 28 , str(''), 0, 0, 'L')
+    pdf.cell(30, 28, 'Anticipos:', 0, 0, 'L')
+    pdf.cell(30, 28 , str(anticipos), 0, 0, 'L')
+
+    pdf.ln(3)
+    lineaDetalle = lineaDetalle + 1
+    pdf.cell(140, 29 , str(''), 0, 0, 'L')
+    pdf.cell(30, 29, 'Descuentos:', 0, 0, 'L')
+    pdf.cell(30, 29 , str(descuentos), 0, 0, 'L')
+
+    pdf.ln(3)
+    lineaDetalle = lineaDetalle + 1
+    pdf.cell(140, 30 , str(''), 0, 0, 'L')
+    pdf.cell(30, 30, 'Valor a Pagar:', 0, 0, 'L')
+    pdf.cell(30, 30 , str(valorApagar), 0, 0, 'L')
+
+    pdf.ln(8)
+
+    pdf.cell(40, 34, 'Facturado por:', 0, 0, 'L')
+    pdf.cell(100, 34, str(usuario), 0, 0, 'L')
+    pdf.cell(40, 34, 'Firma del Paciente o Reponsable:', 0, 0, 'L')
+
+    pdf.ln(3)
+    pdf.cell(40, 35, str(''), 0, 0, 'L')
+    pdf.cell(40, 35, 'Facturador(a):', 0, 0, 'L')
+
+    pdf.ln(8)
+    pdf.cell(40, 36, 'Fecha de impresion:', 0, 0, 'L')
+    pdf.cell(150, 36, str(fechaRegistro), 0, 0, 'L')
+
+    miConexiont.close()
+
+
+
 
     carpeta = 'C:\EntornosPython\Pos6\JSONCLINICA\HistoriasClinicas/'
     print("carpeta = ", carpeta)

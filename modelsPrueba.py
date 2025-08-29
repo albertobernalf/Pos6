@@ -808,20 +808,30 @@ ojo pendiente en aplicacion de medicamentos arreglar cuando aplica la modal no p
 -- ops agregfue tan solo un aceaminfen y no me refrescon totales no grabo en cabezpote facturacion_lquidacion un registro manul de acetaminofen
 -- ojop hay un registro de laliquiacin de eumelia con cums_id y examen_id ala vae en loqudacindetalle ERROR Y ESO COMO PASO ??
 -- ojo en tarifarios, paramettizar la ruta de crague de procedimientos, suminis, honoraro en tabla parametros
+
 -- op el lio es el conscuivoAdmision que se deb actulizar al momento de pasar lel triage al convenio
     -- primero si no existe convenio crea particular con el nvo consecutivo
     --- segundo actualiza elconsecutivo
 
 -- ojo verificar cuando se crea admision desde triage si hay consec=0 de conveno parricular lo pase a consec=1 en pacientesconveniosIngresos
 
--- OPS ESTA GRABANDO MAL EL TOTAL DE LOS SUMINISTROPS DESDE FARMACIA Y CREO DEMAS 
-
-
 -- OPS ESTABA EN ABONOS Y ME INSERTO UN liquidacion_detalle,, de mi papa LUIS ERBNESTO BERNAL,
--- que fue lo que paso
--- OJO PENDIENTE VALIDAR CUANDO CAMBIE EL VALOR D ELOS PROCED O SUMINSYROS EN LA CUENTRA DEL PACIENTE NO DESCUADRE TOTAL PROCE Y TOTAL SUMINI Y TOTAL LIQUIDACIO Y APAGAR ETC
 
 -- cosas por hacer
   -- los abonos pistear totally
   -- facturar, pistear abonos
-  -- crear en detalle factura los pagos, con totales de factura etc
+  -- los filtros de las busqueda de facturas por fechas o numero de factura nop funciona
+  -- ojo se crea la carpeta jsonclinic/rips, enrutar
+  -- ojo los nombres d elos archvos con el nro del folio, para que norepita
+  -- REALIZAR ejercicio completo desde ceros hasta factura hasta rips una vez mas solidop
+  -- como es el lio de la facturacion de una cirugia
+  -- la pantalla de farmacia no refrescxa bien cuan hace despacho
+  --como es el lio de los mensajes de error hay que mejorarlos mal
+  -- como es eso de tx--> rollback criticos ni permitir basira
+ -- no se en qiue lado mecreo un cabezote
+  -- ops validar en ingresos, dx_ingreso, servicio_ingreso, medicoIngreso, actial y salid PILAS
+  -- y el repporteaor que pasa ?
+  -- Lo ultimo ultimo es tablas particionadas ver cuales. Umm yp creo la gran mayoria.
+
+
+

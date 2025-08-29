@@ -58,12 +58,8 @@ function arrancaLiquidacion(valorTabla,valorData)
             columnDefs: [
 		{ className: 'centered', targets: [0, 1, 2, 3, 4, 5] },
 	    { width: '10%', targets: [2,3] },
-		{     "render": function ( data, type, row ) {
-                        var btn = '';
-                          btn = btn + " <input type='radio'  name='miLiquidacion' class='form-check-input editPostLiquidacion' data-pk='"  + row.pk + "'>" + "</input>";
-                       return btn;
-                    },
-                    "targets": 11
+		{    
+                    "targets": 12
                }
             ],
 	 pageLength: 3,
@@ -93,6 +89,13 @@ function arrancaLiquidacion(valorTabla,valorData)
                  dataSrc: ""
             },
             columns: [
+
+		{ "render": function ( data, type, row ) {
+                        var btn = '';
+                          btn = btn + " <input type='radio'  name='miLiquidacion' class='form-check-input editPostLiquidacion' data-pk='"  + row.pk + "'>" + "</input>";
+                       return btn;
+                    }
+		},
 		{
 		"render": function ( data, type, row ) {
                         var btn = '';
@@ -321,12 +324,8 @@ autoWidth: false,
             paging:false,
             columnDefs: [
 		{ className: 'centered', targets: [0, 1, 2, 3, 4, 5] },
-		{     "render": function ( data, type, row ) {
-                        var btn = '';
-                          btn = btn + " <input type='radio' name='miFacturacion' class='form-check-input editPostFacturacion' data-pk='"  + row.pk + "'>" + "</input>";                       return btn;
-                        return btn;
-			},
-                    "targets": 14
+		{     
+                    "targets": 15
                }
             ],
 	 pageLength: 3,
@@ -354,7 +353,15 @@ autoWidth: false,
                  dataSrc: ""
             },
             columns: [
-{
+		{
+			"render": function ( data, type, row ) {
+                        var btn = '';
+                          btn = btn + " <input type='radio' name='miFacturacion' class='form-check-input editPostFacturacion' data-pk='"  + row.pk + "'>" + "</input>";                       return btn;
+                        return btn;
+			}
+		},
+
+	{
 		"render": function ( data, type, row ) {
                         var btn = '';
 
@@ -663,7 +670,7 @@ const initDataTableLiquidacion = async () => {
 	//    dataTableFacAbonosInitialized = true;
 
 	 $('#tablaLiquidacion tbody tr:eq(0) .miLiquidacion').prop('checked', true);  // Checkprimera fila el checkbox creo solo javascript
-	alert("se supone ya seleeciode liquidacion");
+
 
 }
 
@@ -691,7 +698,7 @@ window.addEventListener('load', async () => {
 	          var post_id = $(this).data('pk');
 		var row = $(this).closest('tr'); // Encuentra la fila
 
-		 alert("entre pk = " + post_id);
+		// alert("entre pk = " + post_id);
 
 
 
@@ -712,8 +719,8 @@ window.addEventListener('load', async () => {
 	           dataType : 'json',
 	  		success: function (data) {
 
-			alert("llegue con esta data" + data);
-			alert("llegue con esta data.id" + data.id);
+	//		alert("llegue con esta data" + data);
+	//		alert("llegue con esta data.id" + data.id);
 
 		var liquidacionId = data.id;
 
@@ -864,7 +871,7 @@ window.addEventListener('load', async () => {
 				
 		        data2['liquidacionId'] = data.id;
 
-			alert("Voy a cargar los abonos de esta liquidacion= " + data2['liquidacionId']);
+			// alert("Voy a cargar los abonos de esta liquidacion= " + data2['liquidacionId']);
        
 			document.getElementById("tipoIngreso").value = data.tipo;
 
@@ -910,7 +917,7 @@ window.addEventListener('load', async () => {
 	          var post_id = $(this).data('pk');
 		var row = $(this).closest('tr'); // Encuentra la fila
 
-		 alert("ImprimirFactura entre pk = " + post_id);
+		// alert("ImprimirFactura entre pk = " + post_id);
 
 	var ingresoId = post_id;
 
@@ -973,6 +980,18 @@ window.addEventListener('load', async () => {
 		 $('#RconsecAdmision').val(data.consecAdmision);
 		 $('#RnombreConvenio').val(data.nombreConvenio);
 
+$('#RtotalSuministros').val(data.totalSuministros);
+$('#RtotalProcedimientos').val(data.totalProcedimientos);
+$('#RtotalCopagos').val(data.totalCopagos);
+$('#RtotalCuotaModeradora').val(data.totalCuotaModeradora);
+$('#RtotalAnticipos').val(data.totalAnticipos);
+$('#RtotalAbonos').val(data.totalAbonos);
+$('#RtotalRecibido').val(data.totalRecibido);
+$('#RvalorApagar').val(data.valorApagar);
+$('#RtotalFactura').val(data.totalFactura);
+alert("En letras = " + data.valorAPagarLetras );
+$('#RvalorAPagarLetras').val(data.valorAPagarLetras);
+
 
 			 var data2 =  {}   ;
 			data2['username'] = username;
@@ -992,7 +1011,6 @@ window.addEventListener('load', async () => {
 
 		  arrancaLiquidacion(5,data2);
 		    dataTableFacturacionDetalleInitialized = true;
-
 
 
 			document.getElementById("mensajesError").innerHTML = data.message;
@@ -1156,7 +1174,7 @@ window.addEventListener('load', async () => {
         --------------------------------------------*/
         $('#saveBtnCrearAbonosFacturacion').click(function (e) {
             e.preventDefault();
-       		alert (" Entre a Grabar el abono");
+       //		alert (" Entre a Grabar el abono");
 
             $.ajax({
                 data: $('#postFormCrearAbonosFacturacion').serialize(),
@@ -1463,7 +1481,7 @@ document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Admini
 function AFacturar()
 {
 
-	alert ("Entre a facturar ");
+//	alert ("Entre a facturar ");
 
  	var liquidacionId = document.getElementById("liquidacionId").value;
  	var username_id = document.getElementById("username_id").value;
@@ -1713,7 +1731,7 @@ function AnularFactura()
 
 function ReFacturar()
 {
-	alert ("Entre Refacturar ");
+  //	alert ("Entre Refacturar ");
 
  	var facturacionId = document.getElementById("Rfactura").value;
 	alert("Factura No " + facturacionId);
@@ -1815,7 +1833,7 @@ document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Admini
 
 function ConsultarFacturas()
 {
-	alert("Entre Consultar Facturas");
+	// alert("Entre Consultar Facturas");
 
         var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
         var username = document.getElementById("username").value;
@@ -1827,8 +1845,8 @@ function ConsultarFacturas()
   	var desdeFactura = document.getElementById("fdesdeFactura").value;
         var hastaFactura = document.getElementById("fhastaFactura").value;
 
-	alert ("desdeFactura = " + desdeFactura )
-	alert ("hastaFactura  = " + hastaFactura  )
+	// alert ("desdeFactura = " + desdeFactura )
+	// alert ("hastaFactura  = " + hastaFactura  )
   	var fFechaDesde = document.getElementById("fFechaDesde").value;
     var fFechaHasta = document.getElementById("fFechaHasta").value;
 
@@ -1867,7 +1885,7 @@ function ConsultarFacturas()
 
 function TrasladoConvenio()
 {
-	alert ("Entre a Trasladar Convenio ");
+	// alert ("Entre a Trasladar Convenio ");
 
  	var liquidacionId = document.getElementById("liquidacionId").value;
  	var tipoIng = document.getElementById("tipoIng").value;

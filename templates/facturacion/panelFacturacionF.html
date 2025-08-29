@@ -87,7 +87,9 @@ div.dataTables_filter input {
              		   <div class="row">
                                         <table  id= "tablaLiquidacion" class=" display nowrap table table-striped" style="width: 100%";>
                                            <thead>
-                                            <tr>                                      
+                                            <tr>   
+						 <th>Action</th>                                   
+                                                <th>Action</th>
                                                 <th>id</th>
 						<th>Sel</th>
                                                 <th>TipoDoc</th>
@@ -99,7 +101,7 @@ div.dataTables_filter input {
                                                 <th>Cama</th>
 						<th>Convenio</th>
 						<th>salida</th>
-                                                <th>Action</th>
+
                                             </tr>
                                             </thead>
                                             <tbody >
@@ -166,53 +168,53 @@ div.dataTables_filter input {
 			 <div class="row row-cols-8" style="height=8px;">
 
 					<div class="col">
-			  		     <div class="form-group row">
+
 						 <label for="fFechaDesde" class="col-form-label col-sm-5">FechaDesde:</label>
-						 <div class="col-sm-9">
+
 							  <input type="datetime-local" id="fFechaDesde" name="fFechaDesde">
-	                                        </div>
-          	                            </div>
+
+
                                       </div>
 
 					<div class="col">
-			  		     <div class="form-group row">
+
 						 <label for="fFechaHasta" class="col-form-label col-sm-5">FechaHasta:</label>
-						 <div class="col-sm-9">
+
 							  <input type="datetime-local" id="fFechaHasta" name="fFechaHasta"  >
-	                                        </div>
-          	                            </div>
+
+
                                       </div>
 
 					<div class="col">
-			  		     <div class="form-group row">
+
 						 <label for="fdesdeFactura" class="col-form-label col-sm-4">FacturaDesde:</label>
-						 <div class="col-sm-6">
+
 							  <input type="text" id="fdesdeFactura" name="fdesdeFactura" value="0" >
-	                                        </div>
-          	                            </div>
+
+
                                       </div>
 
 					<div class="col">
-			  		     <div class="form-group row">
+
 						 <label for="fhastaFactura" class="col-form-label col-sm-4">FacturaHasta:</label>
-						 <div class="col-sm-6">
+
 							  <input type="text" id="fhastaFactura" name="fhastaFactura" value="0" >
-	                                        </div>
-          	                            </div>
+
+
                                       </div>
 
 				   <div class="col">
 					<div class="form-group row">
-					 <label for="BtnConsultarFacturas" class="col-form-label col-sm-1"> + </label>
+					 <label for="BtnConsultarFacturas" class="col-form-label col-sm-1">  </label>
 
 
-			                        <input type="button" class="form-control form-control-sm" id="BtnConsultarFacturas"  name="BtnConsultarFacturas" value="Consultar" onclick="ConsultarFacturas()">
+			                        <input type="button"  id="BtnConsultarFacturas"  name="BtnConsultarFacturas" value="Consultar" onclick="ConsultarFacturas()">
 
 					</div>
 				</div>
 				   <div class="col">
 					<div class="form-group row">
-					      <label for="btnRefrescar" class="col-form-label col-sm-1"> + </label>
+					      <label for="btnRefrescar" class="col-form-label col-sm-1">  </label>
 						
 						<input type="button" id="btnRefrescar" name="btnRefrescar" value="Refrescar"  onclick="RefrescarFacturas()">
 
@@ -224,6 +226,8 @@ div.dataTables_filter input {
                                         <table  id= "tablaFacturacion" class=" display table table-striped" style="width: 100%";>
                                            <thead>
                                             <tr>
+						<th>Accion1</th>
+                                                <th>Action</th>
                                                 <th>Factura</th>
                                                 <th>Fecha</th>
                                                 <th>TipoDoc</th>
@@ -238,7 +242,7 @@ div.dataTables_filter input {
 						 <th>Convenio</th>
 						 <th>SalidaClinica</th>
 						<th>Estado</th>
-                                                <th>Action</th>
+
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -1160,6 +1164,87 @@ div.dataTables_filter input {
 
 				</div>
 			</div>
+
+	       <div class="row row-cols-9" style="height=1px;">
+					
+ 				   <div class="col">
+			  		     
+						 <label for="RtotalCopagos" class="col-form-label col-sm-4">Copagos:</label>
+						
+							  <input type="text" id="RtotalCopagos" name="RtotalCopagos" size=7 value="0" readonly>
+	                                     
+                                      </div>
+         	                        
+					<div class="col">
+			  		    
+						 <label for="totalCuotaModeradora" class="col-form-label col-sm-4">Moderadora:</label>
+						
+							  <input type="text" id="RtotalCuotaModeradora" name="RtotalCuotaModeradora" size=7 value="0" readonly>
+	                                      
+                                      </div>
+
+					<div class="col">
+			  		    
+						 <label for="RtotalProcedimientos" class="col-form-label col-sm-4">Proc:</label>
+						
+							  <input type="text" id="RtotalProcedimientos" name="RProcedimientos" size=7 value="0" readonly>
+	                                      
+                                      </div>
+
+					<div class="col">
+
+					<label for="RtotalSuministros" class="col-form-label col-sm-8">Suministros:</label>
+
+							  <input type="text" id="RtotalSuministros" name="RtotalSuministros" size=7  value="0" readonly>
+	                                        </div>
+
+					<div class="col">
+
+						 <label for="RtotalFactura" class="col-form-label col-sm-8">Total:</label>
+
+							  <input type="text" id="RtotalFactura" name="RtotalFactura" size=7 value="0" readonly>
+                                      </div>
+
+					<div class="col">
+						 <label for="RvalorApagar" class="col-form-label col-sm-6">Apagar:</label>
+
+							  <input type="text" id="RvalorApagar" name="RvalorApagar" size=7 value="0" readonly>
+                                      </div>
+
+					<div class="col">
+
+						 <label for="RtotalAnticipos" class="col-form-label col-sm-8">Anticipos:</label>
+
+							  <input type="text" id="RtotalAnticipos" name="RtotalAnticipos" size=7 value="0" readonly>
+                                      </div>
+
+				<div class="col">
+
+						 <label for="RtotalAbonos" class="col-form-label col-sm-4">Abonos:</label>
+							  <input type="text" id="RtotalAbonos" name="RtotalAbonos" size=7 value="0" readonly>
+                                      </div>
+		
+					<div class="col">
+
+						 <label for="RtotalRecibido" class="col-form-label col-sm-6">Recibido:</label>
+
+							  <input type="text" id="RtotalRecibido" name="RtotalRecibido" size=7 value="0" readonly>
+                                      </div>
+
+
+		       </div>  <!-- Cierra el rop de 8 columnas -->
+
+
+		<div class="row row-cols-1" style="height=1px;">
+
+					<div class="col">
+
+						 <label for="RvalorAPagarLetras" class="col-form-label col-sm-6">valor a Pagar en Letras:</label>
+
+							  <input type="text" id="RvalorAPagarLetras" name="RvalorAPagarLetras" size=80 value="" readonly>
+                                      </div>
+                                      </div>
+
 
 
 

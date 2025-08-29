@@ -245,6 +245,7 @@ urlpatterns = [
     path('load_dataAbonosFacturacion/<str:data>', viewsFacturacion.load_dataAbonosFacturacion, name='loaddataAbonosFacturacion'),
     path('facturarCuenta/', viewsFacturacion.FacturarCuenta, name='facturarCuenta'),
     path('leerTotales/', viewsFacturacion.LeerTotales, name='leerTotales'),
+    path('leerTotalesFactura/', viewsFacturacion.LeerTotalesFactura, name='leerTotales_Factura'),
     path('postConsultaFacturacion/', viewsFacturacion.PostConsultaFacturacion , name='PostConsultaFacturacion'),
     path('anularFactura/', viewsFacturacion.AnularFactura , name='anularFactura'),
     path('reFacturar/', viewsFacturacion.ReFacturar , name='reFacturar'),
