@@ -32,6 +32,8 @@ from django.db.models import Q
 from django.db import transaction, IntegrityError
 from django.db.models import F
 from cirugia.models import EstadosCirugias, EstadosProgramacion, Cirugias
+from django.db.models import F
+
 
 def decimal_serializer(obj):
     if isinstance(obj, Decimal):
@@ -1573,7 +1575,7 @@ def PostConsultaFacturacion(request):
     miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",password="123456")
     cur = miConexionx.cursor()
 
-    comando = 'select fac.id id, fac.id factura, fac."fechaFactura" fechaFactura, tip.nombre tipoDoc, documento_id documento, usu.nombre paciente, fac."consecAdmision" consecAdmision, conv.nombre nombreConvenio,  "totalSuministros","totalProcedimientos","totalCopagos","totalCuotaModeradora","totalAbonos","totalRecibido", anticipos totalAnticipos,"valorApagar","totalFactura" , "valorAPagarLetras" FROM facturacion_facturacion fac, contratacion_convenios conv, usuarios_usuarios usu, usuarios_tiposdocumento tip where fac.id = ' + "'" + str(Post_id) + "'" + '  AND  fac.convenio_id = conv.id and usu.id = fac.documento_id  and fac."tipoDoc_id" = usu."tipoDoc_id"   AND tip.id = fac."tipoDoc_id" AND fac.documento_id = usu.id  AND conv.id = fac.convenio_id '
+    comando = 'select fac.id id, fac.id factura, fac."fechaFactura" fechaFactura, tip.nombre tipoDoc, documento_id documento, usu.nombre paciente, fac."consecAdmision" consecAdmision, conv.nombre nombreConvenio,  "totalSuministros","totalProcedimientos","totalCopagos","totalCuotaModeradora","totalAbonos","totalRecibido", anticipos totalAnticipos,"valorApagar","totalFactura" , "valorAPagarLetras" , fac."estadoReg" estadoReg FROM facturacion_facturacion fac, contratacion_convenios conv, usuarios_usuarios usu, usuarios_tiposdocumento tip where fac.id = ' + "'" + str(Post_id) + "'" + '  AND  fac.convenio_id = conv.id and usu.id = fac.documento_id  and fac."tipoDoc_id" = usu."tipoDoc_id"   AND tip.id = fac."tipoDoc_id" AND fac.documento_id = usu.id  AND conv.id = fac.convenio_id '
 
     print(comando)
 
@@ -1581,9 +1583,10 @@ def PostConsultaFacturacion(request):
 
     facturacion = []
 
-    for id,factura , fechaFactura , tipoDoc, documento, paciente, consecAdmision , nombreConvenio , totalSuministros,totalProcedimientos,totalCopagos,totalCuotaModeradora,totalAbonos,totalRecibido,totalAnticipos,valorApagar,totalFactura , valorAPagarLetras in cur.fetchall():
+    for id,factura , fechaFactura , tipoDoc, documento, paciente, consecAdmision , nombreConvenio , totalSuministros,totalProcedimientos,totalCopagos,totalCuotaModeradora,totalAbonos,totalRecibido,totalAnticipos,valorApagar,totalFactura , valorAPagarLetras , estadoReg in cur.fetchall():
             facturacion.append( {"id": id,"factura":factura, "fechaFactura" : fechaFactura, "tipoDoc":tipoDoc, "documento":documento,
-                     "paciente": paciente, "consecAdmision": consecAdmision, "nombreConvenio": nombreConvenio,'totalSuministros':totalSuministros,'totalProcedimientos':totalProcedimientos,'totalCopagos':totalCopagos,'totalCuotaModeradora':totalCuotaModeradora,'totalAbonos':totalAbonos,'totalRecibido':totalRecibido,'totalAnticipos':totalAnticipos,'valorApagar':valorApagar,'totalFactura':totalFactura, 'valorAPagarLetras':valorAPagarLetras
+                     "paciente": paciente, "consecAdmision": consecAdmision, "nombreConvenio": nombreConvenio,'totalSuministros':totalSuministros,'totalProcedimientos':totalProcedimientos,'totalCopagos':totalCopagos,'totalCuotaModeradora':totalCuotaModeradora,'totalAbonos':totalAbonos,'totalRecibido':totalRecibido,'totalAnticipos':totalAnticipos,'valorApagar':valorApagar,'totalFactura':totalFactura, 'valorAPagarLetras':valorAPagarLetras,
+                                 'estadoReg':estadoReg
                                  })
 
 
@@ -1597,7 +1600,8 @@ def PostConsultaFacturacion(request):
 		          'tipoDoc':facturacion[0]['tipoDoc'],'documento':facturacion[0]['documento'],'paciente':facturacion[0]['paciente'],  'consecAdmision':facturacion[0]['consecAdmision'],
                              'nombreConvenio':facturacion[0]['nombreConvenio'] , 
 			'totalSuministros':facturacion[0]['totalSuministros'] ,'totalProcedimientos':facturacion[0]['totalProcedimientos'] ,'totalCopagos':facturacion[0]['totalCopagos'] ,'totalCuotaModeradora':facturacion[0]['totalCuotaModeradora'] ,'totalAbonos':facturacion[0]['totalAbonos'] ,'totalRecibido':facturacion[0]['totalRecibido'] ,'totalAnticipos':facturacion[0]['totalAnticipos'] ,
-			'valorApagar':facturacion[0]['valorApagar'] ,'totalFactura':facturacion[0]['totalFactura']
+			'valorApagar':facturacion[0]['valorApagar'] ,'totalFactura':facturacion[0]['totalFactura'],
+                         'estadoReg': facturacion[0]['estadoReg']
        })
 
 
@@ -1621,8 +1625,17 @@ def AnularFactura(request):
         comando = 'UPDATE facturacion_facturacion SET "estadoReg" = ' + "'" + str('N') + "' WHERE id =  " + str(facturacionId )
         print(comando)
         cur3.execute(comando)
+
+
+        comando1 = 'UPDATE facturacion_facturaciondetalle SET "estadoRegistro" = ' + "'" + str('N') + "' WHERE facturacion_id =  " + str(facturacionId )
+        print(comando1)
+        cur3.execute(comando1)
+
+
         miConexion3.commit()
         miConexion3.close()
+
+        return JsonResponse({'success': True, 'Mensaje': 'Factura ANULADA !'})
 
     except psycopg2.DatabaseError as error:
         print("Entre por rollback", error)
@@ -1654,6 +1667,11 @@ def ReFacturar(request):
 
 
     fechaRegistro = timezone.now()
+
+    if (facturacionId2.estadoReg!='N'):
+
+        return JsonResponse({'success': False, 'Mensaje': 'Factura debe ser anulada previamente'})
+
 
     miConexion3 = None
     try:
@@ -1703,6 +1721,25 @@ def ReFacturar(request):
                 comando4 = 'UPDATE admisiones_ingresos SET "salidaDefinitiva"= ' + "'" + str('R') + "'" + ' WHERE  id = ' + str(ingresoId.id)
                 print(comando4)
                 cur3.execute(comando4)
+
+
+                comando5 = 'SELECT id id2, "valorAplicado" valorAplicado, pago_id  pagoId FROM cartera_pagosfacturas WHERE "facturaAplicada_id" = ' + "'"+ str(facturacionId)  + "'"
+                print(comando5)
+                cur3.execute(comando5)
+
+                pagosFactura = []
+
+                for id2,valorAplicado , pagoId in cur3.fetchall():
+                            pagosFactura.append( {"id2": id2,"valorAplicado":valorAplicado, "pagoId" : pagoId 	 })
+
+                            pagosFac = PagosFacturas.objects.get(facturaAplicada_id=facturacionId, pago_id=pagoId)
+                            pagosFac2 = PagosFacturas.objects.filter(facturaAplicada_id = facturacionId, pago_id=pagoId).update(estadoReg='N')
+                            print("ppagosFac.valorAplicado =", pagosFac.valorAplicado)
+
+                            vale = pagosFac.valorAplicado
+                            carteraPag = Pagos.objects.filter(id=pagoId).update(totalAplicado = F('totalAplicado') - float(vale))
+                            carteraPag1 = Pagos.objects.filter(id=pagoId).update(saldo = F('saldo') - F('totalAplicado'))
+
                 miConexion3.commit()
                 cur3.close()
                 miConexion3.close()
@@ -1901,20 +1938,28 @@ def TrasladarConvenio(request):
                 columnaSuministros.append( {"columnaSuminist": columnaSuminist})
 
 
-        print ("columnaSuministros", columnaSuministros[0]['columnaSuminist'])
+        if columnaSuministros != []:
 
-        columnaSuministros = columnaSuministros[0]['columnaSuminist']
-        columnaSuministros = str(columnaSuministros)
+            print ("columnaSuministros", columnaSuministros[0]['columnaSuminist'])
+
+            columnaSuministros = columnaSuministros[0]['columnaSuminist']
+            columnaSuministros = str(columnaSuministros)
 
 
-        columnaSuministros = columnaSuministros.replace("(", ' ')
-        columnaSuministros = columnaSuministros.replace(")", ' ')
-        columnaSuministros = columnaSuministros.replace(",", ' ')
+            columnaSuministros = columnaSuministros.replace("(", ' ')
+            columnaSuministros = columnaSuministros.replace(")", ' ')
+            columnaSuministros = columnaSuministros.replace(",", ' ')
 
-        columnaSuministros = columnaSuministros.replace("'", '')
-        columnaSuministros = columnaSuministros.replace(" ", '')
+            columnaSuministros = columnaSuministros.replace("'", '')
+            columnaSuministros = columnaSuministros.replace(" ", '')
+
+
+
+        else:
+            columnaSuministros = "colValorBase"
 
         print("columnaSuministros = ", columnaSuministros)
+
 
         ## Segundo busco los Cups desde y los envio Hasta
 
@@ -1936,9 +1981,11 @@ def TrasladarConvenio(request):
         print("comando = ", comando5)
         curt.execute(comando5)
 
-        comando7 = 'UPDATE facturacion_liquidacion set "estadoRegistro" = ' + "'" + str('N') + "'," + '"fechaRegistro" = ' + "'" + str(fechaRegistro) + "' WHERE id = " + "'" + str(liquidacionIdDesde.id) + "'"
-        print("comando = ", comando7)
-        curt.execute(comando7)
+        #OPS esto nop
+
+        #comando7 = 'UPDATE facturacion_liquidacion set "estadoRegistro" = ' + "'" + str('N') + "'," + '"fechaRegistro" = ' + "'" + str(fechaRegistro) + "' WHERE id = " + "'" + str(liquidacionIdDesde.id) + "'"
+        #print("comando = ", comando7)
+        #curt.execute(comando7)
 
         miConexiont.commit()
         curt.close()
@@ -1954,6 +2001,12 @@ def TrasladarConvenio(request):
             miConexiont.rollback()
 
         print ("Voy a hacer el jsonresponde")
+
+        response = JsonResponse({"error": error})
+        response.error = {"error": error}
+        response.status_code = 403 # To announce that the user isn't allowed to publish
+        return response
+
         return JsonResponse({'success': False, 'Mensaje': error})
 
     finally:
@@ -1977,7 +2030,6 @@ def TrasladarConvenio(request):
     #valorEnCurso = registroPago.valorEnCurso
     totalRecibido = registroPago.totalRecibido
     totalAnticipos = registroPago.anticipos
-
 
     totalLiquidacion = float(totalSuministros) + float(totalProcedimientos)
     valorApagar = float(totalLiquidacion) - float(totalRecibido)

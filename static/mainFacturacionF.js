@@ -700,10 +700,11 @@ window.addEventListener('load', async () => {
 
 		// alert("entre pk = " + post_id);
 
-
-
+        var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
+        var username = document.getElementById("username").value;
+        var nombreSede = document.getElementById("nombreSede").value;
+    	var sede = document.getElementById("sede").value;
         var username_id = document.getElementById("username_id").value;
-        var sede = document.getElementById("sede").value;
 
 	document.getElementById("liquidacionId").value = '';
 	document.getElementById("liquidacionId1").value = '';
@@ -919,6 +920,14 @@ window.addEventListener('load', async () => {
 
 		// alert("ImprimirFactura entre pk = " + post_id);
 
+        var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
+        var username = document.getElementById("username").value;
+        var nombreSede = document.getElementById("nombreSede").value;
+    	var sede = document.getElementById("sede").value;
+        var username_id = document.getElementById("username_id").value;
+
+
+
 	var ingresoId = post_id;
 
 	$.ajax({
@@ -952,7 +961,14 @@ window.addEventListener('load', async () => {
 
           var post_id = $(this).data('pk');
       //    alert("pk1 = " + $(this).data('pk'));
+
+        var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
+        var username = document.getElementById("username").value;
+        var nombreSede = document.getElementById("nombreSede").value;
+    	var sede = document.getElementById("sede").value;
         var username_id = document.getElementById("username_id").value;
+
+
 
 	$.ajax({
 	           url: '/postConsultaFacturacion/',
@@ -971,6 +987,8 @@ window.addEventListener('load', async () => {
 		$('#Apaciente').val(data.paciente);
 		$('#AconsecAdmision').val(data.consecAdmision);
 		$('#AnombreConvenio').val(data.nombreConvenio);
+		$('#AestadoFactura').val(data.estadoReg);
+
 
 		 $('#Rfactura').val(data.factura);
 		 $('#RfechaFactura').val(data.fechaFactura);
@@ -979,6 +997,7 @@ window.addEventListener('load', async () => {
 		 $('#Rpaciente').val(data.paciente);
 		 $('#RconsecAdmision').val(data.consecAdmision);
 		 $('#RnombreConvenio').val(data.nombreConvenio);
+		 $('#RestadoFactura').val(data.estadoReg);
 
 $('#RtotalSuministros').val(data.totalSuministros);
 $('#RtotalProcedimientos').val(data.totalProcedimientos);
@@ -1098,6 +1117,14 @@ $('#RvalorAPagarLetras').val(data.valorAPagarLetras);
 	$('#saveBtnApliqueAbonosFacturacion').click(function (e) {
 		e.preventDefault();
 
+        var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
+        var username = document.getElementById("username").value;
+        var nombreSede = document.getElementById("nombreSede").value;
+    	var sede = document.getElementById("sede").value;
+        var username_id = document.getElementById("username_id").value;
+
+
+
 			var avalorEnCurso = document.getElementById("avalorEnCurso").value;
 			var avalorAbono = document.getElementById("avalorAbono").value;
 			var aSaldo = document.getElementById("aSaldo").value;
@@ -1175,6 +1202,14 @@ $('#RvalorAPagarLetras').val(data.valorAPagarLetras);
         $('#saveBtnCrearAbonosFacturacion').click(function (e) {
             e.preventDefault();
        //		alert (" Entre a Grabar el abono");
+
+        var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
+        var username = document.getElementById("username").value;
+        var nombreSede = document.getElementById("nombreSede").value;
+    	var sede = document.getElementById("sede").value;
+        var username_id = document.getElementById("username_id").value;
+
+
 
             $.ajax({
                 data: $('#postFormCrearAbonosFacturacion').serialize(),
@@ -1303,6 +1338,13 @@ document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Admini
             e.preventDefault();
             $(this).html('Sending..');
 
+        var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
+        var username = document.getElementById("username").value;
+        var nombreSede = document.getElementById("nombreSede").value;
+    	var sede = document.getElementById("sede").value;
+        var username_id = document.getElementById("username_id").value;
+
+
             $.ajax({
                 data: $('#postFormLiquidacionDetalle').serialize(),
 		  url: "/editarGuardarLiquidacionDetalle/",
@@ -1366,6 +1408,14 @@ document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Admini
             var current_object = $(this);
             var action = current_object.attr('data-action');
             var id = current_object.attr('data-pk');
+
+        var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
+        var username = document.getElementById("username").value;
+        var nombreSede = document.getElementById("nombreSede").value;
+    	var sede = document.getElementById("sede").value;
+        var username_id = document.getElementById("username_id").value;
+
+
 		// alert("Voy a borrar el id abono = "+ id);
 		   $.ajax({
 	           url: '/postDeleteAbonosFacturacion/' ,
@@ -1417,6 +1467,13 @@ document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Admini
             var action = current_object.attr('data-action');
             var token = $("input[name=csrfmiddlewaretoken]").val();
             var id = current_object.attr('data-pk');
+
+        var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
+        var username = document.getElementById("username").value;
+        var nombreSede = document.getElementById("nombreSede").value;
+    	var sede = document.getElementById("sede").value;
+        var username_id = document.getElementById("username_id").value;
+
 
 		   $.ajax({
 	           url: '/postDeleteLiquidacionDetalle/' ,
@@ -1487,6 +1544,12 @@ function AFacturar()
  	var username_id = document.getElementById("username_id").value;
 	var tipoFactura = document.getElementById("tipoFactura").value;
 	var sede = document.getElementById("sede").value;
+
+        var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
+        var username = document.getElementById("username").value;
+        var nombreSede = document.getElementById("nombreSede").value;
+    	var sede = document.getElementById("sede").value;
+        var username_id = document.getElementById("username_id").value;
 
 
 		$.ajax({
@@ -1575,6 +1638,12 @@ function AdicionarLiquidacion()
         var username_id = document.getElementById("username_id").value;
         var tipoRegistro = document.getElementById("tipoRegistro").value;
  	var liquidacionId = document.getElementById("liquidacionId").value;
+
+        var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
+        var username = document.getElementById("username").value;
+        var nombreSede = document.getElementById("nombreSede").value;
+    	var sede = document.getElementById("sede").value;
+        var username_id = document.getElementById("username_id").value;
 
 
 		$.ajax({
@@ -1669,6 +1738,13 @@ function AnularFactura()
 
  	var facturacionId = document.getElementById("Afactura").value;
 
+        var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
+        var username = document.getElementById("username").value;
+        var nombreSede = document.getElementById("nombreSede").value;
+    	var sede = document.getElementById("sede").value;
+        var username_id = document.getElementById("username_id").value;
+
+
 		$.ajax({
 	           url: '/anularFactura/',
 	            data :
@@ -1715,11 +1791,11 @@ function AnularFactura()
 	
 		        data2 = JSON.stringify(data2);
 
-        arrancaLiquidacion(3,data2);
-	    dataTableFacturacionInitialized = true;
+		        arrancaLiquidacion(3,data2);
+			    dataTableFacturacionInitialized = true;
  
 
-		document.getElementById("mensajesError").innerHTML = data.message;
+		document.getElementById("mensajes").innerHTML = data.Mensaje;
 
                   },
 	   		    error: function (request, status, error) {
@@ -1735,7 +1811,12 @@ function ReFacturar()
 
  	var facturacionId = document.getElementById("Rfactura").value;
 	alert("Factura No " + facturacionId);
-	var username_id = document.getElementById("username_id").value;
+
+        var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
+        var username = document.getElementById("username").value;
+        var nombreSede = document.getElementById("nombreSede").value;
+    	var sede = document.getElementById("sede").value;
+        var username_id = document.getElementById("username_id").value;
 
 
 		$.ajax({
@@ -1761,7 +1842,7 @@ function ReFacturar()
 		        data2 = JSON.stringify(data2);
 
 
-document.getElementById("mensajesError").innerHTML = data.message;
+		document.getElementById("mensajes").innerHTML = data.Mensaje;
 
         arrancaLiquidacion(3,data2);
 	    dataTableFacturacionInitialized = true;
@@ -1777,6 +1858,12 @@ function RefrescarLiquidacionDetalle()
 {
 
 			 var liquidacionId = document.getElementById("liquidacionId").value;
+        var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
+        var username = document.getElementById("username").value;
+        var nombreSede = document.getElementById("nombreSede").value;
+    	var sede = document.getElementById("sede").value;
+        var username_id = document.getElementById("username_id").value;
+
 
 
 		$.ajax({
@@ -1897,6 +1984,13 @@ function TrasladoConvenio()
 	alert(" Desde convenio = " + convenioId )
 	alert(" Nuevo convenioIdHacia = " + convenioIdHacia )
 
+        var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
+        var username = document.getElementById("username").value;
+        var nombreSede = document.getElementById("nombreSede").value;
+    	var sede = document.getElementById("sede").value;
+        var username_id = document.getElementById("username_id").value;
+
+
 
 		$.ajax({
 	           url: '/trasladarConvenio/',
@@ -1916,6 +2010,7 @@ function TrasladoConvenio()
 	                var username_id = document.getElementById("username_id").value;
   	                data2['username_id'] = username_id;
 		        data2['valor'] = liquidacionId;
+			data2['liquidacionId'] = liquidacionId;
 		        data2 = JSON.stringify(data2);
 
 		                arrancaLiquidacion(1,data2);
@@ -1929,9 +2024,13 @@ function TrasladoConvenio()
 
 
                   },
-	   		    error: function (request, status, error) {
-	   			   document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
-	   	    	}
+	   		    error: function(data){
+		           alert("data = " + JSON.stringify(data)); // data
+		           alert(data.status); // the status code
+		   
+		           alert(data.JsonResponse['error']); // the message
+		document.getElementById("mensajesError").innerHTML =  data.JsonResponse.error
+			        },
 	     });
 }
 

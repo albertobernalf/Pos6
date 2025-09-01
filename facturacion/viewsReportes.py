@@ -321,6 +321,7 @@ def ImprimirFactura(request):
     print(comando)
     lineaConcepto=1
     conceptos = []
+    subTotal=0;
 
     for id, nombreConcepto in curt.fetchall():
         conceptos.append(
@@ -373,6 +374,8 @@ def ImprimirFactura(request):
             pdf.cell(30, 26 + lineaConcepto + lineaDetalle, str(valorUnitario), 0, 0, 'L')
             pdf.cell(30, 26 + lineaConcepto + lineaDetalle, str(valorTotal), 0, 0, 'L')
 
+            subTotal = subTotal + float(valorTotal)
+
             lineaDetalle=lineaDetalle +1
 
             pdf.ln(3)
@@ -385,6 +388,10 @@ def ImprimirFactura(request):
         lineaConcepto = lineaConcepto + 1
         pdf.ln(3)
         miConexiony.close()
+        pdf.cell(100, 26 + lineaConcepto + lineaDetalle, 'SubTotal ' , 0, 0, 'L')
+        pdf.cell(30, 26 + lineaConcepto + lineaDetalle, str(subTotal), 0, 0, 'L')
+        pdf.ln(3)
+        subTotal=0
 
     miConexiont.close()
 
