@@ -834,4 +834,11 @@ ojo pendiente en aplicacion de medicamentos arreglar cuando aplica la modal no p
   -- Lo ultimo ultimo es tablas particionadas ver cuales. Umm yp creo la gran mayoria.
 
 
+2. hacer lineas en salto ee cada cambio de  concepto
+3. Trabajar todo traslados prueba. ideal solo traer el convenio de dende selecione 
+4. ver anulacion de facturas
+5. No permitir refacturar si no esta anulada la factura
+6. ver proceso de refacturacion
+7. Trabaja impresion de historia clinica, con apoyo terapeutico formato bien bacano ojo lineas no cuadros. por el momento crera nuevos pacientes y hacer pruebas con ellos
+
 

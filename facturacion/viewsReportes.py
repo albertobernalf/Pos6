@@ -22,7 +22,7 @@ from datetime import datetime
 from clinico.models import Historia, HistoriaExamenes, Examenes, TiposExamen, EspecialidadesMedicos, Medicos, Especialidades, TiposFolio, CausasExterna, EstadoExamenes, HistorialAntecedentes, HistorialDiagnosticos, HistorialInterconsultas, EstadosInterconsulta, HistorialIncapacidades,  HistoriaSignosVitales, HistoriaRevisionSistemas, HistoriaMedicamentos, Regimenes
 from sitios.models import Dependencias
 from planta.models import Planta
-from facturacion.models import Liquidacion, LiquidacionDetalle, Suministros, TiposSuministro
+from facturacion.models import Liquidacion, LiquidacionDetalle, Suministros, TiposSuministro, Conceptos
 #from contratacion.models import Procedimientos
 from usuarios.models import Usuarios, TiposDocumento
 from cartera.models  import Pagos
@@ -306,12 +306,15 @@ def ImprimirFactura(request):
     pdf.ln(1)
     linea = 7
 
+    conceptoMedicamentos= Conceptos.objects.get(nombre='MEDICAMENTOS')
+
+
     miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
                                    password="123456")
     curt = miConexiont.cursor()
 
     #comando = 'SELECT id, nombre nombreConcepto from facturacion_conceptos '
-    comando = 'SELECT distinct con.id, con.nombre nombreConcepto from facturacion_conceptos con INNER JOIN 	 clinico_examenes exa ON (exa.concepto_id = con.id) where exa.id in (select facdet.examen_id from facturacion_facturaciondetalle facdet where facdet.facturacion_id = ' + "'" + str(factura) + "')"
+    comando = 'SELECT distinct con.id, con.nombre nombreConcepto from facturacion_conceptos con INNER JOIN 	 clinico_examenes exa ON (exa.concepto_id = con.id) where exa.id in (select facdet.examen_id from facturacion_facturaciondetalle facdet where facdet.facturacion_id = ' + "'" + str(factura) + "')" + ' union SELECT distinct con.id, con.nombre nombreConcepto from facturacion_conceptos con INNER JOIN facturacion_suministros sum ON (sum.concepto_id = con.id) where sum.id in (select facdet.cums_id from facturacion_facturaciondetalle facdet where facdet.facturacion_id = ' + "'" + str(factura) + "')" + ' order by 1 desc '
 
     curt.execute(comando)
 
@@ -337,17 +340,29 @@ def ImprimirFactura(request):
                                        password="123456")
         cury = miConexiony.cursor()
 
-        comando = 'select exa."codigoCups" cups,tarProc."codigoHomologado" homologado, exa.nombre  descripcion, detFac.cantidad cantidad, detFac."valorUnitario" valorUnitario, detFac."valorTotal" valorTotal FROM facturacion_facturaciondetalle detFac INNER JOIN facturacion_facturacion fac ON (fac.id=detFac.facturacion_id) INNER JOIN clinico_examenes exa on (exa.id=detFac.examen_id) INNER JOIN contratacion_convenios conv ON (conv.id=fac.convenio_id) INNER JOIN tarifarios_tarifariosdescripcion tarDesc ON (tarDesc.id=conv."tarifariosDescripcionProc_id") INNER JOIN tarifarios_tarifariosprocedimientos tarProc ON (tarProc."tiposTarifa_id"=tarDesc."tiposTarifa_id" AND tarProc."codigoCups_id" = detFac.examen_id ) where detfac.facturacion_id= ' + "'" + str(factura) + "' AND exa.concepto_id = " +"'" + str(id) + "'"
+        print("Voy en concepto =", id)
+        print("concepto medicamentos =" ,conceptoMedicamentos.id)
 
+        if (id != conceptoMedicamentos.id):
+
+            comando = 'select exa."codigoCups" cups,tarProc."codigoHomologado" homologado, exa.nombre  descripcion, detFac.cantidad cantidad, detFac."valorUnitario" valorUnitario, detFac."valorTotal" valorTotal FROM facturacion_facturaciondetalle detFac INNER JOIN facturacion_facturacion fac ON (fac.id=detFac.facturacion_id) INNER JOIN clinico_examenes exa on (exa.id=detFac.examen_id) INNER JOIN contratacion_convenios conv ON (conv.id=fac.convenio_id) INNER JOIN tarifarios_tarifariosdescripcion tarDesc ON (tarDesc.id=conv."tarifariosDescripcionProc_id") INNER JOIN tarifarios_tarifariosprocedimientos tarProc ON (tarProc."tiposTarifa_id"=tarDesc."tiposTarifa_id" AND tarProc."codigoCups_id" = detFac.examen_id ) where detfac.facturacion_id= ' + "'" + str(factura) + "' AND exa.concepto_id = " +"'" + str(id) + "'"
+            print("entre Medicamentos")
+
+        else:
+            comando = 'select sum.cums cups,tarSum."codigoHomologado" homologado, sum.nombre  descripcion, detFac.cantidad cantidad, 	detFac."valorUnitario" valorUnitario, detFac."valorTotal" valorTotal FROM facturacion_facturaciondetalle detFac INNER JOIN facturacion_facturacion fac ON (fac.id=detFac.facturacion_id) INNER JOIN facturacion_suministros sum on (sum.id=detFac.cums_id) INNER JOIN contratacion_convenios conv ON (conv.id=fac.convenio_id)  INNER JOIN tarifarios_tarifariosdescripcion tarDesc ON (tarDesc.id=conv."tarifariosDescripcionSum_id") INNER JOIN tarifarios_tarifariossuministros tarSum ON (tarSum."tiposTarifa_id"=tarDesc."tiposTarifa_id" AND tarSum.id = detFac.cums_id ) where detfac.facturacion_id= ' + "'" + str(factura) + "'" + ' AND sum.concepto_id = ' + "'" + str(id) + "'"
+            print ("entre proced")
+
+        print ("comando DE datos", comando)
         cury.execute(comando)
 
         detalleFacturacion = []
         lineaDetalle = 1
 
-        for cups, homologado, descripcion, cantidad, valorUnitario, valorTotal  in cury.fetchall():
+        for cups, homologado, descripcion, cantidad, valorUnitario, valorTotal in cury.fetchall():
             detalleFacturacion.append(
                 {'cups': cups, 'homologado': homologado,'descripcion':descripcion, 'cantidad':cantidad,'valorUnitario':valorUnitario, 'valorTotal':valorTotal })
 
+            print ("voy a imprimir concepto =" , id)
             pdf.cell(15, 26 + lineaConcepto + lineaDetalle, str(cups), 0, 0, 'L')
             pdf.cell(15, 26 + lineaConcepto + lineaDetalle, str(homologado), 0, 0, 'L')
             pdf.cell(85, 26 + lineaConcepto + lineaDetalle, str(descripcion), 0, 0, 'L')
@@ -361,15 +376,19 @@ def ImprimirFactura(request):
             lineaDetalle=lineaDetalle +1
 
             pdf.ln(3)
+            lineaDetalle = lineaDetalle + 3
+            #pdf.rect(5.0, 26 + lineaConcepto + lineaDetalle, 200.0, 0)  # Coordenadas x, y, ancho, alto
 
         ## FIN CURSOR DETALLE FACTURA
 
         pdf.ln(4)
         lineaConcepto = lineaConcepto + 1
         pdf.ln(3)
-
+        miConexiony.close()
 
     miConexiont.close()
+
+    pdf.ln(8)
 
 
     miConexiony = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
@@ -391,7 +410,7 @@ def ImprimirFactura(request):
 
     pdf.set_line_width(0.4)
     # Dibuja el borde
-    pdf.rect(5.0, 90.0, 200.0, 25)  # Coordenadas x, y, ancho, alto
+    #pdf.rect(5.0, 90.0, 200.0, 25)  # Coordenadas x, y, ancho, alto
 
     ## Aquip totales
     pdf.set_font('Times', 'B', 7)
@@ -422,7 +441,7 @@ def ImprimirFactura(request):
     pdf.cell(30, 30, 'Valor a Pagar:', 0, 0, 'L')
     pdf.cell(30, 30 , str(valorApagar), 0, 0, 'L')
 
-    pdf.ln(8)
+    pdf.ln(12)
 
     pdf.cell(40, 34, 'Facturado por:', 0, 0, 'L')
     pdf.cell(100, 34, str(usuario), 0, 0, 'L')
