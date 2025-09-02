@@ -328,7 +328,7 @@ def ImprimirFactura(request):
             {'id': id, 'nombreConcepto': nombreConcepto})
 
         #pdf.cell(40, 26 + lineaConcepto, str(conceptos[0]['nombreConcepto']), 0, 0, 'C')
-        pdf.ln(1)
+        pdf.ln(3)
         pdf.set_font('Times', 'B', 7)
         pdf.cell(200, 22 + lineaConcepto, str(nombreConcepto), 0, 0, 'C')
         pdf.set_font('Times', '', 7)
@@ -376,21 +376,22 @@ def ImprimirFactura(request):
 
             subTotal = subTotal + float(valorTotal)
 
-            lineaDetalle=lineaDetalle +1
+            #lineaDetalle=lineaDetalle +1
 
             pdf.ln(3)
-            lineaDetalle = lineaDetalle + 3
+            lineaDetalle = lineaDetalle + 2
             #pdf.rect(5.0, 26 + lineaConcepto + lineaDetalle, 200.0, 0)  # Coordenadas x, y, ancho, alto
 
         ## FIN CURSOR DETALLE FACTURA
 
         pdf.ln(4)
         lineaConcepto = lineaConcepto + 1
-        pdf.ln(3)
+        pdf.ln(1)
         miConexiony.close()
-        pdf.cell(100, 26 + lineaConcepto + lineaDetalle, 'SubTotal ' , 0, 0, 'L')
-        pdf.cell(30, 26 + lineaConcepto + lineaDetalle, str(subTotal), 0, 0, 'L')
-        pdf.ln(3)
+        pdf.cell(145, 26 + lineaDetalle, ' ' , 0, 0, 'L')
+        pdf.cell(30, 26  + lineaDetalle, 'SubTotal ' , 0, 0, 'L')
+        pdf.cell(30, 26 + lineaDetalle, str(subTotal), 0, 0, 'L')
+        pdf.ln(2)
         subTotal=0
 
     miConexiont.close()
@@ -422,29 +423,29 @@ def ImprimirFactura(request):
     ## Aquip totales
     pdf.set_font('Times', 'B', 7)
     pdf.ln(4)
-    pdf.cell(140, 26, 'Valor en letras', 0, 0, 'L')
+    pdf.cell(145, 26, 'Valor en letras', 0, 0, 'L')
     pdf.cell(30, 26, 'SubTotal Cargos:', 0, 0, 'L')
     pdf.cell(30, 26 , str(totalFactura), 0, 0, 'L')
     pdf.ln(3)
     lineaDetalle = lineaDetalle + 1
-    pdf.cell(140, 27 , str(valorAPagarLetras), 0, 0, 'L')
+    pdf.cell(145, 27 , str(valorAPagarLetras), 0, 0, 'L')
     pdf.cell(30, 27, 'Abonos o Cuota:', 0, 0, 'L')
     pdf.cell(30, 27 , str(abonos), 0, 0, 'L')
     pdf.ln(3)
     lineaDetalle = lineaDetalle + 1
-    pdf.cell(140, 28 , str(''), 0, 0, 'L')
+    pdf.cell(145, 28 , str(''), 0, 0, 'L')
     pdf.cell(30, 28, 'Anticipos:', 0, 0, 'L')
     pdf.cell(30, 28 , str(anticipos), 0, 0, 'L')
 
     pdf.ln(3)
     lineaDetalle = lineaDetalle + 1
-    pdf.cell(140, 29 , str(''), 0, 0, 'L')
+    pdf.cell(145, 29 , str(''), 0, 0, 'L')
     pdf.cell(30, 29, 'Descuentos:', 0, 0, 'L')
     pdf.cell(30, 29 , str(descuentos), 0, 0, 'L')
 
     pdf.ln(3)
     lineaDetalle = lineaDetalle + 1
-    pdf.cell(140, 30 , str(''), 0, 0, 'L')
+    pdf.cell(145, 30 , str(''), 0, 0, 'L')
     pdf.cell(30, 30, 'Valor a Pagar:', 0, 0, 'L')
     pdf.cell(30, 30 , str(valorApagar), 0, 0, 'L')
 

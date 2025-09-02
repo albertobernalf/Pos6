@@ -61,7 +61,7 @@ INNER JOIN tarifarios_tarifariossuministros tarSum ON (tarSum."tiposTarifa_id"=t
 select convenio_id,* from facturacion_liquidacion where documento_id='1'; -- ,, 186,200
 update facturacion_liquidacion set "totalProcedimientos"=0,"totalSuministros" = 0, "totalLiquidacion" = 0, "valorApagar"=0
 	where id=187
-select * from facturacion_liquidaciondetalle where liquidacion_id=186
+select * from facturacion_liquidaciondetalle where liquidacion_id=202
 select * from facturacion_liquidaciondetalle where liquidacion_id=187
 update facturacion_liquidacion set convenio_id=8 where id = 187
 	
@@ -87,4 +87,14 @@ where det.liquidacion_id = liq.id and det.liquidacion_id = '186' and conv.id = '
 	and det."estadoRegistro" = 'A' and descrip.id = conv."tarifariosDescripcionProc_id" and 
 	tiptar.id = descrip."tiposTarifa_id" and tiptar.id = proc."tiposTarifa_id"
 	and proc."codigoCups_id" = det.examen_id
-    
+
+ 
+SELECT descrip.columna columnaSuminist
+FROM facturacion_liquidacion liq,contratacion_convenios conv,tarifarios_tarifariosdescripcion descrip 
+where liq.id =  '202' AND liq.convenio_id = conv.id and descrip.id = conv."tarifariosDescripcionSum_id"
+
+select "estadoReg",* from facturacion_facturacion;
+select * from facturacion_facturaciondetalle;
+
+select * from cartera_pagosfacturas;
+select * from cartera_pagos;

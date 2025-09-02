@@ -841,4 +841,5 @@ ojo pendiente en aplicacion de medicamentos arreglar cuando aplica la modal no p
 6. ver proceso de refacturacion
 7. Trabaja impresion de historia clinica, con apoyo terapeutico formato bien bacano ojo lineas no cuadros. por el momento crera nuevos pacientes y hacer pruebas con ellos
 
-
+-- ojo mañana ver todo el proceso FacturarCuenta ( bien sea ppor factura normal o ppor refacturacion cabecear bien)
+-- ops me sigue saliendo la cuenta de refacturada. ERROR hay que ver cuando si y cuando nop, porque esta no esta para refacturar
