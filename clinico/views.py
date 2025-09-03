@@ -804,8 +804,8 @@ def crearHistoriaClinica(request):
                                 convenioValor = []
 
                             print("columnaALeer.columna", columnaALeerPropia)
-                            print("convenioValor = " ,convenioValor)
-                            print("convenioValor[0].cups = ", convenioValor[0].cups)
+                            print("convenioValor = ", convenioValor)
+                            print("convenioValor[0].cups = ", convenioValor[0]['cups'])
 
 
                             # Aqui analiza si es necesario que caiga en la tabla de Autorizaciones
@@ -1093,6 +1093,7 @@ def crearHistoriaClinica(request):
 
                                 curt.execute(comando)
                                 autorizacionId = curt.fetchone()[0]
+
                                 miConexiont.close()
 
                                 #autorizacionIdU = Autorizaciones.objects.all().filter(
@@ -1111,7 +1112,7 @@ def crearHistoriaClinica(request):
                             curt = miConexiont.cursor()
                             comando = 'INSERT INTO autorizaciones_autorizacionesdetalle ("estadoAutorizacion_id", "cantidadSolicitada", "cantidadAutorizada", "fechaRegistro", "estadoReg", autorizaciones_id, "usuarioRegistro_id", "examenes_id", cums_id)  VALUES (' + "'" + str(estadoAutorizacionId.id) + "'," + "'" + str(cantidad) + "'" + ' ,0, now(),' + "'" + str('A') + "','"  + str(autorizacionId) + "','" + str(usuarioRegistro)  + "'," +  "'"  + str(codigoCupsId[0].id) + "',null)"
                             curt.execute(comando)
-
+                            miConexiont.commit()
                             miConexiont.close()
 
                             # Fin tema Autorizaciones
@@ -1301,6 +1302,7 @@ def crearHistoriaClinica(request):
                                 comando = 'INSERT INTO autorizaciones_autorizaciones ("estadoAutorizacion_id","fechaModifica", "fechaRegistro", "estadoReg",empresa_id, "plantaOrdena_id", "sedesClinica_id", "usuarioRegistro_id", historia_id )  SELECT ' + "'" + str(estadoAutorizacionId.id) + "'" + ', now(), now(), ' + "'" + str('A') + "'" + ', conv.empresa_id,  ' + "'" + str(plantaId.id) + "','" + str(sede) + "','" + str(usuarioRegistro) + "'," + "'" + str(historiaId) + "'" + ' FROM facturacion_conveniospacienteingresos convIngreso,  contratacion_convenios conv WHERE conv.id = convIngreso.convenio_id AND convIngreso."tipoDoc_id" = ' + "'" + str(tipoDocId.id) + "' AND convIngreso.documento_id = " + "'" + str(documentoId.id) + "'" + ' AND convIngreso."consecAdmision" = ' + "'" + str(ingresoPaciente) + "' AND conv.id = " + "'" + str(convenioValor[0]['id']) + "'" + ' RETURNING id'
                                 curt.execute(comando)
                                 autorizacionId = curt.fetchone()[0]
+                                miConexiont.commit()
                                 miConexiont.close()
 
                                 #autorizacionIdU = Autorizaciones.objects.all().filter(
@@ -1319,7 +1321,7 @@ def crearHistoriaClinica(request):
                             curt = miConexiont.cursor()
                             comando = 'INSERT INTO autorizaciones_autorizacionesdetalle ("estadoAutorizacion_id", "cantidadSolicitada", "cantidadAutorizada", "fechaRegistro", "estadoReg", autorizaciones_id, "usuarioRegistro_id", "examenes_id", cums_id)  VALUES (' + "'" + str(estadoAutorizacionId.id) + "'," + "'" + str(cantidad) + "'" + ' ,0, now(),' + "'" + str('A') + "','"  + str(autorizacionId) + "','" + str(usuarioRegistro)  + "'," +  "'"  + str(codigoCupsId[0].id) + "',null)"
                             curt.execute(comando)
-
+                            miConexiont.commit()
                             miConexiont.close()
 
                             # Fin tema Autorizaciones
@@ -1329,8 +1331,9 @@ def crearHistoriaClinica(request):
 
                     # Aqui Rutina FACTURACION crea en liquidaciondetalle el registro con la tarifa, con campo cups y convenio
                     #
-
+                        print("autorizacion = ", codigoCupsId[0].requiereAutorizacion)
                         if (codigoCupsId[0].requiereAutorizacion == 'N'):
+                            print("Entre a guardar liquidaciondetalle")
 
                             miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",                                       password="123456")
                             curt = miConexiont.cursor()
@@ -1508,6 +1511,7 @@ def crearHistoriaClinica(request):
 
                                   curt.execute(comando)
                                   autorizacionId = curt.fetchone()[0]
+                                  miConexiont.commit()
                                   miConexiont.close()
 
                                   #autorizacionIdU = Autorizaciones.objects.all().filter(

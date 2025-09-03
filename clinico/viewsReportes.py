@@ -569,17 +569,17 @@ class PDFOrdenTerapia(FPDF):
         self.set_font('Times', 'B', 7)
         self.cell(25, 16, 'GENERO:', 0, 0, 'L')
         self.set_font('Times', '', 7)
-        self.cell(50, 16, historia[0]['genero'], 0, 0, 'L')
+        self.cell(50, 16, str(historia[0]['genero']), 0, 0, 'L')
         self.ln(2)
         self.set_font('Times', 'B', 7)
         self.cell(25, 18, 'REGIMEN:', 0, 0, 'L')
         self.set_font('Times', '', 7)
-        self.cell(50, 18, historia[0]['regimen'], 0, 0, 'L')
+        self.cell(50, 18, str(historia[0]['regimen']), 0, 0, 'L')
         self.ln(2)
         self.set_font('Times', 'B', 7)
         self.cell(25, 20, 'CONVENIO:', 0, 0, 'L')
         self.set_font('Times', '', 7)
-        self.cell(25, 20, historia[0]['convenio'], 0, 0, 'L')
+        self.cell(25, 20, str(historia[0]['convenio']), 0, 0, 'L')
         self.ln(2)
         self.set_font('Times', 'B', 7)
         self.cell(25, 21, 'SERVICIO:', 0, 0, 'L')
@@ -1995,15 +1995,20 @@ def ImprimirHistoriaClinica(request):
     print ("archivo =" , archivo)
 
     #pdf.output('C:\EntornosPython\Pos6\JSONCLINICA\HistoriasClinicas/hClinica.pdf', 'F')
-    pdf.output(archivo, 'F')
+
 
     try:
         # Intenta abrir el archivo directamente
+        pdf.output(archivo, 'F')
         webbrowser.open(archivo)
     except FileNotFoundError:
         print(f"Error: Archivo no encontrado en {archivo}")
     except Exception as e:
         print(f"Error al abrir el archivo: {e}")
+        datosMensaje = {'success': True, 'Mensaje': 'Cerrar Archivo cargado en browser'}
+        json_data = json.dumps(datosMensaje, default=str)
+        return HttpResponse(json_data, content_type='application/json')
+
 
 
     return JsonResponse({'success': True, 'message': 'Historia Clinica impresa!'})
@@ -2093,15 +2098,20 @@ def ImprimirOrdenIncapacidad(ingresoId2, historiaId,convenioId):
     print ("archivo =" , archivo)
 
     #pdf.output('C:\EntornosPython\Pos6\JSONCLINICA\HistoriasClinicas/hClinica.pdf', 'F')
-    pdf.output(archivo, 'F')
+
 
     try:
         # Intenta abrir el archivo directamente
+        pdf.output(archivo, 'F')
         webbrowser.open(archivo)
     except FileNotFoundError:
         print(f"Error: Archivo no encontrado en {archivo}")
     except Exception as e:
         print(f"Error al abrir el archivo: {e}")
+        datosMensaje = {'success': True, 'Mensaje': 'Cerrar Archivo cargado en browser'}
+        json_data = json.dumps(datosMensaje, default=str)
+        return HttpResponse(json_data, content_type='application/json')
+
 
     return JsonResponse({'success': True, 'message': 'Orden Incapacidad impresa!'})
 
@@ -2292,15 +2302,18 @@ def ImprimirOrdenLaboratorio(ingresoId2, historiaId, convenioId, tipoAdmision):
     archivo = carpeta + '' + str(pacienteId.documento) + '_' + 'Laboratorio.pdf'
     print ("archivo =" , archivo)
 
-    pdf.output(archivo, 'F')
-
     try:
         # Intenta abrir el archivo directamente
+        pdf.output(archivo, 'F')
         webbrowser.open(archivo)
     except FileNotFoundError:
         print(f"Error: Archivo no encontrado en {archivo}")
     except Exception as e:
         print(f"Error al abrir el archivo: {e}")
+        datosMensaje = {'success': True, 'Mensaje': 'Cerrar Archivo cargado en browser'}
+        json_data = json.dumps(datosMensaje, default=str)
+        return HttpResponse(json_data, content_type='application/json')
+
 
     return JsonResponse({'success': True, 'message': 'Orden Laboratorio impresa!'})
 
@@ -2392,15 +2405,19 @@ def ImprimirOrdenRadiologia(ingresoId2, historiaId, convenioId, tipoAdmision):
     archivo = carpeta + '' + str(pacienteId.documento) + '_' + 'Radiologia.pdf'
     print ("archivo =" , archivo)
 
-    pdf.output(archivo, 'F')
+
 
     try:
         # Intenta abrir el archivo directamente
+        pdf.output(archivo, 'F')
         webbrowser.open(archivo)
     except FileNotFoundError:
         print(f"Error: Archivo no encontrado en {archivo}")
     except Exception as e:
         print(f"Error al abrir el archivo: {e}")
+        datosMensaje = {'success': True, 'Mensaje': 'Cerrar Archivo cargado en browser'}
+        json_data = json.dumps(datosMensaje, default=str)
+        return HttpResponse(json_data, content_type='application/json')
 
     return JsonResponse({'success': True, 'message': 'Orden Laboratorio impresa!'})
 
@@ -2497,15 +2514,19 @@ def ImprimirOrdenMedicamentos(ingresoId2, historiaId, convenioId, tipoAdmision):
     archivo = carpeta + '' + str(pacienteId.documento) + '_' + 'Medicamentos.pdf'
     print ("archivo =" , archivo)
 
-    pdf.output(archivo, 'F')
+
 
     try:
         # Intenta abrir el archivo directamente
+        pdf.output(archivo, 'F')
         webbrowser.open(archivo)
     except FileNotFoundError:
         print(f"Error: Archivo no encontrado en {archivo}")
     except Exception as e:
         print(f"Error al abrir el archivo: {e}")
+        datosMensaje = {'success': True, 'Mensaje': 'Cerrar Archivo cargado en browser'}
+        json_data = json.dumps(datosMensaje, default=str)
+        return HttpResponse(json_data, content_type='application/json')
 
     return JsonResponse({'success': True, 'message': 'Orden Formulacion de medicamentos impresa!'})
 
@@ -2596,25 +2617,17 @@ def ImprimirOrdenDeControl(ingresoId2, historiaId, convenioId, tipoAdmision):
     print ("archivo =" , archivo)
 
     try:
-        pdf.output(archivo, 'F')
-    except Exception as e:
-        print("Entre por rollback", e)
-
-        return JsonResponse({'success': False, 'Mensaje': e})
-
-    finally:
-        print("ok")
-
-
-
-
-    try:
         # Intenta abrir el archivo directamente
+        pdf.output(archivo, 'F')
         webbrowser.open(archivo)
     except FileNotFoundError:
         print(f"Error: Archivo no encontrado en {archivo}")
     except Exception as e:
         print(f"Error al abrir el archivo: {e}")
+        datosMensaje = {'success': True, 'Mensaje': 'Cerrar Archivo cargado en browser'}
+        json_data = json.dumps(datosMensaje, default=str)
+        return HttpResponse(json_data, content_type='application/json')
+
 
     return JsonResponse({'success': True, 'message': 'Orden De COntrol impresa!'})
 

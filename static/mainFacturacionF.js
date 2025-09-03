@@ -938,8 +938,17 @@ window.addEventListener('load', async () => {
 	           dataType : 'json',
 	  		success: function (data) {
 
+		if (data.success== false)
+				{
+				alert("entro False");
+				document.getElementById("mensajes").innerHTML = data.Mensaje;
+				return;
+				}
+
+
+
 			 $('#pk').val(data.pk);
-	       	     
+				document.getElementById("mensajes").innerHTML = data.Mensaje;	       	     
 
                   },
 	   		    error: function (request, status, error) {
@@ -1577,8 +1586,7 @@ function AFacturar()
 				$('#imprimir').val(data.Factura);
 
 
-			alert("data.Mensaje= " + data.Mensaje);
-
+			
 			if (data.success== false)
 				{
 				alert("entro False");
@@ -1779,6 +1787,16 @@ function AnularFactura()
 	           type: 'POST',
 	           dataType : 'json',
 	  		success: function (data) {
+
+			if (data.success== false)
+				{
+			
+				document.getElementById("mensajes").innerHTML = data.Mensaje;
+				return;
+				}
+
+
+
 				
 			 var data2 =  {}   ;
 			data2['username'] = username;
@@ -1821,8 +1839,8 @@ function AnularFactura()
 		        arrancaLiquidacion(3,data2);
 			    dataTableFacturacionInitialized = true;
  
-
 		document.getElementById("mensajes").innerHTML = data.Mensaje;
+		
 
                   },
 	   		    error: function (request, status, error) {
@@ -1855,6 +1873,15 @@ function ReFacturar()
 	  		success: function (data) {
 				$('#imprimir').val(data.Factura);
 
+				if (data.success== false)
+				{
+			
+				document.getElementById("mensajes").innerHTML = data.Mensaje;
+				return;
+				}
+
+
+
             	        var data2 =  {}   ;
         		data2['username'] = username;
     		        data2['sedeSeleccionada'] = sedeSeleccionada;
@@ -1867,9 +1894,8 @@ function ReFacturar()
 
 		        data2['valor'] = liquidacionId;
 		        data2 = JSON.stringify(data2);
+	document.getElementById("mensajes").innerHTML = data.Mensaje;
 
-
-		document.getElementById("mensajes").innerHTML = data.Mensaje;
 
         arrancaLiquidacion(3,data2);
 	    dataTableFacturacionInitialized = true;

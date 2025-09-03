@@ -465,24 +465,24 @@ def ImprimirFactura(request):
 
     miConexiont.close()
 
-
-
-
     carpeta = 'C:\EntornosPython\Pos6\JSONCLINICA\HistoriasClinicas/'
     print("carpeta = ", carpeta)
 
-    archivo = carpeta + '' + str(pacienteId.documento) + '_' + 'Factura.pdf'
+    #archivo = carpeta + '' + str(pacienteId.documento) + '_' + 'Factura.pdf'
+    archivo = carpeta + '' + 'Factura_' + str(facturaPaciente.id) + '.pdf'
     print("archivo =", archivo)
-
-    pdf.output(archivo, 'F')
 
     try:
         # Intenta abrir el archivo directamente
+        pdf.output(archivo, 'F')
         webbrowser.open(archivo)
     except FileNotFoundError:
         print(f"Error: Archivo no encontrado en {archivo}")
     except Exception as e:
         print(f"Error al abrir el archivo: {e}")
+        datosMensaje = {'success': True, 'Mensaje': 'Cerrar Archivo cargado en browser'}
+        json_data = json.dumps(datosMensaje, default=str)
+        return HttpResponse(json_data, content_type='application/json')
 
     return JsonResponse({'success': True, 'message': 'Factura impresa!'})
 

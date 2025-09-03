@@ -97,7 +97,7 @@ def load_dataLiquidacion(request, data):
    
     #Esta es la original u propia
 
-    detalle = 'SELECT ' + "'" + str("INGRESO") + "'" + "||'-'||" + ' i.id' + "||" + "'" + "-'||case when conv.id != 0 then conv.id else " + "'" + str(   '00') + "'" + ' end id, tp.nombre tipoDoc,u.documento documento,u.nombre nombre,i.consec consec , i."fechaIngreso" , i."fechaSalida", sd.nombre servicioNombreIng, dep.nombre camaNombreIng , diag.nombre dxActual,conv.nombre convenio, conv.id convenioId , i."salidaClinica" salidaClinica FROM admisiones_ingresos i INNER JOIN sitios_serviciosSedes sd ON (sd."sedesClinica_id" = i."sedesClinica_id" 	and sd.id  = i."serviciosActual_id")   inner join clinico_servicios ser on (ser.id = sd.servicios_id)  INNER JOIN  sitios_dependencias dep  ON (dep."sedesClinica_id" =  i."sedesClinica_id" and dep.id = i."dependenciasActual_id" and dep."serviciosSedes_id" = sd.id   AND  (dep.disponibilidad= ' + "'" + str('O') + "'" + ' OR (dep.disponibilidad = ' + "'" + str('L') + "'" + ' AND ser.id=3)) AND dep."serviciosSedes_id" = sd.id ) INNER JOIN sitios_dependenciastipo deptip ON (deptip.id = dep."dependenciasTipo_id") INNER JOIN usuarios_usuarios u ON (u."tipoDoc_id" = i."tipoDoc_id" and u.id = i."documento_id" ) INNER JOIN usuarios_tiposDocumento tp ON (tp.id = u."tipoDoc_id") INNER JOIN clinico_Diagnosticos diag ON (diag.id = i."dxActual_id") LEFT JOIN facturacion_conveniospacienteingresos fac ON ( fac."tipoDoc_id" = i."tipoDoc_id" and fac.documento_id = i.documento_id and  fac."consecAdmision" = i.consec  and fac.factura_id is null)  LEFT JOIN contratacion_convenios conv ON (conv.id  = fac.convenio_id) WHERE i."sedesClinica_id" =  ' + "'" + str(sede) + "'" + ' AND ((i."salidaDefinitiva" = ' + "'" + str('N') + "'" + ' and i."fechaSalida" is null)  or  (i."fechaSalida" is not null and i."salidaDefinitiva"=' + "'" + str('R') + "'" + ' ))   UNION SELECT ' + "'" + str('TRIAGE') + "'" + "||'-'||" + ' t.id' + "||" + "'" + "-'||case when conv.id != 0 then conv.id else " + "'" + str('00') + "'" + ' end id, tp.nombre tipoDoc,u.documento documento,u.nombre nombre, t.consec consec , t."fechaSolicita" , cast(' + "'" + str('0001-01-01 00:00:00') + "'" + ' as timestamp) fechaSalida,sd.nombre servicioNombreIng, dep.nombre camaNombreIng , ' + "' '" + ' dxActual , conv.nombre convenio, conv.id convenioId , ' + "'" + str('N') + "'" + ' salidaClinica  FROM triage_triage t   INNER JOIN sitios_serviciosSedes sd ON (t."sedesClinica_id" = sd."sedesClinica_id" AND sd.id = t."serviciosSedes_id" )  INNER JOIN clinico_servicios ser ON ( ser.id = sd.servicios_id AND ser.nombre = ' + "'" + str('TRIAGE') + "')" + '  INNER JOIN  sitios_dependencias dep  ON (dep."sedesClinica_id" =  t."sedesClinica_id" and dep.id = t.dependencias_id  AND dep.disponibilidad = ' + "'" + str('O') + "'" + ' AND dep."serviciosSedes_id" = sd.id and dep."tipoDoc_id" = t."tipoDoc_id" and t."consecAdmision" = 0 and dep."documento_id" = t."documento_id") INNER JOIN sitios_dependenciastipo deptip ON (deptip.id = dep."dependenciasTipo_id") INNER JOIN usuarios_usuarios u ON (u."tipoDoc_id" = t."tipoDoc_id" and u.id = t."documento_id" ) INNER JOIN usuarios_tiposDocumento tp ON (tp.id = u."tipoDoc_id") LEFT JOIN facturacion_conveniospacienteingresos fac ON ( fac."tipoDoc_id" = t."tipoDoc_id" and fac.documento_id = t.documento_id and  fac."consecAdmision" = t.consec ) LEFT JOIN contratacion_convenios conv ON (conv.id  = fac.convenio_id) WHERE  t."sedesClinica_id" = ' + "'" + str(sede) + "' UNION "  + 'SELECT ' + "'" + str("INGRESO") + "'" + "||'-'||i.id||'-'||case when conv.id != 0 then conv.id else " + "'" + str('00') + "'" + ' end id, tp.nombre tipoDoc,u.documento documento,u.nombre nombre,i.consec consec , i."fechaIngreso" , i."fechaSalida", sd.nombre servicioNombreIng, dep.nombre camaNombreIng , diag.nombre dxActual,conv.nombre convenio, conv.id convenioId , i."salidaClinica" salidaClinica FROM admisiones_ingresos i INNER JOIN sitios_serviciosSedes sd ON (sd."sedesClinica_id" = i."sedesClinica_id" 	and sd.id  = i."serviciosActual_id")   inner join clinico_servicios ser on (ser.id = sd.servicios_id)  INNER join sitios_historialdependencias histdep on (i."tipoDoc_id" = histdep."tipoDoc_id" and i.documento_id = histdep."documento_id" and i.consec=histdep.consec)  INNER JOIN  sitios_dependencias dep  ON (dep.id =  histdep.dependencias_id) INNER JOIN sitios_dependenciastipo deptip ON (deptip.id = dep."dependenciasTipo_id") INNER JOIN usuarios_usuarios u ON (u."tipoDoc_id" = i."tipoDoc_id" and u.id = i.documento_id ) INNER JOIN usuarios_tiposDocumento tp ON (tp.id = u."tipoDoc_id") INNER JOIN clinico_Diagnosticos diag ON (diag.id = i."dxActual_id") LEFT JOIN facturacion_conveniospacienteingresos fac ON ( fac."tipoDoc_id" = i."tipoDoc_id" and fac.documento_id = i.documento_id and  fac."consecAdmision" = i.consec )  LEFT JOIN contratacion_convenios conv ON (conv.id  = fac.convenio_id) WHERE i."sedesClinica_id" =  ' + "'" +  str(sede) + "'"  + ' AND ((i."salidaDefinitiva" = ' + "'" + str('R') + "'))" + 'and (histdep.id = (select max(histdep1.id) from sitios_historialdependencias histdep1 where histdep1."tipoDoc_id" = histdep."tipoDoc_id" and histdep1.documento_id = histdep.documento_id and histdep1.consec = histdep.consec))'
+    detalle = 'SELECT ' + "'" + str("INGRESO") + "'" + "||'-'||" + ' i.id' + "||" + "'" + "-'||case when conv.id != 0 then conv.id else " + "'" + str(   '00') + "'" + ' end id, tp.nombre tipoDoc,u.documento documento,u.nombre nombre,i.consec consec , i."fechaIngreso" , i."fechaSalida", sd.nombre servicioNombreIng, dep.nombre camaNombreIng , diag.nombre dxActual,conv.nombre convenio, conv.id convenioId , i."salidaClinica" salidaClinica FROM admisiones_ingresos i INNER JOIN sitios_serviciosSedes sd ON (sd."sedesClinica_id" = i."sedesClinica_id" 	and sd.id  = i."serviciosActual_id")   inner join clinico_servicios ser on (ser.id = sd.servicios_id)  INNER JOIN  sitios_dependencias dep  ON (dep."sedesClinica_id" =  i."sedesClinica_id" and dep.id = i."dependenciasActual_id" and dep."serviciosSedes_id" = sd.id   AND  (dep.disponibilidad= ' + "'" + str('O') + "'" + ' OR (dep.disponibilidad = ' + "'" + str('L') + "'" + ' AND ser.id=3)) AND dep."serviciosSedes_id" = sd.id ) INNER JOIN sitios_dependenciastipo deptip ON (deptip.id = dep."dependenciasTipo_id") INNER JOIN usuarios_usuarios u ON (u."tipoDoc_id" = i."tipoDoc_id" and u.id = i."documento_id" ) INNER JOIN usuarios_tiposDocumento tp ON (tp.id = u."tipoDoc_id") INNER JOIN clinico_Diagnosticos diag ON (diag.id = i."dxActual_id") LEFT JOIN facturacion_conveniospacienteingresos fac ON ( fac."tipoDoc_id" = i."tipoDoc_id" and fac.documento_id = i.documento_id and  fac."consecAdmision" = i.consec  and fac.factura_id is null)  LEFT JOIN contratacion_convenios conv ON (conv.id  = fac.convenio_id) WHERE i."sedesClinica_id" =  ' + "'" + str(sede) + "'" + ' AND ((i."salidaDefinitiva" = ' + "'" + str('N') + "'" + ' and i."fechaSalida" is null)  or  (i."fechaSalida" is not null and i."salidaDefinitiva"=' + "'" + str('R') + "'" + ' ))   UNION SELECT ' + "'" + str('TRIAGE') + "'" + "||'-'||" + ' t.id' + "||" + "'" + "-'||case when conv.id != 0 then conv.id else " + "'" + str('00') + "'" + ' end id, tp.nombre tipoDoc,u.documento documento,u.nombre nombre, t.consec consec , t."fechaSolicita" , cast(' + "'" + str('0001-01-01 00:00:00') + "'" + ' as timestamp) fechaSalida,sd.nombre servicioNombreIng, dep.nombre camaNombreIng , ' + "' '" + ' dxActual , conv.nombre convenio, conv.id convenioId , ' + "'" + str('N') + "'" + ' salidaClinica  FROM triage_triage t   INNER JOIN sitios_serviciosSedes sd ON (t."sedesClinica_id" = sd."sedesClinica_id" AND sd.id = t."serviciosSedes_id" )  INNER JOIN clinico_servicios ser ON ( ser.id = sd.servicios_id AND ser.nombre = ' + "'" + str('TRIAGE') + "')" + '  INNER JOIN  sitios_dependencias dep  ON (dep."sedesClinica_id" =  t."sedesClinica_id" and dep.id = t.dependencias_id  AND dep.disponibilidad = ' + "'" + str('O') + "'" + ' AND dep."serviciosSedes_id" = sd.id and dep."tipoDoc_id" = t."tipoDoc_id" and t."consecAdmision" = 0 and dep."documento_id" = t."documento_id") INNER JOIN sitios_dependenciastipo deptip ON (deptip.id = dep."dependenciasTipo_id") INNER JOIN usuarios_usuarios u ON (u."tipoDoc_id" = t."tipoDoc_id" and u.id = t."documento_id" ) INNER JOIN usuarios_tiposDocumento tp ON (tp.id = u."tipoDoc_id") LEFT JOIN facturacion_conveniospacienteingresos fac ON ( fac."tipoDoc_id" = t."tipoDoc_id" and fac.documento_id = t.documento_id and  fac."consecAdmision" = t.consec ) LEFT JOIN contratacion_convenios conv ON (conv.id  = fac.convenio_id) WHERE  t."sedesClinica_id" = ' + "'" + str(sede) + "' UNION "  + 'SELECT ' + "'" + str("INGRESO") + "'" + "||'-'||i.id||'-'||case when conv.id != 0 then conv.id else " + "'" + str('00') + "'" + ' end id, tp.nombre tipoDoc,u.documento documento,u.nombre nombre,i.consec consec , i."fechaIngreso" , i."fechaSalida", sd.nombre servicioNombreIng, dep.nombre camaNombreIng , diag.nombre dxActual,conv.nombre convenio, conv.id convenioId , i."salidaClinica" salidaClinica FROM admisiones_ingresos i INNER JOIN sitios_serviciosSedes sd ON (sd."sedesClinica_id" = i."sedesClinica_id" 	and sd.id  = i."serviciosActual_id")   inner join clinico_servicios ser on (ser.id = sd.servicios_id)  INNER join sitios_historialdependencias histdep on (i."tipoDoc_id" = histdep."tipoDoc_id" and i.documento_id = histdep."documento_id" and i.consec=histdep.consec)  INNER JOIN  sitios_dependencias dep  ON (dep.id =  histdep.dependencias_id) INNER JOIN sitios_dependenciastipo deptip ON (deptip.id = dep."dependenciasTipo_id") INNER JOIN usuarios_usuarios u ON (u."tipoDoc_id" = i."tipoDoc_id" and u.id = i.documento_id ) INNER JOIN usuarios_tiposDocumento tp ON (tp.id = u."tipoDoc_id") INNER JOIN clinico_Diagnosticos diag ON (diag.id = i."dxActual_id") LEFT JOIN facturacion_conveniospacienteingresos fac ON ( fac."tipoDoc_id" = i."tipoDoc_id" and fac.documento_id = i.documento_id and  fac."consecAdmision" = i.consec )  LEFT JOIN contratacion_convenios conv ON (conv.id  = fac.convenio_id) inner join facturacion_refacturacion refact on (cast(refact."facturaAnulada" as integer)  = fac.factura_id)  WHERE i."sedesClinica_id" =  ' + "'" +  str(sede) + "'"  + ' AND ((i."salidaDefinitiva" = ' + "'" + str('R') + "'))" + 'and (histdep.id = (select max(histdep1.id) from sitios_historialdependencias histdep1 where histdep1."tipoDoc_id" = histdep."tipoDoc_id" and histdep1.documento_id = histdep.documento_id and histdep1.consec = histdep.consec))'
     print(detalle)
 
     curx.execute(detalle)
@@ -1403,7 +1403,7 @@ def FacturarCuenta(request):
 
         # AHORA EL DETALLE
 
-        comando5 = 'INSERT INTO facturacion_facturaciondetalle ("consecutivoFactura", fecha, cantidad, "valorUnitario", "valorTotal",  cirugia_id , "fechaCrea", "fechaModifica", observaciones, "fechaRegistro", "estadoRegistro", "examen_id", cums_id, "usuarioModifica_id", "usuarioRegistro_id", facturacion_id, "tipoHonorario_id", "tipoRegistro") SELECT  consecutivo, fecha, cantidad, "valorUnitario", "valorTotal",  cirugia_id , "fechaCrea", "fechaModifica", observaciones, "fechaRegistro", "estadoRegistro", "examen_id", cums_id, "usuarioModifica_id", "usuarioRegistro_id", ' + str(facturacionId) + ', "tipoHonorario_id", "tipoRegistro" FROM facturacion_liquidaciondetalle WHERE liquidacion_id =  ' + liquidacionId + ' AND "estadoRegistro != ' + "'" + str('N') + "'"
+        comando5 = 'INSERT INTO facturacion_facturaciondetalle ("consecutivoFactura", fecha, cantidad, "valorUnitario", "valorTotal",  cirugia_id , "fechaCrea", "fechaModifica", observaciones, "fechaRegistro", "estadoRegistro", "examen_id", cums_id, "usuarioModifica_id", "usuarioRegistro_id", facturacion_id, "tipoHonorario_id", "tipoRegistro") SELECT  consecutivo, fecha, cantidad, "valorUnitario", "valorTotal",  cirugia_id , "fechaCrea", "fechaModifica", observaciones, "fechaRegistro", "estadoRegistro", "examen_id", cums_id, "usuarioModifica_id", "usuarioRegistro_id", ' + str(facturacionId) + ', "tipoHonorario_id", "tipoRegistro" FROM facturacion_liquidaciondetalle WHERE liquidacion_id =  ' + liquidacionId + ' AND "estadoRegistro" != ' + "'" + str('N') + "'"
         print(comando5)
         cur3.execute(comando5)
 
@@ -1445,7 +1445,7 @@ def FacturarCuenta(request):
 
         # ACTALIZAMPOS LA FACTURA EN LA TABLA CONVENIONPACIENTEINGRESOS
 
-        comando10 = 'UPDATE facturacion_conveniospacienteingresos  SET factura_id = ' + "'" + str(liquidacionId) + "'" + ' WHERE documento_id = ' + "'" + str(usuarioId.documento_id) + "'" + ' AND "tipoDoc_id" = ' + "'" + str(usuarioId.tipoDoc_id) + "'" + ' AND consec = ' + "'" + str(usuarioId.consecAdmision) + "'  AND factura_id = " + "'" + str(facturacionId) + "'"
+        comando10 = 'UPDATE facturacion_conveniospacienteingresos  SET factura_id = ' + "'" + str(facturacionId) + "'" + ' WHERE documento_id = ' + "'" + str(usuarioId.documento_id) + "'" + ' AND "tipoDoc_id" = ' + "'" + str(usuarioId.tipoDoc_id) + "'" + ' AND "consecAdmision" = ' + "'" + str(usuarioId.consecAdmision) + "'  AND convenio_id = " + "'" + str(usuarioId.convenio_id) + "'"
 
         print(comando10)
         cur3.execute(comando10)
@@ -1686,7 +1686,12 @@ def AnularFactura(request):
         miConexion3.commit()
         miConexion3.close()
 
-        return JsonResponse({'success': True, 'Mensaje': 'Factura ANULADA !'})
+        datosMensaje = {'success': True, 'Mensaje': 'Factura ANULADA !'}
+        json_data = json.dumps(datosMensaje, default=str)
+        return HttpResponse(json_data, content_type='application/json')
+
+
+        #return JsonResponse({'success': True, 'Mensaje': 'Factura ANULADA !'})
 
     except psycopg2.DatabaseError as error:
         print("Entre por rollback", error)
@@ -1796,7 +1801,11 @@ def ReFacturar(request):
                 cur3.close()
                 miConexion3.close()
 
-                return JsonResponse({'success': True, 'Mensaje': 'Factura Refacturada!'})
+                datosMensaje = {'success': True, 'Mensaje': 'Factura Refacturada!'}
+                json_data = json.dumps(datosMensaje, default=str)
+                return HttpResponse(json_data, content_type='application/json')
+
+                #return JsonResponse({'success': True, 'Mensaje': 'Factura Refacturada!'})
 
     except psycopg2.DatabaseError as error:
         print ("Entre por rollback" , error)
@@ -2045,15 +2054,11 @@ def TrasladarConvenio(request):
             miConexiont.rollback()
 
 
-
         print ("Voy a hacer el jsonresponde")
 
-        response = JsonResponse({"error": error})
-        response.error = {"error": error}
-        response.status_code = 403 # To announce that the user isn't allowed to publish
-        #return response
-
-        return JsonResponse({'success': False, 'Mensaje': error})
+        datosMensaje = {'success': True, 'Mensaje': error}
+        json_data = json.dumps(datosMensaje, default=str)
+        return HttpResponse(json_data, content_type='application/json')
 
     finally:
         if miConexiont:
@@ -2075,9 +2080,14 @@ def TrasladarConvenio(request):
     totalAbonos = registroPago.totalAbonos
     #valorEnCurso = registroPago.valorEnCurso
     totalRecibido = registroPago.totalRecibido
+    if (totalRecibido==None):
+        totalRecibido=0
+
     totalAnticipos = registroPago.anticipos
 
     totalLiquidacion = float(totalSuministros) + float(totalProcedimientos)
+    print("totalLiquidacion", totalLiquidacion)
+    print("totalRecibido", totalRecibido)
     valorApagar = float(totalLiquidacion) - float(totalRecibido)
 
 
@@ -2102,7 +2112,10 @@ def TrasladarConvenio(request):
 
         # Rutina Guarda en cabezote los totales
 
-        return JsonResponse({'success': True, 'Mensaje': 'Traslado realizado satisfactoriamente!'})
+        datosMensaje = {'success': True, 'Mensaje': 'Traslado realizado satisfactoriamente!'}
+        json_data = json.dumps(datosMensaje, default=str)
+        return HttpResponse(json_data, content_type='application/json')
+
 
     except psycopg2.DatabaseError as error:
         print("Entre por rollback", error)
