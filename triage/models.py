@@ -56,6 +56,7 @@ class Triage(models.Model):
     fechaModanexo = models.DateTimeField(editable=True, null=True, blank=True)
     observaciones = models.CharField(max_length=200, default='', editable=True)
     alergiasTriage = models.CharField(max_length=50, default='', editable=True)
+    salidaDefinitiva =  models.CharField(max_length=1,default='N')
     fechaRegistro  = models.DateTimeField(editable=True, null=True, blank=True, default=timezone.now)
     usuarioCrea = models.ForeignKey('planta.Planta', blank=True,null= True, editable=True, on_delete=models.PROTECT ,  related_name='Documento3')
     usuarioAtiende = models.ForeignKey('planta.Planta', blank=True,null= True, editable=True, on_delete=models.PROTECT ,  related_name='Documento2')

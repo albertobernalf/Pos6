@@ -33,6 +33,7 @@ from django.db import transaction, IntegrityError
 from django.db.models import F
 from cirugia.models import EstadosCirugias, EstadosProgramacion, Cirugias
 from django.db.models import F
+from sitios.models import ServiciosSedes
 
 
 def decimal_serializer(obj):
@@ -96,7 +97,7 @@ def load_dataLiquidacion(request, data):
    
     #Esta es la original u propia
 
-    detalle = 'SELECT ' + "'" + str("INGRESO") + "'" + "||'-'||" + ' i.id' + "||" + "'" + "-'||case when conv.id != 0 then conv.id else " + "'" + str(   '00') + "'" + ' end id, tp.nombre tipoDoc,u.documento documento,u.nombre nombre,i.consec consec , i."fechaIngreso" , i."fechaSalida", sd.nombre servicioNombreIng, dep.nombre camaNombreIng , diag.nombre dxActual,conv.nombre convenio, conv.id convenioId , i."salidaClinica" salidaClinica FROM admisiones_ingresos i INNER JOIN sitios_serviciosSedes sd ON (sd."sedesClinica_id" = i."sedesClinica_id" 	and sd.id  = i."serviciosActual_id")   inner join clinico_servicios ser on (ser.id = sd.servicios_id)  INNER JOIN  sitios_dependencias dep  ON (dep."sedesClinica_id" =  i."sedesClinica_id" and dep.id = i."dependenciasActual_id" and dep."serviciosSedes_id" = sd.id   AND  (dep.disponibilidad= ' + "'" + str('O') + "'" + ' OR (dep.disponibilidad = ' + "'" + str('L') + "'" + ' AND ser.id=3)) AND dep."serviciosSedes_id" = sd.id ) INNER JOIN sitios_dependenciastipo deptip ON (deptip.id = dep."dependenciasTipo_id") INNER JOIN usuarios_usuarios u ON (u."tipoDoc_id" = i."tipoDoc_id" and u.id = i."documento_id" ) INNER JOIN usuarios_tiposDocumento tp ON (tp.id = u."tipoDoc_id") INNER JOIN clinico_Diagnosticos diag ON (diag.id = i."dxActual_id") LEFT JOIN facturacion_conveniospacienteingresos fac ON ( fac."tipoDoc_id" = i."tipoDoc_id" and fac.documento_id = i.documento_id and  fac."consecAdmision" = i.consec )  LEFT JOIN contratacion_convenios conv ON (conv.id  = fac.convenio_id) WHERE i."sedesClinica_id" =  ' + "'" + str(sede) + "'" + ' AND ((i."salidaDefinitiva" = ' + "'" + str('N') + "'" + ' and i."fechaSalida" is null)  or  (i."fechaSalida" is not null and i."salidaDefinitiva"=' + "'" + str('R') + "'" + ' ))   UNION SELECT ' + "'" + str('TRIAGE') + "'" + "||'-'||" + ' t.id' + "||" + "'" + "-'||case when conv.id != 0 then conv.id else " + "'" + str('00') + "'" + ' end id, tp.nombre tipoDoc,u.documento documento,u.nombre nombre, t.consec consec , t."fechaSolicita" , cast(' + "'" + str('0001-01-01 00:00:00') + "'" + ' as timestamp) fechaSalida,sd.nombre servicioNombreIng, dep.nombre camaNombreIng , ' + "' '" + ' dxActual , conv.nombre convenio, conv.id convenioId , ' + "'" + str('N') + "'" + ' salidaClinica  FROM triage_triage t   INNER JOIN sitios_serviciosSedes sd ON (t."sedesClinica_id" = sd."sedesClinica_id" AND sd.id = t."serviciosSedes_id" )  INNER JOIN clinico_servicios ser ON ( ser.id = sd.servicios_id AND ser.nombre = ' + "'" + str('TRIAGE') + "')" + '  INNER JOIN  sitios_dependencias dep  ON (dep."sedesClinica_id" =  t."sedesClinica_id" and dep.id = t.dependencias_id  AND dep.disponibilidad = ' + "'" + str('O') + "'" + ' AND dep."serviciosSedes_id" = sd.id and dep."tipoDoc_id" = t."tipoDoc_id" and t."consecAdmision" = 0 and dep."documento_id" = t."documento_id") INNER JOIN sitios_dependenciastipo deptip ON (deptip.id = dep."dependenciasTipo_id") INNER JOIN usuarios_usuarios u ON (u."tipoDoc_id" = t."tipoDoc_id" and u.id = t."documento_id" ) INNER JOIN usuarios_tiposDocumento tp ON (tp.id = u."tipoDoc_id") LEFT JOIN facturacion_conveniospacienteingresos fac ON ( fac."tipoDoc_id" = t."tipoDoc_id" and fac.documento_id = t.documento_id and  fac."consecAdmision" = t.consec ) LEFT JOIN contratacion_convenios conv ON (conv.id  = fac.convenio_id) WHERE  t."sedesClinica_id" = ' + "'" + str(sede) + "' UNION "  + 'SELECT ' + "'" + str("INGRESO") + "'" + "||'-'||i.id||'-'||case when conv.id != 0 then conv.id else " + "'" + str('00') + "'" + ' end id, tp.nombre tipoDoc,u.documento documento,u.nombre nombre,i.consec consec , i."fechaIngreso" , i."fechaSalida", sd.nombre servicioNombreIng, dep.nombre camaNombreIng , diag.nombre dxActual,conv.nombre convenio, conv.id convenioId , i."salidaClinica" salidaClinica FROM admisiones_ingresos i INNER JOIN sitios_serviciosSedes sd ON (sd."sedesClinica_id" = i."sedesClinica_id" 	and sd.id  = i."serviciosActual_id")   inner join clinico_servicios ser on (ser.id = sd.servicios_id)  INNER join sitios_historialdependencias histdep on (i."tipoDoc_id" = histdep."tipoDoc_id" and i.documento_id = histdep."documento_id" and i.consec=histdep.consec)  INNER JOIN  sitios_dependencias dep  ON (dep.id =  histdep.dependencias_id) INNER JOIN sitios_dependenciastipo deptip ON (deptip.id = dep."dependenciasTipo_id") INNER JOIN usuarios_usuarios u ON (u."tipoDoc_id" = i."tipoDoc_id" and u.id = i.documento_id ) INNER JOIN usuarios_tiposDocumento tp ON (tp.id = u."tipoDoc_id") INNER JOIN clinico_Diagnosticos diag ON (diag.id = i."dxActual_id") LEFT JOIN facturacion_conveniospacienteingresos fac ON ( fac."tipoDoc_id" = i."tipoDoc_id" and fac.documento_id = i.documento_id and  fac."consecAdmision" = i.consec )  LEFT JOIN contratacion_convenios conv ON (conv.id  = fac.convenio_id) WHERE i."sedesClinica_id" =  ' + "'" +  str(sede) + "'"  + ' AND ((i."salidaDefinitiva" = ' + "'" + str('R') + "'))" + 'and (histdep.id = (select max(histdep1.id) from sitios_historialdependencias histdep1 where histdep1."tipoDoc_id" = histdep."tipoDoc_id" and histdep1.documento_id = histdep.documento_id and histdep1.consec = histdep.consec))'
+    detalle = 'SELECT ' + "'" + str("INGRESO") + "'" + "||'-'||" + ' i.id' + "||" + "'" + "-'||case when conv.id != 0 then conv.id else " + "'" + str(   '00') + "'" + ' end id, tp.nombre tipoDoc,u.documento documento,u.nombre nombre,i.consec consec , i."fechaIngreso" , i."fechaSalida", sd.nombre servicioNombreIng, dep.nombre camaNombreIng , diag.nombre dxActual,conv.nombre convenio, conv.id convenioId , i."salidaClinica" salidaClinica FROM admisiones_ingresos i INNER JOIN sitios_serviciosSedes sd ON (sd."sedesClinica_id" = i."sedesClinica_id" 	and sd.id  = i."serviciosActual_id")   inner join clinico_servicios ser on (ser.id = sd.servicios_id)  INNER JOIN  sitios_dependencias dep  ON (dep."sedesClinica_id" =  i."sedesClinica_id" and dep.id = i."dependenciasActual_id" and dep."serviciosSedes_id" = sd.id   AND  (dep.disponibilidad= ' + "'" + str('O') + "'" + ' OR (dep.disponibilidad = ' + "'" + str('L') + "'" + ' AND ser.id=3)) AND dep."serviciosSedes_id" = sd.id ) INNER JOIN sitios_dependenciastipo deptip ON (deptip.id = dep."dependenciasTipo_id") INNER JOIN usuarios_usuarios u ON (u."tipoDoc_id" = i."tipoDoc_id" and u.id = i."documento_id" ) INNER JOIN usuarios_tiposDocumento tp ON (tp.id = u."tipoDoc_id") INNER JOIN clinico_Diagnosticos diag ON (diag.id = i."dxActual_id") LEFT JOIN facturacion_conveniospacienteingresos fac ON ( fac."tipoDoc_id" = i."tipoDoc_id" and fac.documento_id = i.documento_id and  fac."consecAdmision" = i.consec  and fac.factura_id is null)  LEFT JOIN contratacion_convenios conv ON (conv.id  = fac.convenio_id) WHERE i."sedesClinica_id" =  ' + "'" + str(sede) + "'" + ' AND ((i."salidaDefinitiva" = ' + "'" + str('N') + "'" + ' and i."fechaSalida" is null)  or  (i."fechaSalida" is not null and i."salidaDefinitiva"=' + "'" + str('R') + "'" + ' ))   UNION SELECT ' + "'" + str('TRIAGE') + "'" + "||'-'||" + ' t.id' + "||" + "'" + "-'||case when conv.id != 0 then conv.id else " + "'" + str('00') + "'" + ' end id, tp.nombre tipoDoc,u.documento documento,u.nombre nombre, t.consec consec , t."fechaSolicita" , cast(' + "'" + str('0001-01-01 00:00:00') + "'" + ' as timestamp) fechaSalida,sd.nombre servicioNombreIng, dep.nombre camaNombreIng , ' + "' '" + ' dxActual , conv.nombre convenio, conv.id convenioId , ' + "'" + str('N') + "'" + ' salidaClinica  FROM triage_triage t   INNER JOIN sitios_serviciosSedes sd ON (t."sedesClinica_id" = sd."sedesClinica_id" AND sd.id = t."serviciosSedes_id" )  INNER JOIN clinico_servicios ser ON ( ser.id = sd.servicios_id AND ser.nombre = ' + "'" + str('TRIAGE') + "')" + '  INNER JOIN  sitios_dependencias dep  ON (dep."sedesClinica_id" =  t."sedesClinica_id" and dep.id = t.dependencias_id  AND dep.disponibilidad = ' + "'" + str('O') + "'" + ' AND dep."serviciosSedes_id" = sd.id and dep."tipoDoc_id" = t."tipoDoc_id" and t."consecAdmision" = 0 and dep."documento_id" = t."documento_id") INNER JOIN sitios_dependenciastipo deptip ON (deptip.id = dep."dependenciasTipo_id") INNER JOIN usuarios_usuarios u ON (u."tipoDoc_id" = t."tipoDoc_id" and u.id = t."documento_id" ) INNER JOIN usuarios_tiposDocumento tp ON (tp.id = u."tipoDoc_id") LEFT JOIN facturacion_conveniospacienteingresos fac ON ( fac."tipoDoc_id" = t."tipoDoc_id" and fac.documento_id = t.documento_id and  fac."consecAdmision" = t.consec ) LEFT JOIN contratacion_convenios conv ON (conv.id  = fac.convenio_id) WHERE  t."sedesClinica_id" = ' + "'" + str(sede) + "' UNION "  + 'SELECT ' + "'" + str("INGRESO") + "'" + "||'-'||i.id||'-'||case when conv.id != 0 then conv.id else " + "'" + str('00') + "'" + ' end id, tp.nombre tipoDoc,u.documento documento,u.nombre nombre,i.consec consec , i."fechaIngreso" , i."fechaSalida", sd.nombre servicioNombreIng, dep.nombre camaNombreIng , diag.nombre dxActual,conv.nombre convenio, conv.id convenioId , i."salidaClinica" salidaClinica FROM admisiones_ingresos i INNER JOIN sitios_serviciosSedes sd ON (sd."sedesClinica_id" = i."sedesClinica_id" 	and sd.id  = i."serviciosActual_id")   inner join clinico_servicios ser on (ser.id = sd.servicios_id)  INNER join sitios_historialdependencias histdep on (i."tipoDoc_id" = histdep."tipoDoc_id" and i.documento_id = histdep."documento_id" and i.consec=histdep.consec)  INNER JOIN  sitios_dependencias dep  ON (dep.id =  histdep.dependencias_id) INNER JOIN sitios_dependenciastipo deptip ON (deptip.id = dep."dependenciasTipo_id") INNER JOIN usuarios_usuarios u ON (u."tipoDoc_id" = i."tipoDoc_id" and u.id = i.documento_id ) INNER JOIN usuarios_tiposDocumento tp ON (tp.id = u."tipoDoc_id") INNER JOIN clinico_Diagnosticos diag ON (diag.id = i."dxActual_id") LEFT JOIN facturacion_conveniospacienteingresos fac ON ( fac."tipoDoc_id" = i."tipoDoc_id" and fac.documento_id = i.documento_id and  fac."consecAdmision" = i.consec )  LEFT JOIN contratacion_convenios conv ON (conv.id  = fac.convenio_id) WHERE i."sedesClinica_id" =  ' + "'" +  str(sede) + "'"  + ' AND ((i."salidaDefinitiva" = ' + "'" + str('R') + "'))" + 'and (histdep.id = (select max(histdep1.id) from sitios_historialdependencias histdep1 where histdep1."tipoDoc_id" = histdep."tipoDoc_id" and histdep1.documento_id = histdep.documento_id and histdep1.consec = histdep.consec))'
     print(detalle)
 
     curx.execute(detalle)
@@ -389,12 +390,12 @@ def PostConsultaLiquidacion(request):
         if llave[0] == 'INGRESO':	
 
             #comando = 'select ' + "'"  + str('INGRESO') + "'" + '  tipo, liq.id id,  "consecAdmision",  fecha ,  "totalCopagos" ,  "totalCuotaModeradora" ,  "totalProcedimientos" ,"totalSuministros", "totalLiquidacion", "valorApagar", "fechaCorte", anticipos, "detalleAnulacion", "fechaAnulacion", observaciones, liq."fechaRegistro", "estadoRegistro", convenio_id, liq."tipoDoc_id" , liq.documento_id, liq."usuarioRegistro_id", "totalAbonos", conv.nombre nombreConvenio, usu.nombre paciente, adm.id ingresoId1, usu.documento documento, tip.nombre tipoDocumento FROM facturacion_liquidacion liq, contratacion_convenios conv, usuarios_usuarios usu, admisiones_ingresos adm, usuarios_tiposdocumento  tip where adm.id = ' + "'" + str(llave[1]) + "'" + '  AND  liq.convenio_id = conv.id and usu.id = liq.documento_id  and adm."tipoDoc_id" = liq."tipoDoc_id"   AND tip.id = adm."tipoDoc_id" AND adm.documento_id = liq.documento_id  AND adm.consec = liq."consecAdmision" AND conv.id = ' + str(convenioId)
-            comando =  'select ' + "'"  + str('INGRESO') + "'" + '  tipo, liq.id id, dep.nombre dependenciaNombre, serv.nombre servicioNombre , "consecAdmision",  fecha ,  "totalCopagos" ,  "totalCuotaModeradora" ,  "totalProcedimientos" ,"totalSuministros", "totalLiquidacion", "valorApagar", "fechaCorte", anticipos, "detalleAnulacion", "fechaAnulacion", observaciones,  liq."fechaRegistro", "estadoRegistro", convenio_id, liq."tipoDoc_id" , liq.documento_id, liq."usuarioRegistro_id", "totalAbonos",  conv.nombre nombreConvenio, usu.nombre paciente, adm.id ingresoId1, usu.documento documento, tip.nombre tipoDocumento , adm."salidaClinica" salidaClinica FROM facturacion_liquidacion liq INNER JOIN usuarios_usuarios usu ON (usu."tipoDoc_id" = liq."tipoDoc_id" AND usu.id = liq.documento_id) INNER JOIN admisiones_ingresos adm ON (adm."tipoDoc_id" = liq."tipoDoc_id"  AND adm.documento_id = liq.documento_id  AND adm.consec = liq."consecAdmision"  ) INNER JOIN usuarios_tiposdocumento  tip ON (tip.id = adm."tipoDoc_id") LEFT JOIN clinico_servicios serv ON (serv.id = adm."serviciosActual_id") LEFT JOIN sitios_dependencias dep on (dep.id =adm."dependenciasActual_id") LEFT JOIN  contratacion_convenios conv ON (conv.id = liq.convenio_id) where liq.id = ' + "'" +  str(liquidacionId) + "'" + ' AND adm.id = ' + "'" + str(llave[1]) + "'"
+            comando =  'select ' + "'"  + str('INGRESO') + "'" + '  tipo, adm."salidaDefinitiva" salidaDefinitiva,liq.id id, dep.nombre dependenciaNombre, sd.nombre servicioNombre , "consecAdmision",  fecha ,  "totalCopagos" ,  "totalCuotaModeradora" ,  "totalProcedimientos" ,"totalSuministros", "totalLiquidacion", "valorApagar", "fechaCorte", anticipos, "detalleAnulacion", "fechaAnulacion", observaciones,  liq."fechaRegistro", "estadoRegistro", convenio_id, liq."tipoDoc_id" , liq.documento_id, liq."usuarioRegistro_id", "totalAbonos",  conv.nombre nombreConvenio, usu.nombre paciente, adm.id ingresoId1, usu.documento documento, tip.nombre tipoDocumento , adm."salidaClinica" salidaClinica FROM facturacion_liquidacion liq INNER JOIN usuarios_usuarios usu ON (usu."tipoDoc_id" = liq."tipoDoc_id" AND usu.id = liq.documento_id) INNER JOIN admisiones_ingresos adm ON (adm."tipoDoc_id" = liq."tipoDoc_id"  AND adm.documento_id = liq.documento_id  AND adm.consec = liq."consecAdmision"  ) INNER JOIN usuarios_tiposdocumento  tip ON (tip.id = adm."tipoDoc_id")  LEFT JOIN sitios_serviciossedes sd ON (sd.id=adm."serviciosActual_id") LEFT JOIN clinico_servicios serv ON (serv.id = sd.servicios_id) LEFT JOIN sitios_dependencias dep on (dep.id =adm."dependenciasActual_id") LEFT JOIN  contratacion_convenios conv ON (conv.id = liq.convenio_id) where liq.id = ' + "'" +  str(liquidacionId) + "'" + ' AND adm.id = ' + "'" + str(llave[1]) + "'"
             comandoP = 'SELECT conv.id, conv.nombre FROM contratacion_convenios conv INNER JOIN facturacion_conveniospacienteingresos convPac ON (convPac.convenio_id = conv.id) WHERE convPac."tipoDoc_id" = ' + "'" + str(ingresoId.tipoDoc_id) + "'" + ' AND convPac.documento_id =  ' + "'" + str(ingresoId.documento_id) + "'" + ' AND convPac."consecAdmision" = ' + "'" + str(ingresoId.consec) + "'"
         else:
 
             #comando = 'select ' + "'"  + str('TRIAGE') + "'" + ' tipo, liq.id id,  tri."consecAdmision" consecAdmision,  fecha ,  "totalCopagos" ,  "totalCuotaModeradora" ,  "totalProcedimientos" ,"totalSuministros", "totalLiquidacion", "valorApagar", "fechaCorte", anticipos, "detalleAnulacion", "fechaAnulacion", tri.observaciones, liq."fechaRegistro", "estadoRegistro", convenio_id, liq."tipoDoc_id" , liq.documento_id, liq."usuarioRegistro_id", "totalAbonos", conv.nombre nombreConvenio, usu.nombre paciente, tri.id triageId1, usu.documento documento, tip.nombre tipoDocumento FROM facturacion_liquidacion liq, contratacion_convenios conv, usuarios_usuarios usu, triage_triage tri, usuarios_tiposdocumento  tip where tri.id = ' + "'" + str(llave[1]) + "'" + '  AND  liq.convenio_id = conv.id and usu.id = liq.documento_id  and tri."tipoDoc_id" = liq."tipoDoc_id"   AND tip.id = tri."tipoDoc_id" AND tri.documento_id = liq.documento_id  AND tri.consec = liq."consecAdmision" AND conv.id = ' + str(convenioId)
-            comando =  'select ' + "'"  + str('TRIAGE') + "'" + ' tipo, liq.id id, ' + "'" + str('Triage') + "'" + ' dependenciaNombre, ' + "'" + str('TRIAGE') + "'" + '  servicioNombre, tri."consecAdmision",  fecha ,  "totalCopagos" ,  "totalCuotaModeradora" ,  "totalProcedimientos" ,"totalSuministros", "totalLiquidacion", "valorApagar", "fechaCorte", anticipos, "detalleAnulacion", "fechaAnulacion", tri.observaciones, liq."fechaRegistro", "estadoRegistro", convenio_id, liq."tipoDoc_id" , liq.documento_id, liq."usuarioRegistro_id", "totalAbonos", conv.nombre nombreConvenio, usu.nombre paciente, tri.id triageId1, usu.documento documento, tip.nombre tipoDocumento, ' + "'N'" + ' salidaClinica  FROM facturacion_liquidacion liq inner join  triage_triage tri on (tri."tipoDoc_id" = liq."tipoDoc_id"  and tri.documento_id = liq.documento_id  AND tri.consec = liq."consecAdmision" ) left join  contratacion_convenios conv on (conv.id = liq.convenio_id) inner join  usuarios_usuarios usu on (usu."tipoDoc_id" = liq."tipoDoc_id" AND usu.id = liq.documento_id) inner join usuarios_tiposdocumento  tip on (tip.id = usu."tipoDoc_id") where liq.id = ' + "'" +  str(liquidacionId) + "'" + ' AND tri.id = ' + "'" + str(llave[1]) + "'"
+            comando =  'select ' + "'"  + str('TRIAGE') + "'" + ' tipo, tri."salidaDefinitiva" salidaDefinitiva, liq.id id, ' + "'" + str('Triage') + "'" + ' dependenciaNombre, ' + "'" + str('TRIAGE') + "'" + '  servicioNombre, tri."consecAdmision",  fecha ,  "totalCopagos" ,  "totalCuotaModeradora" ,  "totalProcedimientos" ,"totalSuministros", "totalLiquidacion", "valorApagar", "fechaCorte", anticipos, "detalleAnulacion", "fechaAnulacion", tri.observaciones, liq."fechaRegistro", "estadoRegistro", convenio_id, liq."tipoDoc_id" , liq.documento_id, liq."usuarioRegistro_id", "totalAbonos", conv.nombre nombreConvenio, usu.nombre paciente, tri.id triageId1, usu.documento documento, tip.nombre tipoDocumento, ' + "'N'" + ' salidaClinica  FROM facturacion_liquidacion liq inner join  triage_triage tri on (tri."tipoDoc_id" = liq."tipoDoc_id"  and tri.documento_id = liq.documento_id  AND tri.consec = liq."consecAdmision" ) left join  contratacion_convenios conv on (conv.id = liq.convenio_id) inner join  usuarios_usuarios usu on (usu."tipoDoc_id" = liq."tipoDoc_id" AND usu.id = liq.documento_id) inner join usuarios_tiposdocumento  tip on (tip.id = usu."tipoDoc_id") where liq.id = ' + "'" +  str(liquidacionId) + "'" + ' AND tri.id = ' + "'" + str(llave[1]) + "'"
             comandoP = 'SELECT conv.id id, conv.nombre nombre FROM contratacion_convenios conv INNER JOIN facturacion_conveniospacienteingresos convPac ON (convPac.convenio_id = conv.id) WHERE convPac."tipoDoc_id" = ' + "'" + str(triageId.tipoDoc_id) + "'" + ' AND convPac.documento_id =  ' + "'" + str(triageId.documento_id) + "'" + ' AND convPac."consecAdmision" = ' + "'" + str(triageId.consec) + "'"
             print(comando)
 
@@ -404,8 +405,8 @@ def PostConsultaLiquidacion(request):
 
         if llave[0] == 'INGRESO':
 
-          for tipo, id, dependenciaNombre, servicioNombre, consecAdmision,fecha ,totalCopagos,totalCuotaModeradora,totalProcedimientos ,totalSuministros, totalLiquidacion, valorApagar, fechaCorte, anticipos, detalleAnulacion, fechaAnulacion, observaciones, fechaRegistro, estadoRegistro, convenio_id, tipoDoc_id , documento_id, usuarioRegistro_id, totalAbonos, nombreConvenio , paciente, ingresoId1 , documento, tipoDocumento, salidaClinica in cur.fetchall():
-            liquidacion.append( {"tipo":tipo, "id": id, "dependenciaNombre":dependenciaNombre,"servicioNombre":servicioNombre,
+          for tipo, salidaDefinitiva,id, dependenciaNombre, servicioNombre, consecAdmision,fecha ,totalCopagos,totalCuotaModeradora,totalProcedimientos ,totalSuministros, totalLiquidacion, valorApagar, fechaCorte, anticipos, detalleAnulacion, fechaAnulacion, observaciones, fechaRegistro, estadoRegistro, convenio_id, tipoDoc_id , documento_id, usuarioRegistro_id, totalAbonos, nombreConvenio , paciente, ingresoId1 , documento, tipoDocumento, salidaClinica in cur.fetchall():
+            liquidacion.append( {"tipo":tipo, "salidaDefinitiva":salidaDefinitiva, "id": id, "dependenciaNombre":dependenciaNombre,"servicioNombre":servicioNombre,
                      "consecAdmision": consecAdmision,
                      "fecha": fecha,
                      "totalCopagos": totalCopagos, "totalCuotaModeradora": totalCuotaModeradora,
@@ -420,8 +421,8 @@ def PostConsultaLiquidacion(request):
             "ingresoId1": ingresoId1, "documento": documento, "tipoDocumento": tipoDocumento, "salidaClinica":salidaClinica
                                  })
         else:
-          for tipo, id, dependenciaNombre, servicioNombre, consecAdmision,fecha ,totalCopagos,totalCuotaModeradora,totalProcedimientos ,totalSuministros, totalLiquidacion, valorApagar, fechaCorte, anticipos, detalleAnulacion, fechaAnulacion, observaciones, fechaRegistro, estadoRegistro, convenio_id, tipoDoc_id , documento_id, usuarioRegistro_id, totalAbonos, nombreConvenio , paciente, triageId1 , documento, tipoDocumento , salidaClinica in cur.fetchall():
-            liquidacion.append( { "tipo":tipo, "id": id, "dependenciaNombre":dependenciaNombre,"servicioNombre":servicioNombre,
+          for tipo, salidaDefinitiva, id, dependenciaNombre, servicioNombre, consecAdmision,fecha ,totalCopagos,totalCuotaModeradora,totalProcedimientos ,totalSuministros, totalLiquidacion, valorApagar, fechaCorte, anticipos, detalleAnulacion, fechaAnulacion, observaciones, fechaRegistro, estadoRegistro, convenio_id, tipoDoc_id , documento_id, usuarioRegistro_id, totalAbonos, nombreConvenio , paciente, triageId1 , documento, tipoDocumento , salidaClinica in cur.fetchall():
+            liquidacion.append( { "tipo":tipo, "salidaDefinitiva":salidaDefinitiva, "id": id, "dependenciaNombre":dependenciaNombre,"servicioNombre":servicioNombre,
                      "consecAdmision": consecAdmision,
                      "fecha": fecha,
                      "totalCopagos": totalCopagos, "totalCuotaModeradora": totalCuotaModeradora,
@@ -494,7 +495,7 @@ def PostConsultaLiquidacion(request):
 
         if llave[0] == 'INGRESO':
 
-            return JsonResponse({'pk':liquidacion[0]['id'],'tipo':liquidacion[0]['tipo'], 'id':liquidacion[0]['id'],  "dependenciaNombre":liquidacion[0]['dependenciaNombre'] ,"servicioNombre":liquidacion[0]['servicioNombre'],'consecAdmision':liquidacion[0]['consecAdmision'],'fecha':liquidacion[0]['fecha'],
+            return JsonResponse({'pk':liquidacion[0]['id'],'tipo':liquidacion[0]['tipo'], 'salidaDefinitiva':liquidacion[0]['salidaDefinitiva'] , 'id':liquidacion[0]['id'],  "dependenciaNombre":liquidacion[0]['dependenciaNombre'] ,"servicioNombre":liquidacion[0]['servicioNombre'],'consecAdmision':liquidacion[0]['consecAdmision'],'fecha':liquidacion[0]['fecha'],
                              'totalCopagos':liquidacion[0]['totalCopagos'],  'totalCuotaModeradora': liquidacion[0]['totalCuotaModeradora'],
                              'totalProcedimientos': liquidacion[0]['totalProcedimientos'],
                              'totalSuministros': liquidacion[0]['totalSuministros'],
@@ -523,7 +524,7 @@ def PostConsultaLiquidacion(request):
             })
         else:
             return JsonResponse(
-                {'pk': liquidacion[0]['id'], 'tipo':liquidacion[0]['tipo'], 'id':liquidacion[0]['id'] ,"dependenciaNombre":liquidacion[0]['dependenciaNombre'] ,"servicioNombre":liquidacion[0]['servicioNombre'],  'consecAdmision': liquidacion[0]['consecAdmision'],
+                {'pk': liquidacion[0]['id'], 'tipo':liquidacion[0]['tipo'], 'salidaDefinitiva':liquidacion[0]['salidaDefinitiva'] , 'id':liquidacion[0]['id'] ,"dependenciaNombre":liquidacion[0]['dependenciaNombre'] ,"servicioNombre":liquidacion[0]['servicioNombre'],  'consecAdmision': liquidacion[0]['consecAdmision'],
                  'fecha': liquidacion[0]['fecha'],
                  'totalCopagos': liquidacion[0]['totalCopagos'],
                  'totalCuotaModeradora': liquidacion[0]['totalCuotaModeradora'],
@@ -1256,17 +1257,22 @@ def FacturarCuenta(request):
     sede = request.POST["sede"]
     print("sede = ", sede)
     tipoFactura = request.POST["tipoFactura"]
+    serviciosAdministrativos = request.POST["serviciosAdministrativos"]
 
     usuarioId = Liquidacion.objects.get(id=liquidacionId)
     print ("Usuario", usuarioId.documento_id)
     print ("TipoDoc", usuarioId.tipoDoc_id)
     print ("Consec", usuarioId.consecAdmision)
 
+    totalCirugias=0
 
     fechaRegistro = timezone.now()
 	
     liquidacionDatos = Liquidacion.objects.get(id=liquidacionId)
     print("convenio de la liquidacion = " , liquidacionDatos.convenio_id);
+
+    numConveniosActivos=0
+    numConveniosActivos =  Liquidacion.objects.filter(tipoDoc_id=usuarioId.tipoDoc_id, documento_id=usuarioId.documento_id, consecAdmision=usuarioId.consecAdmision ).count()
 
     if (liquidacionDatos.convenio_id =='' and tipoFactura == 'FACTURA'):
             print("ENTRE convenio de la liquidacion = " + liquidacionDatos.convenio_id)
@@ -1274,25 +1280,50 @@ def FacturarCuenta(request):
 
 
     servicioAmb = Servicios.objects.get(nombre='AMBULATORIO')
-    #ingresoId = Ingresos.objects.all().filter(tipoDoc_id=usuarioId.documento_id).filter(documento_id=usuarioId.tipoDoc_id).filter(consec=usuarioId.consecAdmision)
-    ingresoId = Ingresos.objects.get(tipoDoc_id=usuarioId.tipoDoc_id , documento_id=usuarioId.documento_id ,consec=usuarioId.consecAdmision)
-    print ("ingresoId = ", ingresoId.id)
 
-    if (ingresoId.salidaClinica=='N' and ingresoId.serviciosIng_id != servicioAmb.id  ):
-	    return JsonResponse({'success': False, 'message': 'Paciente NO tiene Salida Clinica. Consultar medico tratante !', 'Factura' : 0 })
+
+     # OPS PAILAS SI LO QUE VA A FACTURAR ES UN TRIAGE
+
+    flag=''
+
+    if	(usuarioId.consecAdmision == 0 ): #Es triage
+
+	    triageId = Triage.objects.get(tipoDoc_id=usuarioId.tipoDoc_id , documento_id=usuarioId.documento_id ,consec=usuarioId.consecAdmision)
+	    print ("triageId = ", triageId.id)
+	    flag='TRIAGE'
+    else:
+	    ingresoId = Ingresos.objects.get(tipoDoc_id=usuarioId.tipoDoc_id , documento_id=usuarioId.documento_id ,consec=usuarioId.consecAdmision)
+	    print ("ingresoId = ", ingresoId.id)
+	    flag='INGRESO'
+	    servicioSedeAmb = ServiciosSedes.objects.get(id=ingresoId.serviciosActual_id)
+
+
+    if (flag=='INGRESO'):
+	    if (ingresoId.salidaClinica=='N' and servicioSedeAmb.servicios_id != servicioAmb.id  ):
+		    return JsonResponse({'success': False, 'message': 'Paciente NO tiene Salida Clinica. Consultar medico tratante !', 'Factura' : 0 })
 
 
     # AQUI VALDAR SI HAY CIRUGIAS QUE NO ESTEN REALIZADAS  ## OPS ESTO SI HAY QUE REVIZARLO
     
     estadoCirugiaRealizada = EstadosCirugias.objects.get(nombre='REALIZADA')
+    estadoCirugiaFacturada = EstadosCirugias.objects.get(nombre='FACTURADA')
 
-    #cirugiaId = Cirugias.objects.filter(tipoDoc_id=usuarioId.tipoDoc_id , documento_id=usuarioId.documento_id ,consec=usuarioId.consecAdmision, estadoCirugia_id= estadoCirugiaRealizada.id )
-    #print("cirugiaId =", cirugiaId )
+    try:
+        with transaction.atomic():
 
-    #totalCirugias = Cirugias.objects.filter(tipoDoc_id=usuarioId.tipoDoc_id , documento_id=usuarioId.documento_id ,consec=usuarioId.consecAdmision, estadoCirugia_id= estadoCirugiaRealizada.id )
+            totalCirugias = Cirugias.objects.filter(tipoDoc_id=usuarioId.tipoDoc_id , documento_id=usuarioId.documento_id ,consec=usuarioId.consecAdmision, estadoCirugia_id= estadoCirugiaRealizada.id).count()
 
-    #if (cirugias >=1):
-    #    return JsonResponse( {'success': True, 'Mensaje': 'No es posible facturar. Paciente con Cirugias No realizadas !', 'Factura': 0})
+            if (cirugias >=1):
+                Cirugias.objects.filter(tipoDoc_id=usuarioId.tipoDoc_id , documento_id=usuarioId.documento_id ,consec=usuarioId.consecAdmision , estadoCirugia_id= estadoCirugiaRealizada.id).update(estadoCirugia_id=estadoCirugiaFacturada.id)
+			
+
+    except Exception as e:
+        # Aquí ya se hizo rollback automáticamente
+        print("Se hizo rollback por PRONO SE HACE NADA:", e)
+
+    finally:
+        print("No haga nada")
+
 
     # RUTINA ACUMULAR ABONOS RECIBIDOS
 
@@ -1300,55 +1331,62 @@ def FacturarCuenta(request):
 
     #OJO SI SE REFACTURA NO REALIZA LOS SIGTES 3 QUERYS Y continua con los de insercion de cabezote/detalle en facturacion_facturacion
 
-    ## RUTINA ACTUALIZA DX, SERV , MEDIODE AMBULATORIOS
+    ## RUTINA ACTUALIZA DX, SERV ,
 
     miConexion3 = None
     try:
         miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",   password="123456")
         cur3 = miConexion3.cursor()
 
-        if (ingresoId.serviciosIng_id != servicioAmb.id and tipoFactura == 'FACTURA') :
+        if (tipoFactura == 'FACTURA'):
+
+            if (flag=='INGRESO'):
+
+                if (numConveniosActivos <= 1):
+
+                    comando = 'UPDATE admisiones_ingresos SET  "dxSalida_id"= "dxActual_id", "medicoSalida_id" = "medicoActual_id",  "serviciosSalida_id" = "serviciosActual_id" , "dependenciasSalida_id" = "dependenciasActual_id", "especialidadesMedicosSalida_id" = "especialidadesMedicosActual_id"    WHERE id =  ' + "'" +  str(ingresoId.id) + "'"
+                    print(comando)
+                    cur3.execute(comando)
+
+            if (flag=='TRIAGE'):
+
+	               print ("nO HAGA NADA")       
 
 
-               print ("Acumulo Ambulatorio")
-               comando = 'UPDATE admisiones_ingresos SET  "dxSalida_id"= "dxActual_id", "medicoSalida_id" = "medicoActual_id",  "serviciosSalida_id" = "serviciosActual_id"  WHERE id =  ' + "'" +  str(ingresoId.id) + "'"
-               print(comando)
-               cur3.execute(comando)
+            if (numConveniosActivos<=1):
 
-               ## AQUI RUTINA HISTORICO CAMA-DEPENDENCIA
+                    ## AQUI RUTINA HISTORICO CAMA-DEPENDENCIA
+                    comando1 = 'INSERT INTO sitios_historialdependencias (consec,"fechaLiberacion","fechaRegistro","estadoReg", dependencias_id,documento_id,"tipoDoc_id","usuarioRegistro_id",disponibilidad)  SELECT consec,' + "'" + str(fechaRegistro) + "'," + "'" + str(fechaRegistro) + "'," + "'" + str('A') + "'" + ", id" + ",'" + str(ingresoId.documento_id) + "'," + "'" + str(ingresoId.tipoDoc_id) + "'," + "'" + str(username_id) + "'," + "'" + str('L') + "'" +  ' from sitios_dependencias where "tipoDoc_id" = ' + "'" + str(ingresoId.tipoDoc_id) + "' AND documento_id = "  + "'" + str(ingresoId.documento_id) + "' AND consec = " + "'" + str(ingresoId.consec) + "'"
+                    print(comando1)
+                    cur3.execute(comando1)
 
-               comando1 = 'INSERT INTO sitios_historialdependencias (consec,"fechaLiberacion","fechaRegistro","estadoReg", dependencias_id,documento_id,"tipoDoc_id","usuarioRegistro_id",disponibilidad)  SELECT consec,' + "'" + str(fechaRegistro) + "'," + "'" + str(fechaRegistro) + "'," + "'" + str('A') + "'" + ", id" + ",'" + str(ingresoId.documento_id) + "'," + "'" + str(ingresoId.tipoDoc_id) + "'," + "'" + str(username_id) + "'," + "'" + str('L') + "'" +  ' from sitios_dependencias where "tipoDoc_id" = ' + "'" + str(ingresoId.tipoDoc_id) + "' AND documento_id = "  + "'" + str(ingresoId.documento_id) + "' AND consec = " + "'" + str(ingresoId.consec) + "'"
-               print(comando1)
-               cur3.execute(comando1)
+                       ## FIN HISTORICO CAMAA-DEPENDENCIA
 
-               ## FIN HISTORICO CAMAA-DEPENDENCIA
+                       ## AQUI RUTINA DESOCUPAR CAMA-DEPENDENCIA
 
-               ## AQUI RUTINA DESOCUPAR CAMA-DEPENDENCIA
-
-               comando2 = 'UPDATE sitios_dependencias SET disponibilidad = ' + "'" + str('L') + "'," + ' "tipoDoc_id" = null , documento_id = null,  consec= null, "fechaLiberacion" = null , "fechaOcupacion" = null  WHERE "tipoDoc_id" = ' + "'" + str(ingresoId.tipoDoc_id) + "'" + ' AND documento_id = ' + "'" + str(ingresoId.documento_id) + "'" + ' AND consec = ' + str(ingresoId.consec)
-               print(comando2)
-               cur3.execute(comando2)
+                    comando2 = 'UPDATE sitios_dependencias SET disponibilidad = ' + "'" + str('L') + "'," + ' "tipoDoc_id" = null , documento_id = null,  consec= null, "fechaLiberacion" = null , "fechaOcupacion" = null  WHERE "tipoDoc_id" = ' + "'" + str(ingresoId.tipoDoc_id) + "'" + ' AND documento_id = ' + "'" + str(ingresoId.documento_id) + "'" + ' AND consec = ' + str(ingresoId.consec)
+                    print(comando2)
+                    cur3.execute(comando2)
 
 
                ## FIN DESOCUPAR CAMA-DEPENDENCIA
+
+
 
             ## DESDE AQUI S AMBOS tipoFactura: FACTURA/REFACTURA
 
             # PRIMERO EL CABEZOTE
 
-        comando3 = 'INSERT INTO facturacion_facturacion ("sedesClinica_id", documento_id, "consecAdmision", "fechaFactura", "totalCopagos", "totalCuotaModeradora","totalProcedimientos",   "totalSuministros", "totalFactura", "valorApagar", anulado, anticipos, "fechaRegistro", "estadoReg", "fechaAnulacion", observaciones, "fechaCorte",convenio_id, "tipoDoc_id","usuarioAnula_id","usuarioRegistro_id",  "totalAbonos", "totalRecibido") SELECT ' "'" + str(sede) + "'" + ', documento_id, "consecAdmision", ' + "'" + str(fechaRegistro) + "'" + ' , "totalCopagos", "totalCuotaModeradora", "totalProcedimientos",  "totalSuministros", "totalLiquidacion", "valorApagar", anulado, anticipos, ' + "'" + str(fechaRegistro) + "'" + ' ,  ' + "'" + str('A') + "'" + ' , "fechaAnulacion", observaciones, "fechaCorte",convenio_id, "tipoDoc_id","usuarioAnula_id", ' + "'" + str(username_id) + "'" + '  , "totalAbonos", "totalRecibido"  FROM facturacion_liquidacion WHERE id =  ' + liquidacionId + ' RETURNING id  '
+        comando3 = 'INSERT INTO facturacion_facturacion ("sedesClinica_id", documento_id, "consecAdmision", "fechaFactura", "totalCopagos", "totalCuotaModeradora","totalProcedimientos",   "totalSuministros", "totalFactura", "valorApagar", anulado, anticipos, "fechaRegistro", "estadoReg", "fechaAnulacion", observaciones, "fechaCorte",convenio_id, "tipoDoc_id","usuarioAnula_id","usuarioRegistro_id",  "totalAbonos", "totalRecibido", "serviciosAdministrativos_id") SELECT ' "'" + str(sede) + "'" + ', documento_id, "consecAdmision", ' + "'" + str(fechaRegistro) + "'" + ' , "totalCopagos", "totalCuotaModeradora", "totalProcedimientos",  "totalSuministros", "totalLiquidacion", "valorApagar", anulado, anticipos, ' + "'" + str(fechaRegistro) + "'" + ' ,  ' + "'" + str('A') + "'" + ' , "fechaAnulacion", observaciones, "fechaCorte",convenio_id, "tipoDoc_id","usuarioAnula_id", ' + "'" + str(username_id) + "'" + '  , "totalAbonos", "totalRecibido" , ' + "'" + str(serviciosAdministrativos) + "'" + '  FROM facturacion_liquidacion WHERE id =  ' + liquidacionId + ' RETURNING id  '
+
+        # AQUI CONSEGUIR EL ID DE LA FACTURA RECIEN CREADA
 
         print(comando3)
         cur3.execute(comando3)
         facturacionId = cur3.fetchone()[0]
 
-
-        comando32 = 'update facturacion_facturacion set "valorAPagarLetras" = obtienevlrletras(cast("totalFactura" as integer)) WHERE id = ' +"'" + str(facturacionId) + "'"
+        comando32 = 'update facturacion_facturacion set "valorAPagarLetras" = obtienevlrletras(cast("totalFactura" as integer)) ,  "cufeDefinitivo" = ' + "'" + str('6b7dd1910792ec82b16f5a30d83da5c8f10895b42e3a685a8ee0f0edfc9e32e087576ba23525a50091a6eeb5bd9a9c5e') + "'," + '"codigoQr" =' + "'" + str('C:\EntornosPython\Pos6\JSONCLINICA\CodigosQr\Factura_1.png')  + "'" + ' WHERE id = ' +"'" + str(facturacionId) + "'"
         cur3.execute(comando32)
-
-        # AQUI CONSEGUIR EL ID DE LA FACTURA RECIEN CREADA
-        # LO MEJOR ES conseguir el id en el mismo insert
-
 
         print ("facturacionId = ", facturacionId)
 
@@ -1359,23 +1397,21 @@ def FacturarCuenta(request):
                 comando4 = 'UPDATE admisiones_ingresos SET "fechaSalida" = ' + "'" +  str(fechaRegistro) + "'" + ', factura = ' + str(facturacionId)  +  ', "dependenciasSalida_id" = "dependenciasActual_id" ' +  ' WHERE id =' + str(ingresoId.id)
                 cur3.execute(comando4)
         else:
-            comando4 = 'UPDATE admisiones_ingresos SET "salidaDefinitiva" = ' + "'" + str('N') + "'" + ', factura = ' + str(facturacionId)  + ' WHERE id =' + str(ingresoId.id)
+            comando4 = 'UPDATE admisiones_ingresos SET "salidaDefinitiva" = ' + "'" + str('R') + "'" + ', factura = ' + str(facturacionId)  + ' WHERE id =' + str(ingresoId.id)
             cur3.execute(comando4)
 
 
         # AHORA EL DETALLE
 
-        comando5 = 'INSERT INTO facturacion_facturaciondetalle ("consecutivoFactura", fecha, cantidad, "valorUnitario", "valorTotal",  cirugia_id , "fechaCrea", "fechaModifica", observaciones, "fechaRegistro", "estadoRegistro", "examen_id", cums_id, "usuarioModifica_id", "usuarioRegistro_id", facturacion_id, "tipoHonorario_id", "tipoRegistro") SELECT  consecutivo, fecha, cantidad, "valorUnitario", "valorTotal",  cirugia_id , "fechaCrea", "fechaModifica", observaciones, "fechaRegistro", "estadoRegistro", "examen_id", cums_id, "usuarioModifica_id", "usuarioRegistro_id", ' + str(facturacionId) + ', "tipoHonorario_id", "tipoRegistro" FROM facturacion_liquidaciondetalle WHERE liquidacion_id =  ' + liquidacionId
+        comando5 = 'INSERT INTO facturacion_facturaciondetalle ("consecutivoFactura", fecha, cantidad, "valorUnitario", "valorTotal",  cirugia_id , "fechaCrea", "fechaModifica", observaciones, "fechaRegistro", "estadoRegistro", "examen_id", cums_id, "usuarioModifica_id", "usuarioRegistro_id", facturacion_id, "tipoHonorario_id", "tipoRegistro") SELECT  consecutivo, fecha, cantidad, "valorUnitario", "valorTotal",  cirugia_id , "fechaCrea", "fechaModifica", observaciones, "fechaRegistro", "estadoRegistro", "examen_id", cums_id, "usuarioModifica_id", "usuarioRegistro_id", ' + str(facturacionId) + ', "tipoHonorario_id", "tipoRegistro" FROM facturacion_liquidaciondetalle WHERE liquidacion_id =  ' + liquidacionId + ' AND "estadoRegistro != ' + "'" + str('N') + "'"
         print(comando5)
         cur3.execute(comando5)
 
         #AQUI ACTUALIZAMOS LOS PAGOS DEL PACIENTE
 
+        if (tipoFactura == 'FACTURA' or tipoFactura == 'REFACTURA'):
 
-        if (tipoFactura == 'FACTURA'):
-
-
-                comando6 = 'INSERT INTO cartera_pagosFacturas ("valorAplicado", "fechaRegistro","estadoReg", "facturaAplicada_id",pago_id) SELECT "valorEnCurso", ' + "'" + str(fechaRegistro) + "','A'," + str(facturacionId) + ', id FROM cartera_pagos WHERE documento_id = ' + "'" + str(usuarioId.documento_id) + "'" + ' AND "tipoDoc_id" = ' + "'" + str(usuarioId.tipoDoc_id) + "'" + ' AND consec = ' + "'" + str(usuarioId.consecAdmision) + "'"
+                comando6 = 'INSERT INTO cartera_pagosFacturas ("valorAplicado", "fechaRegistro","estadoReg", "facturaAplicada_id",pago_id, "serviciosAdministrativos_id") SELECT "valorEnCurso", ' + "'" + str(fechaRegistro) + "','A'," + str(facturacionId) + ', id ,' + "'" + str(serviciosAdministrativos) + "'" + ' FROM cartera_pagos WHERE documento_id = ' + "'" + str(usuarioId.documento_id) + "'" + ' AND "tipoDoc_id" = ' + "'" + str(usuarioId.tipoDoc_id) + "'" + ' AND consec = ' + "'" + str(usuarioId.consecAdmision) + "'"
 
                 print(comando6)
                 cur3.execute(comando6)
@@ -1407,20 +1443,33 @@ def FacturarCuenta(request):
         print(comando9)
         cur3.execute(comando9)
 
-        # AQUI ACTUALIZAMOS EL ESTADO DE LA CIRUGIA SI ES CIRUGIA
+        # ACTALIZAMPOS LA FACTURA EN LA TABLA CONVENIONPACIENTEINGRESOS
 
-        #if (totalCirugias) >= 1:
-        #    estadoCirugiaFacturada = EstadosCirugias.objects.get(nombre='FACTURADA')
+        comando10 = 'UPDATE facturacion_conveniospacienteingresos  SET factura_id = ' + "'" + str(liquidacionId) + "'" + ' WHERE documento_id = ' + "'" + str(usuarioId.documento_id) + "'" + ' AND "tipoDoc_id" = ' + "'" + str(usuarioId.tipoDoc_id) + "'" + ' AND consec = ' + "'" + str(usuarioId.consecAdmision) + "'  AND factura_id = " + "'" + str(facturacionId) + "'"
 
-        #    comando10= 'UPDATE cirugia_cirugias SET "estadoCirugia_id" = ' + "'" + str(estadoCirugiaFacturada) + "' WHERE id = " + "'" + str(cirugiaId.id) + "'"
-        #    print(comando10)
-        #    cur3.execute(comando10)
+        print(comando10)
+        cur3.execute(comando10)
+
+
+        # AQUI ACTUALIZAMOS EL ESTADO DE LA CIRUGIA 
+
+        if (totalCirugias >= 1):
+
+            estadoCirugiaFacturada = EstadosCirugias.objects.get(nombre='FACTURADA')
+
+            comando10= 'UPDATE cirugia_cirugias SET "estadoCirugia_id" = ' + "'" + str(estadoCirugiaFacturada) + "' WHERE documento_id = " + "'" + str(usuarioId.documento_id) + "'" + ' AND "tipoDoc_id" = ' + "'" + str(usuarioId.tipoDoc_id) + "', " + '"consecAdmision" = ' + "'" +  str(usuarioId.consecAdmision) + "' AND " + '"estadoCirugia_id" = ' + "'" + str(estadoCirugiaRealizada.id) + "'"
+            print(comando10)
+            cur3.execute(comando10)
 
         miConexion3.commit()
         cur3.close()
         miConexion3.close()
 
-        return JsonResponse({'success': True, 'Mensaje': 'Factura Elaborada!', 'Factura' : facturacionId})
+        datosMensaje = {'success': True, 'Mensaje': 'Factura Elaborada  No !'}
+        json_data = json.dumps(datosMensaje, default=str)
+        return HttpResponse(json_data, content_type='application/json')
+
+        #return JsonResponse({'success': True, 'Mensaje': 'Factura Elaborada!', 'Factura' : facturacionId})
 
     except psycopg2.DatabaseError as error:
 
@@ -1430,7 +1479,10 @@ def FacturarCuenta(request):
                 miConexion3.rollback()
 
             print("Voy a hacer el jsonresponde")
-            return JsonResponse({'success': False, 'Mensaje': error})
+            datosMensaje = {'success': False, 'Mensaje': error}
+            json_data = json.dumps(datosMensaje , default=str)
+            return HttpResponse(json_data, content_type='application/json')
+
 
     finally:
             if miConexion3:
@@ -1881,15 +1933,7 @@ def TrasladarConvenio(request):
     print("liquidacionIdHasta.id", liquidacionIdHasta.id )
 
 
-    # voy a guardar los totales de la factura
-
-
-
     ## Se busca de que columna se van a traer los valores
-
-
-
-    ## Primero se actualiza cabezote Los totales
 
 
     miConexiont = None
@@ -1911,19 +1955,25 @@ def TrasladarConvenio(request):
         for columnaProced  in curt.fetchall():
                 columnaProcedimientos.append( {"columnaProced": columnaProced})
 
+        if columnaProcedimientos != []:
 
-        print ("columnaProcedimientos", columnaProcedimientos[0]['columnaProced'])
+        	print ("columnaProcedimientos", columnaProcedimientos[0]['columnaProced'])
 
-        columnaProcedimientos = columnaProcedimientos[0]['columnaProced']
-        columnaProcedimientos = str(columnaProcedimientos)
+	        columnaProcedimientos = columnaProcedimientos[0]['columnaProced']
+        	columnaProcedimientos = str(columnaProcedimientos)
 
 
-        columnaProcedimientos = columnaProcedimientos.replace("(", ' ')
-        columnaProcedimientos = columnaProcedimientos.replace(")", ' ')
-        columnaProcedimientos = columnaProcedimientos.replace(",", ' ')
-        columnaProcedimientos = columnaProcedimientos.replace("'", '')
-        columnaProcedimientos = columnaProcedimientos.replace(" ", '')
-        print("columnaProcedimientos QUEDO= ", columnaProcedimientos)
+	        columnaProcedimientos = columnaProcedimientos.replace("(", ' ')
+        	columnaProcedimientos = columnaProcedimientos.replace(")", ' ')
+	        columnaProcedimientos = columnaProcedimientos.replace(",", ' ')
+        	columnaProcedimientos = columnaProcedimientos.replace("'", '')
+	        columnaProcedimientos = columnaProcedimientos.replace(" ", '')
+	        print("columnaProcedimientos QUEDO= ", columnaProcedimientos)
+
+        else:
+
+            columnaProcedimientos = "colValorBase"
+
 
         # Busco la columna de Suministros a leer la tarifa
 
@@ -1953,16 +2003,16 @@ def TrasladarConvenio(request):
             columnaSuministros = columnaSuministros.replace("'", '')
             columnaSuministros = columnaSuministros.replace(" ", '')
 
-
-
         else:
             columnaSuministros = "colValorBase"
+	    
 
         print("columnaSuministros = ", columnaSuministros)
 
 
-        ## Segundo busco los Cups desde y los envio Hasta
 
+        ## Segundo busco los Cups desde y los envio Hasta
+        #
         comando3 = 'INSERT INTO facturacion_liquidaciondetalle ( consecutivo, fecha, cantidad, "valorUnitario", "valorTotal", cirugia_id, "fechaCrea", "fechaModifica", observaciones, "fechaRegistro", "estadoRegistro",examen_id,  "usuarioModifica_id", "usuarioRegistro_id", liquidacion_id, "tipoHonorario_id", "tipoRegistro", "historiaMedicamento_id") select  det.consecutivo, liq.fecha, cantidad, proc."' + str(columnaProcedimientos) + '"' + ', proc."' + str(columnaProcedimientos) + '"' + ' * cantidad, cirugia_id, "fechaCrea", "fechaModifica", liq.observaciones, liq."fechaRegistro", liq."estadoRegistro", examen_id, "usuarioModifica_id", liq."usuarioRegistro_id",' + "'" + str(liquidacionIdHasta.id) + "'" + ' , "tipoHonorario_id",	"tipoRegistro", "historiaMedicamento_id" from facturacion_liquidacion liq  , facturacion_liquidaciondetalle det, contratacion_convenios conv,	  tarifarios_tarifariosdescripcion descrip, tarifarios_tipostarifa tiptar, tarifarios_tarifariosProcedimientos proc where det.liquidacion_id = liq.id and det.liquidacion_id = ' + "'" + str(liquidacionIdDesde.id) + "'" + ' and conv.id = ' + "'" + str(liquidacionIdHasta.convenio_id) + "'" + ' and det."estadoRegistro" = ' + "'" + str('A') + "'" + ' and descrip.id = conv."tarifariosDescripcionProc_id" and tiptar.id = descrip."tiposTarifa_id" and tiptar.id = proc."tiposTarifa_id" and proc."codigoCups_id" = det.examen_id'
         print("comando = ", comando3)
         curt.execute(comando3)
@@ -1976,16 +2026,10 @@ def TrasladarConvenio(request):
 
         # Ops fata Anular todo el detalle de la cuenta donde estaba
 
-
         comando5 = 'UPDATE facturacion_liquidaciondetalle set "estadoRegistro" = ' + "'" +str('N') + "'," + '"fechaRegistro" = ' + "'" + str(fechaRegistro) + "' WHERE liquidacion_id = " + "'" + str(liquidacionIdDesde.id) + "'"
         print("comando = ", comando5)
         curt.execute(comando5)
 
-        #OPS esto nop
-
-        #comando7 = 'UPDATE facturacion_liquidacion set "estadoRegistro" = ' + "'" + str('N') + "'," + '"fechaRegistro" = ' + "'" + str(fechaRegistro) + "' WHERE id = " + "'" + str(liquidacionIdDesde.id) + "'"
-        #print("comando = ", comando7)
-        #curt.execute(comando7)
 
         miConexiont.commit()
         curt.close()
@@ -1995,17 +2039,19 @@ def TrasladarConvenio(request):
         ## Faltan trasladar los Abonos sera por el apicativo abonos ??
 
     except psycopg2.DatabaseError as error:
-        print ("Entre por rollback" , error)
+        print ("Entre rollback. " , error)
         if miConexiont:
             print("Entro ha hacer el Rollback")
             miConexiont.rollback()
+
+
 
         print ("Voy a hacer el jsonresponde")
 
         response = JsonResponse({"error": error})
         response.error = {"error": error}
         response.status_code = 403 # To announce that the user isn't allowed to publish
-        return response
+        #return response
 
         return JsonResponse({'success': False, 'Mensaje': error})
 

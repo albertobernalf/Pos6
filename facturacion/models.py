@@ -171,6 +171,7 @@ class ConveniosPacienteIngresos(models.Model):
     documento = models.ForeignKey('usuarios.Usuarios', blank=True, null=True, editable=True, on_delete=models.PROTECT,  related_name='DocumentoHistoria2')
     consecAdmision = models.IntegerField(default=0)
     convenio = models.ForeignKey('contratacion.Convenios', blank=True, null=True, editable=True, on_delete=models.PROTECT  , related_name='convenios0221')
+    factura =  models.ForeignKey('facturacion.facturacion', blank=True, null=True, editable=True, on_delete=models.PROTECT)
     fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)
     usuarioRegistro = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True, on_delete=models.PROTECT)
     estadoReg = models.CharField(max_length=1, default='A', editable=False)

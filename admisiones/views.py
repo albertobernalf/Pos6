@@ -2375,6 +2375,20 @@ def escogeAcceso(request, Sede, Username, Profesional, Documento, NombreSede, es
 
         # Fin combo vias de acceso
 
+        serviciosAdministrativos = []
+
+        serviciosAdministrativos.append({'id': '', 'nombre': ''})
+
+
+        for id, nombre in curt.fetchall():
+            serviciosAdministrativos.append({'id': id, 'nombre': nombre})
+
+        miConexiont.close()
+        print("ServiciosAdministrativos = " , serviciosAdministrativos)
+        context['ServiciosAdministrativos'] = serviciosAdministrativos
+
+
+
 
         return render(request, "cirugia/panelCirugiaF.html", context)
 

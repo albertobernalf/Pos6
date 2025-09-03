@@ -754,6 +754,7 @@ window.addEventListener('load', async () => {
 		document.getElementById("paciente").innerHTML = data.paciente;
 		//$('#consecAdmision').val(data.consecAdmision);
 		document.getElementById("consecAdmision").innerHTML = data.consecAdmision;
+		document.getElementById("salidaDefinitiva").innerHTML = data.salidaDefinitiva;
 		//$('#nombreConvenio').val(data.nombreConvenio);
 		document.getElementById("nombreConvenio").innerHTML = data.nombreConvenio;
 		//$('#convenioId').val(data.convenioId);
@@ -1542,6 +1543,19 @@ function AFacturar()
 
  	var liquidacionId = document.getElementById("liquidacionId").value;
  	var username_id = document.getElementById("username_id").value;
+	var salidaDefinitiva = document.getElementById("salidaDefinitiva").value;
+
+	if (salidaDefinitiva=='R')
+		{
+			tipoFactura= 'REFACTURA';
+		}
+
+	else
+		{
+			tipoFactura= 'FACTURA';
+		}
+
+
 	var tipoFactura = document.getElementById("tipoFactura").value;
 	var sede = document.getElementById("sede").value;
 
@@ -1550,16 +1564,28 @@ function AFacturar()
         var nombreSede = document.getElementById("nombreSede").value;
     	var sede = document.getElementById("sede").value;
         var username_id = document.getElementById("username_id").value;
+        var serviciosAdministrativos = document.getElementById("lserviciosAdministrativos").value;
 
 
 		$.ajax({
 	           url: '/facturarCuenta/',
 	            data :
-	            {'liquidacionId':liquidacionId, 'username_id':username_id, 'tipoFactura':tipoFactura,'sede':sede},
+	            {'liquidacionId':liquidacionId, 'username_id':username_id, 'tipoFactura':tipoFactura,'sede':sede,'serviciosAdministrativos':serviciosAdministrativos},
 	           type: 'POST',
 	           dataType : 'json',
 	  		success: function (data) {
 				$('#imprimir').val(data.Factura);
+
+
+			alert("data.Mensaje= " + data.Mensaje);
+
+			if (data.success== false)
+				{
+				alert("entro False");
+				document.getElementById("mensajes").innerHTML = data.Mensaje;
+				return;
+				}
+										
 
             	        var data2 =  {}   ;
         		data2['username'] = username;
@@ -1597,6 +1623,7 @@ function AFacturar()
 
 
 		        data2 = JSON.stringify(data2);
+	
 
 
                      if (data.message != 'Paciente NO tiene Salida Clinica. Consultar medico tratante !')
@@ -1617,8 +1644,8 @@ function AFacturar()
 			 window.location.reload();
 		
 		}
-
-		document.getElementById("mensajesError").innerHTML = data.message;
+		document.getElementById("mensajes").innerHTML = data.Mensaje;
+		
                   },
 	   		    error: function (request, status, error) {
 		document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error

@@ -380,8 +380,6 @@ div.dataTables_filter input {
 </article>
 
 <article id="LiquidacionDetalle">
-
-
 	
 			<div style="height: 50px;  width:100%; background-color:#EBEBEB;"> 
 
@@ -443,6 +441,17 @@ div.dataTables_filter input {
 
           	                           
                                       </div>
+
+					<div class="col">
+
+						 Consec:
+						
+						<span id="salidaDefinitiva" name="salidaDefinitiva"></span>
+							<!--  <input type="text" id="salidaDefinitiva" name="salidaDefinitiva" value="0" readonly> -->
+
+          	                           
+                                      </div>
+
 
 					<div class="col">
 
@@ -508,6 +517,21 @@ div.dataTables_filter input {
 			      <div class="row row-cols-8" >
 				  <input type="hidden" id="tipoRegistro" name="tipoRegistro" value="MANUAL">
 				  <input type="hidden" id="valorTotal" name="valorTotal" value="0" >
+
+					<div class="col-sm-2">
+					
+				                <label for="lserviciosAdministrativos" class="col-sm-1">Cups:</label>
+				       
+					             <select class="select-css"  id="lserviciosAdministrativos" name="lserviciosAdministrativos">
+                                                    {% for serviciosAdministrativos in ServiciosAdministrativos %}
+                                                            <option value="{{serviciosAdministrativos.id}}"> {{serviciosAdministrativos.nombre}}
+                                                            </option>
+                                                            {% endfor %}
+                                            </select>
+				        
+					 </div>
+
+
 
 					<div class="col-sm-2">
 					
