@@ -736,17 +736,17 @@ class PDFOrdenRadiologia(FPDF):
         self.set_font('Times', 'B', 7)
         self.cell(25, 18, 'REGIMEN:', 0, 0, 'L')
         self.set_font('Times', '', 7)
-        self.cell(50, 18, historia[0]['regimen'], 0, 0, 'L')
+        self.cell(50, 18, str(historia[0]['regimen']), 0, 0, 'L')
         self.ln(2)
         self.set_font('Times', 'B', 7)
         self.cell(25, 20, 'CONVENIO:', 0, 0, 'L')
         self.set_font('Times', '', 7)
-        self.cell(25, 20, historia[0]['convenio'], 0, 0, 'L')
+        self.cell(25, 20, str(historia[0]['convenio']), 0, 0, 'L')
         self.ln(2)
         self.set_font('Times', 'B', 7)
         self.cell(25, 21, 'SERVICIO:', 0, 0, 'L')
         self.set_font('Times', '', 7)
-        self.cell(25, 21, historia[0]['servicio'], 0, 0, 'L')
+        self.cell(25, 21, str(historia[0]['servicio']), 0, 0, 'L')
         self.ln(2)
         self.set_font('Times', 'B', 7)
         self.cell(25, 23, 'FECHA:', 0, 0, 'L')
@@ -2202,15 +2202,18 @@ def ImprimirOrdenTerapia(ingresoId2, historiaId, convenioId, tipoAdmision):
     archivo = carpeta + '' + str(pacienteId.documento) + '_' + 'Terapia.pdf'
     print ("archivo =" , archivo)
 
-    pdf.output(archivo, 'F')
 
     try:
         # Intenta abrir el archivo directamente
+        pdf.output(archivo, 'F')
         webbrowser.open(archivo)
     except FileNotFoundError:
         print(f"Error: Archivo no encontrado en {archivo}")
     except Exception as e:
         print(f"Error al abrir el archivo: {e}")
+        datosMensaje = {'success': False, 'Mensaje': 'Cerrar Archivo cargado en browser'}
+        json_data = json.dumps(datosMensaje, default=str)
+        return HttpResponse(json_data, content_type='application/json')
 
     return JsonResponse({'success': True, 'message': 'Orden Terapia impresa!'})
 

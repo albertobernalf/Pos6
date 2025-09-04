@@ -480,7 +480,7 @@ def ImprimirFactura(request):
         print(f"Error: Archivo no encontrado en {archivo}")
     except Exception as e:
         print(f"Error al abrir el archivo: {e}")
-        datosMensaje = {'success': True, 'Mensaje': 'Cerrar Archivo cargado en browser'}
+        datosMensaje = {'success': False, 'Mensaje': 'Cerrar Archivo cargado en browser'}
         json_data = json.dumps(datosMensaje, default=str)
         return HttpResponse(json_data, content_type='application/json')
 

@@ -2017,6 +2017,31 @@ def escogeAcceso(request, Sede, Username, Profesional, Documento, NombreSede, es
 
         # Fin combo estadosAutorizacion
 
+        # Combo Convenios
+
+
+        miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                       password="123456")
+        curt = miConexiont.cursor()
+
+        comando = "SELECT p.id id, p.nombre  nombre FROM contratacion_convenios p ORDER BY p.nombre"
+
+        curt.execute(comando)
+        print(comando)
+
+        convenios = []
+
+        for id, nombre in curt.fetchall():
+            convenios.append({'id': id, 'nombre': nombre})
+
+        miConexiont.close()
+        print("convenios", convenios)
+
+        context['Convenios'] = convenios
+
+        # Fin combo Convenios
+
+
 
         ## FIN CONTEXTO
         return render(request, "autorizaciones/panelAutorizacionesF.html", context)

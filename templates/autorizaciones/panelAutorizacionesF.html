@@ -341,8 +341,33 @@ table.dataTable tbody tr {
                                 </div>
 
 				<div class="col">
+		          
+				<select class="select-css"  id="AserviciosAdministrativos"
+                                                                name="AserviciosAdministrativos">
+                                                            {% for serviciosAdministrativos in ServiciosAdministrativos %}
+                                                            <option value="{{serviciosAdministrativos.id}}">
+                                                                {{serviciosAdministrativos.nombre}}
+                                                            </option>
+                                                            {% endfor %}
+                                                        </select>
+                                </div>
+
+				<div class="col">
+				<select class="select-css"  id="Aconvenios"
+                                                                name="Aconvenios" disable>
+                                                            {% for convenios in Convenios %}
+                                                            <option value="{{convenios.id}}">
+                                                                {{convenios.nombre}}
+                                                            </option>
+                                                            {% endfor %}
+                                                        </select>
+                                </div>
+
+
+
+				<div class="col">
 				TipoAutorizacion:
-                                    <input type="text" id="tipoTipoExamen" name="tipoTipoExamen"  ></input>
+                                    <input type="text" id="tipoTipoExamen" name="tipoTipoExamen" readonly ></input>
                                 </div>
 	
 				<div class="col">
@@ -390,11 +415,11 @@ table.dataTable tbody tr {
 
 				<div class="col">
                                     ValorSolicitado:
-                                    <input type="text" id="valorSolicitado" name="valorSolicitado" value="" readonly ></input>
+                                    <input type="text" id="valorSolicitado" name="valorSolicitado" value="0" readonly ></input>
                                 </div>
 				<div class="col">
                                     valorAutorizado:
-                                    <input type="text" id="valorAutorizado" name="valorAutorizado" value=""  ></input>
+                                    <input type="text" id="valorAutorizado" name="valorAutorizado" value="0"  ></input>
                                 </div>
 
            

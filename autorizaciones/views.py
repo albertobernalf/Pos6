@@ -26,7 +26,7 @@ from autorizaciones.models import AutorizacionesDetalle, Autorizaciones
 import io
 from clinico.models import Historia, HistoriaMedicamentos
 from facturacion.models import Liquidacion, LiquidacionDetalle
-
+from django.utils import timezone
 
 
 def decimal_serializer(obj):
@@ -209,6 +209,9 @@ def ActualizarAutorizacionDetalle(request):
     estadoAutorizacion = request.POST['estadoAutorizacion']
     print("estadoAutorizacion =", estadoAutorizacion)
 
+    serviciosAdministrativos = request.POST['AserviciosAdministrativos']
+    print("serviciosAdministrativos =", serviciosAdministrativos)
+
     numeroAutorizacion = request.POST['numeroAutorizacion']
     print("numeroAutorizacion =", numeroAutorizacion)
 
@@ -218,18 +221,16 @@ def ActualizarAutorizacionDetalle(request):
     tipoTipoExamen = request.POST['tipoTipoExamen']
     print("tipoTipoExamen:", tipoTipoExamen)
 
-
     cantidadAutorizada = request.POST['cantidadAutorizada']
     print("cantidadAutorizada =", cantidadAutorizada)
 
     valorAutorizado = request.POST['valorAutorizado']
     print("valorAutorizado =", valorAutorizado)
 
-    now = datetime.datetime.now()
-    dnow = now.strftime("%Y-%m-%d %H:%M:%S")
-    print("NOW  = ", dnow)
+    convenioId = request.POST['Aconvenios']
+    print("convenioId =", convenioId)
 
-    fechaRegistro = dnow
+    fechaRegistro = timezone.now()
     print("fechaRegistro = ", fechaRegistro)
 
     estadoReg = 'A'
@@ -255,70 +256,98 @@ def ActualizarAutorizacionDetalle(request):
     datosAut1 = AutorizacionesDetalle.objects.get(id = autorizacionDetalleId)
     datosAut = Autorizaciones.objects.get(id=datosAut1.autorizaciones_id)
 
-
     print ("Historia = ", datosAut.historia_id)		
 
     datosHc = Historia.objects.get(id=datosAut.historia_id)
     print ("TipoDoc Paciente = ", datosHc.tipoDoc_id)
     print ("Paciente Cedula= ", datosHc.documento_id)
     print ("Paciente Ingreso= ", datosHc.consecAdmision)
+    ingresoId = Ingresos.objects.get(tipoDoc_id=datosHc.tipoDoc_id, documento_id=datosHc.documento_id,consec=datosHc.consecAdmision)
 
 
-    datosliq = Liquidacion.objects.get(tipoDoc_id =datosHc.tipoDoc.id, documento_id = datosHc.documento_id, consecAdmision= datosHc.consecAdmision)
-    liquidacionId = datosliq.id
- 
-    ## si no existe hay que crear cabezote
+    miConexiont = None
+    try:
 
-    if (datosliq == ''):
-
-	# CREA CABEZOTE
-
-        # Si no existe liquidacion CABEZOTE se debe crear con los totales, abonos, anticipos, procedimiento, suministros etc
-        miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432",                               user="postgres", password="123456")
+        miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                       password="123456")
         curt = miConexiont.cursor()
-        comando = 'INSERT INTO facturacion_liquidacion ("sedesClinica_id", "tipoDoc_id", documento_id, "consecAdmision", fecha, "totalCopagos", "totalCuotaModeradora", "totalProcedimientos" , "totalSuministros" , "totalLiquidacion", "valorApagar", anticipos, "fechaRegistro", "estadoRegistro", convenio_id,  "usuarioRegistro_id", "totalAbonos") VALUES (' + "'" + str(sede) + "'," +  "'" + str(datosHc.tipoDoc_id) + "','" + str(datosHc.documento_id) + "','" + str(datosHc.consecAdmision) + "','" + str(fechaRegistro) + "'," + '0,0,0,0,0,0,0,' + "'" + str(fechaRegistro) + "','" + str(estadoReg) + "'," + str(null) + ',' + "'" + str(usuarioRegistro) + "',0) RETURNING id"
-        curt.execute(comando)
-        liquidacionId   = curt.fetchone()[0]
+
+        datosliq = Liquidacion.objects.get(tipoDoc_id=datosHc.tipoDoc.id, documento_id=datosHc.documento_id,    consecAdmision=datosHc.consecAdmision, convenio_id=convenioId)
+        liquidacionId = datosliq.id
+        consecLiquidacionU = LiquidacionDetalle.objects.filter(liquidacion_id=liquidacionId).aggregate(maximo=Coalesce(Max('consecutivo'), 0))
+        consecLiquidacion = (consecLiquidacionU['maximo']) + 1
+
+        if (tipoTipoExamen == 'CUPS'):
+
+            comando = 'INSERT INTO facturacion_liquidaciondetalle (consecutivo,fecha, cantidad, "valorUnitario", "valorTotal",cirugia_id,"fechaCrea", "fechaRegistro", "estadoRegistro", "examen_id",  "usuarioRegistro_id", liquidacion_id, "tipoRegistro") VALUES (' + "'" + str(
+                consecLiquidacion) + "','" + str(fechaRegistro) + "','" + str(cantidadAutorizada) + "','" + str(
+                valorAutorizado) + "','" + str(valorAutorizado) + "',null," + "'" + str(
+                fechaRegistro) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(
+                examenId) + "','" + str(usuarioRegistro_id) + "','" + str(liquidacionId) + "','" + str(
+                'SISTEMA') + "'" + ')'
+            print("comando = ", comando)
+            curt.execute(comando)
+
+        else:
+
+            # Aqui Gaurdar FARMACIA
+            comando = 'INSERT INTO farmacia_farmacia(historia_id,"ServiciosAdministrativos_id","tipoOrigen_id","tipoMovimiento_id","fechaRegistro", "usuarioRegistro_id","sedesClinica_id",estado_id,"ingresoPaciente_id") VALUES (' + "'" + str(
+                datosAut.historia_id) + "','" + str(serviciosAdministrativos) + "',1,1," + "'" + str(
+                fechaRegistro) + "','" + str(usuarioRegistro_id) + "','" + str(estadoReg) + "','" + str(
+                sede) + "','" + str(ingresoId.id) + "') RETURNIN id"
+            print("comando = ", comando)
+            resultado = curt.execute(comando)
+            farmaciaId = curt.fetchone()[0]
+
+            # Aqui Guardar ENFERMERIA
+            comando = 'INSERT INTO enfermeria_enfermeria(historia_id,"ServiciosAdministrativos_id","tipoOrigen_id","tipoMovimiento_id","fechaRegistro", "usuarioRegistro_id","sedesClinica_id",estado_id,"ingresoPaciente_id") VALUES (' + "'" + str(
+                datosAut.historia_id) + "','" + str(serviciosAdministrativos) + "',1,1," + "'" + str(
+                fechaRegistro) + "','" + str(usuarioRegistro_id) + "','" + str(estadoReg) + "','" + str(
+                sede) + "','" + str(ingresoId.id) + "')"
+            resultado = curt.execute(comando)
+            print("comando = ", comando)
+            enfermeriaId = curt.fetchone()[0]
+
+            # Aqui Guardar FARMACIA DETALLE
+            comando = 'INSERT INTO farmaciadetalle(farmacia_id, "historiaMedicamentos_id",suministro_id,"dosisCantidad", "dosisUnidad_id","viaAdministracion_id","cantidadOrdenada","fechaRegistro","usuarioRegistro_id", "estadoReg", consecutivo)  SELECT ' + "''" + str(
+                farmaciaId) + "'', id," + ' ,suministro_id,"dosisCantidad" , "dosisUnidad_id" , "viaAdministracion_id" ,"cantidadSolicitada",' + "'" + "'" + str(
+                fechaRegistro) + "''," + "'" + "'" + str(usuarioRegistro_id) + "''," + "'" + "'" + str(
+                sede) + "'','A'" + ' "consecutivoMedicamento"  FROM clinico.HistoriaMedicamentos WHERE historia_id = ' + "'" + str(
+                datosAut.historia_id) + "'"
+            print("comando = ", comando)
+            curt.execute(comando)
+
+            # Aqui Guardar ENFERMERIA DETALLE
+            comando = 'INSERT INTO enfermeriadetalle(enfermeria_id, "historiaMedicamentos_id","farmaciaDetalle_id", suministro_id,"dosisCantidad", "dosisUnidad_id","viaAdministracion_id","cantidadOrdenada","fechaRegistro","usuarioRegistro_id", "estadoReg", frecuencia_id, "diasTratamiento")  SELECT ' + "''" + str(
+                enfermeriaId) + "'', id," + ' ,suministro_id,"dosisCantidad" , "dosisUnidad_id" , "viaAdministracion_id" ,"cantidadSolicitada", + "'" +  "'" + str(fechaRegistro) + "''," +  "'" +  "'" + str(usuarioRegistro_id) ' + "'','A'" + ' frecuencia_id, "diasTratamiento"  FROM clinico.HistoriaMedicamentos WHERE historia_id = ' + "'" + str(
+                datosAut.historia_id) + "'"
+            print("comando = ", comando)
+            curt.execute(comando)
+
         miConexiont.commit()
         miConexiont.close()
+        datosMensaje = {'success': True, 'Mensaje': 'Detalle de Autorizacion actualizado satisfactoriamente!'}
+        json_data = json.dumps(datosMensaje, default=str)
+        return HttpResponse(json_data, content_type='application/json')
 
 
-    consecLiquidacionU = LiquidacionDetalle.objects.filter(liquidacion_id=liquidacionId).aggregate(maximo=Coalesce(Max('consecutivo'), 0))
-    consecLiquidacion = (consecLiquidacionU['maximo']) + 1
+    except psycopg2.DatabaseError as error:
+        print("Entre por rollback", error)
+        if miConexiont:
+            print("Entro ha hacer el Rollback")
+            #miConexiont.rollback()
 
+        datosMensaje = {'success': False, 'Mensaje': error}
+        json_data = json.dumps(datosMensaje, default=str)
+        return HttpResponse(json_data, content_type='application/json')
 
-    miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
-                                  password="123456")
-    curt = miConexiont.cursor()
+    finally:
+        if miConexiont:
+            curt.close()
+            miConexiont.close()
 
-    if (tipoTipoExamen == 'SUMINISTROS'):
-    
-    ## Crear rutina para conseguir el id de historiaMedicamentosId
+    ## si no existe hay que crear cabezote
 
-	    datosMed = HistoriaMedicamentos.objects.get(historia_id=datosAut.historia_id)
-	    print ("El id de Medicamento es = ", datosMed.id)	
-
-
-    if (tipoTipoExamen == 'CUPS'):
-	
-	    comando = 'INSERT INTO facturacion_liquidaciondetalle (consecutivo,fecha, cantidad, "valorUnitario", "valorTotal",cirugia,"fechaCrea", "fechaRegistro", "estadoRegistro", "examen_id",  "usuarioRegistro_id", liquidacion_id, "tipoRegistro") VALUES (' + "'" + str(consecLiquidacion) + "','" + str(fechaRegistro) + "','" + str(cantidadAutorizada) + "','" + str(valorAutorizado) + "','" + str(valorAutorizado) + "','" + str('N') + "','" + str(fechaRegistro) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(examenId) + "','" + str(usuarioRegistro_id) + "','" + str(liquidacionId) + "','" + str('SISTEMA') + "'" + ')'
-    else:
-
-	    comando = 'INSERT INTO facturacion_liquidaciondetalle (consecutivo,fecha, cantidad, "valorUnitario", "valorTotal",cirugia,"fechaCrea", "fechaRegistro", "estadoRegistro", "cums_id",  "usuarioRegistro_id", liquidacion_id, "tipoRegistro","historiaMedicamento_id") VALUES (' + "'" + str(
-	        consecLiquidacion) + "','" + str(fechaRegistro) + "','" + str(cantidadAutorizada) + "','" + str(
-        	valorAutorizado) + "','" + str(valorAutorizado) + "','" + str('N') + "','" + str(fechaRegistro) + "','" + str(
-	        fechaRegistro) + "','" + str(estadoReg) + "','" + str(examenId) + "','" + str(usuarioRegistro_id) + "','" + str(liquidacionId) + "'"  + ",'SISTEMA'," + "'" + str(datosMed.id) + "')"
-
-    print ("comando = " , comando)
-
-    curt.execute(comando)
-    miConexiont.commit()
-    miConexiont.close()
-
-    # FIN FACTURACIONDETALLE
-
-
-    return JsonResponse({'success': True, 'Mensaje': 'Detalle de Autorizacion actualizado satisfactoriamente!'})
 
 
 def LeerDetalleAutorizacion(request):
@@ -345,24 +374,24 @@ def LeerDetalleAutorizacion(request):
 
         print ("entre cups")
 
-        detalle = 'select ' + "'" + str('CUPS') + "' tipoTipoExamen," + ' det.id, "cantidadSolicitada", "cantidadAutorizada", det."fechaRegistro", det."estadoReg", autorizaciones_id, det."usuarioRegistro_id", tipexa.nombre tipNombre  , exa.nombre exaNombre,  examenes_id, "valorAutorizado", "valorSolicitado", "tiposExamen_id", "tipoSuministro_id", "estadoAutorizacion_id", "numeroAutorizacion" , est.nombre estadoNombre FROM autorizaciones_autorizacionesdetalle det, autorizaciones_estadosautorizacion est, clinico_tiposexamen tipexa, clinico_examenes exa  WHERE det.id =' + "'" + str(autorizacionDetalleId) + "'" + ' AND tipexa.id = det."tiposExamen_id" AND exa.id = det.examenes_id AND est.id = det."estadoAutorizacion_id"'
+        detalle = 'select ' + "'" + str('CUPS') + "' tipoTipoExamen," + ' det.id, "cantidadSolicitada", "cantidadAutorizada", det."fechaRegistro", det."estadoReg", autorizaciones_id, det."usuarioRegistro_id", tipexa.nombre tipNombre  , exa.nombre exaNombre,  examenes_id, "valorAutorizado", "valorSolicitado", "tiposExamen_id", "tipoSuministro_id", det."estadoAutorizacion_id", det."numeroAutorizacion" , est.nombre estadoNombre , aut.convenio_id convenioId FROM autorizaciones_autorizaciones aut, autorizaciones_autorizacionesdetalle det, autorizaciones_estadosautorizacion est, clinico_tiposexamen tipexa, clinico_examenes exa  WHERE aut.id = det."autorizaciones_id" AND det.id =' + "'" + str(autorizacionDetalleId) + "'" + ' AND tipexa.id = det."tiposExamen_id" AND exa.id = det.examenes_id AND est.id = det."estadoAutorizacion_id"'
 
-    if (tipotipoExamen.cums_id == ''):
+    if (tipotipoExamen.cums_id != ''):
         print("entre suministros")
 
-        detalle = 'select ' + "'" + str('SUMINISTROS') + "' tipoTipoExamen," + ' det.id, "cantidadSolicitada", "cantidadAutorizada", det."fechaRegistro", det."estadoReg", autorizaciones_id, det."usuarioRegistro_id",  tipsum.nombre tipNombre, exa.nombre exaNombre,  cums_id, "valorAutorizado", "valorSolicitado", "tiposExamen_id", det."tipoSuministro_id", "estadoAutorizacion_id", "numeroAutorizacion" , est.nombre estadoNombre FROM autorizaciones_autorizacionesdetalle det, autorizaciones_estadosautorizacion est, facturacion_tipossuministro tipsum, facturacion_suministros exa  WHERE det.id =' + "'" + str(autorizacionDetalleId) + "'" + 'AND tipsum.id = det."tipoSuministro_id"  AND exa.id = det.cums_id AND  est.id = det."estadoAutorizacion_id"'
+        detalle = 'select ' + "'" + str('SUMINISTROS') + "' tipoTipoExamen," + ' det.id, "cantidadSolicitada", "cantidadAutorizada", det."fechaRegistro", det."estadoReg", autorizaciones_id, det."usuarioRegistro_id",  tipsum.nombre tipNombre, exa.nombre exaNombre,  cums_id, "valorAutorizado", "valorSolicitado", "tiposExamen_id", det."tipoSuministro_id", det."estadoAutorizacion_id", det."numeroAutorizacion" , est.nombre estadoNombre, aut.convenio_id convenioId FROM autorizaciones_autorizacionesdetalle det, autorizaciones_estadosautorizacion est, facturacion_tipossuministro tipsum, facturacion_suministros exa  WHERE aut.id = det."autorizaciones_id" and det.id =' + "'" + str(autorizacionDetalleId) + "'" + 'AND tipsum.id = det."tipoSuministro_id"  AND exa.id = det.cums_id AND  est.id = det."estadoAutorizacion_id"'
 
 
     print(detalle)
 
     curx.execute(detalle)
 
-    for tipoTipoExamen,id, cantidadSolicitada, cantidadAutorizada, fechaRegistro, estadoReg, autorizaciones_id, usuarioRegistro_id, tipNombre, exaNombre, examenes_id,  valorAutorizado,	valorSolicitado, tiposExamen_id, tipoSuministro_id, estadoAutorizacion_id, numeroAutorizacion, estadoNombre in curx.fetchall():
+    for tipoTipoExamen,id, cantidadSolicitada, cantidadAutorizada, fechaRegistro, estadoReg, autorizaciones_id, usuarioRegistro_id, tipNombre, exaNombre, examenes_id,  valorAutorizado,	valorSolicitado, tiposExamen_id, tipoSuministro_id, estadoAutorizacion_id, numeroAutorizacion, estadoNombre , convenioId in curx.fetchall():
         autorizacionDetalle.append(
             {"model": "autorizaciones_autorizacionesdetalle", "pk": id, "fields":
                 {'tipoTipoExamen':tipoTipoExamen, 'id':id, 'cantidadSolicitada':cantidadSolicitada,'cantidadAutorizada':cantidadAutorizada,'fechaRegistro':fechaRegistro,'estadoReg':estadoReg,
                  'autorizaciones_id':autorizaciones_id,'usuarioRegistro_id':usuarioRegistro_id,'tipNombre':tipNombre, 'exaNombre':exaNombre, 'examenes_id':examenes_id,'valorAutorizado':valorAutorizado,
-                 'valorSolicitado':valorSolicitado,'tiposExamen_id':tiposExamen_id,'tipoSuministro_id':tipoSuministro_id,'estadoAutorizacion_id':estadoAutorizacion_id,'numeroAutorizacion':id,'numeroAutorizacion':numeroAutorizacion,'estadoNombre':estadoNombre}})
+                 'valorSolicitado':valorSolicitado,'tiposExamen_id':tiposExamen_id,'tipoSuministro_id':tipoSuministro_id,'estadoAutorizacion_id':estadoAutorizacion_id,'numeroAutorizacion':id,'numeroAutorizacion':numeroAutorizacion,'estadoNombre':estadoNombre, 'convenio_id':convenioId}})
 
     miConexionx.close()
     print("autorizacionDetalle ", autorizacionDetalle)

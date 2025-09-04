@@ -336,6 +336,7 @@ window.addEventListener('load', async () => {
 	                $('#fechaRegistro').val(info[0].fields.fechaRegistro);
 	                $('#tipoExamen').val(info[0].fields.tipoExamen);
 	                $('#usuarioRegistro2_id').val(info[0].fields.usuarioRegistro_id);
+			$('#Aconvenios').val(info[0].fields.convenio_id);
 
 
 

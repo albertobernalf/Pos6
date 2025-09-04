@@ -841,6 +841,12 @@ ojo pendiente en aplicacion de medicamentos arreglar cuando aplica la modal no p
 6. ver proceso de refacturacion
 7. Trabaja impresion de historia clinica, con apoyo terapeutico formato bien bacano ojo lineas no cuadros. por el momento crera nuevos pacientes y hacer pruebas con ellos
 
--- ojo mañana ver todo el proceso FacturarCuenta ( bien sea ppor factura normal o ppor refacturacion cabecear bien)
--- ops me sigue saliendo la cuenta de refacturada. ERROR hay que ver cuando si y cuando nop, porque esta no esta para refacturar
-	-- (ojo cuando refactura, actualizar el estado a Factura Normal con ello nosale en la consulktade liquidacion por que no tiene dependencia ni es R)
+
+-- ops
+-- 1., las terapias caigan en autorizaciones detalle
+   2. que de autorizaciones siu es medicamento a frarmacia o sino a cuenta paciente
+   3. hacer fcatura de refactura
+    4. hacer traslado de cargos
+   5. crear ambulatrio completo ghats facturar
+
+-- ojo falta mirar desde autoprizaciones los cups que caen a liquidaciondetalle, actualizaen TOTALES

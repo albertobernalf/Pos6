@@ -558,7 +558,10 @@ def PostConsultaLiquidacion(request):
                  })
 
     else:
-        return JsonResponse({'errors':'Something went wrong!'})
+        datosMensaje = {'success': True, 'Mensaje': 'Something went wrong!'}
+        json_data = json.dumps(datosMensaje, default=str)
+        return HttpResponse(json_data, content_type='application/json')
+
 
 def load_dataLiquidacionDetalle(request, data):
     print("Entre load_data LiquidacionDetalle")
@@ -790,7 +793,10 @@ def GuardaAbonosFacturacion(request):
             miConexion3.rollback()
 
         print ("Voy a hacer el jsonresponde")
-        return JsonResponse({'success': False, 'Mensaje': error})
+        datosMensaje = {'success': True, 'Mensaje': error}
+        json_data = json.dumps(datosMensaje, default=str)
+        return HttpResponse(json_data, content_type='application/json')
+
 
     finally:
         if miConexion3:
@@ -811,7 +817,10 @@ def PostDeleteAbonosFacturacion(request):
 
     if (valorSaldo.saldo > 0):
 
-        return JsonResponse({'success': False, 'message': 'No se puede anular Abono con Facturas relacionadas!'})
+        datosMensaje = {'success': True, 'Mensaje': 'No se puede anular Abono con Facturas relacionadas!'}
+        json_data = json.dumps(datosMensaje, default=str)
+        return HttpResponse(json_data, content_type='application/json')
+
 
     miConexion3 = None
     try:
@@ -828,7 +837,10 @@ def PostDeleteAbonosFacturacion(request):
         cur3.close()
         miConexion3.close()
 
-        return JsonResponse({'success': True, 'message': 'Abono Cancelado!'})
+        datosMensaje = {'success': True, 'Mensaje': 'Abono Cancelado!'}
+        json_data = json.dumps(datosMensaje, default=str)
+        return HttpResponse(json_data, content_type='application/json')
+
 
     except psycopg2.DatabaseError as error:
         print ("Entre por rollback" , error)
@@ -837,7 +849,10 @@ def PostDeleteAbonosFacturacion(request):
             miConexion3.rollback()
 
         print ("Voy a hacer el jsonresponde")
-        return JsonResponse({'success': False, 'Mensaje': error})
+        datosMensaje = {'success': True, 'Mensaje': error}
+        json_data = json.dumps(datosMensaje, default=str)
+        return HttpResponse(json_data, content_type='application/json')
+
 
     finally:
         if miConexion3:
@@ -989,7 +1004,11 @@ def GuardarLiquidacionDetalle(request):
         cur3.close()
         miConexion3.close()
 
-        return JsonResponse({'success': True, 'message': 'Registro Guardado satisfactoriamente!'})
+        datosMensaje = {'success': True, 'Mensaje': 'Registro Guardado satisfactoriamente!'}
+        json_data = json.dumps(datosMensaje, default=str)
+        return HttpResponse(json_data, content_type='application/json')
+
+
 
     except psycopg2.DatabaseError as error:
         print ("Entre por rollback" , error)
@@ -998,7 +1017,11 @@ def GuardarLiquidacionDetalle(request):
             miConexion3.rollback()
 
         print ("Voy a hacer el jsonresponde")
-        return JsonResponse({'success': False, 'Mensaje': error})
+        datosMensaje = {'success': False, 'Mensaje': error}
+        json_data = json.dumps(datosMensaje, default=str)
+        return HttpResponse(json_data, content_type='application/json')
+
+
 
     finally:
         if miConexion3:
@@ -1078,7 +1101,12 @@ def PostDeleteLiquidacionDetalle(request):
             miConexion3.rollback()
 
         print ("Voy a hacer el jsonresponde")
-        return JsonResponse({'success': False, 'Mensaje': error})
+
+        datosMensaje = {'success': False, 'Mensaje':error}
+        json_data = json.dumps(datosMensaje, default=str)
+        return HttpResponse(json_data, content_type='application/json')
+
+
 
     finally:
         if miConexion3:
@@ -1088,7 +1116,10 @@ def PostDeleteLiquidacionDetalle(request):
 
     ## Fin rutina actualiza cabezotes
 
-    return JsonResponse({'success': True, 'message': 'Registro de Liquidacion Anulado!'})
+    datosMensaje = {'success': True, 'Mensaje':'Registro de Liquidacion Anulado!'}
+    json_data = json.dumps(datosMensaje, default=str)
+    return HttpResponse(json_data, content_type='application/json')
+
 
 
 def EditarGuardarLiquidacionDetalle(request):
