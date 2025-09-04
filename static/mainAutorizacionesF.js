@@ -365,8 +365,10 @@ function ActualizarAut()
                 type: "POST",
                 dataType: 'json',
                 success: function (data2) {
-		   $("#mensajes").html(data2.message);
+		   $("#mensajes").html(data2.Mensaje);
                   $('#postFormAutorizacionesDetalle').trigger("reset");
+
+		
 
 	    	var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
         	var username = document.getElementById("username").value;

@@ -850,3 +850,6 @@ ojo pendiente en aplicacion de medicamentos arreglar cuando aplica la modal no p
    5. crear ambulatrio completo ghats facturar
 
 -- ojo falta mirar desde autoprizaciones los cups que caen a liquidaciondetalle, actualizaen TOTALES
+-- EN MEDICAMENTOS : DESDE LA HC NO TIENE GRABADO EL TIPOEXAMENE EN AUTORIZACIONES DETALLE
+-- ops la facturaambulatoria no tiene totales
+-- ops los indicadores de hclinica NO MUESTRA AMBULATORIOS y los de facturacion no funcionan (NO FUNCONA NADA)
