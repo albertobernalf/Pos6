@@ -2864,7 +2864,11 @@ def guardarAdmisionTriage(request):
         salidaClinica = "N"
         salidaDefinitiva = "N"
 
-        especialidadesMedicos = request.POST['busEspecialidad']
+        #especialidadesMedicos = request.POST['busEspecialidad']
+        especialidadesMedicosP = request.POST['busEspecialidad']
+        medicoIngresoId = Medicos.objects.get(id=medicoIngreso)
+        especialidadesMedicosQ = EspecialidadesMedicos.objects.get(planta_id=medicoIngresoId.planta_id, especialidades_id = especialidadesMedicosP)
+        especialidadesMedicos = especialidadesMedicosQ.id
 
         especialidadesMedicosSalida = ""
         especialidadesMedicosActual = especialidadesMedicos

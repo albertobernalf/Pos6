@@ -25,29 +25,34 @@ function arrancaLiquidacion(valorTabla,valorData)
     if (valorTabla == 1)
     {
         let dataTableOptionsLiquidacion  ={
-  dom: "<'row'<'col-md-2'B><'col-md-12'f>>" + 
+   dom: "<'row mb-1'<'col-sm-3'B><'col-sm-3'><'col-sm-6'f>>" + // B = Botones a la izquierda, f = filtro a la derecha
              "<'row'<'col-sm-12'tr>>" +
-             "<'row'<'col-md-6'i><'col-md-6'p>>",
+             "<'row mt-3'<'col-sm-5'i><'col-sm-7'p>>",
+
+
+//  dom: 'Bfrtilp',
   buttons: [
     {
       extend: 'excelHtml5',
       text: '<i class="fas fa-file-excel"></i> ',
+	// text: '<i class="bi bi-file-earmark-excel-fill"></i> Exportar Excel',
       titleAttr: 'Exportar a Excel',
-      className: 'btn btn-success',
+      className: 'btn btn-success btn-sm',
     },
     {
       extend: 'pdfHtml5',
       text: '<i class="fas fa-file-pdf"></i> ',
       titleAttr: 'Exportar a PDF',
-      className: 'btn btn-danger',
+      className: 'btn btn-danger btn-sm',
     },
     {
       extend: 'print',
       text: '<i class="fa fa-print"></i> ',
       titleAttr: 'Imprimir',
-      className: 'btn btn-info',
+      className: 'btn btn-info btn-sm',
     },
   ],
+  autoWidth: false,
   lengthMenu: [2, 4, 15],
            processing: true,
             serverSide: false,
@@ -1862,12 +1867,13 @@ function ReFacturar()
         var nombreSede = document.getElementById("nombreSede").value;
     	var sede = document.getElementById("sede").value;
         var username_id = document.getElementById("username_id").value;
-
+	tipoFactura= 'REFACTURA';
+	
 
 		$.ajax({
 	           url: '/reFacturar/',
 	            data :
-	            {'facturacionId':facturacionId, 'username_id':username_id},
+	            {'facturacionId':facturacionId, 'username_id':username_id,'tipoFactura':tipoFactura},
 	           type: 'POST',
 	           dataType : 'json',
 	  		success: function (data) {

@@ -1897,7 +1897,7 @@ def crearHistoriaClinica(request):
 
                         # Aqui logica para crear el cabezote de Farmacia y Enfermeria
 
-                        if (consecutivo == 1):
+                        if (consecutivo == 1 and medicamentosId.requiereAutorizacion == 'N'):
 
                             # Aqui Gaurdar FARMACIA
 
@@ -2002,7 +2002,7 @@ def crearHistoriaClinica(request):
                                                            user="postgres", password="123456")
 
                             curt = miConexiont.cursor()
-                            comando = 'INSERT INTO autorizaciones_autorizacionesdetalle ("estadoAutorizacion_id", "cantidadSolicitada", "cantidadAutorizada", "fechaRegistro", "estadoReg", autorizaciones_id, "usuarioRegistro_id", "tipoSuministro_id", cums_id)  VALUES (' + "'" + str(estadoAutorizacionId.id) + "'," + "'" + str(cantidadMedicamento) + "'" + ' ,0, now(),' + "'" + str('A') + "','"  + str(autorizacionId) + "','" + str(usuarioRegistro)  + "','" + str(tiposSuministroId.id) + "','" + str(medicamentos) + "')"
+                            comando = 'INSERT INTO autorizaciones_autorizacionesdetalle ("estadoAutorizacion_id", "cantidadSolicitada", "cantidadAutorizada", "fechaRegistro", "estadoReg", autorizaciones_id, "usuarioRegistro_id", "tipoSuministro_id", cums_id,"historiaMedicamentos_id")  VALUES (' + "'" + str(estadoAutorizacionId.id) + "'," + "'" + str(cantidadMedicamento) + "'" + ' ,0, now(),' + "'" + str('A') + "','"  + str(autorizacionId) + "','" + str(usuarioRegistro)  + "','" + str(tiposSuministroId.id) + "','" + str(medicamentos) + "','" + str(i.id) + "')"
 
 
                             curt.execute(comando)

@@ -1087,15 +1087,14 @@ $('#tablaDatos tbody').on('change', '.miIngresoId', function() {
          arrancaAdmisiones(3,data);
 	    dataTableAbonosAdmisionesInitialized = true;
 
+	alert("voy a cargar autorizaciones");
 
          arrancaAdmisiones(4,data);
 	    dataTableAutorizacionesInitialized = true;
-
+	alert("YA PASE  autorizaciones");
 
          arrancaAdmisiones(6,data);
 	    dataTableHabitacionesInitialized = true;
-
-
 
 	$.ajax({
 		type: 'POST',

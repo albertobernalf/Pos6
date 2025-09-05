@@ -53,6 +53,9 @@ class Planta(models.Model):
     fechaRegistro = models.DateTimeField(default=now, editable=False)
     estadoReg = models.CharField(max_length=1, default='A', editable=False)
 
+    class Meta:
+        unique_together = (('tipoDoc', 'documento','nombre'),)
+
     def __str__(self):
         #return self.nombre
 	    return '%s %s' % (self.nombre , self.sedesClinica)

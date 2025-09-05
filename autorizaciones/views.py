@@ -28,7 +28,7 @@ from clinico.models import Historia, HistoriaMedicamentos
 from facturacion.models import Liquidacion, LiquidacionDetalle
 from django.utils import timezone
 from farmacia.models import FarmaciaEstados
-
+from cartera.models import Pagos
 
 def decimal_serializer(obj):
     if isinstance(obj, Decimal):
@@ -243,17 +243,17 @@ def ActualizarAutorizacionDetalle(request):
     print ("usuarioRegistro_id", usuarioRegistro_id)
     # ACTUALIZA DETALLE AUTORIZACION
 
-    miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
-                                   password="123456")
-    curx = miConexionx.cursor()
+    #miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+    #                               password="123456")
+    #curx = miConexionx.cursor()
 
-    detalle = 'UPDATE autorizaciones_autorizacionesdetalle SET  "estadoAutorizacion_id" =   ' + "'" + str(estadoAutorizacion) + "'," + ' "numeroAutorizacion" = '   + "'" + str(numeroAutorizacion) + "'," + ' "valorAutorizado" = ' + "'" + str(valorAutorizado) + "'," +   ' "fechaRegistro" = ' + "'" + str(fechaRegistro) + "',"  + ' "cantidadAutorizada" = ' + "'" + str(cantidadAutorizada) +  "'" +  ' WHERE id = ' + "'" + str(autorizacionDetalleId) + "'"
+    #detalle = 'UPDATE autorizaciones_autorizacionesdetalle SET  "estadoAutorizacion_id" =   ' + "'" + str(estadoAutorizacion) + "'," + ' "numeroAutorizacion" = '   + "'" + str(numeroAutorizacion) + "'," + ' "valorAutorizado" = ' + "'" + str(valorAutorizado) + "'," +   ' "fechaRegistro" = ' + "'" + str(fechaRegistro) + "',"  + ' "cantidadAutorizada" = ' + "'" + str(cantidadAutorizada) +  "'" +  ' WHERE id = ' + "'" + str(autorizacionDetalleId) + "'"
 
-    print("detalle = ", detalle)
+    #print("detalle = ", detalle)
 
-    curx.execute(detalle)
-    miConexionx.commit()
-    miConexionx.close()
+    #curx.execute(detalle)
+    #miConexionx.commit()
+    #miConexionx.close()
 
     # RUTINA SI ESTA AUTORIZADO DEBE CREAR EN FACTURACONDETALLE, OPS CON TARIFA ?????? o el valor lo trae de la autoprizacion mejor
 
@@ -316,7 +316,7 @@ def ActualizarAutorizacionDetalle(request):
             comando = 'INSERT INTO farmacia_farmaciadetalle(farmacia_id, "historiaMedicamentos_id",suministro_id,"dosisCantidad", "dosisUnidad_id","viaAdministracion_id","cantidadOrdenada","fechaRegistro","usuarioRegistro_id", "estadoReg", "consecutivoMedicamento")  SELECT ' + "'" + str(
                 farmaciaId) + "', id," + ' suministro_id,"dosisCantidad" , "dosisUnidad_id" , "viaAdministracion_id" ,"cantidadSolicitada",' + "'"  + str(
                 fechaRegistro) + "'," + "'"  + str(usuarioRegistro_id) + "',"  + "'A'" + ', "consecutivoMedicamento"  FROM clinico_HistoriaMedicamentos WHERE historia_id = ' + "'" + str(
-                datosAut.historia_id) + "' RETURNING id"
+                datosAut.historia_id) + "' AND " + ' id = ' + "'" + str(datosAut1.historiaMedicamentos) + "' RETURNING id"
             print("comando = ", comando)
 
             resultado = curt.execute(comando)
@@ -325,9 +325,55 @@ def ActualizarAutorizacionDetalle(request):
             # Aqui Guardar ENFERMERIA DETALLE
             comando = 'INSERT INTO enfermeria_enfermeriadetalle(enfermeria_id, "historiaMedicamentos_id","farmaciaDetalle_id", suministro_id,"dosisCantidad", "dosisUnidad_id","viaAdministracion_id","cantidadOrdenada","fechaRegistro","usuarioRegistro_id", "estadoReg", frecuencia_id, "diasTratamiento")  SELECT ' + "'" + str(
                 enfermeriaId) + "'," + ' id,' + "'" + str(farmaciaDetalleId) + "'," + ' suministro_id,"dosisCantidad" , "dosisUnidad_id" , "viaAdministracion_id" ,"cantidadSolicitada",' + "'" + str(fechaRegistro) + "','" + str(usuarioRegistro_id) + "','A'," + ' frecuencia_id, "diasTratamiento"  FROM clinico_HistoriaMedicamentos WHERE historia_id = ' + "'" + str(
-                datosAut.historia_id) + "'"
+                datosAut.historia_id) + "' AND " + ' id = ' + "'" + str(datosAut1.historiaMedicamentos) + "'"
             print("comando = ", comando)
             curt.execute(comando)
+
+        ## Vamops a actualizar los totales de la Liquidacion:
+                #
+        totalSuministros = LiquidacionDetalle.objects.all().filter(liquidacion_id=liquidacionId).filter(examen_id = None).exclude(estadoRegistro='N').aggregate(totalS=Coalesce(Sum('valorTotal'), 0))
+        totalSuministros = (totalSuministros['totalS']) + 0
+        print("totalSuministros", totalSuministros)
+        totalProcedimientos = LiquidacionDetalle.objects.all().filter(liquidacion_id=liquidacionId).filter(cums_id = None).exclude(estadoRegistro='N').aggregate(totalP=Coalesce(Sum('valorTotal'), 0))
+        totalProcedimientos = (totalProcedimientos['totalP']) + 0
+        print("totalProcedimientos", totalProcedimientos)
+        registroPago = Liquidacion.objects.get(id=liquidacionId)
+
+		# Continua Aqui
+
+        totalCopagos = Pagos.objects.all().filter(tipoDoc_id=datosHc.tipoDoc_id).filter(documento_id=datosHc.documento_id).filter(consec=datosHc.consecAdmision).filter(formaPago_id=4).exclude(estadoReg='N').aggregate(totalC=Coalesce(Sum('valor'), 0))
+        totalCopagos = (totalCopagos['totalC']) + 0
+        print("totalCopagos", totalCopagos)
+        totalCuotaModeradora = Pagos.objects.all().filter(tipoDoc_id=datosHc.tipoDoc_id).filter(documento_id=datosHc.documento_id).filter(consec=datosHc.consecAdmision).filter(formaPago_id=3).exclude(estadoReg='N').aggregate(totalM=Coalesce(Sum('valor'), 0))
+        totalCuotaModeradora = (totalCuotaModeradora['totalM']) + 0
+        print("totalCuotaModeradora", totalCuotaModeradora)
+        totalAnticipos = Pagos.objects.all().filter(tipoDoc_id=datosHc.tipoDoc_id).filter(documento_id=datosHc.documento_id).filter(consec=datosHc.consecAdmision).filter(formaPago_id=1).exclude(estadoReg='N').aggregate(Anticipos=Coalesce(Sum('valor'), 0))
+        totalAnticipos = (totalAnticipos['Anticipos']) + 0
+        print("totalAnticipos", totalAnticipos)
+        totalAbonos = Pagos.objects.all().filter(tipoDoc_id=datosHc.tipoDoc_id).filter(documento_id=datosHc.documento_id).filter(consec=datosHc.consecAdmision).filter(formaPago_id=2).exclude(estadoReg='N').aggregate(totalAb=Coalesce(Sum('valor'), 0))
+        totalAbonos = (totalAbonos['totalAb']) + 0
+        #totalAbonos = totalCopagos + totalAnticipos + totalCuotaModeradora
+        print("totalAbonos", totalAbonos)
+
+        totalRecibido = totalCopagos + totalCuotaModeradora + totalAnticipos + totalAbonos
+        totalApagar = totalSuministros + totalProcedimientos - totalRecibido
+        totalLiquidacion = totalSuministros + totalProcedimientos
+        print("totalLiquidacion", totalLiquidacion)
+        print("totalAPagar", totalApagar)
+
+        # Rutina Guarda en cabezote los totales
+
+        print ("Voy a grabar el cabezote")
+        print ("liquidacionId = ", liquidacionId)
+
+        comando12 = 'UPDATE facturacion_liquidacion SET "totalSuministros" = ' +  "'" +  str(totalSuministros) + "'" + ',"totalProcedimientos" = ' + "'" +  str(totalProcedimientos) + "'"  + ', "totalCopagos" = ' + "'" +  str(totalCopagos) + "'"  + ' , "totalCuotaModeradora" = ' + "'" +  str(totalCuotaModeradora) + "'" + ', anticipos = ' + "'" +  str(totalAnticipos) + "'"  + ' ,"totalAbonos" = ' + "'" + str(totalAbonos) + "'" + ', "totalLiquidacion" = ' + "'" + str(totalLiquidacion) + "'" + ', "valorApagar" = ' + "'" + str(totalApagar) + "'"   + ', "totalRecibido" = ' + "'" + str(totalRecibido) + "'"  + ' WHERE id =' + str(liquidacionId)
+        print("COMANDO12 = " , comando12)
+        curt.execute(comando12)
+
+        detalle = 'UPDATE autorizaciones_autorizacionesdetalle SET  "estadoAutorizacion_id" =   ' + "'" + str(estadoAutorizacion) + "'," + ' "numeroAutorizacion" = '   + "'" + str(numeroAutorizacion) + "'," + ' "valorAutorizado" = ' + "'" + str(valorAutorizado) + "'," +   ' "fechaRegistro" = ' + "'" + str(fechaRegistro) + "',"  + ' "cantidadAutorizada" = ' + "'" + str(cantidadAutorizada) +  "'" +  ' WHERE id = ' + "'" + str(autorizacionDetalleId) + "'"
+        print("detalle = ", detalle)
+        curt.execute(detalle)
+
 
         miConexiont.commit()
         miConexiont.close()
@@ -352,6 +398,7 @@ def ActualizarAutorizacionDetalle(request):
             miConexiont.close()
 
     ## si no existe hay que crear cabezote
+
 
 
 

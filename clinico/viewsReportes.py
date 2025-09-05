@@ -1956,7 +1956,7 @@ def ImprimirHistoriaClinica(request):
                                            password="123456")
             curx = miConexionx.cursor()
 
-            comando = 'SELECT medicos."registroMedico", planta.nombre plantaNombre, usu."tipoDoc_id", usu.documento 	FROM clinico_historia historia INNER JOIN planta_planta planta ON (planta.id = historia."usuarioRegistro_id") INNER JOIN clinico_medicos medicos ON (medicos.planta_id = planta.id) INNER JOIN usuarios_usuarios usu ON (usu.id = historia.documento_id)	WHERE historia.id = ' + "'" + str(folios[0 + i]['HistoriaId']) + "'"
+            comando = 'SELECT medicos."registroMedico", planta.nombre plantaNombre, planta."tipoDoc_id", planta.documento 	FROM clinico_historia historia INNER JOIN planta_planta planta ON (planta.id = historia."usuarioRegistro_id") INNER JOIN clinico_medicos medicos ON (medicos.planta_id = planta.id) WHERE historia.id = ' + "'" + str(folios[0 + i]['HistoriaId']) + "'"
             curx.execute(comando)
 
             print(comando)

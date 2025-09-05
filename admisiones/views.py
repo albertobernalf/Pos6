@@ -26,7 +26,7 @@ from rips.models import  RipsDestinoEgreso
 from cartera.models import FormasPagos, PagosFacturas, Pagos
 import datetime
 from django.utils import timezone
-from clinico.models import Servicios
+from clinico.models import Servicios,EspecialidadesMedicos, Medicos
 from django.db import transaction, IntegrityError
 from django.db.models import Q
 from admisiones.viewsReportes import ImprimirAtencionUrgencias, ImprimirHojaAdmision, ImpresionManilla
@@ -5025,7 +5025,10 @@ def crearAdmisionDef(request):
         salidaClinica = "N"
         salidaDefinitiva = "N"
 
-        especialidadesMedicos = request.POST['busEspecialidad']
+        especialidadesMedicosP = request.POST['busEspecialidad']
+        medicoIngresoId = Medicos.objects.get(id=medicoIngreso)
+        especialidadesMedicosQ = EspecialidadesMedicos.objects.get(planta_id=medicoIngresoId.planta_id, especialidades_id = especialidadesMedicosP)
+        especialidadesMedicos = especialidadesMedicosQ.id
 
         especialidadesMedicosSalida = ""
         especialidadesMedicosActual = especialidadesMedicos
@@ -5191,15 +5194,16 @@ def crearAdmisionDef(request):
                 grabo88.save()
                 grabo88.id
                 print("yA grabe pacientes ingresos", grabo88.id)
-
-
-
                 print("Grabe HISTORICO DEPENDENCIAS")
 
         except Exception as e:
             # Aquí ya se hizo rollback automáticamente
             print("Se hizo rollback por:", e)
-            return JsonResponse({'success': False, 'Mensaje': e})
+            datosMensaje = {'success': False, 'Mensaje': e}
+            json_data = json.dumps(datosMensaje, default=str)
+            return HttpResponse(json_data, content_type='application/json')
+
+
             #raise Exception("¡Ha ocurrido un error ENVIADO DESDE DJANGO!")
 
 
@@ -7760,9 +7764,9 @@ def Load_dataAutorizacionesAdmisiones(request, data):
                  'empresa': empresa, 'examen': examen, 'cums': cums,'valorAutorizado':valorAutorizado,'autDetalle':autDetalle,'nombreSuministro':nombreSuministro, 'nombreExamen':nombreExamen }})
 
     miConexionx.close()
-    print(autorizaciones)
+    print("autorizaciones =  OJOOOOOOOOOOOOO ", autorizaciones)
 
-    serialized1 = json.dumps(autorizaciones, default=serialize_datetime)
+    serialized1 = json.dumps(autorizaciones, default=str)
 
     print("Envio = ", serialized1)
 

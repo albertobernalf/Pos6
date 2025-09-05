@@ -833,23 +833,22 @@ ojo pendiente en aplicacion de medicamentos arreglar cuando aplica la modal no p
   -- y el repporteaor que pasa ?
   -- Lo ultimo ultimo es tablas particionadas ver cuales. Umm yp creo la gran mayoria.
 
-
-2. hacer lineas en salto ee cada cambio de  concepto
 3. Trabajar todo traslados prueba. ideal solo traer el convenio de dende selecione 
-4. ver anulacion de facturas
-5. No permitir refacturar si no esta anulada la factura
-6. ver proceso de refacturacion
 7. Trabaja impresion de historia clinica, con apoyo terapeutico formato bien bacano ojo lineas no cuadros. por el momento crera nuevos pacientes y hacer pruebas con ellos
-
-
--- ops
--- 1., las terapias caigan en autorizaciones detalle
-   2. que de autorizaciones siu es medicamento a frarmacia o sino a cuenta paciente
-   3. hacer fcatura de refactura
-    4. hacer traslado de cargos
-   5. crear ambulatrio completo ghats facturar
-
--- ojo falta mirar desde autoprizaciones los cups que caen a liquidaciondetalle, actualizaen TOTALES
--- EN MEDICAMENTOS : DESDE LA HC NO TIENE GRABADO EL TIPOEXAMENE EN AUTORIZACIONES DETALLE
+-- ojo falta 
 -- ops la facturaambulatoria no tiene totales
 -- ops los indicadores de hclinica NO MUESTRA AMBULATORIOS y los de facturacion no funcionan (NO FUNCONA NADA)
+2. hacer ejemplocon mas de un medicamento, mas de unat terapia no autoriada en un folio
+3. hacer traslados
+4. indicadores
+5. comenzar hclinica vs apoyo terapeutico resultados
+7. mirar desde autorizaciones los cups que caen a liquidaciondetalle, actualizaen TOTALES
+8. cuando planeo un medicamento en enfermeria sale eroro de turnos catch error
+
+ --	OJO PARA EL 8 DE SEPTIEMBRE:
+
+10. ojo el guery load_dataliquidacion me mosytro 2 veces a nataly y no tiene sisno una solo convenio OPS de pronto es popr que tiene otro conevio al refacturar y activarla quedan activos los
+  dos conveno REVISAR SOSS. es complejo pero si hay que miraralo
+  ME HIZO EL TRASLADO PERO FALO EN EL TOTAL DEL TRASLADO INICIAL
+11 . CUANDO HAGO TRASLADOS ME SUMA  EN TOTALPROCEDIMIENTO, TOTALSUMINISTROS ESTA BIEN PERO EN TOTALLIQUIDACION O VALORAPAGAR ESTAN CON VALORES HYA QUE ACTUALIZAR DESDE EL TRASLADO
+  -- OJO UNA VEZ SOLUCIONADO EL DE EUMELIA, DARLE SALIDA CLINICA Y FACTURAR

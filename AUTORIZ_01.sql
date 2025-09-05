@@ -41,10 +41,41 @@ ROLLBACK;
 
 select * from facturacion_liquidacion where documento_id='18'
 
-
+	select * from usuarios_usuarios
+	select * from clinico_servicios;
 INSERT INTO autorizaciones_autorizacionesdetalle ("estadoAutorizacion_id", "cantidadSolicitada", "cantidadAutorizada",
 	"fechaRegistro", "estadoReg", autorizaciones_id, "usuarioRegistro_id", "examenes_id", cums_id, "tiposExamen_id",
 	"valorSolicitado", "valorAutorizado") 
 	VALUES ('1','2' ,0, now(),'A','78','1','2692',null,'2','42000.0000')
 
-select 'SUMINISTROS' tipoTipoExamen, det.id, "cantidadSolicitada", "cantidadAutorizada", det."fechaRegistro", det."estadoReg", autorizaciones_id, det."usuarioRegistro_id",  tipsum.nombre tipNombre, exa.nombre exaNombre,  cums_id, "valorAutorizado", "valorSolicitado", "tiposExamen_id", det."tipoSuministro_id", det."estadoAutorizacion_id", det."numeroAutorizacion" , est.nombre estadoNombre,aut.convenio_id convenioId FROM autorizaciones_autorizacionesdetalle det, autorizaciones_estadosautorizacion est, facturacion_tipossuministro tipsum, facturacion_suministros exa  WHERE aut.id = det."autorizaciones_id" det.id ='48'AND tipsum.id = det."tipoSuministro_id"  AND exa.id = det.cums_id AND  est.id = det."estadoAutorizacion_id"
+
+	-- QUERY PARA REVIZAR AUTPORIZACIONESDETALLE
+select 'SUMINISTROS' tipoTipoExamen, det.id, "cantidadSolicitada", "cantidadAutorizada", det."fechaRegistro", det."estadoReg", autorizaciones_id, det."usuarioRegistro_id",  tipsum.nombre tipNombre, exa.nombre exaNombre,  cums_id, "valorAutorizado", "valorSolicitado", "tiposExamen_id", det."tipoSuministro_id", det."estadoAutorizacion_id", det."numeroAutorizacion" , est.nombre estadoNombre,aut.convenio_id convenioId FROM autorizaciones_autorizacionesdetalle det, autorizaciones_estadosautorizacion est, facturacion_tipossuministro tipsum, facturacion_suministros exa  WHERE aut.id = det."autorizaciones_id" AND  det.id ='48'AND tipsum.id = det."tipoSuministro_id"  AND exa.id = det.cums_id 
+	AND  est.id = det."estadoAutorizacion_id"
+
+	select * from sitios_serviciossedes;
+
+SELECT * FROM ADMISIONES_INGRESOS order by id   desc
+
+select * from facturacion_facturaciondetalle where facturacion_id= 82
+
+
+select * from sitios_historialdependencias order by id desc
+select * from sitios_dependencias order by id desc
+select * from sitios_serviciosSedes;
+	select * from usuarios_usuarios where id=19
+select * from admisiones_ingresos where documento_id=19
+select * from facturacion_facturacion where documento_id=19
+select * from facturacion_conveniospacienteingresos where documento_id=19
+
+select 'SUMINISTROS' tipoTipoExamen, det.id, "cantidadSolicitada", "cantidadAutorizada", det."fechaRegistro", det."estadoReg", autorizaciones_id, det."usuarioRegistro_id",  tipsum.nombre tipNombre, exa.nombre exaNombre,  cums_id, "valorAutorizado", "valorSolicitado", "tiposExamen_id", det."tipoSuministro_id", det."estadoAutorizacion_id", det."numeroAutorizacion" , est.nombre estadoNombre,
+		aut.convenio_id convenioId
+		FROM autorizaciones_autorizacionesdetalle det, autorizaciones_estadosautorizacion est, facturacion_tipossuministro tipsum,
+		facturacion_suministros exa 
+		WHERE aut.id = det."autorizaciones_id" and det.id ='48' AND tipsum.id = det."tipoSuministro_id"  AND exa.id = det.cums_id
+		AND  est.id = det."estadoAutorizacion_id"
+
+select * from farmacia_farmacia;
+select * from enfermeria_enfermeria;
+select * from clinico_HistoriaMedicamentos
+select * from farmacia_farmaciadetalle

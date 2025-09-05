@@ -15,10 +15,18 @@
         <li><a href="#Liquidacion"><span class="fa-solid fa-user-doctor-message"></span> <span class="tab-text"> </span>Cuentas</a></li>
         <li><a href="#LiquidacionDetalle"><span class="fa-solid fa-user-doctor-message"></span> <span   class="tab-text"> </span>Detalle Cuentas</a></li>
         <li><a href="#Abonos"><span class="fa-solid fa-user-doctor-message"></span> <span  class="tab-text"> </span>Abonos</a></li>
-        <li><a href="#Traslados"><span class="fa-solid fa-user-doctor-message"></span> <span  class="tab-text"> </span>Traslados</a></li>
+        <li><a href="#Traslados"><span class="fa-solid fa-user-doctor-message"></span> <span  class="tab-text"> </span>Traslados</a></li>	
 
     </ul>
 </div>
+
+<span style="padding-left:8px; padding-right:3px; padding-top: 3px; display:inline-block;">
+Alta Medica:  <span id="alta" name="alta" style='color:red'>{{altaMedica}} </span>
+Hospitalizados:  <span id="hosp" name="hosp" style='color:red'>{{Hospitalizados}} </span> <img class="manImg" src={% static 'img/iloveimg-converted/icons8-enfermera-48_X.JPG' %}></img>
+Urgencias:  <span id="urg" name="urg" style='color:red'>{{Urgencias}} </span> <img class="manImg" src={% static 'img/iloveimg-converted/icons8-enfermera-48_X.JPG' %}></img>
+Triage:  <span id="tria" name="tria" style='color:red'>{{Triage}} </span> <img class="manImg" src={% static 'img/iloveimg-converted/icons8-enfermera-48_X.JPG' %}></img>
+Ambulatorios:  <span id="amb" name="amb" style='color:red'>{{Ambulatorios}} </span> <img class="manImg" src={% static 'img/iloveimg-converted/icons8-enfermera-48_X.JPG' %}></img>
+</span>
 
 <style>
 div.dataTables_wrapper  div.dataTables_filter input {
@@ -41,7 +49,6 @@ div.dataTables_filter input {
 {% endblock %}
 
 {% block encabezado %}
-
 
 
 {% endblock %}
@@ -396,8 +403,7 @@ div.dataTables_filter input {
 					<div class="col">
 			  		   
 						 Fecha:
-						
-								<span id="fecha" name="fecha"></span>
+						<span id="fecha" name="fecha"></span>
 							<!--  <input type="text" id="fecha" name="fecha" value="0" readonly> -->
 	                                
           	                          
@@ -518,7 +524,7 @@ div.dataTables_filter input {
 				  <input type="hidden" id="tipoRegistro" name="tipoRegistro" value="MANUAL">
 				  <input type="hidden" id="valorTotal" name="valorTotal" value="0" >
 
-					<div class="col-sm-2">
+					<div class="col-sm-1">
 					
 				                <label for="lserviciosAdministrativos" class="col-sm-1">Cups:</label>
 				       
@@ -533,7 +539,7 @@ div.dataTables_filter input {
 
 
 
-					<div class="col-sm-2">
+					<div class="col-sm-1">
 					
 				                <label for="lcups" class="col-sm-1">Cups:</label>
 				       

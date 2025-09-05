@@ -322,6 +322,7 @@ def ImprimirFactura(request):
     lineaConcepto=1
     conceptos = []
     subTotal=0;
+    lineaDetalle=1
 
     for id, nombreConcepto in curt.fetchall():
         conceptos.append(

@@ -20,9 +20,7 @@ class Ingresos(models.Model):
     dependenciasIngreso = models.ForeignKey('sitios.Dependencias', blank=True,null= True, editable=True, on_delete=models.PROTECT,   related_name='id0')
     dxIngreso = models.ForeignKey('clinico.Diagnosticos', blank=True,null= True, editable=True, on_delete=models.PROTECT,   related_name='id3')
     medicoIngreso  =  models.ForeignKey('clinico.Medicos', blank=True,null= True, editable=True, on_delete=models.PROTECT,   related_name='id6')
-
     especialidadesMedicosIngreso =  models.ForeignKey('clinico.EspecialidadesMedicos', blank=True,null= True, editable=True, on_delete=models.PROTECT,   related_name='EspIng')
-
     serviciosActual = models.ForeignKey('sitios.ServiciosSedes',blank=True,null= True, editable=True,  on_delete=models.PROTECT,  related_name='id10')
     dependenciasActual = models.ForeignKey('sitios.Dependencias', blank=True,null= True, editable=True, on_delete=models.PROTECT,  related_name='id1')
     dxActual = models.ForeignKey('clinico.Diagnosticos', blank=True,null= True, editable=True, on_delete=models.PROTECT,   related_name='id4')
