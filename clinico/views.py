@@ -743,6 +743,8 @@ def crearHistoriaClinica(request):
 
                 print ("Columna a leer = ", columnaALeerPropia)
 
+                autorizacionId=0
+
                 #Grabacion Laboratorios
             #
                 laboratorios = request.POST["laboratorios"]
@@ -1079,8 +1081,18 @@ def crearHistoriaClinica(request):
 
                             estadoAutorizacionId = EstadosAutorizacion.objects.get(nombre='PENDIENTE')
 
-                            if hayAut != '':
+                            hayAut = str(hayAut[0]['id'])
+                            hayAut = hayAut.replace("None", ' ')
+                            hayAut = hayAut.replace("(", ' ')
+                            hayAut = hayAut.replace(")", ' ')
+                            hayAut = hayAut.replace(",", ' ')
+                            hayAut = hayAut.replace(" ", '')
+                            print("hayAut = ", hayAut)
 
+
+
+                            if hayAut == '':
+                                print ("ENTRE CREAR AUTORIZACION ")
                                 miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432",
                                                                user="postgres", password="123456")
 
@@ -1099,7 +1111,7 @@ def crearHistoriaClinica(request):
 
                             else:
 
-                                autorizacionId = hayAut[0]['id']
+                                autorizacionId = hayAut
 
                             print("Autorizacion Final = ", autorizacionId)
 
@@ -1289,7 +1301,16 @@ def crearHistoriaClinica(request):
 
                             estadoAutorizacionId = EstadosAutorizacion.objects.get(nombre='PENDIENTE')
 
-                            if hayAut != '':
+
+                            hayAut = str(hayAut[0]['id'])
+                            hayAut = hayAut.replace("None", ' ')
+                            hayAut = hayAut.replace("(", ' ')
+                            hayAut = hayAut.replace(")", ' ')
+                            hayAut = hayAut.replace(",", ' ')
+                            hayAut = hayAut.replace(" ", '')
+                            print("hayAut = ", hayAut)
+
+                            if hayAut == '':
                                 print ("Entre Autorizaciones detalle")
 
                                 miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432",
@@ -1310,7 +1331,7 @@ def crearHistoriaClinica(request):
 
                             else:
 
-                                autorizacionId = hayAut[0]['id']
+                                autorizacionId = hayAut
 
                             print("Autorizacion Final = ", autorizacionId)
 
@@ -1502,7 +1523,16 @@ def crearHistoriaClinica(request):
                               miConexiont.close()
                               estadoAutorizacionId = EstadosAutorizacion.objects.get(nombre='PENDIENTE')
 
-                              if hayAut != '':
+                              hayAut = str(hayAut[0]['id'])
+                              hayAut = hayAut.replace("None", ' ')
+                              hayAut = hayAut.replace("(", ' ')
+                              hayAut = hayAut.replace(")", ' ')
+                              hayAut = hayAut.replace(",", ' ')
+                              hayAut = hayAut.replace(" ", '')
+                              print("hayAut = ", hayAut)
+
+
+                              if hayAut == '':
 
                                   miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432",
                                                                  user="postgres", password="123456")
@@ -1521,7 +1551,7 @@ def crearHistoriaClinica(request):
 
                               else:
 
-                                  autorizacionId = hayAut[0]['id']
+                                  autorizacionId = hayAut[0]
 
                               print("Autorizacion Final = ", autorizacionId)
 
@@ -1976,7 +2006,15 @@ def crearHistoriaClinica(request):
 
                             estadoAutorizacionId = EstadosAutorizacion.objects.get(nombre='PENDIENTE')
 
-                            if hayAut != '':
+                            hayAut = str(hayAut[0]['id'])
+                            hayAut = hayAut.replace("None", ' ')
+                            hayAut = hayAut.replace("(", ' ')
+                            hayAut = hayAut.replace(")", ' ')
+                            hayAut = hayAut.replace(",", ' ')
+                            hayAut = hayAut.replace(" ", '')
+                            print("hayAut = ", hayAut)
+
+                            if hayAut == '':
 
 
                                 #comando = 'INSERT INTO autorizaciones_autorizaciones ("estadoAutorizacion_id","fechaModifica", "fechaRegistro", "estadoReg",empresa_id, "plantaOrdena_id", "sedesClinica_id", "usuarioRegistro_id", historia_id )  SELECT ' + "'" + str(estadoAutorizacionId.id) + "'" + ', now(), now(), ' + "'" + str('A') + "'" + ', conv.empresa_id,  ' + "'" + str(plantaId.id) + "','" +  str(sede) + "','" + str(usuarioRegistro) + "'," + "'" + str(historiaId) + "'" + ' FROM facturacion_conveniospacienteingresos convIngreso, contratacion_conveniosprocedimientos proc, contratacion_convenios conv WHERE conv.id = convIngreso.convenio_id AND convIngreso."tipoDoc_id" = ' + "'" +  str(tipoDocId.id) + "' AND convIngreso.documento_id = " + "'" + str(documentoId.id) + "'" + ' AND convIngreso."consecAdmision" = ' + "'" + str(ingresoPaciente) + "' AND conv.id = proc.convenio_id AND proc.cups_id = " + "'" +  str(medicamentos) + "' RETURNING id"
@@ -1986,13 +2024,11 @@ def crearHistoriaClinica(request):
                                 autorizacionId = curt.fetchone()[0]
                                 miConexiont.commit()
 
-
                                 #autorizacionIdU = Autorizaciones.objects.all().filter(historia_id=historiaId).aggregate(maximo=Coalesce(Max('id'), 0))
                                 #autorizacionId = (autorizacionIdU['maximo']) + 0
 
                             else:
-
-                                autorizacionId = hayAut[0]['id']
+                                autorizacionId = hayAut
 
                             print("Autorizacion Final = ", autorizacionId)
 

@@ -84,3 +84,7 @@ select * from sitios_historialdependencias where documento_id='9'
 select * from admisiones_ingresos where documento_id=55
 select * from clinico_servicios
 
+SELECT * FROM FACTURACION_CONVENIOSPACIENTEINGRESOS where documento_id='55'
+
+select "requiereAutorizacion",* from facturacion_suministros order  by "requiereAutorizacion" desc;
+select "requiereAutorizacion",* from clinico_examenes   order  by "requiereAutorizacion" desc;

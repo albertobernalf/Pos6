@@ -48,8 +48,9 @@ class Planta(models.Model):
     genero = models.CharField(max_length=1, default ='L',choices=TIPO_CHOICES,)
     direccion = models.CharField(max_length=50)
     telefono  = models.CharField(max_length=20)
+    esCajero = models.CharField(max_length=1,blank=True, null= True,  default='N', editable=False)
     correo = models.EmailField(blank=True,null= True)
-    imagen = models.ImageField(upload_to="fotos",  blank=True,null= True, editable=True)
+    imagen = models.ImageField(upload_to="fotos",  blank=True,  null= True, editable=True)
     fechaRegistro = models.DateTimeField(default=now, editable=False)
     estadoReg = models.CharField(max_length=1, default='A', editable=False)
 

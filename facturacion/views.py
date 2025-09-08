@@ -1512,6 +1512,15 @@ def FacturarCuenta(request):
             print(comando10)
             cur3.execute(comando10)
 
+        if (tipoFactura == 'REFACTURA'):
+
+            if (flag == 'INGRESO'):
+                comando4 = 'UPDATE facturacion_refacturacion SET "facturaNueva" = ' + "'" +  str(facturacionId) + "'" +  ' WHERE id =' + str(ingresoId.factura)
+                cur3.execute(comando4)
+            else:
+                comando4 = 'UPDATE facturacion_refacturacion SET "facturaNueva" = ' + "'" + str(facturacionId) + "'" + ' WHERE id =' + str(TriageId.id)
+                cur3.execute(comando4)
+
 
         miConexion3.commit()
         cur3.close()
