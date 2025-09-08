@@ -12,6 +12,7 @@ let dataTableLiquidacionDetalleInitialized = false;
 let dataTableFacturacionInitialized = false;
 let dataTableFacAbonosInitialized = false;
 let dataTableFacturacionDetalleInitialized = false;
+let dataTableReFacturacionInitialized = false;
 
 
 
@@ -591,7 +592,92 @@ autoWidth: false,
 	            dataTableFacturacionDetalleInitialized  = true;
       }
 
+// Tabla 6
 
+
+    if (valorTabla == 6)
+    {
+
+        let dataTableOptionsReFacturacion  ={
+  dom: "<'row'<'col-md-2'B><'col-md-12'f>>" + 
+             "<'row'<'col-sm-12'tr>>" +
+             "<'row'<'col-md-6'i><'col-md-6'p>>",
+  buttons: [
+    {
+      extend: 'excelHtml5',
+      text: '<i class="fas fa-file-excel"></i> ',
+      titleAttr: 'Exportar a Excel',
+      className: 'btn btn-success',
+    },
+    {
+      extend: 'pdfHtml5',
+      text: '<i class="fas fa-file-pdf"></i> ',
+      titleAttr: 'Exportar a PDF',
+      className: 'btn btn-danger',
+    },
+    {
+      extend: 'print',
+      text: '<i class="fa fa-print"></i> ',
+      titleAttr: 'Imprimir',
+      className: 'btn btn-info',
+    },
+  ],
+  lengthMenu: [2, 4, 15],
+           processing: true,
+            serverSide: false,
+            scrollY: '275px',
+	    scrollX: true,
+	    scrollCollapse: true,
+            paging:false,
+            columnDefs: [
+		{ className: 'centered', targets: [0, 1, 2, 3, 4, 5] },
+		{     
+                    "targets": 5
+               }
+            ],
+	 pageLength: 3,
+	  destroy: true,
+	  language: {
+		    processing: 'Procesando...',
+		    lengthMenu: 'Mostrar _MENU_ registros',
+		    zeroRecords: 'No se encontraron resultados',
+		    emptyTable: 'Ningún dato disponible en esta tabla',
+		    infoEmpty: 'Mostrando registros del 0 al 0 de un total de 0 registros',
+		    infoFiltered: '(filtrado de un total de _MAX_ registros)',
+		    search: 'Buscar:',
+		    infoThousands: ',',
+		    loadingRecords: 'Cargando...',
+		    paginate: {
+			      first: 'Primero',
+			      last: 'Último',
+			      next: 'Siguiente',
+			      previous: 'Anterior',
+		    }
+			},
+           ajax: {
+                 url:"/load_dataReFacturacion/" +  data,
+                 type: "POST",
+                 dataSrc: ""
+            },
+            columns: [
+                  { data: "fields.id"},
+                { data: "fields.fecha"},
+                { data: "fields.facturaNueva"},
+                { data: "fields.facturaAnulada"},
+                { data: "fields.servicio"},
+                     ]
+            }
+
+            if  (dataTableReFacturacionInitialized)  {
+
+		            dataTableD = $("#tablaReFacturacion").dataTable().fnDestroy();
+
+                    }
+
+                dataTableD = $('#tablaReFacturacion').DataTable(dataTableOptionsReFacturacion);
+
+	            dataTableFacturacionReInitialized  = true;
+      }
 
 
 
@@ -901,7 +987,7 @@ window.addEventListener('load', async () => {
 		        data2 = JSON.stringify(data2);
 
 
-			document.getElementById("mensajesError").innerHTML = data.message;
+			document.getElementById("mensajesError").innerHTML = data.Mensaje;
 
 		            arrancaLiquidacion(2,data2);
 	  	            dataTableLiquidacionDetalleInitialized = true;
@@ -976,6 +1062,7 @@ window.addEventListener('load', async () => {
 
           var post_id = $(this).data('pk');
       //    alert("pk1 = " + $(this).data('pk'));
+       facturacionId = post_id;
 
         var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
         var username = document.getElementById("username").value;
@@ -983,18 +1070,13 @@ window.addEventListener('load', async () => {
     	var sede = document.getElementById("sede").value;
         var username_id = document.getElementById("username_id").value;
 
-
-
 	$.ajax({
 	           url: '/postConsultaFacturacion/',
 	            data : {post_id:post_id, username_id:username_id},
 	           type: 'POST',
 	           dataType : 'json',
 	  		success: function (data) {
-                     //   alert("Regrese");
-                    //   alert("data="  + data);
-			// Colocar Encabezadao
-	  		// aqui debe llenar el dato parta posible ANULACION , REFACTURACION
+                  
 		$('#Afactura').val(data.factura);
 		$('#AfechaFactura').val(data.fechaFactura);
 		$('#AtipoDoc_id').val(data.tipoDoc);
@@ -1040,15 +1122,18 @@ $('#RvalorAPagarLetras').val(data.valorAPagarLetras);
 		        data2['valor'] = valor;
 		        data2['ingresoId'] = ingresoId;
 		        data2['liquidacionId'] = post_id;
+		        data2['facturacionId'] = post_id;
 		        data2 = JSON.stringify(data2);
 
-
-		  arrancaLiquidacion(5,data2);
+		 	 arrancaLiquidacion(5,data2);
 		    dataTableFacturacionDetalleInitialized = true;
+		
 
+		  arrancaLiquidacion(6,data2);
+		    dataTableReFacturacionInitialized = true;
+		
 
-			document.getElementById("mensajesError").innerHTML = data.message;
-
+			// document.getElementById("mensajesError").innerHTML = data.Mensaje
                   },
 	   		    error: function (request, status, error) {
 		document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
@@ -1899,11 +1984,18 @@ function ReFacturar()
                      //   alert("numero de la liquidacionId = " + liquidacionId);
 
 		        data2['valor'] = liquidacionId;
+			data2['facturacionId'] = facturacionId;
 		        data2 = JSON.stringify(data2);
 	document.getElementById("mensajes").innerHTML = data.Mensaje;
 
 
         arrancaLiquidacion(3,data2);
+	    dataTableFacturacionInitialized = true;
+
+        arrancaLiquidacion(5,data2);
+	    dataTableFacturacionInitialized = true;
+
+        arrancaLiquidacion(6,data2);
 	    dataTableFacturacionInitialized = true;
 
                   },

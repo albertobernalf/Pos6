@@ -254,6 +254,7 @@ urlpatterns = [
     path('trasladarConvenio/', viewsFacturacion.TrasladarConvenio, name='trasladarConvenio'),
     path('buscoAbono/', viewsFacturacion.BuscoAbono, name='buscoAbono'),
     path('imprimirFactura/', viewsFacturacionReportes.ImprimirFactura),
+    path('load_dataReFacturacion/<str:data>', viewsFacturacion.load_dataReFacturacion, name='loaddata_ReFacturacion'),
 
     # Rips
 

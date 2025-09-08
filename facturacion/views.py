@@ -2335,3 +2335,45 @@ def load_dataFacturacionDetalle(request, data):
 
 
     return HttpResponse(serialized1, content_type='application/json')
+
+
+def load_dataReFacturacion(request, data):
+    print ("Entre load_data ReFacturacion")
+    context = {}
+    d = json.loads(data)
+
+    username = d['username']
+    sede = d['sede']
+    username_id = d['username_id']
+
+    nombreSede = d['nombreSede']
+    print ("sede:", sede)
+    print ("username:", username)
+    print ("username_id:", username_id)
+    facturacionId = d['facturacionId']
+
+    reFacturacion = []
+
+    miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",     password="123456")
+    curx = miConexionx.cursor()
+
+       
+    detalle = 'SELECT fac.id id , fac.fecha fecha,fac."facturaNueva" , fac."facturaAnulada"  , serv.nombre servicio FROM facturacion_refacturacion fac LEFT JOIN sitios_serviciosadministrativos serv  ON (serv.id= fac."serviciosAdministrativos_id") WHERE fac."facturaAnulada" = ' + "'" + str(facturacionId) + "'"
+
+    print("detalle = ", detalle)
+
+    curx.execute(detalle)
+
+    for id ,fecha, facturaNueva, facturaAnulada, servicio in curx.fetchall():
+        reFacturacion.append(
+		{"model":"refacturacion.refacturacion","pk":id,"fields":
+			{'id':id, 'fecha':fecha, 'facturaNueva': facturaNueva, 'facturaAnulada': facturaAnulada, 'servicio': servicio}})
+
+    miConexionx.close()
+    print(reFacturacion)
+
+
+    serialized1 = json.dumps(reFacturacion, default=serialize_datetime)
+
+    return HttpResponse(serialized1, content_type='application/json')
+
