@@ -23,8 +23,7 @@ class Autorizaciones(models.Model):
     fechaAutorizacion = models.DateTimeField( editable=True, null=True, blank=True)
     #plantaAutoriza = models.ForeignKey('planta.Planta',blank=True,null= True, editable=True, on_delete=models.PROTECT , related_name ='Planta1')
     observaciones =  models.CharField(max_length=1000,blank=True,null= True, editable=True,)
-    #estadoAutorizacion =  models.CharField(max_length=1,blank=True,null= True, editable=True,)
-    estadoAutorizacion = models.ForeignKey('autorizaciones.EstadosAutorizacion',blank=True,null= True, editable=True, on_delete=models.PROTECT,  related_name='estadoAut01')
+    estadoAutorizacion = models.ForeignKey('autorizaciones.EstadosAutorizacion',blank=True,null= True, editable=True, on_delete=models.PROTECT)
     fechaModifica = models.DateTimeField( editable=True, null=True, blank=True)
     numeroSolicitud = models.DecimalField(max_digits=6, decimal_places=2 , null=True, blank=True)
     fechaVigencia = models.DateTimeField( editable=True, null=True, blank=True)
@@ -37,8 +36,10 @@ class Autorizaciones(models.Model):
     usuarioRegistro = models.ForeignKey('planta.Planta', blank=True,null=True, editable=True, on_delete=models.PROTECT, related_name ='Planta2')
     estadoReg = models.CharField(max_length=1, default='A', editable=False)
 
-    def __integer__(self):
-        return self.nombre
+
+    def __str__(self):
+        return str(self.estadoAutorizacion)
+
 
 class AutorizacionesDetalle(models.Model):
 
@@ -67,8 +68,8 @@ class AutorizacionesDetalle(models.Model):
     estadoReg = models.CharField(max_length=1, default='A', editable=False)
 
 
-    def __integer__(self):
-        return self.nombre
+    def __str__(self):
+        return str(self.numeroAutorizacion)
 
 
 class AutorizacionesCirugias(models.Model):
@@ -85,7 +86,7 @@ class AutorizacionesCirugias(models.Model):
     estadoReg = models.CharField(max_length=1, default='A', editable=False)
 
     def __integer__(self):
-        return self.nombre
+        return str(self.nombre)
 
 class EstadosAutorizacion(models.Model):
       id = models.AutoField(primary_key=True)
@@ -93,6 +94,6 @@ class EstadosAutorizacion(models.Model):
       estadoReg = models.CharField(max_length=1, default='A', editable=False)
 
       def __str__(self):
-          return self.nombre
+          return str(self.nombre)
 
 

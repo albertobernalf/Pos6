@@ -379,7 +379,7 @@ class historialIncapacidadesAdmin(admin.ModelAdmin):
 class examenesRasgosAdmin(admin.ModelAdmin):
 
         list_display = ("id", "tiposExamen", "codigoCups", "nombre", "unidad","minimo","maximo")
-        search_fields = ("id", "tiposExamen", "codigoCups", "nombre","unidad","minimo","maximo")
+        search_fields = ("id", "tiposExamen__nombre", "codigoCups", "nombre","unidad","minimo","maximo")
         # Filtrar
         list_filter = ("id", "tiposExamen", "codigoCups", "nombre", "unidad","minimo","maximo")
 

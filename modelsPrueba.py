@@ -848,9 +848,11 @@ ojo pendiente en aplicacion de medicamentos arreglar cuando aplica la modal no p
  --	OJO PARA EL 8 DE SEPTIEMBRE:
 
 10. ojo el guery load_dataliquidacion me mosytro 2 veces a nataly y no tiene sisno una solo convenio OPS de pronto es popr que tiene otro conevio al refacturar y activarla quedan activos los
-  dos conveno REVISAR SOSS. es complejo pero si hay que miraralo
+    eSTO DE ARRIBA REVIZARLO EN LA PUESTA A PUNTA
+  dos conveno REVISAR SOSS. es complejo pero si hay que miraralo  .. eSTO DE ARRIBA REVIZARLO EN LA PUESTA A PUNTA
   ME HIZO EL TRASLADO PERO FALO EN EL TOTAL DEL TRASLADO INICIAL
 11 . CUANDO HAGO TRASLADOS ME SUMA  EN TOTALPROCEDIMIENTO, TOTALSUMINISTROS ESTA BIEN PERO EN TOTALLIQUIDACION O VALORAPAGAR ESTAN CON VALORES HYA QUE ACTUALIZAR DESDE EL TRASLADO
-  -- OJO UNA VEZ SOLUCIONADO EL DE EUMELIA, DARLE SALIDA CLINICA Y FACTURAR
+  -- OJO UNA VEZ SOLUCIONADO EL DE EUMELIA, DARLE SALIDA CLINICA Y FACTURAR .. OPS SE PERDIO LA FACTYRA DE EUMELIA
+   ------ OJOOOOOOOOOOO OJOOOOOOOOOOOO  OJOOOOOOOOO
  -- creo que no me esta actualizando el dxActual VRIFICAR CON ENFEREMRA
  -- ops hacer notas de enfermeria desde la HC como desde enfermeria

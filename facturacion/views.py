@@ -2138,13 +2138,22 @@ def TrasladarConvenio(request):
     print("totalProcedimientos", totalProcedimientos)
     registroPago = Liquidacion.objects.get(id=liquidacionIdHasta.id)
     totalCopagos = registroPago.totalCopagos
+    if (totalCopagos==None):
+        totalCopagos=0
+
     totalCuotaModeradora = registroPago.totalCuotaModeradora
+    if (totalCuotaModeradora==None):
+        totalCuotaModeradora=0
     totalAnticipos = registroPago.anticipos
-    totalAbonos = registroPago.totalAbonos
-    #valorEnCurso = registroPago.valorEnCurso
-    totalRecibido = registroPago.totalRecibido
     if (totalRecibido==None):
         totalRecibido=0
+    totalAbonos = registroPago.totalAbonos
+    if (totalAbonos==None):
+        totalAbonoso=0
+
+    #valorEnCurso = registroPago.valorEnCurso
+    totalRecibido = registroPago.totalRecibido
+
 
     totalAnticipos = registroPago.anticipos
 

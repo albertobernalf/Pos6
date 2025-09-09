@@ -9,17 +9,18 @@ from autorizaciones.models import  Autorizaciones, AutorizacionesDetalle, Autori
 @admin.register(Autorizaciones)
 class autorizacionesAdmin(admin.ModelAdmin):
     list_display = ("id", "sedesClinica", "historia","estadoAutorizacion", "fechaSolicitud","empresa","fechaAutorizacion")
-    search_fields = ("id", "sedesClinica", "historia","estadoAutorizacion", "fechaSolicitud","empresa","fechaAutorizacion")
+    #search_fields = ['id', 'sedesClinica__nombre', 'historia','estadoAutorizacion_nombre', 'fechaSolicitud','empresa','fechaAutorizacion',]
+    search_fields = ['id', 'sedesClinica__nombre','historia__id','estadoAutorizacion__nombre' , 'fechaSolicitud','empresa__nombre','fechaAutorizacion']
     # Filtrar
     list_filter = ("id", "sedesClinica", "historia", "estadoAutorizacion","fechaSolicitud","empresa","fechaAutorizacion")
 
 
 @admin.register(AutorizacionesDetalle)
 class autorizacionesDetalleAdmin(admin.ModelAdmin):
-    list_display = ("id",  "autorizaciones", "estadoAutorizacion","cantidadSolicitada","cantidadAutorizada")
-    search_fields = ("id", "autorizaciones", "estadoAutorizacion","cantidadSolicitada","cantidadAutorizada")
+    list_display = ("id",  "autorizaciones", "estadoAutorizacion","cantidadSolicitada","cantidadAutorizada","numeroAutorizacion")
+    search_fields = ("id", "autorizaciones", "estadoAutorizacion","cantidadSolicitada","cantidadAutorizada","numeroAutorizacion")
     # Filtrar
-    # list_filter =("id",  "autorizaciones","estadoAutorizacion","cantidadSolicitada","cantidadAutorizada")
+    # list_filter =("id",  "autorizaciones","estadoAutorizacion","cantidadSolicitada","cantidadAutorizada","numeroAutorizacion")
 
 
 

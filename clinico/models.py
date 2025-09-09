@@ -394,11 +394,11 @@ class HistoriaExamenes(models.Model):
     fechaToma = models.DateTimeField(blank=True, null=True)
     usuarioToma = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True,  on_delete=models.PROTECT, related_name='usuarioToma1')
     #preliminar1 = models.CharField(max_length=300, editable=True,blank=True, null=True)
-    interpretacion1 = models.CharField(max_length=500, editable=True ,blank=True, null=True)
+    interpretacion1 = models.CharField(max_length=5000, editable=True ,blank=True, null=True)
     medicoInterpretacion1 = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True, on_delete=models.PROTECT, related_name='medInterpreta1')
     fechaInterpretacion1 = models.DateTimeField(blank=True, null=True)
     #preliminar2 = models.CharField(max_length=300, editable=True,blank=True, null=True)
-    interpretacion2 = models.CharField(max_length=500, editable=True,blank=True, null=True)
+    interpretacion2 = models.CharField(max_length=5000, editable=True,blank=True, null=True)
     medicoInterpretacion2 = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True, on_delete=models.PROTECT, related_name='medInterpreta2')
     fechaInterpretacion2 = models.DateTimeField(blank=True, null=True)
     #preliminar3 = models.CharField(max_length=300, editable=True,blank=True, null=True)
@@ -1117,7 +1117,7 @@ class ExamenesRasgos(models.Model):
     estadoReg = models.CharField(max_length=1, default='A', editable=False)
 
     def __str__(self):
-        return self.nombre
+        return str(self.nombre)
 
 class TipoDietas(models.Model):
     id = models.AutoField(primary_key=True)

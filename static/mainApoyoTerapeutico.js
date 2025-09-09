@@ -591,17 +591,16 @@ window.addEventListener('load', async () => {
         --------------------------------------------
         --------------------------------------------*/
         $('body').on('click', '.editPostApoyoTerapeutico', function () {
-          alert ("Entre boton Apoyo Terapeutico");
-	
+   
           var post_id = $(this).data('pk');
-          alert("post_id  el ID de la fila que es ingreso, examen, historia o que ?? = " + post_id);
+         // alert("post_id= " + post_id);
 
-         var tipoExamenId = document.getElementById("tipoExamenId").value;
-         var tipoExamen = document.getElementById("tipoExamen").value;
-         var CupsId = document.getElementById("CupsId").value;
-         var nombreExamen = document.getElementById("nombreExamen").value;
-         var cantidad = document.getElementById("cantidad").value;
-	 var observaciones = document.getElementById("observaciones").value;
+         var tipoExamenId = document.getElementById("tipoExamenId").innerHTML;
+         var tipoExamen = document.getElementById("tipoExamen").innerHTML;
+         var CupsId = document.getElementById("CupsId").innerHTML;
+         var nombreExamen = document.getElementById("nombreExamen").innerHTML;
+         var cantidad = document.getElementById("cantidad").innerHTML;
+	 var observaciones = document.getElementById("observaciones").innerHTML;
          var estadoExamen = document.getElementById("estadoExamen").value;
          var folio = document.getElementById("tipoExamenId").value;
          var interpretacion1 = document.getElementById("interpretacion1").value;
@@ -612,14 +611,8 @@ window.addEventListener('load', async () => {
          var rutaImagen = document.getElementById("rutaImagen").value;
          var rutaVideo = document.getElementById("rutaVideo").value;
          var username_id = document.getElementById("username_id").value;	
+         var sede = document.getElementById("sede").value;
 
-	alert("QUE PASO");
-
-      
-        
-	alert("username_id ASI VA " + username_id );
-
-   
 
 
 	$.ajax({
@@ -639,53 +632,68 @@ window.addEventListener('load', async () => {
 			   medicoInterpretacion2:medicoInterpretacion2,
                            medicoReporte:medicoReporte,
    			   rutaImagen:rutaImagen,
-			   rutaVideo:rutaVideo
+			   rutaVideo:rutaVideo,
+			   sede:sede	
 			},
 	           type: 'POST',
 	           dataType : 'json',
 	  		success: function (data) {
-                        alert("Regrese");
+                       // alert("Regrese");
 
-                      alert("dataResultado3="  + data[0]['ResultadoApoyoTerapeutico']); // este es el Registro
-                       alert("dataResultado5="  + data[0]['ResultadoApoyoTerapeutico'][0].tipoExamenId);
-                         alert("RasgosClinicos="  + data[1]['RasgosClinicos']);  // esye es el combo
+                    //  alert("dataResultado3="  + data[0]['ResultadoApoyoTerapeutico']); // este es el Registro
+                    //   alert("dataResultado5="  + data[0]['ResultadoApoyoTerapeutico'][0].tipoExamenId);
+                    //     alert("RasgosClinicos="  + data[1]['RasgosClinicos']);  // esye es el combo
 
-                            alert("data[2].MedicoInterpretacion1="  + data[2]['MedicoInterpretacion1'][1]['nombre']);  // esye es el combo
-                               alert("MedicoInterpretacion2="  + data[3]['MedicoInterpretacion2'][1]['nombre']);  // esye es el combo
-                                  alert("MedicoReporte="  + data[4]['MedicoReporte'][1]['nombre']);  // esye es el combo
-			alert("dependenciasRealizado1 = " + data[0]['ResultadoApoyoTerapeutico'][0]);
-			alert("dependenciasRealizado2 = " + data[0]['ResultadoApoyoTerapeutico'][0].dependencias);
+		//               alert("data[2].MedicoInterpretacion1="  + data[2]['MedicoInterpretacion1'][1]['nombre']);  // esye es el combo
+                 //              alert("MedicoInterpretacion2="  + data[3]['MedicoInterpretacion2'][1]['nombre']);  // esye es el combo
+                  //                alert("MedicoReporte="  + data[4]['MedicoReporte'][1]['nombre']);  // esye es el combo
+	//		alert("dependenciasRealizado1 = " + data[0]['ResultadoApoyoTerapeutico'][0]);
+	//		alert("dependenciasRealizado2 = " + data[0]['ResultadoApoyoTerapeutico'][0].dependencias);
 			
 
 	  		  // var dato = JSON.parse(respuesta);
 			 $('#pk').val(data.pk);
-	       	        $('#tipoDocPaci').val(data[7]['Paciente'][0]['tipoDoc']);
-	       	        $('#documentoPaci').val(data[7]['Paciente'][0]['documento']);
-	       	        $('#nombrePaciente').val(data[7]['Paciente'][0]['nombre']);
+	       	        // $('#tipoDocPaci').val(data[7]['Paciente'][0]['tipoDoc']);
+			document.getElementById("tipoDocPaci").innerHTML = data[7]['Paciente'][0]['tipoDoc'];
+			document.getElementById("documentoPaci").innerHTML = data[7]['Paciente'][0]['documento'];
+			document.getElementById("nombrePaciente").innerHTML = data[7]['Paciente'][0]['nombre'];
+			document.getElementById("tipoExamenId").innerHTML = data[0]['ResultadoApoyoTerapeutico'][0]['tipoExamenId'];
+			document.getElementById("tipoExamen").innerHTML = data[0]['ResultadoApoyoTerapeutico'][0]['tipoExamen'];
+			document.getElementById("CupsId").innerHTML = data[0]['ResultadoApoyoTerapeutico'][0]['CupsId'];
+			document.getElementById("nombreExamen").innerHTML = data[0]['ResultadoApoyoTerapeutico'][0]['nombreExamen'];
+			document.getElementById("cantidad").innerHTML = data[0]['ResultadoApoyoTerapeutico'][0]['cantidad'];
+			document.getElementById("observaciones").innerHTML = data[0]['ResultadoApoyoTerapeutico'][0]['observaciones'];
+		
 
-	       	        $('#tipoExamenId').val(data[0]['ResultadoApoyoTerapeutico'][0].tipoExamenId);
-        	       	$('#tipoExamen').val(data[0]['ResultadoApoyoTerapeutico'][0].tipoExamen);
-	                $('#CupsId').val(data[0]['ResultadoApoyoTerapeutico'][0].CupsId);
-	                $('#nombreExamen').val(data[0]['ResultadoApoyoTerapeutico'][0].nombreExamen);
-	                $('#cantidad').val(data[0]['ResultadoApoyoTerapeutico'][0].cantidad);
-	                $('#observaciones').val(data[0]['ResultadoApoyoTerapeutico'][0].observaciones);
+
+	       	        //$('#documentoPaci').val(data[7]['Paciente'][0]['documento']);
+	       	        // $('#nombrePaciente').val(data[7]['Paciente'][0]['nombre']);
+
+	       	        //$('#tipoExamenId').val(data[0]['ResultadoApoyoTerapeutico'][0].tipoExamenId);
+        	       	//$('#tipoExamen').val(data[0]['ResultadoApoyoTerapeutico'][0].tipoExamen);
+	                //$('#CupsId').val(data[0]['ResultadoApoyoTerapeutico'][0].CupsId);
+	                //$('#nombreExamen').val(data[0]['ResultadoApoyoTerapeutico'][0].nombreExamen);
+	                //$('#cantidad').val(data[0]['ResultadoApoyoTerapeutico'][0].cantidad);
+
+	                //$('#observaciones').val(data[0]['ResultadoApoyoTerapeutico'][0].observaciones);
 	                $('#estadoExamen').val(data[0]['ResultadoApoyoTerapeutico'][0].estado);
 	                $('#folio').val(data[0]['ResultadoApoyoTerapeutico'][0].folio);
 	                $('#interpretacion1').val(data[0]['ResultadoApoyoTerapeutico'][0].interpretacion1);
-	                $('#medicoInterpretacion1').val(data[0]['ResultadoApoyoTerapeutico'][0].medicoInterpretacion1);
+	                // $('#medicoInterpretacion1').val(data[0]['ResultadoApoyoTerapeutico'][0].medicoInterpretacion1);
+
 	                $('#interpretacion2').val(data[0]['ResultadoApoyoTerapeutico'][0].interpretacion2);
-	                $('#medicoInterpretacion2').val(data[0]['ResultadoApoyoTerapeutico'][0].medicoInterpretacion2);
-	                $('#medicoReporte').val(data[0]['ResultadoApoyoTerapeutico'][0].medicoReporte);
+	                // $('#medicoInterpretacion2').val(data[0]['ResultadoApoyoTerapeutico'][0].medicoInterpretacion2);
+	                // $('#medicoReporte').val(data[0]['ResultadoApoyoTerapeutico'][0].medicoReporte);
 	                $('#rutaImagen').val(data[0]['ResultadoApoyoTerapeutico'][0].rutaImagen);
 	                $('#rutaVideo').val(data[0]['ResultadoApoyoTerapeutico'][0].rutaVideo);
-			
+		//		alert("medicointerpretacion1 = " + data[0]['ResultadoApoyoTerapeutico'][0].medicoInterpretacion1);
+
 
 			 $('#ingresoIdA').val(data[4]['MedicoReporte']);
 			 $('#examId').val(data[0]['ResultadoApoyoTerapeutico'][0].examId);
 			
 
            	  		   var options = '<option value="=================="></option>';
-
 
                      const $id2 = document.querySelector("#rasgosClinicos");
  	      		     $("#rasgosClinicos").empty();
@@ -724,7 +732,6 @@ window.addEventListener('load', async () => {
  	      		      });
 
 
-
                      const $id5 = document.querySelector("#medicoReporte");
  	      		     $("#medicoReporte").empty();
 
@@ -735,19 +742,23 @@ window.addEventListener('load', async () => {
                                     option.text = value.nombre;
                                     $id5.appendChild(option);
  	      		      });
+		
+
+                     // const $id6 = document.querySelector("#serviciosAdministrativos");
+ 	      	//	     $("#serviciosAdministrativos").empty();
 
 
 
-                     const $id6 = document.querySelector("#dependenciasRealizado");
- 	      		     $("#dependenciasRealizado").empty();
+	               //  $.each(data[5]['ServiciosAdministrativos'], function(key,value) {
+                       //             options +='<option value="' + value.id + '">' + value.nombre + '</option>';
+                       //             option = document.createElement("option");
+                       //             option.value = value.id;
+                       //             option.text = value.nombre;
+                        //            $id6.appendChild(option);
+ 	      		//      });
 
-	                 $.each(data[5]['DependenciasRealizado'], function(key,value) {
-                                    options +='<option value="' + value.id + '">' + value.nombre + '</option>';
-                                    option = document.createElement("option");
-                                    option.value = value.id;
-                                    option.text = value.nombre;
-                                    $id6.appendChild(option);
- 	      		      });
+
+
 
 	         const $id7 = document.querySelector("#estadoExamen");
  	      		     $("#estadoExamen").empty();
@@ -760,12 +771,13 @@ window.addEventListener('load', async () => {
                                     $id7.appendChild(option);
  	      		      });
 
-
 			
-	                 $('#medicoInterpretacion1').val(data[0]['ResultadoApoyoTerapeutico'][0].medicoInterpretacion1);
-	                 $('#medicoInterpretacion2').val(data[0]['ResultadoApoyoTerapeutico'][0].medicoInterpretacion2);
-	                 $('#medicoReporte').val(data[0]['ResultadoApoyoTerapeutico'][0].medicoReporte);
-			  $('#dependenciasRealizado').val(data[0]['ResultadoApoyoTerapeutico'][0].dependencias);
+	                 $('#medicoInterpretacion1').val(data[0]['ResultadoApoyoTerapeutico'][0].medicoInterpretacion1_id);
+	                 $('#medicoInterpretacion2').val(data[0]['ResultadoApoyoTerapeutico'][0].medicoInterpretacion2_id);
+
+
+	                 $('#medicoReporte').val(data[0]['ResultadoApoyoTerapeutico'][0].medicoReporte_id);
+			  $('#serviciosAdministrativos').val(data[0]['ResultadoApoyoTerapeutico'][0].serviciosAdministrativos);
  			 $('#estadoExamen').val(data[0]['ResultadoApoyoTerapeutico'][0].estado);
 
 
@@ -794,9 +806,6 @@ window.addEventListener('load', async () => {
 
 		  arrancaApoyoTerapeutico(4,data);
 	    dataTableRasgosInitialized = true;
-
-
-
 
 
                   },
@@ -872,7 +881,8 @@ window.addEventListener('load', async () => {
 			   medicoInterpretacion2:medicoInterpretacion2,
                            medicoReporte:medicoReporte,
    			   rutaImagen:rutaImagen,
-			   rutaVideo:rutaVideo
+			   rutaVideo:rutaVideo,
+			    sede:sede
 },
 	           type: 'POST',
 	           dataType : 'json',
