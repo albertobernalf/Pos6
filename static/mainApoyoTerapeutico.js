@@ -600,13 +600,13 @@ window.addEventListener('load', async () => {
          var CupsId = document.getElementById("CupsId").innerHTML;
          var nombreExamen = document.getElementById("nombreExamen").innerHTML;
          var cantidad = document.getElementById("cantidad").innerHTML;
-	 var observaciones = document.getElementById("observaciones").innerHTML;
+	     var observaciones = document.getElementById("observaciones").innerHTML;
          var estadoExamen = document.getElementById("estadoExamen").value;
          var folio = document.getElementById("tipoExamenId").value;
          var interpretacion1 = document.getElementById("interpretacion1").value;
          var medicoInterpretacion1 = document.getElementById("medicoInterpretacion1").value;
          var interpretacion2 = document.getElementById("interpretacion2").value;
-	 var medicoInterpretacion2 = document.getElementById("medicoInterpretacion2").value;
+	     var medicoInterpretacion2 = document.getElementById("medicoInterpretacion2").value;
          var medicoReporte = document.getElementById("medicoReporte").value;
          var rutaImagen = document.getElementById("rutaImagen").value;
          var rutaVideo = document.getElementById("rutaVideo").value;
@@ -623,14 +623,14 @@ window.addEventListener('load', async () => {
 			   CupsId:CupsId,
 			   nombreExamen:nombreExamen,
 			   cantidad:cantidad,
-                           observaciones:observaciones,
+               observaciones:observaciones,
 			   estadoExamen:estadoExamen,
 			   folio:folio,
 			   interpretacion1:interpretacion1,
 			   medicoInterpretacion1:medicoInterpretacion1,
 			   interpretacion2:interpretacion2,
 			   medicoInterpretacion2:medicoInterpretacion2,
-                           medicoReporte:medicoReporte,
+               medicoReporte:medicoReporte,
    			   rutaImagen:rutaImagen,
 			   rutaVideo:rutaVideo,
 			   sede:sede	
@@ -787,19 +787,19 @@ window.addEventListener('load', async () => {
          var sede = document.getElementById("sede").value;
          var nombreSede = document.getElementById("nombreSede").value;
 
-	 data['username'] = username;
+	     data['username'] = username;
          data['sedeSeleccionada'] = sedeSeleccionada;
          data['nombreSede'] = nombreSede;
          data['sede'] = sede;
-	 data['username_id'] = username_id;
+	     data['username_id'] = username_id;
          data['valor'] = post_id;	
 
 	  data = JSON.stringify(data);
 
 
 
-		  arrancaApoyoTerapeutico(2,data);
-	    dataTableRasgosConsultaInitialized = true;
+	//	  arrancaApoyoTerapeutico(2,data);
+	//    dataTableRasgosConsultaInitialized = true;
 
    		  arrancaApoyoTerapeutico(3,data);
 	    dataTableTerapeuticoConsultaInitialized = true;
@@ -852,17 +852,16 @@ window.addEventListener('load', async () => {
 
 	alert("aqui voy");
 
-        var data =  {}   ;
+        var data2 =  {}   ;
 
-	 data['username'] = username;
-         data['sedeSeleccionada'] = sedeSeleccionada;
-         data['nombreSede'] = nombreSede;
-         data['sede'] = sede;
-	 data['username_id'] = username_id;
-         data['valor'] = post_id;	
+    	 data2['username'] = username;
+         data2['sedeSeleccionada'] = sedeSeleccionada;
+         data2['nombreSede'] = nombreSede;
+         data2['sede'] = sede;
+	     data2['username_id'] = username_id;
+         data2['valor'] = post_id;
 
-	  data = JSON.stringify(data);
-
+	  data3 = JSON.stringify(data2);
 
 	$.ajax({
 	           url: '/postConsultaApoyoTerapeuticoConsulta/',
@@ -891,13 +890,13 @@ window.addEventListener('load', async () => {
 
                       alert("dataResultado3="  + data[0]['ResultadoApoyoTerapeutico']); // este es el Registro
                        alert("dataResultado5="  + data[0]['ResultadoApoyoTerapeutico'][0].tipoExamenId);
-                         alert("RasgosClinicos="  + data[1]['RasgosClinicos']);  // esye es el combo
+                         alert("RasgosClinicosz="  + data[1]['RasgosClinicosz']);  // esye es el combo
 
                             alert("data[2].MedicoInterpretacion1="  + data[2]['MedicoInterpretacion1'][1]['nombre']);  // esye es el combo
                                alert("MedicoInterpretacion2="  + data[3]['MedicoInterpretacion2'][1]['nombre']);  // esye es el combo
                                   alert("MedicoReporte="  + data[4]['MedicoReporte'][1]['nombre']);  // esye es el combo
-			alert("dependenciasRealizado1 = " + data[0]['ResultadoApoyoTerapeutico'][0]);
-			alert("dependenciasRealizado2 = " + data[0]['ResultadoApoyoTerapeutico'][0].dependencias);
+			alert("serviciosAdministrativos1 = " + data[0]['ResultadoApoyoTerapeutico'][0]);
+			alert("serviciosAdministrativos = " + data[0]['ResultadoApoyoTerapeutico'][0].serviciosAdministrativos);
 			
 
 	  		  // var dato = JSON.parse(respuesta);
@@ -926,16 +925,16 @@ window.addEventListener('load', async () => {
            	  		   var options = '<option value="=================="></option>';
 
 
-                     const $id2 = document.querySelector("#zrasgosClinicos");
- 	      		     $("#zrasgosClinicos").empty();
+                   //  const $id2 = document.querySelector("#zrasgosClinicos");
+ 	      		//     $("#zrasgosClinicos").empty();
 
-	                 $.each(data[1]['RasgosClinicos'], function(key,value) {
-                                    options +='<option value="' + value.id + '">' + value.nombre + '</option>';
-                                    option = document.createElement("option");
-                                    option.value = value.id;
-                                    option.text = value.nombre;
-                                    $id2.appendChild(option);
- 	      		      });
+	               //  $.each(data[1]['RasgosClinicosz'], function(key,value) {
+                        //            options +='<option value="' + value.id + '">' + value.nombre + '</option>';
+                        //            option = document.createElement("option");
+                        //            option.value = value.id;
+                        //            option.text = value.nombre;
+                        //            $id2.appendChild(option);
+ 	      		//      });
 
 
                      const $id3 = document.querySelector("#zmedicoInterpretacion1");
@@ -999,26 +998,15 @@ window.addEventListener('load', async () => {
                                     $id7.appendChild(option);
  	      		      });
 
-
-			
+		
 	                 $('#zmedicoInterpretacion1').val(data[0]['ResultadoApoyoTerapeutico'][0].medicoInterpretacion1);
 	                 $('#zmedicoInterpretacion2').val(data[0]['ResultadoApoyoTerapeutico'][0].medicoInterpretacion2);
 	                 $('#zmedicoReporte').val(data[0]['ResultadoApoyoTerapeutico'][0].medicoReporte);
-			  $('#zdependenciasRealizado').val(data[0]['ResultadoApoyoTerapeutico'][0].dependencias);
+			  $('#zdependenciasRealizado').val(data[0]['ResultadoApoyoTerapeutico'][0].zserviciosAdministrativos);
  			 $('#zestadoExamen').val(data[0]['ResultadoApoyoTerapeutico'][0].estado);
 
-		  arrancaApoyoTerapeutico(2,data);
+		  arrancaApoyoTerapeutico(2,data3);
 	    dataTableRasgosConsultaInitialized = true;
-
-   		  arrancaApoyoTerapeutico(3,data);
-	    dataTableTerapeuticoConsultaInitialized = true;
-
-		  arrancaApoyoTerapeutico(4,data);
-	    dataTableRasgosInitialized = true;
-
-
-
-
 
                   },
 	   		    error: function (request, status, error) {
@@ -1027,8 +1015,6 @@ window.addEventListener('load', async () => {
 	     });
 
         });
-
-
 
 
 /**** HASTA AQUI  ***/

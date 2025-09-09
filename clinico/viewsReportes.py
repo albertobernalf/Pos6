@@ -1530,6 +1530,43 @@ def ImprimirHistoriaClinica(request):
                 linea = linea + 3
                 pdf.ln(3)
 
+                ## Aqui cabezote del resultado laboratoiro
+
+                miConexiony = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                               password="123456")
+                cury = miConexiony.cursor()
+                comando ='SELECT hisExa.interpretacion1, hisExa."fechaInterpretacion1", med.nombre medico FROM clinico_historiaexamenes hisExa INNER JOIN  clinico_medicos med ON (med.id = hisExa."medicoInterpretacion1_id") INNER JOIN clinico_historia historia on (historia.id = hisExa.historia_id ) WHERE hisExa.historia_id = ' + "'" + str(folios[0 + i]['HistoriaId']) + "'"
+                print(comando)
+                cury.execute(comando)
+
+                resultadosCabezoteLab = []
+
+                for interpretacion1, fechaInterpretacion1, medico in cury.fetchall():
+                    resultadosCabezoteLab.append(
+                        {'interpretacion1': interpretacion1, 'fechaInterpretacion1': fechaInterpretacion1, 'medico': medico})
+                miConexiony.close()
+
+                print("Resultados  resultadosCabezoteLab  = ", resultadosCabezoteLab)
+                print("matriz Resultados laboratorios = ", len(resultadosCabezoteLab))
+
+                if (resultadosCabezoteLab != []):
+                    linea = linea + 2
+                    pdf.ln(2)
+                    pdf.cell(180, 1, 'Resultados Grales:', 0, 0, 'L')
+                    linea = linea + 4
+                    pdf.ln(4)
+
+                for s in range(0, len(resultadosCabezoteLab)):
+                    pdf.cell(70, 1, 'Interpretacion1 ' + str(resultadosCabezoteLab[0 + s]['interpretacion1']), 0, 0, 'L')
+                    pdf.cell(40, 1, 'Fecha: ' + str(resultadosCabezoteLab[0 + s]['fechaInterpretacion1']), 0, 0, 'L')
+                    pdf.cell(25, 1, 'Medico: ' + str(resultadosCabezoteLab[0 + s]['medico']), 0, 0, 'L')
+
+                    linea = linea + 5
+                    pdf.ln(5)
+
+                ## Fin cabezote
+
+
                 # Aquip Resultados del LABORATORIO
 
                 miConexionp = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
@@ -1570,6 +1607,8 @@ def ImprimirHistoriaClinica(request):
                     pdf.cell(25, 1, 'Valor: ' + str(resultadosLab[0 + s]['valor']), 0, 0, 'L')
                     linea = linea + 5
                     pdf.ln(5)
+
+                miConexionp.close()
 
                 # Fin impresion de Resultados der Laboratorio
 

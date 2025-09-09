@@ -191,7 +191,9 @@ def load_dataApoyoTerapeutico(request, data):
     miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",     password="123456")
     curx = miConexionx.cursor()
    
-    detalle = 'SELECT histoexa.id examId ,' + "'" + str("INGRESO") + "'" +  ' tipoIng, i.id'  + "||" +"'" + '-INGRESO' + "'," + '  tp.nombre tipoDoc,u.documento documento,u.nombre nombre,i.consec consec , i."fechaIngreso" , i."fechaSalida",ser.nombre servicioNombreIng, dep.nombre camaNombreIng ,diag.nombre dxActual ,historia.fecha fechaExamen,tipoExa.nombre tipoExamen ,exam.nombre examen ,estadosExam.nombre estadoExamen ,histoexa.consecutivo consecutivo,histoexa."codigoCups" cups, histoexa.cantidad cantidad, histoexa.observaciones observa, historia.folio folio FROM admisiones_ingresos i, usuarios_usuarios u, sitios_dependencias dep , clinico_servicios ser ,usuarios_tiposDocumento tp , sitios_dependenciastipo deptip  , clinico_Diagnosticos diag , sitios_serviciosSedes sd , clinico_tiposexamen tipoExa,  clinico_examenes exam, clinico_historiaexamenes histoexa, clinico_historia historia, clinico_estadoexamenes estadosExam WHERE sd."sedesClinica_id" = i."sedesClinica_id"  and sd.servicios_id  = ser.id and  i."sedesClinica_id" = dep."sedesClinica_id" AND i."sedesClinica_id" = ' + "'" + str(sede) + "'" +' AND  deptip.id = dep."dependenciasTipo_id" and i."serviciosActual_id" = ser.id AND dep.disponibilidad = ' + "'" + str('O') + "'" + ' AND i."salidaDefinitiva" = '  + "'" + str('N') + "'" + '  and tp.id = u."tipoDoc_id" and i."tipoDoc_id" = u."tipoDoc_id" and u.id = i."documento_id" and diag.id = i."dxActual_id" and i."fechaSalida" is null and dep."serviciosSedes_id" = sd.id and dep.id = i."dependenciasActual_id" AND u."tipoDoc_id" = historia."tipoDoc_id" AND u.id = historia.documento_id AND historia.id = histoexa.historia_id AND i.consec = historia."consecAdmision" AND histoexa."tiposExamen_id" = tipoExa.id and  histoexa."tiposExamen_id" = exam."TiposExamen_id" and histoexa."codigoCups" = exam."codigoCups" AND histoexa."estadoExamenes_id" = estadosExam.id AND estadosExam.nombre = ' + "'" + str('ORDENADO') + "'" + ' UNION SELECT histoexa.id examId ,' + "'"  + str("TRIAGE") + "'" + ' tipoIng, t.id'  + "||" +"'" + '-TRIAGE' + "'," + '  tp.nombre tipoDoc,u.documento documento,u.nombre nombre,t.consec consec , t."fechaSolicita" , cast(' + "'" + str('0001-01-01 00:00:00') + "'" + ' as timestamp) fechaSalida,ser.nombre servicioNombreIng, dep.nombre camaNombreIng , ' + "''" + ' dxActual , historia.fecha fechaExamen,    tipoExa.nombre tipoExamen,exam.nombre examen,estadosExam.nombre estadoExamen,histoexa.consecutivo consecutivo,histoexa."codigoCups" cups, histoexa.cantidad cantidad, histoexa.observaciones observa , historia.folio folio  FROM triage_triage t, usuarios_usuarios u, sitios_dependencias dep , usuarios_tiposDocumento tp , sitios_dependenciastipo deptip  ,sitios_serviciosSedes sd, clinico_servicios ser , clinico_tiposexamen tipoExa,  clinico_examenes exam, clinico_historiaexamenes histoexa,  clinico_historia historia, clinico_estadoexamenes estadosExam WHERE sd."sedesClinica_id" = t."sedesClinica_id"  and t."sedesClinica_id" = dep."sedesClinica_id" AND t."sedesClinica_id" = ' + "'" + str(sede) + "'" + ' AND dep."sedesClinica_id" =  sd."sedesClinica_id" AND dep.id = t.dependencias_id AND t."serviciosSedes_id" = sd.id  AND deptip.id = dep."dependenciasTipo_id" and  tp.id = u."tipoDoc_id" and t."tipoDoc_id" = u."tipoDoc_id" and u.id = t."documento_id"  and ser.id = sd.servicios_id and dep."serviciosSedes_id" = sd.id and t."serviciosSedes_id" = sd.id and dep."tipoDoc_id" = t."tipoDoc_id" and t."consecAdmision" = 0 and dep."documento_id" = t."documento_id" and ser.nombre = ' + "'" + str('TRIAGE') + "'" + ' AND u."tipoDoc_id" = historia."tipoDoc_id" AND u.id = historia.documento_id AND historia.id = histoexa.historia_id AND t."consecAdmision" = historia."consecAdmision" AND histoexa."tiposExamen_id" = tipoExa.id and  histoexa."tiposExamen_id" = exam."TiposExamen_id" and histoexa."codigoCups" = exam."codigoCups" AND histoexa."estadoExamenes_id" = estadosExam.id AND estadosExam.nombre = ' + "'" + str('ORDENADO') +  "'"
+    #detalle = 'SELECT histoexa.id examId ,' + "'" + str("INGRESO") + "'" +  ' tipoIng, i.id'  + "||" +"'" + '-INGRESO' + "'," + '  tp.nombre tipoDoc,u.documento documento,u.nombre nombre,i.consec consec , i."fechaIngreso" , i."fechaSalida",ser.nombre servicioNombreIng, dep.nombre camaNombreIng ,diag.nombre dxActual ,historia.fecha fechaExamen,tipoExa.nombre tipoExamen ,exam.nombre examen ,estadosExam.nombre estadoExamen ,histoexa.consecutivo consecutivo,histoexa."codigoCups" cups, histoexa.cantidad cantidad, histoexa.observaciones observa, historia.folio folio FROM admisiones_ingresos i, usuarios_usuarios u, sitios_dependencias dep , clinico_servicios ser ,usuarios_tiposDocumento tp , sitios_dependenciastipo deptip  , clinico_Diagnosticos diag , sitios_serviciosSedes sd , clinico_tiposexamen tipoExa,  clinico_examenes exam, clinico_historiaexamenes histoexa, clinico_historia historia, clinico_estadoexamenes estadosExam WHERE sd."sedesClinica_id" = i."sedesClinica_id"  and sd.servicios_id  = ser.id and  i."sedesClinica_id" = dep."sedesClinica_id" AND i."sedesClinica_id" = ' + "'" + str(sede) + "'" +' AND  deptip.id = dep."dependenciasTipo_id" and i."serviciosActual_id" = ser.id AND dep.disponibilidad = ' + "'" + str('O') + "'" + ' AND i."salidaDefinitiva" = '  + "'" + str('N') + "'" + '  and tp.id = u."tipoDoc_id" and i."tipoDoc_id" = u."tipoDoc_id" and u.id = i."documento_id" and diag.id = i."dxActual_id" and i."fechaSalida" is null and dep."serviciosSedes_id" = sd.id and dep.id = i."dependenciasActual_id" AND u."tipoDoc_id" = historia."tipoDoc_id" AND u.id = historia.documento_id AND historia.id = histoexa.historia_id AND i.consec = historia."consecAdmision" AND histoexa."tiposExamen_id" = tipoExa.id and  histoexa."tiposExamen_id" = exam."TiposExamen_id" and histoexa."codigoCups" = exam."codigoCups" AND histoexa."estadoExamenes_id" = estadosExam.id AND estadosExam.nombre = ' + "'" + str('ORDENADO') + "'" + ' UNION SELECT histoexa.id examId ,' + "'"  + str("TRIAGE") + "'" + ' tipoIng, t.id'  + "||" +"'" + '-TRIAGE' + "'," + '  tp.nombre tipoDoc,u.documento documento,u.nombre nombre,t.consec consec , t."fechaSolicita" , cast(' + "'" + str('0001-01-01 00:00:00') + "'" + ' as timestamp) fechaSalida,ser.nombre servicioNombreIng, dep.nombre camaNombreIng , ' + "''" + ' dxActual , historia.fecha fechaExamen,    tipoExa.nombre tipoExamen,exam.nombre examen,estadosExam.nombre estadoExamen,histoexa.consecutivo consecutivo,histoexa."codigoCups" cups, histoexa.cantidad cantidad, histoexa.observaciones observa , historia.folio folio  FROM triage_triage t, usuarios_usuarios u, sitios_dependencias dep , usuarios_tiposDocumento tp , sitios_dependenciastipo deptip  ,sitios_serviciosSedes sd, clinico_servicios ser , clinico_tiposexamen tipoExa,  clinico_examenes exam, clinico_historiaexamenes histoexa,  clinico_historia historia, clinico_estadoexamenes estadosExam WHERE sd."sedesClinica_id" = t."sedesClinica_id"  and t."sedesClinica_id" = dep."sedesClinica_id" AND t."sedesClinica_id" = ' + "'" + str(sede) + "'" + ' AND dep."sedesClinica_id" =  sd."sedesClinica_id" AND dep.id = t.dependencias_id AND t."serviciosSedes_id" = sd.id  AND deptip.id = dep."dependenciasTipo_id" and  tp.id = u."tipoDoc_id" and t."tipoDoc_id" = u."tipoDoc_id" and u.id = t."documento_id"  and ser.id = sd.servicios_id and dep."serviciosSedes_id" = sd.id and t."serviciosSedes_id" = sd.id and dep."tipoDoc_id" = t."tipoDoc_id" and t."consecAdmision" = 0 and dep."documento_id" = t."documento_id" and ser.nombre = ' + "'" + str('TRIAGE') + "'" + ' AND u."tipoDoc_id" = historia."tipoDoc_id" AND u.id = historia.documento_id AND historia.id = histoexa.historia_id AND t."consecAdmision" = historia."consecAdmision" AND histoexa."tiposExamen_id" = tipoExa.id and  histoexa."tiposExamen_id" = exam."TiposExamen_id" and histoexa."codigoCups" = exam."codigoCups" AND histoexa."estadoExamenes_id" = estadosExam.id AND estadosExam.nombre = ' + "'" + str('ORDENADO') +  "'"
+    detalle = 'SELECT histoexa.id examId ,' + "'" + str('INGRESO') + "'" + " tipoIng, i.id||'-INGRESO' , " + ' tp.nombre tipoDoc,u.documento documento,u.nombre nombre, i.consec consec , i."fechaIngreso" , i."fechaSalida",ser.nombre servicioNombreIng, dep.nombre camaNombreIng ,	diag.nombre dxActual ,historia.fecha fechaExamen,tipoExa.nombre tipoExamen ,exam.nombre examen , estadosExam.nombre estadoExamen ,histoexa.consecutivo consecutivo,histoexa."codigoCups" cups, histoexa.cantidad cantidad, histoexa.observaciones observa, historia.folio folio  FROM admisiones_ingresos i 	INNER JOIN usuarios_usuarios u ON (u."tipoDoc_id" = i."tipoDoc_id" and u.id = i."documento_id") INNER JOIN sitios_dependencias dep ON (dep."sedesClinica_id" = i."sedesClinica_id" AND dep.disponibilidad = ' + "'" + str('O') + "'" + ' and dep."tipoDoc_id" = u."tipoDoc_id" and  dep.documento_id= u.id) INNER JOIN usuarios_tiposDocumento tp ON (tp.id = u."tipoDoc_id") INNER JOIN sitios_dependenciastipo deptip ON ( deptip.id = dep."dependenciasTipo_id") LEFT JOIN clinico_Diagnosticos diag on (diag.id = i."dxActual_id") INNER JOIN sitios_serviciosSedes sd ON (sd."sedesClinica_id" = i."sedesClinica_id" and  sd.id = dep."serviciosSedes_id") INNER JOIN clinico_servicios ser ON (ser.id=sd.servicios_id) INNER JOIN clinico_historia historia ON (historia."tipoDoc_id" =  u."tipoDoc_id" AND historia.documento_id = u.id AND historia."consecAdmision" = i.consec) INNER JOIN clinico_historiaexamenes histoexa on (histoexa.historia_id = historia.id) INNER JOIN clinico_tiposexamen tipoExa ON (tipoExa.id = histoexa."tiposExamen_id" ) INNER JOIN  clinico_examenes exam ON (exam."TiposExamen_id" = tipoExa.id  and  exam."TiposExamen_id" = histoexa."tiposExamen_id" AND  exam."codigoCups" =   Histoexa."codigoCups") LEFT JOIN clinico_estadoexamenes estadosExam ON (estadosExam.id = histoexa."estadoExamenes_id") WHERE  i."sedesClinica_id" = ' + "'" + str(sede) + "'" + ' AND  i."salidaDefinitiva" = ' + "'" + str('N') + "'" + ' and i."fechaSalida" is null AND estadosExam.nombre = ' + "'" + str('ORDENADO') + "'"  + ' UNION SELECT histoexa.id examId ,' + "'"  + str("TRIAGE") + "'" + ' tipoIng, t.id'  + "||" +"'" + '-TRIAGE' + "'," + '  tp.nombre tipoDoc,u.documento documento,u.nombre nombre,t.consec consec , t."fechaSolicita" , cast(' + "'" + str('0001-01-01 00:00:00') + "'" + ' as timestamp) fechaSalida,ser.nombre servicioNombreIng, dep.nombre camaNombreIng , ' + "''" + ' dxActual , historia.fecha fechaExamen,    tipoExa.nombre tipoExamen,exam.nombre examen,estadosExam.nombre estadoExamen,histoexa.consecutivo consecutivo,histoexa."codigoCups" cups, histoexa.cantidad cantidad, histoexa.observaciones observa , historia.folio folio  FROM triage_triage t, usuarios_usuarios u, sitios_dependencias dep , usuarios_tiposDocumento tp , sitios_dependenciastipo deptip  ,sitios_serviciosSedes sd, clinico_servicios ser , clinico_tiposexamen tipoExa,  clinico_examenes exam, clinico_historiaexamenes histoexa,  clinico_historia historia, clinico_estadoexamenes estadosExam WHERE sd."sedesClinica_id" = t."sedesClinica_id"  and t."sedesClinica_id" = dep."sedesClinica_id" AND t."sedesClinica_id" = ' + "'" + str(sede) + "'" + ' AND dep."sedesClinica_id" =  sd."sedesClinica_id" AND dep.id = t.dependencias_id AND t."serviciosSedes_id" = sd.id  AND deptip.id = dep."dependenciasTipo_id" and  tp.id = u."tipoDoc_id" and t."tipoDoc_id" = u."tipoDoc_id" and u.id = t."documento_id"  and ser.id = sd.servicios_id and dep."serviciosSedes_id" = sd.id and t."serviciosSedes_id" = sd.id and dep."tipoDoc_id" = t."tipoDoc_id" and t."consecAdmision" = 0 and dep."documento_id" = t."documento_id" and ser.nombre = ' + "'" + str('TRIAGE') + "'" + ' AND u."tipoDoc_id" = historia."tipoDoc_id" AND u.id = historia.documento_id AND historia.id = histoexa.historia_id AND t."consecAdmision" = historia."consecAdmision" AND histoexa."tiposExamen_id" = tipoExa.id and  histoexa."tiposExamen_id" = exam."TiposExamen_id" and histoexa."codigoCups" = exam."codigoCups" AND histoexa."estadoExamenes_id" = estadosExam.id AND estadosExam.nombre = ' + "'" + str('ORDENADO') +  "'"
+
     print(detalle)
 
     curx.execute(detalle)
@@ -584,14 +586,14 @@ def PostConsultaApoyoTerapeuticoConsulta(request):
     curt.execute(comando)
     print(comando)
 
-    rasgosClinicos = []
-    rasgosClinicos.append({'id': '', 'nombre': ''})
+    rasgosClinicosz = []
+    rasgosClinicosz.append({'id': '', 'nombre': ''})
 
     for id, nombre in curt.fetchall():
-        rasgosClinicos.append({'id': id, 'nombre': nombre})
+        rasgosClinicosz.append({'id': id, 'nombre': nombre})
 
     miConexiont.close()
-    print(rasgosClinicos)
+    print(rasgosClinicosz)
 
     #context['RasgosClinicos'] = rasgosClinicos
 
@@ -774,7 +776,7 @@ def PostConsultaApoyoTerapeuticoConsulta(request):
         envio = []
 
         envio.append({'ResultadoApoyoTerapeutico': zresultadoApoyoTerapeutico})
-        envio.append({'RasgosClinicos':rasgosClinicos})
+        envio.append({'RasgosClinicosz':rasgosClinicosz})
         envio.append({'MedicoInterpretacion1':medicoInt1})
         envio.append({'MedicoInterpretacion2':medicoInt2})
         envio.append({'MedicoReporte':medicoRep})
@@ -811,6 +813,9 @@ def load_dataRasgos(request, data):
     print ("Entre load_data Rasgos ... ")
 
     context = {}
+    print("antes del error raro")
+    print("data =", data)
+
     d = json.loads(data)
 
     username = d['username']
@@ -860,6 +865,9 @@ def load_dataRasgos(request, data):
 def load_dataRasgosConsulta(request, data):
     print ("Entre load_data Rasgos Consulta... ")
 
+    print("antes del error raro")
+    print("data =", data)
+
     context = {}
     d = json.loads(data)
 
@@ -869,15 +877,13 @@ def load_dataRasgosConsulta(request, data):
     valor = d['valor']
     print ("valor es el id de historiaexamenes")
 
-
-
     nombreSede = d['nombreSede']
     print ("sede:", sede)
     print ("username:", username)
     print ("username_id:", username_id)
     #valor = 127
 
-    rasgos = []
+    rasgosConsulta = []
 
 
     miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",     password="123456")
@@ -890,7 +896,7 @@ def load_dataRasgosConsulta(request, data):
     curx.execute(detalle)
 
     for rasgosId, examId,  tipoExamenId, tipoExamen,  codigoCups,  nombreExamen,  cantidad, unidad, observaciones,  estado,  valorResultado, nombreRasgo, minimo, maximo , observa in curx.fetchall():
-        rasgos.append(
+        rasgosConsulta.append(
 		{"model":"examenesrasgos.riesgos","pk":rasgosId,"fields":
 			{'rasgosId':rasgosId, 'examId':examId, 'tipoExamenId':tipoExamenId, 'tipoExamen':tipoExamen, 'codigoCups': codigoCups, 'nombreExamen': nombreExamen, 'cantidad': cantidad, 'observaciones': observaciones,
                          'unidad':unidad, 'observaciones': observaciones, 'estado': estado,
@@ -898,18 +904,15 @@ def load_dataRasgosConsulta(request, data):
                          'minimo': minimo,'maximo':maximo, 'observa':observa}})
 
     miConexionx.close()
-    print(rasgos)
-    context['Rasgos'] = rasgos
+    print(rasgosConsulta)
+    context['Rasgos'] = rasgosConsulta
 
-    print("Rasgos  =  ", rasgos)
+    print("rasgosConsulta  =  ", rasgosConsulta)
 
-    serialized1 = json.dumps(rasgos, default=serialize_datetime)
+    serialized1 = json.dumps(rasgosConsulta, default=str)
 
     return HttpResponse(serialized1,   content_type='application/json')
     #return JsonResponse(json.dumps(serialized1),  safe=False)
-
-
-
 
 
 

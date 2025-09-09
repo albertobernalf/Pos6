@@ -282,3 +282,23 @@ class NotasDebito(models.Model):
     def __str__(self):
         return self.descripcion
 
+
+class Caja(models.Model):
+
+    id = models.AutoField(primary_key=True)
+    fecha = models.DateField(editable=True, null=True, blank=True, default=now)
+    serviciosAdministrativos = models.ForeignKey('sitios.ServiciosAdministrativos', blank=True,null= True, editable=True,  on_delete=models.PROTECT,   related_name='seradm335')
+    usuarioEntrega = models.ForeignKey('planta.Planta', default=1, on_delete=models.PROTECT, null=True ,  related_name='usuario7397')
+    usuarioRecibe = models.ForeignKey('planta.Planta', default=1, on_delete=models.PROTECT, null=True ,  related_name='usuario7597')
+    usuarioSuperviza= models.ForeignKey('planta.Planta', default=1, on_delete=models.PROTECT, null=True ,  related_name='usuario7497')
+    totalEfectivo =  models.DecimalField( max_digits=15, decimal_places=0, default=0)
+    totalTarjetasDebito =  models.DecimalField( max_digits=15, decimal_places=0, default=0)
+    totalTarjetasCredito =  models.DecimalField( max_digits=15, decimal_places=0, default=0)
+    totalCheques =  models.DecimalField( max_digits=15, decimal_places=0, default=0)
+    total =  models.DecimalField( max_digits=15, decimal_places=0, default=0)
+    usuarioRegistro = models.ForeignKey('planta.Planta', default=1, on_delete=models.PROTECT, null=True ,  related_name='usuario7297')
+    fechaRegistro = models.DateTimeField(default=now, blank=True, null=True, editable=True)
+    estadoReg = models.CharField(max_length=1, default='A', editable=False)
+
+    def __str__(self):
+        return str(self.serviciosAdministrativos)

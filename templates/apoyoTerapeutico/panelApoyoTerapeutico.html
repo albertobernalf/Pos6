@@ -468,13 +468,13 @@ Mayor a un dia
                                     </div>
 
 				          <div class="col">
-                                        <label for="zdependenciasRealizado" class="col-sm-6 control-label">RealizadoEnDependencia:</label>
+                                        <label for="zserviciosAdministrativos" class="col-sm-6 control-label">Servicio:</label>
 
-                                        <select class="form-select  h-40 w-10" id="zdependenciasRealizado"
-                                                name="zdependenciasRealizado" disabled>
-                                            {% for dependenciasRealizado in DependenciasRealizado %}
-                                            <option value="{{dependenciasRealizado.id}}">
-                                                {{dependenciasRealizado.nombre}}
+                                        <select class="form-select  h-40 w-10" id="zserviciosAdministrativos"
+                                                name="zserviciosAdministrativos" disabled>
+                                            {% for serviciosAdministrativos in ServiciosAdministrativos %}
+                                            <option value="{{serviciosAdministrativos.id}}">
+                                                {{serviciosAdministrativos.nombre}}
                                             </option>
                                             {% endfor %}
                                         </select>
