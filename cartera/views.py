@@ -1146,8 +1146,8 @@ def GuardarCaja(request):
     print("serviciosAdministrativos =", serviciosAdministrativos)
     fecha = request.POST["fecha"]
     print("fecha =", fecha)
-    usuarioEngrega = request.POST["usuarioEngrega_id"]
-    print("usuarioEngrega =", usuarioEngrega)
+    usuarioEntrega = request.POST["usuarioEntrega_id"]
+    print("usuarioEntrega =", usuarioEntrega)
     usuarioRecibe = request.POST["usuarioRecibe_id"]
     print("usuarioRecibe =", usuarioRecibe)
     usuarioSuperviza = request.POST["usuarioSuperviza_id"]
@@ -1166,8 +1166,11 @@ def GuardarCaja(request):
     estadoCaja = request.POST["estadoCaja"]
     print("estadoCaja =", estadoCaja)
 
-    username = request.POST["username_id"]
+    username = request.POST["username_idC"]
     print("username =", username)
+
+    sede = request.POST["sedeC"]
+    print("sede =", sede)
 
     fechaRegistro = timezone.now()
 
@@ -1178,7 +1181,7 @@ def GuardarCaja(request):
         miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",  password="123456")
         cur3 = miConexion3.cursor()
 
-        comando = 'UPDATE cartera_caja SET "fechaRegistro"= ' +"'" + str(fechaRegistro) + "'," + ' "totalEfectivo" = ' + "'" +str(totalEfectivo) + "'," + '"totalTarjetasDebito" = ' + "'" + str(totalTarjetasDebito) + "',"  + '"totalTarjetasCredito" = ' + "'" + str(totalTarjetasCredito) + "',"  + '"totalCheques" = ' + "'" + str(totalCheques) + "'," + '"total" = ' + "'" + str(total) + "',"   + '"usuarioEntrega_id" = ' + "'" + str(usuarioEntrega) + "'," + '"usuarioRecibe_id" = ' + "'" + str(usuarioRecibe) + "'," + '"usuarioSuperviza_id" = ' + "'" + str(usuarioSuperviza) + "',"  + '"estadoCaja_id" = ' + "'" + str(estadoCaja) + "'," + '"serviciosAdministrativos_id" = ' + "'" + str(serviciosAdministrativos) + "'," + '"estadoReg" = ' + "'" + str('A') + "'"  + '   WHERE id = ' + str(cajaId)
+        comando = 'UPDATE cartera_caja SET "fechaRegistro"= ' +"'" + str(fechaRegistro) + "'," + ' "totalEfectivo" = ' + "'" +str(totalEfectivo) + "'," + '"totalTarjetasDebito" = ' + "'" + str(totalTarjetasDebito) + "',"  + '"totalTarjetasCredito" = ' + "'" + str(totalTarjetasCredito) + "',"  + '"totalCheques" = ' + "'" + str(totalCheques) + "'," + '"total" = ' + "'" + str(total) + "',"   + '"usuarioEntrega_id" = ' + "'" + str(usuarioEntrega) + "'," + '"usuarioRecibe_id" = ' + "'" + str(usuarioRecibe) + "'," + '"usuarioSuperviza_id" = ' + "'" + str(usuarioSuperviza) + "',"  + '"estadoCaja" = ' + "'" + str(estadoCaja) + "'," + '"serviciosAdministrativos_id" = ' + "'" + str(serviciosAdministrativos) + "'," + '"estadoReg" = ' + "'" + str('A') + "'"  + '   WHERE id = ' + str(cajaId)
 
         print(comando)
         cur3.execute(comando)
@@ -1195,7 +1198,7 @@ def GuardarCaja(request):
         print ("Entre por rollback" , error)
         if miConexion3:
             print("Entro ha hacer el Rollback")
-            miConexion3.rollback()
+            #miConexion3.rollback()
 
         datosMensaje = {'success': False, 'Mensaje': error}
         json_data = json.dumps(datosMensaje, default=str)
@@ -1221,17 +1224,19 @@ def EditarCaja(request):
                                    password="123456")
     curx = miConexionx.cursor()
 	
-    detalle = 'SELECT id, fecha, "totalEfectivo", "totalTarjetasDebito", "totalTarjetasCredito", "totalCheques", total, "serviciosAdministrativos_id", "usuarioEntrega_id", "usuarioRecibe_id", "usuarioSuperviza_id", "estadoCaja" FROM cartera_caja WHERE id =  ' + "'" + str(cajaId) + "'"
+    detalle = 'SELECT id, fecha, "totalEfectivo", "totalTarjetasDebito", "totalTarjetasCredito", "totalCheques", total, "serviciosAdministrativos_id", "usuarioEntrega_id", "usuarioRecibe_id", "usuarioSuperviza_id", "estadoCaja" , "totalEfectivoEsperado", "totalTarjetasDebitoEsperado", "totalTarjetasCreditoEsperado", "totalChequesEsperado", "totalEsperado"   FROM cartera_caja WHERE id =  ' + "'" + str(cajaId) + "'"
 
     print(detalle)
 
     curx.execute(detalle)
 
-    for  id, fecha, totalEfectivo, totalTarjetasDebito,totalTarjetasCredito,totalCheques, total, serviciosAdministrativos_id, usuarioEntrega_id, usuarioRecibe_id,  usuarioSuperviza_id, estadoCaja  in curx.fetchall():
+    for  id, fecha, totalEfectivo, totalTarjetasDebito,totalTarjetasCredito,totalCheques, total, serviciosAdministrativos_id, usuarioEntrega_id, usuarioRecibe_id,  usuarioSuperviza_id, estadoCaja,   totalEfectivoEsperado, totalTarjetasDebitoEsperado,totalTarjetasCreditoEsperado,totalChequesEsperado, totalEsperado  in curx.fetchall():
      caja.append(
             {"model": "cartera.caja", "pk": id, "fields":
                 {'id': id, 'fecha': fecha , 'totalEfectivo': totalEfectivo,  'totalTarjetasDebito':totalTarjetasDebito,
-		  'totalTarjetasCredito':totalTarjetasCredito,'totalCheques':totalCheques,'total':total,'serviciosAdministrativos_id':serviciosAdministrativos_id,'usuarioEntrega_id':usuarioEntrega_id,'usuarioRecibe_id':usuarioRecibe_id,'usuarioSuperviza_id':usuarioSuperviza_id,'estadoCaja':estadoCaja
+		  'totalTarjetasCredito':totalTarjetasCredito,'totalCheques':totalCheques,'total':total,'serviciosAdministrativos_id':serviciosAdministrativos_id,'usuarioEntrega_id':usuarioEntrega_id,'usuarioRecibe_id':usuarioRecibe_id,'usuarioSuperviza_id':usuarioSuperviza_id,'estadoCaja':estadoCaja,
+                 'totalEfectivoEsperado': totalEfectivoEsperado, 'totalTarjetasDebitoEsperado': totalTarjetasDebitoEsperado,
+                 'totalTarjetasCreditoEsperado': totalTarjetasCreditoEsperado, 'totalChequesEsperado': totalChequesEsperado, 'totalEsperado': totalEsperado
                  }})
 
     miConexionx.close()
@@ -1258,7 +1263,7 @@ def Load_dataCaja(request, data):
                                    password="123456")
     curx = miConexionx.cursor()
 
-    detalle = 'SELECT id, fecha, "totalEfectivo", "totalTarjetasDebito", "totalTarjetasCredito", "totalCheques", total, "fechaRegistro", "estadoReg", "serviciosAdministrativos_id", "usuarioEntrega_id", "usuarioRecibe_id", "usuarioRegistro_id", "usuarioSuperviza_id", "estadoCaja", "sedesClinica_id", "totalChequesEsperado", "totalEfectivoEsperado", "totalEsperado", "totalTarjetasCreditoEsperado", "totalTarjetasDebitoEsperado"  FROM cartera_caja'
+    detalle = 'SELECT caj.id, fecha, "totalEfectivo", "totalTarjetasDebito", "totalTarjetasCredito", "totalCheques", total, caj."fechaRegistro", caj."estadoReg", "serviciosAdministrativos_id", pla1.nombre usuarioEntrega_id, pla2.nombre usuarioRecibe_id, "usuarioRegistro_id", pla3.nombre usuarioSuperviza_id, "estadoCaja", caj."sedesClinica_id", "totalChequesEsperado", "totalEfectivoEsperado", "totalEsperado", "totalTarjetasCreditoEsperado", "totalTarjetasDebitoEsperado"  FROM cartera_caja caj LEFT JOIN planta_planta pla1 ON (pla1.id = caj."usuarioEntrega_id") LEFT JOIN planta_planta pla2 ON (pla2.id = caj."usuarioRecibe_id") LEFT JOIN planta_planta pla3 ON (pla3.id = caj."usuarioSuperviza_id")  WHERE caj."sedesClinica_id" = ' + "'" + str(sedesClinica_id) + "'"
 
     print ("detalle = ", detalle)
 

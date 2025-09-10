@@ -108,14 +108,19 @@ table.dataTable tbody tr {
                                                 <th>id</th>
                                                 <th>Fecha</th>
                                                 <th>Entrega</th>
-                                                <th>Efectivo</th>
-                                                <th>TarjetasDebito</th>
-                                                <th>TarjetasCredito</th>
-                                                <th>Cheques</th>
+                                                <th>Efec</th>
+                                                <th>TDeb</th>
+                                                <th>TCred</th>
+                                                <th>Cheq</th>
                                                 <th>Total</th>
                                                 <th>Recibe</th>
                                                 <th>Superviza</th>
-                                                <th>EstadoCaja</th>
+                                                <th>Estado</th>
+                                                <th>EfecEspera</th>
+                                                <th>TDebEspera</th>
+                                                <th>TCredEspera</th>
+                                                <th>CheqEspera</th>
+                                                <th>TotalEspera</th>
 						<th>Servicio</th>
 
 						</bold>                                  
@@ -133,7 +138,7 @@ table.dataTable tbody tr {
 	            <!-- Espacio Modales  Glosas-->
 
             <div class="modal fade" id="crearModelCaja" tabindex="-1" role="dialog"  style="overflow-y:scroll;" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
-                <div class="modal-dialog modal-dialog-scrollable  modal-dialog-center" role="document" modal-lg>
+                <div class="modal-dialog modal-lg modal-dialog-scrollable  modal-dialog-center" role="document" >
                     <div class="modal-content">
                         <div class="modal-header">
 	     <div  class="modal-title" id="exampleModalLabel" style="text-align:center;"><font gont-family="Times New roman" size=5">Caja</font> </div>
@@ -147,6 +152,9 @@ table.dataTable tbody tr {
 
                                 <input type="hidden" name="post_id" id="post_id">
                                 <input type="hidden" name="cajaId" id="cajaId">
+
+             			  <input type="hidden" id="username_id" name="username_idC" value="{{Username_id}}">
+               			<input type="hidden" id="sedeC" name="sedeC" value="{{Sede}}">
 
                       <div class="row row-cols-lg-auto g-3 align-items-center mb-3">
 
@@ -174,17 +182,17 @@ table.dataTable tbody tr {
 				<div class="col-12">
 					fecha:
                                                 
-					 <input type="datetime-local"  class="form-control" id="fecha" name="fecha" placeholder="fecha"  >
+					 <input type="date"  class="form-control" id="fecha" name="fecha" placeholder="fecha"  readonly>
                                 </div>
 
 				<div class="col-12">
                                		  Entrega:
-                                        <label for="usuarioEngrega_id" class="col-sm-1 control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SeviciosAdmon:</label>
+                                        <label for="usuarioEntrega_id" class="col-sm-1 control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SeviciosAdmon:</label>
                                         <div class="col-sm-8">
-                                            <select class="select-css h-40 w-20" id="usuarioEngrega_id"  tabindex= "0"
-                                                    name="usuarioEngrega_id"
+                                            <select class="select-css h-40 w-20" id="usuarioEntrega_id"  tabindex= "0"
+                                                    name="usuarioEntrega_id"
                                                     required>
-                                                {% for usuarioEngrega in UsuarioEngrega  %}
+                                                {% for usuarioEngrega in UsuarioEntrega  %}
                                                 <option value="{{usuarioEngrega.id}}"> {{usuarioEngrega.nombre}}</option>
                                                 {% endfor %}
                                            </select>
@@ -229,11 +237,9 @@ table.dataTable tbody tr {
 					 <input type="text"  class="form-control" id="totalEfectivo" name="totalEfectivo" placeholder="totalEfectivo">
                                 </div>
 
-
-
 				<div class="col-12">
-					Total Efectivo:                               
-					 <input type="text"  class="form-control" id="totalEfectivo" name="totalEfectivo" placeholder="totalEfectivo">
+					Total EsperadoEfectivo:                               
+					 <input type="text"  class="form-control" id="totalEfectivoEsperado" name="totalEfectivoEsperado" placeholder="totalEfectivoEsperado" readonly>
                                 </div>
 
 
@@ -241,11 +247,21 @@ table.dataTable tbody tr {
 					Total Tarjetas Debito:                               
 					 <input type="text"  class="form-control" id="totalTarjetasDebito" name="totalTarjetasDebito" placeholder="totalTarjetasDebito">
                                 </div>
+				<div class="col-12">
+					Total Tarjetas Debito Esperado:                               
+					 <input type="text"  class="form-control" id="totalTarjetasDebitoEsperado" name="totalTarjetasDebitoEsperado" placeholder="totalTarjetasDebitoEsperado" readonly>
+                                </div>
+
 
 
 				<div class="col-12">
 					Total Tarjetas Credito:                               
 					 <input type="text"  class="form-control" id="totalTarjetasCredito" name="totalTarjetasCredito" placeholder="totalTarjetasCredito">
+                                </div>
+
+				<div class="col-12">
+					Total Tarjetas Credito Esperado:                               
+					 <input type="text"  class="form-control" id="totalTarjetasCreditoEsperado" name="totalTarjetasCreditoEsperado" placeholder="totalTarjetasCreditoEsperado" readonly>
                                 </div>
 
 
@@ -254,11 +270,22 @@ table.dataTable tbody tr {
 					 <input type="text"  class="form-control" id="totalCheques" name="totalCheques" placeholder="totalCheques">
                                 </div>
 
+				<div class="col-12">
+					Total Cheques Esperado:                               
+					 <input type="text"  class="form-control" id="totalChequesEsperado" name="totalChequesEsperado" placeholder="totalChequesEsperado" readonly>
+                                </div>
+
 
 				<div class="col-12">
 					Total :                               
-					 <input type="text"  class="form-control" id="total" name="total" placeholder="total" readonly>
+					 <input type="text"  class="form-control" id="total" name="total" placeholder="total" >
                                 </div>
+
+				<div class="col-12">
+					Total Esperado:                               
+					 <input type="text"  class="form-control" id="totalEsperado" name="totalEsperado" placeholder="totalEsperado" readonly>
+                                </div>
+
 
 
 				<div class="col-12">

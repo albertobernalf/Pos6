@@ -81,7 +81,7 @@ function arrancaCartera(valorTabla,valorData)
 	    { width: '10%', targets: [2,3] },
 
 		{   
-                    "targets": 12
+                    "targets": 17
                }
             ],
 	 pageLength: 3,
@@ -122,17 +122,21 @@ function arrancaCartera(valorTabla,valorData)
 
                 { data: "fields.id"},
                 { data: "fields.fecha"},
-                { data: "fields.entrega"},
-                { data: "fields.efectivo"},
-                { data: "fields.tarjetasDebito"},
-                { data: "fields.tarjetasCredito"},
-                { data: "fields.cheques"},
+                { data: "fields.usuarioEntrega_id"},
+                { data: "fields.totalEfectivo"},
+                { data: "fields.totalTarjetasDebito"},
+                { data: "fields.totalTarjetasCredito"},
+                { data: "fields.totalCheques"},
                 { data: "fields.total"},
-                { data: "fields.recibe"},
-		{ data: "fields.superviza"},
+                { data: "fields.usuarioRecibe_id"},
+		{ data: "fields.usuarioSuperviza_id"},
 		{ data: "fields.estadoCaja"},
-                { data: "fields.servicio"},    
-
+                { data: "fields.totalEfectivoEsperado"},
+                { data: "fields.totalTarjetasDebitoEsperado"},
+                { data: "fields.totalTarjetasCreditoEsperado"},
+                { data: "fields.totalChequesEsperado"},
+                { data: "fields.totalEsperado"},
+                { data: "fields.serviciosAdministrativos_id"},    
        ]
             }
 	        dataTable = $('#tablaCaja').DataTable(dataTableOptionsCaja);
@@ -184,8 +188,6 @@ window.addEventListener('load', async () => {
         var post_id = $(this).data('pk');
         var cajaId = post_id;
 	var row = $(this).closest('tr'); // Encuentra la fila
-	alert("cajaId = " + cajaId);
-
 
         var data =  {}   ;
 
@@ -194,6 +196,8 @@ window.addEventListener('load', async () => {
         var nombreSede = document.getElementById("nombreSede").value;
     	var sede = document.getElementById("sede").value;
         var username_id = document.getElementById("username_id").value;
+
+
         data['username'] = username;
         data['sedeSeleccionada'] = sedeSeleccionada;
         data['nombreSede'] = nombreSede;
@@ -208,15 +212,43 @@ window.addEventListener('load', async () => {
                 type: "POST",
                 dataType: 'json',
                 success: function (info) {
-		   $("#mensajes").html(info.message);
 
-	$('#postFormCaja').trigger("reset");
+
+		   $("#mensajes").html(info.Mensaje);
+		$('#postFormCaja').trigger("reset");
+
+			// $('#fecha').val(info[0].fields.fecha);
+			document.getElementById("fecha").value = info[0].fields.fecha;
+			 $('#usuarioEngrega_id').val(info[0].fields.usuarioEntrega_id);
+			 $('#serviciosAdministrativos_id').val(info[0].fields.serviciosAdministrativos_id);
+
+
+
+			$('#usuarioRecibe_id').val(info[0].fields.usuarioRecibe_id);
+			$('#usuarioSuperviza_id').val(info[0].fields.usuarioSuperviza_id);
+			$('#totalEfectivo').val(info[0].fields.totalEfectivo);
+			$('#totalEfectivoEsperado').val(info[0].fields.totalEfectivoEsperado);
+			$('#totalTarjetasDebito').val(info[0].fields.totalTarjetasDebito);
+			$('#totalTarjetasDebitoEsperado').val(info[0].fields.totalTarjetasDebitoEsperado);
+			$('#totalTarjetasCredito').val(info[0].fields.totalTarjetasCredito);
+			$('#totalTarjetasCreditoEsperado').val(info[0].fields.totalTarjetasCreditoEsperado);
+			$('#totalCheques').val(info[0].fields.totalCheques);
+			$('#totalChequesEsperado').val(info[0].fields.totalChequesEsperado);
+			$('#total').val(info[0].fields.total);
+			$('#totalEsperado').val(info[0].fields.totalEsperado);
+			$('#estadoCaja').val(info[0].fields.estadoCaja);
+			$('#cajaId').val(cajaId);
+
 	
 		 $('#crearModelCaja').modal('show');
                 },
-            error: function (request, status, error) {
-		document.getElementById("mensajesErrorModalCaja").innerHTML =  'Error' + ': ' + request.responseText;
-	   	    	}
+            error: function(data){
+		           alert("data = " + JSON.stringify(data)); // data
+		           alert(data.status); // the status code
+		   
+		           alert(data.JsonResponse['error']); // the message
+		document.getElementById("mensajesError").innerHTML =  data.JsonResponse.error
+			        },
             });
   });
 
@@ -233,48 +265,12 @@ function GuardarCaja()
 	    	var sede = document.getElementById("sede").value;
 
 
-	    	var post_idGlo = document.getElementById("post_idGlo").innerHTML;
-	    	var tipoGloDet = document.getElementById("tipoGloDet").innerHTML;
-	        var glosaGloDet = document.getElementById("glosaGloDet").innerHTML;
-	        var post_idGloDet = document.getElementById("post_idGloDet").innerHTML;
-	        var motivoGlosa_idGloDet = document.getElementById("motivoGlosa_idGloDet").value;
-	        var cantidadGlosadaGloDet = document.getElementById("cantidadGlosadaGloDet").value;
-	        var cantidadAceptadaGloDet = document.getElementById("cantidadAceptadaGloDet").value;
-	        var cantidadSoportadoGloDet = document.getElementById("cantidadSoportadoGloDet").value;
-	        var valorGlosadoGloDet = document.getElementById("valorGlosadoGloDet").value;
-
-
-
-
             $.ajax({
                 data: $('#postFormCaja').serialize(),
 	        url: "/guardarCaja/",
                 type: "POST",
                 dataType: 'json',
                 success: function (data2) {
-
-
-			if (data2['Error'] == 'Si' )
-				{
-		
-				document.getElementById("mensajesGloDet").innerHTML = data2['message']
-
-					return ;
-				}
-	
-				if (data2['Error'] == 'No' )
-				{
-
-
-				 $('#postFormGlosasDetalle').trigger("reset");
-
-
-			filtrodata = JSON.stringify(data2['Data']);
-	
-
-			filtrodata = filtrodata.replace ('[','');
-			filtrodata = filtrodata.replace (']','');
-			filtro = JSON.parse(filtrodata);
 
 		var data =  {}   ;
 	        data['username'] = username;
@@ -284,19 +280,13 @@ function GuardarCaja()
 	        data['sede'] = sede;
 	        data['sedesClinica_id'] = sede;
 
-		var cajaId = document.getElementById("cajaId").innerHTML; // jquery
-
+		 $('#crearModelCaja').modal('hide');
 
 	        data = JSON.stringify(data);
+
+		 arrancaCartera(1,data);
+	         dataTableCajanitialized = true;
 	
-			 arrancaCartera(1,data);
-			    dataTableCajanitialized = true;
-
- 		 $('#crearModelCaja').modal('hide');
-
-
-				}	// Cierra el if		
-
                 },
             error: function (request, status, error) {
 		document.getElementById("mensajesErrorModalCaja").innerHTML =  'Error' + ': ' + request.responseText;

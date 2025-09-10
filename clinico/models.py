@@ -3,6 +3,7 @@ from django.utils.timezone import now
 from django.db.models.functions import Cast
 from django.db.models import IntegerField
 from django.db.models import CharField
+from django.db.models import Index
 
 # Create your models here.
 
@@ -372,6 +373,12 @@ class Historia(models.Model):
 
     class Meta:
         unique_together = (('tipoDoc', 'documento','consecAdmision','folio'),)
+        indexes = [
+            # Crea un índice compuesto sobre 'nombre' y 'email'
+            Index(fields=['tipoDoc', 'documento','folio']),
+            # Opcionalmente, puedes definir restricciones únicas (que también generan índices)
+            # models.UniqueConstraint(fields=['email'], name='unique_email_constraint')
+        ]
         ordering = ["tipoDoc", "documento", "folio", "fecha", "especialidades", "motivo", "subjetivo", "objetivo",
                     "analisis", "plann"]
 

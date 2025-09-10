@@ -1170,7 +1170,7 @@ def ImprimirHistoriaClinica(request):
                                    password="123456")
     curt = miConexiont.cursor()
 
-    comando = 'select  h.id HistoriaId, h.folio folioId, h.fecha fechaFolio, h."tiposFolio_id" tipoFolio from clinico_historia h where h.documento_id = ' + "'" + str(documentoId) + "'" + ' order by id'
+    comando = 'select  h.id HistoriaId, h.folio folioId, h.fecha fechaFolio, tip.nombre tipoFolio from clinico_historia h left join clinico_tiposfolio tip ON (tip.id = h."tiposFolio_id" ) where h.documento_id = ' + "'" + str(documentoId) + "'" + ' order by h.id'
     curt.execute(comando)
     print(comando)
 
@@ -1210,7 +1210,7 @@ def ImprimirHistoriaClinica(request):
                                        password="123456")
         curt = miConexiont.cursor()
 
-        comando = 'select  h.motivo motivo, h.subjetivo subjetivo, h.objetivo objetivo, h.analisis analisis, h.plann plan, h."causasExterna_id" causasExterna    from clinico_historia h where h.id = ' + str(folios[0 + i]['HistoriaId'])
+        comando = 'select  h.motivo motivo, h.subjetivo subjetivo, h.objetivo objetivo, h.analisis analisis, h.plann plan, cau.nombre causasExterna    from clinico_historia h LEFT JOIN clinico_causasexterna cau ON (cau.id = h."causasExterna_id" )  where h.id = ' + str(folios[0 + i]['HistoriaId'])
 
         curt.execute(comando)
 
@@ -1563,17 +1563,26 @@ def ImprimirHistoriaClinica(request):
                     pdf.ln(4)
 
                 for s in range(0, len(resultadosCabezoteLab)):
-                    pdf.cell(70, 1, 'Interpretacion1 ' + str(resultadosCabezoteLab[0 + s]['interpretacion1']), 0, 0, 'L')
-                    pdf.cell(40, 1, 'Fecha: ' + str(resultadosCabezoteLab[0 + s]['fechaInterpretacion1']), 0, 0, 'L')
-                    pdf.cell(25, 1, 'Medico: ' + str(resultadosCabezoteLab[0 + s]['medicoInterpreta1']), 0, 0, 'L')
-                    linea = linea + 5
+                    pdf.cell(120, 1, 'Interpretacion1 ' + str(resultadosCabezoteLab[0 + s]['interpretacion1']), 0, 0, 'L')
+                    linea = linea + 3
+                    pdf.ln(3)
+                    pdf.cell(20, 2, 'Fecha: ' + str(resultadosCabezoteLab[0 + s]['fechaInterpretacion1']), 0, 0, 'L')
+                    linea = linea + 3
+                    pdf.ln(3)
+                    pdf.cell(25, 3, 'Medico: ' + str(resultadosCabezoteLab[0 + s]['medicoInterpreta1']), 0, 0, 'L')
+                    linea = linea + 3
                     pdf.ln(5)
-                    pdf.cell(70, 2, 'Interpretacion2' + str(resultadosCabezoteLab[0 + s]['interpretacion2']), 0, 0, 'L')
-                    pdf.cell(40, 2, 'Fecha: ' + str(resultadosCabezoteLab[0 + s]['fechaInterpretacion2']), 0, 0, 'L')
-                    pdf.cell(25, 2, 'Medico: ' + str(resultadosCabezoteLab[0 + s]['medicoInterpreta2']), 0, 0, 'L')
+                    pdf.cell(120, 1, 'Interpretacion2' + str(resultadosCabezoteLab[0 + s]['interpretacion2']), 0, 0, 'L')
+                    linea = linea + 3
+                    pdf.ln(3)
+                    pdf.cell(20, 2, 'Fecha: ' + str(resultadosCabezoteLab[0 + s]['fechaInterpretacion2']), 0, 0, 'L')
+                    linea = linea + 3
+                    pdf.ln(3)
 
-                    linea = linea + 5
-                    pdf.ln(5)
+                    pdf.cell(25, 3, 'Medico: ' + str(resultadosCabezoteLab[0 + s]['medicoInterpreta2']), 0, 0, 'L')
+
+                    linea = linea + 4
+                    pdf.ln(4)
 
                 ## Fin cabezote
 
@@ -1660,6 +1669,64 @@ def ImprimirHistoriaClinica(request):
                 linea = linea + 3
                 pdf.ln(3)
 
+                ## Aqui cabezote del resultado Radiologia
+
+                miConexiony = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                               password="123456")
+                cury = miConexiony.cursor()
+                #comando ='SELECT hisExa.interpretacion1, hisExa."fechaInterpretacion1", med.nombre medico FROM clinico_historiaexamenes hisExa INNER JOIN  clinico_medicos med ON (med.id = hisExa."medicoInterpretacion1_id") INNER JOIN clinico_historia historia on (historia.id = hisExa.historia_id ) WHERE hisExa.historia_id = ' + "'" + str(folios[0 + i]['HistoriaId']) + "'"
+                comando = 'SELECT hisExa.interpretacion1, hisExa."fechaInterpretacion1", pla.nombre medicoInterpreta1, hisExa.interpretacion2, hisExa."fechaInterpretacion2", pla.nombre medicoInterpreta2 FROM clinico_historiaexamenes hisExa LEFT JOIN  clinico_medicos med ON (med.id = hisExa."medicoInterpretacion1_id") LEFT  JOIN  clinico_medicos med2 ON (med2.id = hisExa."medicoInterpretacion2_id") INNER JOIN clinico_historia historia on (historia.id = hisExa.historia_id ) LEFT JOIN planta_planta pla ON (pla.id=med.planta_id) LEFT JOIN planta_planta pla2 ON (pla2.id=med2.planta_id) WHERE hisExa.id = ' + "'" + str(laboratorios[0 + l]['id'])  + "'"
+
+                print(comando)
+                cury.execute(comando)
+
+                resultadosCabezoteRad = []
+
+                for interpretacion1, fechaInterpretacion1, medicoInterpreta1, interpretacion2, fechaInterpretacion2, medicoInterpreta2   in cury.fetchall():
+                    resultadosCabezoteRad.append(
+                        {'interpretacion1': interpretacion1, 'fechaInterpretacion1': fechaInterpretacion1, 'medicoInterpreta1': medicoInterpreta1,
+                         'interpretacion2': interpretacion2, 'fechaInterpretacion2': fechaInterpretacion2, 'medicoInterpreta2': medicoInterpreta2
+                         })
+                miConexiony.close()
+
+
+                print("Resultados  resultadosCabezoteRad  = ", resultadosCabezoteRad)
+                print("matriz Resultados resultadosCabezoteRad = ", len(resultadosCabezoteRad))
+
+
+                if (resultadosCabezoteRad != []):
+                    linea = linea + 2
+                    pdf.ln(2)
+                    pdf.cell(180, 1, 'Resultados Grales:', 0, 0, 'L')
+                    linea = linea + 4
+                    pdf.ln(4)
+
+                for s in range(0, len(resultadosCabezoteRad)):
+                    pdf.cell(120, 1, 'Interpretacion1 ' + str(resultadosCabezoteRad[0 + s]['interpretacion1']), 0, 0, 'L')
+                    linea = linea + 3
+                    pdf.ln(3)
+                    pdf.cell(20, 2, 'Fecha: ' + str(resultadosCabezoteRad[0 + s]['fechaInterpretacion1']), 0, 0, 'L')
+                    linea = linea + 3
+                    pdf.ln(3)
+                    pdf.cell(25, 3, 'Medico: ' + str(resultadosCabezoteRad[0 + s]['medicoInterpreta1']), 0, 0, 'L')
+                    linea = linea + 3
+                    pdf.ln(5)
+                    pdf.cell(120, 1, 'Interpretacion2' + str(resultadosCabezoteRad[0 + s]['interpretacion2']), 0, 0, 'L')
+                    linea = linea + 3
+                    pdf.ln(3)
+                    pdf.cell(20, 2, 'Fecha: ' + str(resultadosCabezoteRad[0 + s]['fechaInterpretacion2']), 0, 0, 'L')
+                    linea = linea + 3
+                    pdf.ln(3)
+
+                    pdf.cell(25, 3, 'Medico: ' + str(resultadosCabezoteRad[0 + s]['medicoInterpreta2']), 0, 0, 'L')
+
+                    linea = linea + 4
+                    pdf.ln(4)
+
+                ## Fin cabezote
+
+
+
                 # Aquip Resultados del RADIOLOGIA
 
                 miConexiona = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
@@ -1741,6 +1808,64 @@ def ImprimirHistoriaClinica(request):
                 linea = linea + 3
                 pdf.ln(3)
 
+
+                ## Aqui cabezote del resultado Terapias
+
+                miConexiony = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                               password="123456")
+                cury = miConexiony.cursor()
+                #comando ='SELECT hisExa.interpretacion1, hisExa."fechaInterpretacion1", med.nombre medico FROM clinico_historiaexamenes hisExa INNER JOIN  clinico_medicos med ON (med.id = hisExa."medicoInterpretacion1_id") INNER JOIN clinico_historia historia on (historia.id = hisExa.historia_id ) WHERE hisExa.historia_id = ' + "'" + str(folios[0 + i]['HistoriaId']) + "'"
+                comando = 'SELECT hisExa.interpretacion1, hisExa."fechaInterpretacion1", pla.nombre medicoInterpreta1, hisExa.interpretacion2, hisExa."fechaInterpretacion2", pla.nombre medicoInterpreta2 FROM clinico_historiaexamenes hisExa LEFT JOIN  clinico_medicos med ON (med.id = hisExa."medicoInterpretacion1_id") LEFT  JOIN  clinico_medicos med2 ON (med2.id = hisExa."medicoInterpretacion2_id") INNER JOIN clinico_historia historia on (historia.id = hisExa.historia_id ) LEFT JOIN planta_planta pla ON (pla.id=med.planta_id) LEFT JOIN planta_planta pla2 ON (pla2.id=med2.planta_id) WHERE hisExa.id = ' + "'" + str(laboratorios[0 + l]['id'])  + "'"
+
+                print(comando)
+                cury.execute(comando)
+
+                resultadosCabezoteTer = []
+
+                for interpretacion1, fechaInterpretacion1, medicoInterpreta1, interpretacion2, fechaInterpretacion2, medicoInterpreta2   in cury.fetchall():
+                    resultadosCabezoteTer.append(
+                        {'interpretacion1': interpretacion1, 'fechaInterpretacion1': fechaInterpretacion1, 'medicoInterpreta1': medicoInterpreta1,
+                         'interpretacion2': interpretacion2, 'fechaInterpretacion2': fechaInterpretacion2, 'medicoInterpreta2': medicoInterpreta2
+                         })
+                miConexiony.close()
+
+
+                print("Resultados  resultadosCabezoteTer  = ", resultadosCabezoteTer)
+                print("matriz Resultados resultadosCabezoteTer = ", len(resultadosCabezoteTer))
+
+
+                if (resultadosCabezoteTer != []):
+                    linea = linea + 2
+                    pdf.ln(2)
+                    pdf.cell(180, 1, 'Resultados Grales:', 0, 0, 'L')
+                    linea = linea + 4
+                    pdf.ln(4)
+
+                for s in range(0, len(resultadosCabezoteRad)):
+                    pdf.cell(120, 1, 'Interpretacion1 ' + str(resultadosCabezoteTer[0 + s]['interpretacion1']), 0, 0, 'L')
+                    linea = linea + 3
+                    pdf.ln(3)
+                    pdf.cell(20, 2, 'Fecha: ' + str(resultadosCabezoteTer[0 + s]['fechaInterpretacion1']), 0, 0, 'L')
+                    linea = linea + 3
+                    pdf.ln(3)
+                    pdf.cell(25, 3, 'Medico: ' + str(resultadosCabezoteTer[0 + s]['medicoInterpreta1']), 0, 0, 'L')
+                    linea = linea + 3
+                    pdf.ln(5)
+                    pdf.cell(120, 1, 'Interpretacion2' + str(resultadosCabezoteTer[0 + s]['interpretacion2']), 0, 0, 'L')
+                    linea = linea + 3
+                    pdf.ln(3)
+                    pdf.cell(20, 2, 'Fecha: ' + str(resultadosCabezoteTer[0 + s]['fechaInterpretacion2']), 0, 0, 'L')
+                    linea = linea + 3
+                    pdf.ln(3)
+
+                    pdf.cell(25, 3, 'Medico: ' + str(resultadosCabezoteTer[0 + s]['medicoInterpreta2']), 0, 0, 'L')
+
+                    linea = linea + 4
+                    pdf.ln(4)
+
+                ## Fin cabezote
+
+
                 # Aquip Resultados del TERAPIAS
 
                 miConexionb = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
@@ -1821,6 +1946,63 @@ def ImprimirHistoriaClinica(request):
                 pdf.cell(25, 1, 'Observacion: ' + str(noqX[0 + l]['observaciones']), 0, 0, 'L')
                 linea = linea + 3
                 pdf.ln(3)
+
+                ## Aqui cabezote del resultado NoQx
+
+                miConexiony = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                               password="123456")
+                cury = miConexiony.cursor()
+                #comando ='SELECT hisExa.interpretacion1, hisExa."fechaInterpretacion1", med.nombre medico FROM clinico_historiaexamenes hisExa INNER JOIN  clinico_medicos med ON (med.id = hisExa."medicoInterpretacion1_id") INNER JOIN clinico_historia historia on (historia.id = hisExa.historia_id ) WHERE hisExa.historia_id = ' + "'" + str(folios[0 + i]['HistoriaId']) + "'"
+                comando = 'SELECT hisExa.interpretacion1, hisExa."fechaInterpretacion1", pla.nombre medicoInterpreta1, hisExa.interpretacion2, hisExa."fechaInterpretacion2", pla.nombre medicoInterpreta2 FROM clinico_historiaexamenes hisExa LEFT JOIN  clinico_medicos med ON (med.id = hisExa."medicoInterpretacion1_id") LEFT  JOIN  clinico_medicos med2 ON (med2.id = hisExa."medicoInterpretacion2_id") INNER JOIN clinico_historia historia on (historia.id = hisExa.historia_id ) LEFT JOIN planta_planta pla ON (pla.id=med.planta_id) LEFT JOIN planta_planta pla2 ON (pla2.id=med2.planta_id) WHERE hisExa.id = ' + "'" + str(laboratorios[0 + l]['id'])  + "'"
+
+                print(comando)
+                cury.execute(comando)
+
+                resultadosCabezoteNoQx = []
+
+                for interpretacion1, fechaInterpretacion1, medicoInterpreta1, interpretacion2, fechaInterpretacion2, medicoInterpreta2   in cury.fetchall():
+                    resultadosCabezoteNoQx.append(
+                        {'interpretacion1': interpretacion1, 'fechaInterpretacion1': fechaInterpretacion1, 'medicoInterpreta1': medicoInterpreta1,
+                         'interpretacion2': interpretacion2, 'fechaInterpretacion2': fechaInterpretacion2, 'medicoInterpreta2': medicoInterpreta2
+                         })
+                miConexiony.close()
+
+
+                print("Resultados  resultadosCabezoteNoQx  = ", resultadosCabezoteNoQx)
+                print("matriz Resultados resultadosCabezoteNoQx = ", len(resultadosCabezoteNoQx))
+
+
+                if (resultadosCabezoteNoQx != []):
+                    linea = linea + 2
+                    pdf.ln(2)
+                    pdf.cell(180, 1, 'Resultados Grales:', 0, 0, 'L')
+                    linea = linea + 4
+                    pdf.ln(4)
+
+                for s in range(0, len(resultadosCabezoteNoQx)):
+                    pdf.cell(120, 1, 'Interpretacion1 ' + str(resultadosCabezoteNoQx[0 + s]['interpretacion1']), 0, 0, 'L')
+                    linea = linea + 3
+                    pdf.ln(3)
+                    pdf.cell(20, 2, 'Fecha: ' + str(resultadosCabezoteNoQx[0 + s]['fechaInterpretacion1']), 0, 0, 'L')
+                    linea = linea + 3
+                    pdf.ln(3)
+                    pdf.cell(25, 3, 'Medico: ' + str(resultadosCabezoteNoQx[0 + s]['medicoInterpreta1']), 0, 0, 'L')
+                    linea = linea + 3
+                    pdf.ln(5)
+                    pdf.cell(120, 1, 'Interpretacion2' + str(resultadosCabezoteNoQx[0 + s]['interpretacion2']), 0, 0, 'L')
+                    linea = linea + 3
+                    pdf.ln(3)
+                    pdf.cell(20, 2, 'Fecha: ' + str(resultadosCabezoteNoQx[0 + s]['fechaInterpretacion2']), 0, 0, 'L')
+                    linea = linea + 3
+                    pdf.ln(3)
+
+                    pdf.cell(25, 3, 'Medico: ' + str(resultadosCabezoteNoQx[0 + s]['medicoInterpreta2']), 0, 0, 'L')
+
+                    linea = linea + 4
+                    pdf.ln(4)
+
+                ## Fin cabezote
+
 
             # Cursor recorre Interconsultas
 

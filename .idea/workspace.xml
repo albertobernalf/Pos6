@@ -4,28 +4,12 @@
     <list default="true" id="d041c887-ab16-4071-a5e4-52a8295bbd5d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/JSONCLINICA/HistoriasClinicas/19465673_HistoriaClinica.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/JSONCLINICA/HistoriasClinicas/19465673_HistoriaClinica.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/admisiones/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/admisiones/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/admisiones/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/admisiones/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apoyo01.sql" beforeDir="false" afterPath="$PROJECT_DIR$/apoyo01.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/autorizaciones/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/autorizaciones/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cartera/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/cartera/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cartera/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/cartera/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apoyo02.sql" beforeDir="false" afterPath="$PROJECT_DIR$/apoyo02.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cartera/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/cartera/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cirugia/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/cirugia/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/clinico/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/clinico/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clinico/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/clinico/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/clinico/viewsReportes.py" beforeDir="false" afterPath="$PROJECT_DIR$/clinico/viewsReportes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/contratacion/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/contratacion/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/enfermeria/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/enfermeria/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/facturacion/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/facturacion/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/planta/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/planta/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/seguridad/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/seguridad/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sitios/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/sitios/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tarifarios/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/tarifarios/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/clinico/panelClinicoF.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/clinico/panelClinicoF.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/terapeutico/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/terapeutico/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/triage/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/triage/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/usuarios/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/usuarios/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vulner/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/vulner/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/mainCarteraF.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/mainCarteraF.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/cartera/PanelCarteraF.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/cartera/PanelCarteraF.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
