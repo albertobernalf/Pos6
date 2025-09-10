@@ -286,6 +286,7 @@ urlpatterns = [
     path('actualizarAutorizacionDetalle/', viewsAutorizaciones.ActualizarAutorizacionDetalle, name='actualizarAutorizacionDetalle'),
     path('leerDetalleAutorizacion/', viewsAutorizaciones.LeerDetalleAutorizacion,  name='LeerDetalleAutorizacion'),
     path('imprimirAutorizaciones/', viewsAutorizacionesReportes.ImprimirAutorizaciones),
+
     # Cartera - Glosas
 
     path('load_dataGlosas/<str:data>', viewsCartera.load_dataGlosas, name='loaddataGlosas'),
@@ -300,6 +301,10 @@ urlpatterns = [
     path('guardarGlosasDetalle/', viewsCartera.GuardarGlosasDetalle,name='guardarGlosasDetalle'),
     path('guardaGlosasEstados/', viewsCartera.GuardaGlosasEstados,name='guardaGlosasEstados'),
     path('load_tablaGlosasDetalle/<str:data>', viewsCartera.Load_tablaGlosasDetalle,name='load_tablaGlosasDetalle'),
+    path('load_dataCaja/<str:data>', viewsCartera.Load_dataCaja,name='load_data-Caja'),
+
+    path('editarCaja/', viewsCartera.EditarCaja, name='Editar_Caja'),
+    path('guardarCaja/', viewsCartera.GuardarCaja, name='Guardar_Caja'),
 
     # Tarifas
 	
@@ -445,6 +450,10 @@ urlpatterns = [
     path('load_dataConsultaDevolucionesDetalleEnfermeria/<str:data>', viewsEnfermeria.Load_dataConsultaDevolucionesDetalleEnfermeria,name='load_dataConsulta_DevolucionesDetalleEnfermeria'),
     path('load_dataSignosVitalesEnfermeria/<str:data>', viewsEnfermeria.Load_dataSignosVitalesEnfermeria,  name='Load_dataSignosVitales_Enfermeria'),
     path('guardaSignosVitalEnfermeria/', viewsEnfermeria.GuardaSignosVitalEnfermeria,name='GuardaSignosVital_Enfermeria'),
+
+
+
+
 
     # Citas Medicas
 

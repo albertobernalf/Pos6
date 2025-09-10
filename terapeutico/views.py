@@ -444,8 +444,6 @@ def PostConsultaApoyoTerapeutico(request):
 
     # Combo de Servicios
 
-
-
     if request.method == 'POST':
 
         tipoExamenId=request.POST["tipoExamenId"]
@@ -572,8 +570,6 @@ def PostConsultaApoyoTerapeuticoConsulta(request):
     print(estadosExamenes)
 
       # Fin combo estadosExamenes
-
-
 
     # Combo RazgosExamenes
 

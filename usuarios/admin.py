@@ -25,7 +25,7 @@ class tiposUsuarioAdmin(admin.ModelAdmin):
 class usuariosAdmin(admin.ModelAdmin):
 
     list_display = ("id","tipoDoc","documento","nombre","genero","centrosC","tiposUsuario","direccion","telefono","contacto")
-    search_fields =("id","tipoDoc","documento","nombre","genero","centrosC","tiposUsuario","direccion","telefono","contacto")
+    search_fields =("id","tipoDoc__nombre","documento","nombre","genero","centrosC","tiposUsuario","direccion","telefono","contacto")
     # Filtrar
     list_filter = ('genero','tiposUsuario')
 
@@ -33,6 +33,6 @@ class usuariosAdmin(admin.ModelAdmin):
 class usuariosContactoAdmin(admin.ModelAdmin):
 
     list_display = ("id","tipoDoc","documento","nombre","direccion","telefono","correo")
-    search_fields =  ("id","tipoDoc","documento","nombre","direccion","telefono","correo")
+    search_fields =  ("id","tipoDoc_nombre","documento","nombre","direccion","telefono","correo")
     # Filtrar
     list_filter =  ("id","tipoDoc","documento","nombre","direccion","telefono","correo")

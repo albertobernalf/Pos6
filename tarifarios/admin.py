@@ -33,7 +33,7 @@ class tiposHonorariosAdmin(admin.ModelAdmin):
 class TarifariosDescripcionAdmin(admin.ModelAdmin):
 
    list_display = ("id","tiposTarifa", "columna",  "descripcion","fechaRegistro")
-   search_fields = ("id","tiposTarifa", "columna",  "descripcion","fechaRegistro")
+   search_fields = ("id","tiposTarifa__nombre", "columna",  "descripcion","fechaRegistro")
    # Filtrar
    list_filter = ("id","tiposTarifa", "columna",  "descripcion","fechaRegistro")
 
@@ -49,7 +49,7 @@ class TarifariosDescripcionHonorariosAdmin(admin.ModelAdmin):
 class tarifariosProcedimientosAdmin(admin.ModelAdmin):
 
    list_display = ("id","tiposTarifa", "codigoCups",  "codigoHomologado", "colValorBase", "colValor1", "colValor2", "colValor3","colValor1", "fechaRegistro")
-   search_fields = ("id","tiposTarifa", "codigoCups",  "codigoHomologado", "colValorBase", "colValor1", "colValor2", "colValor3","colValor1", "fechaRegistro")
+   search_fields = ("id","tiposTarifa__nombre", "codigoCups",  "codigoHomologado", "colValorBase", "colValor1", "colValor2", "colValor3","colValor1", "fechaRegistro")
    # Filtrar
    list_filter = ("id","tiposTarifa", "codigoCups",  "codigoHomologado", "colValorBase", "colValor1", "colValor2", "colValor3","colValor1", "fechaRegistro")
 
@@ -60,7 +60,7 @@ class tarifariosProcedimientosAdmin(admin.ModelAdmin):
 class tarifariosSuministrosAdmin(admin.ModelAdmin):
 
    list_display = ("id","tiposTarifa", "codigoCum",  "codigoHomologado", "colValorBase", "colValor1", "colValor2", "colValor3","colValor1", "fechaRegistro")
-   search_fields = ("id","tiposTarifa", "codigoCum", "codigoHomologado", "colValorBase", "colValor1", "colValor2", "colValor3","colValor1", "fechaRegistro")
+   search_fields = ("id","tiposTarifa__nombre", "codigoCum", "codigoHomologado", "colValorBase", "colValor1", "colValor2", "colValor3","colValor1", "fechaRegistro")
    # Filtrar
    list_filter = ("id","tiposTarifa", "codigoCum",  "codigoHomologado", "colValorBase", "colValor1", "colValor2", "colValor3","colValor1", "fechaRegistro")
 
@@ -70,7 +70,7 @@ class tarifariosSuministrosAdmin(admin.ModelAdmin):
 class tarifariosProcedimientosHonorariosAdmin(admin.ModelAdmin):
 
    list_display = ("id","tiposTarifa", "codigoCups",  "codigoHomologado", "valorHonorarioCirujano", "valorHonorarioAnestesiologo", "valorHonorarioAyudante", "valorHonorarioPerfucionista","valorHonorarioViaAcceso", "fechaRegistro")
-   search_fields = ("id","tiposTarifa", "codigoCups",  "codigoHomologado", "valorHonorarioCirujano", "valorHonorarioAnestesiologo", "valorHonorarioAyudante", "valorHonorarioPerfucionista","valorHonorarioViaAcceso", "fechaRegistro")
+   search_fields = ("id","tiposTarifa__nombre", "codigoCups",  "codigoHomologado", "valorHonorarioCirujano", "valorHonorarioAnestesiologo", "valorHonorarioAyudante", "valorHonorarioPerfucionista","valorHonorarioViaAcceso", "fechaRegistro")
    # Filtrar
    list_filter = ("id","tiposTarifa", "codigoCups",  "codigoHomologado", "valorHonorarioCirujano", "valorHonorarioAnestesiologo", "valorHonorarioAyudante", "valorHonorarioPerfucionista","valorHonorarioViaAcceso", "fechaRegistro")
 
@@ -92,7 +92,7 @@ class minimosLegalesAdmin(admin.ModelAdmin):
 @admin.register(TablaHonorariosSoat)
 class tablaHonorariosSoatAdmin(admin.ModelAdmin):
     list_display = ("id","tiposTarifaProducto","tiposHonorarios","homologado","grupoQx","smldv", "fechaRegistro")
-    search_fields =  ("id","tiposTarifaProducto","tiposHonorarios","homologado","grupoQx","smldv", "fechaRegistro")
+    search_fields =  ("id","tiposTarifaProducto__nombre","tiposHonorarios__nombre","homologado","grupoQx","smldv", "fechaRegistro")
     # Filtrar
     list_filter = ("id", "tiposTarifaProducto","tiposHonorarios","homologado","grupoQx","smldv", "fechaRegistro")
 
@@ -100,7 +100,7 @@ class tablaHonorariosSoatAdmin(admin.ModelAdmin):
 @admin.register(TablaMaterialSuturaCuracion)
 class tablaMaterialSuturaCuracionAdmin(admin.ModelAdmin):
     list_display = ("id", "tiposTarifaProducto","homologado","grupoQx","smldv","cruento", "fechaRegistro")
-    search_fields =  ("id","tiposTarifaProducto","homologado","grupoQx","smldv", "cruento","fechaRegistro")
+    search_fields =  ("id","tiposTarifaProducto__nombre","homologado","grupoQx","smldv", "cruento","fechaRegistro")
     # Filtrar
     list_filter = ("id", "tiposTarifaProducto","homologado","grupoQx","smldv", "cruento","fechaRegistro")
 
@@ -108,27 +108,27 @@ class tablaMaterialSuturaCuracionAdmin(admin.ModelAdmin):
 @admin.register(TablaSalasDeCirugia)
 class tablaSalasDeCirugia(admin.ModelAdmin):
     list_display = ("id", "tiposTarifaProducto","homologado","grupoQx","smldv", "cruento", "fechaRegistro")
-    search_fields =  ("id","tiposTarifaProducto","homologado","grupoQx","smldv","cruento", "fechaRegistro")
+    search_fields =  ("id","tiposTarifaProducto__nombre","homologado","grupoQx","smldv","cruento", "fechaRegistro")
     # Filtrar
     list_filter = ("id", "tiposTarifaProducto","homologado","grupoQx","smldv", "cruento","fechaRegistro")
 
 @admin.register(TablaHonorariosIss)
 class tablaHonorariosIssAdmin(admin.ModelAdmin):
     list_display = ("id","tiposTarifaProducto","tiposHonorarios","homologado","valorUvr" ,"fechaRegistro")
-    search_fields =  ("id","tiposTarifaProducto","tiposHonorarios","homologado","valorUvr", "fechaRegistro")
+    search_fields =  ("id","tiposTarifaProducto__nombre","tiposHonorarios","homologado","valorUvr", "fechaRegistro")
     # Filtrar
     list_filter = ("id", "tiposTarifaProducto","tiposHonorarios","homologado","valorUvr", "fechaRegistro")
 
 @admin.register(TablaSalasDeCirugiaIss)
 class tablaSalasDeCirugiaIss(admin.ModelAdmin):
     list_display = ("id", "tiposSala", "homologado","desdeUvr","hastaUvr", "valor", "fechaRegistro")
-    search_fields =  ("id","tiposSala","homologado","desdeUvr","hastaUvr", "valor", "fechaRegistro")
+    search_fields =  ("id","tiposSala__nombre","homologado","desdeUvr","hastaUvr", "valor", "fechaRegistro")
     # Filtrar
     list_filter = ("id", "tiposSala","homologado","desdeUvr","hastaUvr", "valor", "fechaRegistro")
 
 @admin.register(TablaMaterialSuturaCuracionIss)
 class tablaMaterialSuturaCuracionIss(admin.ModelAdmin):
     list_display = ("id", "tiposSala", "homologado","desdeUvr","hastaUvr", "valor", "fechaRegistro")
-    search_fields =  ("id","tiposSala","homologado","desdeUvr","hastaUvr", "valor", "fechaRegistro")
+    search_fields =  ("id","tiposSala__nombre","homologado","desdeUvr","hastaUvr", "valor", "fechaRegistro")
     # Filtrar
     list_filter = ("id", "tiposSala","homologado","desdeUvr","hastaUvr", "valor", "fechaRegistro")

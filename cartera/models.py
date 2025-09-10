@@ -22,6 +22,7 @@ class Pagos(models.Model):
 
     id = models.AutoField(primary_key=True)
     fecha = models.DateTimeField(editable=True, null=True, blank=True)
+    sedesClinica = models.ForeignKey('sitios.SedesClinica', blank=True,null= True, editable=True, on_delete=models.PROTECT, related_name = 'SedesClinica7645')
     serviciosAdministrativos = models.ForeignKey('sitios.ServiciosAdministrativos', blank=True,null= True, editable=True,  on_delete=models.PROTECT,   related_name='seradm05')
     tipoDoc = models.ForeignKey('usuarios.TiposDocumento', blank=True,null= True, editable=True, on_delete=models.PROTECT)
     documento = models.ForeignKey('usuarios.Usuarios',blank=True,null= True, editable=True, on_delete=models.PROTECT,  related_name='Documento77')
@@ -44,6 +45,7 @@ class Pagos(models.Model):
 class PagosFacturas(models.Model):
 
     id = models.AutoField(primary_key=True)
+    sedesClinica = models.ForeignKey('sitios.SedesClinica', blank=True,null= True, editable=True, on_delete=models.PROTECT, related_name = 'SedesClinica7647')
     serviciosAdministrativos = models.ForeignKey('sitios.ServiciosAdministrativos', blank=True,null= True, editable=True,  on_delete=models.PROTECT,   related_name='seradm06')
     pago = models.ForeignKey('cartera.Pagos', blank=True,null= True, editable=True, on_delete=models.PROTECT)
     facturaAplicada  =  models.ForeignKey('facturacion.facturacion',blank=True,null= True, editable=True, on_delete=models.PROTECT)
@@ -287,17 +289,24 @@ class Caja(models.Model):
 
     id = models.AutoField(primary_key=True)
     fecha = models.DateField(editable=True, null=True, blank=True, default=now)
+    sedesClinica = models.ForeignKey('sitios.SedesClinica', blank=True,null= True, editable=True, on_delete=models.PROTECT, related_name = 'SedesClinica7648')
     serviciosAdministrativos = models.ForeignKey('sitios.ServiciosAdministrativos', blank=True,null= True, editable=True,  on_delete=models.PROTECT,   related_name='seradm335')
-    usuarioEntrega = models.ForeignKey('planta.Planta', default=1, on_delete=models.PROTECT, null=True ,  related_name='usuario7397')
-    usuarioRecibe = models.ForeignKey('planta.Planta', default=1, on_delete=models.PROTECT, null=True ,  related_name='usuario7597')
-    usuarioSuperviza= models.ForeignKey('planta.Planta', default=1, on_delete=models.PROTECT, null=True ,  related_name='usuario7497')
+    usuarioEntrega = models.ForeignKey('planta.Planta', blank=True, null=True, on_delete=models.PROTECT,   related_name='usuario7397')
+    usuarioRecibe = models.ForeignKey('planta.Planta', blank=True, null=True, on_delete=models.PROTECT,   related_name='usuario7597')
+    usuarioSuperviza= models.ForeignKey('planta.Planta', blank=True, null=True, on_delete=models.PROTECT,   related_name='usuario7497')
     totalEfectivo =  models.DecimalField( max_digits=15, decimal_places=0, default=0)
     totalTarjetasDebito =  models.DecimalField( max_digits=15, decimal_places=0, default=0)
     totalTarjetasCredito =  models.DecimalField( max_digits=15, decimal_places=0, default=0)
     totalCheques =  models.DecimalField( max_digits=15, decimal_places=0, default=0)
     total =  models.DecimalField( max_digits=15, decimal_places=0, default=0)
-    usuarioRegistro = models.ForeignKey('planta.Planta', default=1, on_delete=models.PROTECT, null=True ,  related_name='usuario7297')
+    totalEfectivoEsperado =  models.DecimalField( max_digits=15, decimal_places=0, default=0)
+    totalTarjetasDebitoEsperado =  models.DecimalField( max_digits=15, decimal_places=0, default=0)
+    totalTarjetasCreditoEsperado =  models.DecimalField( max_digits=15, decimal_places=0, default=0)
+    totalChequesEsperado =  models.DecimalField( max_digits=15, decimal_places=0, default=0)
+    totalEsperado =  models.DecimalField( max_digits=15, decimal_places=0, default=0)
+    usuarioRegistro = models.ForeignKey('planta.Planta', blank=True, null=True, on_delete=models.PROTECT,   related_name='usuario7297')
     fechaRegistro = models.DateTimeField(default=now, blank=True, null=True, editable=True)
+    estadoCaja = models.CharField(max_length=1, default='A', editable=False) 
     estadoReg = models.CharField(max_length=1, default='A', editable=False)
 
     def __str__(self):

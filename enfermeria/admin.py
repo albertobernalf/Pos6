@@ -25,7 +25,7 @@ class  enfermeriaTipoMovimientoAdmin(admin.ModelAdmin):
 class  tiposTurnosEnfermeriaAdmin(admin.ModelAdmin):
 
     list_display = ( "id","nombre", "horario", "sedesClinica",  "usuarioRegistro")
-    search_fields = ( "id","nombre", "horario", "sedesClinica",  "usuarioRegistro")
+    search_fields = ( "id","nombre", "horario", "sedesClinica__nombre",  "usuarioRegistro")
     # Filtrar
     list_filter =  ( "id","nombre", "horario", "sedesClinica",  "usuarioRegistro")
 
@@ -34,6 +34,6 @@ class  tiposTurnosEnfermeriaAdmin(admin.ModelAdmin):
 class  turnosEnfermeriaAdmin(admin.ModelAdmin):
 
     list_display = ( "id", "tiposTurnosEnfermeria", "enfermeraTurno", "serviciosAdministrativos", "usuarioRegistro")
-    search_fields =( "id", "tiposTurnosEnfermeria", "enfermeraTurno", "serviciosAdministrativos", "usuarioRegistro")
+    search_fields =( "id", "tiposTurnosEnfermeria__nombre", "enfermeraTurno__nombre", "serviciosAdministrativos__nombre", "usuarioRegistro__nombre")
     # Filtrar
     list_filter =  ( "id", "tiposTurnosEnfermeria", "enfermeraTurno", "serviciosAdministrativos", "usuarioRegistro")

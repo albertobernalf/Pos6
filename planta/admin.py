@@ -18,7 +18,7 @@ class tiposPlantaAdmin(admin.ModelAdmin):
 #class perfilesPlantaAdmin(admin.ModelAdmin):
 
 #        list_display = ("id", "sedesClinica",  "tiposPlanta", "planta",)
-#        search_fields =  ("id", "sedesClinica",  "tiposPlanta", "planta",)
+#        search_fields =  ("id", "sedesClinica__nombre",  "tiposPlanta_nombre", "planta__nombre",)
         # Filtrar
 #        list_filter = ('sedesClinica','planta','tiposPlanta')
 
@@ -26,7 +26,7 @@ class tiposPlantaAdmin(admin.ModelAdmin):
 class plantaAdmin(admin.ModelAdmin):
 
     list_display = ("id","sedesClinica","tiposPlanta","tipoDoc","documento","nombre","genero","direccion","telefono")
-    search_fields = ("id","sedesClinica","tiposPlanta","tipoDoc","documento","nombre","genero","direccion","telefono")
+    search_fields = ("id","sedesClinica__nombre","tiposPlanta__nombre","tipoDoc__nombre","documento","nombre","genero","direccion","telefono")
     # Filtrar
     list_filter = ('nombre','sedesClinica',"tiposPlanta",'documento','genero')
 

@@ -98,14 +98,14 @@ class recordAnestesicoAdmin(admin.ModelAdmin):
 @admin.register(CirugiasProcedimientos)
 class cirugiasProcedimientosAdmin(admin.ModelAdmin):
     list_display = ("id", "cirugia","cups","finalidad", "fechaRegistro")
-    search_fields = ("id", "cirugia","cups","finalidad", "fechaRegistro")
+    search_fields = ("id", "cirugia__id","cups","finalidad", "fechaRegistro")
     # Filtrar
     list_filter = ("id", "cirugia","cups","finalidad", "fechaRegistro")
 
 @admin.register(CirugiasParticipantes)
 class cirugiasParticipantesAdmin(admin.ModelAdmin):
     list_display = ("id", "cirugia","cups", "tipoHonorarios", "finalidad", "fechaRegistro")
-    search_fields = ("id", "cirugia","cups","tipoHonorarios", "finalidad", "fechaRegistro")
+    search_fields = ("id", "cirugia__id","cups","tipoHonorarios", "finalidad", "fechaRegistro")
     # Filtrar
     list_filter = ("id", "cirugia","cups","tipoHonorarios", "finalidad", "fechaRegistro")
 

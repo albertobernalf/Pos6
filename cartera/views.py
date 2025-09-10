@@ -7,6 +7,7 @@ from django.core.serializers import serialize
 from django.db.models.functions import Cast, Coalesce
 from django.utils.timezone import now
 from django.db.models import Avg, Max, Min, Sum
+from django.utils import timezone
 
 from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect, HttpResponse, HttpResponseRedirect
@@ -1130,6 +1131,156 @@ def Load_tablaGlosasUrgencias(request, data):
     #context['usuariosRips'] = usuariosRips
 
     serialized1 = json.dumps(urgenciasGlosas,  default=str)
+
+    return HttpResponse(serialized1, content_type='application/json')
+
+
+def GuardarCaja(request):
+
+    print ("Entre GuardarCaja" )
+
+    cajaId = request.POST.get('cajaId')
+    print ("cajaId =", cajaId)
+
+    serviciosAdministrativos = request.POST["serviciosAdministrativos_id"]
+    print("serviciosAdministrativos =", serviciosAdministrativos)
+    fecha = request.POST["fecha"]
+    print("fecha =", fecha)
+    usuarioEngrega = request.POST["usuarioEngrega_id"]
+    print("usuarioEngrega =", usuarioEngrega)
+    usuarioRecibe = request.POST["usuarioRecibe_id"]
+    print("usuarioRecibe =", usuarioRecibe)
+    usuarioSuperviza = request.POST["usuarioSuperviza_id"]
+    print("usuarioSuperviza =", usuarioSuperviza)
+    totalEfectivo = request.POST["totalEfectivo"]
+    print("totalEfectivo =", totalEfectivo)
+    totalTarjetasDebito = request.POST["totalTarjetasDebito"]
+    print("totalTarjetasDebito =", totalTarjetasDebito)
+
+    totalTarjetasCredito = request.POST["totalTarjetasCredito"]
+    print("totalTarjetasCredito =", totalTarjetasCredito)
+    totalCheques = request.POST["totalCheques"]
+    print("totalCheques =", totalCheques)
+    total = request.POST["total"]
+    print("total =", total)
+    estadoCaja = request.POST["estadoCaja"]
+    print("estadoCaja =", estadoCaja)
+
+    username = request.POST["username_id"]
+    print("username =", username)
+
+    fechaRegistro = timezone.now()
+
+
+    miConexion3 = None
+    try:
+
+        miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",  password="123456")
+        cur3 = miConexion3.cursor()
+
+        comando = 'UPDATE cartera_caja SET "fechaRegistro"= ' +"'" + str(fechaRegistro) + "'," + ' "totalEfectivo" = ' + "'" +str(totalEfectivo) + "'," + '"totalTarjetasDebito" = ' + "'" + str(totalTarjetasDebito) + "',"  + '"totalTarjetasCredito" = ' + "'" + str(totalTarjetasCredito) + "',"  + '"totalCheques" = ' + "'" + str(totalCheques) + "'," + '"total" = ' + "'" + str(total) + "',"   + '"usuarioEntrega_id" = ' + "'" + str(usuarioEntrega) + "'," + '"usuarioRecibe_id" = ' + "'" + str(usuarioRecibe) + "'," + '"usuarioSuperviza_id" = ' + "'" + str(usuarioSuperviza) + "',"  + '"estadoCaja_id" = ' + "'" + str(estadoCaja) + "'," + '"serviciosAdministrativos_id" = ' + "'" + str(serviciosAdministrativos) + "'," + '"estadoReg" = ' + "'" + str('A') + "'"  + '   WHERE id = ' + str(cajaId)
+
+        print(comando)
+        cur3.execute(comando)
+        miConexion3.commit()
+        cur3.close()
+        miConexion3.close()
+
+        datosMensaje = {'success': True, 'Mensaje': 'Caja Actualizada satisfactoriamente!'}
+        json_data = json.dumps(datosMensaje, default=str)
+        return HttpResponse(json_data, content_type='application/json')
+
+
+    except psycopg2.DatabaseError as error:
+        print ("Entre por rollback" , error)
+        if miConexion3:
+            print("Entro ha hacer el Rollback")
+            miConexion3.rollback()
+
+        datosMensaje = {'success': False, 'Mensaje': error}
+        json_data = json.dumps(datosMensaje, default=str)
+        return HttpResponse(json_data, content_type='application/json')
+
+
+    finally:
+        if miConexion3:
+            cur3.close()
+            miConexion3.close()
+
+
+def EditarCaja(request):
+    
+    print("Entre EditarCaja")
+
+    cajaId  = request.POST['cajaId']
+    print("cajaId  =", cajaId)
+
+    caja = []
+
+    miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                   password="123456")
+    curx = miConexionx.cursor()
+	
+    detalle = 'SELECT id, fecha, "totalEfectivo", "totalTarjetasDebito", "totalTarjetasCredito", "totalCheques", total, "serviciosAdministrativos_id", "usuarioEntrega_id", "usuarioRecibe_id", "usuarioSuperviza_id", "estadoCaja" FROM cartera_caja WHERE id =  ' + "'" + str(cajaId) + "'"
+
+    print(detalle)
+
+    curx.execute(detalle)
+
+    for  id, fecha, totalEfectivo, totalTarjetasDebito,totalTarjetasCredito,totalCheques, total, serviciosAdministrativos_id, usuarioEntrega_id, usuarioRecibe_id,  usuarioSuperviza_id, estadoCaja  in curx.fetchall():
+     caja.append(
+            {"model": "cartera.caja", "pk": id, "fields":
+                {'id': id, 'fecha': fecha , 'totalEfectivo': totalEfectivo,  'totalTarjetasDebito':totalTarjetasDebito,
+		  'totalTarjetasCredito':totalTarjetasCredito,'totalCheques':totalCheques,'total':total,'serviciosAdministrativos_id':serviciosAdministrativos_id,'usuarioEntrega_id':usuarioEntrega_id,'usuarioRecibe_id':usuarioRecibe_id,'usuarioSuperviza_id':usuarioSuperviza_id,'estadoCaja':estadoCaja
+                 }})
+
+    miConexionx.close()
+    print("caja = "  , caja)
+    
+    serialized1 = json.dumps(caja, default=str)
+
+    return HttpResponse(serialized1, content_type='application/json')
+
+
+def Load_dataCaja(request, data):
+
+    print("Entre load_data Load_dataCaja")
+
+    context = {}
+    d = json.loads(data)
+
+    sedesClinica_id = d['sedesClinica_id']
+    print("sedesClinica_id = ", sedesClinica_id)
+
+    caja = []
+
+    miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                   password="123456")
+    curx = miConexionx.cursor()
+
+    detalle = 'SELECT id, fecha, "totalEfectivo", "totalTarjetasDebito", "totalTarjetasCredito", "totalCheques", total, "fechaRegistro", "estadoReg", "serviciosAdministrativos_id", "usuarioEntrega_id", "usuarioRecibe_id", "usuarioRegistro_id", "usuarioSuperviza_id", "estadoCaja", "sedesClinica_id", "totalChequesEsperado", "totalEfectivoEsperado", "totalEsperado", "totalTarjetasCreditoEsperado", "totalTarjetasDebitoEsperado"  FROM cartera_caja'
+
+    print ("detalle = ", detalle)
+
+    curx.execute(detalle)
+
+    for id,  fecha, totalEfectivo, totalTarjetasDebito,totalTarjetasCredito, totalCheques,  total,  fechaRegistro,  estadoReg , serviciosAdministrativos_id,  usuarioEntrega_id, usuarioRecibe_id, usuarioRegistro_id, usuarioSuperviza_id, estadoCaja, sedesClinica_id, totalChequesEsperado, totalEfectivoEsperado, totalEsperado, totalTarjetasCreditoEsperado, totalTarjetasDebitoEsperado in curx.fetchall():
+        caja.append(
+            {"model": "cartera.caja", "pk": id, "fields":
+                {'id': id, 'fecha': fecha , 'totalEfectivo': totalEfectivo, 'totalTarjetasDebito': totalTarjetasDebito, 'totalTarjetasCredito':totalTarjetasCredito,
+                 'totalCheques':totalCheques, 'total':total, 'fechaRegistro':fechaRegistro,
+                 estadoReg:estadoReg, 'serviciosAdministrativos_id':serviciosAdministrativos_id, 'usuarioEntrega_id':usuarioEntrega_id, 'usuarioRecibe_id':usuarioRecibe_id,
+                 'usuarioRegistro_id':usuarioRegistro_id, 'usuarioSuperviza_id':usuarioSuperviza_id,'estadoCaja':estadoCaja,'sedesClinica_id':sedesClinica_id,
+                 'totalChequesEsperado':totalChequesEsperado,'totalEfectivoEsperado':totalEfectivoEsperado, 'totalEsperado':totalEsperado,
+                 'totalTarjetasCreditoEsperado':totalTarjetasCreditoEsperado,'totalTarjetasDebitoEsperado':totalTarjetasDebitoEsperado
+                 }})
+
+
+
+    miConexionx.close()
+    print("caja "  , caja)
+
+    serialized1 = json.dumps(caja, default=str)
 
     return HttpResponse(serialized1, content_type='application/json')
 

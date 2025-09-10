@@ -11,14 +11,14 @@ class sedesClinicaAdmin(admin.ModelAdmin):
 
 
     list_display = ("id","nit","departamentos","ciudades" , "nombre","direccion", "telefono", "contacto","fechaRegistro")
-    search_fields = ("id","nit","departamentos","ciudades", "nombre","direccion", "telefono", "contacto","fechaRegistro")
+    search_fields = ("id","nit","departamentos__nombre","ciudades__nombre", "nombre","direccion", "telefono", "contacto","fechaRegistro")
     #Filtrar
     list_filter =('nombre', "nit", 'ciudades')
 
 
 class CiudadesAdmin(admin.ModelAdmin):
     list_display = ("id", "nombre","departamentos")
-    search_fields = ("id", "nombre","departamentos")
+    search_fields = ("id", "nombre","departamentos__nombre")
 
     # Filtrar
     list_filter = ('nombre',"departamentos")
@@ -44,7 +44,7 @@ class centrosAdmin(admin.ModelAdmin):
         list_related_name = 'ciudadesDepartamentos'
 
         list_display = ("id","departamentos","ciudades" , "nombre","direccion", "telefono", "contacto","fechaRegistro")
-        search_fields = ("id","departamentos","ciudades" , "nombre","direccion", "telefono", "contacto","fechaRegistro")
+        search_fields = ("id","departamentos__nombre","ciudades__nombre" , "nombre","direccion", "telefono", "contacto","fechaRegistro")
         # Filtrar
         list_filter = ('nombre','departamentos','ciudades','contacto')
 
@@ -55,7 +55,7 @@ class serviciosSedesAdmin(admin.ModelAdmin):
 
 
     list_display = ("id","sedesClinica", "servicios","nombre")
-    search_fields = ("id","sedesClinica", "servicios","nombre")
+    search_fields = ("id","sedesClinica__nombre", "servicios_nombre","nombre")
     # Filtrar
     list_filter = ('nombre', "sedesClinica", "servicios",)
 
@@ -65,7 +65,7 @@ class SubServiciosSedesAdmin(admin.ModelAdmin):
 
 
     list_display = ("id","sedesClinica", "serviciosSedes", "subServiciosSedes","nombre")
-    search_fields = ("id","sedesClinica", "serviciosSedes","subServiciosSedes","nombre")
+    search_fields = ("id","sedesClinica__nombre", "serviciosSedes__nombre","subServiciosSedes__nombre","nombre")
     # Filtrar
     list_filter = ('nombre', "sedesClinica", "serviciosSedes","subServiciosSedes")
 
@@ -85,7 +85,7 @@ class dependenciasAdmin(admin.ModelAdmin):
 
 
     list_display = ("id", "sedesClinica","serviciosSedes","subServiciosSedes","numero", "dependenciasTipo", "nombre", "descripcion")
-    search_fields =  ("id", "sedesClinica","serviciosSedes","subServiciosSedes","numero", "dependenciasTipo", "nombre", "descripcion")
+    search_fields =  ("id", "sedesClinica__nombre","serviciosSedes__nombre","subServiciosSedes__nombre","numero", "dependenciasTipo__nombre", "nombre", "descripcion")
     #fields =  ("sedesClinica","subServicios", "dependenciasTipo","numero", "nombre", "descripcion")
     # Filtrar
     #list_filter = ('nombre', "sedesClinica","subServicios","numero", 'dependenciasTipo','descripcion')
@@ -96,7 +96,7 @@ class historialDependenciasAdmin(admin.ModelAdmin):
 
 
     list_display = ("id","dependencias", "tipoDoc", "documento","consec","fechaOcupacion", "fechaLiberacion", "fechaRegistro")
-    fields = ( "dependencias", "tipoDoc", "documento", "consec", "fechaOcupacion", "fechaLiberacion", "fechaRegistro")
+    fields = ( "dependencias__nombre", "tipoDoc__nombre", "documento", "consec", "fechaOcupacion", "fechaLiberacion", "fechaRegistro")
     search_fields = ("id","dependencias", "tipoDoc", "documento","consec","fechaOcupacion", "fechaLiberacion", "fechaRegistro")
 
 
@@ -131,7 +131,7 @@ class serviciosAdministrativosAdmin(admin.ModelAdmin):
 
 
     list_display = ("id","sedesClinica", "ubicaciones","dependenciaTipo", "nombre")
-    search_fields = ("id","sedesClinica", "ubicaciones","dependenciaTipo", "nombre")
+    search_fields = ("id","sedesClinica", "ubicaciones__nombre","dependenciaTipo__nombre", "nombre")
     # Filtrar
     list_filter = ("id","sedesClinica", "ubicaciones","dependenciaTipo", "nombre")
 
@@ -150,7 +150,7 @@ class ubicacionesAdmin(admin.ModelAdmin):
 class bodegasAdmin(admin.ModelAdmin):
 
     list_display = ("id","sedesClinica","serviciosAdministrativos", "nombre")
-    search_fields = ("id","sedesClinica","serviciosAdministrativos", "nombre")
+    search_fields = ("id","sedesClinica__nombre","serviciosAdministrativos__nombre", "nombre")
     # Filtrar
     list_filter = ("id","sedesClinica","serviciosAdministrativos", "nombre")
 
@@ -160,7 +160,7 @@ class salasAdmin(admin.ModelAdmin):
 
 
     list_display = ("id","sedesClinica", "tipoSala", "dependenciaTipo", "numero", "nombre","serviciosAdministrativos")
-    search_fields = ("id","sedesClinica","tipoSala", "dependenciaTipo", "numero", "nombre", "serviciosAdministrativos")
+    search_fields = ("id","sedesClinica__nombre","tipoSala__nombre", "dependenciaTipo__nombre", "numero", "nombre", "serviciosAdministrativos__nombre")
     # Filtrar
     list_filter = ("id","sedesClinica", "tipoSala", "dependenciaTipo",  "numero","nombre", "serviciosAdministrativos")
 

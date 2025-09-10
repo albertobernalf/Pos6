@@ -9,7 +9,7 @@ from facturacion.models import Suministros, TiposEmpresa ,Empresas,  Conceptos, 
 class empresasAdmin(admin.ModelAdmin):
 
    list_display = ("id", "tipoDoc", "tipoEmpresa","documento","nombre","codigoEapb","direccion","telefono")
-   search_fields = ("id", "tipoDoc", "tipoEmpresa", "documento","nombre","codigoEapb","direccion","telefono")
+   search_fields = ("id", "tipoDoc__nombre", "tipoEmpresa_nombre", "documento","nombre","codigoEapb","direccion","telefono")
    # Filtrar
    list_filter = ("id", "tipoDoc",  "tipoEmpresa","documento","nombre","codigoEapb","direccion","telefono")
 
@@ -25,7 +25,7 @@ class conceptosAdmin(admin.ModelAdmin):
 @admin.register(ConveniosPacienteIngresos)
 class conveniosPacienteIngresosAdmin(admin.ModelAdmin):
    list_display = ("id", "tipoDoc", "documento", "consecAdmision", "convenio")
-   search_fields = ("id", "tipoDoc", "documento", "consecAdmision", "convenio")
+   search_fields = ("id", "tipoDoc__nombre", "documento", "consecAdmision", "convenio__nombre")
    # Filtrar
    list_filter = ("id", "tipoDoc", "documento", "consecAdmision", "convenio")
 

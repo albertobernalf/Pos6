@@ -23,7 +23,7 @@ class tiposPagosAdmin(admin.ModelAdmin):
 @admin.register(Pagos)
 class pagosAdmin(admin.ModelAdmin):
     list_display = ("id", "fecha", "documento", "tipoPago","formaPago")
-    search_fields = ("id", "fecha", "documento", "tipoPago","formaPago")
+    search_fields = ("id", "fecha", "documento", "tipoPago__nombre","formaPago__nombre")
     # Filtrar
     list_filter = ("id", "fecha", "documento", "tipoPago","formaPago")
 

@@ -9,7 +9,7 @@ from contratacion.models import  Convenios,  ConveniosTarifasHonorarios,Convenio
 class conveniosAdmin(admin.ModelAdmin):
 
     list_display = ( "id","tarifariosDescripcionProc","tarifariosDescripcionSum","tarifariosDescripcionHono","nombre","descripcion", "empresa","vigenciaDesde","vigenciaHasta")
-    search_fields = ( "id","tarifariosDescripcionProc","tarifariosDescripcionSum","tarifariosDescripcionHono","nombre","descripcion", "empresa","vigenciaDesde","vigenciaHasta")
+    search_fields = ( "id","tarifariosDescripcionProc","tarifariosDescripcionSum","tarifariosDescripcionHono","nombre","descripcion", "empresa__nombre","vigenciaDesde","vigenciaHasta")
     # Filtrar
     list_filter = ( "id","tarifariosDescripcionProc","tarifariosDescripcionSum","tarifariosDescripcionHono","nombre","descripcion", "empresa","vigenciaDesde","vigenciaHasta")
 
@@ -19,7 +19,7 @@ class conveniosAdmin(admin.ModelAdmin):
 class  conveniosTarifasHonorariosAdmin(admin.ModelAdmin):
 
     list_display = ( "id","convenio",  "valor")
-    search_fields = ( "id","convenio","valor")
+    search_fields = ( "id","convenio__nombre","valor")
     # Filtrar
     list_filter =  ( "id","convenio",  "valor")
 

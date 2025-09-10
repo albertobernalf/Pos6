@@ -1498,7 +1498,7 @@ def ImprimirHistoriaClinica(request):
                                            password="123456")
             curt = miConexiont.cursor()
 
-            comando = 'select h."codigoCups" codigoCups, e.nombre nombre, h.cantidad cantidad, h.observaciones observaciones from clinico_historiaexamenes h, clinico_examenes    e, clinico_tiposexamen t  where h."tiposExamen_id" = t.id and t.nombre like(' + "'" + '%LABORATO%' + "'" + ') and e."codigoCups" = h."codigoCups" and h.historia_id = ' + str(
+            comando = 'select h.id id, h."codigoCups" codigoCups, e.nombre nombre, h.cantidad cantidad, h.observaciones observaciones from clinico_historiaexamenes h, clinico_examenes    e, clinico_tiposexamen t  where h."tiposExamen_id" = t.id and t.nombre like(' + "'" + '%LABORATO%' + "'" + ') and e."codigoCups" = h."codigoCups" and h.historia_id = ' + str(
                 folios[0 + i]['HistoriaId'])
 
             curt.execute(comando)
@@ -1507,9 +1507,9 @@ def ImprimirHistoriaClinica(request):
 
             laboratorios = []
 
-            for codigoCups, nombre, cantidad, observaciones in curt.fetchall():
+            for id, codigoCups, nombre, cantidad, observaciones in curt.fetchall():
                 laboratorios.append(
-                    {'codigoCups': codigoCups, 'nombre': nombre, 'cantidad': cantidad, 'observaciones': observaciones})
+                    {'id':id, 'codigoCups': codigoCups, 'nombre': nombre, 'cantidad': cantidad, 'observaciones': observaciones})
             miConexiont.close()
 
             print("laboratorios = ", laboratorios)
@@ -1535,19 +1535,25 @@ def ImprimirHistoriaClinica(request):
                 miConexiony = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
                                                password="123456")
                 cury = miConexiony.cursor()
-                comando ='SELECT hisExa.interpretacion1, hisExa."fechaInterpretacion1", med.nombre medico FROM clinico_historiaexamenes hisExa INNER JOIN  clinico_medicos med ON (med.id = hisExa."medicoInterpretacion1_id") INNER JOIN clinico_historia historia on (historia.id = hisExa.historia_id ) WHERE hisExa.historia_id = ' + "'" + str(folios[0 + i]['HistoriaId']) + "'"
+                #comando ='SELECT hisExa.interpretacion1, hisExa."fechaInterpretacion1", med.nombre medico FROM clinico_historiaexamenes hisExa INNER JOIN  clinico_medicos med ON (med.id = hisExa."medicoInterpretacion1_id") INNER JOIN clinico_historia historia on (historia.id = hisExa.historia_id ) WHERE hisExa.historia_id = ' + "'" + str(folios[0 + i]['HistoriaId']) + "'"
+                comando = 'SELECT hisExa.interpretacion1, hisExa."fechaInterpretacion1", pla.nombre medicoInterpreta1, hisExa.interpretacion2, hisExa."fechaInterpretacion2", pla.nombre medicoInterpreta2 FROM clinico_historiaexamenes hisExa LEFT JOIN  clinico_medicos med ON (med.id = hisExa."medicoInterpretacion1_id") LEFT  JOIN  clinico_medicos med2 ON (med2.id = hisExa."medicoInterpretacion2_id") INNER JOIN clinico_historia historia on (historia.id = hisExa.historia_id ) LEFT JOIN planta_planta pla ON (pla.id=med.planta_id) LEFT JOIN planta_planta pla2 ON (pla2.id=med2.planta_id) WHERE hisExa.id = ' + "'" + str(laboratorios[0 + l]['id'])  + "'"
+
                 print(comando)
                 cury.execute(comando)
 
                 resultadosCabezoteLab = []
 
-                for interpretacion1, fechaInterpretacion1, medico in cury.fetchall():
+                for interpretacion1, fechaInterpretacion1, medicoInterpreta1, interpretacion2, fechaInterpretacion2, medicoInterpreta2   in cury.fetchall():
                     resultadosCabezoteLab.append(
-                        {'interpretacion1': interpretacion1, 'fechaInterpretacion1': fechaInterpretacion1, 'medico': medico})
+                        {'interpretacion1': interpretacion1, 'fechaInterpretacion1': fechaInterpretacion1, 'medicoInterpreta1': medicoInterpreta1,
+                         'interpretacion2': interpretacion2, 'fechaInterpretacion2': fechaInterpretacion2, 'medicoInterpreta2': medicoInterpreta2
+                         })
                 miConexiony.close()
+
 
                 print("Resultados  resultadosCabezoteLab  = ", resultadosCabezoteLab)
                 print("matriz Resultados laboratorios = ", len(resultadosCabezoteLab))
+
 
                 if (resultadosCabezoteLab != []):
                     linea = linea + 2
@@ -1559,13 +1565,17 @@ def ImprimirHistoriaClinica(request):
                 for s in range(0, len(resultadosCabezoteLab)):
                     pdf.cell(70, 1, 'Interpretacion1 ' + str(resultadosCabezoteLab[0 + s]['interpretacion1']), 0, 0, 'L')
                     pdf.cell(40, 1, 'Fecha: ' + str(resultadosCabezoteLab[0 + s]['fechaInterpretacion1']), 0, 0, 'L')
-                    pdf.cell(25, 1, 'Medico: ' + str(resultadosCabezoteLab[0 + s]['medico']), 0, 0, 'L')
+                    pdf.cell(25, 1, 'Medico: ' + str(resultadosCabezoteLab[0 + s]['medicoInterpreta1']), 0, 0, 'L')
+                    linea = linea + 5
+                    pdf.ln(5)
+                    pdf.cell(70, 2, 'Interpretacion2' + str(resultadosCabezoteLab[0 + s]['interpretacion2']), 0, 0, 'L')
+                    pdf.cell(40, 2, 'Fecha: ' + str(resultadosCabezoteLab[0 + s]['fechaInterpretacion2']), 0, 0, 'L')
+                    pdf.cell(25, 2, 'Medico: ' + str(resultadosCabezoteLab[0 + s]['medicoInterpreta2']), 0, 0, 'L')
 
                     linea = linea + 5
                     pdf.ln(5)
 
                 ## Fin cabezote
-
 
                 # Aquip Resultados del LABORATORIO
 

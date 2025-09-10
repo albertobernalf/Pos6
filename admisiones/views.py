@@ -23,13 +23,17 @@ from usuarios.models import Usuarios, TiposDocumento
 from planta.models import Planta
 from facturacion.models import ConveniosPacienteIngresos, Liquidacion, LiquidacionDetalle
 from rips.models import  RipsDestinoEgreso
-from cartera.models import FormasPagos, PagosFacturas, Pagos
+from cartera.models import FormasPagos, PagosFacturas, Pagos, TiposPagos
 import datetime
 from django.utils import timezone
 from clinico.models import Servicios,EspecialidadesMedicos, Medicos
 from django.db import transaction, IntegrityError
 from django.db.models import Q
 from admisiones.viewsReportes import ImprimirAtencionUrgencias, ImprimirHojaAdmision, ImpresionManilla
+from django.db.models import Q
+from django.db import transaction, IntegrityError
+from django.db.models import F
+
 
 # Create your views here.
 
@@ -2828,6 +2832,133 @@ def escogeAcceso(request, Sede, Username, Profesional, Documento, NombreSede, es
 
 
         return render(request, "cartera/PanelGlosasFU.html", context)
+
+
+    if (escogeModulo == 'CARTERA'):
+        print("ENTRE PERMISO CARTERA")
+
+        # Combo Convenios
+
+        miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                       password="123456")
+        curt = miConexiont.cursor()
+
+        comando = "SELECT c.id id,c.nombre nombre FROM contratacion_convenios c"
+
+        curt.execute(comando)
+        print(comando)
+
+        convenios = []
+
+        for id, nombre in curt.fetchall():
+            convenios.append({'id': id, 'nombre': nombre})
+
+        miConexiont.close()
+        print(convenios)
+
+        context['Convenios'] = convenios
+
+        # Fin combo convenios
+
+
+        # Combo UsuarioEntrega
+
+        miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                       password="123456")
+        curt = miConexiont.cursor()
+
+        comando = "SELECT c.id id,c.nombre nombre FROM planta_planta c WHERE " + ' "sedesClinica_id" =  ' + "'" + str(sede) + "'" + ' AND  c."estadoReg" = ' + "'" + str('A') + "' AND " + ' "esCajero" = ' + "'" + str('S') + "'"
+
+        curt.execute(comando)
+        print(comando)
+
+        usuarioEntrega = []
+
+        for id, nombre in curt.fetchall():
+            usuarioEntrega.append({'id': id, 'nombre': nombre})
+
+        miConexiont.close()
+        print(usuarioEntrega)
+
+        context['UsuarioEntrega'] = usuarioEntrega
+
+        # Fin combo UsuarioEntrega
+
+        # Combo UsuarioRecibe
+
+        miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                       password="123456")
+        curt = miConexiont.cursor()
+
+        comando = "SELECT c.id id,c.nombre nombre FROM planta_planta c WHERE " + ' "sedesClinica_id" =  ' + "'" + str(sede) + "'" + ' AND  c."estadoReg" = ' + "'" + str('A') + "' AND " + ' "esCajero" = ' + "'" + str('S') + "'"
+
+        curt.execute(comando)
+        print(comando)
+
+        usuarioRecibe = []
+
+        for id, nombre in curt.fetchall():
+            usuarioRecibe.append({'id': id, 'nombre': nombre})
+
+        miConexiont.close()
+        print(usuarioRecibe)
+
+        context['UsuarioRecibe'] = usuarioRecibe
+
+        # Fin combo usuarioRecibe
+
+
+        # Combo UsuarioSuperviza
+
+        miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                       password="123456")
+        curt = miConexiont.cursor()
+
+        comando = "SELECT c.id id,c.nombre nombre FROM planta_planta c WHERE " + ' "sedesClinica_id" =  ' + "'" + str(sede) + "'" + ' AND  c."estadoReg" = ' + "'" + str('A') + "' AND " + ' "esCajero" = ' + "'" + str('S') + "'"
+
+        curt.execute(comando)
+        print(comando)
+
+        usuarioSuperviza = []
+
+        for id, nombre in curt.fetchall():
+            usuarioSuperviza.append({'id': id, 'nombre': nombre})
+
+        miConexiont.close()
+        print(usuarioSuperviza)
+
+        context['UsuarioSuperviza'] = usuarioSuperviza
+
+        # Fin combo UsuarioSuperviza
+
+        # Combo ServiciosAdministrativos
+
+        miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                       password="123456")
+        curt = miConexiont.cursor()
+
+        # comando = 'select m.id id, m.nombre nombre , m.nomenclatura nomenclatura, m.logo logo from seguridad_modulos m, seguridad_perfilesgralusu gral, planta_planta planta, seguridad_perfilesclinica perfcli where planta.id = gral."plantaId_id" and gral."perfilesClinicaId_id" = perfcli.id and perfcli."modulosId_id" = m.id and planta.documento =' + "'" + username + "'" + ' and  perfcli."sedesClinica_id" = ' + "'" + str(Sede) + "'"
+        comando = 'select m.id id, m.nombre||' + "'" + str(
+            ' ') + "'||" + ' u.nombre nombre FROM sitios_serviciosAdministrativos m, sitios_ubicaciones u where m.ubicaciones_id= u.id AND m."sedesClinica_id" = ' + str(
+            sede)
+
+        print(comando)
+        curt.execute(comando)
+
+        serviciosAdministrativos = []
+
+        for id, nombre in curt.fetchall():
+            serviciosAdministrativos.append({'id': id, 'nombre': nombre})
+
+        miConexiont.close()
+
+        print(serviciosAdministrativos)
+        context['ServiciosAdministrativos'] = serviciosAdministrativos
+
+        # Fin Combo ServiciosAdministrativos
+
+        return render(request, "cartera/PanelCarteraF.html", context)
+
 
     if (escogeModulo == 'ENFERMERIA'):
         print("ENTRE PERMSISO ENFERMERIA")
@@ -7139,6 +7270,9 @@ def GuardaAbonosAdmision(request):
     print ("formaAbono = " , formaAbono)
     formaModeradora= FormasPagos.objects.get(nombre='CUOTA MODERADORA')
     formaCopago= FormasPagos.objects.get(nombre='COPAGO')
+    tipoPagoId= TiposPagos.objects.get(id=tipoPago)
+
+
 
     valor = request.POST['valorAbono']
     descripcion = request.POST['descripcionAbono']
@@ -7156,6 +7290,22 @@ def GuardaAbonosAdmision(request):
 
     ## falta usuarioRegistro_id
 
+    ## Aqui busco el registro en cartera_caja si lo hay o si no hat que crear uno nuevo
+
+    try:
+        with transaction.atomic():
+
+            cajaId = Caja.objects.get(fecha=fechaRegistro, usuarioEntrega_id=username_id)
+
+    except Exception as e:
+        # Aquí ya se hizo rollback automáticamente
+        print("Se hizo rollback por PRONO SE HACE NADA:", e)
+
+    finally:
+        print("No haga nada")
+        cajaId=0
+
+
     miConexion3 = None
     try:
 
@@ -7164,6 +7314,43 @@ def GuardaAbonosAdmision(request):
         comando = 'insert into cartera_Pagos ("fecha", "tipoDoc_id" , documento_id, consec,  "tipoPago_id" , "formaPago_id", valor, descripcion ,"fechaRegistro","estadoReg",saldo, "totalAplicado", "valorEnCurso", convenio_id) values ('  + "'" + str(fechaRegistro) + "'," +  "'" + str(registroId.tipoDoc_id) + "'" + ' , ' + "'" + str(registroId.documento_id) + "'" + ', ' + "'" + str(registroId.consec) + "'" + '  , ' + "'" + str(tipoPago) + "'" + '  , ' + "'" + str(formaPago) + "'" + ', ' + "'" + str(valor) + "',"   + "'" + str(descripcion) + "','"   + str(fechaRegistro) + "','" +  str("A") + "','" + str(valor) + "'," + ' 0 , 0, ' + "'" + str(convenioPaciente) + "')"
 
         cur3.execute(comando)
+
+    	## AQui RUTINA Actualiza lo generado por el CAJERO
+        if (cajaId>0):
+
+            if (tipoPagoId.nombre == 'EFECTIVO'):
+                comando2 = 'UPDATE cartera_caja SET "totalEfectivoEsperado" = "totalEfectivoEsperado" + ' + "'" + str(valor) + "'" + ' WHERE id = ' + "'" + str(cajaId) + "'"
+
+            if (tipoPagoId.nombre == 'TARJETA DEBITO'):
+                comando2 = 'UPDATE cartera_caja SET "totalTarjetasDebitoEsperado" = "totalTarjetasDebitoEsperado" + ' + "'" + str(valor) + "'" + ' WHERE id = ' + "'" + str(cajaId) + "'"
+
+            if (tipoPagoId.nombre == 'TARJETA CREDITO'):
+                comando2 = 'UPDATE cartera_caja SET "totalTarjetasCreditoEsperado" = "totalTarjetasCreditoEsperado" + ' + "'" + str(valor) + "'" + ' WHERE id = ' + "'" + str(cajaId) + "'"
+
+            if (tipoPagoId.nombre == 'CHEQUE'):
+                comando2 = 'UPDATE cartera_caja SET "totalChequesEsperado" = "totalChequesEsperado" + ' + "'" + str(valor) + "'" + ' WHERE id = ' + "'" + str(cajaId) + "'"
+
+        if (cajaId == 0):
+
+            if (tipoPagoId.nombre == 'EFECTIVO'):
+                comando2 = 'INSERT INTO cartera_caja (fecha, "totalEfectivo", "totalTarjetasDebito", "totalTarjetasCredito", "totalCheques", total, "fechaRegistro", "estadoReg", "serviciosAdministrativos_id", "usuarioEntrega_id", "usuarioRecibe_id", "usuarioRegistro_id", "usuarioSuperviza_id", "estadoCaja", "sedesClinica_id", "totalChequesEsperado", "totalEfectivoEsperado", "totalEsperado", "totalTarjetasCreditoEsperado", "totalTarjetasDebitoEsperado") VALUES (' + "'" + str(fechaRegistro) + "',0,0,0,0,0," + "'" + str(fechaRegistro) + "','A',null"  + "," + "'" + str(username_id) + "',null,"  + "'" + str(username_id) + "',null,'A',"  + "'" + str(sede)  + "',0,'" + str(valor) + "'," + "'" + str(valor) + "',0,0)"
+
+            if (tipoPagoId.nombre == 'TARJETA DEBITO'):
+                comando2 = 'INSERT INTO cartera_caja (fecha, "totalEfectivo", "totalTarjetasDebito", "totalTarjetasCredito", "totalCheques", total, "fechaRegistro", "estadoReg", "serviciosAdministrativos_id", "usuarioEntrega_id", "usuarioRecibe_id", "usuarioRegistro_id", "usuarioSuperviza_id", "estadoCaja", "sedesClinica_id", "totalChequesEsperado", "totalEfectivoEsperado", "totalEsperado", "totalTarjetasCreditoEsperado", "totalTarjetasDebitoEsperado") VALUES (' + "'" + str(fechaRegistro) + "',0,0,0,0,0," + "'" + str(fechaRegistro) + "','A'," + "'" + str(serviciosAdministrativos) + "'," + "'" + str(username_id) + "',null,"  + "'" + str(username_id) + "',null,'A',"  + "'" + str(sede)  + "',0,0," + "'" + str(valor) + "',0," + "'" + str(valor) + "')"
+
+            if (tipoPagoId.nombre == 'TARJETA CREDITO'):
+                comando2 = 'INSERT INTO cartera_caja (fecha, "totalEfectivo", "totalTarjetasDebito", "totalTarjetasCredito", "totalCheques", total, "fechaRegistro", "estadoReg", "serviciosAdministrativos_id", "usuarioEntrega_id", "usuarioRecibe_id", "usuarioRegistro_id", "usuarioSuperviza_id", "estadoCaja", "sedesClinica_id", "totalChequesEsperado", "totalEfectivoEsperado", "totalEsperado", "totalTarjetasCreditoEsperado", "totalTarjetasDebitoEsperado") VALUES (' + "'" + str(fechaRegistro) + "',0,0,0,0,0," + "'" + str(fechaRegistro) + "','A'," + "'" + str(serviciosAdministrativos) + "'," + "'" + str(username_id) + "',null,"  + "'" + str(username_id) + "',null,'A',"  + "'" + str(sede)  + "',0,0," + "'" + str(valor) + "', " + "'" + str(valor) + "',0)"
+
+            if (tipoPagoId.nombre == 'CHEQUE'):
+                comando2 = 'INSERT INTO cartera_caja (fecha, "totalEfectivo", "totalTarjetasDebito", "totalTarjetasCredito", "totalCheques", total, "fechaRegistro", "estadoReg", "serviciosAdministrativos_id", "usuarioEntrega_id", "usuarioRecibe_id", "usuarioRegistro_id", "usuarioSuperviza_id", "estadoCaja", "sedesClinica_id", "totalChequesEsperado", "totalEfectivoEsperado", "totalEsperado", "totalTarjetasCreditoEsperado", "totalTarjetasDebitoEsperado") VALUES (' + "'" + str(fechaRegistro) + "',0,0,0,0,0," + "'" + str(fechaRegistro) + "','A'," + "'" + str(serviciosAdministrativos) + "'," + "'" + str(username_id) + "',null,"  + "'" + str(username_id) + "',null,'A',"  + "'" + str(sede)  + "'," + "'" + str(valor) + "'" + "0," + str(valor) + "',0,0)"
+
+
+        cur3.execute(comando2)
+
+        ## Aqui actualiza el total registro d caja esperado
+
+        comandox = 'UPDATE cartera_caja SET "totalEsperado" = "totalEfectivoEsperado" + "totalTarjetasDebitoEsperado" + "totalTarjetasCreditoEsperado" + "totalChequesEsperado"  WHERE id = ' + "'" + str(cajaId) + "'"
+        cur3.execute(comandox)
 
 
         ## Aqui rutina crea cabezote si no existe. Actualiza totales a la liquidacion

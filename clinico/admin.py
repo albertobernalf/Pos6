@@ -25,7 +25,7 @@ class especialidadesAdmin(admin.ModelAdmin):
 @admin.register(EspecialidadesMedicos)
 class especialidadesMedicosAdmin(admin.ModelAdmin):
     list_display = ("id", "especialidades" ,  "planta", "nombre")
-    search_fields = ("id", "especialidades", "planta", "nombre")
+    search_fields = ("id", "especialidades__nombre", "planta__nombre", "nombre")
     # Filtrar
     list_filter = ( "especialidades", "planta", "nombre")
 
@@ -107,7 +107,7 @@ class examenesAdmin(admin.ModelAdmin):
 class historiaExamenesAdmin(admin.ModelAdmin):
 
     list_display = ( "id", "cantidad","tiposExamen","codigoCups","fechaToma","estadoExamenes")
-    search_fields = ( "id", "cantidad","tiposExamen","codigoCups","fechaToma","estadoExamenes")
+    search_fields = ( "id", "cantidad","tiposExamen__nombre","codigoCups","fechaToma","estadoExamenes__nombre")
     # Filtrar
     list_filter = ( "id", "cantidad","tiposExamen","codigoCups","fechaToma","estadoExamenes")
 
@@ -117,7 +117,7 @@ class historiaExamenesAdmin(admin.ModelAdmin):
 @admin.register(HistorialDiagnosticos)
 class historialDiagnosticosAdmin(admin.ModelAdmin):
         list_display = ("id", "diagnosticos","tiposDiagnostico")
-        search_fields = ("id", "diagnosticos","tiposDiagnostico")
+        search_fields = ("id", "diagnosticos__nombre","tiposDiagnostico__nombre")
         # Filtrar
         list_filter = ("id", "diagnosticos","tiposDiagnostico")
 
@@ -127,7 +127,7 @@ class historialDiagnosticosAdmin(admin.ModelAdmin):
 class historiaAdmin(admin.ModelAdmin):
 
         list_display = ("id", "tipoDoc", "documento","folio","fecha","causasExterna")
-        search_fields = ("id", "tipoDoc", "documento","folio","fecha","causasExterna")
+        search_fields = ("id", "tipoDoc", "documento","folio","fecha","causasExterna__nombre")
         # Filtrar
         list_filter = ('id', 'tipoDoc', 'documento', 'folio', 'fecha', 'causasExterna')
 
@@ -162,7 +162,7 @@ class estadosSalidaAdmin(admin.ModelAdmin):
 class historialAntecedentesAdmin(admin.ModelAdmin):
 
         list_display = ("id", "historia","tiposAntecedente","descripcion")
-        search_fields = ("id", "historia","tiposAntecedente","descripcion")
+        search_fields = ("id", "historia__id","tiposAntecedente__nombre","descripcion")
         # Filtrar
         list_filter = ("id", "historia","tiposAntecedente","descripcion")
 
@@ -186,7 +186,7 @@ class tiposInterconsultaAdmin(admin.ModelAdmin):
 class historialInterconsultasAdmin(admin.ModelAdmin):
 
         list_display = ("id", "historia","descripcionConsulta","especialidadConsultada","respuestaConsulta","especialidadConsultada","medicoConsultado")
-        search_fields = ("id", "historia","descripcionConsulta","especialidadConsultada","respuestaConsulta","especialidadConsultada","medicoConsultado")
+        search_fields = ("id", "historia__id","descripcionConsulta","especialidadConsultada__nombre","respuestaConsulta","especialidadConsultada__nombre","medicoConsultado__nombre")
         # Filtrar
         list_filter =("id", "historia","descripcionConsulta","especialidadConsultada","respuestaConsulta","especialidadConsultada","medicoConsultado")
 
@@ -330,7 +330,7 @@ class frecuenciasAplicacionAdmin(admin.ModelAdmin):
 @admin.register(HistoriaMedicamentos)
 class historiaMedicamentosAdmin(admin.ModelAdmin):
     list_display = ("id","suministro","historia")
-    search_fields = ("id","suministro","historia")
+    search_fields = ("id","suministro","historia__id")
     # Filtrar
     list_filter = ("id","suministro","historia")
 
@@ -370,7 +370,7 @@ class formasFarmaceuticasAdmin(admin.ModelAdmin):
 class historialIncapacidadesAdmin(admin.ModelAdmin):
 
     list_display = ("id", "historia","tiposIncapacidad","desdeFecha","hastaFecha","numDias")
-    search_fields =("id", "historia","tiposIncapacidad","desdeFecha","hastaFecha","numDias")
+    search_fields =("id", "historia__id","tiposIncapacidad__nombre","desdeFecha","hastaFecha","numDias")
     # Filtrar
     list_filter =("id", "historia","tiposIncapacidad","desdeFecha","hastaFecha","numDias")
 
@@ -406,7 +406,7 @@ class tipoOxigenacionAdmin(admin.ModelAdmin):
 class historiaOxigenoAdmin(admin.ModelAdmin):
 
         list_display = ("id", "historia", "tipoOxigenacion","aire","saturacionOxigeno")
-        search_fields = ("id", "historia", "tipoOxigenacion","aire","saturacionOxigeno")
+        search_fields = ("id", "historia__id", "tipoOxigenacion","aire","saturacionOxigeno")
         # Filtrar
         list_filter = ("id", "historia", "tipoOxigenacion","aire","saturacionOxigeno")
 
@@ -422,7 +422,7 @@ class tipoDietasAdmin(admin.ModelAdmin):
 class historialDietasAdmin(admin.ModelAdmin):
 
         list_display = ("id", "historia","tipoDieta","consecutivo","observaciones")
-        search_fields = ("id", "historia","tipoDieta","consecutivo","observaciones")
+        search_fields = ("id", "historia__id","tipoDieta","consecutivo","observaciones")
         # Filtrar
         list_filter = ("id", "historia","tipoDieta","consecutivo","observaciones")
 
@@ -430,6 +430,6 @@ class historialDietasAdmin(admin.ModelAdmin):
 class historialNotasEnfermeriaAdmin(admin.ModelAdmin):
 
         list_display = ("id", "historia","observaciones","fechaRegistro")
-        search_fields = ("id", "historia","observaciones","fechaRegistro")
+        search_fields = ("id", "historia__id","observaciones","fechaRegistro")
         # Filtrar
         list_filter = ("id", "historia","observaciones","fechaRegistro")

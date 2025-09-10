@@ -60,7 +60,7 @@ class perfilesOpcionesAdmin(admin.ModelAdmin):
 class perfilesClinicaAdmin(admin.ModelAdmin):
 
     list_display = ("id","sedesClinica", "nombre", "modulosId","estadoReg")
-    search_fields = ("id", "sedesClinica", "nombre","modulosId", "estadoReg")
+    search_fields = ("id", "sedesClinica__nombre", "nombre","modulosId", "estadoReg")
     # readonly_fields = ["nombre"]
     # Filtrar
     list_filter = ('id', "sedesClinica","modulosId",'nombre')
@@ -78,7 +78,7 @@ class perfilesClinicaOpcionesAdmin(admin.ModelAdmin):
 @admin.register(PerfilesUsu)
 class perfilesUsuAdmin(admin.ModelAdmin):
     list_display = ("id", "plantaId","perfilesClinicaOpcionesId", "adicion", "estadoReg")
-    search_fields = ("id", "plantaId","perfilesClinicaOpcionesId", "adicion", "estadoReg")
+    search_fields = ("id", "plantaId__nombre","perfilesClinicaOpcionesId", "adicion", "estadoReg")
     # readonly_fields = ["nombre"]
     # Filtrar
     list_filter = ("id", "plantaId","perfilesClinicaOpcionesId", "adicion", "estadoReg")
@@ -87,7 +87,7 @@ class perfilesUsuAdmin(admin.ModelAdmin):
 @admin.register(PerfilesGralUsu)
 class perfilesGralUsuAdmin(admin.ModelAdmin):
     list_display = ("id", "plantaId","perfilesClinicaId",  "estadoReg")
-    search_fields = ("id", "plantaId","perfilesClinicaId",  "estadoReg")
+    search_fields = ("id", "plantaId__nombre","perfilesClinicaId__nombre",  "estadoReg")
     # readonly_fields = ["nombre"]
     # Filtrar
     list_filter = ("id", "plantaId","perfilesClinicaId",  "estadoReg")

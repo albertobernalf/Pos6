@@ -18,7 +18,7 @@ class autorizacionesAdmin(admin.ModelAdmin):
 @admin.register(AutorizacionesDetalle)
 class autorizacionesDetalleAdmin(admin.ModelAdmin):
     list_display = ("id",  "autorizaciones", "estadoAutorizacion","cantidadSolicitada","cantidadAutorizada","numeroAutorizacion")
-    search_fields = ("id", "autorizaciones", "estadoAutorizacion","cantidadSolicitada","cantidadAutorizada","numeroAutorizacion")
+    search_fields = ("id", "autorizaciones", "estadoAutorizacion__nombre","cantidadSolicitada","cantidadAutorizada","numeroAutorizacion")
     # Filtrar
     # list_filter =("id",  "autorizaciones","estadoAutorizacion","cantidadSolicitada","cantidadAutorizada","numeroAutorizacion")
 
@@ -28,7 +28,7 @@ class autorizacionesDetalleAdmin(admin.ModelAdmin):
 class autorizacionesCirugiasAdmin(admin.ModelAdmin):
 
    list_display = ("id", "sedesClinica", "tipoDoc","documento","hClinica","consec", "autorizacionesId","fechaRegistro","usuarioRegistro")
-   search_fields = ("id", "sedesClinica", "tipoDoc","documento","hClinica","consec", "autorizacionesId","fechaRegistro","usuarioRegistro")
+   search_fields = ("id", "sedesClinica__nombre", "tipoDoc__nombre","documento","hClinica","consec", "autorizacionesId","fechaRegistro","usuarioRegistro")
    # Filtrar
    # list_filter = ("id", "sedesClinica", "tipoDoc","documento","hClinica","consec", "autorizacionesId","fechaRegistro","usuarioRegistro")
 
