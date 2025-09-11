@@ -22,7 +22,7 @@ from .forms import historiaForm, historiaExamenesForm
 import datetime
 from datetime import date, timedelta
 import time
-from clinico.models import Historia, HistoriaExamenes, Examenes, TiposExamen, EspecialidadesMedicos, Medicos, Especialidades, TiposFolio, CausasExterna, EstadoExamenes, HistorialAntecedentes, HistorialDiagnosticos, HistorialInterconsultas, EstadosInterconsulta, HistorialIncapacidades,  HistoriaSignosVitales, HistoriaRevisionSistemas, HistoriaMedicamentos , HistorialNotasEnfermeria, EstadosInterconsulta
+from clinico.models import Historia, HistoriaExamenes, Examenes, TiposExamen, EspecialidadesMedicos, Medicos, Especialidades, TiposFolio, CausasExterna, EstadoExamenes, HistorialAntecedentes, HistorialDiagnosticos, HistorialInterconsultas, EstadosInterconsulta, HistorialIncapacidades,  HistoriaSignosVitales, HistoriaRevisionSistemas, HistoriaMedicamentos
 from sitios.models import Dependencias
 from planta.models import Planta
 from facturacion.models import Liquidacion, LiquidacionDetalle, Suministros, TiposSuministro
@@ -251,10 +251,7 @@ def crearHistoriaClinica(request):
    
 
             tiposFolio = request.POST["tiposFolioEscogido"]
-            print("tiposFolio = ", tiposFolio)
-            tiposFolioEnfermeria = TiposFolio.objects.get(nombre='ENFERMERIA')
-            print("tiposFolioEnfermeria = ", tiposFolioEnfermeria)
-
+            print("tiposFolioEscogido = ", tiposFolio)
             mipres = request.POST["mipres"]
             print ("mipres = " , mipres)
 
@@ -470,27 +467,26 @@ def crearHistoriaClinica(request):
             diagnosticos = request.POST["diagnosticos"]
 
             print("diagnosticos = ", diagnosticos)
-            print ("tiposFolioEnfermeria = ", tiposFolioEnfermeria.id)
-            print("tiposFolio = ", tiposFolio)
-            print("causasExterna" , causasExterna)
 
             if (causasExterna == ''):
 
-                print("Entre GRAVES campos vacios CONSUKLTAEXTERNA")
+                print("Entre GRAVES campos vacios")
                 data = {'Mensaje': 'Favor suministrar Causa externa Obligatorio'}
                 return HttpResponse(json.dumps(data))
+
 
             jsonDDiagnosticos = json.loads(diagnosticos)
             elementosDiagnosticos = len (jsonDDiagnosticos)
             print ("elementosDiagnosticos = ", elementosDiagnosticos )
 
 
-            #if (elementosDiagnosticos== 1 and tiposFolioEnfermeria.id == tiposFolio ):
-            if (elementosDiagnosticos == 1):
 
-                print("Entre GRAVES campos vacios DIAGNOSTICO")
+            if (elementosDiagnosticos== 1):
+
+                print("Entre GRAVES campos vacios")
                 data = {'Mensaje': 'Favor suministrar diagnostico Obligatorios!'}
                 return HttpResponse(json.dumps(data))
+
 
             else:
 
@@ -748,36 +744,6 @@ def crearHistoriaClinica(request):
                 print ("Columna a leer = ", columnaALeerPropia)
 
                 autorizacionId=0
-
-
-		# Grabacion Notas de Enfermeria
-
-                notasEnfermeria = request.POST["notasEnfermeria"]
-                print("notasEnfermeria =", notasEnfermeria)
-                ## Rutina leer el JSON de notasEnfermeria en python primero
-                consecutivo=0
-                jsonNotasEnfermeria = json.loads(notasEnfermeria)
-
-                conteoEnf=0
-
-                for key in jsonNotasEnfermeria:
-
-                    print("key = " ,key)
-                    queda= key
-                    observa = key["observa"]
-                    print("observa", observa)
-
-
-                    if observa != "":
-                        consecutivo = consecutivo + 1
-                        #codigoCupsId = Examenes.objects.get(codigoCups=cups)
-
-                        notas = HistorialNotasEnfermeria(observaciones= observa ,fechaRegistro=fechaRegistro, estadoReg='A' , historia_id=historiaId)
-                        notas.save()
-                        conteoEnf = conteoEnf + 1
-
-
-		# Fin grabacion Notas de Enfermeria
 
                 #Grabacion Laboratorios
             #
@@ -3161,31 +3127,6 @@ def crearHistoriaClinica(request):
 
         # Fin Combo ServiciosAdministrativos
 
-        # Combo EspecialidadesMedicosInterconsultas
-
-
-        miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
-                                       password="123456")
-        curt = miConexiont.cursor()
-        comando = 'SELECT e.id ,e.nombre FROM clinico_Especialidades e, clinico_EspecialidadesMedicos em,planta_planta pl  where em."especialidades_id" = e.id and em."planta_id" = pl.id AND  em."sedesClinica_id" = ' + "'" + str(sede) + "' GROUP BY  e.id ,e.nombre"
-        curt.execute(comando)
-        print(comando)
-
-        especialidadesMedicosInterConsultas = []
-        especialidadesMedicosInterConsultas.append({'id': '', 'nombre': ''})
-
-        for id, nombre in curt.fetchall():
-            especialidadesMedicosInterConsultas.append({'id': id, 'nombre': nombre})
-
-        miConexiont.close()
-        print(especialidadesMedicosInterConsultas)
-
-        context['EspecialidadesMedicosInterConsultas'] = especialidadesMedicosInterConsultas
-
-        # Fin combo EspecialidadesMedicosInterconsultas
-
-
-
         return render(request, 'clinico/navegacionClinicaF.html', context);
 
 
@@ -3339,189 +3280,3 @@ def PostConsultaHcli(request):
 
     else:
         return JsonResponse({'errors':'Something went wrong!'})
-
-
-
-
-# Create your views here.
-def load_dataInterConsultas(request, data):
-    print ("Entre load_data InterConsultas")
-
-    context = {}
-    d = json.loads(data)
-
-    username = d['username']
-    sede = d['sede']
-    username_id = d['username_id']
-
-    nombreSede = d['nombreSede']
-    print ("sede:", sede)
-    print ("username:", username)
-    print ("username_id:", username_id)
-    
-    estadoInterconsulta = EstadosInterconsulta.objects.get(nombre='PENDIENTE')
-
-    #print("data = ", request.GET('data'))
-
-    interConsultas = []
-
-    # miConexionx = MySQLdb.connect(host='CMKSISTEPC07', user='sa', passwd='75AAbb??', db='vulnerable')
-    miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",     password="123456")
-    curx = miConexionx.cursor()
-   
-
-    detalle ='SELECT int.id, "descripcionConsulta", "respuestaConsulta", int."estadoReg", diag.nombre diagnostico, esp.nombre espConsulta,  estados.nombre estadosNombre, historia_id, espmed.nombre especialidadMedico , pla1.nombre medicoConsulta, pla2.nombre medicoConsultado, tipos.nombre tiposNombre, "ordenMedica" FROM public.clinico_historialinterconsultas int INNER JOIN clinico_historia his ON (his.id=int.historia_id) INNER JOIN clinico_estadosinterconsulta estados ON (estados.id=int."estadosInterconsulta_id")  INNER JOIN clinico_tiposinterconsulta tipos ON (tipos.id = int."tipoInterconsulta_id" ) INNER JOIN clinico_especialidades esp ON (esp.id = int."especialidadConsultada_id")  INNER JOIN clinico_medicos med1 ON (med1.id = int."medicoConsulta_id" )  INNER JOIN planta_planta pla1 ON (pla1.id = med1.planta_id )  INNER JOIN clinico_medicos med2 ON (med2.id = int."medicoConsultado_id") INNER JOIN planta_planta pla2 ON (pla2.id = med2.planta_id ) INNER JOIN clinico_especialidadesmedicos cliesp ON (cliesp.id = int."especialidadConsulta_id") INNER JOIN clinico_especialidades espmed ON (espmed.id= cliesp.especialidades_id  ) LEFT JOIN clinico_diagnosticos diag ON (diag.id = int.diagnosticos_id) WHERE his."sedesClinica_id" = ' +"'" + str(sede) + "'" + ' AND med2.planta_id = ' + "'" + str(username_id) + "'" + ' AND int."estadosInterconsulta_id" = ' + "'" + str(estadoInterconsulta.id) + "'"
-
-    print(detalle)
-
-    curx.execute(detalle)
-
-    for id, descripcionConsulta, respuestaConsulta, estadoReg, diagnostico, espConsulta,estadosNombre , historia_id, especialidadMedico,medicoConsulta,medicoConsultado, tiposNombre, ordenMedica    in curx.fetchall():
-        interConsultas.append(
-		{"model":"ingresos.ingresos","pk":id,"fields":
-			{ 'id':id, 'descripcionConsulta': descripcionConsulta, 'respuestaConsulta': respuestaConsulta, 'estadoReg': estadoReg, 'diagnostico': diagnostico,
-                         'espConsulta': espConsulta, 'historia_id': historia_id,
-                         'especialidadMedico': especialidadMedico, 'medicoConsulta': medicoConsulta,
-                         'medicoConsultado': medicoConsultado, 'tiposNombre':tiposNombre,'ordenMedica':ordenMedica}})
-
-    miConexionx.close()
-    print(interConsultas)
-    context['InterConsultas'] = interConsultas
-
-
-    serialized1 = json.dumps(interConsultas, default=serialize_datetime)
-
-    print ("Envio = ", json)
-
-
-
-    return HttpResponse(serialized1, content_type='application/json')
-
-
-def TraerMedicosEspecialidad(request):
-    context = {}
-    Esp = request.GET["Esp"]
-    Sede = request.GET["Sede"]
-    print ("Entre buscar  Especialidad =",Esp)
-    print ("Sede = ", Sede)
-
-    # Combo de Medicos Especialidades
-
-
-    miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres", password="123456")
-    curt = miConexiont.cursor()
-
-
-    comando = 'SELECT m.id id, pla.nombre nombre from clinico_medicos m, clinico_Especialidadesmedicos medesp,clinico_especialidades esp,sitios_sedesclinica sed,  planta_planta pla where  pla.id=medesp.planta_id and  medesp.especialidades_id = esp.id and m.planta_id = pla.id and  esp.id = ' + "'" + str(
-        Esp) + "'" + ' and esp.id=medesp.especialidades_id and pla."sedesClinica_id" = sed.id and pla.id = medesp.planta_id and pla."sedesClinica_id"=' + "'" + str(
-        Sede) + "'" + ' order by pla.nombre'
-
-    curt.execute(comando)
-    print(comando)
-
-    medicosEspecialidadesInterconsulta = []
-
-
-    for id, nombre in curt.fetchall():
-        medicosEspecialidadesInterconsulta.append({'id': id, 'nombre': nombre})
-
-    miConexiont.close()
-    print(medicosEspecialidadesInterconsulta)
-
-    context['MedicosEspecialidadesInterconsulta'] = medicosEspecialidadesInterconsulta
-
-    context['Sede'] = Sede
-
-    return JsonResponse(json.dumps(medicosEspecialidadesInterconsulta), safe=False)
-
-
-def GuardarInterConsulta(request):
-
-    print ("Entre GuardarInterConsulta" )
-
-    interConsultaId = request.POST["interConsultaId"]
-    print("interConsultaId =",interConsultaId )
-
-    respuestaConsulta = request.POST["respuestaConsulta"]
-
-    print ("respuestaConsulta" , respuestaConsulta)
-
-    fechaRegistro = timezone.now()
-
-
-
-    miConexion3 = None
-    try:
-
-        estadoInterconsulta = EstadosInterConsulta.objects.get(nombre='CONTESTADA')
-
-        miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",  password="123456")
-        cur3 = miConexion3.cursor()
-
-        comando = 'UPDATE clinico_historialinterconsultas SET "respuestaConsulta" = ' + "'" + str(respuestaConsulta) + "',"  + '"estadoInterconsulta_id" = ' + "'" + str(estadoInterconsulta.id) + "'" + ' WHERE id = ' + "'" + str(interConsultaId) + "'"
-        print(comando)
-        cur3.execute(comando)
-
-        miConexion3.commit()
-        cur3.close()
-        miConexion3.close()
-
-        datosMensaje = {'success': True, 'Mensaje': 'InterConsulta Guardada satisfactoriamente!'}
-        json_data = json.dumps(datosMensaje, default=str)
-        return HttpResponse(json_data, content_type='application/json')
-
-
-
-    except psycopg2.DatabaseError as error:
-        print ("Entre por rollback" , error)
-        if miConexion3:
-            print("Entro ha hacer el Rollback")
-            miConexion3.rollback()
-
-        print ("Voy a hacer el jsonresponde")
-        datosMensaje = {'success': False, 'Mensaje': error}
-        json_data = json.dumps(datosMensaje, default=str)
-        return HttpResponse(json_data, content_type='application/json')
-
-
-
-    finally:
-        if miConexion3:
-            cur3.close()
-            miConexion3.close()
-
-
-def LeerInterConsulta(request):
-    context = {}
-    print("Entre LeerInterConsulta")
-    interConsultaId = request.POST["interConsultaId"]
-    print ("interConsultaId =",interConsultaId)
-
-
-    # Combo de Medicos Especialidades
-
-
-    miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres", password="123456")
-    curt = miConexiont.cursor()
-
-    comando ='SELECT int.id, "descripcionConsulta", "respuestaConsulta", int."estadoReg", diag.nombre diagnostico, esp.nombre espConsulta,  estados.nombre estadosNombre, historia_id, espmed.nombre especialidadMedico , pla1.nombre medicoConsulta, pla2.nombre medicoConsultado, tipos.nombre tiposNombre, "ordenMedica" FROM public.clinico_historialinterconsultas int INNER JOIN clinico_historia his ON (his.id=int.historia_id) INNER JOIN clinico_estadosinterconsulta estados ON (estados.id=int."estadosInterconsulta_id")  INNER JOIN clinico_tiposinterconsulta tipos ON (tipos.id = int."tipoInterconsulta_id" ) INNER JOIN clinico_especialidades esp ON (esp.id = int."especialidadConsultada_id")  INNER JOIN clinico_medicos med1 ON (med1.id = int."medicoConsulta_id" )  INNER JOIN planta_planta pla1 ON (pla1.id = med1.planta_id )  INNER JOIN clinico_medicos med2 ON (med2.id = int."medicoConsultado_id") INNER JOIN planta_planta pla2 ON (pla2.id = med2.planta_id ) INNER JOIN clinico_especialidadesmedicos cliesp ON (cliesp.id = int."especialidadConsulta_id") INNER JOIN clinico_especialidades espmed ON (espmed.id= cliesp.especialidades_id  ) LEFT JOIN clinico_diagnosticos diag ON (diag.id = int.diagnosticos_id) WHERE int.id =' +"'" + str(interConsultaId) + "'"
-
-    curt.execute(comando)
-    print(comando)
-
-    interConsulta = []
-
-    for id, descripcionConsulta, respuestaConsulta, estadoReg, diagnostico, espConsulta, estadosNombre, historia_id, especialidadMedico, medicoConsulta, medicoConsultado, tiposNombre, ordenMedica in curt.fetchall():
-        interConsulta.append(
-            {"model": "ingresos.ingresos", "pk": id, "fields":
-                {'id': id, 'descripcionConsulta': descripcionConsulta, 'respuestaConsulta': respuestaConsulta,
-                 'estadoReg': estadoReg, 'diagnostico': diagnostico,
-                 'espConsulta': espConsulta, 'historia_id': historia_id,
-                 'especialidadMedico': especialidadMedico, 'medicoConsulta': medicoConsulta,
-                 'medicoConsultado': medicoConsultado, 'tiposNombre': tiposNombre, 'ordenMedica': ordenMedica}})
-
-    miConexiont.close()
-    print(interConsulta)
-
-
-    return JsonResponse(json.dumps(interConsulta), safe=False)

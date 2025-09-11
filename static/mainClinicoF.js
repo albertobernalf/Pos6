@@ -8,6 +8,7 @@ console.log(form)
 
 let dataTable;
 let dataTableClinicoInitialized = false;
+let dataTableInterConsultasInitialized = false;
 
 
 function arrancaClinico(valorTabla,valorData)
@@ -127,6 +128,114 @@ autoWidth: false,
 	        dataTable = $('#tablaClinico').DataTable(dataTableOptionsClinico);
 			
   }
+
+
+    if (valorTabla == 2)
+    {
+        let dataTableOptionsInterConsultas  ={
+    dom: "<'row mb-1'<'col-sm-3'B><'col-sm-3'><'col-sm-6'f>>" + // B = Botones a la izquierda, f = filtro a la derecha
+             "<'row'<'col-sm-12'tr>>" +
+             "<'row mt-3'<'col-sm-5'i><'col-sm-7'p>>",
+  buttons: [
+    {
+      extend: 'excelHtml5',
+      text: '<i class="fas fa-file-excel"></i> ',
+      titleAttr: 'Exportar a Excel',
+      className: 'btn btn-success',
+    },
+    {
+      extend: 'pdfHtml5',
+      text: '<i class="fas fa-file-pdf"></i> ',
+      titleAttr: 'Exportar a PDF',
+      className: 'btn btn-danger',
+    },
+    {
+      extend: 'print',
+      text: '<i class="fa fa-print"></i> ',
+      titleAttr: 'Imprimir',
+      className: 'btn btn-info',
+    },
+  ],
+  lengthMenu: [2, 4, 15],
+           processing: true,
+            serverSide: false,
+            scrollY: '275px',
+	    scrollX: true,
+	    scrollCollapse: true,
+            paging:false,
+            columnDefs: [
+		{ className: 'centered', targets: [0, 1, 2, 3, 4, 5] },
+	    { width: '10%', targets: [2,3] },
+	    { width: '10%', targets: [9] },
+		{    
+                    "targets": 10
+               }
+            ],
+	 pageLength: 3,
+	  destroy: true,
+	  language: {
+		    processing: 'Procesando...',
+		    lengthMenu: 'Mostrar _MENU_ registros',
+		    zeroRecords: 'No se encontraron resultados',
+		    emptyTable: 'Ningún dato disponible en esta tabla',
+		    infoEmpty: 'Mostrando registros del 0 al 0 de un total de 0 registros',
+		    infoFiltered: '(filtrado de un total de _MAX_ registros)',
+		    search: 'Buscar:',
+		    infoThousands: ',',
+		    loadingRecords: 'Cargando...',
+		    paginate: {
+			      first: 'Primero',
+			      last: 'Último',
+			      next: 'Siguiente',
+			      previous: 'Anterior',
+		    }
+			},
+
+
+           ajax: {
+                 url:"/load_dataInterConsultas/" +  data,
+                 type: "POST",
+                 dataSrc: ""
+            },
+            columns: [
+		{
+
+ "render": function ( data, type, row ) {
+                        var btn = '';
+             btn = btn + " <input type='radio' name='miInterConsulta' class='miInterConsulta form-check-input ' data-pk='"  + row.pk + "'>" + "</input>";
+
+
+                       return btn;
+                    },
+                 },
+        {
+		"render": function ( data, type, row ) {
+                        var btn = '';
+
+	 	 btn = btn + " <button class='ImprimirInterConsulta btn-primary ' data-pk='" + row.pk + "'>" + '<i class=""fa-duotone fa-solid fa-print""></i>' + "</button>";
+
+                       return btn;
+		}
+                   },
+
+                { data: "fields.id"},
+                { data: "fields.descripcionConsulta"},
+                { data: "fields.respuestaConsulta"},
+                { data: "fields.diagnostico"},
+                { data: "fields.espConsulta"},
+                { data: "fields.historia_id"},
+                { data: "fields.especialidadMedico"},
+                { data: "fields.medicoConsulta"},
+                { data: "fields.medicoConsultado"},
+                { data: "fields.tiposNombre"},
+
+            ]
+            }
+	        dataTable = $('#tablaInterConsultas').DataTable(dataTableOptionsInterConsultas);
+
+
+  }
+
 }
 
 const initDataTableClinico = async () => {
@@ -154,6 +263,13 @@ const initDataTableClinico = async () => {
 
         arrancaClinico(1,data);
 	    dataTableClinicoInitialized = true;
+	alert("voy a cargar interconsultas");
+
+
+        arrancaClinico(2,data);
+	    dataTableInterConsultasInitialized = true;
+	alert("listo ya cargue interconsultas");
+
 }
 
  // COMIENZA ONLOAD
@@ -241,3 +357,111 @@ $.ajax({
 
 
     });
+
+
+$('#tablaInterConsultas tbody').on('click', '.ImprimirInterConsulta', function() {
+
+	alert ("Entre tablaInterConsultas ");
+
+	     var post_id = $(this).data('pk');
+	alert ("post_id = " + post_id);
+	var interConsultaId = post_id;
+
+$.ajax({
+	           url: '/imprimirInterConsultas/',
+	            data : {interConsultaId:interConsultaId},
+	           type: 'POST',
+	           dataType : 'json',
+	  		success: function (data) {
+
+			 $('#pk').val(data.pk);
+	       	     
+
+                  },
+	   		    error: function (request, status, error) {
+	   			   document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
+	   	    	}
+	     });
+
+
+
+
+    });
+
+$('#tablaInterConsultas tbody').on('click', '.miInterConsulta', function() {
+
+	alert ("Entre miInterconsulta ");
+
+	     var post_id = $(this).data('pk');
+	alert ("post_id = " + post_id);
+	var interConsultaId = post_id;
+
+$.ajax({
+	           url: '/leerInterConsulta/',
+	            data : {'interConsultaId':interConsultaId},
+	           type: 'POST',
+	           dataType : 'json',
+	  		success: function (data) {
+			alert("data = " + JSON.stringify(data));
+		alert("data1 = " + data[0].fields['descripcionConsulta']);
+
+			 $('#descripcionConsulta').val(data[0].fields.descripcionConsulta);
+			 $('#respuestaConsulta').val(data.fields['respuestaConsulta']);
+			 $('#diagnostico').val(data.fields['diagnostico']);
+			 $('#espConsulta').val(data.fields['espConsulta']);
+			 $('#especialidadMedico').val(data.fields['especialidadMedico']);
+			 $('#medicoConsulta').val(data.fields['medicoConsulta']);
+			 $('#medicoConsultado').val(data.fields['medicoConsultado']);
+			 $('#tiposNombre').val(data.fields['tiposNombre']);
+
+			$('#crearModelInterConsultas').modal('show');
+			 $('#pk').val(data.pk);	       	     
+
+                  },
+	   		    error: function (request, status, error) {
+	   			   document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
+	   	    	}
+	     });
+
+    });
+
+
+$('#saveBtnResponderInterConsulta').click(function (e) {
+		e.preventDefault();
+
+	alert ("Entre a actualizar Interconsulta");
+
+  		  $.ajax({
+                data: $('#postFormInterConsultas').serialize(),
+	        url: "/guardarInterConsulta/",
+                type: "POST",
+                dataType: 'json',
+                success: function (data) {
+		  $("#mensajes").html(data.message);
+                //  $('#postFormModalApliqueParcial').trigger("reset");
+    		  $('#crearAplique').modal('hide');
+
+
+			 var data2 =  {}   ;
+			data2['username'] = username;
+		        data2['sedeSeleccionada'] = sedeSeleccionada;
+		        data2['nombreSede'] = nombreSede;
+		        data2['sede'] = sede;
+		        data2['username_id'] = username_id;
+
+		        data2 = JSON.stringify(data2);
+
+
+		  arrancaClinico(2,data2);
+		    dataTableInterConsultasInitialized = true;
+
+		$('#crearModelInterConsultas').modal('show');
+
+                },
+                error: function (data) {
+		document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error                }
+            });
+      });
+
+
+

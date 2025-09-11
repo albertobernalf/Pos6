@@ -269,7 +269,7 @@ class HistorialInterconsultas(models.Model):
                 ordenMedica = models.CharField(max_length=80, blank=True, null=True)
                 tipoInterconsulta = models.ForeignKey('clinico.TiposInterconsulta',  blank=True, null=True, editable=True, on_delete=models.PROTECT)
                 descripcionConsulta = models.CharField(max_length=200)
-                especialidadConsulta = models.ForeignKey('clinico.Especialidades', default=1, on_delete=models.PROTECT, null=False)
+                especialidadConsulta = models.ForeignKey('clinico.EspecialidadesMedicos', default=1, on_delete=models.PROTECT, null=False)
                 medicoConsulta  = models.ForeignKey('clinico.Medicos',  blank=True, null=True, editable=True, on_delete=models.PROTECT)
                 especialidadConsultada = models.ForeignKey('clinico.Especialidades', default=1, on_delete=models.PROTECT, null=False,    related_name='espe22')
                 medicoConsultado  = models.ForeignKey('clinico.Medicos',  blank=True, null=True, editable=True, on_delete=models.PROTECT ,   related_name='med22')

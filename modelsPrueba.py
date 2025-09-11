@@ -800,7 +800,6 @@ ojo pendiente en aplicacion de medicamentos arreglar cuando aplica la modal no p
 
 -- ojo martes 18-agoiso
   -- hacer todos los JSONRESPONSE con dat. Mensaje Erro y no erro
-  -- Hacer prueba totale grales y arregklar a la lata
 
 -- los combos sin seleccion de rips despues de que se crea un admison estan con inicio en blanco
 -- ojo sale mensaje que pacinte ya esta en la clinica cuando nop por elcotext ver como arreglar
@@ -833,7 +832,6 @@ ojo pendiente en aplicacion de medicamentos arreglar cuando aplica la modal no p
   -- y el repporteaor que pasa ?
   -- Lo ultimo ultimo es tablas particionadas ver cuales. Umm yp creo la gran mayoria.
 
-3. Trabajar todo traslados prueba. ideal solo traer el convenio de dende selecione 
 7. Trabaja impresion de historia clinica, con apoyo terapeutico formato bien bacano ojo lineas no cuadros. por el momento crera nuevos pacientes y hacer pruebas con ellos
 -- ojo falta 
 -- ops la facturaambulatoria no tiene totales
@@ -841,7 +839,6 @@ ojo pendiente en aplicacion de medicamentos arreglar cuando aplica la modal no p
 2. hacer ejemplocon mas de un medicamento, mas de unat terapia no autoriada en un folio
 3. hacer traslados
 4. indicadores
-5. comenzar hclinica vs apoyo terapeutico resultados
 7. mirar desde autorizaciones los cups que caen a liquidaciondetalle, actualizaen TOTALES
 8. cuando planeo un medicamento en enfermeria sale eroro de turnos catch error
 
@@ -856,3 +853,9 @@ ojo pendiente en aplicacion de medicamentos arreglar cuando aplica la modal no p
    ------ OJOOOOOOOOOOO OJOOOOOOOOOOOO  OJOOOOOOOOO
  -- creo que no me esta actualizando el dxActual VRIFICAR CON ENFEREMRA
  -- ops hacer notas de enfermeria desde la HC como desde enfermeria
+
+-- TRAZA De combate ,, Puesta a punto Nro 2:
+
+
+
+

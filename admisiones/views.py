@@ -1678,6 +1678,33 @@ def escogeAcceso(request, Sede, Username, Profesional, Documento, NombreSede, es
 
         # Fin Combo ServiciosAdministrativos
 
+
+
+        # Combo EspecialidadesMedicosInterconsultas
+
+
+        miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                       password="123456")
+        curt = miConexiont.cursor()
+        comando = 'SELECT e.id ,e.nombre FROM clinico_Especialidades e, clinico_EspecialidadesMedicos em,planta_planta pl  where em."especialidades_id" = e.id and em."planta_id" = pl.id AND  em."sedesClinica_id" = ' + "'" + str(sede) + "' GROUP BY  e.id ,e.nombre"
+        curt.execute(comando)
+        print(comando)
+
+        especialidadesMedicosInterConsultas = []
+        especialidadesMedicosInterConsultas.append({'id': '', 'nombre': ''})
+
+        for id, nombre in curt.fetchall():
+            especialidadesMedicosInterConsultas.append({'id': id, 'nombre': nombre})
+
+        miConexiont.close()
+        print(especialidadesMedicosInterConsultas)
+
+        context['EspecialidadesMedicosInterConsultas'] = especialidadesMedicosInterConsultas
+
+        # Fin combo EspecialidadesMedicosInterconsultas
+
+
+
         ## FIN CONTEXTO
         return render(request, "clinico/panelClinicoF.html", context)
 

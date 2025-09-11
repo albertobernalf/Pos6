@@ -113,6 +113,13 @@ urlpatterns = [
     path('imprimirOrdenDeControl/<str:ingresoId> , <str:historiaId>, <str:convenioId>,<str:tipoAdmision>/', viewsClinicoReportes.ImprimirOrdenDeControl),
     path('imprimirOrdenRadiologia/<str:ingresoId> , <str:historiaId>, <str:convenioId>,<str:tipoAdmision>/', viewsClinicoReportes.ImprimirOrdenRadiologia),
 
+
+    path('traerMedicosEspecialidad/', viewsClinico.TraerMedicosEspecialidad),
+    path('load_dataInterConsultas/<str:data>', viewsClinico.load_dataInterConsultas),
+    path('guardarInterConsulta/', viewsClinico.GuardarInterConsulta),
+    path('leerInterConsulta/', viewsClinico.LeerInterConsulta),
+
+
     # Actividaes Mecanicas
 
     path('prueba/', viewsClinico.prueba),

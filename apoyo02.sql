@@ -13,3 +13,10 @@ SELECT hisExa.interpretacion1, hisExa."fechaInterpretacion1", pla.nombre medicoI
 	LEFT JOIN planta_planta pla ON (pla.id=med.planta_id) 
 	LEFT JOIN planta_planta pla2 ON (pla2.id=med2.planta_id)
 	WHERE hisExa.historia_id = '1162'
+
+	select * from clinico_tiposfolio;
+
+select * from clinico_causasexterna;
+
+select * from planta_planta;
+update planta_planta set "esCajero" = 'S' where id in (8,6)

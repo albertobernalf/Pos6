@@ -10,7 +10,6 @@
 	var controlDia = 0;
 	var controlAnt = 0;
 	var controlInt = 0;
-	var controlEnf = 0;
 
 
 
@@ -57,24 +56,6 @@
 
 	/*------------------------------------------
         --------------------------------------------
-        Delete Post Code Notas Enfermeria
-        --------------------------------------------
-        --------------------------------------------*/
-        $("body").on("click",".deletePostNotasEnfermeria",function(){
-		alert("Entre a borrar el id laboratorio ");
-      	        var rowIndex = $(this).parent().index('#tablaNotasEnfermeria tbody tr');
-	     	alert("Entre a borrar la fila #  Notas  Nro" + rowIndex );
-		var tableL = $('#tablaNotasEnfermeria').DataTable();
-		// tableL.row(':eq(rowIndex-1)').remove().draw(false);
-		 tableL.row.remove(rowIndex).draw(false);
-		// document.getElementById("tablaLaboratorios").deleteRow(rowIndex);
-                // tableL.ajax.reload();
-	});
-
-
-
-	/*------------------------------------------
-        --------------------------------------------
         Delete Post Code Lab
         --------------------------------------------
         --------------------------------------------*/
@@ -89,7 +70,6 @@
 		// document.getElementById("tablaLaboratorios").deleteRow(rowIndex);
                 // tableL.ajax.reload();
 	});
-
 
 
 	/*------------------------------------------
@@ -231,20 +211,6 @@
                         $('.success-msg').text(data.message);
 			              table8.ajax.reload();
 	});
-
-
-$('#tablaNotasEnfermeria tbody').on('click', 'tr', function () {
-    confirm("Desea eliminar LA FILA: ");
-       var tableL = $('#tablaNotasEnfermeria').DataTable();
-      var fila = $(this).parents("tr")['prevObject']['0']['_DT_RowIndex'];
-          alert("Fila a borrar = " + fila);
-		var rows = tableL
-			    .rows(fila)
-			    .remove()
-			    .draw();
-		 document.getElementById("tablaNotasEnfermeria").deleteRow(fila-1);
-
-});
 
 
 $('#tablaLaboratorios tbody').on('click', 'tr', function () {
@@ -684,63 +650,6 @@ $('#tablaFacturacions tbody').on('click', 'tr', function () {
         });
       
 
-  /*------------------------------------------
-        --------------------------------------------
-        Create Post Code Notas de Enfermeria
-        --------------------------------------------
-        --------------------------------------------*/
-        $('#BtnAdicionarNotasEnfermeria').click(function (e) {
-            e.preventDefault();
-         //   $('.success-msg').css('display','block');
-         //   $('.success-msg').text('Dato actualizado');
-
-   	   if (controlEnf == 0)
-   	   {
-   	   var tableE = $('#tablaNotasEnfermeria').DataTable({scrollY: '150px', paging:false,   scrollX: true,  scrollCollapse: true,  lengthMenu: [5]});   // accede de nuevo a la DataTable.
-   	   controlEnf=1;
-   	   }
-   	   else
-   	   {
-   	   var tableE = $('#tablaNotasEnfermeria').DataTable();
-   	   }
-
-     	   var observa = document.getElementById("observacionesNotas").value;
-           tableE.row.add([observa, '<i class="fa fa-trash"></i>']).draw(false);
-        });
-// 0. NOTASENFERMERIA
-
-function tableActionsNotasEnfermeria() {
-
-   var table= $('#tablaNotasEnfermeria').DataTable({
-                "language": {
-                  "lengthMenu": "Display _MENU_ registros",
-                   "search": "Filtrar registros:",
-                    },
-                processing: true,
-                serverSide: false,
-                scrollY: '250px',
-	            scrollX: true,
-	            scrollCollapse: true,
-                paging:false,
-                 columnDefs: [
-                {
-                    "render": function ( data, type, row ) {
-                        var btn = '';
-			  btn = btn + " <button class='btn btn-danger deletePostNotasEnfermeria' >" + '<i class="fa fa-trash"></i>' + "</button>";
-                        return btn;
-                    },
-                    "targets": 1
-               }
-            ],
-        lengthMenu: [5],
-    columns:[
-
-        { visible: true },
-          { visible: true },
-
-            ],
-    });
-}
 
 // I. LABORATORIOS
 
@@ -769,16 +678,18 @@ function tableActionsLaboratorios() {
             ],
         lengthMenu: [5],
     columns:[
-
+    
+        { visible: true }, 
         { visible: true },
-        { visible: true },
-        { visible: true },
-        { visible: true },
-        { visible: true },
+        { visible: true }, 
+        { visible: true }, 
+        { visible: true }, 
             ],
     });
 }
 });  // Aquip fin del document.ready
+
+
 
 // II. RADIOLOGIA
 
@@ -1115,70 +1026,6 @@ function tableActionsFormulacion() {
 
 
 
-// aqui trozo para INTERCONSULTAS COMBO ESPECIALIDADE
-
-
-$(document).on('change', '#especialidadConsultada', function(event) {
-
-        alert("Entre cambio especialidadConsultada");
-
-
-       var Esp =   $(this).val()
-
-	alert("especialidad Nro = " + Esp);
-
-
-        var Sede =  document.getElementById("sede").value;
-       // var Sede1 = document.getElementById("FormBuscar").elements["sede"];
-	alert("Sede = " + Sede);
-
-
-
-        $.ajax({
-	           url: '/traerMedicosEspecialidad',
-	            data : {Esp:Esp, Sede:Sede},
-	           type: 'GET',
-	           dataType : 'json',
-
-	  		success: function (respuesta) {
-
-	  		   var options = '<option value="=================="></option>';
-
-	  		  var dato = JSON.parse(respuesta);
-
-
-                     const $id2 = document.querySelector("#medicoConsultado");
-
-
- 	      		     $("#medicoConsultado").empty();
-
-				   alert("ya blanquue los medicos");
-
-
-
-	                 $.each(dato, function(key,value) {
-                                    options +='<option value="' + value.id + '">' + value.nombre + '</option>';
-                                    option = document.createElement("option");
-                                    option.value = value.id;
-                                    option.text = value.nombre;
-                                    $id2.appendChild(option);
- 	      		      });
-
-                    },
-	   		    error: function (request, status, error) {
-
-	   			 	document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
-
-	   	    	}
-
-	     });
-});
-
-
-
-
-// FIN INTERCONSULTAS COMBO
-
 // FIN MEDICAMENTOS
 
 formHistoriaClinica.addEventListener('submit', e=>{
@@ -1198,28 +1045,6 @@ formHistoriaClinica.addEventListener('submit', e=>{
 
         e.preventDefault()
         // Ah peros si se puede solo hay que recorrer y yap
-
-
-        // NOASENFERMERIA
-
-        const tabley = $('#tablaNotasEnfermeria').DataTable();
-        var datos_tabla = tabley.rows().data().toArray();
-
-
-        notasEnfermeria=[]
-        cadenas = {}
-
-
-	for(var i= 0; i < datos_tabla.length; i++) {
-
-	    notasEnfermeria.push({
-	        "observa"  : datos_tabla[i][0],
-	      });
-	   };
-
-	notasEnfermeria  = JSON.stringify(notasEnfermeria);
-
-        // FIN notasEnfermeria
 
         // LABORATORIO
 
@@ -1765,7 +1590,6 @@ formHistoriaClinica.addEventListener('submit', e=>{
 	                        'documentoCirugia':documentoCirugia,
 	                        'consecutivoIngresoCirugia':consecutivoIngresoCirugia,
 				'ordenDeControl':ordenDeControl,
-				'notasEnfermeria':notasEnfermeria,
 
 				   },
  	      		success: function (data) {
@@ -1806,4 +1630,3 @@ formHistoriaClinica.addEventListener('submit', e=>{
   	        });  // cierra ajax
 
 });  // cierra commit
-
