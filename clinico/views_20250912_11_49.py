@@ -557,15 +557,8 @@ def crearHistoriaClinica(request):
                 print ("convenioParticular =", convenioParticular)
 
                 # Fin Grabacion Historia
-
-                medicoActual = Medicos.objects.get(planta_id=plantaId.id)
-
-		        # Voy a actualizar el medico actual en la tabla ingresos
-
-                if (tipoAdmision=='ADMISION'):
-                    medicoActualAc = Ingresos.objects.filter(id=ingresosPaciente.id).update(medicoActual_id=medicoActual.id)
-
-		        # Aqui rutina busca Convenio del Paciente
+		
+		# Aqui rutina busca Convenio del Paciente
 
                 miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",        password="123456")
                 curt = miConexiont.cursor()

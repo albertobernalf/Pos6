@@ -74,4 +74,23 @@ detalle =
 	WHERE int."medicoConsultado_id" = '1'
 
 	
-select * from sitios_dependencias;
+SELECT int.id, "descripcionConsulta", "respuestaConsulta", int."estadoReg", diag.nombre diagnostico, esp.nombre espConsulta,
+	estados.nombre estadosNombre, historia_id, espmed.nombre especialidadMedico , pla1.nombre medicoConsulta,
+	pla2.nombre medicoConsultado, tipos.nombre tiposNombre, "ordenMedica" 
+	FROM public.clinico_historialinterconsultas int 
+	INNER JOIN clinico_historia his ON (his.id=int.historia_id) 
+	INNER JOIN clinico_estadosinterconsulta estados ON (estados.id=int."estadosInterconsulta_id") 
+	INNER JOIN clinico_tiposinterconsulta tipos ON (tipos.id = int."tipoInterconsulta_id" ) 
+	INNER JOIN clinico_especialidades esp ON (esp.id = int."especialidadConsultada_id")
+	INNER JOIN clinico_medicos med1 ON (med1.id = int."medicoConsulta_id" ) 
+	INNER JOIN planta_planta pla1 ON (pla1.id = med1.planta_id ) 
+	INNER JOIN clinico_medicos med2 ON (med2.id = int."medicoConsultado_id") 
+	INNER JOIN planta_planta pla2 ON (pla2.id = med2.planta_id ) 
+	INNER JOIN clinico_especialidadesmedicos cliesp ON (cliesp.id = int."especialidadConsulta_id")
+	INNER JOIN clinico_especialidades espmed ON (espmed.id= cliesp.especialidades_id  ) 
+	LEFT JOIN clinico_diagnosticos diag ON (diag.id = int.diagnosticos_id) 
+	WHERE his."sedesClinica_id" = '1' AND med2.planta_id = '1' AND int."estadosInterconsulta_id" = '1'
+
+select * from planta_planta
+UPDATE clinico_historialinterconsultas SET "respuestaConsulta" = 'ALA TOMATE UNAS BERENJENAS AL APOR',"estadoInterconsulta_id" = '2',fechaRespuesta" = '2025-09-12 12:48:35.038779+00:00'
+	WHERE id = '7'

@@ -263,12 +263,12 @@ const initDataTableClinico = async () => {
 
         arrancaClinico(1,data);
 	    dataTableClinicoInitialized = true;
-	alert("voy a cargar interconsultas");
+
 
 
         arrancaClinico(2,data);
 	    dataTableInterConsultasInitialized = true;
-	alert("listo ya cargue interconsultas");
+
 
 }
 
@@ -402,25 +402,30 @@ $.ajax({
 	           type: 'POST',
 	           dataType : 'json',
 	  		success: function (data) {
-			alert("data = " + JSON.stringify(data));
-		alert("data1 = " + data[0].fields['descripcionConsulta']);
+			dato = JSON.parse(data);
 
-			 $('#descripcionConsulta').val(data[0].fields.descripcionConsulta);
-			 $('#respuestaConsulta').val(data.fields['respuestaConsulta']);
-			 $('#diagnostico').val(data.fields['diagnostico']);
-			 $('#espConsulta').val(data.fields['espConsulta']);
-			 $('#especialidadMedico').val(data.fields['especialidadMedico']);
-			 $('#medicoConsulta').val(data.fields['medicoConsulta']);
-			 $('#medicoConsultado').val(data.fields['medicoConsultado']);
-			 $('#tiposNombre').val(data.fields['tiposNombre']);
+			$('#interConsultaId').val(dato[0].fields.id);
+
+			 $('#descripcionConsulta').val(dato[0].fields.descripcionConsulta);
+			 $('#respuestaConsulta').val(dato[0].fields.respuestaConsulta);
+			 $('#diagnostico').val(dato[0].fields.diagnostico);
+			 $('#espConsulta').val(dato[0].fields.espConsulta);
+			 $('#especialidadMedico').val(dato[0].fields.especialidadMedico);
+			 $('#medicoConsulta').val(dato[0].fields.medicoConsulta);
+			 $('#medicoConsultado').val(dato[0].fields.medicoConsultado);
+			 $('#tiposNombre').val(dato[0].fields.tiposNombre);
 
 			$('#crearModelInterConsultas').modal('show');
 			 $('#pk').val(data.pk);	       	     
 
                   },
-	   		    error: function (request, status, error) {
-	   			   document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
-	   	    	}
+	   		      error: function(data){
+		           alert("data = " + JSON.stringify(data)); // data
+		           alert(data.status); // the status code
+		   
+		           alert(data.JsonResponse['error']); // the message
+		document.getElementById("mensajesError").innerHTML =  data.JsonResponse.error
+			        },
 	     });
 
     });
@@ -431,6 +436,13 @@ $('#saveBtnResponderInterConsulta').click(function (e) {
 
 	alert ("Entre a actualizar Interconsulta");
 
+     var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
+        var username = document.getElementById("username").value;
+        var nombreSede = document.getElementById("nombreSede").value;
+    	var sede = document.getElementById("sede").value;
+        var username_id = document.getElementById("username_id").value;
+
+
   		  $.ajax({
                 data: $('#postFormInterConsultas').serialize(),
 	        url: "/guardarInterConsulta/",
@@ -438,10 +450,16 @@ $('#saveBtnResponderInterConsulta').click(function (e) {
                 dataType: 'json',
                 success: function (data) {
 		  $("#mensajes").html(data.message);
-                //  $('#postFormModalApliqueParcial').trigger("reset");
-    		  $('#crearAplique').modal('hide');
 
+		  if (data.success== false)
+				{
+                alert("entre error");
+				document.getElementById("mensajesErrorModalInterConsulta").innerHTML = data.Mensaje;
+				return;
+				}
 
+                  $('#postFormInterConsultas').trigger("reset");
+    		  
 			 var data2 =  {}   ;
 			data2['username'] = username;
 		        data2['sedeSeleccionada'] = sedeSeleccionada;
@@ -455,13 +473,17 @@ $('#saveBtnResponderInterConsulta').click(function (e) {
 		  arrancaClinico(2,data2);
 		    dataTableInterConsultasInitialized = true;
 
-		$('#crearModelInterConsultas').modal('show');
+		$('#crearModelInterConsultas').modal('hide');
 
                 },
-                error: function (data) {
-		document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error                }
-            });
+                   error: function(data){
+		           alert("data = " + JSON.stringify(data)); // data
+		           alert(data.status); // the status code
+		   
+		           alert(data.JsonResponse['error']); // the message
+		document.getElementById("mensajesError").innerHTML =  data.JsonResponse.error
+			        },
       });
 
-
+     });
 

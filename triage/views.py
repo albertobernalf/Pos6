@@ -27,7 +27,7 @@ import datetime
 from rips.models import  RipsDestinoEgreso
 from django.db import transaction, IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
-from clinico.models import Servicios
+from clinico.models import Servicios, Medicos, EspecialidadesMedicos
 from triage.viewsReportes import ImprimirAtencionInicialUrgencias, ImprimirHojaAdmision, ImprimirManilla, ImprimirTriage, ImprimirTriageParametro
 from facturacion.models import ConveniosPacienteIngresos
 from contratacion.models import Convenios

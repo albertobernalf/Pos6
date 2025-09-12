@@ -97,7 +97,7 @@ class tiposIncapacidadAdmin(admin.ModelAdmin):
 class examenesAdmin(admin.ModelAdmin):
 
     list_display = ("id","nombre","TiposExamen")
-    search_fields = ("id","nombre","TiposExamen")
+    search_fields = ("id","nombre","TiposExamen__nombre")
     # Filtrar
     list_filter = ("id","nombre","TiposExamen")
 

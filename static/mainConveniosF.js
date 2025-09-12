@@ -747,7 +747,7 @@ function CrearGuardarConvenios()
   	var tarifariosDescripcionProc_id = document.getElementById("tarifariosDescripcionProcC_id").value;
   	var tarifariosDescripcionSum_id = document.getElementById("tarifariosDescripcionSumC_id").value;
   	var tarifariosDescripcionHono_id = document.getElementById("tarifariosDescripcionHonoC_id").value;
-  	var serviciosAdministrativos_id = document.getElementById("serviciosAdministrativosC_id").value;
+  	var serviciosAdministrativos = document.getElementById("serviciosAdministrativosC_id").value;
 
 	$.ajax({
 

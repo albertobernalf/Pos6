@@ -856,6 +856,14 @@ ojo pendiente en aplicacion de medicamentos arreglar cuando aplica la modal no p
 
 -- TRAZA De combate ,, Puesta a punto Nro 2:
 
-
-
-
+	1. combo localidades en actualizar usuaro de triage NO FUNCIONa
+	2. en crear responsables y acompañamtes No esta hecho hay que hacerlo
+	3. ops crre un servicio admon y no aparece en dependencia ???
+	4. No me gusta que guarda el folio no hace roolback pailas
+            Guanda en clinico_histporiaexamenes pailas
+            No saca el erroen navegacnio
+	5.hay que arreglar el reporte hclinica en analisis debe imprimir COMPLETO toda wrap
+        6. mop esta actualizando en la tabla ingresos : medicoActual cando hay un folio nuevo
+        7. verificar por que alnombre de los laboratorio , radio, terapia en pdf enerados tienenel numeorp del imgreso mejor colocar tambienm otro flag
+        8.ops error en apoyo terapeutico cuando voy a ver el resultado pailas (NO ESTA LLEGANDO LOS ERRORES A PATALLA)
+        9. no actualizo el esatdo del examene cuando se respondio en historiaexamenes

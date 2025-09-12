@@ -274,6 +274,7 @@ class HistorialInterconsultas(models.Model):
                 especialidadConsultada = models.ForeignKey('clinico.Especialidades', default=1, on_delete=models.PROTECT, null=False,    related_name='espe22')
                 medicoConsultado  = models.ForeignKey('clinico.Medicos',  blank=True, null=True, editable=True, on_delete=models.PROTECT ,   related_name='med22')
                 respuestaConsulta = models.CharField(max_length=800)
+                fechaRespuesta = models.DateTimeField(default=now)
                 diagnosticos = models.ForeignKey('clinico.Diagnosticos', blank=True, null=True, editable=True, on_delete=models.PROTECT)
                 estadosInterconsulta = models.ForeignKey('clinico.EstadosInterconsulta',  blank=True, null=True, editable=True, on_delete=models.PROTECT)
                 estadoReg = models.CharField(max_length=1, default='A', editable=False)

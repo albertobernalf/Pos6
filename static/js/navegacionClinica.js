@@ -15,21 +15,24 @@
 
 
 
-	var sede = document.getElementById("sede").value;
-        var username_id = document.getElementById("username_id").value;
-	var tipoDoc_id = document.getElementById("tipoDoc_id").value;
-	var documentoPaciente = document.getElementById("documentoPaciente").value;
-	var IngresoPaciente = document.getElementById("IngresoPaciente").value;
+	// var sede = document.getElementById("sede").value;
+        // var username_id = document.getElementById("username_id").value;
+        // alert("username_id = " + username_id);
 
-        var data =  {}   ;
+	// var tipoDoc_id = document.getElementById("tipoDoc_id").value;
+        // alert("tipoDoc_id = " + tipoDoc_id);
+	// var documentoPaciente = document.getElementById("documentoPaciente").value;
+	// var IngresoPaciente = document.getElementById("IngresoPaciente").value;
 
-        data['sede'] = sede;
-        data['username_id'] = username_id;
-        data['tipoDoc_id'] = tipoDoc_id;
-        data['documentoPaciente'] = documentoPaciente;
-        data['IngresoPaciente'] = IngresoPaciente;
+        // var data =  {}   ;
 
-        data = JSON.stringify(data);
+        // data['sede'] = sede;
+        // data['username_id'] = username_id;
+        // data['tipoDoc_id'] = tipoDoc_id;
+        // data['documentoPaciente'] = documentoPaciente;
+        // data['IngresoPaciente'] = IngresoPaciente;
+
+        // data = JSON.stringify(data);
 
 
 //	tableActionsLaboratorios();
@@ -1545,7 +1548,7 @@ formHistoriaClinica.addEventListener('submit', e=>{
          var tipoDocPaciente    =  document.getElementById("tipoDocPaciente1").value
          var documentoPaciente  =  document.getElementById("documentoPaciente1").value;
          var folio      = "0";
-         var fecha      =  document.getElementById("fecha").value;
+         // var fecha      =  document.getElementById("fecha").value;
          var motivo     =  document.getElementById("id_motivo").value;
          var subjetivo  =  document.getElementById("id_subjetivo").value;
          var objetivo   =  document.getElementById("id_objetivo").value;

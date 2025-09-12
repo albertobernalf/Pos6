@@ -819,7 +819,7 @@ $.ajax({
 
 // aclara las localidades
 
-     $("#localidades").empty();
+ //    $("#localidades").empty();
 
 
 });
