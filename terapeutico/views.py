@@ -11,7 +11,7 @@ from django.db.models.functions import Cast, Coalesce
 from django.utils.timezone import now
 from django.db.models import Avg, Max, Min
 from datetime import datetime
-from clinico.models import Historia, HistoriaExamenes, Examenes, TiposExamen, EspecialidadesMedicos, Medicos, Especialidades, TiposFolio, CausasExterna, EstadoExamenes, HistorialAntecedentes, HistorialDiagnosticos, HistorialInterconsultas, EstadosInterconsulta, HistorialIncapacidades,  HistoriaSignosVitales, HistoriaRevisionSistemas, HistoriaMedicamentos, HistoriaResultados
+from clinico.models import Historia, HistoriaExamenes, Examenes, TiposExamen, EspecialidadesMedicos, Medicos, Especialidades, TiposFolio, CausasExterna, EstadoExamenes, HistorialAntecedentes, HistorialDiagnosticos, HistorialInterconsultas, EstadosInterconsulta, HistorialIncapacidades,  HistoriaSignosVitales, HistoriaRevisionSistemas, HistoriaMedicamentos, HistoriaResultados , EstadoExamenes
 from sitios.models import Dependencias
 from planta.models import Planta
 #from contratacion.models import Procedimientos
@@ -1052,12 +1052,14 @@ def GuardarResultado ( request):
 
         print ("examId =", examId)
 
+        estadoExamenInterpretado = EstadoExamenes.objects.get(nombre='INTERPRETADO')
+
         miConexiont = None
         try:
 
                 miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",  password="123456")
                 curt = miConexiont.cursor()
-                comando = 'UPDATE clinico_historiaexamenes set interpretacion1 = ' + "'" + str(interpretacion1) + "'," +  '"fechaInterpretacion1" = '  + "'" + str(fechaInterpretacion1) + "'," + ' "medicoInterpretacion1_id" = ' +  str(medicoInterpretacion1) + ","  + '"medicoReporte_id" = ' + str(medicoReporte) + ","  + '  interpretacion2 = '  + "'" +  str(interpretacion2) + "'," + '"fechaInterpretacion2"  = '  + "'"   + str(fechaInterpretacion2) + "'," + ' "medicoInterpretacion2_id" = ' + str(medicoInterpretacion2) + ","  + ' observaciones = ' + "'" +   str(observaciones) + "'," + '"rutaImagen" = ' + "'" + str(rutaImagen) +  "'" + ',"rutaVideo" = ' + "'" + str(rutaVideo) + "'," +  '"fechaReporte" = ' + "'" + str(fechaReporte) + "'," + ' "usuarioToma_id" = ' + "'" + str(usuarioToma) + "'," + '"serviciosAdministrativos_id" = ' + str(serviciosAdministrativos) + "," + '"estadoExamenes_id" = ' + "'" + str(estadoExamen) + "'" + ' WHERE id = ' + "'" + str(examId) + "'"
+                comando = 'UPDATE clinico_historiaexamenes set interpretacion1 = ' + "'" + str(interpretacion1) + "'," +  '"fechaInterpretacion1" = '  + "'" + str(fechaInterpretacion1) + "'," + ' "medicoInterpretacion1_id" = ' +  str(medicoInterpretacion1) + ","  + '"medicoReporte_id" = ' + str(medicoReporte) + ","  + '  interpretacion2 = '  + "'" +  str(interpretacion2) + "'," + '"fechaInterpretacion2"  = '  + "'"   + str(fechaInterpretacion2) + "'," + ' "medicoInterpretacion2_id" = ' + str(medicoInterpretacion2) + ","  + ' observaciones = ' + "'" +   str(observaciones) + "'," + '"rutaImagen" = ' + "'" + str(rutaImagen) +  "'" + ',"rutaVideo" = ' + "'" + str(rutaVideo) + "'," +  '"fechaReporte" = ' + "'" + str(fechaReporte) + "'," + ' "usuarioToma_id" = ' + "'" + str(usuarioToma) + "'," + '"serviciosAdministrativos_id" = ' + str(serviciosAdministrativos) + "," + '"estadoExamenes_id" = ' + "'" + str(estadoExamenInterpretado.id) + "'" + ' WHERE id = ' + "'" + str(examId) + "'"
                 print(comando)
                 curt.execute(comando)
                 miConexiont.commit()

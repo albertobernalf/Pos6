@@ -1126,8 +1126,10 @@ def crearHistoriaClinica(request):
 
                             estadoAutorizacionId = EstadosAutorizacion.objects.get(nombre='PENDIENTE')
 
-                            hayAut = str(hayAut[0]['id'])
+                            hayAut = str(hayAut)
                             hayAut = hayAut.replace("None", ' ')
+                            hayAut = hayAut.replace("[", ' ')
+                            hayAut = hayAut.replace("]", ' ')
                             hayAut = hayAut.replace("(", ' ')
                             hayAut = hayAut.replace(")", ' ')
                             hayAut = hayAut.replace(",", ' ')
@@ -1353,9 +1355,10 @@ def crearHistoriaClinica(request):
 
                             estadoAutorizacionId = EstadosAutorizacion.objects.get(nombre='PENDIENTE')
 
-
-                            hayAut = str(hayAut[0]['id'])
+                            hayAut = str(hayAut)
                             hayAut = hayAut.replace("None", ' ')
+                            hayAut = hayAut.replace("[", ' ')
+                            hayAut = hayAut.replace("]", ' ')
                             hayAut = hayAut.replace("(", ' ')
                             hayAut = hayAut.replace(")", ' ')
                             hayAut = hayAut.replace(",", ' ')
@@ -1571,6 +1574,8 @@ def crearHistoriaClinica(request):
                                   ingresoPaciente) + "' AND aut.historia_id = " + "'" + str(historiaId) + "'"
 
                               curt.execute(comando)
+                              print("comando = ", comando)
+
                               hayAut = []
 
                               for id in curt.fetchall():
@@ -1579,8 +1584,11 @@ def crearHistoriaClinica(request):
                               miConexiont.close()
                               estadoAutorizacionId = EstadosAutorizacion.objects.get(nombre='PENDIENTE')
 
-                              hayAut = str(hayAut[0]['id'])
+                              print("hayAut = ",  hayAut)
+                              hayAut = str(hayAut)
                               hayAut = hayAut.replace("None", ' ')
+                              hayAut = hayAut.replace("[", ' ')
+                              hayAut = hayAut.replace("]", ' ')
                               hayAut = hayAut.replace("(", ' ')
                               hayAut = hayAut.replace(")", ' ')
                               hayAut = hayAut.replace(",", ' ')
@@ -1620,24 +1628,29 @@ def crearHistoriaClinica(request):
                                                              user="postgres", password="123456")
 
                               curt = miConexiont.cursor()
+
                               comando = 'INSERT INTO autorizaciones_autorizacionesdetalle ("estadoAutorizacion_id", "cantidadSolicitada", "cantidadAutorizada", "fechaRegistro", "estadoReg", autorizaciones_id, "usuarioRegistro_id", "examenes_id", cums_id, "tiposExamen_id","valorSolicitado")  VALUES (' + "'" + str(
                                   estadoAutorizacionId.id) + "'," + "'" + str(cantidad) + "'" + ' ,0, now(),' + "'" + str(
                                   'A') + "','" + str(autorizacionId) + "','" + str(usuarioRegistro) + "'," + "'" + str(
                                   codigoCupsId[0].id) + "',null," + "'" + str(tiposExamen_Id) + "','" + str(tarifaValor) + "')"
 
-                              curt.execute(comando)
+                              print("comando =" , comando)
 
+                              curt.execute(comando)
+                              miConexiont.commit()
                               miConexiont.close()
 
                               # Fin tema Autorizaciones
 
                           # Aqui Rutina FACTURACION crea en liquidaciondetalle el registro con la tarifa, con campo cups y convenio
                       #
+
+
                           if (codigoCupsId[0].requiereAutorizacion == 'N'):
 
                             miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",                                       password="123456")
                             curt = miConexiont.cursor()
-                            comando = 'INSERT INTO facturacion_liquidaciondetalle (consecutivo,fecha, cantidad, "valorUnitario", "valorTotal",cirugia,"fechaCrea", "fechaRegistro", "estadoRegistro", "examen_id",  "usuarioRegistro_id", liquidacion_id, "tipoRegistro") VALUES (' + "'" +  str(consecLiquidacion)  + "','" + str(fechaRegistro) + "','" + str(cantidad) + "','"  + str(tarifaValor) + "','" + str(TotalTarifa)  + "','" + str('N') + "','" +  str(fechaRegistro) + "','" +  str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(codigoCupsId[0].id) + "','" + str(usuarioRegistro) + "'," + liquidacionId + ",'SISTEMA')"
+                            comando = 'INSERT INTO facturacion_liquidaciondetalle (consecutivo,fecha, cantidad, "valorUnitario", "valorTotal",cirugia_id,"fechaCrea", "fechaRegistro", "estadoRegistro", "examen_id",  "usuarioRegistro_id", liquidacion_id, "tipoRegistro") VALUES (' + "'" +  str(consecLiquidacion)  + "','" + str(fechaRegistro) + "','" + str(cantidad) + "','"  + str(tarifaValor) + "','" + str(TotalTarifa)  + "',null," + "'" +  str(fechaRegistro) + "','" +  str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(codigoCupsId[0].id) + "','" + str(usuarioRegistro) + "'," + liquidacionId + ",'SISTEMA')"
                             curt.execute(comando)
                             miConexiont.commit()
                             miConexiont.close()

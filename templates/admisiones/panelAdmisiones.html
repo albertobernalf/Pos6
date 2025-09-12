@@ -75,6 +75,7 @@ table.dataTable tbody tr {
     </ul>
 </div>
 
+
 <script>
 
 function RefrescarPantalla() {
@@ -93,7 +94,7 @@ Urgencias:  <span id="urg" name="urg" style='color:red'>{{Urgencias}} </span> <i
 Triage:  <span id="tria" name="tria" style='color:red'>{{Triage}} </span> <img class="manImg" src={% static 'img/iloveimg-converted/icons8-enfermera-48_X.JPG' %}></img>
 Ambulatorios:  <span id="amb" name="amb" style='color:red'>{{Ambulatorios}} </span> <img class="manImg" src={% static 'img/iloveimg-converted/icons8-enfermera-48_X.JPG' %}></img>
 </span>
-
+<input type="button" id="btnRefrescar" name="btnRefrescar" value="Refrescar" onclick="RefrescarPantalla()">
 
 {% endblock %}
 

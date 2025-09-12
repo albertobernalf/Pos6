@@ -854,8 +854,9 @@ ojo pendiente en aplicacion de medicamentos arreglar cuando aplica la modal no p
  -- creo que no me esta actualizando el dxActual VRIFICAR CON ENFEREMRA
  -- ops hacer notas de enfermeria desde la HC como desde enfermeria
 
--- TRAZA De combate ,, Puesta a punto Nro 2:
-
+--------------------------------------------------------------------------------------
+-- TRAZA De combate ,, Puesta a punto Nro 2: oJOOOOOOOOOOOOOOOOOOOOOO
+-------------------------------------------------------------------------------------
 	1. combo localidades en actualizar usuaro de triage NO FUNCIONa
 	2. en crear responsables y acompañamtes No esta hecho hay que hacerlo
 	3. ops crre un servicio admon y no aparece en dependencia ???
@@ -867,3 +868,15 @@ ojo pendiente en aplicacion de medicamentos arreglar cuando aplica la modal no p
         7. verificar por que alnombre de los laboratorio , radio, terapia en pdf enerados tienenel numeorp del imgreso mejor colocar tambienm otro flag
         8.ops error en apoyo terapeutico cuando voy a ver el resultado pailas (NO ESTA LLEGANDO LOS ERRORES A PATALLA)
         9. no actualizo el esatdo del examene cuando se respondio en historiaexamenes
+	10. ojo dese autorizaciones no actuliza los cabezotes de TOATLE Liquidacion poroced, vapagar etc PPERSISTE OJO ARREGLAR, es como el orden de los fatcires 
+        11. OJO TOCO EN TARIFARIOS update tarifarios_TarifariosDescripcion set columna = 'colValorBase' where id=36 AL MOMENTO DE CREAR UNA DESCRICOPMN  ES MEJOPR SOLO DESDE "ColValorBase"
+        12. No esata funcionando bien el tema de si no encuentyrtavtarifa en convenio coloque el del particular
+
+--------------------
+LUNES 15-SEPTIEMBRE: Ademas de revizar lo de arriba: ver acomodar columnas grades word-wrap en historia clinica , ordenes medica etc
+			seguir con la pacienmte, traslados, facturar, refacturar etc
+                        ops cirugia cursor cerrado OPS
+			Colocar sin gastar pantalla boton REFRESCAR en pantallas escogidas
+			Colocar boton REFRESCAR en block Indicadores
+--------------------
+        

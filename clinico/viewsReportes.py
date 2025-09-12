@@ -1637,7 +1637,7 @@ def ImprimirHistoriaClinica(request):
                                            password="123456")
             curt = miConexiont.cursor()
 
-            comando = 'select h."codigoCups" codigoCups, e.nombre nombre, h.cantidad cantidad, h.observaciones observaciones from clinico_historiaexamenes h, clinico_examenes    e, clinico_tiposexamen t  where h."tiposExamen_id" = t.id and t.nombre like(' + "'" + '%RAD%' + "'" + ') and e."codigoCups" = h."codigoCups" and h.historia_id = ' + str(
+            comando = 'select h.id id ,h."codigoCups" codigoCups, e.nombre nombre, h.cantidad cantidad, h.observaciones observaciones from clinico_historiaexamenes h, clinico_examenes    e, clinico_tiposexamen t  where h."tiposExamen_id" = t.id and t.nombre like(' + "'" + '%RAD%' + "'" + ') and e."codigoCups" = h."codigoCups" and h.historia_id = ' + str(
                 folios[0 + i]['HistoriaId'])
 
             curt.execute(comando)
@@ -1646,9 +1646,9 @@ def ImprimirHistoriaClinica(request):
 
             radiologia = []
 
-            for codigoCups, nombre, cantidad, observaciones in curt.fetchall():
+            for id,codigoCups, nombre, cantidad, observaciones in curt.fetchall():
                 radiologia.append(
-                    {'codigoCups': codigoCups, 'nombre': nombre, 'cantidad': cantidad, 'observaciones': observaciones})
+                    {'id':id, 'codigoCups': codigoCups, 'nombre': nombre, 'cantidad': cantidad, 'observaciones': observaciones})
             miConexiont.close()
 
             print("Radiologia = ", radiologia)
@@ -1675,7 +1675,7 @@ def ImprimirHistoriaClinica(request):
                                                password="123456")
                 cury = miConexiony.cursor()
                 #comando ='SELECT hisExa.interpretacion1, hisExa."fechaInterpretacion1", med.nombre medico FROM clinico_historiaexamenes hisExa INNER JOIN  clinico_medicos med ON (med.id = hisExa."medicoInterpretacion1_id") INNER JOIN clinico_historia historia on (historia.id = hisExa.historia_id ) WHERE hisExa.historia_id = ' + "'" + str(folios[0 + i]['HistoriaId']) + "'"
-                comando = 'SELECT hisExa.interpretacion1, hisExa."fechaInterpretacion1", pla.nombre medicoInterpreta1, hisExa.interpretacion2, hisExa."fechaInterpretacion2", pla.nombre medicoInterpreta2 FROM clinico_historiaexamenes hisExa LEFT JOIN  clinico_medicos med ON (med.id = hisExa."medicoInterpretacion1_id") LEFT  JOIN  clinico_medicos med2 ON (med2.id = hisExa."medicoInterpretacion2_id") INNER JOIN clinico_historia historia on (historia.id = hisExa.historia_id ) LEFT JOIN planta_planta pla ON (pla.id=med.planta_id) LEFT JOIN planta_planta pla2 ON (pla2.id=med2.planta_id) WHERE hisExa.id = ' + "'" + str(laboratorios[0 + l]['id'])  + "'"
+                comando = 'SELECT hisExa.interpretacion1, hisExa."fechaInterpretacion1", pla.nombre medicoInterpreta1, hisExa.interpretacion2, hisExa."fechaInterpretacion2", pla.nombre medicoInterpreta2 FROM clinico_historiaexamenes hisExa LEFT JOIN  clinico_medicos med ON (med.id = hisExa."medicoInterpretacion1_id") LEFT  JOIN  clinico_medicos med2 ON (med2.id = hisExa."medicoInterpretacion2_id") INNER JOIN clinico_historia historia on (historia.id = hisExa.historia_id ) LEFT JOIN planta_planta pla ON (pla.id=med.planta_id) LEFT JOIN planta_planta pla2 ON (pla2.id=med2.planta_id) WHERE hisExa.id = ' + "'" + str(radiologia[0 + l]['id'])  + "'"
 
                 print(comando)
                 cury.execute(comando)
@@ -1915,7 +1915,7 @@ def ImprimirHistoriaClinica(request):
                                            password="123456")
             curt = miConexiont.cursor()
 
-            comando = 'select h."codigoCups" codigoCups, e.nombre nombre, h.cantidad cantidad, h.observaciones observaciones from clinico_historiaexamenes h, clinico_examenes    e, clinico_tiposexamen t  where h."tiposExamen_id" = t.id and t.nombre like(' + "'" + '%NO%' + "'" + ') and e."codigoCups" = h."codigoCups" and h.historia_id = ' + str(
+            comando = 'select h.id,h."codigoCups" codigoCups, e.nombre nombre, h.cantidad cantidad, h.observaciones observaciones from clinico_historiaexamenes h, clinico_examenes    e, clinico_tiposexamen t  where h."tiposExamen_id" = t.id and t.nombre like(' + "'" + '%NO%' + "'" + ') and e."codigoCups" = h."codigoCups" and h.historia_id = ' + str(
                 folios[0 + i]['HistoriaId'])
 
             curt.execute(comando)
@@ -1924,9 +1924,9 @@ def ImprimirHistoriaClinica(request):
 
             noqX = []
 
-            for codigoCups, nombre, cantidad, observaciones in curt.fetchall():
+            for id,codigoCups, nombre, cantidad, observaciones in curt.fetchall():
                 noqX.append(
-                    {'codigoCups': codigoCups, 'nombre': nombre, 'cantidad': cantidad, 'observaciones': observaciones})
+                    {'id':id, 'codigoCups': codigoCups, 'nombre': nombre, 'cantidad': cantidad, 'observaciones': observaciones})
             miConexiont.close()
 
             print("noqX = ", noqX)
@@ -1947,13 +1947,13 @@ def ImprimirHistoriaClinica(request):
                 linea = linea + 3
                 pdf.ln(3)
 
+                print ("noQx = ",noqX )
                 ## Aqui cabezote del resultado NoQx
-
                 miConexiony = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
                                                password="123456")
                 cury = miConexiony.cursor()
                 #comando ='SELECT hisExa.interpretacion1, hisExa."fechaInterpretacion1", med.nombre medico FROM clinico_historiaexamenes hisExa INNER JOIN  clinico_medicos med ON (med.id = hisExa."medicoInterpretacion1_id") INNER JOIN clinico_historia historia on (historia.id = hisExa.historia_id ) WHERE hisExa.historia_id = ' + "'" + str(folios[0 + i]['HistoriaId']) + "'"
-                comando = 'SELECT hisExa.interpretacion1, hisExa."fechaInterpretacion1", pla.nombre medicoInterpreta1, hisExa.interpretacion2, hisExa."fechaInterpretacion2", pla.nombre medicoInterpreta2 FROM clinico_historiaexamenes hisExa LEFT JOIN  clinico_medicos med ON (med.id = hisExa."medicoInterpretacion1_id") LEFT  JOIN  clinico_medicos med2 ON (med2.id = hisExa."medicoInterpretacion2_id") INNER JOIN clinico_historia historia on (historia.id = hisExa.historia_id ) LEFT JOIN planta_planta pla ON (pla.id=med.planta_id) LEFT JOIN planta_planta pla2 ON (pla2.id=med2.planta_id) WHERE hisExa.id = ' + "'" + str(laboratorios[0 + l]['id'])  + "'"
+                comando = 'SELECT hisExa.interpretacion1, hisExa."fechaInterpretacion1", pla.nombre medicoInterpreta1, hisExa.interpretacion2, hisExa."fechaInterpretacion2", pla.nombre medicoInterpreta2 FROM clinico_historiaexamenes hisExa LEFT JOIN  clinico_medicos med ON (med.id = hisExa."medicoInterpretacion1_id") LEFT  JOIN  clinico_medicos med2 ON (med2.id = hisExa."medicoInterpretacion2_id") INNER JOIN clinico_historia historia on (historia.id = hisExa.historia_id ) LEFT JOIN planta_planta pla ON (pla.id=med.planta_id) LEFT JOIN planta_planta pla2 ON (pla2.id=med2.planta_id) WHERE hisExa.id = ' + "'" + str(noqX[0 + l]['id'])  + "'"
 
                 print(comando)
                 cury.execute(comando)

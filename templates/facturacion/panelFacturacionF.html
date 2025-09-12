@@ -28,7 +28,7 @@ Urgencias:  <span id="urg" name="urg" style='color:red'>{{Urgencias}} </span> <i
 Triage:  <span id="tria" name="tria" style='color:red'>{{Triage}} </span> <img class="manImg" src={% static 'img/iloveimg-converted/icons8-enfermera-48_X.JPG' %}></img>
 Ambulatorios:  <span id="amb" name="amb" style='color:red'>{{Ambulatorios}} </span> <img class="manImg" src={% static 'img/iloveimg-converted/icons8-enfermera-48_X.JPG' %}></img>
 </span>
-
+<input type="button" id="btnRefrescar" name="btnRefrescar" value="Refrescar" onclick="RefrescarPantalla()">
 <style>
 div.dataTables_wrapper  div.dataTables_filter input {
    height: 2px;
@@ -89,7 +89,7 @@ div.dataTables_filter input {
 		<input type="hidden" id="convenioId" name="convenioId" value="{{convenioId}}">
 	
             </form>
-	<input type="button" id="btnRefrescar" name="btnRefrescar" value="Refrescar" onclick="RefrescarPantalla()">	
+
             <!-- INICIO TABLE DE  EL DATATABLE  -->
 		<div class="container my-2">
              		   <div class="row">

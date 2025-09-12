@@ -331,28 +331,43 @@ def ActualizarAutorizacionDetalle(request):
 
         ## Vamops a actualizar los totales de la Liquidacion:
                 #
-        totalSuministros = LiquidacionDetalle.objects.all().filter(liquidacion_id=liquidacionId).filter(examen_id = None).exclude(estadoRegistro='N').aggregate(totalS=Coalesce(Sum('valorTotal'), 0))
+        # Rutina Guarda en cabezote los totales
+
+        print ("Voy a grabar el cabezote")
+        print ("liquidacionId = ", liquidacionId)
+
+        totalSuministros = LiquidacionDetalle.objects.all().filter(liquidacion_id=liquidacionId).filter(
+            examen_id=None).exclude(estadoRegistro='N').aggregate(totalS=Coalesce(Sum('valorTotal'), 0))
         totalSuministros = (totalSuministros['totalS']) + 0
         print("totalSuministros", totalSuministros)
-        totalProcedimientos = LiquidacionDetalle.objects.all().filter(liquidacion_id=liquidacionId).filter(cums_id = None).exclude(estadoRegistro='N').aggregate(totalP=Coalesce(Sum('valorTotal'), 0))
+        totalProcedimientos = LiquidacionDetalle.objects.all().filter(liquidacion_id=liquidacionId).filter(
+            cums_id=None).exclude(estadoRegistro='N').aggregate(totalP=Coalesce(Sum('valorTotal'), 0))
         totalProcedimientos = (totalProcedimientos['totalP']) + 0
         print("totalProcedimientos", totalProcedimientos)
         registroPago = Liquidacion.objects.get(id=liquidacionId)
 
-		# Continua Aqui
+        # Continua Aqui
 
-        totalCopagos = Pagos.objects.all().filter(tipoDoc_id=datosHc.tipoDoc_id).filter(documento_id=datosHc.documento_id).filter(consec=datosHc.consecAdmision).filter(formaPago_id=4).exclude(estadoReg='N').aggregate(totalC=Coalesce(Sum('valor'), 0))
+        totalCopagos = Pagos.objects.all().filter(tipoDoc_id=datosHc.tipoDoc_id).filter(
+            documento_id=datosHc.documento_id).filter(consec=datosHc.consecAdmision).filter(formaPago_id=4).exclude(
+            estadoReg='N').aggregate(totalC=Coalesce(Sum('valor'), 0))
         totalCopagos = (totalCopagos['totalC']) + 0
         print("totalCopagos", totalCopagos)
-        totalCuotaModeradora = Pagos.objects.all().filter(tipoDoc_id=datosHc.tipoDoc_id).filter(documento_id=datosHc.documento_id).filter(consec=datosHc.consecAdmision).filter(formaPago_id=3).exclude(estadoReg='N').aggregate(totalM=Coalesce(Sum('valor'), 0))
+        totalCuotaModeradora = Pagos.objects.all().filter(tipoDoc_id=datosHc.tipoDoc_id).filter(
+            documento_id=datosHc.documento_id).filter(consec=datosHc.consecAdmision).filter(formaPago_id=3).exclude(
+            estadoReg='N').aggregate(totalM=Coalesce(Sum('valor'), 0))
         totalCuotaModeradora = (totalCuotaModeradora['totalM']) + 0
         print("totalCuotaModeradora", totalCuotaModeradora)
-        totalAnticipos = Pagos.objects.all().filter(tipoDoc_id=datosHc.tipoDoc_id).filter(documento_id=datosHc.documento_id).filter(consec=datosHc.consecAdmision).filter(formaPago_id=1).exclude(estadoReg='N').aggregate(Anticipos=Coalesce(Sum('valor'), 0))
+        totalAnticipos = Pagos.objects.all().filter(tipoDoc_id=datosHc.tipoDoc_id).filter(
+            documento_id=datosHc.documento_id).filter(consec=datosHc.consecAdmision).filter(formaPago_id=1).exclude(
+            estadoReg='N').aggregate(Anticipos=Coalesce(Sum('valor'), 0))
         totalAnticipos = (totalAnticipos['Anticipos']) + 0
         print("totalAnticipos", totalAnticipos)
-        totalAbonos = Pagos.objects.all().filter(tipoDoc_id=datosHc.tipoDoc_id).filter(documento_id=datosHc.documento_id).filter(consec=datosHc.consecAdmision).filter(formaPago_id=2).exclude(estadoReg='N').aggregate(totalAb=Coalesce(Sum('valor'), 0))
+        totalAbonos = Pagos.objects.all().filter(tipoDoc_id=datosHc.tipoDoc_id).filter(
+            documento_id=datosHc.documento_id).filter(consec=datosHc.consecAdmision).filter(formaPago_id=2).exclude(
+            estadoReg='N').aggregate(totalAb=Coalesce(Sum('valor'), 0))
         totalAbonos = (totalAbonos['totalAb']) + 0
-        #totalAbonos = totalCopagos + totalAnticipos + totalCuotaModeradora
+        # totalAbonos = totalCopagos + totalAnticipos + totalCuotaModeradora
         print("totalAbonos", totalAbonos)
 
         totalRecibido = totalCopagos + totalCuotaModeradora + totalAnticipos + totalAbonos
@@ -360,11 +375,6 @@ def ActualizarAutorizacionDetalle(request):
         totalLiquidacion = totalSuministros + totalProcedimientos
         print("totalLiquidacion", totalLiquidacion)
         print("totalAPagar", totalApagar)
-
-        # Rutina Guarda en cabezote los totales
-
-        print ("Voy a grabar el cabezote")
-        print ("liquidacionId = ", liquidacionId)
 
         comando12 = 'UPDATE facturacion_liquidacion SET "totalSuministros" = ' +  "'" +  str(totalSuministros) + "'" + ',"totalProcedimientos" = ' + "'" +  str(totalProcedimientos) + "'"  + ', "totalCopagos" = ' + "'" +  str(totalCopagos) + "'"  + ' , "totalCuotaModeradora" = ' + "'" +  str(totalCuotaModeradora) + "'" + ', anticipos = ' + "'" +  str(totalAnticipos) + "'"  + ' ,"totalAbonos" = ' + "'" + str(totalAbonos) + "'" + ', "totalLiquidacion" = ' + "'" + str(totalLiquidacion) + "'" + ', "valorApagar" = ' + "'" + str(totalApagar) + "'"   + ', "totalRecibido" = ' + "'" + str(totalRecibido) + "'"  + ' WHERE id =' + str(liquidacionId)
         print("COMANDO12 = " , comando12)
@@ -377,6 +387,8 @@ def ActualizarAutorizacionDetalle(request):
 
         miConexiont.commit()
         miConexiont.close()
+
+
         datosMensaje = {'success': True, 'Mensaje': 'Detalle de Autorizacion actualizado satisfactoriamente!'}
         json_data = json.dumps(datosMensaje, default=str)
         return HttpResponse(json_data, content_type='application/json')
