@@ -94,7 +94,7 @@ select tarproc.id id, tiptar.nombre tipoTarifa, exa."codigoCups" cups, tarproc."
 	where tarprod.id = tiptar."tiposTarifaProducto_id" and tiptar.id = tardes."tiposTarifa_id" and
 	tarproc."tiposTarifa_id" = tiptar.id and tardes.columna='colValorBase' and exa.id = tarproc."codigoCups_id" and
 	tarproc."tiposTarifa_id" ='10'
-
+ 
 update tarifarios_TarifariosDescripcion set columna = 'colValorBase' where id=36
 
 SELECT histoexa.id examId ,'INGRESO' tipoIng, i.id||'-INGRESO' , tp.nombre tipoDoc,u.documento documento,

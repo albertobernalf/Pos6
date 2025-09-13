@@ -8,6 +8,7 @@ from django.db.models import Index
 # Create your models here.
 
 class HistorialDiagnosticosCabezote(models.Model):
+
     id = models.AutoField(primary_key=True)
     tipoDoc = models.ForeignKey('usuarios.TiposDocumento',  blank=True, null=True, editable=True, on_delete=models.PROTECT)
     documento = models.ForeignKey('usuarios.Usuarios',  blank=True, null=True, editable=True, on_delete=models.PROTECT,  related_name='DocumentoHistoriaDiag')
@@ -22,8 +23,11 @@ class HistorialDiagnosticosCabezote(models.Model):
 
 class TiposRadiologia(models.Model):
     id = models.AutoField(primary_key=True)
+    STATUS_CHOICES = [
+        ('A', 'Activo'),
+        ('N', 'Inactivo'), ]
     nombre = models.CharField(max_length=50, null=False)
-    estadoReg = models.CharField(max_length=1, default='A', editable=False)
+    estadoReg = models.CharField(max_length=1, choices=STATUS_CHOICES,default='A', editable=False)
 
     def __str__(self):
         return self.nombre
@@ -40,6 +44,10 @@ class Servicios(models.Model):
         return self.nombre
 
 class EspecialidadesMedicos(models.Model):
+    STATUS_CHOICES = [
+        ('A', 'Activo'),
+        ('N', 'Inactivo'),
+        ]
     id = models.AutoField(primary_key=True)
     sedesClinica = models.ForeignKey('sitios.SedesClinica',   blank=True,null= True, on_delete=models.PROTECT ,related_name ='sedesClinica301')
     especialidades = models.ForeignKey('clinico.Especialidades', on_delete=models.PROTECT, null=False,related_name ='especialidadesMedicos1')
@@ -48,7 +56,7 @@ class EspecialidadesMedicos(models.Model):
     nombre = models.CharField(max_length=30, default="" , null = False)
     fechaRegistro = models.DateTimeField(default=now, editable=False)
     usuarioRegistro = models.ForeignKey('planta.Planta',  blank=True, null=True, editable=True, on_delete=models.PROTECT,related_name ='usuarioRegistroPlanta')
-    estadoReg = models.CharField(max_length=1, default='A', editable=False)
+    estadoReg = models.CharField(max_length=1, choices=STATUS_CHOICES,default='A', editable=False)
 
     class Meta:
             unique_together = (('sedesClinica','planta','especialidades'),)
@@ -59,6 +67,10 @@ class EspecialidadesMedicos(models.Model):
 
 
 class Especialidades(models.Model):
+    STATUS_CHOICES = [
+        ('A', 'Activo'),
+        ('N', 'Inactivo'),
+        ]
     id = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=30 , null = False)
     examen = models.ForeignKey('clinico.Examenes',  blank=True, null=True, editable=True, on_delete=models.PROTECT)
@@ -71,7 +83,7 @@ class Especialidades(models.Model):
     agenda = models.CharField(max_length=1,  blank=True, null=True, editable=True,)
     quirurgica = models.CharField(max_length=1,  blank=True, null=True, editable=True,)
     citaDeControl = models.CharField(max_length=1,  blank=True, null=True, editable=True,)
-    estadoReg = models.CharField(max_length=1, default='A', editable=False)
+    estadoReg = models.CharField(max_length=1, choices=STATUS_CHOICES, default='A', editable=False)
 
 
     def __str__(self):
@@ -105,18 +117,26 @@ class Medicos(models.Model):
 
 
 class EstadoExamenes(models.Model):
-      id = models.AutoField(primary_key=True)
-      nombre = models.CharField(max_length=30, null=False)
-      estadoReg = models.CharField(max_length=1, default='A', editable=False)
+    STATUS_CHOICES = [
+        ('A', 'Activo'),
+        ('N', 'Inactivo'),
+        ]
+    id = models.AutoField(primary_key=True)
+    nombre = models.CharField(max_length=30, null=False)
+    estadoReg = models.CharField(max_length=1, choices=STATUS_CHOICES,default='A', editable=False)
 
-      def __str__(self):
+    def __str__(self):
           return self.nombre
 
 
 class Enfermedades(models.Model):
+    STATUS_CHOICES = [
+        ('A', 'Activo'),
+        ('N', 'Inactivo'),
+        ]
     id = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=80, null=False)
-    estadoReg = models.CharField(max_length=1, default='A', editable=False)
+    estadoReg = models.CharField(max_length=1, choices=STATUS_CHOICES,default='A', editable=False)
 
     def __str__(self):
         return self.nombre
@@ -124,27 +144,39 @@ class Enfermedades(models.Model):
 
 
 class TiposExamen(models.Model):
-            id = models.AutoField(primary_key=True)
-            nombre = models.CharField(max_length=30, null=False)
-            estadoReg = models.CharField(max_length=1, default='A', editable=False)
+    STATUS_CHOICES = [
+        ('A', 'Activo'),
+        ('N', 'Inactivo'),
+    ]
+    id = models.AutoField(primary_key=True)
+    nombre = models.CharField(max_length=30, null=False)
+    estadoReg = models.CharField(max_length=1, choices=STATUS_CHOICES, default='A', editable=False)
 
-            def __str__(self):
-                return self.nombre
+    def __str__(self):
+        return self.nombre
 
 
 class TiposFolio(models.Model):
+    STATUS_CHOICES = [
+        ('A', 'Activo'),
+        ('N', 'Inactivo'),
+        ]
     id = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=30, null=False)
-    estadoReg = models.CharField(max_length=1, default='A', editable=False)
+    estadoReg = models.CharField(max_length=1, choices=STATUS_CHOICES,default='A', editable=False)
 
     def __str__(self):
         return self.nombre
 
 
 class TiposAntecedente(models.Model):
+    STATUS_CHOICES = [
+        ('A', 'Activo'),
+        ('N', 'Inactivo'),
+        ]
     id = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=30, null=False)
-    estadoReg = models.CharField(max_length=1, default='A', editable=False)
+    estadoReg = models.CharField(max_length=1, choices=STATUS_CHOICES,default='A', editable=False)
 
     def __str__(self):
         return self.nombre
@@ -154,34 +186,51 @@ class TiposAntecedente(models.Model):
 
 
 class CausasExterna(models.Model):
+    STATUS_CHOICES = [
+        ('A', 'Activo'),
+        ('N', 'Inactivo'),
+        ]
     id = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=50, null=False)
-    estadoReg = models.CharField(max_length=1, default='A', editable=False)
+    estadoReg = models.CharField(max_length=1, choices=STATUS_CHOICES,default='A', editable=False)
 
     def __str__(self):
         return self.nombre
 
 class ViasIngreso(models.Model):
         id = models.AutoField(primary_key=True)
+        STATUS_CHOICES = [
+            ('A', 'Activo'),
+            ('N', 'Inactivo'),
+        ]
         nombre = models.CharField(max_length=50, null=True)
-        estadoReg = models.CharField(max_length=1, default='A', editable=False)
+        estadoReg = models.CharField(max_length=1, choices=STATUS_CHOICES,default='A', editable=False)
 
         def __str__(self):
             return self.nombre
 
 class ViasEgreso(models.Model):
-        id = models.AutoField(primary_key=True)
-        nombre = models.CharField(max_length=50, null=True)
-        estadoReg = models.CharField(max_length=1, default='A', editable=False)
+    STATUS_CHOICES = [
+        ('A', 'Activo'),
+        ('N', 'Inactivo'),
+]
+    id = models.AutoField(primary_key=True)
+    nombre = models.CharField(max_length=50, null=True,blank=False)
+    estadoReg = models.CharField(max_length=1, choices=STATUS_CHOICES, default='A')
 
-        def __str__(self):
-            return self.nombre
+
+    def __str__(self):
+        return self.nombre
 
 
 class TiposIncapacidad(models.Model):
+    STATUS_CHOICES = [
+        ('A', 'Activo'),
+        ('N', 'Inactivo'),
+        ]
     id = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=50, null=False)
-    estadoReg = models.CharField(max_length=1, default='A', editable=False)
+    estadoReg = models.CharField(max_length=1, choices=STATUS_CHOICES,default='A', editable=False)
 
     def __str__(self):
         return self.nombre
@@ -190,19 +239,16 @@ class TiposIncapacidad(models.Model):
 
 
 class Examenes(models.Model):
-    Si = 'S'
-    No = 'N'
-    TIPO_CHOICES = (
-        (Si, 'Si'),
-        (No, 'No'),
-    )
+    STATUS_CHOICES = [
+        ('S', 'Si'),
+        ('N', 'No'),]
     id = models.AutoField(primary_key=True)
     TiposExamen = models.ForeignKey('clinico.TiposExamen',  blank=True, null=True, editable=True, on_delete=models.PROTECT)
     codigoCups = models.CharField(max_length=20, null=False,  blank=True)
     nombre = models.CharField(max_length=300)
     edadIni = models.IntegerField(blank=True, null=True, editable=True)
     edadFin = models.IntegerField( blank=True, null=True, editable=True)
-    solicitaEnfermeria = models.CharField(max_length=1, choices=TIPO_CHOICES,  null=False,  blank=True, )
+    solicitaEnfermeria = models.CharField(max_length=1, choices=STATUS_CHOICES, default='N', null=False, blank=True, )
     citaControl = models.CharField(max_length=1, blank=True, null=True, editable=True)
     concepto = models.ForeignKey('facturacion.Conceptos', blank=True, null=True, editable=True, on_delete=models.PROTECT)
     codigoRips = models.CharField(max_length=6,  blank=True, null=True, editable=True)
@@ -210,7 +256,7 @@ class Examenes(models.Model):
     cantidadUvr =  models.CharField(max_length=10,blank=True, null=True, editable=True)
     uvrAño = models.ForeignKey('tarifas.Uvr', blank=True,null= True, editable=True, on_delete=models.PROTECT , related_name='Uvr105')
     honorarios = models.CharField(max_length=1, blank=True, null=True, editable=True)
-    requiereAutorizacion = models.CharField(max_length=1,  blank=True, null=True, editable=True, default='N')
+    requiereAutorizacion = models.CharField(max_length=1,  blank=True, null=True, editable=True, choices=STATUS_CHOICES ,default='N')
     tipoRadiologia = models.ForeignKey('clinico.TiposRadiologia',  blank=True, null=True, editable=True, on_delete=models.PROTECT)
     cupsGrupo = models.CharField(max_length=15,  blank=True, null=True, editable=True)
     cupsSubgrupo = models.CharField(max_length=15, blank=True, null=True, editable=True)
@@ -245,50 +291,68 @@ class Examenes(models.Model):
         #return self.nombre
 
 class EstadosInterconsulta(models.Model):
-                id = models.AutoField(primary_key=True)
-                nombre = models.CharField(max_length=30, null=False)
-                estadoReg = models.CharField(max_length=1, default='A', editable=False)
+    STATUS_CHOICES = [
+        ('A', 'Activo'),
+        ('N', 'Inactivo'),
+    ]
+    id = models.AutoField(primary_key=True)
+    nombre = models.CharField(max_length=30, null=False)
+    estadoReg = models.CharField(max_length=1, choices=STATUS_CHOICES,default='A', editable=False)
 
-                def __str__(self):
-                    return self.nombre
+    def __str__(self):
+        return self.nombre
 
 
 class TiposInterconsulta(models.Model):
-                id = models.AutoField(primary_key=True)
-                nombre = models.CharField(max_length=30, null=False)
-                estadoReg = models.CharField(max_length=1, default='A', editable=False)
+    STATUS_CHOICES = [
+        ('A', 'Activo'),
+        ('N', 'Inactivo'),
+    ]
 
-                def __str__(self):
-                    return self.nombre
+    id = models.AutoField(primary_key=True)
+    nombre = models.CharField(max_length=30, null=False)
+    estadoReg = models.CharField(max_length=1, choices=STATUS_CHOICES,default='A', editable=False)
+
+    def __str__(self):
+        return self.nombre
 
 
 class HistorialInterconsultas(models.Model):
+    STATUS_CHOICES = [
+        ('A', 'Activo'),
+        ('N', 'Inactivo'),
+    ]
 
-                id  = models.AutoField(primary_key=True)
-                historia =  models.ForeignKey('clinico.Historia',  blank=True, null=True, editable=True, on_delete=models.PROTECT,   related_name='DocumentoHistoriaDiag11')
-                ordenMedica = models.CharField(max_length=80, blank=True, null=True)
-                tipoInterconsulta = models.ForeignKey('clinico.TiposInterconsulta',  blank=True, null=True, editable=True, on_delete=models.PROTECT)
-                descripcionConsulta = models.CharField(max_length=200)
-                especialidadConsulta = models.ForeignKey('clinico.EspecialidadesMedicos', default=1, on_delete=models.PROTECT, null=False)
-                medicoConsulta  = models.ForeignKey('clinico.Medicos',  blank=True, null=True, editable=True, on_delete=models.PROTECT)
-                especialidadConsultada = models.ForeignKey('clinico.Especialidades', default=1, on_delete=models.PROTECT, null=False,    related_name='espe22')
-                medicoConsultado  = models.ForeignKey('clinico.Medicos',  blank=True, null=True, editable=True, on_delete=models.PROTECT ,   related_name='med22')
-                respuestaConsulta = models.CharField(max_length=800)
-                fechaRespuesta = models.DateTimeField(default=now)
-                diagnosticos = models.ForeignKey('clinico.Diagnosticos', blank=True, null=True, editable=True, on_delete=models.PROTECT)
-                estadosInterconsulta = models.ForeignKey('clinico.EstadosInterconsulta',  blank=True, null=True, editable=True, on_delete=models.PROTECT)
-                estadoReg = models.CharField(max_length=1, default='A', editable=False)
+    id  = models.AutoField(primary_key=True)
+    historia =  models.ForeignKey('clinico.Historia',  blank=True, null=True, editable=True, on_delete=models.PROTECT,   related_name='DocumentoHistoriaDiag11')
+    ordenMedica = models.CharField(max_length=80, blank=True, null=True)
+    tipoInterconsulta = models.ForeignKey('clinico.TiposInterconsulta',  blank=True, null=True, editable=True, on_delete=models.PROTECT)
+    descripcionConsulta = models.CharField(max_length=200)
+    especialidadConsulta = models.ForeignKey('clinico.EspecialidadesMedicos', default=1, on_delete=models.PROTECT, null=False)
+    medicoConsulta  = models.ForeignKey('clinico.Medicos',  blank=True, null=True, editable=True, on_delete=models.PROTECT)
+    especialidadConsultada = models.ForeignKey('clinico.Especialidades', default=1, on_delete=models.PROTECT, null=False,    related_name='espe22')
+    medicoConsultado  = models.ForeignKey('clinico.Medicos',  blank=True, null=True, editable=True, on_delete=models.PROTECT ,   related_name='med22')
+    respuestaConsulta = models.CharField(max_length=800)
+    fechaRespuesta = models.DateTimeField(default=now)
+    diagnosticos = models.ForeignKey('clinico.Diagnosticos', blank=True, null=True, editable=True, on_delete=models.PROTECT)
+    estadosInterconsulta = models.ForeignKey('clinico.EstadosInterconsulta',  blank=True, null=True, editable=True, on_delete=models.PROTECT)
+    estadoReg = models.CharField(max_length=1, choices=STATUS_CHOICES,default='A', editable=False)
 
-                def __str__(self):
-                    return self.descripcionConsulta
+    def __str__(self):
+        return self.descripcionConsulta
 
 
 
 
 class TiposEvolucion(models.Model):
+    STATUS_CHOICES = [
+        ('A', 'Activo'),
+        ('N', 'Inactivo'),
+        ]
+
     id = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=30, null=False)
-    estadoReg = models.CharField(max_length=1, default='A', editable=False)
+    estadoReg = models.CharField(max_length=1, choices=STATUS_CHOICES,default='A', editable=False)
 
     def __str__(self):
         return self.nombre
@@ -297,12 +361,10 @@ class TiposEvolucion(models.Model):
 
 
 class Historia(models.Model):
-    S = 'S'
-    N = 'N'
-    TIPO_CHOICES = (
-        (S, 'S'),
-        (N, 'N'),
-    )
+    STATUS_CHOICES = [
+        ('A', 'Activo'),
+        ('N', 'Inactivo'),
+        ]
     id = models.AutoField(primary_key=True)
     sedesClinica = models.ForeignKey('sitios.SedesClinica',   blank=True,null= True, on_delete=models.PROTECT ,related_name ='sedesClinica367')
     tipoDoc = models.ForeignKey('usuarios.TiposDocumento', blank=True, null=True, editable=True,      on_delete=models.PROTECT)
@@ -331,7 +393,7 @@ class Historia(models.Model):
     ordenDeControl = models.CharField(max_length=20000,  blank=True, null=True,)
     enfermedadActual = models.CharField(max_length=5000,  blank=True, null=True,)
     ingestaAlcohol = models.CharField(max_length=5000,  blank=True, null=True,)
-    monitoreo = models.CharField(max_length=1,  blank=True, null=True,choices=TIPO_CHOICES,)
+    monitoreo = models.CharField(max_length=1,  blank=True, null=True,choices=STATUS_CHOICES,)
     examenFisico = models.CharField(max_length=5000,  blank=True, null=True,)
     justificacion = models.CharField(max_length=5000,  blank=True, null=True,)
     tipoEvolucion = models.ForeignKey('clinico.TiposEvolucion', blank=True, null=True, editable=True,               on_delete=models.PROTECT)
@@ -340,24 +402,24 @@ class Historia(models.Model):
     epicrisis = models.CharField(max_length=20000,  blank=True, null=True,)
     manejoQx = models.CharField(max_length=20000,  blank=True, null=True,)
     noQx = models.CharField(max_length=30,  blank=True, null=True,)
-    antibioticos = models.CharField(max_length=1,  blank=True, null=True, choices=TIPO_CHOICES,)
+    antibioticos = models.CharField(max_length=1,  blank=True, null=True, choices=STATUS_CHOICES,)
     tratamiento = models.CharField(max_length=5000,  blank=True, null=True,)
-    llenadoCapilar = models.CharField(max_length=1,  blank=True, null=True, choices=TIPO_CHOICES,)
-    pulsos = models.CharField(max_length=1, blank=True, null=True, choices=TIPO_CHOICES,)
-    vomito = models.CharField(max_length=1,  blank=True, null=True, choices=TIPO_CHOICES,)
-    nauseas = models.CharField(max_length=1,  blank=True, null=True, choices=TIPO_CHOICES,)
-    irritacion = models.CharField(max_length=1,  blank=True, null=True, choices=TIPO_CHOICES,)
-    neurologia = models.CharField(max_length=1, blank=True, null=True, choices=TIPO_CHOICES,)
-    retiroPuntos = models.CharField(max_length=1,  blank=True, null=True, choices=TIPO_CHOICES,)
-    movilidadLimitada = models.CharField(max_length=1,  blank=True, null=True, choices=TIPO_CHOICES,)
-    interconsulta = models.CharField(max_length=1,  blank=True, null=True, choices=TIPO_CHOICES,)
+    llenadoCapilar = models.CharField(max_length=1,  blank=True, null=True, choices=STATUS_CHOICES,)
+    pulsos = models.CharField(max_length=1, blank=True, null=True, choices=STATUS_CHOICES,)
+    vomito = models.CharField(max_length=1,  blank=True, null=True, choices=STATUS_CHOICES,)
+    nauseas = models.CharField(max_length=1,  blank=True, null=True, choices=STATUS_CHOICES,)
+    irritacion = models.CharField(max_length=1,  blank=True, null=True, choices=STATUS_CHOICES,)
+    neurologia = models.CharField(max_length=1, blank=True, null=True, choices=STATUS_CHOICES,)
+    retiroPuntos = models.CharField(max_length=1,  blank=True, null=True, choices=STATUS_CHOICES,)
+    movilidadLimitada = models.CharField(max_length=1,  blank=True, null=True, choices=STATUS_CHOICES,)
+    interconsulta = models.CharField(max_length=1,  blank=True, null=True, choices=STATUS_CHOICES,)
     observaciones = models.CharField(max_length=5000,  blank=True, null=True,)
     riesgos = models.CharField(max_length=5000,  blank=True, null=True,)
-    notaAclaratoria = models.CharField(max_length=1,  blank=True, null=True, choices=TIPO_CHOICES,)
+    notaAclaratoria = models.CharField(max_length=1,  blank=True, null=True, choices=STATUS_CHOICES,)
     fecNotaAclaratoria = models.DateTimeField(blank=True,  null=True,)
     textoNotaAclaratoria = models.CharField(max_length=5000,  blank=True, null=True,)
     usuarioNotaAclaratoria = models.ForeignKey('usuarios.Usuarios', blank=True, null=True, editable=True,          on_delete=models.PROTECT)
-    inmovilizacion = models.CharField(max_length=1, blank=True, null=True,choices=TIPO_CHOICES,)
+    inmovilizacion = models.CharField(max_length=1, blank=True, null=True,choices=STATUS_CHOICES,)
     inmovilizacionObservaciones = models.CharField(max_length=5000,  blank=True, null=True,)
     riesgoHemodinamico = models.CharField(max_length=15,  blank=True, null=True,)
     riesgoVentilatorio = models.CharField(max_length=15,  blank=True, null=True,)
@@ -367,7 +429,7 @@ class Historia(models.Model):
     mipres = models.CharField(max_length=30, null=True, blank=True)
     fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)
     usuarioRegistro = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True, on_delete=models.PROTECT   ,          related_name='lanta345')
-    estadoReg = models.CharField(max_length=1, default='A', editable=False,  blank=True, null=True,)
+    estadoReg = models.CharField(max_length=1, choices=STATUS_CHOICES,default='A', editable=False,  blank=True, null=True,)
 
     def __str__(self):
         return str(self.id)
@@ -386,6 +448,10 @@ class Historia(models.Model):
 
 
 class HistoriaExamenes(models.Model):
+    STATUS_CHOICES = [
+        ('A', 'Activo'),
+        ('N', 'Inactivo'),
+        ]
     id = models.AutoField(primary_key=True)
     historia = models.ForeignKey('clinico.Historia', blank=True, null=True, editable=True, on_delete=models.PROTECT)
     tiposExamen = models.ForeignKey('clinico.TiposExamen', default=1, on_delete=models.PROTECT, null=False)
@@ -420,7 +486,7 @@ class HistoriaExamenes(models.Model):
     medicoReporte = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True,  on_delete=models.PROTECT, related_name='medReporte')
     fechaReporte = models.DateTimeField(blank=True, null=True)
     opinion = models.CharField(max_length=1000, editable=True,blank=True, null=True)
-    facturado = models.CharField(max_length=1, editable=True ,blank=True, null=True)
+    facturado = models.CharField(max_length=1, choices=STATUS_CHOICES,default='N',editable=True ,blank=True, null=True)
     anulado = models.CharField(max_length=1, editable=True, default = 'N')
     usuarioAnula = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True,  on_delete=models.PROTECT, related_name='usuarioAnula1')
     rutaImagen = models.CharField(max_length=100, default='')
@@ -428,30 +494,32 @@ class HistoriaExamenes(models.Model):
     estadoExamenes = models.ForeignKey('clinico.EstadoExamenes', default=1, on_delete=models.PROTECT)
     observaciones = models.CharField(max_length=200, editable=True,blank=True, null=True)
     usuaroRegistra = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True, on_delete=models.PROTECT, related_name='usuarioRegistra1')
-    estadoReg = models.CharField(max_length=1, default='A', editable=False)
+    estadoReg = models.CharField(max_length=1, choices=STATUS_CHOICES,default='A', editable=False)
 
     def __str__(self):
         return str(self.cantidad)
 
 
 class HistoriaResultados(models.Model):
+    STATUS_CHOICES = [
+        ('A', 'Activo'),
+        ('N', 'Inactivo'),
+        ]
+    id = models.AutoField(primary_key=True)
+    #historia = models.ForeignKey('clinico.Historia', blank=True, null=True, editable=True, on_delete=models.PROTECT)
+    historiaExamenes = models.ForeignKey('clinico.HistoriaExamenes', blank=True, null=True, editable=True, on_delete=models.PROTECT)
+    #dependenciasRealizado = models.ForeignKey('sitios.Dependencias', blank=True, null=True, editable=True, on_delete=models.PROTECT)
+    fechaServicio = models.DateTimeField(default=now, blank=True, null=True, editable=True)
+    fechaResultado = models.DateTimeField(default=now, blank=True, null=True, editable=True)
+    examenesRasgos = models.ForeignKey('clinico.ExamenesRasgos', blank=True, null=True, editable=True, on_delete=models.PROTECT)
+    valor =  models.CharField(max_length=20,  blank=True, null=True, editable=True)
+    observaciones =  models.CharField(max_length=255,  blank=True, null=True, editable=True)
+    consecResultado = models.IntegerField(default=0, blank=True, null=True, editable=True)
+    #estadoExamenes =  models.ForeignKey('clinico.EstadoExamenes', blank=True, null=True, editable=True, on_delete=models.PROTECT)
+    estadoReg = models.CharField(max_length=1, choices=STATUS_CHOICES,default='A', editable=False)
 
-                    id = models.AutoField(primary_key=True)
-                    #historia = models.ForeignKey('clinico.Historia', blank=True, null=True, editable=True, on_delete=models.PROTECT)
-                    historiaExamenes = models.ForeignKey('clinico.HistoriaExamenes', blank=True, null=True, editable=True, on_delete=models.PROTECT)
-                    #dependenciasRealizado = models.ForeignKey('sitios.Dependencias', blank=True, null=True, editable=True, on_delete=models.PROTECT)
-                    fechaServicio = models.DateTimeField(default=now, blank=True, null=True, editable=True)
-                    fechaResultado = models.DateTimeField(default=now, blank=True, null=True, editable=True)
-                    examenesRasgos = models.ForeignKey('clinico.ExamenesRasgos', blank=True, null=True, editable=True, on_delete=models.PROTECT)
-                    valor =  models.CharField(max_length=20,  blank=True, null=True, editable=True)
-                    observaciones =  models.CharField(max_length=255,  blank=True, null=True, editable=True)
-                    consecResultado = models.IntegerField(default=0, blank=True, null=True, editable=True)
-                    #estadoExamenes =  models.ForeignKey('clinico.EstadoExamenes', blank=True, null=True, editable=True, on_delete=models.PROTECT)
-                    estadoReg = models.CharField(max_length=1, default='A', editable=False)
-
-                    def __str__(self):
-                        return self.resultado
-
+    def __str__(self):
+        return self.valor
 
 
 class TiposDiagnostico(models.Model):

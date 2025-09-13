@@ -94,19 +94,19 @@ class historiaForm(forms.ModelForm):
     class Meta:
         model = Historia
         fields = '__all__'
-        widgets = {'antibioticos': forms.RadioSelect(choices=Historia.TIPO_CHOICES),
-                   'monitoreo': forms.RadioSelect(choices=Historia.TIPO_CHOICES),
-                   'movilidadLimitada': forms.RadioSelect(choices=Historia.TIPO_CHOICES),
-                   'nauseas': forms.RadioSelect(choices=Historia.TIPO_CHOICES),
-                   'llenadoCapilar': forms.RadioSelect(choices=Historia.TIPO_CHOICES),
-                   'neurologia': forms.RadioSelect(choices=Historia.TIPO_CHOICES),
-                   'irritacion': forms.RadioSelect(choices=Historia.TIPO_CHOICES),
-                   'pulsos': forms.RadioSelect(choices=Historia.TIPO_CHOICES),
-                   'retiroPuntos': forms.RadioSelect(choices=Historia.TIPO_CHOICES),
-                   'vomito': forms.RadioSelect(choices=Historia.TIPO_CHOICES),
-                   'inmovilizacion': forms.RadioSelect(choices=Historia.TIPO_CHOICES),
-                   'notaAclaratoria': forms.RadioSelect(choices=Historia.TIPO_CHOICES),
-   		   'inmovilizacion': forms.RadioSelect(choices=Historia.TIPO_CHOICES),
+        widgets = {'antibioticos': forms.RadioSelect(choices=Historia.STATUS_CHOICES),
+                   'monitoreo': forms.RadioSelect(choices=Historia.STATUS_CHOICES),
+                   'movilidadLimitada': forms.RadioSelect(choices=Historia.STATUS_CHOICES),
+                   'nauseas': forms.RadioSelect(choices=Historia.STATUS_CHOICES),
+                   'llenadoCapilar': forms.RadioSelect(choices=Historia.STATUS_CHOICES),
+                   'neurologia': forms.RadioSelect(choices=Historia.STATUS_CHOICES),
+                   'irritacion': forms.RadioSelect(choices=Historia.STATUS_CHOICES),
+                   'pulsos': forms.RadioSelect(choices=Historia.STATUS_CHOICES),
+                   'retiroPuntos': forms.RadioSelect(choices=Historia.STATUS_CHOICES),
+                   'vomito': forms.RadioSelect(choices=Historia.STATUS_CHOICES),
+                   'inmovilizacion': forms.RadioSelect(choices=Historia.STATUS_CHOICES),
+                   'notaAclaratoria': forms.RadioSelect(choices=Historia.STATUS_CHOICES),
+   		   'inmovilizacion': forms.RadioSelect(choices=Historia.STATUS_CHOICES),
                    }
 
         tipoDoc = forms.ModelChoiceField(queryset=TiposDocumento.objects.all())

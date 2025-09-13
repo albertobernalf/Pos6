@@ -857,7 +857,7 @@ ojo pendiente en aplicacion de medicamentos arreglar cuando aplica la modal no p
 --------------------------------------------------------------------------------------
 -- TRAZA De combate ,, Puesta a punto Nro 2: oJOOOOOOOOOOOOOOOOOOOOOO
 -------------------------------------------------------------------------------------
-	1. combo localidades en actualizar usuaro de triage NO FUNCIONa
+	1. combo localidades en actualizar usuaro de triage NO FUNCIONa, CREO QUE EN ADMISIONES TAMPOCO
 	2. en crear responsables y acompañamtes No esta hecho hay que hacerlo
 	3. ops crre un servicio admon y no aparece en dependencia ???
 	4. No me gusta que guarda el folio no hace roolback pailas
@@ -878,5 +878,8 @@ LUNES 15-SEPTIEMBRE: Ademas de revizar lo de arriba: ver acomodar columnas grade
                         ops cirugia cursor cerrado OPS
 			Colocar sin gastar pantalla boton REFRESCAR en pantallas escogidas
 			Colocar boton REFRESCAR en block Indicadores
+			Crear orden de Interconsulta .pdf y em historia Clinica
+			pdf.multi_cell(0, 10, long_text, border=0, align='J', fill=Fals  para lineas grandes que verraquera VER IA (probar con la HC)
+ 			PILAS NO PERMITIR GUARDAR FOLIOS CLINICOS DUPÑLICADOS ALINEAR TAB SACAR COPIA DE CLINICO.VIEWS PRIMERO Y HACER EL AJUSTE
 --------------------
         
