@@ -1545,25 +1545,31 @@ function cargarTablaAbonosPaciente()
         </table>
 <!-- Espacio Modales  -->
 
-<div class="modal fade" id="crearAbonosModel" aria-hidden="true" tabindex="-1" role="dialog"
-                         style="overflow-y:scroll;" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="modelHeading"></h4>
-	<button type="button" class="close" data-bs-dismiss="modal"  aria-label="Close">
-            </div>
-            <div class="modal-body">
-                <div class="alert alert-danger error-msg" style="display:none">
-                    <ul class="mb-0"></ul>
-                </div>
-                <form id="postFormCrearAbonos" name="postFormCrearAbonos" class="form-horizontal"  novalidate>
-                    {% csrf_token %}
+<div class="modal fade" id="crearAbonosModel" aria-hidden="true" tabindex="-1" role="dialog"  style="overflow-y:scroll;" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+           <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-center" role="document">
+		<div class="modal-content">         
+		   <div class="modal-header">
+                	<h4 class="modal-title" id="modelHeading"></h4>
+			<button type="button" class="close" data-bs-dismiss="modal"  aria-label="Close">
+ 	           </div>
+        	   <div class="modal-body">
+                	
+   	            <form id="postFormCrearAbonos" name="postFormCrearAbonos" class="form-horizontal"  novalidate>
+                     {% csrf_token %}
                      <input type="hidden" name="post_id" id="post_id">
                      <input type="hidden" id="sede22"        name="sede22" value = "{{Sede}}">
                      <input type="hidden" id="ingresoId22"   name="ingresoId22" value ="">
  		     <input type="hidden" id="username22_id" name="username22_id" value ="{{Username_id}}">
 
+			<div class="col">
+				<label for="serviciosAdministrativosPagos" class="col-sm-2 control-label">Servicio:</label>
+                            <select class="form-select  h-100 w-200" aria-label="" id="serviciosAdministrativosPagos"
+                                    name="serviciosAdministrativosPagos">
+                                {% for serviciosAdministrativos in ServiciosAdministrativos %}
+                                <option value="{{serviciosAdministrativos.id}}"> {{serviciosAdministrativos.nombre}}</option>
+                                {% endfor %}
+                            </select>
+   			</div>
 
 
 			<div class="col">
@@ -1596,8 +1602,6 @@ function cargarTablaAbonosPaciente()
                             </select>
    			</div>
 
-
-
 			<div class="col">
 				Valor:
 			       <input type="text" id="valorAbono" name="valorAbono" value = "0"></input>
@@ -1615,16 +1619,12 @@ function cargarTablaAbonosPaciente()
                         </button>
                     </div>
 
-
-                </form>
-            </div>
-
-
-     <div class="modal-footer">
-					  <span id="mensajesErrorAbonos" name="mensajesErrorAbonos" style= "color:red; font-size:15px; line-height:35px; font-family: Times Neww Roman;" > </span>
-                                   	  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar   </button>
-
-                                </div>
+	           </form>
+        	 </div>
+		 <div class="modal-footer">
+			<span class="mensajesErrorAbonos" id="mensajesErrorAbonos" name="mensajesErrorAbonos" > </span>
+                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar   </button>
+                 </div>
 
 
         </div>
@@ -2540,7 +2540,7 @@ function cargarTablaAbonosPaciente()
 <div class="marco">
 
         <span id="mensajes" name="mensajes" style= "color:green; font-size:12px; line-height:35px; font-family: Calibri;" > </span>
-     <span id="mensajesError" name="mensajesError" style= "color:red; font-size:12px; line-height:35px; font-family: Calibri;" > </span>
+     <span id="mensajesError" name="mensajesError" > </span>
 
 </div>
 {% endblock %}

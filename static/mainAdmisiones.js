@@ -856,11 +856,7 @@ window.addEventListener('load', async () => {
             $('#crearAbonosModel').modal('show');
                     },
 	   		        error: function(data){
-		           alert("data = " + JSON.stringify(data)); // data
-		           alert(data.status); // the status code
-		                   // alert(data.responseText); // the status code
-
-		document.getElementById("mensajesError").innerHTML =  data.responseText
+		       		document.getElementById("mensajesErrorAbonos").innerHTML =  data.responseText
 			        },
       });
         });
@@ -958,12 +954,9 @@ window.addEventListener('load', async () => {
 
                 },
                 error: function (data) {
-         alert("data = " + JSON.stringify(data)); // data
-		           alert(data.status); // the status code
-		   
-		           alert(data.JsonResponse['error']); // the message
 
-			document.getElementById("mensajesError").innerHTML =   data.JsonResponse.error;
+		        alert("entre error");
+			document.getElementById("mensajesErrorAbonos").innerHTML =   data.responseText;
 
 		  var tableA = $('#tablaAbonosAdmisiones').DataTable(); // accede de nuevo a la DataTable.
 	          tableA.ajax.reload();

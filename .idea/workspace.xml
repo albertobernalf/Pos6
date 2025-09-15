@@ -3,30 +3,11 @@
   <component name="ChangeListManager">
     <list default="true" id="d041c887-ab16-4071-a5e4-52a8295bbd5d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JSONCLINICA/HistoriasClinicas/20248592_Laboratorio.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/JSONCLINICA/HistoriasClinicas/20248592_Laboratorio.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/admisiones/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/admisiones/forms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/admisiones/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/admisiones/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/admisiones/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/admisiones/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/autorizaciones/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/autorizaciones/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/basicas/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/basicas/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cartera/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/cartera/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cirugia/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/cirugia/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/clinico/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/clinico/forms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/clinico/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/clinico/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/contratacion/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/contratacion/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/enfermeria/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/enfermeria/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/facturacion/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/facturacion/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/farmacia/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/farmacia/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modelsPrueba.py" beforeDir="false" afterPath="$PROJECT_DIR$/modelsPrueba.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/planta/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/planta/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rips/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/rips/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/seguridad/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/seguridad/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sitios/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/sitios/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/css/panelAdmisiones.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/panelAdmisiones.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/static/mainAdmisiones.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/mainAdmisiones.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tarifarios/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/tarifarios/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/admisiones/panelAdmisiones.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/admisiones/panelAdmisiones.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/triage/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/triage/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/usuarios/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/usuarios/models.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

@@ -23,6 +23,7 @@ class Pagos(models.Model):
         ('A', 'Activo'),
         ('I', 'Inactivo'), ]
     FLAG_CHOICES = [
+	("", "Select an option"),
         ('S', 'Si'),
         ('N', 'No'),
         ]
@@ -56,6 +57,7 @@ class PagosFacturas(models.Model):
         ('A', 'Activo'),
         ('I', 'Inactivo'), ]
     FLAG_CHOICES = [
+	("", "Select an option"),
         ('S', 'Si'),
         ('N', 'No'),
         ]
@@ -118,10 +120,10 @@ class Radicaciones(models.Model):
         ('A', 'Activo'),
         ('I', 'Inactivo'), ]
     FLAG_CHOICES = [
+	("", "Select an option"),
         ('S', 'Si'),
         ('N', 'No'),
         ]
-
     id = models.AutoField(primary_key=True)
     sedesClinica = models.ForeignKey('sitios.SedesClinica', blank=True,null= True, editable=True, on_delete=models.PROTECT, related_name = 'SedesClinica762')
     serviciosAdministrativos = models.ForeignKey('sitios.ServiciosAdministrativos', blank=True,null= True, editable=True,  on_delete=models.PROTECT,   related_name='seradm08')
@@ -183,6 +185,7 @@ class Glosas(models.Model):
         ('A', 'Activo'),
         ('I', 'Inactivo'), ]
     FLAG_CHOICES = [
+	("", "Select an option"),
         ('S', 'Si'),
         ('N', 'No'),
         ]
@@ -220,6 +223,7 @@ class GlosasDetalle(models.Model):
         ('A', 'Activo'),
         ('I', 'Inactivo'), ]
     FLAG_CHOICES = [
+	("", "Select an option"),
         ('S', 'Si'),
         ('N', 'No'),
         ]
@@ -249,6 +253,7 @@ class NotasCredito(models.Model):
         ('A', 'Activo'),
         ('I', 'Inactivo'), ]
     FLAG_CHOICES = [
+	("", "Select an option"),
         ('S', 'Si'),
         ('N', 'No'),
         ]
@@ -304,10 +309,10 @@ class NotasDebito(models.Model):
         ('A', 'Activo'),
         ('I', 'Inactivo'), ]
     FLAG_CHOICES = [
+	("", "Select an option"),
         ('S', 'Si'),
         ('N', 'No'),
         ]
-
 
     id = models.AutoField(primary_key=True)
     sedesClinica = models.ForeignKey('sitios.SedesClinica', blank=True,null= True, editable=True, on_delete=models.PROTECT, related_name = 'SedesClinica760')	
@@ -360,10 +365,10 @@ class Caja(models.Model):
         ('A', 'Activo'),
         ('I', 'Inactivo'), ]
     FLAG_CHOICES = [
+	("", "Select an option"),
         ('S', 'Si'),
         ('N', 'No'),
         ]
-
     id = models.AutoField(primary_key=True)
     fecha = models.DateField(editable=True, null=True, blank=True, default=now)
     sedesClinica = models.ForeignKey('sitios.SedesClinica', blank=True,null= True, editable=True, on_delete=models.PROTECT, related_name = 'SedesClinica7648')
@@ -385,7 +390,7 @@ class Caja(models.Model):
     usuarioRegistro = models.ForeignKey('planta.Planta', blank=True, null=True, on_delete=models.PROTECT,   related_name='usuario7297')
     fechaRegistro = models.DateTimeField(default=now, blank=True, null=True, editable=True)
     estadoCaja = models.CharField(max_length=1, default='A', editable=False) 
-    anulado = models.CharField(max_length=1, choices=FLAG_CHOICES, default='N', blank=True, editable=False)
+    anulado = models.CharField(max_length=1, choices=FLAG_CHOICES, default='N', blank=True, null=True, editable=False)
 
     def __str__(self):
         return str(self.serviciosAdministrativos)

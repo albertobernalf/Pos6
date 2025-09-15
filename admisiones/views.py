@@ -1,5 +1,6 @@
 from django.shortcuts import render
 import MySQLdb
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, get_object_or_404, redirect, HttpResponse, HttpResponseRedirect
 from django.http import JsonResponse
 import json
@@ -23,7 +24,7 @@ from usuarios.models import Usuarios, TiposDocumento
 from planta.models import Planta
 from facturacion.models import ConveniosPacienteIngresos, Liquidacion, LiquidacionDetalle
 from rips.models import  RipsDestinoEgreso
-from cartera.models import FormasPagos, PagosFacturas, Pagos, TiposPagos
+from cartera.models import FormasPagos, PagosFacturas, Pagos, TiposPagos, Caja
 import datetime
 from django.utils import timezone
 from clinico.models import Servicios,EspecialidadesMedicos, Medicos
@@ -7309,6 +7310,10 @@ def GuardaAbonosAdmision(request):
     convenioPaciente = request.POST['convenioPaciente']
     print ("convenioPaciente = ", convenioPaciente)
 
+    serviciosAdministrativos = request.POST['serviciosAdministrativosPagos']
+    print ("serviciosAdministrativos = ", serviciosAdministrativos)
+
+
     estadoReg = 'A'
     fechaRegistro = timezone.now()
 
@@ -7319,18 +7324,30 @@ def GuardaAbonosAdmision(request):
 
     ## Aqui busco el registro en cartera_caja si lo hay o si no hat que crear uno nuevo
 
+    pailas = 0
+
     try:
         with transaction.atomic():
 
             cajaId = Caja.objects.get(fecha=fechaRegistro, usuarioEntrega_id=username_id)
+    except ObjectDoesNotExist:
+        print("no ya informacion")
+        pailas=0
+
 
     except Exception as e:
         # Aquí ya se hizo rollback automáticamente
         print("Se hizo rollback por PRONO SE HACE NADA:", e)
+        pailas=1
+        envioMensaje=e
 
     finally:
-        print("No haga nada")
-        cajaId=0
+
+        if (pailas==1):
+            return JsonResponse({'success': False, 'Mensaje': envioMensaje})
+        else:
+            cajaId=0
+            print("No haga nada")
 
 
     miConexion3 = None
@@ -7338,7 +7355,7 @@ def GuardaAbonosAdmision(request):
 
         miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",  password="123456")
         cur3 = miConexion3.cursor()
-        comando = 'insert into cartera_Pagos ("fecha", "tipoDoc_id" , documento_id, consec,  "tipoPago_id" , "formaPago_id", valor, descripcion ,"fechaRegistro","estadoReg",saldo, "totalAplicado", "valorEnCurso", convenio_id) values ('  + "'" + str(fechaRegistro) + "'," +  "'" + str(registroId.tipoDoc_id) + "'" + ' , ' + "'" + str(registroId.documento_id) + "'" + ', ' + "'" + str(registroId.consec) + "'" + '  , ' + "'" + str(tipoPago) + "'" + '  , ' + "'" + str(formaPago) + "'" + ', ' + "'" + str(valor) + "',"   + "'" + str(descripcion) + "','"   + str(fechaRegistro) + "','" +  str("A") + "','" + str(valor) + "'," + ' 0 , 0, ' + "'" + str(convenioPaciente) + "')"
+        comando = 'insert into cartera_Pagos ("fecha", "tipoDoc_id" , documento_id, consec,  "tipoPago_id" , "formaPago_id", valor, descripcion ,"fechaRegistro","estadoReg",saldo, "totalAplicado", "valorEnCurso", convenio_id, "serviciosAdministrativos_id" ) values ('  + "'" + str(fechaRegistro) + "'," +  "'" + str(registroId.tipoDoc_id) + "'" + ' , ' + "'" + str(registroId.documento_id) + "'" + ', ' + "'" + str(registroId.consec) + "'" + '  , ' + "'" + str(tipoPago) + "'" + '  , ' + "'" + str(formaPago) + "'" + ', ' + "'" + str(valor) + "',"   + "'" + str(descripcion) + "','"   + str(fechaRegistro) + "','" +  str("A") + "','" + str(valor) + "'," + ' 0 , 0, ' + "'" + str(convenioPaciente) + "','" + str(serviciosAdministrativos) + "')"
 
         cur3.execute(comando)
 
@@ -7360,18 +7377,18 @@ def GuardaAbonosAdmision(request):
         if (cajaId == 0):
 
             if (tipoPagoId.nombre == 'EFECTIVO'):
-                comando2 = 'INSERT INTO cartera_caja (fecha, "totalEfectivo", "totalTarjetasDebito", "totalTarjetasCredito", "totalCheques", total, "fechaRegistro", "estadoReg", "serviciosAdministrativos_id", "usuarioEntrega_id", "usuarioRecibe_id", "usuarioRegistro_id", "usuarioSuperviza_id", "estadoCaja", "sedesClinica_id", "totalChequesEsperado", "totalEfectivoEsperado", "totalEsperado", "totalTarjetasCreditoEsperado", "totalTarjetasDebitoEsperado") VALUES (' + "'" + str(fechaRegistro) + "',0,0,0,0,0," + "'" + str(fechaRegistro) + "','A',null"  + "," + "'" + str(username_id) + "',null,"  + "'" + str(username_id) + "',null,'A',"  + "'" + str(sede)  + "',0,'" + str(valor) + "'," + "'" + str(valor) + "',0,0)"
+                comando2 = 'INSERT INTO cartera_caja (fecha, "totalEfectivo", "totalTarjetasDebito", "totalTarjetasCredito", "totalCheques", total, "fechaRegistro", "estadoReg", "serviciosAdministrativos_id", "usuarioEntrega_id", "usuarioRecibe_id", "usuarioRegistro_id", "usuarioSuperviza_id", "estadoCaja", "sedesClinica_id", "totalChequesEsperado", "totalEfectivoEsperado", "totalEsperado", "totalTarjetasCreditoEsperado", "totalTarjetasDebitoEsperado") VALUES (' + "'" + str(fechaRegistro) + "',0,0,0,0,0," + "'" + str(fechaRegistro) + "','A',null"  + "," + "'" + str(username_id) + "',null,"  + "'" + str(username_id) + "',null,'A','"  + str(sede)  + "',0,'" + str(valor) + "','" + str(valor) + "',0,0)"
 
             if (tipoPagoId.nombre == 'TARJETA DEBITO'):
-                comando2 = 'INSERT INTO cartera_caja (fecha, "totalEfectivo", "totalTarjetasDebito", "totalTarjetasCredito", "totalCheques", total, "fechaRegistro", "estadoReg", "serviciosAdministrativos_id", "usuarioEntrega_id", "usuarioRecibe_id", "usuarioRegistro_id", "usuarioSuperviza_id", "estadoCaja", "sedesClinica_id", "totalChequesEsperado", "totalEfectivoEsperado", "totalEsperado", "totalTarjetasCreditoEsperado", "totalTarjetasDebitoEsperado") VALUES (' + "'" + str(fechaRegistro) + "',0,0,0,0,0," + "'" + str(fechaRegistro) + "','A'," + "'" + str(serviciosAdministrativos) + "'," + "'" + str(username_id) + "',null,"  + "'" + str(username_id) + "',null,'A',"  + "'" + str(sede)  + "',0,0," + "'" + str(valor) + "',0," + "'" + str(valor) + "')"
+                comando2 = 'INSERT INTO cartera_caja (fecha, "totalEfectivo", "totalTarjetasDebito", "totalTarjetasCredito", "totalCheques", total, "fechaRegistro", "estadoReg", "serviciosAdministrativos_id", "usuarioEntrega_id", "usuarioRecibe_id", "usuarioRegistro_id", "usuarioSuperviza_id", "estadoCaja", "sedesClinica_id", "totalChequesEsperado", "totalEfectivoEsperado", "totalEsperado", "totalTarjetasCreditoEsperado", "totalTarjetasDebitoEsperado") VALUES (' + "'" + str(fechaRegistro) + "',0,0,0,0,0," + "'" + str(fechaRegistro) + "','A'," + "'" + str(serviciosAdministrativos) + "'," + "'" + str(username_id) + "',null,"  + "'" + str(username_id) + "',null,'A',"  + "'" + str(sede)  + "',0,0,'" + str(valor) + "',0,'"  + str(valor) + "')"
 
             if (tipoPagoId.nombre == 'TARJETA CREDITO'):
-                comando2 = 'INSERT INTO cartera_caja (fecha, "totalEfectivo", "totalTarjetasDebito", "totalTarjetasCredito", "totalCheques", total, "fechaRegistro", "estadoReg", "serviciosAdministrativos_id", "usuarioEntrega_id", "usuarioRecibe_id", "usuarioRegistro_id", "usuarioSuperviza_id", "estadoCaja", "sedesClinica_id", "totalChequesEsperado", "totalEfectivoEsperado", "totalEsperado", "totalTarjetasCreditoEsperado", "totalTarjetasDebitoEsperado") VALUES (' + "'" + str(fechaRegistro) + "',0,0,0,0,0," + "'" + str(fechaRegistro) + "','A'," + "'" + str(serviciosAdministrativos) + "'," + "'" + str(username_id) + "',null,"  + "'" + str(username_id) + "',null,'A',"  + "'" + str(sede)  + "',0,0," + "'" + str(valor) + "', " + "'" + str(valor) + "',0)"
+                comando2 = 'INSERT INTO cartera_caja (fecha, "totalEfectivo", "totalTarjetasDebito", "totalTarjetasCredito", "totalCheques", total, "fechaRegistro", "estadoReg", "serviciosAdministrativos_id", "usuarioEntrega_id", "usuarioRecibe_id", "usuarioRegistro_id", "usuarioSuperviza_id", "estadoCaja", "sedesClinica_id", "totalChequesEsperado", "totalEfectivoEsperado", "totalEsperado", "totalTarjetasCreditoEsperado", "totalTarjetasDebitoEsperado") VALUES (' + "'" + str(fechaRegistro) + "',0,0,0,0,0," + "'" + str(fechaRegistro) + "','A'," + "'" + str(serviciosAdministrativos) + "'," + "'" + str(username_id) + "',null,"  + "'" + str(username_id) + "',null,'A','"  + str(sede)  + "',0,0,'"  + str(valor) + "','"  + str(valor) + "',0)"
 
             if (tipoPagoId.nombre == 'CHEQUE'):
-                comando2 = 'INSERT INTO cartera_caja (fecha, "totalEfectivo", "totalTarjetasDebito", "totalTarjetasCredito", "totalCheques", total, "fechaRegistro", "estadoReg", "serviciosAdministrativos_id", "usuarioEntrega_id", "usuarioRecibe_id", "usuarioRegistro_id", "usuarioSuperviza_id", "estadoCaja", "sedesClinica_id", "totalChequesEsperado", "totalEfectivoEsperado", "totalEsperado", "totalTarjetasCreditoEsperado", "totalTarjetasDebitoEsperado") VALUES (' + "'" + str(fechaRegistro) + "',0,0,0,0,0," + "'" + str(fechaRegistro) + "','A'," + "'" + str(serviciosAdministrativos) + "'," + "'" + str(username_id) + "',null,"  + "'" + str(username_id) + "',null,'A',"  + "'" + str(sede)  + "'," + "'" + str(valor) + "'" + "0," + str(valor) + "',0,0)"
+                comando2 = 'INSERT INTO cartera_caja (fecha, "totalEfectivo", "totalTarjetasDebito", "totalTarjetasCredito", "totalCheques", total, "fechaRegistro", "estadoReg", "serviciosAdministrativos_id", "usuarioEntrega_id", "usuarioRecibe_id", "usuarioRegistro_id", "usuarioSuperviza_id", "estadoCaja", "sedesClinica_id", "totalChequesEsperado", "totalEfectivoEsperado", "totalEsperado", "totalTarjetasCreditoEsperado", "totalTarjetasDebitoEsperado") VALUES (' + "'" + str(fechaRegistro) + "',0,0,0,0,0," + "'" + str(fechaRegistro) + "','A'," + "'" + str(serviciosAdministrativos) + "'," + "'" + str(username_id) + "',null,"  + "'" + str(username_id) + "',null,'A','"  + str(sede)  + "','" + str(valor) + "'0,'" + str(valor) + "',0,0)"
 
-
+        print("comando2 =" , comando2)
         cur3.execute(comando2)
 
         ## Aqui actualiza el total registro d caja esperado
