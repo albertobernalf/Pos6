@@ -5,6 +5,7 @@ from django.utils.timezone import now
 
 class RipsTipos (models.Model):
 
+
    id = models.AutoField(primary_key=True)
    codigo = models.CharField(max_length=2, blank=True,null= True, editable=True)
    nombre =   models.CharField(max_length=80, blank=True,null= True, editable=True)
@@ -14,14 +15,15 @@ class RipsTipos (models.Model):
 
 
 class RipsEnvios (models.Model):
-    TIPO_CHOICES = (
-    ('E' , 'ENVIADA'),
-    ('P' , 'PENDIENTE'),
-    ),
-    TIPO_CHOICES1 = (
-    ('F' ,'FACTURA' ),
-    ('N' , 'NOTA')  ,
-    )
+    ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
+    TIPO_CHOICES = [
+        ('E', 'ENVIADA'),
+        ('P', 'PENDIENTE'), ]
+    TIPO1_CHOICES = [
+        ('F', 'FACTURA'),
+        ('N', 'NOTA'), ]
 
     id = models.AutoField(primary_key=True)
     sedesClinica = models.ForeignKey('sitios.SedesClinica', blank=True,null= True, editable=True, on_delete=models.PROTECT, related_name = 'SedesClinica759')
@@ -46,28 +48,26 @@ class RipsEnvios (models.Model):
     usuarioRadicacion = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True, on_delete=models.PROTECT, related_name='planta149')
     usuarioRegistro = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True, on_delete=models.PROTECT)
     fechaRegistro = models.DateTimeField(default=now, blank=True, null=True, editable=True)
-    estadoReg = models.CharField(max_length=1, default='A', editable=False)
+    estadoReg = models.CharField(max_length=1, choices=ESTADOREG_CHOICES, default='A', editable=False)
 
     def __str__(self):
         return self.estadoPasoMinisterio
 
 class RipsDetalle (models.Model):
-    Enviada = 'E'
-    Rechazada = 'R'
-    SinRespuesta = 'S'
-    TIPO_CHOICES1 = (
-        ('Enviada', 'Enviada'),
-        ('Rechazada', 'Rechazada'),
-        ('Sin respuesta', 'Sin Respuesta'),
-    )
-
+    ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
+    TIPO1_CHOICES = [
+        ('E', 'Enviada'),
+        ('R', 'Rechazada'), 
+        ('S', 'SinRespuesta'),]
     id = models.AutoField(primary_key=True)
     ripsEnvios =  models.ForeignKey('rips.RipsEnvios', blank=True, null=True, editable=True, on_delete=models.PROTECT , related_name='Envios01')
     numeroFactura  =  models.ForeignKey('facturacion.Facturacion', blank=True,null= True, editable=True, on_delete=models.PROTECT)
     glosa  =  models.ForeignKey('cartera.Glosas', blank=True,null= True, editable=True, on_delete=models.PROTECT)
     #numeroFactura  =  models.CharField(max_length=50, blank=True,null= True, editable=True)
     cuv  =  models.CharField(max_length=500, blank=True,null= True, editable=True)
-    estadoPasoMinisterio=  models.CharField(max_length=10,  editable=False , choices = TIPO_CHOICES1, default=Enviada)
+    estadoPasoMinisterio=  models.CharField(max_length=10,  editable=False , choices = TIPO1_CHOICES, default='E')
     ripsEstados = models.ForeignKey('rips.RipsEstados', blank=True,null= True, editable=True, on_delete=models.PROTECT, related_name = 'RipsEtados01')
     estado = models.CharField(max_length=20, blank=True,null= True, editable=True)
     rutaJsonFactura = models.CharField(max_length=5000, blank=True,null= True, editable=True)
@@ -76,12 +76,15 @@ class RipsDetalle (models.Model):
     rutaPdf = models.CharField(max_length=5000, blank=True,null= True, editable=True)
     usuarioRegistro = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True, on_delete=models.PROTECT)
     fechaRegistro = models.DateTimeField(default=now, blank=True, null=True, editable=True)
-    estadoReg = models.CharField(max_length=1, default='A', editable=False)
+    estadoReg = models.CharField(max_length=1, choices=ESTADOREG_CHOICES, default='A', editable=False)
 
     def __str__(self):
         return self.numeroFactura
 
 class RipsTransaccion (models.Model):
+    ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
 
     id = models.AutoField(primary_key=True)
     sedesClinica = models.ForeignKey('sitios.SedesClinica', blank=True,null= True, editable=True, on_delete=models.PROTECT, related_name = 'SedesClinica769')
@@ -92,11 +95,15 @@ class RipsTransaccion (models.Model):
     numNota =  models.CharField(max_length=20, default='S', editable=False)
     usuarioRegistro = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True, on_delete=models.PROTECT)
     fechaRegistro = models.DateTimeField(default=now, blank=True, null=True, editable=True)
+    estadoReg = models.CharField(max_length=1, choices=ESTADOREG_CHOICES, default='A', editable=False)
 
     def __str__(self):
         return self.numDocumentoIdObligado
 
 class RipsTipoUsuario (models.Model):
+   ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
 
    id = models.AutoField(primary_key=True)
    codigo = models.CharField(max_length=2, blank=True,null= True, editable=True)
@@ -127,27 +134,22 @@ class RipsPaises (models.Model):
 
 
 class RipsUsuarios (models.Model):
-    UNO =  'Rural'
-    DOS = 'Urbano'
-    TIPO_ZONAS = (
-        (UNO, 'Rural'),
-        (DOS, 'Urbano'),
-    )	
-    SI =  'Si'
-    NO = 'NO'
-    TIPO_INCAPACIDAD = (
-        (SI, 'Si'),
-        (NO, 'No'),
-    )	
-    H =  'Masculino'
-    M = 'Femenino'
-    I = 'Indeterminado'
-    TIPO_SEXO = (
-        (H, 'Masculino'),
-        (M, 'Femenino'),
-	(I, 'Indeterminado'),
-     )	
+    ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
 
+    ZONAS_CHOICES = [
+        ('UNO', 'Rural'),
+        ('DOS', 'Urbano'), ]
+
+    INCAPACIDAD_CHOICES = [
+        ('SI', 'Si'),
+        ('NO', 'No'), ]
+
+    GENERO_CHOICES = [
+        ('H', 'Masculino'),
+        ('M', 'Femenino'), 
+        ('I', 'Indeterminado'), ]
 
     id = models.AutoField(primary_key=True)
     ripsDetalle =  models.ForeignKey('rips.RipsDetalle', blank=True, null=True, editable=True, on_delete=models.PROTECT , related_name='RpsDetalle02')
@@ -155,22 +157,24 @@ class RipsUsuarios (models.Model):
     numDocumentoIdentificacion = models.CharField(max_length=20, blank=True,null= True, editable=True)
     tipoUsuario  =  models.CharField(max_length=20, blank=True,null= True, editable=True)
     fechaNacimiento   =   models.DateTimeField(default=now, blank=True, null=True, editable=True)
-    codSexo =  models.CharField(max_length=13, default='A', editable=False ,choices = TIPO_SEXO)
+    codSexo =  models.CharField(max_length=13, default='A', editable=False ,choices = GENERO_CHOICES)
     codPaisResidencia = models.ForeignKey('rips.RipsPaises', blank=True, null=True, editable=True, on_delete=models.PROTECT , related_name='Paises01')
     codMunicipioResidencia = models.ForeignKey('sitios.Municipios', blank=True, null=True, editable=True, on_delete=models.PROTECT , related_name='MunicipioRes01')
-    codZonaTerritorialResidencia = models.CharField(max_length=6, default='A', editable=False ,choices = TIPO_ZONAS)
-    incapacidad = models.CharField(max_length=2, default='A', editable=False ,choices = TIPO_INCAPACIDAD)
+    codZonaTerritorialResidencia = models.CharField(max_length=6, default='A', editable=False ,choices = ZONAS_CHOICES)
+    incapacidad = models.CharField(max_length=2, default='A', editable=False ,choices = INCAPACIDAD_CHOICES)
     consecutivo = models.CharField(max_length=10, blank=True,null= True, editable=True)
     ripsTransaccion =  models.ForeignKey('rips.RipsTransaccion', blank=True, null=True, editable=True, on_delete=models.PROTECT , related_name='RpipsTransaccion12')
     codPaisOrigen = models.ForeignKey('rips.RipsPaises', blank=True, null=True, editable=True, on_delete=models.PROTECT)
     usuarioRegistro = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True, on_delete=models.PROTECT , related_name='Usu01')
     fechaRegistro = models.DateTimeField(default=now, blank=True, null=True, editable=True)
+    estadoReg = models.CharField(max_length=1, choices=ESTADOREG_CHOICES, default='A', editable=False)
 
     def __str__(self):
         return self.nombre
 
 
 class RipsGrupoServicios (models.Model):
+
 
    id = models.AutoField(primary_key=True)
    codigo = models.CharField(max_length=2, blank=True,null= True, editable=True)
@@ -237,15 +241,13 @@ class RipsTiposDocumento (models.Model):
 
 
 class RipsConsultas (models.Model):
-
-    UNO = 'Impresion Diagnostica'
-    DOS = 'Confirmado nuevo'
-    TRES = 'Confirmado repetido'
-    TIPO_DIAGNOSTICO = (
-        (UNO, 'Impresion Diagnostica'),
-        (DOS, 'Confirmado nuevo'),
-        (TRES, 'Confirmado REPETIDO'),
-    )
+    ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
+    DIAGNOSTICO_CHOICES = [
+        ('UNO', 'Impresion Diagnostica'),
+        ('DOS', 'Confirmado nuevo'), 
+        ('TRES', 'Confirmado repetido'), ]
     id = models.AutoField(primary_key=True)
     ripsDetalle =  models.ForeignKey('rips.RipsDetalle', blank=True, null=True, editable=True, on_delete=models.PROTECT , related_name='RpsDetalle03')
     ripsTipos =  models.ForeignKey('rips.RipsTipos', blank=True, null=True, editable=True, on_delete=models.PROTECT , related_name='RpsTipos01')   
@@ -262,7 +264,7 @@ class RipsConsultas (models.Model):
     codDiagnosticoRelacionado1 =  models.ForeignKey('clinico.Diagnosticos', blank=True, null=True, editable=True, on_delete=models.PROTECT, related_name='Diagnost02')
     codDiagnosticoRelacionado2 = models.ForeignKey('clinico.Diagnosticos', blank=True, null=True, editable=True, on_delete=models.PROTECT, related_name='Diagnost03')
     codDiagnosticoRelacionado3 = models.ForeignKey('clinico.Diagnosticos', blank=True, null=True, editable=True, on_delete=models.PROTECT, related_name='Diagnost04')
-    tipoDiagnosticoPrincipal = models.CharField(max_length=21, default='A', editable=False ,choices = TIPO_DIAGNOSTICO)
+    tipoDiagnosticoPrincipal = models.CharField(max_length=21, default='A', editable=False ,choices =DIAGNOSTICO_CHOICES)
     tipoDocumentoIdentificacion = models.ForeignKey('rips.RipsTiposDocumento', blank=True, null=True, editable=True, on_delete=models.PROTECT)
     numDocumentoIdentificacion = models.CharField(max_length=20, blank=True,null= True, editable=True)
     vrServicio = models.DecimalField(max_digits=10, decimal_places=2, blank=True,null= True, editable=True)
@@ -285,6 +287,7 @@ class RipsConsultas (models.Model):
     notasDebito = models.DecimalField( max_digits=15, decimal_places=2 , blank=True,null= True, editable=True)
     usuarioRegistro = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True, on_delete=models.PROTECT, related_name='Plantas01')
     fechaRegistro = models.DateTimeField(default=now, blank=True, null=True, editable=True)
+    estadoReg = models.CharField(max_length=1, choices=ESTADOREG_CHOICES, default='A', editable=False)
 
 
     def __str__(self):
@@ -301,6 +304,9 @@ class RipsViasIngresoSalud (models.Model):
 
 
 class RipsProcedimientos (models.Model):
+   ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
 
    id = models.AutoField(primary_key=True)
    ripsDetalle =  models.ForeignKey('rips.RipsDetalle', blank=True, null=True, editable=True, on_delete=models.PROTECT , related_name='RpsDetalle04')
@@ -343,6 +349,7 @@ class RipsProcedimientos (models.Model):
 
    usuarioRegistro = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True, on_delete=models.PROTECT, related_name='Plantas02')
    fechaRegistro = models.DateTimeField(default=now, blank=True, null=True, editable=True)
+   estadoReg = models.CharField(max_length=1, choices=ESTADOREG_CHOICES, default='A', editable=False)
 
    def __str__(self):
         return self.codPrestador
@@ -359,7 +366,9 @@ class RipsDestinoEgreso (models.Model):
   
 
 class RipsUrgenciasObservacion (models.Model):
-
+   ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+       ('I', 'Inactivo'), ]
    id = models.AutoField(primary_key=True)
    ripsDetalle =  models.ForeignKey('rips.RipsDetalle', blank=True, null=True, editable=True, on_delete=models.PROTECT , related_name='RpsDetalle05')
    ripsTipos =  models.ForeignKey('rips.RipsTipos', blank=True, null=True, editable=True, on_delete=models.PROTECT , related_name='RpsTipos03')   
@@ -392,6 +401,7 @@ class RipsUrgenciasObservacion (models.Model):
 
    usuarioRegistro = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True, on_delete=models.PROTECT, related_name='Plantas05')
    fechaRegistro = models.DateTimeField(default=now, blank=True, null=True, editable=True)
+   estadoReg = models.CharField(max_length=1, choices=ESTADOREG_CHOICES, default='A', editable=False)
 
 
    def __str__(self):
@@ -401,6 +411,9 @@ class RipsUrgenciasObservacion (models.Model):
 
 
 class RipsHospitalizacion (models.Model):
+   ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
 
    id = models.AutoField(primary_key=True)
    ripsDetalle =  models.ForeignKey('rips.RipsDetalle', blank=True, null=True, editable=True, on_delete=models.PROTECT , related_name='RpsDetalle09')
@@ -424,6 +437,7 @@ class RipsHospitalizacion (models.Model):
    ripsTransaccion =  models.ForeignKey('rips.RipsTransaccion', blank=True, null=True, editable=True, on_delete=models.PROTECT , related_name='RpipsTransaccion17')
    usuarioRegistro = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True, on_delete=models.PROTECT, related_name='Plantas21')
    fechaRegistro = models.DateTimeField(default=now, blank=True, null=True, editable=True)
+   estadoReg = models.CharField(max_length=1, choices=ESTADOREG_CHOICES, default='A', editable=False)
 
 
 
@@ -431,6 +445,10 @@ class RipsHospitalizacion (models.Model):
         return self.codPrestador
 
 class RipsRecienNacido(models.Model):
+    ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
+
     H =  'Masculino'
     M = 'Femenino'
     I = 'Indeterminado'
@@ -458,6 +476,7 @@ class RipsRecienNacido(models.Model):
     ripsTransaccion =  models.ForeignKey('rips.RipsTransaccion', blank=True, null=True, editable=True, on_delete=models.PROTECT , related_name='RpipsTransaccion18')
     usuarioRegistro = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True, on_delete=models.PROTECT, related_name='Plantas33')
     fechaRegistro = models.DateTimeField(default=now, blank=True, null=True, editable=True)
+    estadoReg = models.CharField(max_length=1, choices=ESTADOREG_CHOICES, default='A', editable=False)
 
 
     def __str__(self):
@@ -527,6 +546,9 @@ class RipsUnidadUpr (models.Model):
 
 
 class RipsMedicamentos(models.Model):
+   ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
 
    id = models.AutoField(primary_key=True)
    ripsDetalle =  models.ForeignKey('rips.RipsDetalle', blank=True, null=True, editable=True, on_delete=models.PROTECT , related_name='RpsDetalle07')
@@ -570,6 +592,7 @@ class RipsMedicamentos(models.Model):
 
    usuarioRegistro = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True, on_delete=models.PROTECT, related_name='Plantas61')
    fechaRegistro = models.DateTimeField(default=now, blank=True, null=True, editable=True)
+   estadoReg = models.CharField(max_length=1, choices=ESTADOREG_CHOICES, default='A', editable=False)
  
 
 
@@ -597,6 +620,10 @@ class RipsDci (models.Model):
 
 
 class RipsOtrosServicios(models.Model):
+   ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
+
 
    id = models.AutoField(primary_key=True)
    ripsDetalle =  models.ForeignKey('rips.RipsDetalle', blank=True, null=True, editable=True, on_delete=models.PROTECT , related_name='RpsDetalle06')
@@ -633,6 +660,7 @@ class RipsOtrosServicios(models.Model):
 
    usuarioRegistro = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True, on_delete=models.PROTECT, related_name='Plantas12')
    fechaRegistro = models.DateTimeField(default=now, blank=True, null=True, editable=True)
+   estadoReg = models.CharField(max_length=1, choices=ESTADOREG_CHOICES, default='A', editable=False)
  
 
 

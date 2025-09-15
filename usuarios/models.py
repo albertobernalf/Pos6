@@ -9,35 +9,42 @@ from basicas.models import EstadoCivil
 
 
 class TiposDocumento(models.Model):
+    ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
     id = models.AutoField(primary_key=True)
     abreviatura= models.CharField(max_length=2)
     nombre = models.CharField(max_length=50)
     tiposDocCodigoDian = models.CharField(max_length=15, default='')
     tipoDocRips= models.ForeignKey('rips.ripstiposdocumento', blank=True,null= True, editable=True, on_delete=models.PROTECT)
     fechaRegistro = models.DateTimeField(default=now, editable=False)
-    estadoReg = models.CharField(max_length=1, default='A', editable=False)
+    estadoReg = models.CharField(max_length=1, choices=ESTADOREG_CHOICES,default='A', editable=False)
 
 
     def __str__(self):
         return self.nombre
 
 class TiposUsuario(models.Model):
+    ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
     id=models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=50)
     fechaRegistro = models.DateTimeField(default=now, editable=False)
-    estadoReg = models.CharField(max_length=1, default='A', editable=False)
+    estadoReg = models.CharField(max_length=1,choices=ESTADOREG_CHOICES, default='A', editable=False)
 
 
     def __str__(self):
         return self.nombre
 
 class Usuarios(models.Model):
-    MASCULINO = 'M'
-    FEMENINO = 'F'
-    TIPO_CHOICES= (
-        (MASCULINO, 'Masculino'),
-        (FEMENINO, 'Femenino'),
-    )
+    ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
+    GENERO_CHOICES = [
+        ('M', 'Masculino'),
+        ('F', 'Femenino'), ]
+
     id = models.AutoField(primary_key=True)
     tipoDoc= models.ForeignKey('usuarios.TiposDocumento', blank=True,null= True, editable=True, on_delete=models.PROTECT)
     #documento =  models.IntegerField(unique=True)
@@ -47,7 +54,7 @@ class Usuarios(models.Model):
     segundoNombre = models.CharField(max_length=20,blank=True,null= True)
     primerApellido = models.CharField(max_length=20,blank=True,null= True)
     segundoApellido = models.CharField(max_length=20,blank=True,null= True)
-    genero = models.CharField(max_length=1, default ='M',choices=TIPO_CHOICES,)
+    genero = models.CharField(max_length=1, default ='M',choices=GENERO_CHOICES,)
     centrosC = models.ForeignKey('sitios.Centros', blank=True,null= True, editable=True, on_delete=models.PROTECT)
     tiposUsuario = models.ForeignKey('usuarios.TiposUsuario', blank=True,null= True, editable=True, on_delete=models.PROTECT)
     correo = models.EmailField(blank=True,null= True)
@@ -67,7 +74,7 @@ class Usuarios(models.Model):
     imagen = models.ImageField(upload_to="fotos",blank=True,null= True, editable=True,)
 
     fechaRegistro = models.DateTimeField(default=now, editable=False)
-    estadoReg = models.CharField(max_length=1, default='A', editable=False)
+    estadoReg = models.CharField(max_length=1, choices=ESTADOREG_CHOICES, default='A', editable=False)
 
     class Meta:
         unique_together = (('tipoDoc', 'documento'),)
@@ -77,17 +84,17 @@ class Usuarios(models.Model):
 
 
 class UsuariosContacto(models.Model):
-    MASCULINO = 'M'
-    FEMENINO = 'F'
-    TIPO_CHOICES= (
-        (MASCULINO, 'Masculino'),
-        (FEMENINO, 'Femenino'),
-    )
+    ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
+    GENERO_CHOICES = [
+        ('M', 'Masculino'),
+        ('F', 'Femenino'), ]
     id = models.AutoField(primary_key=True)
     tipoDoc= models.ForeignKey('usuarios.TiposDocumento', default=1, on_delete=models.PROTECT ,  related_name='tipoDoc01')
     documento = models.CharField(unique=True,max_length=30)
     nombre = models.CharField(max_length=50)
-    genero = models.CharField(max_length=1, default ='L',choices=TIPO_CHOICES,)
+    genero = models.CharField(max_length=1, default ='L',choices=GENERO_CHOICES,)
     fechaNacio = models.DateTimeField(default=now, blank=True,null= True, editable=True)
     departamentos = models.ForeignKey('sitios.Departamentos', blank=True,null= True, editable=True, on_delete=models.PROTECT)
     ciudades = ChainedForeignKey(Ciudades, chained_field='departamentos', chained_model_field='departamentos',  show_all=False)
@@ -101,7 +108,7 @@ class UsuariosContacto(models.Model):
 
     tiposContacto = models.ForeignKey('basicas.TiposContacto', blank=True,null= True, editable=True, on_delete=models.PROTECT)
     fechaRegistro = models.DateTimeField(default=now, editable=False)
-    estadoReg = models.CharField(max_length=1, default='A', editable=False)
+    estadoReg = models.CharField(max_length=1, choices=ESTADOREG_CHOICES, default='A', editable=False)
 
     def __str__(self):
         return self.nombre

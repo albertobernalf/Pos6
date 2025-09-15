@@ -5,6 +5,9 @@ from django.utils.timezone import now
 
 
 class Eapb (models.Model):
+    ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
 
     id = models.AutoField(primary_key=True)
     codigoEapb=models.CharField(max_length=8, blank=True,null= True, editable=True)
@@ -15,23 +18,32 @@ class Eapb (models.Model):
     telefono =models.CharField(max_length=30, blank=True,null= True, editable=True)
     codigoRips= models.CharField(max_length=8, blank=True,null= True, editable=True)
     fechaRegistro = models.DateTimeField(default=now, blank=True, null=True, editable=True)
-    estadoReg = models.CharField(max_length=1, default='A', editable=False)
+    estadoReg = models.CharField(max_length=1, choices=ESTADOREG_CHOICES, default='A', editable=False)
 
     def __str__(self):
         return self.nombre
 
 class TiposEmpresa(models.Model):
+    ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
     id = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=30, null=False)
     fechaRegistro = models.DateTimeField(default=now, blank=True, null=True, editable=True, )
-    estadoReg = models.CharField(max_length=1, default='A', editable=False)
+    estadoReg = models.CharField(max_length=1,choices=ESTADOREG_CHOICES,  default='A', editable=False)
 
     def __str__(self):
         return self.nombre
 
 
 class Empresas (models.Model):
-
+    ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
+    FLAG_CHOICES = [
+        ('S', 'Si'),
+        ('N', 'No'),
+        ]
     id           = models.AutoField(primary_key=True)
     tipoDoc = models.ForeignKey('usuarios.TiposDocumento', blank=True,null= True, editable=True, on_delete=models.PROTECT)
     tipoEmpresa = models.ForeignKey('facturacion.TiposEmpresa', blank=True,null= True, editable=True, on_delete=models.PROTECT)
@@ -42,21 +54,28 @@ class Empresas (models.Model):
     telefono =  models.CharField(max_length=20, blank=True,null= True, editable=True,)
     representante =  models.CharField(max_length=80, blank=True,null= True, editable=True,)
     regimen =  models.ForeignKey('clinico.Regimenes', blank=True,null= True, editable=True,  on_delete=models.PROTECT)
-    fosyga = models.CharField(max_length=1, default='N', editable=False)
-    particular = models.CharField(max_length=1, default='N', editable=False)
+    fosyga = models.CharField(max_length=1, choices=FLAG_CHOICES,  default='N', editable=False)
+    particular = models.CharField(max_length=1,choices=FLAG_CHOICES,  default='N', editable=False)
     departamento = models.ForeignKey('sitios.Departamentos', blank=True,null= True, editable=True,  on_delete=models.PROTECT , related_name='Depto01')
     municipio  = models.ForeignKey('sitios.Municipios', blank=True,null= True, editable=True,  on_delete=models.PROTECT , related_name='Muni01')
     codigoPostal = models.CharField(max_length=30, blank=True,null= True, editable=True,)
     responsableFiscal = models.CharField(max_length=80, blank=True,null= True, editable=True,)
     identificadorDian = models.CharField(max_length=80, blank=True,null= True, editable=True,)
     fechaRegistro = models.DateTimeField(default=now, blank=True,null= True, editable=True, )
-    estadoReg = models.CharField(max_length=1, default='A', editable=False)
+    estadoReg = models.CharField(max_length=1,choices=ESTADOREG_CHOICES,  default='A', editable=False)
 
     def __str__(self):
         return self.nombre
 
 
 class Conceptos(models.Model):
+    ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
+    FLAG_CHOICES = [
+        ('S', 'Si'),
+        ('N', 'No'),
+        ]
     id = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=30, null=False)
     #tipoCups = models.ForeignKey('clinico.TiposExamen', blank=True, null=True, editable=True, on_delete=models.PROTECT)
@@ -69,23 +88,37 @@ class Conceptos(models.Model):
     ripsAh = models.CharField(max_length=1, default='A', editable=False)
     ripsAu = models.CharField(max_length=1, default='A', editable=False)
     fechaRegistro = models.DateTimeField(default=now, blank=True, null=True, editable=True, )
-    estadoReg = models.CharField(max_length=1, default='A', editable=False)
+    estadoReg = models.CharField(max_length=1, choices=ESTADOREG_CHOICES,  default='A', editable=False)
 
 
     def __str__(self):
         return self.nombre
 
 class TiposSuministro(models.Model):
+    ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
+    FLAG_CHOICES = [
+        ('S', 'Si'),
+        ('N', 'No'),
+        ]
     id = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=30, blank=True, null=True, editable=True)
     fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)
-    estadoReg = models.CharField(max_length=1, default='A', editable=False)
+    estadoReg = models.CharField(max_length=1, choices=ESTADOREG_CHOICES, default='A', editable=False)
 
     def __str__(self):
         return str(self.nombre)
 
 
 class Suministros (models.Model):
+    ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
+    FLAG_CHOICES = [
+        ('S', 'Si'),
+        ('N', 'No'),
+        ]
     id = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=300, blank=True,null= True, editable=True)
     tipoSuministro =   models.ForeignKey('facturacion.TiposSuministro', blank=True,null= True, editable=True, on_delete=models.PROTECT)
@@ -115,43 +148,43 @@ class Suministros (models.Model):
     fechaVencimiento =  models.DateTimeField(editable=True, null=True, blank=True)
     fraccion =  models.DecimalField( max_digits=20, decimal_places=2, blank=True,null= True)
     unidadFraccion =    models.CharField(max_length=20, blank=True,null= True, editable=True)
-    vence =   models.CharField(max_length=1, blank=True,null= True, editable=True)
-    control =   models.CharField(max_length=1, blank=True,null= True, editable=True)
-    antibiotico =   models.CharField(max_length=1, blank=True,null= True, editable=True)
-    pos	 =   models.CharField(max_length=1, blank=True,null= True, editable=True)
-    facturable   = models.CharField(max_length=1, blank=True,null= True, editable=True)
+    vence =   models.CharField(max_length=1, choices=FLAG_CHOICES, blank=True,null= True, editable=True)
+    control =   models.CharField(max_length=1,  choices=FLAG_CHOICES,blank=True,null= True, editable=True)
+    antibiotico =   models.CharField(max_length=1, choices=FLAG_CHOICES, blank=True,null= True, editable=True)
+    pos	 =   models.CharField(max_length=1,  choices=FLAG_CHOICES,blank=True,null= True, editable=True)
+    facturable   = models.CharField(max_length=1, choices=FLAG_CHOICES, blank=True,null= True, editable=True)
     stockMinimo = models.DecimalField( max_digits=20, decimal_places=2, blank=True,null= True)
     stockMaximo = models.DecimalField( max_digits=20, decimal_places=2, blank=True,null= True)
     maxOrdenar = models.DecimalField( max_digits=20, decimal_places=2, blank=True,null= True)
     estabilidad	 = models.DecimalField( max_digits=20, decimal_places=0, blank=True,null= True)
-    invFarmacia = models.CharField(max_length=1, blank=True,null= True, editable=True)
-    invAlmacen = models.CharField(max_length=1, blank=True,null= True, editable=True)
-    enfermeria = models.CharField(max_length=1, blank=True,null= True, editable=True)
-    terapia = models.CharField(max_length=1, blank=True,null= True, editable=True)
-    nutricion = models.CharField(max_length=1, blank=True,null= True, editable=True)
+    invFarmacia = models.CharField(max_length=1, choices=FLAG_CHOICES, blank=True,null= True, editable=True)
+    invAlmacen = models.CharField(max_length=1, choices=FLAG_CHOICES, blank=True,null= True, editable=True)
+    enfermeria = models.CharField(max_length=1, choices=FLAG_CHOICES, blank=True,null= True, editable=True)
+    terapia = models.CharField(max_length=1, choices=FLAG_CHOICES, blank=True,null= True, editable=True)
+    nutricion = models.CharField(max_length=1, choices=FLAG_CHOICES, blank=True,null= True, editable=True)
     cantidad	 = models.DecimalField( max_digits=20, decimal_places=2, blank=True,null= True)
     regSanitario = models.CharField(max_length=30, blank=True,null= True, editable=True)
-    altoCosto = models.CharField(max_length=1, blank=True,null= True, editable=True)
+    altoCosto = models.CharField(max_length=1, choices=FLAG_CHOICES, blank=True,null= True, editable=True)
     vrCompra = models.DecimalField( max_digits=20, decimal_places=2 , blank=True,null= True)
     vrUltimaCompra = models.DecimalField( max_digits=20, decimal_places=2 , blank=True,null= True)
     codigoAtc	= models.CharField(max_length=10, blank=True,null= True, editable=True)
-    infusion  = models.CharField(max_length=1, blank=True,null= True, editable=True)
+    infusion  = models.CharField(max_length=1,  choices=FLAG_CHOICES,blank=True,null= True, editable=True)
     tipoAdministracion = models.CharField(max_length=20, blank=True,null= True, editable=True)
-    regulado = models.CharField(max_length=1, blank=True,null= True, editable=True)
+    regulado = models.CharField(max_length=1, choices=FLAG_CHOICES, blank=True,null= True, editable=True)
     vaorRegulado = models.DecimalField( max_digits=20, decimal_places=2 , blank=True,null= True)
     observaciones = models.CharField(max_length=250, blank=True,null= True, editable=True)
-    sispro = models.CharField(max_length=1, blank=True,null= True, editable=True)
-    oncologico = models.CharField(max_length=1, blank=True,null= True, editable=True)
-    ortesis = models.CharField(max_length=1, blank=True,null= True, editable=True)
+    sispro = models.CharField(max_length=1, choices=FLAG_CHOICES, blank=True,null= True, editable=True)
+    oncologico = models.CharField(max_length=1, choices=FLAG_CHOICES, blank=True,null= True, editable=True)
+    ortesis = models.CharField(max_length=1, choices=FLAG_CHOICES, blank=True,null= True, editable=True)
     #mipres = models.CharField(max_length=15, blank=True,null= True, editable=True)
     epiHigiene = models.CharField(max_length=1, blank=True,null= True, editable=True)
-    controlStock = models.CharField(max_length=1, blank=True,null= True, editable=True)
-    AnatoPos = models.CharField(max_length=1, blank=True,null= True, editable=True)
-    magistralControl  = models.CharField(max_length=1, blank=True,null= True, editable=True)
-    genericoPos = models.CharField(max_length=1, blank=True,null= True, editable=True)
-    requiereAutorizacion = models.CharField(max_length=1,  blank=True, null=True, editable=True, default='N')
+    controlStock = models.CharField(max_length=1, choices=FLAG_CHOICES,  blank=True,null= True, editable=True)
+    AnatoPos = models.CharField(max_length=1, choices=FLAG_CHOICES, blank=True,null= True, editable=True)
+    magistralControl  = models.CharField(max_length=1, choices=FLAG_CHOICES, blank=True,null= True, editable=True)
+    genericoPos = models.CharField(max_length=1,  choices=FLAG_CHOICES,blank=True,null= True, editable=True)
+    requiereAutorizacion = models.CharField(max_length=1, choices=FLAG_CHOICES,  blank=True, null=True, editable=True, default='N')
     fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)
-    estadoReg = models.CharField(max_length=1, default='A', editable=False )
+    estadoReg = models.CharField(max_length=1, choices=ESTADOREG_CHOICES, default='A', editable=False )
 
     class Meta:
         indexes = [
@@ -166,15 +199,23 @@ class Suministros (models.Model):
 
 
 class ConveniosPacienteIngresos(models.Model):
+    ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
+    FLAG_CHOICES = [
+        ('S', 'Si'),
+        ('N', 'No'),
+        ]
     id = models.AutoField(primary_key=True)
     tipoDoc = models.ForeignKey('usuarios.TiposDocumento', blank=True, null=True, editable=True, on_delete=models.PROTECT)
     documento = models.ForeignKey('usuarios.Usuarios', blank=True, null=True, editable=True, on_delete=models.PROTECT,  related_name='DocumentoHistoria2')
     consecAdmision = models.IntegerField(default=0)
     convenio = models.ForeignKey('contratacion.Convenios', blank=True, null=True, editable=True, on_delete=models.PROTECT  , related_name='convenios0221')
     factura =  models.ForeignKey('facturacion.facturacion', blank=True, null=True, editable=True, on_delete=models.PROTECT)
+    anulado = models.CharField(max_length=1, choices=FLAG_CHOICES, default='N', blank=True, editable=False)
     fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)
     usuarioRegistro = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True, on_delete=models.PROTECT)
-    estadoReg = models.CharField(max_length=1, default='A', editable=False)
+    estadoReg = models.CharField(max_length=1, choices=ESTADOREG_CHOICES,default='A', editable=False)
 
     class Meta:
         unique_together = (('tipoDoc', 'documento','consecAdmision','convenio'),)
@@ -184,22 +225,36 @@ class ConveniosPacienteIngresos(models.Model):
 
 
 class SalariosLegales(models.Model):
+    ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
+    FLAG_CHOICES = [
+        ('S', 'Si'),
+        ('N', 'No'),
+        ]
     id = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=30, blank=True, null=True, editable=True)
     fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)
-    estadoReg = models.CharField(max_length=1, default='A', editable=False )
+    estadoReg = models.CharField(max_length=1, choices=ESTADOREG_CHOICES,default='A', editable=False )
 
     def __str__(self):
         return str(self.nombre)
 
 class SalariosMinimosLegales(models.Model):
+    ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
+    FLAG_CHOICES = [
+        ('S', 'Si'),
+        ('N', 'No'),
+        ]
     id = models.AutoField(primary_key=True)
     año =  models.CharField(max_length=5, blank=True, null=True, editable=True )
     nombre = models.CharField(max_length=30, blank=True, null=True, editable=True)
     valor  =  models.DecimalField( max_digits=15, decimal_places=2, editable=True, null=True, blank=True)
     valorSubsidio =  models.DecimalField( max_digits=15, decimal_places=2 , editable=True, null=True, blank=True)
     fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)
-    estadoReg = models.CharField(max_length=1, default='A', editable=False )
+    estadoReg = models.CharField(max_length=1, choices=ESTADOREG_CHOICES,default='A', editable=False )
 
     def __str__(self):
         return str(self.nombre)
@@ -207,6 +262,13 @@ class SalariosMinimosLegales(models.Model):
 
 
 class RegimenesTipoPago(models.Model):
+    ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
+    FLAG_CHOICES = [
+        ('S', 'Si'),
+        ('N', 'No'),
+        ]
     id = models.AutoField(primary_key=True)
     regimen =  models.ForeignKey('clinico.Regimenes', blank=True, null=True, editable=True, on_delete=models.PROTECT)
     salarioLegal =  models.ForeignKey('facturacion.SalariosLegales', blank=True, null=True, editable=True, on_delete=models.PROTECT)
@@ -216,7 +278,7 @@ class RegimenesTipoPago(models.Model):
     valorTopeMaximoCopagoEvento= models.DecimalField( max_digits=20, decimal_places=2)
     valorTopeMaximoCopagoCalendario=models.DecimalField( max_digits=20, decimal_places=2)
     fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)
-    estadoReg = models.CharField(max_length=1, default='A', editable=False )
+    estadoReg = models.CharField(max_length=1,choices=ESTADOREG_CHOICES, default='A', editable=False )
 
     def __str__(self):
         return str(self.regimen)
@@ -224,11 +286,18 @@ class RegimenesTipoPago(models.Model):
 
 
 class ConceptosAfacturar(models.Model):
+    ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
+    FLAG_CHOICES = [
+        ('S', 'Si'),
+        ('N', 'No'),
+        ]
     id = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=30, blank=True, null=True, editable=True)
     usuarioRegistro = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True, on_delete=models.PROTECT)
     fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)
-    estadoReg = models.CharField(max_length=1, default='A', editable=False )
+    estadoReg = models.CharField(max_length=1, choices=ESTADOREG_CHOICES,default='A', editable=False )
 
     def __str__(self):
         return str(self.nombre)
@@ -237,6 +306,13 @@ class ConceptosAfacturar(models.Model):
 
 
 class LiquidacionCirugias(models.Model):
+    ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
+    FLAG_CHOICES = [
+        ('S', 'Si'),
+        ('N', 'No'),
+        ]
     id = models.AutoField(primary_key=True)
     tipo =  models.CharField(max_length=50, default='A', editable=False )
     tipoTarifa =  models.ForeignKey('tarifas.TiposTarifa', blank=True,null= True, editable=True, on_delete=models.PROTECT)
@@ -245,15 +321,23 @@ class LiquidacionCirugias(models.Model):
     ayudantePorcentage      = models.DecimalField( max_digits=15, decimal_places=2 , blank=True,null= True, editable=True)
     derechosSalaPorcentage      = models.DecimalField( max_digits=15, decimal_places=2 , blank=True,null= True, editable=True)
     materialesPorcentage      = models.DecimalField( max_digits=15, decimal_places=2 , blank=True,null= True, editable=True)
+    anulado = models.CharField(max_length=1, choices=FLAG_CHOICES, default='N', blank=True, editable=False) 
     usuarioRegistro = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True, on_delete=models.PROTECT)
     fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)
-    estadoReg = models.CharField(max_length=1, default='A', editable=False )
+    estadoReg = models.CharField(max_length=1, choices=ESTADOREG_CHOICES,default='A', editable=False )
 
     def __str__(self):
         return str(self.codigoHomologado)
 
 
 class Facturacion(models.Model):
+    ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
+    FLAG_CHOICES = [
+        ('S', 'Si'),
+        ('N', 'No'),
+        ]
     id  = models.AutoField(primary_key=True)
     sedesClinica = models.ForeignKey('sitios.SedesClinica',   blank=True,null= True, on_delete=models.PROTECT ,related_name ='sedesClinica398')
     serviciosAdministrativos = models.ForeignKey('sitios.ServiciosAdministrativos', blank=True,null= True, editable=True,  on_delete=models.PROTECT,   related_name='seradm20')
@@ -290,9 +374,9 @@ class Facturacion(models.Model):
     nombreArchivo =  models.CharField(max_length=1000, blank=True,null= True, editable=True,)
     estado =   models.CharField(max_length=100, blank=True,null= True, editable=True,)
     fechaEnvioDian =  models.DateTimeField(editable=True, null=True, blank=True)
-    reprocesarDian =models.CharField(max_length=1, blank=True,null= True, editable=True,)
-    estadoEnvioDyan =models.CharField(max_length=1, blank=True,null= True, editable=True,)
-    tipoFacturaDyan = models.CharField(max_length=1, blank=True,null= True, editable=True,)
+    reprocesarDian =models.CharField(max_length=1,choices=FLAG_CHOICES, blank=True,null= True, editable=True,)
+    estadoEnvioDyan =models.CharField(max_length=1,choices=FLAG_CHOICES,  blank=True,null= True, editable=True,)
+    tipoFacturaDyan = models.CharField(max_length=1,choices=FLAG_CHOICES,  blank=True,null= True, editable=True,)
     rutaPdf = models.CharField(max_length=100, blank=True,null= True, editable=True,)
     envioCorreo = models.CharField(max_length=1, blank=True,null= True, editable=True,)
     desbloqueada =  models.CharField(max_length=1, blank=True,null= True, editable=True,)
@@ -311,11 +395,12 @@ class Facturacion(models.Model):
     totalNotasDebito = models.DecimalField( max_digits=15, decimal_places=2 , blank=True,null= True, editable=True)
     usuarioAnula = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True, on_delete=models.PROTECT , related_name='Plantas100')
     detalleAnulacion = models.CharField(max_length=20, blank=True,null= True, editable=True,)
+    anulado = models.CharField(max_length=1, choices=FLAG_CHOICES, default='N', blank=True, editable=False)
     fechaAnulacion =  models.DateTimeField(editable=True, null=True, blank=True)
     observaciones = models.CharField(max_length=100, blank=True,null= True, editable=True,)
     usuarioRegistro = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True, on_delete=models.PROTECT, related_name='Plantas101')
     fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)
-    estadoReg = models.CharField(max_length=1, default='A', editable=False )
+    estadoReg = models.CharField(max_length=1, choices=ESTADOREG_CHOICES,default='A', editable=False )
 
 
 
@@ -323,13 +408,16 @@ class Facturacion(models.Model):
         return str(self.documento)
 
 class FacturacionDetalle(models.Model):
-
-    M = 'MANUAL'
-    S = 'SISTEMA'
-    TIPO_REGISTRO = (
+    ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
+    FLAG_CHOICES = [
+        ('S', 'Si'),
+        ('N', 'No'),
+        ]
+    TIPOREGISTRO_CHOICES = [
         ('M', 'MANUAL'),
-        ('S', 'SISTEMA'),
-    )
+        ('S', 'SISTEMAS'), ]
     id = models.AutoField(primary_key=True)
     facturacion = models.ForeignKey('facturacion.facturacion', blank=True,null= True, editable=True, on_delete=models.PROTECT, related_name='Fact01')
     consecutivoFactura =  models.IntegerField(editable=True, null=True, blank=True)
@@ -345,7 +433,7 @@ class FacturacionDetalle(models.Model):
     valorTotal =  models.DecimalField( max_digits=15, decimal_places=0 , blank=True,null= True, editable=True)
     cirugia = models.ForeignKey('cirugia.Cirugias', blank=True,null= True, editable=True, on_delete=models.PROTECT, related_name='Ciru01112')
     fechaCrea = models.DateTimeField(editable=True, null=True, blank=True)
-    tipoRegistro = models.CharField(max_length=20,  blank=True, null=True, editable=True, choices = TIPO_REGISTRO)
+    tipoRegistro = models.CharField(max_length=20,  blank=True, null=True, editable=True, choices = TIPOREGISTRO_CHOICES)
     tipoHonorario =  models.ForeignKey('tarifas.TiposHonorarios', blank=True,null= True, editable=True, on_delete=models.PROTECT, related_name='TipoHonorario099')
     usuarioCrea = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True, on_delete=models.PROTECT, related_name='Planta105') 
     fechaModifica = models.DateTimeField(editable=True, null=True, blank=True)
@@ -374,15 +462,23 @@ class FacturacionDetalle(models.Model):
     observacionOtraNotaCredito = models.CharField(max_length=200, blank=True,null= True, editable=True,)
     notaDebito    = models.ForeignKey('cartera.NotasDebito', blank=True,null= True, editable=True, on_delete=models.PROTECT , related_name='TablaCups121')
     valorNotaDebito = models.DecimalField( max_digits=15, decimal_places=2 , blank=True,null= True, editable=True)
+    anulado = models.CharField(max_length=1, choices=FLAG_CHOICES, default='N', blank=True, editable=False)
     fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)
     usuarioRegistro = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True, on_delete=models.PROTECT , related_name='Planta107') 
-    estadoRegistro = models.CharField(max_length=1, blank=True,null= True, editable=True,)
+    estadoRegistro = models.CharField(max_length=1, choices=ESTADOREG_CHOICES,blank=True,null= True, editable=True,)
 
 
     def __str__(self):
         return str(self.codigoHomologado)
 
 class Liquidacion(models.Model):
+    ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
+    FLAG_CHOICES = [
+        ('S', 'Si'),
+        ('N', 'No'),
+        ]
     id = models.AutoField(primary_key=True)
     sedesClinica = models.ForeignKey('sitios.SedesClinica',   blank=True,null= True, on_delete=models.PROTECT ,related_name ='sedesClinica789')
     serviciosAdministrativos = models.ForeignKey('sitios.ServiciosAdministrativos', blank=True,null= True, editable=True,  on_delete=models.PROTECT,   related_name='seradm21')
@@ -402,7 +498,7 @@ class Liquidacion(models.Model):
     valorApagar = models.DecimalField( max_digits=15, decimal_places=0 , blank=True,null= True, editable=True)
     notasDebito =  models.DecimalField( max_digits=15, decimal_places=0 , blank=True,null= True, editable=True)
     notasCredito =  models.DecimalField( max_digits=15, decimal_places=0 , blank=True,null= True, editable=True)
-    anulado = models.CharField(max_length=1, blank=True,null= True, editable=True,)
+    anulado = models.CharField(max_length=1, choices=FLAG_CHOICES, default='N', blank=True, editable=False)
     fechaCorte = models.DateTimeField(editable=True, null=True, blank=True)
     anticipos = models.DecimalField( max_digits=15, decimal_places=0 , blank=True,null= True, editable=True)
     usuarioAnula =  models.ForeignKey('planta.Planta', blank=True, null=True, editable=True, on_delete=models.PROTECT, related_name='Planta108') 
@@ -411,7 +507,7 @@ class Liquidacion(models.Model):
     observaciones  = models.CharField(max_length=120, blank=True,null= True, editable=True,)
     usuarioRegistro = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True, on_delete=models.PROTECT, related_name='Planta109') 
     fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)
-    estadoRegistro = models.CharField(max_length=1, blank=True,null= True, editable=True,)
+    estadoRegistro = models.CharField(max_length=1,choices=ESTADOREG_CHOICES, blank=True,null= True, editable=True,)
 
 
 
@@ -420,13 +516,16 @@ class Liquidacion(models.Model):
 
 
 class LiquidacionDetalle(models.Model):
-
-    M = 'MANUAL'
-    S = 'SISTEMA'
-    TIPO_REGISTRO = (
+    ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
+    FLAG_CHOICES = [
+        ('S', 'Si'),
+        ('N', 'No'),
+        ]
+    TIPOREGISTRO_CHOICES = [
         ('M', 'MANUAL'),
-        ('S', 'SISTEMA'),
-    )
+        ('S', 'SISTEMAS'), ]
     id = models.AutoField(primary_key=True)
     liquidacion = models.ForeignKey('facturacion.Liquidacion', blank=True,null= True, editable=True, on_delete=models.PROTECT, related_name='Liquid01')
     consecutivo = models.IntegerField(editable=True, null=True, blank=True)
@@ -442,21 +541,29 @@ class LiquidacionDetalle(models.Model):
     valorTotal = models.DecimalField( max_digits=15, decimal_places=0 , blank=True,null= True, editable=True)
     cirugia = models.ForeignKey('cirugia.Cirugias', blank=True,null= True, editable=True, on_delete=models.PROTECT, related_name='Ciru0111')
     fechaCrea = models.DateTimeField(editable=True, null=True, blank=True)
-    tipoRegistro = models.CharField(max_length=20,  blank=True, null=True, editable=True, choices = TIPO_REGISTRO)
+    tipoRegistro = models.CharField(max_length=20,  blank=True, null=True, editable=True, choices = TIPOREGISTRO_CHOICES)
     tipoHonorario =  models.ForeignKey('tarifas.TiposHonorarios', blank=True,null= True, editable=True, on_delete=models.PROTECT, related_name='TipoHonorario091')
     #usuarioCrea = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True, on_delete=models.PROTECT, related_name='Planta120') 
     fechaModifica = models.DateTimeField(editable=True, null=True, blank=True)
     usuarioModifica = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True, on_delete=models.PROTECT, related_name='Planat121') 
     observaciones =  models.CharField(max_length=120, blank=True,null= True, editable=True,)
+    anulado = models.CharField(max_length=1, choices=FLAG_CHOICES, default='N', blank=True, editable=False)
     usuarioRegistro = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True, on_delete=models.PROTECT, related_name='Planta122') 
     fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)
-    estadoRegistro = models.CharField(max_length=1, blank=True,null= True, editable=True,)
+    estadoRegistro = models.CharField(max_length=1, choices=ESTADOREG_CHOICES, blank=True,null= True, editable=True,)
 
     def __str__(self):
         return str(self.id)
 
 
 class Refacturacion(models.Model):
+    ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
+    FLAG_CHOICES = [
+        ('S', 'Si'),
+        ('N', 'No'),
+        ]
     id = models.AutoField(primary_key=True)
     sedesClinica = models.ForeignKey('sitios.SedesClinica',   blank=True,null= True, on_delete=models.PROTECT ,related_name ='sedesClinica667')
     serviciosAdministrativos = models.ForeignKey('sitios.ServiciosAdministrativos', blank=True,null= True, editable=True,  on_delete=models.PROTECT,   related_name='seradm51')
@@ -469,9 +576,10 @@ class Refacturacion(models.Model):
     facturaAnulada = models.CharField(max_length=20, blank=True,null= True, editable=True,)
     #facturaFinal  = models.CharField(max_length=20, blank=True,null= True, editable=True,)
     facturaNueva  = models.CharField(max_length=20, blank=True,null= True, editable=True,)
+    anulado = models.CharField(max_length=1, choices=FLAG_CHOICES, default='N', blank=True, editable=False)
     usuarioRegistro = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True, on_delete=models.PROTECT, related_name='Planta123') 
     fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)
-    estadoRegistro = models.CharField(max_length=1, blank=True,null= True, editable=True,)
+    estadoRegistro = models.CharField(max_length=1, choices=ESTADOREG_CHOICES, blank=True,null= True, editable=True,)
 
 
     def __str__(self):

@@ -103,23 +103,23 @@ class crearAdmisionForm(forms.ModelForm):
 
 
 # Desde Aquip FURIPS
-TIPO_CHOICES = (
+ESTADOREG_CHOICES = (
         ('A', 'ACTIVO'),
         ('I', 'INACTIVO'),
     )
 
-TIPO_CHOICES1 = (
+FLAG_CHOICES = (
         ('S', 'Si'),
         ('N', 'No'),
     )
-TIPO_CONDICION =(
+TIPOCONDICION_CHOICES =(
     ("A", "Asegurado"),
     ("N", "No Asegurado"),
     ("V", "Vehiculo_Fantasma"),
     ("P", "Poliza_Falsa"),
     ("F", "Vehiculo_en_fuga"),
 )
-TIPO_CHOICES3 = (
+TIPO3_CHOICES = (
         ("P", 'Servicio Particular'),
         ("U", 'Servicio Publico'),
         ("O", 'Servicio Oficial'),
@@ -127,7 +127,7 @@ TIPO_CHOICES3 = (
         ("T", 'De transporte Masivo'),
 	    ("E", 'Escolar')
 )
-TIPO_CHOICES4 = (
+TIPO4_CHOICES = (
         ("R", 'Remision'),
         ("O", 'Orden de Servicio'),
 )
@@ -138,11 +138,11 @@ class furipsForm(forms.ModelForm):
     class Meta:
         model = Furips
         fields = '__all__'
-        widgets = {'condicionAccidentado': forms.RadioSelect(choices=Furips.TIPO_CONDICION),
-                   'estado': forms.RadioSelect(choices=Furips.TIPO_CHOICES1),
-                   'tipoVehiculo': forms.RadioSelect(choices=Furips.TIPO_CHOICES3),
-                   'tipoReferencia': forms.RadioSelect(choices=Furips.TIPO_CHOICES4),
-		   'estadoReg': forms.RadioSelect(choices=Furips.TIPO_CHOICES),
+        widgets = {'condicionAccidentado': forms.RadioSelect(choices=Furips.TIPOCONDICION_CHOICES),
+                   'estado': forms.RadioSelect(choices=Furips.FLAG_CHOICES),
+                   'tipoVehiculo': forms.RadioSelect(choices=Furips.TIPO3_CHOICES),
+                   'tipoReferencia': forms.RadioSelect(choices=Furips.TIPO4_CHOICES),
+		   'estadoReg': forms.RadioSelect(choices=Furips.ESTADOREG_CHOICES),
                    }
 
     sedesClinica = forms.ModelChoiceField(queryset=SedesClinica.objects.all())
@@ -157,7 +157,7 @@ class furipsForm(forms.ModelForm):
     tipoDocVictima        = forms.ModelChoiceField(queryset=TiposDocumento.objects.all())
     documentoVictima      = forms.ModelChoiceField(queryset=Usuarios.objects.all())
     consecVictima         = forms.CharField(max_length=8)
-    condicionAccidentado = forms.ChoiceField(choices = TIPO_CONDICION)
+    condicionAccidentado = forms.ChoiceField(choices = TIPOCONDICION_CHOICES)
     evento = forms.ModelChoiceField(queryset=Eventos.objects.all())
     direccionEvento = forms.CharField(max_length=80)
     departamentoEvento = forms.ModelChoiceField(queryset=Departamentos.objects.all())
@@ -166,11 +166,11 @@ class furipsForm(forms.ModelForm):
     zonaEvento =  forms.CharField(max_length=1)
     fechaEvento = forms.DateTimeField()
     eventoDescripcion = forms.CharField(max_length=500)
-    estado = forms.ChoiceField(choices = TIPO_CHOICES1)
+    estado = forms.ChoiceField(choices = FLAG_CHOICES)
     marcaVehiculo = forms.CharField(max_length=50)
     placaVehiculo = forms.CharField(max_length=20)
     tipoServicioVehiculo = forms.CharField(max_length=20)
-    tipoVehiculo = forms.ChoiceField(choices = TIPO_CHOICES3)
+    tipoVehiculo = forms.ChoiceField(choices = TIPO3_CHOICES)
     codigoaseguradora = forms.CharField(max_length=20)
     numeroPoliza= forms.CharField(max_length=20)
     fechaIniPoliza = forms.DateTimeField()
@@ -197,7 +197,7 @@ class furipsForm(forms.ModelForm):
     municipioInvolucrado = forms.ModelChoiceField(queryset=Municipios.objects.all())
     localidadInvolucrado = forms.ModelChoiceField(queryset=Localidades.objects.all())
     direccionInvolucrado = forms.CharField(max_length=30)
-    tipoReferencia =  forms.ChoiceField(choices = TIPO_CHOICES4)
+    tipoReferencia =  forms.ChoiceField(choices = TIPO4_CHOICES)
     fechaRemision = forms.DateTimeField()
     prestadorRemite = forms.ModelChoiceField(queryset=Ips.objects.all())
     codigoInscripcion = forms.CharField(max_length=20)

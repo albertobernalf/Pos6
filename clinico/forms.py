@@ -106,7 +106,7 @@ class historiaForm(forms.ModelForm):
                    'vomito': forms.RadioSelect(choices=Historia.STATUS_CHOICES),
                    'inmovilizacion': forms.RadioSelect(choices=Historia.STATUS_CHOICES),
                    'notaAclaratoria': forms.RadioSelect(choices=Historia.STATUS_CHOICES),
-   		   'inmovilizacion': forms.RadioSelect(choices=Historia.STATUS_CHOICES),
+           		   'inmovilizacion': forms.RadioSelect(choices=Historia.STATUS_CHOICES),
                    }
 
         tipoDoc = forms.ModelChoiceField(queryset=TiposDocumento.objects.all())

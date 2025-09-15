@@ -4,6 +4,14 @@ from django.utils.timezone import now
 # Create your models here.
 
 class Ingresos(models.Model):
+    ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
+    FLAG_CHOICES = [
+        ('S', 'Si'),
+        ('N', 'No'),
+        ]
+
 
     id           = models.AutoField(primary_key=True)
     sedesClinica = models.ForeignKey('sitios.SedesClinica', blank=True,null= True, editable=True, on_delete=models.PROTECT, related_name = 'SedesClinica')
@@ -32,13 +40,13 @@ class Ingresos(models.Model):
     dxSalida = models.ForeignKey('clinico.Diagnosticos', blank=True,null= True, editable=True, on_delete=models.PROTECT,  related_name='id5')
     medicoSalida =  models.ForeignKey('clinico.Medicos', blank=True,null= True, editable=True, on_delete=models.PROTECT,   related_name='id8')
     especialidadesMedicosSalida = models.ForeignKey('clinico.EspecialidadesMedicos', blank=True,null= True, editable=True,  on_delete=models.PROTECT, related_name='EspSal')
-    salidaClinica = models.CharField(max_length=1,default='N')
+    salidaClinica = models.CharField(max_length=1,choices=FLAG_CHOICES,default='N')
 
     salidaDefinitiva =  models.CharField(max_length=1,default='N')
     salidaMotivo = models.ForeignKey('clinico.TiposSalidas', blank=True,null= True, editable=True,  on_delete=models.PROTECT, related_name='salidaMotivo01')
 
     empresa = models.ForeignKey('facturacion.Empresas', blank=True,null= True, editable=True,  on_delete=models.PROTECT)
-    remitido =  models.CharField(max_length=1, blank=True,null= True, editable=True,)
+    remitido =  models.CharField(max_length=1, choices=FLAG_CHOICES, blank=True,null= True, editable=True,)
     ipsRemite =  models.ForeignKey('clinico.Ips', blank=True,null= True, editable=True,  on_delete=models.PROTECT)
     contactoAcompañante = models.ForeignKey('usuarios.UsuariosContacto', blank=True,null= True, editable=True,  on_delete=models.PROTECT , related_name='Contac01')
     contactoResponsable = models.ForeignKey('usuarios.UsuariosContacto', blank=True,null= True, editable=True,  on_delete=models.PROTECT , related_name='Contac02')
@@ -52,7 +60,7 @@ class Ingresos(models.Model):
     # supongo  tabla - ContratosPaciente(id, tipoDoc, documento, contrato, vigencia_desde, vigencia_hasta)
     # ContratosPacienteAdmisiones(id, tipoDoc, documento, contrato, consec)
     ViasEgreso = models.ForeignKey('clinico.ViasEgreso', blank=True, null=True, editable=True, on_delete=models.PROTECT)
-    muerte =  models.CharField(max_length=1,default='N')
+    muerte =  models.CharField(max_length=1,choices=FLAG_CHOICES, default='N')
     fechaMuerte = models.DateTimeField(editable=True, null=True, blank=True)
     #dxMuerte = models.ForeignKey('clinico.Diagnosticos', blank=True,null= True, editable=True, on_delete=models.PROTECT,   related_name='id74')
     dxComplicacion = models.ForeignKey('clinico.Diagnosticos', blank=True,null= True, editable=True, on_delete=models.PROTECT,   related_name='id75')
@@ -62,7 +70,7 @@ class Ingresos(models.Model):
     ripsServiciosIng = models.ForeignKey('rips.RipsServicios', blank=True,null= True, editable=True,  on_delete=models.PROTECT,   related_name='ripssServicios01')
     ripsServiciosActual = models.ForeignKey('rips.RipsServicios', blank=True,null= True, editable=True,  on_delete=models.PROTECT,   related_name='ripssServicios02')
     ripsServiciosSalida = models.ForeignKey('rips.RipsServicios', blank=True,null= True, editable=True,  on_delete=models.PROTECT,   related_name='ripssServicios03')
-    ripsRecienNacido = models.CharField(max_length=1,  blank=True,null= True, editable=True)
+    ripsRecienNacido = models.CharField(max_length=1, choices=FLAG_CHOICES,  blank=True,null= True, editable=True)
     ripsEdadGestacional = models.CharField(max_length=10, blank=True,null= True, editable=True)
     ripsNumConsultasCPrenatal = models.CharField(max_length=10, blank=True,null= True, editable=True)
     ripsPesoRecienNacido = models.CharField(max_length=10, blank=True,null= True, editable=True)
@@ -77,7 +85,7 @@ class Ingresos(models.Model):
     ripsTipoUsuario  = models.ForeignKey('rips.RipsTipoUsuario', blank=True,null= True, editable=True, on_delete=models.PROTECT ,   related_name='ripsTipousuario12')
     fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)
     usuarioRegistro = models.ForeignKey('planta.Planta', default=1, on_delete=models.PROTECT, null=True)
-    estadoReg = models.CharField(max_length=1, default='A', editable=False)
+    estadoReg = models.CharField(max_length=1,choices=ESTADOREG_CHOICES, default='A', editable=False)
 
     class Meta:
         unique_together = (('tipoDoc', 'documento','consec'),)
@@ -89,51 +97,33 @@ class Ingresos(models.Model):
 
 
 class Furips(models.Model):
-    A = 'A'
-    I = 'I'
-    TIPO_CHOICES = (
-        ('A', 'ACTIVO'),
-        ('I', 'INACTIVO'),
-    )
-    S = 'S'
-    N = 'N'
-    TIPO_CHOICES1 = (
+    ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
+    FLAG_CHOICES = [
         ('S', 'Si'),
         ('N', 'No'),
-    )
-    Asegurado = 'A'
-    No_Asegurado = 'N'
-    Vehiculo_Fantasma = 'V'
-    Poliza_Falsa = 'P'
-    Vehiculo_en_fuga = 'F'
-    TIPO_CONDICION = (
-        (Asegurado, 'Asegurado'),
-        (No_Asegurado, 'No Asegurado'),
-        (Vehiculo_Fantasma, 'Vehiculo Fantasma'),
-        (Poliza_Falsa, 'Poliza Falsa'),
-        (Vehiculo_en_fuga, 'Vehiculo en fuga'),
-    )
-    P = 'Servicio Particular'
-    U = 'Servicio Publico'
-    O = 'Servicio Oficial'
-    D = 'Servicio Diplomatico'
-    T = 'De transporte Masivo'
-    E =	'Escolar'
-    TIPO_CHOICES3 = (
-        (P, 'Servicio Particular'),
-        (U, 'Servicio Publico'),
-        (O, 'Servicio Oficial'),
-        (D, 'Servicio Diplomatico'),
-        (T, 'De transporte Masivo'),
-	    (E, 'Escolar'),
-    )
-    R =  'Remision'
-    O = 'Orden de Servicio'
-    TIPO_CHOICES4 = (
-        (R, 'Remision'),
-        (O, 'Orden de Servicio'),
-    )
-
+        ]
+    TIPOCONDICION_CHOICES = [
+        ('A', 'Asegurado'),
+        ('N', 'No_Asegurado'),
+        ('V', 'Vehiculo_Fantasma'),
+        ('P', 'Poliza_Falsa'),
+        ('F', 'Vehiculo_en_fugao'),
+        ]
+    TIPO3_CHOICES = [
+        ('P', 'Servicio Particular'),
+        ('U', 'Servicio Publico'),
+        ('O', 'Servicio Oficial'),
+        ('D', 'Poliza_Falsa'),
+        ('T', 'Servicio Diplomatico'),
+        ('R', 'De transporte Masivo'),
+        ('E', 'Escolar'),
+        ]
+    TIPO4_CHOICES = [
+        ('R', 'Remision'),
+        ('O', 'Orden de Servicio'),
+        ]
     id = models.AutoField(primary_key=True)
     sedesClinica = models.ForeignKey('sitios.SedesClinica', blank=True,null= True, editable=True, on_delete=models.PROTECT, related_name = 'SedesClinica3')
     tipoDoc = models.ForeignKey('usuarios.TiposDocumento', blank=True,null= True, editable=True, on_delete=models.PROTECT)
@@ -150,7 +140,7 @@ class Furips(models.Model):
     tipoDocVictima        = models.ForeignKey('usuarios.TiposDocumento', blank=True,null= True, editable=True, on_delete=models.PROTECT ,  related_name='tipoDoc14')
     documentoVictima      = models.ForeignKey('usuarios.Usuarios',blank=True,null= True, editable=True, on_delete=models.PROTECT,  related_name='Documento14')
     consecVictima         = models.IntegerField( blank=True, null=True, editable=True,)
-    condicionAccidentado = models.CharField(max_length=1, default='A',  blank=True, null=True,  editable=False ,choices = TIPO_CONDICION)
+    condicionAccidentado = models.CharField(max_length=1, default='A',  blank=True, null=True,  editable=False ,choices = TIPOCONDICION_CHOICES)
     evento = models.ForeignKey('basicas.Eventos', blank=True,null= True, editable=True, on_delete=models.PROTECT)
     direccionEvento = models.CharField(max_length=80,  blank=True, null=True, editable=True,)
     departamentoEvento = models.ForeignKey('sitios.Departamentos', blank=True,null= True, editable=True, on_delete=models.PROTECT ,  related_name='dept10')
@@ -159,11 +149,11 @@ class Furips(models.Model):
     zonaEvento =  models.CharField(max_length=1, default='A',  blank=True, null=True,  editable=False )
     fechaEvento = models.DateTimeField( default=now,editable=True,  blank=True, null=True)
     eventoDescripcion = models.CharField(max_length=500,  blank=True, null=True, editable=True,)
-    estado = models.CharField(max_length=20,  blank=True, null=True, editable=True, choices = TIPO_CHOICES1)
+    estado = models.CharField(max_length=20,  blank=True, null=True, editable=True, choices = FLAG_CHOICES)
     marcaVehiculo = models.CharField(max_length=50,  blank=True, null=True, editable=True,)
     placaVehiculo = models.CharField(max_length=20, blank=True, null=True, editable=True,)
     tipoServicioVehiculo = models.CharField(max_length=20,  blank=True, null=True, editable=True,)
-    tipoVehiculo = models.CharField(max_length=20,  blank=True, null=True, editable=True, choices = TIPO_CHOICES3)
+    tipoVehiculo = models.CharField(max_length=20,  blank=True, null=True, editable=True, choices = TIPO3_CHOICES)
     codigoaseguradora = models.CharField(max_length=20, blank=True, null=True, editable=True,)
     numeroPoliza= models.CharField(max_length=20,  blank=True, null=True, editable=True,)
     fechaIniPoliza = models.DateTimeField(default=now,  editable=True, null=True, blank=True)
@@ -190,7 +180,7 @@ class Furips(models.Model):
     municipioInvolucrado = models.ForeignKey('sitios.Municipios', blank=True,null= True, editable=True, on_delete=models.PROTECT ,  related_name='muni12')
     localidadInvolucrado = models.ForeignKey('sitios.Localidades', blank=True,null= True, editable=True, on_delete=models.PROTECT)
     direccionInvolucrado = models.CharField(max_length=80,  blank=True, null=True, editable=True,)
-    tipoReferencia =  models.CharField(max_length=20,  blank=True, null=True, editable=True, choices = TIPO_CHOICES4)
+    tipoReferencia =  models.CharField(max_length=20,  blank=True, null=True, editable=True, choices = TIPO4_CHOICES)
     fechaRemision = models.DateTimeField( default=now, editable=True, null=True, blank=True)
     prestadorRemite = models.ForeignKey('clinico.Ips', blank=True,null= True, editable=True, on_delete=models.PROTECT ,  related_name='ips7' )
     codigoInscripcion = models.CharField(max_length=20,  blank=True, null=True, editable=True,)
@@ -220,7 +210,7 @@ class Furips(models.Model):
     amparoReclamaAFosygaGastos =  models.DecimalField(max_digits=7, decimal_places=2, default=0.0, blank=True, null=True, editable=True,)
     fechaRegistro  = models.DateTimeField(editable=True, null=True, blank=True)
     usuarioCrea = models.ForeignKey('planta.Planta', blank=True,null= True, editable=True, on_delete=models.PROTECT ,  related_name='planta111')
-    estadoReg = models.CharField(max_length=1, default='A', editable=False ,choices = TIPO_CHOICES)
+    estadoReg = models.CharField(max_length=1, choices=ESTADOREG_CHOICES, default='A', editable=False )
 
     def __str__(self):
         return self.numeroRadicacion

@@ -3,19 +3,32 @@ from django.db import models
 # Create your models here.
 
 class TiposTurnosEnfermeria(models.Model):
+    ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
+
+
+    FLAG_CHOICES = [
+        ('S', 'Si'),
+        ('N', 'No'),
+        ]
     id = models.AutoField(primary_key=True)
     sedesClinica = models.ForeignKey('sitios.SedesClinica',   blank=True,null= True, on_delete=models.PROTECT ,related_name ='sedesClinica_377')
     nombre = models.CharField(max_length=50, blank=False, null=False,  editable = True)
     horario = models.CharField(max_length=50, default='A', editable=True)
     fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)
     usuarioRegistro = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True,    on_delete=models.PROTECT ,   related_name='usuarioenf01')
-    estadoReg = models.CharField(max_length=1, default='A', editable=False)
+    estadoReg = models.CharField(max_length=1, choices=ESTADOREG_CHOICES,default='A', editable=False)
 
     def __str__(self):
         return str(self.nombre)
 
 
 class TurnosEnfermeria(models.Model):
+    ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
+
     id = models.AutoField(primary_key=True)
     sedesClinica = models.ForeignKey('sitios.SedesClinica',   blank=True,null= True, on_delete=models.PROTECT ,related_name ='sedesClinica_398')
     tiposTurnosEnfermeria = models.ForeignKey('enfermeria.TiposTurnosEnfermeria',   blank=True,null= True, on_delete=models.PROTECT ,related_name ='tiposTurno01')  
@@ -24,12 +37,19 @@ class TurnosEnfermeria(models.Model):
     enfermeraTurno = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True, on_delete=models.PROTECT)
     fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)
     usuarioRegistro = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True,    on_delete=models.PROTECT ,   related_name='usuarioenf02')
-    estadoReg = models.CharField(max_length=1, default='A', editable=False)
+    estadoReg = models.CharField(max_length=1,  choices=ESTADOREG_CHOICES,default='A', editable=False)
 
     def __str__(self):
         return str(self.id)
 
 class CuidadosEnfermeria(models.Model):
+    ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
+    FLAG_CHOICES = [
+        ('S', 'Si'),
+        ('N', 'No'),
+        ]
     id = models.AutoField(primary_key=True)
     sedesClinica = models.ForeignKey('sitios.SedesClinica',   blank=True,null= True, on_delete=models.PROTECT ,related_name ='sedesClinica378')
     historia = models.ForeignKey('clinico.Historia', on_delete=models.PROTECT, blank=True, null=True,  editable=True,  related_name='HistoriaCuidadosEnfermeria01')
@@ -107,13 +127,16 @@ class CuidadosEnfermeria(models.Model):
     observaCuracion =models.CharField(max_length=5000, blank=False, null=False,             editable = True)
     fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)
     usuarioRegistro = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True,   on_delete=models.PROTECT ,   related_name='usuarioenf03')
-    estadoReg = models.CharField(max_length=1, default='A', editable=False)
+    estadoReg = models.CharField(max_length=1,choices=ESTADOREG_CHOICES, default='A', editable=False)
 
 
     def __str__(self):
         return str(self.id)
 
 class DolorEnfermeria(models.Model):
+    ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
     id = models.AutoField(primary_key=True)
     sedesClinica = models.ForeignKey('sitios.SedesClinica',   blank=True,null= True, on_delete=models.PROTECT ,related_name ='sedesClinica379')
     historia = models.ForeignKey('clinico.Historia', on_delete=models.PROTECT, blank=True, null=True,  editable=True,  related_name='HistoriaDolorEnfermeria01')
@@ -125,12 +148,15 @@ class DolorEnfermeria(models.Model):
     lateralidad = models.CharField(max_length=100, blank=False, null=False, editable=True)
     fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)
     usuarioRegistro = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True,   on_delete=models.PROTECT)
-    estadoReg = models.CharField(max_length=1, default='A', editable=False)
+    estadoReg = models.CharField(max_length=1, choices=ESTADOREG_CHOICES,default='A', editable=False)
 
     def __str__(self):
-        return str(self.id)
+        return str(self.dolorDescripcion)
 
 class HeridasEnfermeria(models.Model):
+    ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
     id = models.AutoField(primary_key=True)
     sedesClinica = models.ForeignKey('sitios.SedesClinica',   blank=True,null= True, on_delete=models.PROTECT ,related_name ='sedesClinica380')
     historia = models.ForeignKey('clinico.Historia', on_delete=models.PROTECT, blank=True, null=True,  editable=True,  related_name='HistoriaHeridasEnfermeria01')
@@ -147,21 +173,31 @@ class HeridasEnfermeria(models.Model):
     edema = models.BooleanField()
     fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)
     usuarioRegistro = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True,            on_delete=models.PROTECT)
-    estadoReg = models.CharField(max_length=1, default='A', editable=False)
+    estadoReg = models.CharField(max_length=1,choices=ESTADOREG_CHOICES, default='A', editable=False)
 
     def __str__(self):
-        return str(self.id)
+        return str(self.historia)
 
 class TipoBalanceLiquidosEnfermeria(models.Model):
+    ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
     id = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=30, blank=False, null=False,            editable = True)
     fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)
-    estadoReg = models.CharField(max_length=1, default='A', editable=False)
+    estadoReg = models.CharField(max_length=1,choices=ESTADOREG_CHOICES, default='A', editable=False)
 
     def __str__(self):
-        return str(self.id)
+        return str(self.nombre)
 
 class PosicionPacientesEnfermeria(models.Model):
+    ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
+    FLAG_CHOICES = [
+        ('S', 'Si'),
+        ('N', 'No'),
+        ]
     id = models.AutoField(primary_key=True)
     sedesClinica = models.ForeignKey('sitios.SedesClinica',   blank=True,null= True, on_delete=models.PROTECT ,related_name ='sedesClinica381')
     historia = models.ForeignKey('clinico.Historia', on_delete=models.PROTECT, blank=True, null=True,  editable=True,  related_name='HistoriaPosicionEnfermeria01')
@@ -172,17 +208,25 @@ class PosicionPacientesEnfermeria(models.Model):
     realizado = models.CharField(max_length=100, blank=False, null=False, editable=True)
     observaciones = models.CharField(max_length=20000, blank=False, null=False, editable=True)
     zonaPresion = models.CharField(max_length=20000, blank=False, null=False, editable=True)
+    anulado = models.CharField(max_length=1, choices=FLAG_CHOICES, default='N', blank=True, editable=False)
     fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)
     usuarioRegistro = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True,           on_delete=models.PROTECT)
-    estadoReg = models.CharField(max_length=1, default='A', editable=False)
+    estadoReg = models.CharField(max_length=1, choices=ESTADOREG_CHOICES,default='A', editable=False)
 
 
     def __str__(self):
-        return str(self.id)
+        return str(self.nombre)
 
 
 
 class NotasEnfermeria(models.Model):
+    ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
+    FLAG_CHOICES = [
+        ('S', 'Si'),
+        ('N', 'No'),
+        ]
     id = models.AutoField(primary_key=True)
     sedesClinica = models.ForeignKey('sitios.SedesClinica',   blank=True,null= True, on_delete=models.PROTECT ,related_name ='sedesClinica383')
     historia = models.ForeignKey('clinico.Historia', on_delete=models.PROTECT, blank=True, null=True,  editable=True,  related_name='HistoriaNotasEnfermeria01')
@@ -214,15 +258,23 @@ class NotasEnfermeria(models.Model):
     duracionMasaje = models.CharField(max_length=500, blank=False, null=False, editable=True)
     codigoHuella = models.CharField(max_length=100, blank=False, null=False, editable=True)
     epicrisis = models.CharField(max_length=5000, blank=False, null=False, editable=True)
+    anulado = models.CharField(max_length=1, choices=FLAG_CHOICES, default='N', blank=True, editable=False)
     fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)
     usuarioRegistro = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True, on_delete=models.PROTECT)
-    estadoReg = models.CharField(max_length=1, default='A', editable=False)
+    estadoReg = models.CharField(max_length=1, choices=ESTADOREG_CHOICES,default='A', editable=False)
 
     def __str__(self):
-        return str(self.id)
+        return str(self.historia)
 
 
 class BalanceLiquidosEnfermeria(models.Model):
+    ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
+    FLAG_CHOICES = [
+        ('S', 'Si'),
+        ('N', 'No'),
+        ]
     id = models.AutoField(primary_key=True)
     sedesClinica = models.ForeignKey('sitios.SedesClinica',   blank=True,null= True, on_delete=models.PROTECT ,related_name ='sedesClinica384')
     historia = models.ForeignKey('clinico.Historia', on_delete=models.PROTECT, blank=True, null=True,  editable=True,  related_name='HistoriaBalanceLiquidosEnfermeria01')
@@ -261,14 +313,22 @@ class BalanceLiquidosEnfermeria(models.Model):
     totalAdministrado= models.IntegerField(default=0)
     total=models.IntegerField(default=0)
     residuoMezclas=models.IntegerField(default=0)
+    anulado = models.CharField(max_length=1, choices=FLAG_CHOICES, default='N', blank=True, editable=False)
     fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)
     usuarioRegistro = models.ForeignKey('planta.Planta', blank=True,null= True, editable=True, on_delete=models.PROTECT)
-    estadoReg = models.CharField(max_length=1, default='A', editable=False)
+    estadoReg = models.CharField(max_length=1,choices=ESTADOREG_CHOICES, default='A', editable=False)
 
     def __str__(self):
-        return str(self.id)
+        return str(self.historia)
 
 class SignosEnfermeria(models.Model):
+    ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
+    FLAG_CHOICES = [
+        ('S', 'Si'),
+        ('N', 'No'),
+        ]
     id = models.AutoField(primary_key=True)
     sedesClinica = models.ForeignKey('sitios.SedesClinica',   blank=True,null= True, on_delete=models.PROTECT ,related_name ='sedesClinica385')
     historia = models.ForeignKey('clinico.Historia', on_delete=models.PROTECT, blank=True, null=True,  editable=True,  related_name='HistoriaSignosEnfermeria01')
@@ -354,9 +414,10 @@ class SignosEnfermeria(models.Model):
     observaSuturas=models.CharField(max_length=50, blank=False,null= False, editable=True)
     inmovilizacion=models.CharField(max_length=50, blank=False,null= False,  editable=True)
     observaInmovilizacion=models.CharField(max_length=50, blank=False,null= False,  editable=True)
+    anulado = models.CharField(max_length=1, choices=FLAG_CHOICES, default='N', blank=True, editable=False)
     fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)
     usuarioRegistro = models.ForeignKey('planta.Planta', blank=True,null= True, editable=True, on_delete=models.PROTECT)
-    estadoReg = models.CharField(max_length=1, default='A', editable=False)
+    estadoReg = models.CharField(max_length=1,choices=ESTADOREG_CHOICES,  default='A', editable=False)
 
 
 
@@ -365,6 +426,13 @@ class SignosEnfermeria(models.Model):
 
 
 class Enfermeria(models.Model):
+    ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
+    FLAG_CHOICES = [
+        ('S', 'Si'),
+        ('N', 'No'),
+        ]
     id = models.AutoField(primary_key=True)
     sedesClinica = models.ForeignKey('sitios.SedesClinica',   blank=True,null= True, on_delete=models.PROTECT ,related_name ='sedesClinica386')
     historia = models.ForeignKey('clinico.Historia', on_delete=models.PROTECT, blank=True, null=True,  editable=True,  related_name='HistoriaEnfermeria01')
@@ -373,13 +441,21 @@ class Enfermeria(models.Model):
     tipoOrigen = models.ForeignKey('enfermeria.EnfermeriaTipoOrigen', on_delete=models.PROTECT, blank=True, null=True,  editable=True,  related_name='TipoEnfermeria01')
     tipoMovimiento = models.ForeignKey('enfermeria.EnfermeriaTipoMovimiento', on_delete=models.PROTECT, blank=True, null=True,  editable=True,  related_name='TipoEnfermeria02')
     fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)
+    anulado = models.CharField(max_length=1, choices=FLAG_CHOICES, default='N', blank=True, editable=False)
     usuarioRegistro = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True, on_delete=models.PROTECT   , related_name='Planta3460')
-    estadoReg = models.CharField(max_length=1, default='A', editable=False,  blank=True, null=True,)
+    estadoReg = models.CharField(max_length=1, choices=ESTADOREG_CHOICES,default='A', editable=False,  blank=True, null=True,)
 
     def __str__(self):
-        return str(self.id)
+        return str(self.historia)
 
 class EnfermeriaDetalle(models.Model):
+    ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
+    FLAG_CHOICES = [
+        ('S', 'Si'),
+        ('N', 'No'),
+        ]
     id = models.AutoField(primary_key=True)
     enfermeria = models.ForeignKey('enfermeria.Enfermeria', on_delete=models.PROTECT, blank=True, null=True,  editable=True,  related_name='Enfermeria01')
     historiaMedicamentos = models.ForeignKey('clinico.HistoriaMedicamentos', blank=True,null= True, editable=True,  on_delete=models.PROTECT,   related_name='servAdmEnfermeria102')
@@ -391,15 +467,23 @@ class EnfermeriaDetalle(models.Model):
     frecuencia = models.ForeignKey('clinico.FrecuenciasAplicacion', blank=True, null=True, editable=True,               on_delete=models.PROTECT)
     cantidadOrdenada = models.DecimalField(max_digits=10, decimal_places=0, blank=True, null=True, editable=True)
     diasTratamiento =  models.DecimalField(max_digits=10, decimal_places=0, blank=True, null=True, editable=True)
+    anulado = models.CharField(max_length=1, choices=FLAG_CHOICES, default='N', blank=True, editable=False)
     fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)
     usuarioRegistro = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True, on_delete=models.PROTECT   , related_name='Planta3462')
-    estadoReg = models.CharField(max_length=1, default='A', editable=False,  blank=True, null=True,)
+    estadoReg = models.CharField(max_length=1,choices=ESTADOREG_CHOICES, default='A', editable=False,  blank=True, null=True,)
 
     def __str__(self):
         return str(self.id)
 
 
 class EnfermeriaRecibe(models.Model):
+    ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
+    FLAG_CHOICES = [
+        ('S', 'Si'),
+        ('N', 'No'),
+        ]
     id = models.AutoField(primary_key=True)
     enfermeriaDetalle = models.ForeignKey('enfermeria.EnfermeriaDetalle', on_delete=models.PROTECT, blank=True, null=True,  editable=True,  related_name='EnfermeriaDetalle1101')
     despachos = models.ForeignKey('farmacia.FarmaciaDespachos', on_delete=models.PROTECT, blank=True, null=True,  editable=True,  related_name='FarmaciaDispensa01')
@@ -415,15 +499,23 @@ class EnfermeriaRecibe(models.Model):
     cantidadDispensada = models.DecimalField(max_digits=10, decimal_places=0, blank=True, null=True, editable=True)
     cantidadDevuelta = models.DecimalField(max_digits=10, decimal_places=0, blank=True, null=True, editable=True)
     netoCantidad = models.DecimalField(max_digits=10, decimal_places=0, blank=True, null=True, editable=True)
+    anulado = models.CharField(max_length=1, choices=FLAG_CHOICES, default='N', blank=True, editable=False)
     #diasTratamiento =  models.DecimalField(max_digits=10, decimal_places=0, blank=True, null=True, editable=True)
     fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)
     usuarioRegistro = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True, on_delete=models.PROTECT   , related_name='Planta3478')
-    estadoReg = models.CharField(max_length=1, default='A', editable=False,  blank=True, null=True,)
+    estadoReg = models.CharField(max_length=1, choices=ESTADOREG_CHOICES, default='A', editable=False,  blank=True, null=True,)
 
     def __str__(self):
         return str(self.id)
 
 class EnfermeriaPlaneacion(models.Model):
+    ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
+    FLAG_CHOICES = [
+        ('S', 'Si'),
+        ('N', 'No'),
+        ]
     id = models.AutoField(primary_key=True)
     enfermeria = models.ForeignKey('enfermeria.Enfermeria', blank=True, null=True, editable=True,   on_delete=models.PROTECT) 
     enfermeriaRecibe = models.ForeignKey('enfermeria.EnfermeriaRecibe', on_delete=models.PROTECT, blank=True, null=True,  editable=True,  related_name='EnfermeriaRecibe1102')
@@ -443,33 +535,47 @@ class EnfermeriaPlaneacion(models.Model):
     turnoEnfermeriaAplica = models.ForeignKey('enfermeria.TurnosEnfermeria', blank=True, null=True, editable=True,   on_delete=models.PROTECT ,  related_name='EnfermeriaTipoTurno11013') 
     enfermeraPlanea = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True, on_delete=models.PROTECT   , related_name='PlantaEnfermeraPlanea3468')
     enfermeraAplica = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True, on_delete=models.PROTECT   , related_name='PlantaEnfermera3468')
+    anulado = models.CharField(max_length=1, choices=FLAG_CHOICES, default='N', blank=True, editable=False)
     fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)
     usuarioRegistro = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True, on_delete=models.PROTECT   , related_name='Planta3488')
-    estadoReg = models.CharField(max_length=1, default='A', editable=False,  blank=True, null=True,)
+    estadoReg = models.CharField(max_length=1, default='A', choices=ESTADOREG_CHOICES, editable=False,  blank=True, null=True,)
 
     def __str__(self):
         return str(self.id)
 
 class EnfermeriaTipoOrigen(models.Model):
+    ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
     id = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=50, default='F', editable=True)
     usuarioRegistro = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True, on_delete=models.PROTECT   , related_name='Planta3467')
-    estadoReg = models.CharField(max_length=1, default='A', editable=False,  blank=True, null=True,)
+    estadoReg = models.CharField(max_length=1,choices=ESTADOREG_CHOICES, default='A', editable=False,  blank=True, null=True,)
 
     def __str__(self):
         return str(self.nombre)
 
 class EnfermeriaTipoMovimiento(models.Model):
+    ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
     id = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=50, default='F', editable=True,  blank=True, null=True,)
     fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)
     usuarioRegistro = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True, on_delete=models.PROTECT   , related_name='Planta3469')
-    estadoReg = models.CharField(max_length=1, default='A', editable=False,  blank=True, null=True,)
+    estadoReg = models.CharField(max_length=1,choices=ESTADOREG_CHOICES, default='A', editable=False,  blank=True, null=True,)
 
     def __str__(self):
         return str(self.nombre)
 
 class EnfermeriaDevolucion(models.Model):
+    ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
+    FLAG_CHOICES = [
+        ('S', 'Si'),
+        ('N', 'No'),
+        ]
     id = models.AutoField(primary_key=True)
     sedesClinica = models.ForeignKey('sitios.SedesClinica',   blank=True,null= True, on_delete=models.PROTECT ,related_name ='sedesClinica3Enf9022')
     serviciosAdministrativosDevuelve = models.ForeignKey('sitios.ServiciosAdministrativos', blank=True,null= True, editable=True,  on_delete=models.PROTECT,   related_name='servDevuelve3231')
@@ -477,22 +583,31 @@ class EnfermeriaDevolucion(models.Model):
     serviciosAdministrativosRecibe = models.ForeignKey('sitios.ServiciosAdministrativos', blank=True,null= True, editable=True,  on_delete=models.PROTECT,   related_name='servRecibe32431')
     usuarioRecibe = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True, on_delete=models.PROTECT   , related_name='PlantaRecibe4553')
     #observaciones =  models.CharField(max_length=250,  editable=True,  blank=True)
+    anulado = models.CharField(max_length=1, choices=FLAG_CHOICES, default='N', blank=True, editable=False)
     fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)
     usuarioRegistro = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True, on_delete=models.PROTECT   , related_name='PlantaEnfermeriaia3453')
-    estadoReg = models.CharField(max_length=1, default='A', editable=False,  blank=True, null=True,)
+    estadoReg = models.CharField(max_length=1, choices=ESTADOREG_CHOICES, default='A', editable=False,  blank=True, null=True,)
 
     def __str__(self):
         return str(self.id)
 
 class EnfermeriaDevolucionDetalle(models.Model):
+    ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
+    FLAG_CHOICES = [
+        ('S', 'Si'),
+        ('N', 'No'),
+        ]
     id = models.AutoField(primary_key=True)
     enfermeriaDevolucion = models.ForeignKey('enfermeria.EnfermeriaDevolucion', on_delete=models.PROTECT, blank=True, null=True,  editable=True,  related_name='EnfermeriDevolos261201')
     enfermeriaRecibe = models.ForeignKey('enfermeria.EnfermeriaRecibe', on_delete=models.PROTECT, blank=True, null=True,  editable=True,  related_name='EnfermeriaRecibe201')
     cantidadDevuelta = models.DecimalField(max_digits=10, decimal_places=0, blank=True, null=True, editable=True)
     observaciones =  models.CharField(max_length=250,  editable=True,  blank=True)
+    anulado = models.CharField(max_length=1, choices=FLAG_CHOICES, default='N', blank=True, editable=False)
     fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)
     usuarioRegistro = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True, on_delete=models.PROTECT   , related_name='PlantaEnfermeria3453')
-    estadoReg = models.CharField(max_length=1, default='A', editable=False,  blank=True, null=True,)
+    estadoReg = models.CharField(max_length=1,choices=ESTADOREG_CHOICES, default='A', editable=False,  blank=True, null=True,)
 
     def __str__(self):
         return str(self.id)

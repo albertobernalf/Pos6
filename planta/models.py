@@ -9,10 +9,13 @@ import usuarios
 
 
 class TiposPlanta(models.Model):
+    ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
     id=models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=30)
     fechaRegistro = models.DateTimeField(default=now, editable=False)
-    estadoReg = models.CharField(max_length=1, default='A', editable=False)
+    estadoReg = models.CharField(max_length=1, choices=ESTADOREG_CHOICES,  default='A', editable=False)
 
     def __str__(self):
         return self.nombre
@@ -32,12 +35,13 @@ class TiposPlanta(models.Model):
 
 
 class Planta(models.Model):
-    MASCULINO = 'M'
-    FEMENINO = 'F'
-    TIPO_CHOICES= (
-        (MASCULINO, 'Masculino'),
-        (FEMENINO, 'Femenino'),
-    )
+    ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
+    GENERO_CHOICES = [
+        ('M', 'Masculino'),
+        ('F', 'Femenino'), ]
+
     id = models.AutoField(primary_key=True)
     sedesClinica = models.ForeignKey('sitios.SedesClinica', default=1, on_delete=models.PROTECT, null=True ,  related_name='plid1')
     tiposPlanta = models.ForeignKey('planta.TiposPlanta', default=1, on_delete=models.PROTECT, null=True)
@@ -45,14 +49,14 @@ class Planta(models.Model):
     documento = models.CharField( max_length=30)
     nombre = models.CharField(max_length=50)
     contrasena = models.CharField(max_length=50)
-    genero = models.CharField(max_length=1, default ='L',choices=TIPO_CHOICES,)
+    genero = models.CharField(max_length=1, default ='L',choices=GENERO_CHOICES,)
     direccion = models.CharField(max_length=50)
     telefono  = models.CharField(max_length=20)
     esCajero = models.CharField(max_length=1,blank=True, null= True,  default='N', editable=False)
     correo = models.EmailField(blank=True,null= True)
     imagen = models.ImageField(upload_to="fotos",  blank=True,  null= True, editable=True)
     fechaRegistro = models.DateTimeField(default=now, editable=False)
-    estadoReg = models.CharField(max_length=1, default='A', editable=False)
+    estadoReg = models.CharField(max_length=1, choices=ESTADOREG_CHOICES, default='A', editable=False)
 
     class Meta:
         unique_together = (('tipoDoc', 'documento','nombre'),)

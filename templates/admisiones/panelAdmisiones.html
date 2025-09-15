@@ -1545,11 +1545,13 @@ function cargarTablaAbonosPaciente()
         </table>
 <!-- Espacio Modales  -->
 
-<div class="modal fade" id="crearAbonosModel" aria-hidden="true">
+<div class="modal fade" id="crearAbonosModel" aria-hidden="true" tabindex="-1" role="dialog"
+                         style="overflow-y:scroll;" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="modelHeading"></h4>
+	<button type="button" class="close" data-bs-dismiss="modal"  aria-label="Close">
             </div>
             <div class="modal-body">
                 <div class="alert alert-danger error-msg" style="display:none">
@@ -1616,6 +1618,15 @@ function cargarTablaAbonosPaciente()
 
                 </form>
             </div>
+
+
+     <div class="modal-footer">
+					  <span id="mensajesErrorAbonos" name="mensajesErrorAbonos" style= "color:red; font-size:15px; line-height:35px; font-family: Times Neww Roman;" > </span>
+                                   	  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar   </button>
+
+                                </div>
+
+
         </div>
     </div>
 </div>
@@ -2528,8 +2539,8 @@ function cargarTablaAbonosPaciente()
 {% block mensajeria %}
 <div class="marco">
 
-        <span id="mensajes" name="mensajes" style= "color:blue; font-size:18px; line-height:35px; font-family: Calibri;" > </span>
-     <span id="mensajesError" name="mensajesError" style= "color:red; font-size:18px; line-height:35px; font-family: Calibri;" > </span>
+        <span id="mensajes" name="mensajes" style= "color:green; font-size:12px; line-height:35px; font-family: Calibri;" > </span>
+     <span id="mensajesError" name="mensajesError" style= "color:red; font-size:12px; line-height:35px; font-family: Calibri;" > </span>
 
 </div>
 {% endblock %}

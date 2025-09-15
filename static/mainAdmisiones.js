@@ -813,6 +813,13 @@ window.addEventListener('load', async () => {
 
 	    var ingresoId= document.getElementById("ingresoId1").value;
 	    document.getElementById("ingresoId2").value = ingresoId;
+        alert("ingresoId" + ingresoId);
+
+	    if (ingresoId=='undefined')
+		{
+		alert("Debe seleccionar Ingreso");
+		return;
+		}
 
         // Tiene que hace run ajax para leer los convenios del paciente
 
@@ -848,18 +855,15 @@ window.addEventListener('load', async () => {
             $('#modelHeading').html("Creacion Abonos en admision");
             $('#crearAbonosModel').modal('show');
                     },
-	   		    error: function (request, status, error) {
-				//alert("Error Ajax" + errorThrown)
-				// alert("Ocurrió un error al procesar la solicitud: " + xhr.responseText);
+	   		        error: function(data){
+		           alert("data = " + JSON.stringify(data)); // data
+		           alert(data.status); // the status code
+		                   // alert(data.responseText); // the status code
 
-				document.getElementById("mensajesErrorModalUsuario").innerHTML =  'Error' + ': ' + request.responseText;
-	   	    	}
-
-	           });
-
-
+		document.getElementById("mensajesError").innerHTML =  data.responseText
+			        },
+      });
         });
-
 
         /*------------------------------------------
         --------------------------------------------
@@ -906,10 +910,14 @@ window.addEventListener('load', async () => {
                 },
 
 
-	   		    error: function (request, status, error) {
-				//alert("Error Ajax" + errorThrown)
+	   		    error: function (data) {
+				           alert("data = " + JSON.stringify(data)); // data
+		           alert(data.status); // the status code
+		   
+		           alert(data.JsonResponse['error']); // the message
 
-				document.getElementById("mensajesErrorModalConvenio").innerHTML =  'Error' + ': ' + request.responseText;
+
+				document.getElementById("mensajesErrorModalConvenio").innerHTML =  data.JsonResponse.error;
 
 		  var table = $('#tablaConveniosAdmisiones').DataTable(); // accede de nuevo a la DataTable.
 	          table.ajax.reload();
@@ -949,8 +957,13 @@ window.addEventListener('load', async () => {
 	          tableA.ajax.reload();
 
                 },
-                error: function (request,status, error) {
-			document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
+                error: function (data) {
+         alert("data = " + JSON.stringify(data)); // data
+		           alert(data.status); // the status code
+		   
+		           alert(data.JsonResponse['error']); // the message
+
+			document.getElementById("mensajesError").innerHTML =   data.JsonResponse.error;
 
 		  var tableA = $('#tablaAbonosAdmisiones').DataTable(); // accede de nuevo a la DataTable.
 	          tableA.ajax.reload();
@@ -984,9 +997,13 @@ window.addEventListener('load', async () => {
 			            var table = $('#tablaConveniosAdmisiones').DataTable(); // accede de nuevo a la DataTable.
 		                table.ajax.reload();
                     },
-	   		    error: function (request, status, error) {
+	   		    error: function (data) {
+      alert("data = " + JSON.stringify(data)); // data
+		           alert(data.status); // the status code
+		   
+		           alert(data.JsonResponse['error']); // the message
 
-				document.getElementById("mensajesErrorModalUsuario").innerHTML =  'Error' + ': ' + request.responseText;
+				document.getElementById("mensajesErrorModalUsuario").innerHTML =  data.JsonResponse.error;
 
 	   	    	}
 
@@ -1019,9 +1036,12 @@ window.addEventListener('load', async () => {
 			            var table = $('#tablaConveniosAdmisiones').DataTable(); // accede de nuevo a la DataTable.
 		                table.ajax.reload();
                     },
-	   		    error: function (request, status, error) {
+	   		    error: function (data) {
+		         alert("data = " + JSON.stringify(data)); // data
+		           alert(data.status); // the status code   
+		           alert(data.JsonResponse['error']); // the message
 
-				document.getElementById("mensajesErrorModalUsuario").innerHTML =  'Error' + ': ' + request.responseText;
+				document.getElementById("mensajesErrorModalUsuario").innerHTML =  data.JsonResponse.error;
 
 	   	    	}
 
@@ -1144,8 +1164,11 @@ $('#tablaDatos tbody').on('change', '.miIngresoId', function() {
 
 
                     },
-	   		    error: function (request, status, error) {
-	document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
+	   		    error: function (data) {
+		      alert("data = " + JSON.stringify(data)); // data
+		           alert(data.status); // the status code   
+		           alert(data.JsonResponse['error']); // the message
+	document.getElementById("mensajesError").innerHTML =  data.JsonResponse.error;
 
 	   	    	}
 	});
@@ -1336,14 +1359,12 @@ if (genero =='')
 
 
                     },
-	   		    error: function (request, status, error) {
-				//alert("Error Ajax" + error);
-				//alert("Error Ajax" + request);
+	   		    error: function (sata) {
+     alert("data = " + JSON.stringify(data)); // data
+		           alert(data.status); // the status code   
+		           alert(data.JsonResponse['error']); // the message
 
-
-				//alert("Ocurrió un error al procesar la solicitud: " + request.responseText);
-
-				document.getElementById("mensajesErrorModalUsuario").innerHTML = 'Error' + ': ' + request.responseText;
+				document.getElementById("mensajesErrorModalUsuario").innerHTML = data.JsonResponse.error;
 
 	   	    	}
 	});
@@ -1381,8 +1402,11 @@ $(document).on('change', '#servicioCambio', function(event) {
                                     $id2.appendChild(option);
  	      		      });
                     },
-	   		    error: function (request, status, error) {
-	   			  	document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
+	   		    error: function (data) {
+			      alert("data = " + JSON.stringify(data)); // data
+		           alert(data.status); // the status code   
+		           alert(data.JsonResponse['error']); // the message
+	   			  	document.getElementById("mensajesError").innerHTML =  data.JsonResponse.error;
 
 	   	    	}
 	     });
@@ -1418,8 +1442,11 @@ $(document).on('change', '#subServicioCambio', function(event) {
                                     $id2.appendChild(option);
  	      		      });
                     },
-	   		    error: function (request, status, error) {
-	   			   	document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
+	   		    error: function (data) {
+     		  alert("data = " + JSON.stringify(data)); // data
+		           alert(data.status); // the status code   
+		           alert(data.JsonResponse['error']); // the message
+	   			   	document.getElementById("mensajesError").innerHTML =  data.JsonResponse.error;
 
 	   	    	}
 	     });
@@ -1490,8 +1517,11 @@ $(document).on('change', '#busDocumentoSel', function(event) {
 			//	 $('#usuariosModal').modal().hide();
 
                     },
-	   		    error: function (request, status, error) {
-	document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
+	   		    error: function (data) {
+	           alert("data = " + JSON.stringify(data)); // data
+		           alert(data.status); // the status code   
+		           alert(data.JsonResponse['error']); // the message
+	document.getElementById("mensajesError").innerHTML =  data.JsonResponse.error;
 
 	   	    	}
 	});
@@ -1553,8 +1583,11 @@ $(document).on('change', '#busDocumentoSelTriage', function(event) {
 				 $('#usuariosModalTriage').modal({show:true});
 			//	 $('#usuariosModal').modal().hide();
                     },
-	   		    error: function (request, status, error) {
-	document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
+	   		    error: function (data) {
+			    alert("data = " + JSON.stringify(data)); // data
+		           alert(data.status); // the status code   
+		           alert(data.JsonResponse['error']); // the message
+	document.getElementById("mensajesError").innerHTML =  data.JsonResponse.error;
 
 	   	    	}
 	});
@@ -1616,8 +1649,12 @@ function findOneUsuarioTriage()
 			//	 $('#usuariosModal').modal().hide();
 
                     },
-	   		    error: function (request, status, error) {
-	document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
+	   		    error: function (data) {
+		           alert("data = " + JSON.stringify(data)); // data
+		           alert(data.status); // the status code   
+		           alert(data.JsonResponse['error']); // the message
+
+	document.getElementById("mensajesError").innerHTML =  data.JsonResponse.error;
 
 
 	   	    	}
@@ -1684,8 +1721,11 @@ $(document).on('change', '#busDocumentoSel22', function(event) {
 
 
                     },
-	   		    error: function (request, status, error) {
-	document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
+	   		    error: function (data) {
+		    alert("data = " + JSON.stringify(data)); // data
+		           alert(data.status); // the status code   
+		           alert(data.JsonResponse['error']); // the message
+	document.getElementById("mensajesError").innerHTML =  data.JsonResponse.error;
 
 	   	    	}
 	});
@@ -1750,8 +1790,11 @@ function findOneUsuario1()
 			//	 $('#usuariosModal').modal().hide();
 
                     },
-	   		    error: function (request, status, error) {
-	document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
+	   		    error: function (data) {
+         alert("data = " + JSON.stringify(data)); // data
+		           alert(data.status); // the status code   
+		           alert(data.JsonResponse['error']); // the message
+	document.getElementById("mensajesError").innerHTML =  data.JsonResponse.error;
 
 	   	    	}
 	});
@@ -1858,8 +1901,11 @@ alert("llegue medicoIngreso = " + Usuarios.medicoIngreso);
 
 
                     },
-	   		    error: function (request, status, error) {
-	document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
+	   		    error: function (data) {
+		          alert("data = " + JSON.stringify(data)); // data
+		           alert(data.status); // the status code   
+		           alert(data.JsonResponse['error']); // the message
+	document.getElementById("mensajesError").innerHTML =  data.JsonResponse.error;
 
 	   	    	}
 	});
@@ -1936,9 +1982,12 @@ $(document).on('change', '#pais', function(event) {
 
 
                     },
-	   		    error: function (request, status, error) {
+	   		    error: function (data) {
+		    alert("data = " + JSON.stringify(data)); // data
+		           alert(data.status); // the status code   
+		           alert(data.JsonResponse['error']); // the message
 
-	document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
+	document.getElementById("mensajesError").innerHTML =  data.JsonResponse.error;
 
 	   	    	}
 
@@ -1987,9 +2036,12 @@ $(document).on('change', '#departamentos', function(event) {
 
 
                     },
-	   		    error: function (request, status, error) {
+	   		    error: function (data) {
+		           alert("data = " + JSON.stringify(data)); // data
+		           alert(data.status); // the status code   
+		           alert(data.JsonResponse['error']); // the message
 
-	document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
+	document.getElementById("mensajesError").innerHTML =   data.JsonResponse.error;
 
 	   	    	}
 
@@ -2032,9 +2084,12 @@ $.ajax({
 
 
                     },
-	   		    error: function (request, status, error) {
+	   		    error: function (data) {
+      			  alert("data = " + JSON.stringify(data)); // data
+		           alert(data.status); // the status code   
+		           alert(data.JsonResponse['error']); // the message
 
-	document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
+	document.getElementById("mensajesError").innerHTML =  data.JsonResponse.error;
 
 	   	    	}
 
@@ -2087,9 +2142,12 @@ $(document).on('change', '#departamentosViejo', function(event) {
 
 
                     },
-	   		    error: function (request, status, error) {
+	   		    error: function (data) {
+		        alert("data = " + JSON.stringify(data)); // data
+		           alert(data.status); // the status code   
+		           alert(data.JsonResponse['error']); // the message
 
-	   			  	document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
+	   			  	document.getElementById("mensajesError").innerHTML =  data.JsonResponse.error;
 
 	   	    	}
 
@@ -2145,9 +2203,12 @@ $(document).on('change', '#busEspecialidad', function(event) {
  	      		      });
 
                     },
-	   		    error: function (request, status, error) {
+	   		    error: function (data) {
+     alert("data = " + JSON.stringify(data)); // data
+		           alert(data.status); // the status code   
+		           alert(data.JsonResponse['error']); // the message
 
-	   			 	document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
+	   			 	document.getElementById("mensajesError").innerHTML =  data.JsonResponse.error;
 
 	   	    	}
 
@@ -2201,9 +2262,12 @@ $(document).on('change', '#busEspecialidadP', function(event) {
 
 
                     },
-	   		    error: function (request, status, error) {
+	   		    error: function (data) {
+       alert("data = " + JSON.stringify(data)); // data
+		           alert(data.status); // the status code   
+		           alert(data.JsonResponse['error']); // the message
 
-	   			 	document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
+	   			 	document.getElementById("mensajesError").innerHTML =  data.JsonResponse.error;
 
 	   	    	}
 
@@ -2251,9 +2315,12 @@ $(document).on('change', '#tiposAntecedente', function(event) {
  	      		      });
 
                     },
-		 error: function (request, status, error) {
+		 error: function (data) {
+    alert("data = " + JSON.stringify(data)); // data
+		           alert(data.status); // the status code   
+		           alert(data.JsonResponse['error']); // the message
 
-				document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
+				document.getElementById("mensajesError").innerHTML =  data.JsonResponse.error;
 
 	   	    	}            
 	     });
@@ -2305,9 +2372,12 @@ $(document).on('change', '#busServicio', function(event) {
 
 
                     },
-	   		    error: function (request, status, error) {
+	   		    error: function (data) {
+       alert("data = " + JSON.stringify(data)); // data
+		           alert(data.status); // the status code   
+		           alert(data.JsonResponse['error']); // the message
 
-	document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
+	document.getElementById("mensajesError").innerHTML =  data.JsonResponse.error;
 
 	   	    	}
 
@@ -2356,9 +2426,12 @@ $(document).on('change', '#busServicioT', function(event) {
  	      		      });
 
                     },
-	   		    error: function (request, status, error) {
+	   		    error: function (data) {
+ alert("data = " + JSON.stringify(data)); // data
+		           alert(data.status); // the status code   
+		           alert(data.JsonResponse['error']); // the message
 
-	   			    	document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
+	   			    	document.getElementById("mensajesError").innerHTML =  data.JsonResponse.error;
 
 	   	    	}
 
@@ -2402,8 +2475,11 @@ $(document).on('change', '#busSubServicio', function(event) {
  	      		      });
 
                     },
-	   		    error: function (request, status, error) {
-	document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
+	   		    error: function (data) {
+    alert("data = " + JSON.stringify(data)); // data
+		           alert(data.status); // the status code   
+		           alert(data.JsonResponse['error']); // the message
+	document.getElementById("mensajesError").innerHTML =  data.JsonResponse.error;
 
 	   	    	}
 
@@ -2464,9 +2540,12 @@ $(document).on('change', '#busSubServicioT', function(event) {
  	      		      });
 
                     },
-	   		    error: function (request, status, error) {
+	   		    error: function (data) {
+alert("data = " + JSON.stringify(data)); // data
+		           alert(data.status); // the status code   
+		           alert(data.JsonResponse['error']); // the message
 
-	   				document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
+	   				document.getElementById("mensajesError").innerHTML =  data.JsonResponse.error;
 
 	   	    	}
 
@@ -2520,9 +2599,12 @@ $(document).on('change', '#busServicio22', function(event) {
 
 
                     },
-	   		    error: function (request, status, error) {
+	   		    error: function (data) {
+       alert("data = " + JSON.stringify(data)); // data
+		           alert(data.status); // the status code   
+		           alert(data.JsonResponse['error']); // the message
 
-	   			  	document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
+	   			  	document.getElementById("mensajesError").innerHTML =  data.JsonResponse.error;
 
 	   	    	}
 
@@ -2573,9 +2655,12 @@ $(document).on('change', '#busSubServicio22', function(event) {
 
 
                     },
-	   		    error: function (request, status, error) {
+	   		    error: function (data) {
+   alert("data = " + JSON.stringify(data)); // data
+		           alert(data.status); // the status code   
+		           alert(data.JsonResponse['error']); // the message
 
-	   			document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
+	   			document.getElementById("mensajesError").innerHTML =  data.JsonResponse.error;
 
 	   	    	}
 
@@ -2693,10 +2778,12 @@ function findOneAdmision(tipoDoc,Documento,consec, sede)
 
 
 				 $('#modalActualizaAdmision').modal({show:true});
-
+         alert("data = " + JSON.stringify(data)); // data
+		           alert(data.status); // the status code   
+		           alert(data.JsonResponse['error']); // the message
                     },
-	   		    error: function (request, status, error) {
-	document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
+	   		    error: function (data) {
+	document.getElementById("mensajesError").innerHTML =  data.JsonResponse.error;
 
 	   	    	}
 	});
@@ -2855,9 +2942,12 @@ var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
 
 
                     },
-		 error: function (request, status, error) {
+		 error: function (data) {
+         alert("data = " + JSON.stringify(data)); // data
+		           alert(data.status); // the status code   
+		           alert(data.JsonResponse['error']); // the message
 
-				document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
+				document.getElementById("mensajesError").innerHTML =  data.JsonResponse.error;
 
 	   	    	}            
 	});
@@ -2912,9 +3002,12 @@ $(document).on('click', '#Convenios', function(event) {
 
 
                 },
-		 error: function (request, status, error) {
+		 error: function (data) {
+    alert("data = " + JSON.stringify(data)); // data
+		           alert(data.status); // the status code   
+		           alert(data.JsonResponse['error']); // the message
 
-				document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
+				document.getElementById("mensajesError").innerHTML =  data.JsonResponse.error;
 
 	   	    	}            
 });
@@ -2948,9 +3041,13 @@ $(document).on('click', '#Convenios', function(event) {
 					  $("#mensajes").html(data['message']);
 
                 },
-		 error: function (request, status, error) {
+		 error: function (data) {
 
-				document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
+   alert("data = " + JSON.stringify(data)); // data
+		           alert(data.status); // the status code   
+		           alert(data.JsonResponse['error']); // the message
+
+				document.getElementById("mensajesError").innerHTML =  data.JsonResponse.error;
 
 	   	    	}
 
@@ -3001,9 +3098,12 @@ var valor = $('input[name="ingresoId"]:checked').val();
 		 $("#mensajes").html(" !  Registro Actualizado !");
 
                     },
-			 error: function (request, status, error) {
+			 error: function (data) {
+alert("data = " + JSON.stringify(data)); // data
+		           alert(data.status); // the status code   
+		           alert(data.JsonResponse['error']); // the message
 
-				document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
+				document.getElementById("mensajesError").innerHTML =  data.JsonResponse.errort;
 
 	   	    	}	});
 
@@ -3126,9 +3226,12 @@ function actualizaAdmision()
 	    dataTableAdmisionesInitialized = true;
 
                     },
-		 error: function (request, status, error) {
+		 error: function (data) {
+           alert("data = " + JSON.stringify(data)); // data
+		           alert(data.status); // the status code   
+		           alert(data.JsonResponse['error']); // the message
 
-					document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
+					document.getElementById("mensajesError").innerHTML =  data.JsonResponse.error;
 
 
 	   	    	}            
@@ -3168,8 +3271,11 @@ $('#tablaDatos tbody').on('click', '.ImprimirHojaAdmision', function() {
 	       	     
 
                   },
-	   		    error: function (request, status, error) {
-	   			   document.getElementById("mensajesError").innerHTML = 'Revize la informacion completa de la Hoja de Admsion ' +  error;
+	   		    error: function (data) {
+          alert("data = " + JSON.stringify(data)); // data
+		           alert(data.status); // the status code   
+		           alert(data.JsonResponse['error']); // the message
+	   			   document.getElementById("mensajesError").innerHTML = data.JsonResponse.error;
 	   	    	}
 	     });
 
@@ -3196,8 +3302,11 @@ $('#tablaDatos tbody').on('click', '.ImprimirManilla', function() {
 	       	     
 
                   },
-	   		    error: function (request, status, error) {
-	   			   document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
+	   		    error: function (data) {
+	           alert("data = " + JSON.stringify(data)); // data
+		           alert(data.status); // the status code   
+		           alert(data.JsonResponse['error']); // the message
+	   			   document.getElementById("mensajesError").innerHTML = data.JsonResponse.error;
 	   	    	}
 	     });
 
@@ -3226,8 +3335,11 @@ $('#tablaDatos tbody').on('click', '.ImprimirAtencionInicialUrgencias', function
 	       	     
 
                   },
-	   		    error: function (request, status, error) {
-	   			   document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
+	   		    error: function (data) {
+  alert("data = " + JSON.stringify(data)); // data
+		           alert(data.status); // the status code   
+		           alert(data.JsonResponse['error']); // the message
+	   			   document.getElementById("mensajesError").innerHTML = data.JsonResponse.error;
 	   	    	}
 	     });
 
@@ -3276,9 +3388,12 @@ $(document).on('change', '#municipios', function(event) {
 
 
                     },
-	   		    error: function (request, status, error) {
+	   		    error: function (data) {
+           alert("data = " + JSON.stringify(data)); // data
+		           alert(data.status); // the status code   
+		           alert(data.JsonResponse['error']); // the message
 
-	document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
+	document.getElementById("mensajesError").innerHTML =  data.JsonResponse.errort;
 
 	   	    	}
 
@@ -3306,8 +3421,11 @@ $(document).on('change', '#municipios', function(event) {
 	       	     
 
                   },
-	   		    error: function (request, status, error) {
-	   			   document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
+	   		    error: function (data) {
+      alert("data = " + JSON.stringify(data)); // data
+		           alert(data.status); // the status code   
+		           alert(data.JsonResponse['error']); // the message
+	   			   document.getElementById("mensajesError").innerHTML = data.JsonResponse.error;
 	   	    	}
 	     });
 
@@ -3348,9 +3466,12 @@ $(document).on('change', '#empresaC', function(event) {
  	      		      });
 
                     },
-	   		    error: function (request, status, error) {
+	   		    error: function (data) {
+         alert("data = " + JSON.stringify(data)); // data
+		           alert(data.status); // the status code   
+		           alert(data.JsonResponse['error']); // the message
 
-	   			    	document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
+	   			    	document.getElementById("mensajesError").innerHTML =   data.JsonResponse.error;
 
 	   	    	}
 

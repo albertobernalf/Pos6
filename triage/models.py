@@ -7,13 +7,13 @@ from django.utils import timezone
 
 class Triage(models.Model):
 
-    A = 'A'
-    I = 'I'
-
-    TIPO_CHOICES = (
-        (A, 'ACTIVO'),
-        (I, 'INACTIVO')
-    )
+    ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
+    FLAG_CHOICES = [
+        ('S', 'Si'),
+        ('N', 'No'),
+        ]
     id = models.AutoField(primary_key=True)
     sedesClinica   = models.ForeignKey('sitios.SedesClinica', blank=True,null= True, editable=True, on_delete=models.PROTECT, related_name = 'SedesClinica1')
     serviciosAdministrativos = models.ForeignKey('sitios.ServiciosAdministrativos', blank=True,null= True, editable=True,  on_delete=models.PROTECT,   related_name='seradm02')
@@ -56,16 +56,16 @@ class Triage(models.Model):
     fechaModanexo = models.DateTimeField(editable=True, null=True, blank=True)
     observaciones = models.CharField(max_length=200, default='', editable=True)
     alergiasTriage = models.CharField(max_length=50, default='', editable=True)
-    salidaDefinitiva =  models.CharField(max_length=1,default='N')
+    salidaDefinitiva =  models.CharField(max_length=1,choices = FLAG_CHOICES ,default='N')
     fechaRegistro  = models.DateTimeField(editable=True, null=True, blank=True, default=timezone.now)
     usuarioCrea = models.ForeignKey('planta.Planta', blank=True,null= True, editable=True, on_delete=models.PROTECT ,  related_name='Documento3')
     usuarioAtiende = models.ForeignKey('planta.Planta', blank=True,null= True, editable=True, on_delete=models.PROTECT ,  related_name='Documento2')
-    estadoReg = models.CharField(max_length=1, default='A', editable=False ,choices = TIPO_CHOICES)
+    estadoReg = models.CharField(max_length=1, default='A', editable=False ,choices = ESTADOREG_CHOICES)
 
 
     class Meta:
         unique_together = (('tipoDoc', 'documento','consecAdmision'),)
 
     def __str__(self):
-            return self.nombre
+            return self.documento
 

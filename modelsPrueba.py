@@ -883,3 +883,14 @@ LUNES 15-SEPTIEMBRE: Ademas de revizar lo de arriba: ver acomodar columnas grade
  			PILAS NO PERMITIR GUARDAR FOLIOS CLINICOS DUPÑLICADOS ALINEAR TAB SACAR COPIA DE CLINICO.VIEWS PRIMERO Y HACER EL AJUSTE
 --------------------
         
+1. choices -->>OPS OJO ME TOCA AGREGAR UN CAMPO ANULADO EN DETALLE y no manejar estoRegistro ops en abonos, factutracion, liquidacion donde mas ?? OPOP
+2. main : modal, Error , sucess
+3. templates : modal, message
+4. viewd. try, catch,finaly
+5. css: span message size, color
+6. pdf : multicell
+7. arreglar apoyp terapeutico
+8. modales antigiuas vs nuevas
+8. hoistoria: try, catch GLOBAL TABS
+10. usuarios de bases de datos probar
+-- permisos OPCIONMESg

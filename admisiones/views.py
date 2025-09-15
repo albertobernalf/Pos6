@@ -7936,7 +7936,6 @@ def BuscaConveniosAbonoAdmision(request):
         miConexiont.close()
         print("conveniosPaciente", conveniosPaciente)
 
-
         # Fin combo Convenios
 
         serialized1 = json.dumps(conveniosPaciente, default=str)
