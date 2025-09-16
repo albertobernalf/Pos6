@@ -34,6 +34,9 @@ from admisiones.viewsReportes import ImprimirAtencionUrgencias, ImprimirHojaAdmi
 from django.db.models import Q
 from django.db import transaction, IntegrityError
 from django.db.models import F
+from django.db.models import Q
+from django.db import transaction, IntegrityError
+from django.db.models import F
 
 
 # Create your views here.
@@ -3345,8 +3348,6 @@ def escogeAcceso(request, Sede, Username, Profesional, Documento, NombreSede, es
 
 
 
-
-
         # Combo Vias Administracion
 
         # iConexiont = MySQLdb.connect(host='CMKSISTEPC07', user='sa', passwd='75AAbb??', db='vulnerable')
@@ -3376,8 +3377,6 @@ def escogeAcceso(request, Sede, Username, Profesional, Documento, NombreSede, es
         return render(request, "farmacia/PanelFarmaciaF.html", context)
 
     return render(request, "panelVacio.html", context)
-
-
 
 
 
@@ -5105,7 +5104,6 @@ def crearAdmisionDef(request):
         NombreSede = request.POST['nombreSede']
         nombreSede = request.POST['nombreSede']
 
-
         print("Sedes Clinica = ", sedesClinica)
         print ("Sede = ",Sede)
 
@@ -5363,7 +5361,6 @@ def crearAdmisionDef(request):
             return HttpResponse(json_data, content_type='application/json')
 
 
-            #raise Exception("¡Ha ocurrido un error ENVIADO DESDE DJANGO!")
 
 
         # HASTA AQUIP TRANSACCIONALIDAD
@@ -6416,8 +6413,6 @@ def UsuariosModal(request):
         print ("documento = " , documento)
         print("tipodoc = " ,tipoDoc)
 
-
-
         miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres", password="123456")
         curt = miConexiont.cursor()
         comando = 'SELECT usu.nombre, usu.documento, usu.genero, usu."fechaNacio" fechaNacio, usu.pais_id pais_id,  usu.departamentos_id, usu.ciudades_id, usu.direccion, usu.telefono, usu.contacto, usu."centrosC_id", usu."tipoDoc_id", usu."tiposUsuario_id", usu.municipio_id municipio, usu.localidad_id localidad, usu."estadoCivil_id" estadoCivil , usu.ocupacion_id ocupacion, correo correo  FROM usuarios_usuarios usu WHERE usu."tipoDoc_id" = ' + "'"  + str(tipoDoc) + "'" + ' AND usu.documento = ' + "'" + str(documento) + "'"
@@ -6576,11 +6571,7 @@ def guardarUsuariosModal(request):
         if miConexion3:
             print("Entro ha hacer el Rollback")
             miConexion3.rollback()
-
-        raise error
-        #print ("Voy a hacer el jsonresponde")
-        datos = {'Mensaje': error}
-        return JsonResponse(datos, safe=False)
+        return JsonResponse({'success': False, 'Mensaje': error})
 
 
 
@@ -7069,11 +7060,11 @@ def guardaCambioServicio(request):
             grabo05.save()
             print("yA grabe dependencias historico", grabo05.id)
 
+            CambioServicio['success'] = True
+            CambioServicio['Mensaje'] = 'Traslado realizado correctamente !'
 
             return JsonResponse(CambioServicio, safe=False)
 
-            #if algo_malo:
-            #    raise ValueError("Algo salió mal")
 
     except Exception as e:
         # Aquí ya se hizo rollback automáticamente
@@ -7222,7 +7213,7 @@ def GuardaConvenioAdmision(request):
             miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",  password="123456")
             cur3 = miConexion3.cursor()
 
-            comando1 = 'insert into facturacion_ConveniosPacienteIngresos ("consecAdmision", "fechaRegistro",  convenio_id, documento_id, "tipoDoc_id" , "usuarioRegistro_id" ,"estadoReg") values (' + "'" + str(registroId.consec) + "'" + ' , ' + "'" + str(fechaRegistro) + "'" + ', ' + "'" + str(convenio) + "'" + '  , ' + "'" + str(registroId.documento_id) + "'" + ', ' + "'" + str(registroId.tipoDoc_id) + "'," + "'" + str("1") + "'," + "'" + str("A") + "');"
+            comando1 = 'insert into facturacion_ConveniosPacienteIngresos ("consecAdmision", "fechaRegistro",  convenio_id, documento_id, "tipoDoc_id" , "usuarioRegistro_id" ,"estadoReg", anulado ) values (' + "'" + str(registroId.consec) + "'" + ' , ' + "'" + str(fechaRegistro) + "'" + ', ' + "'" + str(convenio) + "'" + '  , ' + "'" + str(registroId.documento_id) + "'" + ', ' + "'" + str(registroId.tipoDoc_id) + "'," + "'" + str("1") + "'," + "'" + str("A") + "','N');"
             print(comando1)
             cur3.execute(comando1)
 
@@ -7246,7 +7237,7 @@ def GuardaConvenioAdmision(request):
 
 
                 print ("Entre por hayliquidacion= 0, O sea creo liquidacion ")
-                comando2 = 'INSERT INTO facturacion_liquidacion ("sedesClinica_id", "tipoDoc_id", documento_id, "consecAdmision", fecha, "totalCopagos", "totalCuotaModeradora", "totalProcedimientos" , "totalSuministros" , "totalLiquidacion", "valorApagar", anticipos, "fechaRegistro", "estadoRegistro", convenio_id,  "usuarioRegistro_id", "totalAbonos") VALUES (' + "'" + str(sede) + "'," +  "'" + str(registroId.tipoDoc_id) + "','" + str(registroId.documento_id) + "','" + str(registroId.consec) + "','" + str(fechaRegistro) + "'," + '0,0,0,0,0,0,0,' + "'" + str(fechaRegistro) + "','" + str(estadoReg) + "'," + str(convenio) + ',' + "'" + str(username_id) + "',0) RETURNING id "
+                comando2 = 'INSERT INTO facturacion_liquidacion ("sedesClinica_id", "tipoDoc_id", documento_id, "consecAdmision", fecha, "totalCopagos", "totalCuotaModeradora", "totalProcedimientos" , "totalSuministros" , "totalLiquidacion", "valorApagar", anticipos, "fechaRegistro", "estadoRegistro", convenio_id,  "usuarioRegistro_id", "totalAbonos",anulado) VALUES (' + "'" + str(sede) + "'," +  "'" + str(registroId.tipoDoc_id) + "','" + str(registroId.documento_id) + "','" + str(registroId.consec) + "','" + str(fechaRegistro) + "'," + '0,0,0,0,0,0,0,' + "'" + str(fechaRegistro) + "','" + str(estadoReg) + "'," + str(convenio) + ',' + "'" + str(username_id) + "',0,'N') RETURNING id "
 
             else:
                 comando2 = 'UPDATE facturacion_Liquidacion SET convenio_id = ' + "'" + str(convenio) + "' WHERE id =" + str(hayLiquidacion)
@@ -7254,16 +7245,13 @@ def GuardaConvenioAdmision(request):
             print("comando1= ", comando1)
             print("comando2= ", comando2)
 
-
             cur3.execute(comando2)
             miConexion3.commit()
             cur3.close()
-            datos = {'Mensaje': 'Convenio Actualizado satisfactoriamente!'}
+            datos = {'success': True, 'Mensaje': 'Convenio Actualizado satisfactoriamente!'}
             return JsonResponse(datos, safe=False)
 
             #return JsonResponse({'success': True, 'Mensaje': 'Convenio Actualizado satisfactoriamente!'})
-
-
 
 
     except psycopg2.DatabaseError as error:
@@ -7271,7 +7259,6 @@ def GuardaConvenioAdmision(request):
         if miConexion3:
             print("Entro ha hacer el Rollback")
             miConexion3.rollback()
-        #raise error
 
         return JsonResponse({'success': False, 'Mensaje': error})
 
@@ -7286,6 +7273,7 @@ def GuardaAbonosAdmision(request):
     print ("Entre GuardaAbonosAdmision" )
 
     ingresoId = request.POST["ingresoId22"]
+    sede = request.POST["sede22"]
     ingresos = Ingresos.objects.get(id=ingresoId)
 
     sede = request.POST["sede22"]
@@ -7299,8 +7287,6 @@ def GuardaAbonosAdmision(request):
     formaModeradora= FormasPagos.objects.get(nombre='CUOTA MODERADORA')
     formaCopago= FormasPagos.objects.get(nombre='COPAGO')
     tipoPagoId= TiposPagos.objects.get(id=tipoPago)
-
-
 
     valor = request.POST['valorAbono']
     descripcion = request.POST['descripcionAbono']
@@ -7325,75 +7311,92 @@ def GuardaAbonosAdmision(request):
     ## Aqui busco el registro en cartera_caja si lo hay o si no hat que crear uno nuevo
 
     pailas = 0
+    cajaEsteId=0
 
     try:
         with transaction.atomic():
-
             cajaId = Caja.objects.get(fecha=fechaRegistro, usuarioEntrega_id=username_id)
+            cajaEsteId= cajaId.id
+
     except ObjectDoesNotExist:
         print("no ya informacion")
         pailas=0
-
+        cajaEsteId=0
 
     except Exception as e:
         # Aquí ya se hizo rollback automáticamente
         print("Se hizo rollback por PRONO SE HACE NADA:", e)
         pailas=1
         envioMensaje=e
+        #return JsonResponse({'success': False, 'Mensaje': e})
 
     finally:
 
         if (pailas==1):
+
             return JsonResponse({'success': False, 'Mensaje': envioMensaje})
         else:
-            cajaId=0
             print("No haga nada")
 
 
     miConexion3 = None
     try:
 
-        miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",  password="123456")
+        miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                       password="123456")
         cur3 = miConexion3.cursor()
-        comando = 'insert into cartera_Pagos ("fecha", "tipoDoc_id" , documento_id, consec,  "tipoPago_id" , "formaPago_id", valor, descripcion ,"fechaRegistro","estadoReg",saldo, "totalAplicado", "valorEnCurso", convenio_id, "serviciosAdministrativos_id" ) values ('  + "'" + str(fechaRegistro) + "'," +  "'" + str(registroId.tipoDoc_id) + "'" + ' , ' + "'" + str(registroId.documento_id) + "'" + ', ' + "'" + str(registroId.consec) + "'" + '  , ' + "'" + str(tipoPago) + "'" + '  , ' + "'" + str(formaPago) + "'" + ', ' + "'" + str(valor) + "',"   + "'" + str(descripcion) + "','"   + str(fechaRegistro) + "','" +  str("A") + "','" + str(valor) + "'," + ' 0 , 0, ' + "'" + str(convenioPaciente) + "','" + str(serviciosAdministrativos) + "')"
+
+    	## AQui RUTINA Actualiza lo generado por el CAJERO
+        if (cajaEsteId>0):
+
+            if (tipoPagoId.nombre == 'EFECTIVO'):
+                comando2 = 'UPDATE cartera_caja SET "totalEfectivoEsperado" = "totalEfectivoEsperado" + ' + "'" + str(valor) + "'" + ' WHERE id = ' + "'" + str(cajaEsteId) + "'"
+                print ("acabo de actulizar con valor = ", valor)
+            if (tipoPagoId.nombre == 'TARJETA DEBITO'):
+                comando2 = 'UPDATE cartera_caja SET "totalTarjetasDebitoEsperado" = "totalTarjetasDebitoEsperado" + ' + "'" + str(valor) + "'" + ' WHERE id = ' + "'" + str(cajaEsteId) + "'"
+
+            if (tipoPagoId.nombre == 'TARJETA CREDITO'):
+                comando2 = 'UPDATE cartera_caja SET "totalTarjetasCreditoEsperado" = "totalTarjetasCreditoEsperado" + ' + "'" + str(valor) + "'" + ' WHERE id = ' + "'" + str(cajaEsteId) + "'"
+
+            if (tipoPagoId.nombre == 'CHEQUE'):
+                comando2 = 'UPDATE cartera_caja SET "totalChequesEsperado" = "totalChequesEsperado" + ' + "'" + str(valor) + "'" + ' WHERE id = ' + "'" + str(cajaEsteId) + "'"
+
+            print("comando2 =" , comando2)
+            resultado = cur3.execute(comando2)
+
+        if (cajaEsteId == 0):
+
+            if (tipoPagoId.nombre == 'EFECTIVO'):
+                comando2 = 'INSERT INTO cartera_caja (fecha, "totalEfectivo", "totalTarjetasDebito", "totalTarjetasCredito", "totalCheques", total, "fechaRegistro", "estadoReg", "serviciosAdministrativos_id", "usuarioEntrega_id", "usuarioRecibe_id", "usuarioRegistro_id", "usuarioSuperviza_id", "estadoCaja", "sedesClinica_id", "totalChequesEsperado", "totalEfectivoEsperado", "totalEsperado", "totalTarjetasCreditoEsperado", "totalTarjetasDebitoEsperado", anulado) VALUES (' + "'" + str(fechaRegistro) + "',0,0,0,0,0," + "'" + str(fechaRegistro) + "','A',null"  + "," + "'" + str(username_id) + "',null,"  + "'" + str(username_id) + "',null,'A','"  + str(sede)  + "',0,'" + str(valor) + "','" + str(valor) + "',0,0,'N') RETURNING id"
+
+            if (tipoPagoId.nombre == 'TARJETA DEBITO'):
+                comando2 = 'INSERT INTO cartera_caja (fecha, "totalEfectivo", "totalTarjetasDebito", "totalTarjetasCredito", "totalCheques", total, "fechaRegistro", "estadoReg", "serviciosAdministrativos_id", "usuarioEntrega_id", "usuarioRecibe_id", "usuarioRegistro_id", "usuarioSuperviza_id", "estadoCaja", "sedesClinica_id", "totalChequesEsperado", "totalEfectivoEsperado", "totalEsperado", "totalTarjetasCreditoEsperado", "totalTarjetasDebitoEsperado", anulado) VALUES (' + "'" + str(fechaRegistro) + "',0,0,0,0,0," + "'" + str(fechaRegistro) + "','A'," + "'" + str(serviciosAdministrativos) + "'," + "'" + str(username_id) + "',null,"  + "'" + str(username_id) + "',null,'A',"  + "'" + str(sede)  + "',0,0,'" + str(valor) + "',0,'"  + str(valor) + "','N') RETURNING id"
+
+            if (tipoPagoId.nombre == 'TARJETA CREDITO'):
+                comando2 = 'INSERT INTO cartera_caja (fecha, "totalEfectivo", "totalTarjetasDebito", "totalTarjetasCredito", "totalCheques", total, "fechaRegistro", "estadoReg", "serviciosAdministrativos_id", "usuarioEntrega_id", "usuarioRecibe_id", "usuarioRegistro_id", "usuarioSuperviza_id", "estadoCaja", "sedesClinica_id", "totalChequesEsperado", "totalEfectivoEsperado", "totalEsperado", "totalTarjetasCreditoEsperado", "totalTarjetasDebitoEsperado", anulado) VALUES (' + "'" + str(fechaRegistro) + "',0,0,0,0,0," + "'" + str(fechaRegistro) + "','A'," + "'" + str(serviciosAdministrativos) + "'," + "'" + str(username_id) + "',null,"  + "'" + str(username_id) + "',null,'A','"  + str(sede)  + "',0,0,'"  + str(valor) + "','"  + str(valor) + "',0,'N') RETURNING id"
+
+            if (tipoPagoId.nombre == 'CHEQUE'):
+                comando2 = 'INSERT INTO cartera_caja (fecha, "totalEfectivo", "totalTarjetasDebito", "totalTarjetasCredito", "totalCheques", total, "fechaRegistro", "estadoReg", "serviciosAdministrativos_id", "usuarioEntrega_id", "usuarioRecibe_id", "usuarioRegistro_id", "usuarioSuperviza_id", "estadoCaja", "sedesClinica_id", "totalChequesEsperado", "totalEfectivoEsperado", "totalEsperado", "totalTarjetasCreditoEsperado", "totalTarjetasDebitoEsperado", anulado) VALUES (' + "'" + str(fechaRegistro) + "',0,0,0,0,0," + "'" + str(fechaRegistro) + "','A'," + "'" + str(serviciosAdministrativos) + "'," + "'" + str(username_id) + "',null,"  + "'" + str(username_id) + "',null,'A','"  + str(sede)  + "','" + str(valor) + "'0,'" + str(valor) + "',0,0,'N') RETURNING id"
+
+            print("comando2 =" , comando2)
+            resultado = cur3.execute(comando2)
+            cajaEsteId = cur3.fetchone()[0]
+
+        print("Aqui vony cajaEsteId = ", cajaEsteId )
+
+        comando = 'insert into cartera_Pagos ("fecha", "tipoDoc_id" , documento_id, consec,  "tipoPago_id" , "formaPago_id", valor, descripcion ,"fechaRegistro","estadoReg",saldo, "totalAplicado", "valorEnCurso", convenio_id, "serviciosAdministrativos_id" , anulado, "sedesClinica_id" , caja_id ) values (' + "'" + str(
+            fechaRegistro) + "'," + "'" + str(registroId.tipoDoc_id) + "'" + ' , ' + "'" + str(
+            registroId.documento_id) + "'" + ', ' + "'" + str(registroId.consec) + "'" + '  , ' + "'" + str(
+            tipoPago) + "'" + '  , ' + "'" + str(formaPago) + "'" + ', ' + "'" + str(valor) + "'," + "'" + str(
+            descripcion) + "','" + str(fechaRegistro) + "','" + str("A") + "','" + str(
+            valor) + "'," + ' 0 , 0, ' + "'" + str(convenioPaciente) + "','" + str(
+            serviciosAdministrativos) + "','N','" + str(sede) + "' ,'" + str(cajaEsteId) + "')"
 
         cur3.execute(comando)
 
-    	## AQui RUTINA Actualiza lo generado por el CAJERO
-        if (cajaId>0):
-
-            if (tipoPagoId.nombre == 'EFECTIVO'):
-                comando2 = 'UPDATE cartera_caja SET "totalEfectivoEsperado" = "totalEfectivoEsperado" + ' + "'" + str(valor) + "'" + ' WHERE id = ' + "'" + str(cajaId) + "'"
-
-            if (tipoPagoId.nombre == 'TARJETA DEBITO'):
-                comando2 = 'UPDATE cartera_caja SET "totalTarjetasDebitoEsperado" = "totalTarjetasDebitoEsperado" + ' + "'" + str(valor) + "'" + ' WHERE id = ' + "'" + str(cajaId) + "'"
-
-            if (tipoPagoId.nombre == 'TARJETA CREDITO'):
-                comando2 = 'UPDATE cartera_caja SET "totalTarjetasCreditoEsperado" = "totalTarjetasCreditoEsperado" + ' + "'" + str(valor) + "'" + ' WHERE id = ' + "'" + str(cajaId) + "'"
-
-            if (tipoPagoId.nombre == 'CHEQUE'):
-                comando2 = 'UPDATE cartera_caja SET "totalChequesEsperado" = "totalChequesEsperado" + ' + "'" + str(valor) + "'" + ' WHERE id = ' + "'" + str(cajaId) + "'"
-
-        if (cajaId == 0):
-
-            if (tipoPagoId.nombre == 'EFECTIVO'):
-                comando2 = 'INSERT INTO cartera_caja (fecha, "totalEfectivo", "totalTarjetasDebito", "totalTarjetasCredito", "totalCheques", total, "fechaRegistro", "estadoReg", "serviciosAdministrativos_id", "usuarioEntrega_id", "usuarioRecibe_id", "usuarioRegistro_id", "usuarioSuperviza_id", "estadoCaja", "sedesClinica_id", "totalChequesEsperado", "totalEfectivoEsperado", "totalEsperado", "totalTarjetasCreditoEsperado", "totalTarjetasDebitoEsperado") VALUES (' + "'" + str(fechaRegistro) + "',0,0,0,0,0," + "'" + str(fechaRegistro) + "','A',null"  + "," + "'" + str(username_id) + "',null,"  + "'" + str(username_id) + "',null,'A','"  + str(sede)  + "',0,'" + str(valor) + "','" + str(valor) + "',0,0)"
-
-            if (tipoPagoId.nombre == 'TARJETA DEBITO'):
-                comando2 = 'INSERT INTO cartera_caja (fecha, "totalEfectivo", "totalTarjetasDebito", "totalTarjetasCredito", "totalCheques", total, "fechaRegistro", "estadoReg", "serviciosAdministrativos_id", "usuarioEntrega_id", "usuarioRecibe_id", "usuarioRegistro_id", "usuarioSuperviza_id", "estadoCaja", "sedesClinica_id", "totalChequesEsperado", "totalEfectivoEsperado", "totalEsperado", "totalTarjetasCreditoEsperado", "totalTarjetasDebitoEsperado") VALUES (' + "'" + str(fechaRegistro) + "',0,0,0,0,0," + "'" + str(fechaRegistro) + "','A'," + "'" + str(serviciosAdministrativos) + "'," + "'" + str(username_id) + "',null,"  + "'" + str(username_id) + "',null,'A',"  + "'" + str(sede)  + "',0,0,'" + str(valor) + "',0,'"  + str(valor) + "')"
-
-            if (tipoPagoId.nombre == 'TARJETA CREDITO'):
-                comando2 = 'INSERT INTO cartera_caja (fecha, "totalEfectivo", "totalTarjetasDebito", "totalTarjetasCredito", "totalCheques", total, "fechaRegistro", "estadoReg", "serviciosAdministrativos_id", "usuarioEntrega_id", "usuarioRecibe_id", "usuarioRegistro_id", "usuarioSuperviza_id", "estadoCaja", "sedesClinica_id", "totalChequesEsperado", "totalEfectivoEsperado", "totalEsperado", "totalTarjetasCreditoEsperado", "totalTarjetasDebitoEsperado") VALUES (' + "'" + str(fechaRegistro) + "',0,0,0,0,0," + "'" + str(fechaRegistro) + "','A'," + "'" + str(serviciosAdministrativos) + "'," + "'" + str(username_id) + "',null,"  + "'" + str(username_id) + "',null,'A','"  + str(sede)  + "',0,0,'"  + str(valor) + "','"  + str(valor) + "',0)"
-
-            if (tipoPagoId.nombre == 'CHEQUE'):
-                comando2 = 'INSERT INTO cartera_caja (fecha, "totalEfectivo", "totalTarjetasDebito", "totalTarjetasCredito", "totalCheques", total, "fechaRegistro", "estadoReg", "serviciosAdministrativos_id", "usuarioEntrega_id", "usuarioRecibe_id", "usuarioRegistro_id", "usuarioSuperviza_id", "estadoCaja", "sedesClinica_id", "totalChequesEsperado", "totalEfectivoEsperado", "totalEsperado", "totalTarjetasCreditoEsperado", "totalTarjetasDebitoEsperado") VALUES (' + "'" + str(fechaRegistro) + "',0,0,0,0,0," + "'" + str(fechaRegistro) + "','A'," + "'" + str(serviciosAdministrativos) + "'," + "'" + str(username_id) + "',null,"  + "'" + str(username_id) + "',null,'A','"  + str(sede)  + "','" + str(valor) + "'0,'" + str(valor) + "',0,0)"
-
-        print("comando2 =" , comando2)
-        cur3.execute(comando2)
-
         ## Aqui actualiza el total registro d caja esperado
 
-        comandox = 'UPDATE cartera_caja SET "totalEsperado" = "totalEfectivoEsperado" + "totalTarjetasDebitoEsperado" + "totalTarjetasCreditoEsperado" + "totalChequesEsperado"  WHERE id = ' + "'" + str(cajaId) + "'"
+        comandox = 'UPDATE cartera_caja SET "totalEsperado" = "totalEfectivoEsperado" + "totalTarjetasDebitoEsperado" + "totalTarjetasCreditoEsperado" + "totalChequesEsperado"  WHERE id = ' + "'" + str(cajaEsteId) + "'"
         cur3.execute(comandox)
 
 
@@ -7430,10 +7433,10 @@ def GuardaAbonosAdmision(request):
 
         ## Vamops a actualizar los totales de la Liquidacion:
         #
-        totalSuministros = LiquidacionDetalle.objects.all().filter(liquidacion_id=liquidacionId).filter(examen_id=None).exclude(estadoRegistro='N').aggregate(totalS=Coalesce(Sum('valorTotal'), 0))
+        totalSuministros = LiquidacionDetalle.objects.all().filter(liquidacion_id=liquidacionId).filter(examen_id=None).exclude(estadoRegistro='N').exclude(anulado='N').aggregate(totalS=Coalesce(Sum('valorTotal'), 0))
         totalSuministros = (totalSuministros['totalS']) + 0
         print("totalSuministros", totalSuministros)
-        totalProcedimientos = LiquidacionDetalle.objects.all().filter(liquidacion_id=liquidacionId).filter(cums_id=None).exclude(estadoRegistro='N').aggregate(totalP=Coalesce(Sum('valorTotal'), 0))
+        totalProcedimientos = LiquidacionDetalle.objects.all().filter(liquidacion_id=liquidacionId).filter(cums_id=None).exclude(estadoRegistro='N').exclude(anulado='N').aggregate(totalP=Coalesce(Sum('valorTotal'), 0))
         totalProcedimientos = (totalProcedimientos['totalP']) + 0
         print("totalProcedimientos", totalProcedimientos)
         registroPago = Liquidacion.objects.get(id=liquidacionId)
@@ -7441,7 +7444,7 @@ def GuardaAbonosAdmision(request):
         # Continua Aqui
 
 
-        totalCopagos = Pagos.objects.all().filter(tipoDoc_id=ingresos.tipoDoc_id).filter(documento_id=ingresos.documento_id).filter(consec=ingresos.consec).filter(formaPago_id=4).exclude(estadoReg='N').aggregate(totalC=Coalesce(Sum('valor'), 0))
+        totalCopagos = Pagos.objects.all().filter(tipoDoc_id=ingresos.tipoDoc_id).filter(documento_id=ingresos.documento_id).filter(consec=ingresos.consec).filter(formaPago_id=4).exclude(estadoReg='N').exclude(anulado='N').aggregate(totalC=Coalesce(Sum('valor'), 0))
         totalCopagos = (totalCopagos['totalC']) + 0
 
         #if (float(formaCopago.id) == float(formaPago)):
@@ -7505,7 +7508,7 @@ def GuardaAbonosAdmision(request):
         if miConexion3:
             print("Entro ha hacer el Rollback")
             miConexion3.rollback()
-        raise error
+
         #print ("Voy a hacer el jsonresponde")
         return JsonResponse({'success': False, 'Mensaje': error})
 
@@ -7573,6 +7576,9 @@ def PostDeleteConveniosAdmision(request):
         # Aquí ya se hizo rollback automáticamente
         print("Se hizo rollback por:", e)
 
+    finally:
+        print("Cleanup operations or final logging.")
+
 
     # Aqui Fin Manejo Transaccionalidad
 
@@ -7604,6 +7610,7 @@ def PostDeleteAbonosAdmision(request):
     except Exception as e:
 
         print("Se hizo rollback por NO SE HACE NADA :", e)
+
         valorAMirar = 0
 
     finally:
@@ -7629,88 +7636,12 @@ def PostDeleteAbonosAdmision(request):
 
             miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres", password="123456")
             cur3 = miConexion3.cursor()
-            comando = 'UPDATE cartera_Pagos SET "estadoReg" = ' + "'" + str('N') + "' WHERE id =  " + id
+            comando = 'UPDATE cartera_Pagos SET "estadoReg" = ' + "'" + str('N') + "', anulado= 'N' WHERE id =  " + id
             print("comando = ", comando)
             cur3.execute(comando)
 
             ## AQUI RUTUNA ACTUALIZA CABEZOTE DE LIQUIDACION
 
-            ## Vamops a actualizar los totales de la Liquidacion:
-            #
-            #totalSuministros = LiquidacionDetalle.objects.all().filter(liquidacion_id=liquidacionId).filter(
-            #    examen_id=None).exclude(estadoRegistro='N').aggregate(totalS=Coalesce(Sum('valorTotal'), 0))
-            #totalSuministros = (totalSuministros['totalS']) + 0
-            #print("totalSuministros", totalSuministros)
-            #totalProcedimientos = LiquidacionDetalle.objects.all().filter(liquidacion_id=liquidacionId).filter(
-            #    cums_id=None).exclude(estadoRegistro='N').aggregate(totalP=Coalesce(Sum('valorTotal'), 0))
-            #totalProcedimientos = (totalProcedimientos['totalP']) + 0
-            #print("totalProcedimientos", totalProcedimientos)
-            registroPago = Liquidacion.objects.get(id=liquidacionId)
-
-            # Continua Aqui
-
-            #totalCopagos = Pagos.objects.all().filter(tipoDoc_id=pagos.tipoDoc_id).filter(
-            #    documento_id=pagos.documento_id).filter(consec=pagos.consec).filter(formaPago_id=4).exclude(
-            #    estadoReg='N').aggregate(totalC=Coalesce(Sum('valor'), 0))
-            #totalCopagos = (totalCopagos['totalC']) + 0
-            #if (float(formaCopago.id) == float(formaPago)):
-            #    totalCopagos = float(totalCopagos) + float(pagos.valor)
-            #    print("totalCopagos", totalCopagos)
-
-            #totalCuotaModeradora = Pagos.objects.all().filter(tipoDoc_id=pagos.tipoDoc_id).filter(
-            #    documento_id=pagos.documento_id).filter(consec=pagos.consec).filter(formaPago_id=3).exclude(
-            #    estadoReg='N').aggregate(totalM=Coalesce(Sum('valor'), 0))
-            #totalCuotaModeradora = (totalCuotaModeradora['totalM']) + 0
-            #if (float(formaModeradora.id) == float(formaPago)):
-            #    totalCuotaModeradora = float(totalCuotaModeradora) + float(pagos.valor)
-            #    print("totalCuotaModeradora", totalCuotaModeradora)
-
-            #totalAnticipos = Pagos.objects.all().filter(tipoDoc_id=pagos.tipoDoc_id).filter(
-            #    documento_id=pagos.documento_id).filter(consec=pagos.consec).filter(formaPago_id=1).exclude(
-            #    estadoReg='N').aggregate(Anticipos=Coalesce(Sum('valor'), 0))
-            #totalAnticipos = (totalAnticipos['Anticipos']) + 0
-
-            #if (float(formaAnticipo.id) == float(formaPago)):
-            #    totalAnticipos = float(totalAnticipos) + float(pagos.valor)
-            #    print("totalAnticipos", totalAnticipos)
-
-            #totalAbonos = Pagos.objects.all().filter(tipoDoc_id=pagos.tipoDoc_id).filter(
-            #    documento_id=pagos.documento_id).filter(consec=pagos.consec).filter(formaPago_id=2).exclude(
-            #    estadoReg='N').aggregate(totalAb=Coalesce(Sum('valor'), 0))
-            #totalAbonos = (totalAbonos['totalAb']) + 0
-
-            #print("totalAbonos =", totalAbonos)
-
-            #print("formaAbono.id", formaAbono.id)
-            #print("formaPago", formaPago)
-
-            #if (float(formaAbono.id) == float(formaPago)):
-            #    print("ENTRE ABONO")
-            #    totalAbonos = float(totalAbonos) + float(pagos.valor)
-            #    print("totalAbonos", totalAbonos)
-
-            #totalRecibido = float(totalCopagos) + float(totalCuotaModeradora) + float(totalAnticipos) + float(totalAbonos)
-            #totalApagar = float(totalSuministros) + float(totalProcedimientos) - float(totalRecibido)
-            #totalLiquidacion = float(totalSuministros) + float(totalProcedimientos)
-            #print("totalLiquidacion", totalLiquidacion)
-            #print("totalAPagar", totalApagar)
-
-            # Rutina Guarda en cabezote los totales
-
-            #print("Voy a grabar el cabezote")
-
-            #comando = 'UPDATE facturacion_liquidacion SET "totalSuministros" = ' + "'" + str(
-            #    totalSuministros) + "'" + ',"totalProcedimientos" = ' + "'" + str(
-            #    totalProcedimientos) + "'" + ', "totalCopagos" = ' + "'" + str(
-            #    totalCopagos) + "'" + ' , "totalCuotaModeradora" = ' + "'" + str(
-            #    totalCuotaModeradora) + "'" + ', anticipos = ' + "'" + str(
-            #    totalAnticipos) + "'" + ' ,"totalAbonos" = ' + "'" + str(
-            #    totalAbonos) + "'" + ', "totalLiquidacion" = ' + "'" + str(
-            #    totalLiquidacion) + "'" + ', "valorApagar" = ' + "'" + str(
-            #    totalApagar) + "'" + ', "totalRecibido" = ' + "'" + str(totalRecibido) + "'" + ' WHERE id =' + str(
-            #    liquidacionId)
-            #print("ACTUALIZADO", comando)
-            #cur3.execute(comando)
             miConexion3.commit()
             cur3.close()
             miConexion3.close()
@@ -7723,7 +7654,6 @@ def PostDeleteAbonosAdmision(request):
         if miConexion3:
             print("Entro ha hacer el Rollback")
             miConexion3.rollback()
-        #raise error
         #print ("Voy a hacer el jsonresponde")
         return JsonResponse({'success': False, 'Mensaje': error})
 
@@ -7767,11 +7697,9 @@ def GuardarResponsableAdmision(request):
         if miConexion3:
             print("Entro ha hacer el Rollback")
             miConexion3.rollback()
-        raise error
+
         #print ("Voy a hacer el jsonresponde")
         return JsonResponse({'success': False, 'Mensaje': error})
-
-
 
     finally:
         if miConexion3:
@@ -7807,18 +7735,15 @@ def GuardarAcompananteAdmision(request):
         miConexion3.commit()
         cur3.close()
 
-        return JsonResponse({'success': True, 'Mensaje': 'Responsable Actualizado satisfactoriamente!'})
+        return JsonResponse({'success': True, 'Mensaje': 'Acompañante Actualizado satisfactoriamente!'})
 
     except psycopg2.DatabaseError as error:
         print ("Entre por rollback" , error)
         if miConexion3:
             print("Entro ha hacer el Rollback")
             miConexion3.rollback()
-        raise error
         #print ("Voy a hacer el jsonresponde")
         return JsonResponse({'success': False, 'Mensaje': error})
-
-
 
     finally:
         if miConexion3:
@@ -7873,7 +7798,6 @@ def GuardaFurips(request):
         if miConexion3:
             print("Entro ha hacer el Rollback")
             miConexion3.rollback()
-        raise error
         #print ("Voy a hacer el jsonresponde")
         return JsonResponse({'success': False, 'Mensaje': error})
 
@@ -8142,7 +8066,7 @@ def ActualizaAdmision(request):
         if miConexion3:
             print("Entro ha hacer el Rollback")
             miConexion3.rollback()
-        raise error
+
         #print ("Voy a hacer el jsonresponde")
         return JsonResponse({'success': False, 'Mensaje': error})
 

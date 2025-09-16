@@ -23,7 +23,7 @@ class Pagos(models.Model):
         ('A', 'Activo'),
         ('I', 'Inactivo'), ]
     FLAG_CHOICES = [
-	("", "Select an option"),
+	
         ('S', 'Si'),
         ('N', 'No'),
         ]
@@ -43,8 +43,8 @@ class Pagos(models.Model):
     valorEnCurso = models.DecimalField( max_digits=20, decimal_places=2 , blank=True, null=True, editable=True , default=0.0)
     saldo = models.DecimalField( max_digits=20, decimal_places=2, default=0.0)
     convenio = models.ForeignKey('contratacion.Convenios', blank=True,null= True, editable=True, on_delete=models.PROTECT)
-    anulado = models.CharField(max_length=1, choices=FLAG_CHOICES, default='N', blank=True, null=True, editable=False)
-
+    anulado = models.CharField(max_length=1, choices=FLAG_CHOICES, default='N', editable=False)
+    caja = models.ForeignKey('cartera.caja', blank=True,null= True, editable=True, on_delete=models.PROTECT)
     #facturaAplicada  =  models.ForeignKey('facturacion.facturacion',blank=True,null= True, editable=True, on_delete=models.PROTECT)
     fechaRegistro = models.DateTimeField(default=now, blank=True, null=True, editable=True)
     estadoReg = models.CharField(max_length=1, choices=ESTADOREG_CHOICES, default='A', editable=False)
@@ -57,7 +57,7 @@ class PagosFacturas(models.Model):
         ('A', 'Activo'),
         ('I', 'Inactivo'), ]
     FLAG_CHOICES = [
-	("", "Select an option"),
+
         ('S', 'Si'),
         ('N', 'No'),
         ]
@@ -69,7 +69,7 @@ class PagosFacturas(models.Model):
     facturaAplicada  =  models.ForeignKey('facturacion.facturacion',blank=True,null= True, editable=True, on_delete=models.PROTECT)
     valorAplicado = models.DecimalField( max_digits=20, decimal_places=2)
     fechaRegistro = models.DateTimeField(default=now, blank=True, null=True, editable=True)
-    anulado = models.CharField(max_length=1, choices=FLAG_CHOICES, default='N', blank=True, editable=False)
+    anulado = models.CharField(max_length=1, choices=FLAG_CHOICES, default='N', editable=False)
     estadoReg = models.CharField(max_length=1, choices=ESTADOREG_CHOICES,default='A', editable=False)
 
     def __str__(self):
@@ -120,7 +120,7 @@ class Radicaciones(models.Model):
         ('A', 'Activo'),
         ('I', 'Inactivo'), ]
     FLAG_CHOICES = [
-	("", "Select an option"),
+
         ('S', 'Si'),
         ('N', 'No'),
         ]
@@ -131,7 +131,7 @@ class Radicaciones(models.Model):
     remision= models.CharField(max_length=20, null=False)
     radicacion= models.CharField(max_length=20, null=False)
     fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)
-    anulado = models.CharField(max_length=1, choices=FLAG_CHOICES, default='N', blank=True, editable=False)
+    anulado = models.CharField(max_length=1, choices=FLAG_CHOICES, default='N', editable=False)
     usuarioRegistro = models.ForeignKey('planta.Planta', default=1, on_delete=models.PROTECT, null=True)
     estadoReg = models.CharField(max_length=1, choices=ESTADOREG_CHOICES, default='A', editable=False)
 
@@ -154,7 +154,7 @@ class Remisiones(models.Model):
     remision= models.CharField(max_length=20, null=False)
     fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)
     usuarioRegistro = models.ForeignKey('planta.Planta', default=1, on_delete=models.PROTECT, null=True)
-    anulado = models.CharField(max_length=1, choices=FLAG_CHOICES, default='N', blank=True, editable=False)
+    anulado = models.CharField(max_length=1, choices=FLAG_CHOICES, default='N', editable=False)
     estadoReg = models.CharField(max_length=1, default='A', editable=False)
 
     def __str__(self):
@@ -185,7 +185,7 @@ class Glosas(models.Model):
         ('A', 'Activo'),
         ('I', 'Inactivo'), ]
     FLAG_CHOICES = [
-	("", "Select an option"),
+
         ('S', 'Si'),
         ('N', 'No'),
         ]
@@ -212,7 +212,7 @@ class Glosas(models.Model):
     usuarioRecepcion = models.ForeignKey('planta.Planta', default=1, on_delete=models.PROTECT, null=True  ,  related_name='recepcion01')
     fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)
     usuarioRegistro = models.ForeignKey('planta.Planta', default=1, on_delete=models.PROTECT, null=True ,  related_name='usuario987')
-    anulado = models.CharField(max_length=1, choices=FLAG_CHOICES, default='N', blank=True, editable=False)
+    anulado = models.CharField(max_length=1, choices=FLAG_CHOICES, default='N', editable=False)
     estadoReg = models.CharField(max_length=1, choices=ESTADOREG_CHOICES, default='A', editable=False)
 
     def __str__(self):
@@ -223,7 +223,7 @@ class GlosasDetalle(models.Model):
         ('A', 'Activo'),
         ('I', 'Inactivo'), ]
     FLAG_CHOICES = [
-	("", "Select an option"),
+
         ('S', 'Si'),
         ('N', 'No'),
         ]
@@ -242,7 +242,7 @@ class GlosasDetalle(models.Model):
     observaciones = models.CharField(max_length=120, blank=True,null= True, editable=True)
     fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)
     usuarioRegistro = models.ForeignKey('planta.Planta', default=1, on_delete=models.PROTECT, null=True ,  related_name='usuario799')
-    anulado = models.CharField(max_length=1, choices=FLAG_CHOICES, default='N', blank=True, editable=False)
+    anulado = models.CharField(max_length=1, choices=FLAG_CHOICES, default='N', editable=False)
     estadoReg = models.CharField(max_length=1, choices=ESTADOREG_CHOICES, default='A', editable=False)
 
     def __integer__(self):
@@ -253,7 +253,7 @@ class NotasCredito(models.Model):
         ('A', 'Activo'),
         ('I', 'Inactivo'), ]
     FLAG_CHOICES = [
-	("", "Select an option"),
+
         ('S', 'Si'),
         ('N', 'No'),
         ]
@@ -295,7 +295,7 @@ class NotasCredito(models.Model):
     codigoZip = models.IntegerField(editable=True, null=True, blank=True)
     fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)
     usuarioRegistro = models.ForeignKey('planta.Planta', default=1, on_delete=models.PROTECT, null=True ,  related_name='usuario798')
-    anulado = models.CharField(max_length=1, choices=FLAG_CHOICES, default='N', blank=True, editable=False)
+    anulado = models.CharField(max_length=1, choices=FLAG_CHOICES, default='N', editable=False)
     estadoReg = models.CharField(max_length=1, choices=ESTADOREG_CHOICES, default='A', editable=False)
 
 
@@ -309,7 +309,6 @@ class NotasDebito(models.Model):
         ('A', 'Activo'),
         ('I', 'Inactivo'), ]
     FLAG_CHOICES = [
-	("", "Select an option"),
         ('S', 'Si'),
         ('N', 'No'),
         ]
@@ -351,7 +350,7 @@ class NotasDebito(models.Model):
     codigoZip = models.IntegerField(editable=True, null=True, blank=True)
     fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)
     usuarioRegistro = models.ForeignKey('planta.Planta', default=1, on_delete=models.PROTECT, null=True ,  related_name='usuario797')
-    anulado = models.CharField(max_length=1, choices=FLAG_CHOICES, default='N', blank=True, editable=False)
+    anulado = models.CharField(max_length=1, choices=FLAG_CHOICES, default='N', editable=False)
     estadoReg = models.CharField(max_length=1, choices=ESTADOREG_CHOICES, default='A', editable=False)
 
 
@@ -365,7 +364,6 @@ class Caja(models.Model):
         ('A', 'Activo'),
         ('I', 'Inactivo'), ]
     FLAG_CHOICES = [
-	("", "Select an option"),
         ('S', 'Si'),
         ('N', 'No'),
         ]
@@ -390,7 +388,7 @@ class Caja(models.Model):
     usuarioRegistro = models.ForeignKey('planta.Planta', blank=True, null=True, on_delete=models.PROTECT,   related_name='usuario7297')
     fechaRegistro = models.DateTimeField(default=now, blank=True, null=True, editable=True)
     estadoCaja = models.CharField(max_length=1, default='A', editable=False) 
-    anulado = models.CharField(max_length=1, choices=FLAG_CHOICES, default='N', blank=True, null=True, editable=False)
+    anulado = models.CharField(max_length=1, choices=FLAG_CHOICES, default='N', editable=False)
 
     def __str__(self):
         return str(self.serviciosAdministrativos)

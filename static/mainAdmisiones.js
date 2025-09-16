@@ -795,11 +795,10 @@ window.addEventListener('load', async () => {
 
 
                     },
-	   		    error: function (request, status, error) {
-	   			    	document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
-
-	   	    	}
-	     });
+	   	        error: function(data){
+		       		document.getElementById("mensajesErrorAbonos").innerHTML =  data.responseText
+			        },
+      });
         });
 
 
@@ -834,6 +833,8 @@ window.addEventListener('load', async () => {
 			if (data2 == '')
 				{
 				alert("Debe crear un Convenio");
+				document.getElementById("mensajesErrorAbonos").innerHTML = 'Debe crear un Convenio';
+				return;
 				}
 
 	  	    var options = '<option value="=================="></option>';
@@ -855,7 +856,7 @@ window.addEventListener('load', async () => {
             $('#modelHeading').html("Creacion Abonos en admision");
             $('#crearAbonosModel').modal('show');
                     },
-	   		        error: function(data){
+	   		                error: function(data){
 		       		document.getElementById("mensajesErrorAbonos").innerHTML =  data.responseText
 			        },
       });
@@ -890,30 +891,40 @@ window.addEventListener('load', async () => {
                 type: "POST",
                 dataType: 'json',
                 success: function (data) {
-			printErrorMsg(data.error)
-                    if ($.isEmptyObject(data.error)) {
 
-                        //  $("input[name='description']").val('');
-                        $('#crearConvenioModel').modal('hide');
-      
-                    }else{
-                        printErrorMsg(data.error)
-                    }
+			if (data.success==true)
+			{
+			document.getElementById("mensajes").innerHTML = data.Mensaje;
+			}
+
+		    $('#crearConvenioModel').modal('hide');
                     $('#postFormCrearConvenio').trigger("reset");
-	 	  var table = $('#tablaConveniosAdmisiones').DataTable(); // accede de nuevo a la DataTable.
-	          table.ajax.reload();
+
+	var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
+		        var username = document.getElementById("username").value;
+		        var nombreSede = document.getElementById("nombreSede").value;
+		    	var sede = document.getElementById("sede").value;
+		        var username_id = document.getElementById("username_id").value;
+		        var ingresoId  = document.getElementById("ingresoId22").value;
+		         var data =  {}   ;
+		        data['username'] = username;
+		        data['sedeSeleccionada'] = sedeSeleccionada;
+		        data['nombreSede'] = nombreSede;
+		        data['sede'] = sede;
+		        data['username_id'] = username_id;   
+			data['ingresoId'] = ingresoId;
+			
+          		 data = JSON.stringify(data);
+
+        		arrancaAdmisiones(2,data);
+	 		   dataTableConveniosAdmisionesInitialized = true;
 
                 },
 
 
 	   		    error: function (data) {
-				           alert("data = " + JSON.stringify(data)); // data
-		           alert(data.status); // the status code
-		   
-		           alert(data.JsonResponse['error']); // the message
-
-
-				document.getElementById("mensajesErrorModalConvenio").innerHTML =  data.JsonResponse.error;
+	
+				document.getElementById("mensajesErrorModalConvenio").innerHTML =  data.responseText;
 
 		  var table = $('#tablaConveniosAdmisiones').DataTable(); // accede de nuevo a la DataTable.
 	          table.ajax.reload();
@@ -938,24 +949,38 @@ window.addEventListener('load', async () => {
                 type: "POST",
                 dataType: 'json',
                 success: function (data) {
-			printErrorMsg(data.error)
-                    if ($.isEmptyObject(data.error)) {
 
-                        //  $("input[name='description']").val('');
-                        $('#crearAbonosModel').modal('hide');
-                        $('.success-msg').css('display','block');
-                        $('.success-msg').text(data.message);
-                    }else{
-                        printErrorMsg(data.error)
-                    }
+			if (data.success==true)
+			{
+			document.getElementById("mensajes").innerHTML = data.Mensaje;
+			}
+
+                    $('#crearAbonosModel').modal('hide');
                     $('#postFormCrearAbonos').trigger("reset");
-	 	  var tableA = $('#tablaAbonosAdmisiones').DataTable(); // accede de nuevo a la DataTable.
-	          tableA.ajax.reload();
+		  	var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
+		        var username = document.getElementById("username").value;
+		        var nombreSede = document.getElementById("nombreSede").value;
+		    	var sede = document.getElementById("sede").value;
+		        var username_id = document.getElementById("username_id").value;
+		        var ingresoId  = document.getElementById("ingresoId22").value;
+		         var data =  {}   ;
+		        data['username'] = username;
+		        data['sedeSeleccionada'] = sedeSeleccionada;
+		        data['nombreSede'] = nombreSede;
+		        data['sede'] = sede;
+		        data['username_id'] = username_id;   
+			data['ingresoId'] = ingresoId;
+			
+          		 data = JSON.stringify(data);
+
+			arrancaAdmisiones(3,data);
+		        dataTableAbonosAdmisionesInitialized = true;
+
 
                 },
                 error: function (data) {
 
-		        alert("entre error");
+		      
 			document.getElementById("mensajesErrorAbonos").innerHTML =   data.responseText;
 
 		  var tableA = $('#tablaAbonosAdmisiones').DataTable(); // accede de nuevo a la DataTable.
@@ -991,12 +1016,9 @@ window.addEventListener('load', async () => {
 		                table.ajax.reload();
                     },
 	   		    error: function (data) {
-      alert("data = " + JSON.stringify(data)); // data
-		           alert(data.status); // the status code
-		   
-		           alert(data.JsonResponse['error']); // the message
+    
 
-				document.getElementById("mensajesErrorModalUsuario").innerHTML =  data.JsonResponse.error;
+				document.getElementById("mensajesErrorModalUsuario").innerHTML =  data.JresponseText;
 
 	   	    	}
 
@@ -1030,11 +1052,9 @@ window.addEventListener('load', async () => {
 		                table.ajax.reload();
                     },
 	   		    error: function (data) {
-		         alert("data = " + JSON.stringify(data)); // data
-		           alert(data.status); // the status code   
-		           alert(data.JsonResponse['error']); // the message
+		  
 
-				document.getElementById("mensajesErrorModalUsuario").innerHTML =  data.JsonResponse.error;
+				document.getElementById("mensajesErrorModalUsuario").innerHTML =  data.JresponseText;
 
 	   	    	}
 
@@ -1158,10 +1178,8 @@ $('#tablaDatos tbody').on('change', '.miIngresoId', function() {
 
                     },
 	   		    error: function (data) {
-		      alert("data = " + JSON.stringify(data)); // data
-		           alert(data.status); // the status code   
-		           alert(data.JsonResponse['error']); // the message
-	document.getElementById("mensajesError").innerHTML =  data.JsonResponse.error;
+		 
+	document.getElementById("mensajesError").innerHTML =  data.responseText;
 
 	   	    	}
 	});
@@ -1353,11 +1371,8 @@ if (genero =='')
 
                     },
 	   		    error: function (sata) {
-     alert("data = " + JSON.stringify(data)); // data
-		           alert(data.status); // the status code   
-		           alert(data.JsonResponse['error']); // the message
-
-				document.getElementById("mensajesErrorModalUsuario").innerHTML = data.JsonResponse.error;
+  
+				document.getElementById("mensajesErrorModalUsuario").innerHTML = data.responseText;
 
 	   	    	}
 	});
@@ -1396,10 +1411,8 @@ $(document).on('change', '#servicioCambio', function(event) {
  	      		      });
                     },
 	   		    error: function (data) {
-			      alert("data = " + JSON.stringify(data)); // data
-		           alert(data.status); // the status code   
-		           alert(data.JsonResponse['error']); // the message
-	   			  	document.getElementById("mensajesError").innerHTML =  data.JsonResponse.error;
+			
+	   			  	document.getElementById("mensajesError").innerHTML =  data.responseText;
 
 	   	    	}
 	     });
@@ -1436,10 +1449,8 @@ $(document).on('change', '#subServicioCambio', function(event) {
  	      		      });
                     },
 	   		    error: function (data) {
-     		  alert("data = " + JSON.stringify(data)); // data
-		           alert(data.status); // the status code   
-		           alert(data.JsonResponse['error']); // the message
-	   			   	document.getElementById("mensajesError").innerHTML =  data.JsonResponse.error;
+     		
+	   			   	document.getElementById("mensajesError").innerHTML =  data.responseText;
 
 	   	    	}
 	     });
@@ -1511,10 +1522,8 @@ $(document).on('change', '#busDocumentoSel', function(event) {
 
                     },
 	   		    error: function (data) {
-	           alert("data = " + JSON.stringify(data)); // data
-		           alert(data.status); // the status code   
-		           alert(data.JsonResponse['error']); // the message
-	document.getElementById("mensajesError").innerHTML =  data.JsonResponse.error;
+	   
+	document.getElementById("mensajesError").innerHTML =  data.responseText;
 
 	   	    	}
 	});
@@ -1577,10 +1586,8 @@ $(document).on('change', '#busDocumentoSelTriage', function(event) {
 			//	 $('#usuariosModal').modal().hide();
                     },
 	   		    error: function (data) {
-			    alert("data = " + JSON.stringify(data)); // data
-		           alert(data.status); // the status code   
-		           alert(data.JsonResponse['error']); // the message
-	document.getElementById("mensajesError").innerHTML =  data.JsonResponse.error;
+			
+	document.getElementById("mensajesError").innerHTML =  data.responseText;
 
 	   	    	}
 	});
@@ -1643,11 +1650,9 @@ function findOneUsuarioTriage()
 
                     },
 	   		    error: function (data) {
-		           alert("data = " + JSON.stringify(data)); // data
-		           alert(data.status); // the status code   
-		           alert(data.JsonResponse['error']); // the message
+		       
 
-	document.getElementById("mensajesError").innerHTML =  data.JsonResponse.error;
+	document.getElementById("mensajesError").innerHTML =  data.responseText;
 
 
 	   	    	}
@@ -1715,10 +1720,8 @@ $(document).on('change', '#busDocumentoSel22', function(event) {
 
                     },
 	   		    error: function (data) {
-		    alert("data = " + JSON.stringify(data)); // data
-		           alert(data.status); // the status code   
-		           alert(data.JsonResponse['error']); // the message
-	document.getElementById("mensajesError").innerHTML =  data.JsonResponse.error;
+		
+	document.getElementById("mensajesError").innerHTML =  data.responseText;
 
 	   	    	}
 	});
@@ -1784,10 +1787,8 @@ function findOneUsuario1()
 
                     },
 	   		    error: function (data) {
-         alert("data = " + JSON.stringify(data)); // data
-		           alert(data.status); // the status code   
-		           alert(data.JsonResponse['error']); // the message
-	document.getElementById("mensajesError").innerHTML =  data.JsonResponse.error;
+        
+	document.getElementById("mensajesError").innerHTML =  data.responseText;
 
 	   	    	}
 	});
@@ -1895,11 +1896,8 @@ alert("llegue medicoIngreso = " + Usuarios.medicoIngreso);
 
                     },
 	   		    error: function (data) {
-		          alert("data = " + JSON.stringify(data)); // data
-		           alert(data.status); // the status code   
-		           alert(data.JsonResponse['error']); // the message
-	document.getElementById("mensajesError").innerHTML =  data.JsonResponse.error;
-
+		       
+	document.getElementById("mensajesError").innerHTML = data.responseText;
 	   	    	}
 	});
 
@@ -1976,11 +1974,9 @@ $(document).on('change', '#pais', function(event) {
 
                     },
 	   		    error: function (data) {
-		    alert("data = " + JSON.stringify(data)); // data
-		           alert(data.status); // the status code   
-		           alert(data.JsonResponse['error']); // the message
+	
 
-	document.getElementById("mensajesError").innerHTML =  data.JsonResponse.error;
+	document.getElementById("mensajesError").innerHTML =  data.responseText;
 
 	   	    	}
 
@@ -2030,11 +2026,9 @@ $(document).on('change', '#departamentos', function(event) {
 
                     },
 	   		    error: function (data) {
-		           alert("data = " + JSON.stringify(data)); // data
-		           alert(data.status); // the status code   
-		           alert(data.JsonResponse['error']); // the message
+		
 
-	document.getElementById("mensajesError").innerHTML =   data.JsonResponse.error;
+	document.getElementById("mensajesError").innerHTML =   data.responseText;
 
 	   	    	}
 
@@ -2078,11 +2072,9 @@ $.ajax({
 
                     },
 	   		    error: function (data) {
-      			  alert("data = " + JSON.stringify(data)); // data
-		           alert(data.status); // the status code   
-		           alert(data.JsonResponse['error']); // the message
+      		
 
-	document.getElementById("mensajesError").innerHTML =  data.JsonResponse.error;
+	document.getElementById("mensajesError").innerHTML =  data.responseText;
 
 	   	    	}
 
@@ -2136,11 +2128,9 @@ $(document).on('change', '#departamentosViejo', function(event) {
 
                     },
 	   		    error: function (data) {
-		        alert("data = " + JSON.stringify(data)); // data
-		           alert(data.status); // the status code   
-		           alert(data.JsonResponse['error']); // the message
+		      
 
-	   			  	document.getElementById("mensajesError").innerHTML =  data.JsonResponse.error;
+	   			  	document.getElementById("mensajesError").innerHTML =  data.responseText;
 
 	   	    	}
 
@@ -2197,11 +2187,9 @@ $(document).on('change', '#busEspecialidad', function(event) {
 
                     },
 	   		    error: function (data) {
-     alert("data = " + JSON.stringify(data)); // data
-		           alert(data.status); // the status code   
-		           alert(data.JsonResponse['error']); // the message
 
-	   			 	document.getElementById("mensajesError").innerHTML =  data.JsonResponse.error;
+
+	   			 	document.getElementById("mensajesError").innerHTML =  data.responseText;
 
 	   	    	}
 
@@ -2256,11 +2244,9 @@ $(document).on('change', '#busEspecialidadP', function(event) {
 
                     },
 	   		    error: function (data) {
-       alert("data = " + JSON.stringify(data)); // data
-		           alert(data.status); // the status code   
-		           alert(data.JsonResponse['error']); // the message
 
-	   			 	document.getElementById("mensajesError").innerHTML =  data.JsonResponse.error;
+
+	   			 	document.getElementById("mensajesError").innerHTML =  data.responseText;
 
 	   	    	}
 
@@ -2309,11 +2295,9 @@ $(document).on('change', '#tiposAntecedente', function(event) {
 
                     },
 		 error: function (data) {
-    alert("data = " + JSON.stringify(data)); // data
-		           alert(data.status); // the status code   
-		           alert(data.JsonResponse['error']); // the message
+    
 
-				document.getElementById("mensajesError").innerHTML =  data.JsonResponse.error;
+				document.getElementById("mensajesError").innerHTML =  data.responseText;
 
 	   	    	}            
 	     });
@@ -2366,11 +2350,8 @@ $(document).on('change', '#busServicio', function(event) {
 
                     },
 	   		    error: function (data) {
-       alert("data = " + JSON.stringify(data)); // data
-		           alert(data.status); // the status code   
-		           alert(data.JsonResponse['error']); // the message
-
-	document.getElementById("mensajesError").innerHTML =  data.JsonResponse.error;
+      
+	document.getElementById("mensajesError").innerHTML =  data.responseText;
 
 	   	    	}
 
@@ -2420,11 +2401,8 @@ $(document).on('change', '#busServicioT', function(event) {
 
                     },
 	   		    error: function (data) {
- alert("data = " + JSON.stringify(data)); // data
-		           alert(data.status); // the status code   
-		           alert(data.JsonResponse['error']); // the message
 
-	   			    	document.getElementById("mensajesError").innerHTML =  data.JsonResponse.error;
+	   			    	document.getElementById("mensajesError").innerHTML =  data.responseText;
 
 	   	    	}
 
@@ -2469,10 +2447,8 @@ $(document).on('change', '#busSubServicio', function(event) {
 
                     },
 	   		    error: function (data) {
-    alert("data = " + JSON.stringify(data)); // data
-		           alert(data.status); // the status code   
-		           alert(data.JsonResponse['error']); // the message
-	document.getElementById("mensajesError").innerHTML =  data.JsonResponse.error;
+
+	document.getElementById("mensajesError").innerHTML =  data.JsonResponse.errodata.responseText;
 
 	   	    	}
 
@@ -2534,11 +2510,9 @@ $(document).on('change', '#busSubServicioT', function(event) {
 
                     },
 	   		    error: function (data) {
-alert("data = " + JSON.stringify(data)); // data
-		           alert(data.status); // the status code   
-		           alert(data.JsonResponse['error']); // the message
 
-	   				document.getElementById("mensajesError").innerHTML =  data.JsonResponse.error;
+
+	   				document.getElementById("mensajesError").innerHTML =  data.responseText;
 
 	   	    	}
 
@@ -2593,11 +2567,9 @@ $(document).on('change', '#busServicio22', function(event) {
 
                     },
 	   		    error: function (data) {
-       alert("data = " + JSON.stringify(data)); // data
-		           alert(data.status); // the status code   
-		           alert(data.JsonResponse['error']); // the message
+     
 
-	   			  	document.getElementById("mensajesError").innerHTML =  data.JsonResponse.error;
+	   			  	document.getElementById("mensajesError").innerHTML =  data.responseText;
 
 	   	    	}
 
@@ -2649,11 +2621,9 @@ $(document).on('change', '#busSubServicio22', function(event) {
 
                     },
 	   		    error: function (data) {
-   alert("data = " + JSON.stringify(data)); // data
-		           alert(data.status); // the status code   
-		           alert(data.JsonResponse['error']); // the message
+   
 
-	   			document.getElementById("mensajesError").innerHTML =  data.JsonResponse.error;
+	   			document.getElementById("mensajesError").innerHTML =  data.responseText;
 
 	   	    	}
 
@@ -2776,7 +2746,7 @@ function findOneAdmision(tipoDoc,Documento,consec, sede)
 		           alert(data.JsonResponse['error']); // the message
                     },
 	   		    error: function (data) {
-	document.getElementById("mensajesError").innerHTML =  data.JsonResponse.error;
+	document.getElementById("mensajesError").innerHTML =  data.responseText;
 
 	   	    	}
 	});
@@ -2855,6 +2825,12 @@ alert("servicio cambio = " +  servicioCambio);
 			 'permisosDetalle':permisosDetalle},
 
 		success: function (CambioServicio) {
+
+			if (CambioServicio.success == true)
+				{
+			$('#mensajes').val(CambioServicio.Mensaje);
+				}
+		
 
 			 alert("DE REGRESO CON CambioServicio = " + CambioServicio);
 			 alert("DE REGRESO CON CambioServicio Doc = " + CambioServicio.Documentox);
@@ -2936,11 +2912,9 @@ var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
 
                     },
 		 error: function (data) {
-         alert("data = " + JSON.stringify(data)); // data
-		           alert(data.status); // the status code   
-		           alert(data.JsonResponse['error']); // the message
+  
 
-				document.getElementById("mensajesError").innerHTML =  data.JsonResponse.error;
+				document.getElementById("mensajesError").innerHTML =  data.responseText;
 
 	   	    	}            
 	});
@@ -2990,17 +2964,18 @@ $(document).on('click', '#Convenios', function(event) {
                 type: "POST",
                 dataType: 'json',
                 success: function (data) {
-			alert("De regreso grabe responsable = " + data);
-			  $("#mensajes").html(data['message']);
+
+			if (data.success == true)
+			 {
+			  $("#mensajes").html(data.Mensaje);
+			 }
 
 
                 },
 		 error: function (data) {
-    alert("data = " + JSON.stringify(data)); // data
-		           alert(data.status); // the status code   
-		           alert(data.JsonResponse['error']); // the message
 
-				document.getElementById("mensajesError").innerHTML =  data.JsonResponse.error;
+
+				document.getElementById("mensajesError").innerHTML =  data.responseText;
 
 	   	    	}            
 });
@@ -3030,17 +3005,17 @@ $(document).on('click', '#Convenios', function(event) {
                 type: "POST",
                 dataType: 'json',
                 success: function (data) {
-			alert("De regreso grabe Acompanante  = " + data);
-					  $("#mensajes").html(data['message']);
+			if (data.success == true)
+				{
+					  $("#mensajes").html(data.Mensaje);
+				}
 
                 },
 		 error: function (data) {
 
-   alert("data = " + JSON.stringify(data)); // data
-		           alert(data.status); // the status code   
-		           alert(data.JsonResponse['error']); // the message
 
-				document.getElementById("mensajesError").innerHTML =  data.JsonResponse.error;
+
+				document.getElementById("mensajesError").innerHTML = data.responseText;
 
 	   	    	}
 
@@ -3092,11 +3067,9 @@ var valor = $('input[name="ingresoId"]:checked').val();
 
                     },
 			 error: function (data) {
-alert("data = " + JSON.stringify(data)); // data
-		           alert(data.status); // the status code   
-		           alert(data.JsonResponse['error']); // the message
 
-				document.getElementById("mensajesError").innerHTML =  data.JsonResponse.errort;
+
+				document.getElementById("mensajesError").innerHTML =  data.responseText;
 
 	   	    	}	});
 
@@ -3220,11 +3193,8 @@ function actualizaAdmision()
 
                     },
 		 error: function (data) {
-           alert("data = " + JSON.stringify(data)); // data
-		           alert(data.status); // the status code   
-		           alert(data.JsonResponse['error']); // the message
-
-					document.getElementById("mensajesError").innerHTML =  data.JsonResponse.error;
+     
+					document.getElementById("mensajesError").innerHTML =  data.responseText;
 
 
 	   	    	}            
@@ -3265,10 +3235,8 @@ $('#tablaDatos tbody').on('click', '.ImprimirHojaAdmision', function() {
 
                   },
 	   		    error: function (data) {
-          alert("data = " + JSON.stringify(data)); // data
-		           alert(data.status); // the status code   
-		           alert(data.JsonResponse['error']); // the message
-	   			   document.getElementById("mensajesError").innerHTML = data.JsonResponse.error;
+        
+	   			   document.getElementById("mensajesError").innerHTML = data.responseText;
 	   	    	}
 	     });
 
@@ -3296,10 +3264,8 @@ $('#tablaDatos tbody').on('click', '.ImprimirManilla', function() {
 
                   },
 	   		    error: function (data) {
-	           alert("data = " + JSON.stringify(data)); // data
-		           alert(data.status); // the status code   
-		           alert(data.JsonResponse['error']); // the message
-	   			   document.getElementById("mensajesError").innerHTML = data.JsonResponse.error;
+	       
+	   			   document.getElementById("mensajesError").innerHTML =data.responseText;
 	   	    	}
 	     });
 
@@ -3329,10 +3295,8 @@ $('#tablaDatos tbody').on('click', '.ImprimirAtencionInicialUrgencias', function
 
                   },
 	   		    error: function (data) {
-  alert("data = " + JSON.stringify(data)); // data
-		           alert(data.status); // the status code   
-		           alert(data.JsonResponse['error']); // the message
-	   			   document.getElementById("mensajesError").innerHTML = data.JsonResponse.error;
+
+	   			   document.getElementById("mensajesError").innerHTML = data.responseText;
 	   	    	}
 	     });
 
@@ -3382,11 +3346,9 @@ $(document).on('change', '#municipios', function(event) {
 
                     },
 	   		    error: function (data) {
-           alert("data = " + JSON.stringify(data)); // data
-		           alert(data.status); // the status code   
-		           alert(data.JsonResponse['error']); // the message
+    
 
-	document.getElementById("mensajesError").innerHTML =  data.JsonResponse.errort;
+	document.getElementById("mensajesError").innerHTML = data.responseText;
 
 	   	    	}
 
@@ -3415,10 +3377,8 @@ $(document).on('change', '#municipios', function(event) {
 
                   },
 	   		    error: function (data) {
-      alert("data = " + JSON.stringify(data)); // data
-		           alert(data.status); // the status code   
-		           alert(data.JsonResponse['error']); // the message
-	   			   document.getElementById("mensajesError").innerHTML = data.JsonResponse.error;
+    
+	   			   document.getElementById("mensajesError").innerHTML = data.responseText;
 	   	    	}
 	     });
 
@@ -3457,14 +3417,9 @@ $(document).on('change', '#empresaC', function(event) {
                                     option.text = value.nombre;
                                     $id2.appendChild(option);
  	      		      });
-
                     },
-	   		    error: function (data) {
-         alert("data = " + JSON.stringify(data)); // data
-		           alert(data.status); // the status code   
-		           alert(data.JsonResponse['error']); // the message
-
-	   			    	document.getElementById("mensajesError").innerHTML =   data.JsonResponse.error;
+                    error: function (data) {
+	   			    	document.getElementById("mensajesError").innerHTML =   data.responseText;
 
 	   	    	}
 

@@ -269,19 +269,22 @@ input[type="datetime-local"] {
 }
 
 
-.mensajesError
+.mensajes
 {
 
-   size:150;
-   color:red;
-   font-size:12px;
-   line-height:35px;
+   display: inline-block;
+   color:green;
+   font-size:8px;
+   line-height:8px;
    font-family: Calibri;
-   width: max-content;
+   width: 800px;
+   height: 20px;
+   position: relative;
 
 }
 
-.mensajesErrorAbonos
+
+.mensajesError .mensajesErrorAbonos .mensajesErrorModalConvenio .mensajesErrorModalUsuario .mensajesErrorModalEdicionAdmisiones .mensajesErrorModalFurips
 {
 
    display: inline-block;
@@ -293,8 +296,5 @@ input[type="datetime-local"] {
    height: 20px;
    position: relative;
 
-
 }
-
-
 

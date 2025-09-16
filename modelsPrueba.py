@@ -893,4 +893,5 @@ LUNES 15-SEPTIEMBRE: Ademas de revizar lo de arriba: ver acomodar columnas grade
 8. modales antigiuas vs nuevas
 8. hoistoria: try, catch GLOBAL TABS
 10. usuarios de bases de datos probar
+11.  hacer exp todo imhoteps conm cpomandos SQL como en vulnerx
 -- permisos OPCIONMESg

@@ -1228,15 +1228,21 @@ def ImprimirHistoriaClinica(request):
         print("matriz historia = ", len(historia))
 
         for l in range(0, len(historia)):
+            plan = str(historia[0 + l]['plan'])
+            analisis = str(historia[0 + l]['analisis'])
             pdf.cell(250, 1, 'Motivo ' + str(historia[0 + l]['motivo']), 0, 0, 'L')
             pdf.ln(3)
             pdf.cell(250, 1, 'Subjetivo: ' + str(historia[0 + l]['subjetivo']), 0, 0, 'L')
             pdf.ln(3)
             pdf.cell(250, 1, 'Objetivo: ' + str(historia[0 + l]['objetivo']), 0, 0, 'L')
             pdf.ln(3)
-            pdf.cell(250, 1, 'Analisis: ' + str(historia[0 + l]['analisis']), 0, 0, 'L')
+            pdf.cell(15, 1, 'Analisis:', '', 0, 0, 'L')
+            pdf.multi_cell(w=0, h=4, txt=analisis, border=0, align='J', fill=False)
+            #pdf.cell(250, 1, 'Analisis: ' + str(historia[0 + l]['analisis']), 0, 0, 'L')
             pdf.ln(3)
-            pdf.cell(250, 1, 'Plan: ' + str(historia[0 + l]['plan']), 0, 0, 'L')
+            pdf.cell(15,1,'Plan:','',0,0,'L')
+            pdf.multi_cell(w=0, h=4, txt=plan,border=0, align='J',fill=False)
+            #pdf.cell(250, 1, 'Plan: ' + str(historia[0 + l]['plan']), 0, 0, 'L')
             pdf.ln(3)
             pdf.cell(30, 1, 'CausasExterna: ' + str(historia[0 + l]['causasExterna']), 0, 0, 'L')
             linea = linea + 5
@@ -1563,7 +1569,10 @@ def ImprimirHistoriaClinica(request):
                     pdf.ln(4)
 
                 for s in range(0, len(resultadosCabezoteLab)):
-                    pdf.cell(120, 1, 'Interpretacion1 ' + str(resultadosCabezoteLab[0 + s]['interpretacion1']), 0, 0, 'L')
+                    interpretacion1=str(resultadosCabezoteLab[0 + s]['interpretacion1'])
+                    pdf.cell(20, 1, 'Interprestacion1:', '', 0, 0, 'L')
+                    pdf.multi_cell(w=0, h=4, txt=interpretacion1, border=0, align='J', fill=False)
+                    #pdf.cell(120, 1, 'Interpretacion1 ' + str(resultadosCabezoteLab[0 + s]['interpretacion1']), 0, 0, 'L')
                     linea = linea + 3
                     pdf.ln(3)
                     pdf.cell(20, 2, 'Fecha: ' + str(resultadosCabezoteLab[0 + s]['fechaInterpretacion1']), 0, 0, 'L')
@@ -1702,7 +1711,10 @@ def ImprimirHistoriaClinica(request):
                     pdf.ln(4)
 
                 for s in range(0, len(resultadosCabezoteRad)):
-                    pdf.cell(120, 1, 'Interpretacion1 ' + str(resultadosCabezoteRad[0 + s]['interpretacion1']), 0, 0, 'L')
+                    interpretacion1 = str(resultadosCabezoteRad[0 + s]['interpretacion1'])
+                    pdf.cell(20, 1, 'Interprestacion1:', '', 0, 0, 'L')
+                    pdf.multi_cell(w=0, h=4, txt=interpretacion1, border=0, align='J', fill=False)
+                    #pdf.cell(120, 1, 'Interpretacion1 ' + str(resultadosCabezoteRad[0 + s]['interpretacion1']), 0, 0, 'L')
                     linea = linea + 3
                     pdf.ln(3)
                     pdf.cell(20, 2, 'Fecha: ' + str(resultadosCabezoteRad[0 + s]['fechaInterpretacion1']), 0, 0, 'L')

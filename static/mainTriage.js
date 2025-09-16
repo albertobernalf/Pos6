@@ -350,9 +350,9 @@ if (tiposUsuario =='')
                 $('#usuariosModalTriage').modal('hide');		     
 
                     },
-	   		    error: function (request, status, error) {
-document.getElementById("mensajesErrorModalUsuario").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
-	   	    	}
+			 error: function(data){
+		       		document.getElementById("mensajesErrorModalUsuario").innerHTML =  data.responseText
+			        },
 	});
 };
 
@@ -407,8 +407,8 @@ $(document).on('change', '#busDocumentoSelTriage', function(event) {
 
 
                     },
-	   		    error: function (request, status, error) {
-document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
+	   		   			 error: function(data){
+		       		document.getElementById("mensajesError").innerHTML =  data.responseText
 	   	    	}
 	});
 
@@ -477,8 +477,9 @@ $('#tablaDatosTriage tbody').on('click', '.miEditaTriage', function() {
 		//	$('#modalActualizaTriage').modal({show:true});
 			$('#clasificacionTriage').val(response_data['Triage'].clasificacionTriage);
                     },
-   		    error: function (request, status, error) {
-document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
+   		   			 error: function(data){
+		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+
 	   	    	}
 	});
 	});
@@ -587,10 +588,11 @@ $('#tablaDatosTriage tbody').on('click', '.miTriage', function() {
 				alert("listo todo voy a abrir la modal");
 
 			 $('#crearAdmTriage').modal('show');
-		   //         $('#crearAdmTriage').modal({show:true});
+
                     },
-   		    error: function (request, status, error) {
-	document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
+   		   			 error: function(data){
+		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+
 
 	   	    	}
 	});
@@ -669,9 +671,8 @@ $(document).on('change', '#municipios', function(event) {
 
 
                     },
-	   		    error: function (request, status, error) {
-
-	document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
+			 error: function(data){
+		       		document.getElementById("mensajesError").innerHTML =  data.responseText
 
 	   	    	}
 
@@ -713,9 +714,8 @@ $(document).on('change', '#pais', function(event) {
 
 
                     },
-	   		    error: function (request, status, error) {
-
-	document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
+			 error: function(data){
+		       		document.getElementById("mensajesError").innerHTML =  data.responseText
 
 	   	    	}
 
@@ -764,9 +764,8 @@ $(document).on('change', '#departamentos', function(event) {
 
 
                     },
-	   		    error: function (request, status, error) {
-
-	document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
+	   		  			 error: function(data){
+		       		document.getElementById("mensajesError").innerHTML =  data.responseText
 
 	   	    	}
 
@@ -809,9 +808,8 @@ $.ajax({
 
 
                     },
-	   		    error: function (request, status, error) {
-
-	document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
+	   		error: function(data){
+		       		document.getElementById("mensajesError").innerHTML =  data.responseText
 
 	   	    	}
 
@@ -869,9 +867,8 @@ $(document).on('change', '#busServicio', function(event) {
 
 
                     },
-	   		    error: function (request, status, error) {
-
-	document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
+	   		  	  error: function(data){
+		       		document.getElementById("mensajesError").innerHTML =  data.responseText
 
 	   	    	}
 
@@ -922,9 +919,8 @@ $(document).on('change', '#busServicio2', function(event) {
 
 
                     },
-	   		    error: function (request, status, error) {
-
-	document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
+	   		  error: function(data){
+		       		document.getElementById("mensajesError").innerHTML =  data.responseText
 
 	   	    	}
 
@@ -979,9 +975,8 @@ $(document).on('change', '#busServicioX', function(event) {
 
 
                     },
-	   		    error: function (request, status, error) {
-
-	document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
+	   		  error: function(data){
+		       		document.getElementById("mensajesError").innerHTML =  data.responseText
 
 	   	    	}
 
@@ -1038,8 +1033,8 @@ $(document).on('change', '#busSubServicio', function(event) {
  	      		      });
 
                     },
-	   		    error: function (request, status, error) {
-	document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
+	   		error: function(data){
+		       		document.getElementById("mensajesError").innerHTML =  data.responseText
 
 	   	    	}
 
@@ -1098,9 +1093,9 @@ $(document).on('change', '#busSubServicioT', function(event) {
  	      		      });
 
                     },
-	   		    error: function (request, status, error) {
+	   		  			 error: function(data){
+		       		document.getElementById("mensajesError").innerHTML =  data.responseText
 
-	document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
 
 	   	    	}
 
@@ -1158,9 +1153,9 @@ $(document).on('change', '#busSubServicio2', function(event) {
  	      		      });
 
                     },
-	   		    error: function (request, status, error) {
+		   		 error: function(data){
+		       		document.getElementById("mensajesError").innerHTML =  data.responseText
 
-	document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
 
 	   	    	}
 
@@ -1302,23 +1297,23 @@ function guardaTriageModal()
 
 		success: function (respuesta)
 		        {
+		        alert("De regreso con : " + JSON.stringify(respuesta));
 
-                $('#mensaje1').html('<span> respuesta</span>');
-                alert("esta es la clasificacion triage = " + respuesta['clasificacionTriage'] );
+		 $('#mensajes').html(respuesta.Mensaje);
+               // $('#mensaje1').html('<span> respuesta</span>');
+
                 $('#clasificacionTriage').val(respuesta['clasificacionTriage']);
-
                 $('#modalActualizaTriage').modal({show:false});
-
 		$('#clasificacionTriage').val(respuesta['clasificacionTriage']);		
 
 		        window.location.reload();
 
-			document.getElementById("mensajes").innerHTML = 'Triage Actualizado';
-
+			// document.getElementById("mensajes").innerHTML = 'Triage Actualizado';
+		 $('#mensajes').html(respuesta.Mensaje);
                 },
-	   		    error: function (request, status, error)
-	   		    {
-	document.getElementById("mensajesErrorTriage").innerHTML =  'Error' + ': ' + request.responseText;
+		   		  			 error: function(data){
+		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+
 
 	   	    	}
 	});
@@ -1409,9 +1404,9 @@ function guardarAdmisionTriage()
 		document.getElementById("mensajes").innerHTML = respuesta['Mensajes'];
 
               },
-	   		    error: function (request, status, error)
-		    {
-	document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
+		   		  			 error: function(data){
+		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+
 
 	   	    	}
 	});
@@ -1464,9 +1459,9 @@ $(document).on('change', '#busEspecialidad', function(event) {
 
 
                     },
-	   		    error: function (request, status, error) {
+	   			   		  			 error: function(data){
+		       		document.getElementById("mensajesError").innerHTML =  data.responseText
 
-	   			 	document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
 
 	   	    	}
 
@@ -1495,8 +1490,9 @@ $('#tablaDatosTriage tbody').on('click', '.ImprimirTriage', function() {
 			 $('#pk').val(data.pk);      	     
 
                   },
-	   		    error: function (request, status, error) {
-	   			   document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
+	   		  			 error: function(data){
+		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+
 	   	    	}
 	     });
 
@@ -1541,9 +1537,9 @@ $(document).on('change', '#busServicioX', function(event) {
  	      		      });
 
                     },
-	   		    error: function (request, status, error) {
+		   		  			 error: function(data){
+		       		document.getElementById("mensajesError").innerHTML =  data.responseText
 
-	   			    	document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
 
 	   	    	}
 
@@ -1590,9 +1586,9 @@ $(document).on('change', '#empresasT', function(event) {
  	      		      });
 
                     },
-	   		    error: function (request, status, error) {
+		   		  			 error: function(data){
+		       		document.getElementById("mensajesError").innerHTML =  data.responseText
 
-	   			    	document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
 
 	   	    	}
 
