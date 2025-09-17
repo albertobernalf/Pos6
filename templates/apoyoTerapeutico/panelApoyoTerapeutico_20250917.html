@@ -3,12 +3,10 @@
 {% block head %}
 
 <link rel="stylesheet" type="text/css" href={% static 'css/navegacionApoyoTerapeutico.css' %} >
-
 <link rel="stylesheet" type="text/css" href={% static 'css/fontawesome.css' %}>
 <link rel="stylesheet" type="text/css"  href = {% static 'css/litle.css' %} >
 <script src={% static 'js/panelTabsApoyoTerapeutico.js' %} defer>         </script>
 <script src="https://kit.fontawesome.com/5d0337a043.js" crossorigin="anonymous"></script>
-<script src={% static 'js/panelApoyoTerapeutico.js' %} defer >         </script>
 
 <style>
 tablaApoyoTerapeutico td {
@@ -28,6 +26,13 @@ tablaApoyoTerapeutico tr {
 
 }
 </style>
+<script>
+
+function RefrescarPantalla() {
+ 	 location.reload();
+}
+</script>
+
 {% endblock %}
 
 {% block indicadores %}
@@ -52,12 +57,12 @@ Mayor a un dia
     <ul class="tabs">
         <li><a href="#ApoyoTerapeutico"><span class="fa-solid fa-user-doctor-message"></span> <span class="tab-text"> </span>
             Ingresos Apoyo Terapeutico </a></li>
-	 <li><a href="#RespuestasApoyoTerapeutico"><span class="fa-solid fa-user-doctor-message"></span> <span class="tab-text"> </span>
-            Respuestas Apoyo Terapeutico</a></li>
+	 <li><a href="#RespuestasApoTerap"><span class="fa-solid fa-user-doctor-message"></span> <span class="tab-text"> </span>
+            Responder Examenes</a></li>
 	 <li><a href="#ConsultaResultados"><span class="fa-solid fa-user-doctor-message"></span> <span class="tab-text"> </span>
-            Consulta de Resultados</a></li>
-	 <li><a href="#ConsultaRespuestasTerapeutico"><span class="fa-solid fa-user-doctor-message"></span> <span class="tab-text"> </span>
-            Resultados </a></li>
+            Resultados</a></li>
+	 <li><a href="#DetalleResultados"><span class="fa-solid fa-user-doctor-message"></span> <span class="tab-text"> </span>
+             Detalle Resultados </a></li>
 
 
     </ul>
@@ -82,7 +87,6 @@ Mayor a un dia
                 <input type="hidden" id="permisosDetalle" name="permisosDetalle" value="{{PermisosDetalle}}">
                 <input type="hidden" id="escogeModulo" name="escogeModulo" value="{{EscogeModulo}}">
                 <input type="hidden" id="username_id" name="username_id" value="{{Username_id}}">
-
                 <input type="hidden" id="tipoDocId" name="tipoDocId" value="">
                 <input type="hidden" id="nombreTipoDoc" name="nombreTipoDoc" value="">
                 <input type="hidden" id="documentoId" name="documentoId" value="">
@@ -94,7 +98,7 @@ Mayor a un dia
             <!-- INICIO TABLE DE  EL DATATABLE  -->
           		<div class="container my-2" style="width:100%">
           		   <div class="row" style="width:100%">
- 				    <table  id= "tablaApoyoTerapeutico" class="display table table-striped table-sm fs-6 nowrap" style="width:100%";>                                    
+ 				    <table  id= "tablaApoyoTerapeutico" class="display table table-striped table-sm fs-6 nowrap" style="width:100%;">                                    
                                         <thead>
                                         <tr>
                                             <th style="width:5%;">Action</th>
@@ -109,28 +113,20 @@ Mayor a un dia
                                             <th style="width:12%;">Estado</th>
                                             <th style="width:12%;">Cantidad</th>
                                             <th style="width:12%;">Folio</th>
-                             
+                         
                                         </tr>
                                         </thead>
-                                        <tbody style="margin-left:0>
+                                        <tbody style="margin-left:0">
                                         </tbody>
                                     </table>
                                 </div> 
                             </div> 
         </article>
 
-        <article id="RespuestasApoyoTerapeutico">
+       <article id="RespuestasApoTerap">
             <center>
-                <h3>Ingreso de Resultados</h3></center>
-            <table class="table" style="height: 80px; background-color:LightGray;  width:100%;">
-                <tr>
-                    <td>
-                    </td>
-                    <td>
-                    </td>
-                    <td>
-                     
-                           <div style="height: 1px;  width:90%;">  
+                <h3>Ingresar resultados Examenes</h3></center>
+   <div style="height: 1px;  width:90%;">  
                             <form class="form-inline" action="/crearApoyoTerapeutico/" method="POST"
                                   id="ApoyoTerapeuticoForma">
 
@@ -138,80 +134,79 @@ Mayor a un dia
 
                                     <input type="hidden" class="form-control form-control-sm" id="tipoExamenId"    name="tipoExamenId" value="" readonly>
 
-
-                                <div class="row row-cols-8">
-
-				     <div class="col">
-                                        <label for="tipoDocPaci" class="col-sm-3 control-label"> TipoDoc:</label>
-                                        <input type="text" class="form-control form-control-sm" id="tipoDocPaci"
-                                               name="tipoDocPaci" value="" readonly>
-                                    </div>
-
+                                <div class="row row-cols-9">
 
 				     <div class="col">
-                                        <label for="nombrePaciente" class="col-sm-3 control-label">Paciente:</label>
-                                        <input type="text" class="form-control form-control-sm" id="nombrePaciente"
-                                               name="nombrePaciente" value="" readonly>
+					TipoDoc:
+					<span id="tipoDocPaci" name="tipoDocPaci"></span>
                                     </div>
 
-
-
-                                    <div class="col">
-                                        <label for="tipoExamen" class="col-sm-3 control-label"> TipoExamen:</label>
-                                        <input type="text" class="form-control form-control-sm" id="tipoExamen"
-                                               name="tipoExamen" value="" readonly>
+				     <div class="col">
+					Documento:
+					<span id="documentoPaci" name="documentoPaci"></span>
                                     </div>
 
-                                    <div class="col">
-                                        <label for="CupsId" class="col-sm-1 control-label"> CupsId :</label>
-                                        <input type="text" class="form-control form-control-sm" id="CupsId"
-                                               name="CupsId" value="" readonly>
+				     <div class="col">
+					Paciente:
+					<span id="nombrePaciente" name="nombrePaciente"></span>
+
                                     </div>
 
                                     <div class="col">
-                                        <label for="nombreExamen" class="col-sm-6 control-label"> Examen:</label>
-                                        <input type="text" class="form-control form-control-sm" id="nombreExamen"
-                                               name="nombreExamen" value="" readonly>
+					<span id="tipoExamen" name="tipoExamen"></span>
+					TipoExamen:
+                                    </div>
+
+                                    <div class="col">
+					CupsId :
+					<span id="CupsId" name="CupsId"></span>
+                                        
+                                    </div>
+
+                                    <div class="col">
+					Examen:
+					<span id="nombreExamen" name="nombreExamen"></span>
+                                        
 
                                     </div>
 
-				          <div class="col">
-                                        <label for="dependenciasRealizado" class="col-sm-6 control-label">RealizadoEnDependencia:</label>
-
-                                        <select class="form-select  h-40 w-10" id="dependenciasRealizado"
-                                                name="dependenciasRealizado">
-                                            {% for dependenciasRealizado in DependenciasRealizado %}
-                                            <option value="{{dependenciasRealizado.id}}">
-                                                {{dependenciasRealizado.nombre}}
-                                            </option>
-                                            {% endfor %}
-                                        </select>
+				  <div class="col">
+                                        <label for="serviciosAdministrativos" class="col-sm-1 control-label">&nbsp;&nbsp;&nbsp;SeviciosAdmon:</label>
+                                        <div class="col-sm-8">
+                                            <select class="select-css h-40 w-20" id="serviciosAdministrativos"  tabindex= "0"
+                                                    name="serviciosAdministrativos" required>
+                                                {% for serviciosAdministrativos in ServiciosAdministrativos %}
+                                                <option value="{{serviciosAdministrativos.id}}"> {{serviciosAdministrativos.nombre}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
 
                                     </div>
+
 				
                                     <div class="col">
-                                        <label for="cantidad" class="col-sm-1 control-label"> Cantidad:</label>
-                                        <input type="text" class="form-control form-control-sm" id="cantidad"
-                                               name="cantidad" value="" readonly>
+					Cantidad:
+					<span id="cantidad" name="cantidad"></span>
+                                   
 
                                     </div>
+			 <div class="col">
+                                         Folio:
+                                        <input type="text" class="form-control form-control-sm" id="folio" name="folio" size="2"
+                                               value="" readonly>
 
+                                    </div>
                                  
 
                                 </div>
 
-                                <div class="row row-cols-8">
-				   <div class="col">
-                                        <label for="folio" class="col-sm-1 control-label"> Folio:</label>
-                                        <input type="text" class="form-control form-control-sm" id="folio" name="folio"
-                                               value="" readonly>
-
-                                    </div>
+                                <div class="row">
+				  
 
                                         <div class="col">
-                                        <label for="estadoExamen" class="col-sm-6 control-label">EstadoExamen:</label>
+                                        Estado:
 
-                                        <select class="form-select  h-40 w-10" id="estadoExamen"
+                                        <select class="select-css  h-40 w-10" id="estadoExamen"
                                                 name="estadoExamen">
                                             {% for estadosExamenes in EstadosExamenes %}
                                             <option value="{{estadosExamenes.id}}">
@@ -224,24 +219,22 @@ Mayor a un dia
 
 
                                     <div class="col">
-                                        <label for="observaciones" class="col-sm-6 control-label"> Observaciones
-                                            :</label>
+                                         Observa:
                                         <input type="text" class="form-control form-control-sm" id="observaciones"
-                                               name="observaciones" value="" readonly>
+                                               name="observaciones" size="6" value="" readonly>
 
                                     </div>
 
                                     <div class="col">
-                                        <label for="interpretacion1" class="col-sm-6 control-label"> Interpretacion1
-                                            :</label>
+                                        Interpreta1:
                                         <input type="text" class="form-control form-control-sm" id="interpretacion1"
-                                               name="interpretacion1" value="">
+                                               name="interpretacion1" size="6" value="">
 
                                     </div>
                                     <div class="col">
-                                        <label for="medicoInterpretacion1" class="col-sm-6 control-label">MedicoInterpreta:</label>
+                                        Medico:
 
-                                        <select class="form-select  h-40 w-10" id="medicoInterpretacion1"
+                                        <select class="select-css  h-40 w-10" id="medicoInterpretacion1"
                                                 name="medicoInterpretacion1">
                                             {% for medicoInterpretacion1 in MedicoInterpretacion1 %}
                                             <option value="{{medicoInterpretacion1.id}}">
@@ -253,16 +246,16 @@ Mayor a un dia
                                     </div>
 
                                     <div class="col">
-                                        <label for="interpretacion2" class="col-sm-6 control-label"> Interpretacion2:</label>
+                                     Interpreta2:
                                         <input type="text" class="form-control form-control-sm" id="interpretacion2"
                                                name="interpretacion2" value="">
 
                                     </div>
 
                                     <div class="col">
-                                        <label for="medicoInterpretacion2" class="col-sm-6 control-label">MedicoInterpreta:</label>
+                                       Medico:
 
-                                        <select class="form-select  h-40 w-10" id="medicoInterpretacion2"
+                                        <select class="select-css  h-40 w-10" id="medicoInterpretacion2"
                                                 name="medicoInterpretacion2">
                                             {% for medicoInterpretacion2 in MedicoInterpretacion2 %}
                                             <option value="{{medicoInterpretacion2.id}}">
@@ -273,9 +266,9 @@ Mayor a un dia
 
                                     </div>
                                     <div class="col">
-                                        <label for="medicoReporte" class="col-sm-6 control-label">MedicoReporte:</label>
+                                       MedReporte:
 
-                                        <select class="form-select  h-40 w-10" id="medicoReporte" name="medicoReporte">
+                                        <select class="select-css" id="medicoReporte" name="medicoReporte" >
                                             {% for medicoReporte in MedicoReporte %}
                                             <option value="{{medicoReporte.id}}"> {{medicoReporte.nombre}}
                                             </option>
@@ -284,14 +277,14 @@ Mayor a un dia
 
                                     </div>
                                     <div class="col">
-                                        <label for="rutaImagen" class="col-sm-6 control-label"> RutaImagen :</label>
+                                         Imagen :
                                         <input type="text" class="form-control form-control-sm" id="rutaImagen"
-                                               name="rutaImagen" value="">
+                                               name="rutaImagen" value="" size="4">
                                     </div>
                                     <div class="col">
-                                        <label for="rutaVideo" class="col-sm-6 control-label"> RutaVideo :</label>
+                                        Video :
                                         <input type="text" class="form-control form-control-sm" id="rutaVideo"
-                                               name="rutaVideo" value="">
+                                               name="rutaVideo" value="" size="4">
                                     </div>
 
                                 </div>
@@ -306,16 +299,6 @@ Mayor a un dia
                                         <div class="card" style="width=100%;">
                                             <div class="card-header" style="height:30px;width=100%;">
                                                 <div class="row">
-                                                    <div class="col">
-                                                      
-                                                      <!--   <div class="alert alert-success success-msg" style="display:none"></div> -->
-							<span style="padding-right:3px; padding-top: 3px; display:inline-block; ">
-							<img class="manImg" src={% static 'img/iloveimg-converted/icons8-guardar-48.JPG' %}></img>
-								  <input type="button" id="btn-rango" name="btn-rango"
-                                                               value="Guardar ¡" onClick="guardarResultado()">
-							</span>
-
-                                                    </div>
 
 
                                                     <div class="col">
@@ -331,21 +314,39 @@ Mayor a un dia
                                                         </select>
                                                     </div>
 
+ 						 <div class="col"> Observa:
+                                                        <input type="text" id="observa" name="observa" value="">
+                                                    </div>
+
                                                     <div class="col">
+                                                       Resultado:
                                                         <input type="text" id="valor" name="valor" value="">
                                                     </div>
 
-						   <div class="col">
-                                                        <input type="text" id="observa" name="observa" value="">
-                                                    </div>
+						 
 
                                                     <div class="col">
                                                         <span class="text-secondary">Crear Resultado</span>
                                                         <a class="btn btn-success" href="javascript:void(0)"
                                                            id="createNewResultadoRasgo"> <i class="fa fa-plus"></i></a>
                                                     </div>
+                                                    <div class="col">
+                                                      
+
+							<span style="padding-right:3px; padding-top: 3px; display:inline-block; ">
+							<img class="manImg" src={% static 'img/iloveimg-converted/icons8-guardar-48.JPG' %}></img>
+								  <input type="button" id="btn-rango" name="btn-rango"
+                                                               value="Guardar ¡" onClick="guardarResultado()">
+							</span>
+
+                                                    </div>
+
+
                                                 </div> <!-- Cierra el row -->
                                             </div>  <!-- Cierra el header -->
+						<br>
+						<br>
+
                                             <div class="card-body" style="height:30px;width=100%;">
                                                 <div class="row">
                                                      <div class="col-sm-12"> 
@@ -381,74 +382,45 @@ Mayor a un dia
                                 <!-- FIN TABLE DE  EL DATATABLE  -->
                   </div>  <!-- cierra el div papa -->
             <!-- HASTA AQUI DATATABLE -->
-    </td>
-    <td>
-    </td>
-    <td>
-    </td>
-    </tr>
 
-    </table>
-
-
-    </article>
-
-    <article id="ConsultaResultados">
+                   
+         </article>
+  <article id="ConsultaResultados">
             <center>
                 <h3>Consulta de Resultados</h3></center>
 
-            <!-- INICIO TABLE DE  EL DATATABLE  -->
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="card">
-                        <div class="card-header">
-                        </div>
-                        <div class="card-body">
-                            <div class="row" style="height=250px;">
-                                <div class="col-md-12">
-                                    <div class="alert alert-success success-msg" style="display:none"></div>
-                                    <table id="tablaTerapeuticoConsulta"
-                                           class="display nowrap table table table-bordered  tablaTerapeuticoConsulta table-hover table-sm dtr-inline">
-                                        <thead>
+           <!-- INICIO TABLE DE  EL DATATABLE  -->
+          		<div class="container my-2" style="width:100%">
+          		   <div class="row" style="width:100%">
+ 				    <table  id= "tablaTerapeuticoConsulta" class="display table table-striped table-sm fs-6 nowrap" style="width:100%;">                                    
+                                       <thead>
                                         <tr>
-                                            <!--  <th style="width:5%;">Tipo</th> -->
-                                            <th style="width:5%;">id</th>
-                                            <th style="width:5%;">TipoDoc</th>
-                                            <th style="width:12%;">Documento</th>
-                                            <th style="width:20%;">Paciente</th>
-                                            <th style="width:3%;">#</th>
-                                            <th style="width:3%;">FecExamen</th>
-                                            <th style="width:12%;">TipoExamen</th>
-                                            <th style="width:12%;">Examen</th>
-                                            <th style="width:12%;">Estado</th>
-                                            <!-- <th style="width:12%;">Cups</th> -->
-                                            <th style="width:12%;">Cantidad</th>
-                                            <!--    <th style="width:12%;">Observa</th> -->
-                                            <th style="width:12%;">Folio</th>
-
-                                            <th style="width:5%;">Action</th>
-                                            <!--  <th data-visible="true"></th>  -->
+                                            <th>Action</th>
+                                            <th>id</th>
+                                            <th>TipoDoc</th>
+                                            <th>Documento</th>
+                                            <th>Paciente</th>
+                                            <th>#</th>
+                                            <th>FecExamen</th>
+                                            <th>TipoExamen</th>
+                                            <th>Examen</th>
+                                            <th>Estado</th>
+                                            <th>Cantidad</th>
+                                            <th>Folio</th>
                                         </tr>
                                         </thead>
-                                        <tbody style="vertical-align:bottom">
-                                        <tr style="height:10%">
-                                        </tr>
+                                        <tbody>
                                         </tbody>
                                     </table>
-                                </div> <!-- Cierra col -->
-                            </div> <!-- Cierra row -->
-                        </div>  <!-- Cierra body -->
-
-                    </div>   <!-- Cierra Card -->
-                </div>   <!-- Cierra col -->
-            </div>  <!-- Cierra row -->
+                                </div> 
+            </div>  
 
         </article>
 	<!-- Aqui  Otro Article de consultaDetallado  -->
 
-        <article id="ConsultaRespuestasTerapeutico">
+        <article id="DetalleResultados">
             <center>
-                <h3>Consulta Resultados tramitados </h3></center>
+                <h3>Detalle Resultados </h3></center>
             <table class="table" style="height: 80px; background-color:LightGray;  width:100%;">
                 <tr>
                     <td>
@@ -503,13 +475,13 @@ Mayor a un dia
                                     </div>
 
 				          <div class="col">
-                                        <label for="zdependenciasRealizado" class="col-sm-6 control-label">RealizadoEnDependencia:</label>
+                                        <label for="zserviciosAdministrativos" class="col-sm-6 control-label">Servicio:</label>
 
-                                        <select class="form-select  h-40 w-10" id="zdependenciasRealizado"
-                                                name="zdependenciasRealizado" disabled>
-                                            {% for dependenciasRealizado in DependenciasRealizado %}
-                                            <option value="{{dependenciasRealizado.id}}">
-                                                {{dependenciasRealizado.nombre}}
+                                        <select class="form-select  h-40 w-10" id="zserviciosAdministrativos"
+                                                name="zserviciosAdministrativos" disabled>
+                                            {% for serviciosAdministrativos in ServiciosAdministrativos %}
+                                            <option value="{{serviciosAdministrativos.id}}">
+                                                {{serviciosAdministrativos.nombre}}
                                             </option>
                                             {% endfor %}
                                         </select>
@@ -643,21 +615,20 @@ Mayor a un dia
 
                                                             <thead>
                                                             <tr>
-                                                             <!--    <th>id</th> -->
+                                                           
                                                                 <th>Codigo Cups</th>
                                                                 <th>Nombre Rasgo</th>
-                                                                <th style="width:25%;">Unidad</th>
-                                                                <th style="width:12%;">Minimo</th>
-                                                                <th style="width:30%;">Maximo</th>
-                                                                <th style="width:30%;">Valor</th>
-						                                		 <th style="width:30%;">Observacion</th>
-                                                              <!--   <th style="width:3%;">Borrar</th>  -->
+                                                                <th>Unidad</th>
+                                                                <th>Minimo</th>
+                                                                <th>Maximo</th>
+                                                                <th>Valor</th>
+						                 <th>Observacion</th>
+                                                                <th>Borrar</th>  
 
                                                             </tr>
                                                             </thead>
                                                             <tbody style="vertical-align:bottom">
-                                                            <tr style="height:5%">
-                                                            </tr>
+                                                        
                                                             </tbody>
                                                         </table>
                                                      </div> 
@@ -667,7 +638,6 @@ Mayor a un dia
                                     </div>
                                 </div>
                                 <!-- FIN TABLE DE  EL DATATABLE  -->
-                    <!--     </form>  estaba aquip-->
                   </div> 
             </table>
 
@@ -691,6 +661,7 @@ Mayor a un dia
     </article>
 
 	<!-- Aqui  Fin Otro Article de consultaDetallado  -->
+
 
     </div>
 </div>

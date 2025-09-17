@@ -436,7 +436,7 @@ class Enfermeria(models.Model):
     id = models.AutoField(primary_key=True)
     sedesClinica = models.ForeignKey('sitios.SedesClinica',   blank=True,null= True, on_delete=models.PROTECT ,related_name ='sedesClinica386')
     historia = models.ForeignKey('clinico.Historia', on_delete=models.PROTECT, blank=True, null=True,  editable=True,  related_name='HistoriaEnfermeria01')
-    ingresoPaciente =  models.ForeignKey('admisiones.Ingresos', on_delete=models.PROTECT, blank=True, null=True,  editable=True,  related_name='Ingreso987')
+    ingresoPaciente =   models.DecimalField(max_digits=10, decimal_places=0, blank=True, null=True, editable=True)
     serviciosAdministrativos = models.ForeignKey('sitios.ServiciosAdministrativos', blank=True,null= True, editable=True,  on_delete=models.PROTECT,   related_name='servAdmEnfermeria101')
     tipoOrigen = models.ForeignKey('enfermeria.EnfermeriaTipoOrigen', on_delete=models.PROTECT, blank=True, null=True,  editable=True,  related_name='TipoEnfermeria01')
     tipoMovimiento = models.ForeignKey('enfermeria.EnfermeriaTipoMovimiento', on_delete=models.PROTECT, blank=True, null=True,  editable=True,  related_name='TipoEnfermeria02')

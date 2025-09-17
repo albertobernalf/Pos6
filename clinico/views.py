@@ -1387,10 +1387,10 @@ def crearHistoriaClinica(request):
 
                                       convenioValor = []
 
-                                      for id, cups, tarifaValor in curt.fetchall():
+                                      for id, cups, tarifaValor in cur3.fetchall():
                                           convenioValor.append({'id': id, 'cups': cups, 'valor': tarifaValor})
 
-                                      miConexiont.close()
+                                      #miConexiont.close()
                                   else:
                                       convenioValor = []
 
@@ -1871,7 +1871,7 @@ def crearHistoriaClinica(request):
                                     print("usuarioRegistro = ", usuarioRegistro)
                                     print("ingresosPaciente = ", ingresosPaciente.id)
 
-                                    comando = 'INSERT INTO farmacia_farmacia (historia_id, "serviciosAdministrativos_id","tipoOrigen_id",  "tipoMovimiento_id","fechaRegistro" ,  "usuarioRegistro_id","estadoReg", "sedesClinica_id",estado_id,"ingresoPaciente_id") values (' + "'" + str(historiaId) + "','" + str(serviciosAdministrativos) + "',1,1,'" + str(fechaRegistro) + "','" + str(usuarioRegistro) +  "','A','"  + str(sede) + "','" + str(estadoFarmaciaSolicitud.id) + "','" + str(ingresosPaciente.id)  + "') RETURNING id"
+                                    comando = 'INSERT INTO farmacia_farmacia (historia_id, "serviciosAdministrativos_id","tipoOrigen_id",  "tipoMovimiento_id","fechaRegistro" ,  "usuarioRegistro_id","estadoReg", "sedesClinica_id",estado_id,"ingresoPaciente") values (' + "'" + str(historiaId) + "','" + str(serviciosAdministrativos) + "',1,1,'" + str(fechaRegistro) + "','" + str(usuarioRegistro) +  "','A','"  + str(sede) + "','" + str(estadoFarmaciaSolicitud.id) + "','" + str(ingresosPaciente.id)  + "') RETURNING id"
                                     print("comando = ", comando)
 
                                     resultado = cur3.execute(comando)
@@ -1882,7 +1882,7 @@ def crearHistoriaClinica(request):
 
                                     # Aqui Guardar ENFERMERIA
 
-                                    comando = 'INSERT INTO enfermeria_enfermeria (historia_id, "serviciosAdministrativos_id","tipoOrigen_id",  "tipoMovimiento_id","fechaRegistro" ,  "usuarioRegistro_id","estadoReg", "sedesClinica_id","ingresoPaciente_id",anulado) values (' + "'" + str(historiaId) + "','" + str(serviciosAdministrativos) + "','1','1','" + str(fechaRegistro) + "','" + str(usuarioRegistro) +  "','A','" + str(sede) + "','" + str(ingresosPaciente.id) + "','N') RETURNING id"
+                                    comando = 'INSERT INTO enfermeria_enfermeria (historia_id, "serviciosAdministrativos_id","tipoOrigen_id",  "tipoMovimiento_id","fechaRegistro" ,  "usuarioRegistro_id","estadoReg", "sedesClinica_id","ingresoPaciente",anulado) values (' + "'" + str(historiaId) + "','" + str(serviciosAdministrativos) + "','1','1','" + str(fechaRegistro) + "','" + str(usuarioRegistro) +  "','A','" + str(sede) + "','" + str(ingresosPaciente.id) + "','N') RETURNING id"
                                     print("comando = ", comando)
                                     resultado = cur3.execute(comando)
                                     e = cur3.fetchone()[0]
@@ -2236,10 +2236,14 @@ def crearHistoriaClinica(request):
 
                                 # Aqui buscar el ingreso del paciente
                                 documento_id = Usuarios.objects.get(tipoDoc_id=tipoDocCirugia, documento=documentoCirugia)
-                                registroIngreso = Ingresos.objects.get(tipoDoc_id=tipoDocCirugia, documento_id=documento_id.id,
-                                                                      consec=consecutivoIngresoCirugia)
 
-                                comando = 'INSERT INTO cirugia_cirugias ("consecAdmision", "fechaSolicita", "solicitaHospitalizacion", "solicitaAyudante", "solicitaTiempoQx",  "solicitaAnestesia", "solicitaSangre", "describeSangre", "cantidadSangre", "solicitaCamaUci", "solicitaMicroscopio", "solicitaRx", "solicitaAutoSutura", "solicitaOsteosintesis",  "solicitaBiopsia", "solicitaMalla", "solicitaOtros", "describeOtros", "tiempoMaxQx", "fechaRegistro", "estadoReg", anestesia_id, documento_id,  "dxPreQx_id", "dxPrinc_id", "dxRel1_id", especialidad_id, "sedesClinica_id", "tipoDoc_id", "usuarioRegistro_id", "usuarioSolicita_id", "serviciosAdministrativos_id", "estadoProgramacion_id", "tiposCirugia_id","estadoCirugia_id", historia_id) VALUES (' + "'" + str(
+                                #registroIngreso = Ingresos.objects.get(tipoDoc_id=tipoDocCirugia, documento_id=documento_id.id,
+                                #                                      consec=consecutivoIngresoCirugia)
+
+                                registroIngreso= ingresosPaciente
+                                print("espMedico = ", espMedico)
+
+                                comando = 'INSERT INTO cirugia_cirugias ("consecAdmision", "fechaSolicita", "solicitaHospitalizacion", "solicitaAyudante", "solicitaTiempoQx",  "solicitaAnestesia", "solicitaSangre", "describeSangre", "cantidadSangre", "solicitaCamaUci", "solicitaMicroscopio", "solicitaRx", "solicitaAutoSutura", "solicitaOsteosintesis",  "solicitaBiopsia", "solicitaMalla", "solicitaOtros", "describeOtros", "tiempoMaxQx", "fechaRegistro", "estadoReg", anestesia_id, documento_id,  "dxPreQx_id", "dxPrinc_id", "dxRel1_id", especialidad_id, "sedesClinica_id", "tipoDoc_id", "usuarioRegistro_id", "usuarioSolicita_id", "serviciosAdministrativos_id", "estadoProgramacion_id", "tiposCirugia_id","estadoCirugia_id", historia_id,anulado) VALUES (' + "'" + str(
                                     registroIngreso.consec) + "','" + str(fechaSolicita) + "','" + str(
                                     solicitaHospitalizacion) + "','" + str(solicitaAyudante) + "','" + str(
                                     solicitaTiempoQx) + "','" + str(solicitaAnestesia) + "','" + str(solicitaSangre) + "','" + str(
@@ -2252,7 +2256,7 @@ def crearHistoriaClinica(request):
                                     dxPrinc) + "','" + str(dxRel1) + "','" + str(espMedico) + "','" + str(
                                     sedesClinica_id) + "','" + str(registroIngreso.tipoDoc_id) + "','" + str(
                                     username) + "','" + str(username) + "','" + str(serviciosAdministrativos) + "','" + str(
-                                    estadoProgramacion.id) + "','" + str(tiposCirugia) + "','" + str(estadoCirugia.id) + "','" + str(historiaId) + "')"
+                                    estadoProgramacion.id) + "','" + str(tiposCirugia) + "','" + str(estadoCirugia.id) + "','" + str(historiaId) + "','N')"
 
                                 print(comando)
                                 cur3.execute(comando)
@@ -2265,32 +2269,28 @@ def crearHistoriaClinica(request):
                                 print(comando2)
                                 cur3.execute(comando2)
 
-                                miConexion3.commit()
-                                cur3.close()
-                                miConexion3.close()
+                                #miConexion3.commit()
+                                #cur3.close()
+                                #miConexion3.close()
 
 
                         # FIN RUTINA CREA Solicitud - Programacion de Cirugia
 
                         # Imprimir OrdenDeControl
                         print("ordenDeControl = ", ordenDeControl)
+                        miConexion3.commit()
+                        cur3.close()
+                        miConexion3.close()
 
-                        if (ordenDeControl != ''):
+
+                        if (ordenDeControl != None):
 
                             print("Entre imprimir orden de control")
                             ingresoId2=ingresosPaciente.id
-                            try:
-                                ImprimirOrdenDeControl(ingresoId2, historiaId, convenioId, tipoAdmision)
-                            except psycopg2.DatabaseError as error:
-                                print("Entre por rollback", error)
-
-                                return JsonResponse({'success': False, 'Mensaje': 'Favor cerrar pdf OrdenDeControl'})
-
-                            finally:
-                                print("ok")
+                            ImprimirOrdenDeControl(ingresoId2, historiaId, convenioId, tipoAdmision)
 
                         print("Ya grabe el cabezote")
-                        miConexion3.commit()
+
 
                         ##Aqui vendiran los reportes
 

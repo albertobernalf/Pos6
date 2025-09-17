@@ -2435,6 +2435,16 @@ def escogeAcceso(request, Sede, Username, Profesional, Documento, NombreSede, es
 
         # Fin combo vias de acceso
 
+        miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                       password="123456")
+        curt = miConexiont.cursor()
+
+        comando = "SELECT p.id id, p.nombre nombre FROM  sitios_serviciosadministrativos  p ORDER BY nombre"
+
+        curt.execute(comando)
+        print(comando)
+
+
         serviciosAdministrativos = []
 
         serviciosAdministrativos.append({'id': '', 'nombre': ''})
@@ -2446,7 +2456,6 @@ def escogeAcceso(request, Sede, Username, Profesional, Documento, NombreSede, es
         miConexiont.close()
         print("ServiciosAdministrativos = " , serviciosAdministrativos)
         context['ServiciosAdministrativos'] = serviciosAdministrativos
-
 
 
 

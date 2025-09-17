@@ -2715,7 +2715,7 @@ def ImprimirOrdenMedicamentos(ingresoId2, historiaId, convenioId, tipoAdmision):
     finally:
         print("Finally")
 
-    ingresoPaciente = Ingresos.objects.get(id=ingresoId)
+
     tipoDocId = ingresoPaciente.tipoDoc_id
     print("tipoDocId = ", tipoDocId)
     documentoId = ingresoPaciente.documento_id
