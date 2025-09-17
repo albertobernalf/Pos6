@@ -752,9 +752,13 @@ def crearHistoriaClinica(request):
                             if observa != "":
                                 consecutivo = consecutivo + 1
                                 #codigoCupsId = Examenes.objects.get(codigoCups=cups)
+                                comando='INSERT INTO clinico_historialnotasEnfermeria ("observaciones","fechaRegistro", "estadoReg",historia_id) values (' + "'" + str(observa) + "','" + str(fechaRegistro) + "','A','" + str(historiaId) + "') RETURNING id"
+                                print("comando = ", comando)
+                                resultado = cur3.execute(comando)
+                                notas = cur3.fetchone()[0]
 
-                                notas = HistorialNotasEnfermeria(observaciones= observa ,fechaRegistro=fechaRegistro, estadoReg='A' , historia_id=historiaId)
-                                notas.save()
+                                #notas = HistorialNotasEnfermeria(observaciones= observa ,fechaRegistro=fechaRegistro, estadoReg='A' , historia_id=historiaId)
+                                #notas.save()
                                 conteoEnf = conteoEnf + 1
 
 
@@ -1543,7 +1547,7 @@ def crearHistoriaClinica(request):
                            estadoExamenes_id = "1"
 
                            if tipo != "":
-                                comando = 'INSERT INTO clinico_historialantecedentes (descripcion,"fechaRegistro", "tiposAntecedente_id", "estadoReg",historia_id, "usuariosRegistro_id") values (' + "'" + str(descripcion) + "','" + str(fechaRegistro) + "','" + str(id) + "','A'," + str(historiaId) + "','" + str(usuarioRegistro) + "') RETURNING id"
+                                comando = 'INSERT INTO clinico_historialantecedentes (descripcion,"fechaRegistro", "tiposAntecedente_id", "estadoReg",historia_id, "usuarioRegistro_id") values (' + "'" + str(descripcion) + "','" + str(fechaRegistro) + "','" + str(id) + "','A','" + str(historiaId) + "','" + str(usuarioRegistro) + "') RETURNING id"
                                 print("comando = ", comando)
                                 resultado = cur3.execute(comando)
                                 d = cur3.fetchone()[0]
@@ -1602,35 +1606,6 @@ def crearHistoriaClinica(request):
                         # Antecedentes
 
                         ## Rutina leer el JSON de laboratorios en python primero
-
-                        jsonAntecedentes = json.loads(antecedentes)
-
-                        for key4 in jsonAntecedentes:
-
-                           print("key4 = ", key4)
-                           queda = key4
-                           id = key4["id"].strip()
-                           print("id = ", id)
-                           tipo = key4["tipo"]
-                           print("tipo", tipo)
-                           descripcion = key4["descripcion"]
-
-                           estadoExamenes_id = "1"
-
-                           if tipo != "":
-                                  d = HistorialAntecedentes(descripcion=descripcion, fechaRegistro=fechaRegistro,
-                                                       tiposAntecedente_id=id,
-                                                       estadoReg='A', historia_id=historiaId, usuarioRegistro_id=usuarioRegistro)
-                                  d.save()
-
-                                  print("id =", key4["id"])
-                                  print("tipo =", key4["tipo"])
-                                  print("descripcion =", key4["descripcion"])
-
-
-                                 ## Fin
-
-                             # Fin Grabacion Antecedentes
 
                            # Grabacion Interconsultas
 
@@ -1894,7 +1869,9 @@ def crearHistoriaClinica(request):
 
                                     # Aqui Gaurdar FARMACIA
                                     print("usuarioRegistro = ", usuarioRegistro)
-                                    comando = 'INSERT INTO farmacia_farmacia (historia_id, "serviciosAdministrativos_id","tipoOrigen_id",  "tipoMovimiento_id","fechaRegistro" ,  "usuarioRegistro_id","estadoReg", "sedesClinica_id",estado_id,"ingresoPaciente_id") values (' + "'" + str(historiaId) + "','" + str(serviciosAdministrativos) + "',1,1,'" + str(fechaRegistro) + "','" + str(usuarioRegistro) +  "','A','"  + str(sede) + "','" + str(estadoFarmaciaSolicitud.id) + "','" + str(ingresosPaciente)  + "') RETURNING id"
+                                    print("ingresosPaciente = ", ingresosPaciente.id)
+
+                                    comando = 'INSERT INTO farmacia_farmacia (historia_id, "serviciosAdministrativos_id","tipoOrigen_id",  "tipoMovimiento_id","fechaRegistro" ,  "usuarioRegistro_id","estadoReg", "sedesClinica_id",estado_id,"ingresoPaciente_id") values (' + "'" + str(historiaId) + "','" + str(serviciosAdministrativos) + "',1,1,'" + str(fechaRegistro) + "','" + str(usuarioRegistro) +  "','A','"  + str(sede) + "','" + str(estadoFarmaciaSolicitud.id) + "','" + str(ingresosPaciente.id)  + "') RETURNING id"
                                     print("comando = ", comando)
 
                                     resultado = cur3.execute(comando)
@@ -1905,7 +1882,7 @@ def crearHistoriaClinica(request):
 
                                     # Aqui Guardar ENFERMERIA
 
-                                    comando = 'INSERT INTO enfermeria_enfermeria (historia_id, "serviciosAdministrativos_id","tipoOrigen_id",  "tipoMovimiento_id","fechaRegistro" ,  "usuarioRegistro_id","estadoReg", "sedesClinica_id","ingresoPaciente_id",anulado) values (' + "'" + str(historiaId) + "','" + str(serviciosAdministrativos) + "','1','1','" + str(fechaRegistro) + "','" + str(usuarioRegistro) +  "','A','" + str(sede) + "','" + str(ingresosPaciente) + "','N') RETURNING id"
+                                    comando = 'INSERT INTO enfermeria_enfermeria (historia_id, "serviciosAdministrativos_id","tipoOrigen_id",  "tipoMovimiento_id","fechaRegistro" ,  "usuarioRegistro_id","estadoReg", "sedesClinica_id","ingresoPaciente_id",anulado) values (' + "'" + str(historiaId) + "','" + str(serviciosAdministrativos) + "','1','1','" + str(fechaRegistro) + "','" + str(usuarioRegistro) +  "','A','" + str(sede) + "','" + str(ingresosPaciente.id) + "','N') RETURNING id"
                                     print("comando = ", comando)
                                     resultado = cur3.execute(comando)
                                     e = cur3.fetchone()[0]
