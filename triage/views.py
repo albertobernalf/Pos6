@@ -2753,11 +2753,17 @@ def admisionTriageModal(request):
     if Triage == '[]':
         datos = {'Mensaje': 'Triage Inavlido'}
         return JsonResponse(datos, safe=False)
+        response_data['success'] = False
+        response_data['Mensaje'] = 'Triage Inavlido'
+
 
     else:
         datos = {'Mensaje': 'Triage SIII existe'}
         # return JsonResponse(Triage, safe=False)
         print("Envio estos datos :", response_data )
+        response_data['success'] = True
+        response_data['Mensaje'] = 'Triage SIII existe'
+
         return JsonResponse(response_data, safe=False)
 
 
@@ -3929,6 +3935,8 @@ def guardarAdmisionTriage(request):
         response_data['Empresas'] = empresas
 
         response_data['Mensajes'] = 'Admision Creada desde Triage !'
+        response_data['success'] = True
+
 
         # Fin combo empresas
 

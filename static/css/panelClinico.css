@@ -181,3 +181,31 @@ input[type="datetime-local"] {
 }
 
 
+.mensajes
+{
+
+   display: inline-block;
+   color:green;
+   font-size:8px;
+   line-height:8px;
+   font-family: Calibri;
+   width: 800px;
+   height: 20px;
+   position: relative;
+
+}
+
+
+.mensajesError 
+{
+
+   display: inline-block;
+   color:red;
+   font-size:8px;
+   line-height:8px;
+   font-family: Calibri;
+   width: 800px;
+   height: 20px;
+   position: relative;
+
+}

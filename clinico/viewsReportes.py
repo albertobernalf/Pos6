@@ -162,12 +162,14 @@ class PDF(FPDF):
 
 
 class PDFOrdenIncapacidad(FPDF):
-    def __init__(self, tipoDocId, documentoId, consec,historiaId , *args, **kwargs):
+    def __init__(self, tipoDocId, documentoId, consec,historiaId ,  convenioId, tipoAdmision, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.tipoDocId = tipoDocId
         self.documentoId = documentoId
         self.consec = consec
         self.historiaId = historiaId
+        self.convenioId = convenioId
+        self.tipoAdmision = tipoAdmision
 
 
     def header(self):
@@ -191,14 +193,28 @@ class PDFOrdenIncapacidad(FPDF):
 
         curt = miConexiont.cursor()
 
-        comando = 'select  u."tipoDoc_id" , tip.nombre tipnombre, u.documento documentoPaciente, u.nombre nombre, case when genero = ' + "'" + str(
-            'M') + "'" + ' then ' + "'" + str('Masculino') + "'" + ' when genero= ' + "'" + str(
-            'F') + "'" + ' then ' + "'" + str('Femenino') + "'" + ' end as genero, cast((date_part(' + "'" + str(
-            'year') + "'" + ', now()) - date_part(' + "'" + str(
-            'year') + "'" + ', u."fechaNacio" )) as text) edad,   reg.nombre regimen, convenio.nombre convenio , serv.nombre servicio, cast(now() as text) fecha from admisiones_ingresos adm INNER JOIN 	usuarios_usuarios u ON (u."tipoDoc_id" = adm."tipoDoc_id" and u.id = adm.documento_id) INNER JOIN usuarios_tiposDocumento tip ON (tip.id = u."tipoDoc_id") INNER JOIN facturacion_conveniospacienteingresos  convIngreso ON (convIngreso."tipoDoc_id" = adm."tipoDoc_id" and convIngreso.documento_id = adm.documento_id and convIngreso."consecAdmision" = adm.consec) INNER JOIN contratacion_convenios convenio ON (convenio.id = convIngreso.convenio_id) INNER JOIN facturacion_empresas EMP on (emp.id =convenio.empresa_id ) INNER JOIN clinico_regimenes reg ON (reg.id=emp.regimen_id) INNER JOIN clinico_servicios serv ON (serv.id = adm."serviciosActual_id")	 WHERE adm."tipoDoc_id" = ' + "'" + str(
-            self.tipoDocId) + "'" + ' AND adm.documento_id= ' + "'" + str(
-            self.documentoId) + "'" + ' AND adm.consec = ' + "'" + str(
-            self.consec) + "'" + ' and convenio.id = ' + "'" + str(convenio) + "'"
+
+        if (self.tipoAdmision=='ADMISION'):
+
+            comando = 'select  u."tipoDoc_id" , tip.nombre tipnombre, u.documento documentoPaciente, u.nombre nombre, case when genero = ' + "'" + str(
+                'M') + "'" + ' then ' + "'" + str('Masculino') + "'" + ' when genero= ' + "'" + str(
+                'F') + "'" + ' then ' + "'" + str('Femenino') + "'" + ' end as genero, cast((date_part(' + "'" + str(
+                'year') + "'" + ', now()) - date_part(' + "'" + str(
+                'year') + "'" + ', u."fechaNacio" )) as text) edad,   reg.nombre regimen, convenio.nombre convenio , serv.nombre servicio, cast(now() as text) fecha from admisiones_ingresos adm INNER JOIN 	usuarios_usuarios u ON (u."tipoDoc_id" = adm."tipoDoc_id" and u.id = adm.documento_id) INNER JOIN usuarios_tiposDocumento tip ON (tip.id = u."tipoDoc_id") LEFT JOIN facturacion_conveniospacienteingresos  convIngreso ON (convIngreso."tipoDoc_id" = adm."tipoDoc_id" and convIngreso.documento_id = adm.documento_id and convIngreso."consecAdmision" = adm.consec) LEFT JOIN contratacion_convenios convenio ON (convenio.id = convIngreso.convenio_id AND convenio.id = ' + "'" + str(convenio) + "')" +  ' LEFT JOIN facturacion_empresas EMP on (emp.id =convenio.empresa_id ) LEFT JOIN clinico_regimenes reg ON (reg.id=emp.regimen_id) INNER JOIN sitios_serviciosSedes serv ON (serv.id = adm."serviciosActual_id")	 WHERE adm."tipoDoc_id" = ' + "'" + str(
+                self.tipoDocId) + "'" + ' AND adm.documento_id= ' + "'" + str(
+                self.documentoId) + "'" + ' AND adm.consec = ' + "'" + str(
+                self.consec) + "'"
+        else:
+
+            comando = 'select  u."tipoDoc_id" , tip.nombre tipnombre, u.documento documentoPaciente, u.nombre nombre, case when genero = ' + "'" + str(
+                'M') + "'" + ' then ' + "'" + str('Masculino') + "'" + ' when genero= ' + "'" + str(
+                'F') + "'" + ' then ' + "'" + str('Femenino') + "'" + ' end as genero, cast((date_part(' + "'" + str(
+                'year') + "'" + ', now()) - date_part(' + "'" + str(
+                'year') + "'" + ', u."fechaNacio" )) as text) edad,   reg.nombre regimen, convenio.nombre convenio , serv.nombre servicio, cast(now() as text) fecha from triage_triage tri INNER JOIN 	usuarios_usuarios u ON (u."tipoDoc_id" = tri."tipoDoc_id" and u.id = tri.documento_id) INNER JOIN usuarios_tiposDocumento tip ON (tip.id = u."tipoDoc_id") LEFT JOIN facturacion_conveniospacienteingresos  convIngreso ON (convIngreso."tipoDoc_id" = tri."tipoDoc_id" and convIngreso.documento_id = tri.documento_id and convIngreso."consecAdmision" = tri.consec) LEFT JOIN contratacion_convenios convenio ON (convenio.id = convIngreso.convenio_id AND convenio.id = ' + "'" + str(convenio) + "')" +  ' LEFT JOIN facturacion_empresas EMP on (emp.id =convenio.empresa_id ) LEFT JOIN clinico_regimenes reg ON (reg.id=emp.regimen_id) INNER JOIN sitios_serviciosSedes serv ON (serv.id = tri."serviciosSedes_id") WHERE tri."tipoDoc_id" = ' + "'" + str(
+                self.tipoDocId) + "'" + ' AND tri.documento_id= ' + "'" + str(
+                self.documentoId) + "'" + ' AND tri.consec = ' + "'" + str(
+                self.consec) + "'"
+
 
         curt.execute(comando)
         print(comando)
@@ -231,9 +247,9 @@ class PDFOrdenIncapacidad(FPDF):
         self.cell(25, 10, 'PACIENTE: ', 0, 0, 'L')
         self.set_font('Times', '', 7)
 
-        self.cell(25, 10, historia[0]['tipnombre'], 0, 0, 'L')
-        self.cell(25, 10, historia[0]['documentoPaciente'], 0, 0, 'L')
-        self.cell(25, 10, historia[0]['nombre'], 0, 0, 'L')
+        self.cell(25, 10, str(historia[0]['tipnombre']), 0, 0, 'L')
+        self.cell(25, 10, str(historia[0]['documentoPaciente']), 0, 0, 'L')
+        self.cell(25, 10, str(historia[0]['nombre']), 0, 0, 'L')
         self.ln(1)
         self.set_font('Times', 'B', 7)
         self.cell(25, 16, 'EDAD:', 0, 0, 'L')
@@ -247,17 +263,17 @@ class PDFOrdenIncapacidad(FPDF):
         self.set_font('Times', 'B', 7)
         self.cell(25, 18, 'REGIMEN:', 0, 0, 'L')
         self.set_font('Times', '', 7)
-        self.cell(50, 18, historia[0]['regimen'], 0, 0, 'L')
+        self.cell(50, 18, str(historia[0]['regimen']), 0, 0, 'L')
         self.ln(2)
         self.set_font('Times', 'B', 7)
         self.cell(25, 20, 'CONVENIO:', 0, 0, 'L')
         self.set_font('Times', '', 7)
-        self.cell(25, 20, historia[0]['convenio'], 0, 0, 'L')
+        self.cell(25, 20, str(historia[0]['convenio']), 0, 0, 'L')
         self.ln(2)
         self.set_font('Times', 'B', 7)
         self.cell(25, 21, 'SERVICIO:', 0, 0, 'L')
         self.set_font('Times', '', 7)
-        self.cell(25, 21, historia[0]['servicio'], 0, 0, 'L')
+        self.cell(25, 21, str(historia[0]['servicio']), 0, 0, 'L')
         self.ln(2)
         self.set_font('Times', 'B', 7)
         self.cell(25, 23, 'FECHA:', 0, 0, 'L')
@@ -1059,17 +1075,17 @@ class PDFOrdenDeControl(FPDF):
         self.set_font('Times', 'B', 7)
         self.cell(25, 18, 'REGIMEN:', 0, 0, 'L')
         self.set_font('Times', '', 7)
-        self.cell(50, 18, historia[0]['regimen'], 0, 0, 'L')
+        self.cell(50, 18, str(historia[0]['regimen']), 0, 0, 'L')
         self.ln(2)
         self.set_font('Times', 'B', 7)
         self.cell(25, 20, 'CONVENIO:', 0, 0, 'L')
         self.set_font('Times', '', 7)
-        self.cell(25, 20, historia[0]['convenio'], 0, 0, 'L')
+        self.cell(25, 20, str(historia[0]['convenio']), 0, 0, 'L')
         self.ln(2)
         self.set_font('Times', 'B', 7)
         self.cell(25, 21, 'SERVICIO:', 0, 0, 'L')
         self.set_font('Times', '', 7)
-        self.cell(25, 21, historia[0]['servicio'], 0, 0, 'L')
+        self.cell(25, 21, str(historia[0]['servicio']), 0, 0, 'L')
         self.ln(2)
         self.set_font('Times', 'B', 7)
         self.cell(25, 23, 'FECHA:', 0, 0, 'L')
@@ -2257,16 +2273,27 @@ def ImprimirHistoriaClinica(request):
     return JsonResponse({'success': True, 'message': 'Historia Clinica impresa!'})
 
 
-def ImprimirOrdenIncapacidad(ingresoId2, historiaId,convenioId):
+def ImprimirOrdenIncapacidad(ingresoId2, historiaId,convenioId , tipoAdmision):
     # Instantiation of inherited class
     print("Entre ImprimirOrdenIncapacidad ")
+
+    ingresoId = ingresoId2
+
+    try:
+        with transaction.atomic():
+            ingresoPaciente = Ingresos.objects.get(id=ingresoId)
+            print(" ingresosPaciente = ", ingresoPaciente.id)
+    except Exception as e:
+        # Aquí ya se hizo rollback automáticamente
+        print("Se hizo rollback INGRESO por:", e)
+        ingresoPaciente = Triage.objects.get(id=ingresoId)
+        print(" ingresosPaciente = ", ingresoPaciente.id)
+    finally:
+        print("Finally")
 
     #ingresoId = request.POST["ingresoId"]
     #print("ingresoId = ", ingresoId)
 
-    ingresoId = ingresoId2
-
-    ingresoPaciente = Ingresos.objects.get(id=ingresoId)
     tipoDocId = ingresoPaciente.tipoDoc_id
     print("tipoDocId = ", tipoDocId)
     documentoId = ingresoPaciente.documento_id
@@ -2276,7 +2303,7 @@ def ImprimirOrdenIncapacidad(ingresoId2, historiaId,convenioId):
     pacienteId = Usuarios.objects.get(id=documentoId)
     print("documentoPaciente = ", pacienteId.documento)
 
-    pdf = PDFOrdenIncapacidad(tipoDocId,documentoId, consec, historiaId, convenioId, format="letter")
+    pdf = PDFOrdenIncapacidad(tipoDocId,documentoId, consec, historiaId, convenioId, tipoAdmision, format="letter")
     pdf.alias_nb_pages()
     pdf.set_margins(left= 10, top= 5, right= 5 )
     pdf.add_page()
@@ -2337,7 +2364,7 @@ def ImprimirOrdenIncapacidad(ingresoId2, historiaId,convenioId):
     carpeta = 'C:\EntornosPython\Pos6\JSONCLINICA\HistoriasClinicas/'
     print ("carpeta = ", carpeta)
 
-    archivo = carpeta + '' + str(pacienteId.documento) + '_' + 'Incapacidad.pdf'
+    archivo = carpeta + '' + str(pacienteId.documento) + '_' + str(historiaId) + 'Incapacidad.pdf'
     print ("archivo =" , archivo)
 
     #pdf.output('C:\EntornosPython\Pos6\JSONCLINICA\HistoriasClinicas/hClinica.pdf', 'F')
@@ -2379,7 +2406,7 @@ def ImprimirOrdenTerapia(ingresoId2, historiaId, convenioId, tipoAdmision):
         print("Finally")
 
 
-    ingresoPaciente = Ingresos.objects.get(id=ingresoId)
+
     tipoDocId = ingresoPaciente.tipoDoc_id
     print("tipoDocId = ", tipoDocId)
     documentoId = ingresoPaciente.documento_id
@@ -2442,7 +2469,7 @@ def ImprimirOrdenTerapia(ingresoId2, historiaId, convenioId, tipoAdmision):
     carpeta = 'C:\EntornosPython\Pos6\JSONCLINICA\HistoriasClinicas/'
     print ("carpeta = ", carpeta)
 
-    archivo = carpeta + '' + str(pacienteId.documento) + '_' + 'Terapia.pdf'
+    archivo = carpeta + '' + str(pacienteId.documento) + '_' + str(historiaId) + 'Terapia.pdf'
     print ("archivo =" , archivo)
 
 
@@ -2545,7 +2572,7 @@ def ImprimirOrdenLaboratorio(ingresoId2, historiaId, convenioId, tipoAdmision):
     carpeta = 'C:\EntornosPython\Pos6\JSONCLINICA\HistoriasClinicas/'
     print ("carpeta = ", carpeta)
 
-    archivo = carpeta + '' + str(pacienteId.documento) + '_' + 'Laboratorio.pdf'
+    archivo = carpeta + '' + str(pacienteId.documento) + '_' + str(historiaId) + 'Laboratorio.pdf'
     print ("archivo =" , archivo)
 
     try:
@@ -2585,7 +2612,6 @@ def ImprimirOrdenRadiologia(ingresoId2, historiaId, convenioId, tipoAdmision):
     finally:
         print("Finally")
 
-    ingresoPaciente = Ingresos.objects.get(id=ingresoId)
     tipoDocId = ingresoPaciente.tipoDoc_id
     print("tipoDocId = ", tipoDocId)
     documentoId = ingresoPaciente.documento_id
@@ -2648,7 +2674,7 @@ def ImprimirOrdenRadiologia(ingresoId2, historiaId, convenioId, tipoAdmision):
     carpeta = 'C:\EntornosPython\Pos6\JSONCLINICA\HistoriasClinicas/'
     print ("carpeta = ", carpeta)
 
-    archivo = carpeta + '' + str(pacienteId.documento) + '_' + 'Radiologia.pdf'
+    archivo = carpeta + '' + str(pacienteId.documento)+ '_' + str(historiaId)  + 'Radiologia.pdf'
     print ("archivo =" , archivo)
 
 
@@ -2757,7 +2783,7 @@ def ImprimirOrdenMedicamentos(ingresoId2, historiaId, convenioId, tipoAdmision):
     carpeta = 'C:\EntornosPython\Pos6\JSONCLINICA\HistoriasClinicas/'
     print ("carpeta = ", carpeta)
 
-    archivo = carpeta + '' + str(pacienteId.documento) + '_' + 'Medicamentos.pdf'
+    archivo = carpeta + '' + str(pacienteId.documento) + '_' + str(historiaId) + 'Medicamentos.pdf'
     print ("archivo =" , archivo)
 
 
@@ -2799,7 +2825,7 @@ def ImprimirOrdenDeControl(ingresoId2, historiaId, convenioId, tipoAdmision):
     finally:
         print("Finally")
 
-    ingresoPaciente = Ingresos.objects.get(id=ingresoId)
+
     tipoDocId = ingresoPaciente.tipoDoc_id
     print("tipoDocId = ", tipoDocId)
     documentoId = ingresoPaciente.documento_id
@@ -2859,7 +2885,8 @@ def ImprimirOrdenDeControl(ingresoId2, historiaId, convenioId, tipoAdmision):
     carpeta = 'C:\EntornosPython\Pos6\JSONCLINICA\HistoriasClinicas/'
     print ("carpeta = ", carpeta)
 
-    archivo = carpeta + '' + str(pacienteId.documento) + '_' + 'OrdenDeControl.pdf'
+    archivo = carpeta + '' + str(pacienteId.documento) + '_' + str(historiaId) + '_' + 'OrdenDeControl.pdf'
+
     print ("archivo =" , archivo)
 
     try:

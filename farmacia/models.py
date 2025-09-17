@@ -18,7 +18,7 @@ class Farmacia(models.Model):
     usuarioRegistro = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True, on_delete=models.PROTECT   , related_name='Planta3450')
     estadoReg = models.CharField(max_length=1,choices=ESTADOREG_CHOICES,  default='A', editable=False,  blank=True, null=True,)
 
-    def __str__(self):
+    def __integer__(self):
         return str(self.historia)
 
 class FarmaciaDetalle(models.Model):

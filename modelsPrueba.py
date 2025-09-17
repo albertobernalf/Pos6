@@ -860,14 +860,8 @@ ojo pendiente en aplicacion de medicamentos arreglar cuando aplica la modal no p
 	1. combo localidades en actualizar usuaro de triage NO FUNCIONa, CREO QUE EN ADMISIONES TAMPOCO
 	2. en crear responsables y acompañamtes No esta hecho hay que hacerlo
 	3. ops crre un servicio admon y no aparece en dependencia ???
-	4. No me gusta que guarda el folio no hace roolback pailas
-            Guanda en clinico_histporiaexamenes pailas
-            No saca el erroen navegacnio
-	5.hay que arreglar el reporte hclinica en analisis debe imprimir COMPLETO toda wrap
-        6. mop esta actualizando en la tabla ingresos : medicoActual cando hay un folio nuevo
         7. verificar por que alnombre de los laboratorio , radio, terapia en pdf enerados tienenel numeorp del imgreso mejor colocar tambienm otro flag
         8.ops error en apoyo terapeutico cuando voy a ver el resultado pailas (NO ESTA LLEGANDO LOS ERRORES A PATALLA)
-        9. no actualizo el esatdo del examene cuando se respondio en historiaexamenes
 	10. ojo dese autorizaciones no actuliza los cabezotes de TOATLE Liquidacion poroced, vapagar etc PPERSISTE OJO ARREGLAR, es como el orden de los fatcires 
         11. OJO TOCO EN TARIFARIOS update tarifarios_TarifariosDescripcion set columna = 'colValorBase' where id=36 AL MOMENTO DE CREAR UNA DESCRICOPMN  ES MEJOPR SOLO DESDE "ColValorBase"
         12. No esata funcionando bien el tema de si no encuentyrtavtarifa en convenio coloque el del particular
@@ -883,7 +877,7 @@ LUNES 15-SEPTIEMBRE: Ademas de revizar lo de arriba: ver acomodar columnas grade
  			PILAS NO PERMITIR GUARDAR FOLIOS CLINICOS DUPÑLICADOS ALINEAR TAB SACAR COPIA DE CLINICO.VIEWS PRIMERO Y HACER EL AJUSTE
 --------------------
         
-1. choices -->>OPS OJO ME TOCA AGREGAR UN CAMPO ANULADO EN DETALLE y no manejar estoRegistro ops en abonos, factutracion, liquidacion donde mas ?? OPOP
+
 2. main : modal, Error , sucess
 3. templates : modal, message
 4. viewd. try, catch,finaly
@@ -895,3 +889,5 @@ LUNES 15-SEPTIEMBRE: Ademas de revizar lo de arriba: ver acomodar columnas grade
 10. usuarios de bases de datos probar
 11.  hacer exp todo imhoteps conm cpomandos SQL como en vulnerx
 -- permisos OPCIONMESg
+
+-- OPS PELIGRO PELIGRO PEÑIGRO CUANDO HAY ERRO EN REPORTES YA HA GRABADO Y S VUELVEN A GRABAR QUEDA REPETIDO ÑUCAS LA VEPONEGRA SOLUCIONAR

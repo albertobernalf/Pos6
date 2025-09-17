@@ -1617,9 +1617,6 @@ formHistoriaClinica.addEventListener('submit', e=>{
 	var dxComplicacion =  document.getElementById("dxComplicacion").value;
 	var mipres =  document.getElementById("id_mipres").value;
 
-	
-
-
 	var ordenMedicaLab =  document.getElementById("id_ordenMedicaLab").value;
 	var ordenMedicaRad =  document.getElementById("id_ordenMedicaRad").value;
 	var ordenMedicaTer =  document.getElementById("id_ordenMedicaTer").value;
@@ -1664,8 +1661,7 @@ formHistoriaClinica.addEventListener('submit', e=>{
 
             var form_valido;
 
-  
-
+     
       
                $.ajax({
             	   type: 'POST',
@@ -1777,25 +1773,36 @@ formHistoriaClinica.addEventListener('submit', e=>{
 				   },
  	      		success: function (data) {
 
+		// alert("data = " + JSON.stringify(data));
 
-		        if ( data.success == true)
+				
+                    dato = data;
+                    var dataRespuesta = JSON.parse(dato);
+
+			alert("dataRespuesta = ", dataRespuesta);
+
+                  var dato = dataRespuesta['Mensaje'];
+
+
+		        if ( dato == 'OK')
 		            {
 
 		            $("#formHistoriaClinicaT").submit();
-			 document.getElementById("mensajes").innerHTML = data.Mensaje;
-
 
 		            }
 		        else
 		            {
-		           document.getElementById("mensajes").innerHTML = data.Mensaje;
+		           $("#mensajes").html(dato);
 
 		            }
 
 
  	      		}, // cierra function sucess
-		 error: function(data){
-		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+
+			 error: function(data){
+		           alert(data.status); // the status code
+		           alert(data.responseJSON.error); // the message
+		document.getElementById("mensajesError").innerHTML =  data.responseJSON.error
 			        },
 
 
