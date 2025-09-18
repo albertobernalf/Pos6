@@ -1728,7 +1728,8 @@ def crearHistoriaClinica(request):
 
                         for key8 in jsonSignos:
 
-                            fecha=key8["fecha"]
+                            #fecha=key8["fecha"]
+                            fecha=fechaRegistro
                             frecCardiaca=key8["frecCardiaca"]
                             frecRespiratoria=key8["frecRespiratoria"]
                             tensionADiastolica=key8["tensionADiastolica"]

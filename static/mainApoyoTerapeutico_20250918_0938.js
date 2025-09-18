@@ -469,8 +469,6 @@ function arrancaApoyoTerapeutico(valorTabla,valorData)
 
     if (valorTabla == 5)
     {
-		alert("entre tabla 5");
-
         let dataTableOptionsOrdenadosApoyoTerapeutico  ={
    dom: "<'row mb-1'<'col-sm-3'B><'col-sm-3'><'col-sm-6'f>>" + // B = Botones a la izquierda, f = filtro a la derecha
              "<'row'<'col-sm-12'tr>>" +
@@ -517,7 +515,7 @@ function arrancaApoyoTerapeutico(valorTabla,valorData)
 
 		    },
 		{
-                    "targets": 10
+                    "targets": 11
                }
             ],
 	 pageLength: 3,
@@ -540,7 +538,7 @@ function arrancaApoyoTerapeutico(valorTabla,valorData)
 		    }
 			},
            ajax: {
-                 url:"/load_dataOrdenadosTerapeutico/" +  data,
+                 url:"/load_dataOrdenadosApoyoTerapeutico/" +  data,
                  type: "POST",
                  dataSrc: ""
             },
@@ -556,17 +554,18 @@ function arrancaApoyoTerapeutico(valorTabla,valorData)
                     }
 
 	},
-
                 { data: "fields.id"},
+                { data: "fields.tipoDoc"},
+                { data: "fields.documento"},
+                { data: "fields.nombre"},
+                { data: "fields.consec"},
                 { data: "fields.fechaExamen"},
                 { data: "fields.tipoExamen"},
 	            { data: "fields.examen"},
                 { data: "fields.estadoExamen"},
-                { data: "fields.consecutivo"},
-                { data: "fields.cups"},
                 { data: "fields.cantidad"},
-                { data: "fields.observa"},
                 { data: "fields.folio"},
+
 
             ]
              }
@@ -575,116 +574,6 @@ function arrancaApoyoTerapeutico(valorTabla,valorData)
 
     
   }
-
-
-    if (valorTabla == 6)
-    {
-
-	alert ("entre a cargar tabla 6 ");
-
-
-        let dataTableOptionsNoOrdenadosApoyoTerapeutico  ={
-   dom: "<'row mb-1'<'col-sm-3'B><'col-sm-3'><'col-sm-6'f>>" + // B = Botones a la izquierda, f = filtro a la derecha
-             "<'row'<'col-sm-12'tr>>" +
-             "<'row mt-3'<'col-sm-5'i><'col-sm-7'p>>",
-
-
-//  dom: 'Bfrtilp',
-  buttons: [
-    {
-      extend: 'excelHtml5',
-      text: '<i class="fas fa-file-excel"></i> ',
-	// text: '<i class="bi bi-file-earmark-excel-fill"></i> Exportar Excel',
-      titleAttr: 'Exportar a Excel',
-      className: 'btn btn-success btn-sm',
-    },
-    {
-      extend: 'pdfHtml5',
-      text: '<i class="fas fa-file-pdf"></i> ',
-      titleAttr: 'Exportar a PDF',
-      className: 'btn btn-danger btn-sm',
-    },
-    {
-      extend: 'print',
-      text: '<i class="fa fa-print"></i> ',
-      titleAttr: 'Imprimir',
-      className: 'btn btn-info btn-sm',
-    },
-  ],
-	autoWidth: false,
-  lengthMenu: [2, 4, 15],
-           processing: true,
-            serverSide: false,
-            scrollY: '450px',
-	    scrollX: true,
-	    scrollCollapse: true,
-            paging:false,
-             "rowClass": function( row, data, index ) {
-      return 'my-row-class';
-    },
-            columnDefs: [
-            { width: '1%', targets: [0,1] },
-		{ className: 'centered', targets: [0, 1, 2, 3, 4, 5] },
-		{   targets: [5,6,7] // índice de la columna que quieres evitar que haga wrap
-
-		    },
-		{
-                    "targets": 10
-               }
-            ],
-	 pageLength: 3,
-	  destroy: true,
-	  language: {
-		    processing: 'Procesando...',
-		    lengthMenu: 'Mostrar _MENU_ registros',
-		    zeroRecords: 'No se encontraron resultados',
-		    emptyTable: 'Ningún dato disponible en esta tabla',
-		    infoEmpty: 'Mostrando registros del 0 al 0 de un total de 0 registros',
-		    infoFiltered: '(filtrado de un total de _MAX_ registros)',
-		    search: 'Buscar:',
-		    infoThousands: ',',
-		    loadingRecords: 'Cargando...',
-		    paginate: {
-			      first: 'Primero',
-			      last: 'Último',
-			      next: 'Siguiente',
-			      previous: 'Anterior',
-		    }
-			},
-           ajax: {
-                 url:"/load_dataNoOrdenadosTerapeutico/" +  data,
-                 type: "POST",
-                 dataSrc: ""
-            },
-            columns: [
-
-	{
-	  "render": function ( data, type, row ) {
-                        var btn = '';
-
-                         btn = btn + " <input type='radio'  class='form-check-input editPostNoOrdenadosTerapeuticoConsulta' data-pk='" + row.pk + "'>" + "</input>";
-
-                       return btn;
-                    }
-
-	},
-                { data: "fields.id"},
-                { data: "fields.fechaExamen"},
-                { data: "fields.tipoExamen"},
-	            { data: "fields.examen"},
-                { data: "fields.estadoExamen"},
-                { data: "fields.consecutivo"},
-                { data: "fields.cups"},
-                { data: "fields.cantidad"},
-                { data: "fields.observa"},
-                { data: "fields.folio"},
-
-            ]
-             }
-	        dataTable = $('#tablaNoOrdenadosApoyoTerapeutico').DataTable(dataTableOptionsNoOrdenadosApoyoTerapeutico);
-   
-  }
-
 
 
 }
@@ -714,7 +603,7 @@ const initDataTableApoyoTerapeutico = async () => {
 
  	    data = JSON.stringify(data);
 
-
+	alert("Voy a cargar la tabla");
 
         arrancaApoyoTerapeutico(1,data);
 	    dataTableApoyoTerapeuticoInitialized = true;
@@ -803,59 +692,134 @@ window.addEventListener('load', async () => {
         $('body').on('click', '.editPostApoyoTerapeutico', function () {
    
           var post_id = $(this).data('pk');
-        //  alert("post_id= " + post_id);
-         var username_id = document.getElementById("username_id").value;	
+          alert("post_id= " + post_id);
+        var username_id = document.getElementById("username_id").value;	
          var sede = document.getElementById("sede").value;
 
-       var data =  {}   ;
 
-	     data['username'] = username;
-	     data['sede'] = sede;
-	     data['username_id'] = username_id;
-       	    data['post_id'] = post_id;	
-		
-	    data = JSON.stringify(data);
-
-	   arrancaApoyoTerapeutico(5,data);
-	    dataTableOrdenadosApoyoTerapeuticoInitialized = true;
-
-	  arrancaApoyoTerapeutico(6,data);
-	    dataTableNoOrdenadosApoyoTerapeuticoInitialized = true;
-
-
-        });
-
-
-
-	/*--------------------------------------------
-        Click to Edit Button
-        --------------------------------------------
-        --------------------------------------------*/
-        $('body').on('click', '.editPostOrdenadosApoyoTerapeutico', function () {
-   
-          var post_id = $(this).data('pk');
-          alert("post_id= " + post_id);
-             var sede = document.getElementById("sede").value;
 
 	$.ajax({
-	           url: '/postConsultaOrdenadosApoyoTerapeutico/',
-	            data : {post_id:post_id,
+	           url: '/postConsultaApoyoTerapeutico/',
+	            data : {post_id:post_id,			
 			   sede:sede	
 			},
 	           type: 'POST',
 	           dataType : 'json',
 	  		success: function (data) {
                         alert("Regrese");
+                 		
 
-                      alert("dataResultado3="  + data[0]['ResultadoApoyoTerapeutico']); // este es el Registro
-                       alert("dataResultado5="  + data[0]['ResultadoApoyoTerapeutico'][0].tipoExamenId);
-                         alert("RasgosClinicos="  + data[1]['RasgosClinicos']);  // esye es el combo
+	  		  // var dato = JSON.parse(respuesta);
+			 $('#pk').val(data.pk);
+	       	        // $('#tipoDocPaci').val(data[7]['Paciente'][0]['tipoDoc']);
+			document.getElementById("tipoDocPaci").innerHTML = data[7]['Paciente'][0]['tipoDoc'];
+			document.getElementById("documentoPaci").innerHTML = data[7]['Paciente'][0]['documento'];
+			document.getElementById("nombrePaciente").innerHTML = data[7]['Paciente'][0]['nombre'];
+			
 
-		               alert("data[2].MedicoInterpretacion1="  + data[2]['MedicoInterpretacion1'][1]['nombre']);  // esye es el combo
-                               alert("MedicoInterpretacion2="  + data[3]['MedicoInterpretacion2'][1]['nombre']);  // esye es el combo
-                                  alert("MedicoReporte="  + data[4]['MedicoReporte'][1]['nombre']);  // esye es el combo
-		alert("dependenciasRealizado1 = " + data[0]['ResultadoApoyoTerapeutico'][0]);
-			alert("dependenciasRealizado2 = " + data[0]['ResultadoApoyoTerapeutico'][0].dependencias);
+	  var data =  {}   ;
+
+         var username_id = document.getElementById("username_id").value;
+         var sede = document.getElementById("sede").value;
+         var nombreSede = document.getElementById("nombreSede").value;
+
+	     data['username'] = username;
+         data['sedeSeleccionada'] = sedeSeleccionada;
+         data['nombreSede'] = nombreSede;
+         data['sede'] = sede;
+	     data['username_id'] = username_id;
+         data['valor'] = post_id;	
+
+	  data = JSON.stringify(data);
+
+   		  arrancaApoyoTerapeutico(3,data);
+	    dataTableTerapeuticoConsultaInitialized = true;
+
+		  arrancaApoyoTerapeutico(4,data);
+	    dataTableRasgosInitialized = true;
+
+		  arrancaApoyoTerapeutico(5,data);
+	    dataTableDetalleApoyoTerapeuticoInitialized = true;
+
+
+                  },
+	   		     error: function(data){
+		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+
+	   	    	}
+
+	     });
+
+        });
+
+
+
+
+
+
+/*--------------------------------------------
+        Click to Edit Button
+        --------------------------------------------
+        --------------------------------------------*/
+        $('body').on('click', '.editPostDetalleApoyoTerapeutico', function () {
+   
+          var post_id = $(this).data('pk');
+          alert("post_id= " + post_id);
+
+         var tipoExamenId = document.getElementById("tipoExamenId").innerHTML;
+         var tipoExamen = document.getElementById("tipoExamen").innerHTML;
+         var CupsId = document.getElementById("CupsId").innerHTML;
+         var nombreExamen = document.getElementById("nombreExamen").innerHTML;
+         var cantidad = document.getElementById("cantidad").innerHTML;
+	     var observaciones = document.getElementById("observaciones").innerHTML;
+         var estadoExamen = document.getElementById("estadoExamen").value;
+         var folio = document.getElementById("tipoExamenId").value;
+         var interpretacion1 = document.getElementById("interpretacion1").value;
+         var medicoInterpretacion1 = document.getElementById("medicoInterpretacion1").value;
+         var interpretacion2 = document.getElementById("interpretacion2").value;
+	     var medicoInterpretacion2 = document.getElementById("medicoInterpretacion2").value;
+         var medicoReporte = document.getElementById("medicoReporte").value;
+         var rutaImagen = document.getElementById("rutaImagen").value;
+         var rutaVideo = document.getElementById("rutaVideo").value;
+         var username_id = document.getElementById("username_id").value;	
+         var sede = document.getElementById("sede").value;
+
+
+
+	$.ajax({
+	           url: '/postConsultaApoyoTerapeutico/',
+	            data : {post_id:post_id,
+			   tipoExamenId:tipoExamenId,
+			   tipoExamen:tipoExamen,
+			   CupsId:CupsId,
+			   nombreExamen:nombreExamen,
+			   cantidad:cantidad,
+               observaciones:observaciones,
+			   estadoExamen:estadoExamen,
+			   folio:folio,
+			   interpretacion1:interpretacion1,
+			   medicoInterpretacion1:medicoInterpretacion1,
+			   interpretacion2:interpretacion2,
+			   medicoInterpretacion2:medicoInterpretacion2,
+               medicoReporte:medicoReporte,
+   			   rutaImagen:rutaImagen,
+			   rutaVideo:rutaVideo,
+			   sede:sede	
+			},
+	           type: 'POST',
+	           dataType : 'json',
+	  		success: function (data) {
+                       // alert("Regrese");
+
+                    //  alert("dataResultado3="  + data[0]['ResultadoApoyoTerapeutico']); // este es el Registro
+                    //   alert("dataResultado5="  + data[0]['ResultadoApoyoTerapeutico'][0].tipoExamenId);
+                    //     alert("RasgosClinicos="  + data[1]['RasgosClinicos']);  // esye es el combo
+
+		//               alert("data[2].MedicoInterpretacion1="  + data[2]['MedicoInterpretacion1'][1]['nombre']);  // esye es el combo
+                 //              alert("MedicoInterpretacion2="  + data[3]['MedicoInterpretacion2'][1]['nombre']);  // esye es el combo
+                  //                alert("MedicoReporte="  + data[4]['MedicoReporte'][1]['nombre']);  // esye es el combo
+	//		alert("dependenciasRealizado1 = " + data[0]['ResultadoApoyoTerapeutico'][0]);
+	//		alert("dependenciasRealizado2 = " + data[0]['ResultadoApoyoTerapeutico'][0].dependencias);
 			
 
 	  		  // var dato = JSON.parse(respuesta);
@@ -1005,11 +969,17 @@ window.addEventListener('load', async () => {
 
 
 
-	alert("ya pinte el resultado voy a cargar datatables ");
+	//	  arrancaApoyoTerapeutico(2,data);
+	//    dataTableRasgosConsultaInitialized = true;
 
+   		  arrancaApoyoTerapeutico(3,data);
+	    dataTableTerapeuticoConsultaInitialized = true;
 
 		  arrancaApoyoTerapeutico(4,data);
 	    dataTableRasgosInitialized = true;
+
+		  arrancaApoyoTerapeutico(5,data);
+	    dataTableDetalleApoyoTerapeuticoInitialized = true;
 
 
                   },
@@ -1030,15 +1000,33 @@ window.addEventListener('load', async () => {
         Click to Edit Button
         --------------------------------------------
         --------------------------------------------*/
-        $('body').on('click', '.editPostNoOrdenadosTerapeuticoConsulta', function () {
-        //  alert ("Entre boton Apoyo Terapeutico Consulta");
+        $('body').on('click', '.editPostTerapeuticoConsulta', function () {
+          alert ("Entre boton Apoyo Terapeutico Consulta");
 	
           var post_id = $(this).data('pk');
           alert("pk1 = " + $(this).data('pk'));
 
+         var tipoExamenId = document.getElementById("ztipoExamenId").value;
+         var tipoExamen = document.getElementById("ztipoExamen").value;
+         var CupsId = document.getElementById("zCupsId").value;
+         var nombreExamen = document.getElementById("znombreExamen").value;
+         var cantidad = document.getElementById("zcantidad").value;
+	 var observaciones = document.getElementById("zobservaciones").value;
+         var estadoExamen = document.getElementById("zestadoExamen").value;
+         var folio = document.getElementById("ztipoExamenId").value;
+         var interpretacion1 = document.getElementById("zinterpretacion1").value;
+         var medicoInterpretacion1 = document.getElementById("zmedicoInterpretacion1").value;
+         var interpretacion2 = document.getElementById("zinterpretacion2").value;
+	 var medicoInterpretacion2 = document.getElementById("zmedicoInterpretacion2").value;
+         var medicoReporte = document.getElementById("zmedicoReporte").value;
+         var rutaImagen = document.getElementById("zrutaImagen").value;
+         var rutaVideo = document.getElementById("zrutaVideo").value;
+         var username_id = document.getElementById("username_id").value;
+	   var username_id = document.getElementById("username_id").value;
          var sede = document.getElementById("sede").value;
+         var nombreSede = document.getElementById("nombreSede").value;
 
-	 alert("aqui voy con el examen id = " + post_id);
+	alert("aqui voy");
 
         var data2 =  {}   ;
 
@@ -1052,14 +1040,29 @@ window.addEventListener('load', async () => {
 	  data3 = JSON.stringify(data2);
 
 	$.ajax({
-	           url: '/postConsultaNoOrdenadosTerapeuticoConsulta/',
+	           url: '/postConsultaApoyoTerapeuticoConsulta/',
 	            data : {post_id:post_id,
+			   tipoExamenId:tipoExamenId,
+			   tipoExamen:tipoExamen,
+			   CupsId:CupsId,
+			   nombreExamen:nombreExamen,
+			   cantidad:cantidad,
+                           observaciones:observaciones,
+			   estadoExamen:estadoExamen,
+			   folio:folio,
+			   interpretacion1:interpretacion1,
+			   medicoInterpretacion1:medicoInterpretacion1,
+			   interpretacion2:interpretacion2,
+			   medicoInterpretacion2:medicoInterpretacion2,
+                           medicoReporte:medicoReporte,
+   			   rutaImagen:rutaImagen,
+			   rutaVideo:rutaVideo,
 			    sede:sede
-				},
+},
 	           type: 'POST',
 	           dataType : 'json',
 	  		success: function (data) {
-                     //   alert("Regrese");
+                        alert("Regrese");
 
                       alert("dataResultado3="  + data[0]['ResultadoApoyoTerapeutico']); // este es el Registro
                        alert("dataResultado5="  + data[0]['ResultadoApoyoTerapeutico'][0].tipoExamenId);
@@ -1074,31 +1077,12 @@ window.addEventListener('load', async () => {
 
 	  		  // var dato = JSON.parse(respuesta);
 			 $('#pk').val(data.pk);
-
-
-			//document.getElementById("ztipoDocPaci").innerHTML = data[0]['ResultadoApoyoTerapeutico'][0].tipoDocPaci;
-			//document.getElementById("zdocumentoPaci").innerHTML = data[0]['ResultadoApoyoTerapeutico'][0].documento;
-			//document.getElementById("znombrePaciente").innerHTML = data[0]['ResultadoApoyoTerapeutico'][0].nombrePaciente;
-			//document.getElementById("ztipoExamenId").innerHTML = data[0]['ResultadoApoyoTerapeutico'][0].tipoExamenId;
-			//document.getElementById("ztipoExamen").innerHTML = data[0]['ResultadoApoyoTerapeutico'][0].tipoExamen;
-			//document.getElementById("zCupsId").innerHTML = data[0]['ResultadoApoyoTerapeutico'][0].CupsId;
-			//document.getElementById("znombreExamen").innerHTML = data[0]['ResultadoApoyoTerapeutico'][0].nombreExamen;
-			//document.getElementById("zcantidad").innerHTML = data[0]['ResultadoApoyoTerapeutico'][0]['cantidad'];
-			//document.getElementById("zobservaciones").innerHTML = data[0]['ResultadoApoyoTerapeutico'][0]['observaciones'];
-
-
-
-			$('#ztipoDocPaci').val(data[0]['ResultadoApoyoTerapeutico'][0].tipoDocPaci);
-			$('#zdocumentoPaci').val(data[0]['ResultadoApoyoTerapeutico'][0].documento);
-			$('#znombrePaciente').val(data[0]['ResultadoApoyoTerapeutico'][0].znombrePaciente);
 	       	        $('#ztipoExamenId').val(data[0]['ResultadoApoyoTerapeutico'][0].tipoExamenId);
         	       	$('#ztipoExamen').val(data[0]['ResultadoApoyoTerapeutico'][0].tipoExamen);
 	                $('#zCupsId').val(data[0]['ResultadoApoyoTerapeutico'][0].CupsId);
 	                $('#znombreExamen').val(data[0]['ResultadoApoyoTerapeutico'][0].nombreExamen);
 	                $('#zcantidad').val(data[0]['ResultadoApoyoTerapeutico'][0].cantidad);
 	                $('#zobservaciones').val(data[0]['ResultadoApoyoTerapeutico'][0].observaciones);
-
-
 	                $('#zestadoExamen').val(data[0]['ResultadoApoyoTerapeutico'][0].estado);
 	                $('#zfolio').val(data[0]['ResultadoApoyoTerapeutico'][0].folio);
 	                $('#zinterpretacion1').val(data[0]['ResultadoApoyoTerapeutico'][0].interpretacion1);
@@ -1352,7 +1336,6 @@ function guardarResultado() {
 	 var username_id = document.getElementById("username_id").value;	
 	 var estadoExamen = document.getElementById("estadoExamen").value;
 	 var serviciosAdministrativos = document.getElementById("serviciosAdministrativos").value;
-	 var estadoExamen = document.getElementById("estadoExamen").value;
 
 
 
@@ -1371,14 +1354,14 @@ function guardarResultado() {
                         usuarioToma: username_id ,
 			estadoExamen:estadoExamen,
 			serviciosAdministrativos:serviciosAdministrativos,
-			estadoExamen:estadoExamen,
 			},
 	           type: 'POST',
 	           dataType : 'json',
 	  		success: function (data) {
                         alert("Regrese");
                         alert("respuesta="  + data);
-	           
+
+	               // $('#mensajes').val('! Registro Actualizado !');
 			  $("#mensajes").html(" ! Registro Actualizado !");
 			  window.location.reload();
 			  $("#mensajes").html(" ! Registro Actualizado !");

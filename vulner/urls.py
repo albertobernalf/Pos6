@@ -228,15 +228,16 @@ urlpatterns = [
     # Apoyo Terapeutico
 
     path('load_dataApoyoTerapeutico/<str:data>', viewsApoyoTerapeutico.load_dataApoyoTerapeutico, name='loaddataApoyoTerapeutico'),
-    path('load_dataDetakkeApoyoTerapeutico/<str:data>', viewsApoyoTerapeutico.load_dataDetalleApoyoTerapeutico, name='loaddataDetalle_ApoyoTerapeutico'),
+    path('load_dataOrdenadosTerapeutico/<str:data>', viewsApoyoTerapeutico.load_dataOrdenadosTerapeutico, name='loaddataOrdenados_Terapeutico'),
+    path('load_dataNoOrdenadosTerapeutico/<str:data>', viewsApoyoTerapeutico.load_dataNoOrdenadosTerapeutico, name='loaddataNoOrdenados_Terapeutico'),
     path('load_dataRasgos/<str:data>', viewsApoyoTerapeutico.load_dataRasgos, name='loadDataRasgos'),
-    path('postConsultaApoyoTerapeutico/', viewsApoyoTerapeutico.PostConsultaApoyoTerapeutico , name='Post_editApoyoTerapeutico'),
+    path('postConsultaOrdenadosApoyoTerapeutico/', viewsApoyoTerapeutico.PostConsultaOrdenadosApoyoTerapeutico , name='Post_consultaordenadosApoyoTerapeutico'),
     path('guardarResultadoRasgo/', viewsApoyoTerapeutico.GuardarResultadoRasgo, name='guardarResultado_Rasgo'),
     path('postDeleteExamenesRasgos/', viewsApoyoTerapeutico.PostDeleteExamenesRasgos, name='PostDeleteExamenesRasgos'),
     path('guardarResultado/', viewsApoyoTerapeutico.GuardarResultado, name='GuardarResultado'),
     path('load_dataTerapeuticoConsulta/<str:data>', viewsApoyoTerapeutico.load_dataTerapeuticoConsulta, name='loaddataTerapeuticoConsulta'),
     path('load_dataRasgosConsulta/<str:data>', viewsApoyoTerapeutico.load_dataRasgosConsulta, name='loadDataRasgos_Consulta'),
-    path('postConsultaApoyoTerapeuticoConsulta/', viewsApoyoTerapeutico.PostConsultaApoyoTerapeuticoConsulta , name='Post_editApoyoTerapeutico_Consulta'),
+    path('postConsultaNoOrdenadosTerapeuticoConsulta/', viewsApoyoTerapeutico.PostConsultaNoOrdenadosTerapeuticoConsulta , name='post_ConsultaNoOrdenadosTerapeuticoConsulta'),
 
     # Facturacion
 

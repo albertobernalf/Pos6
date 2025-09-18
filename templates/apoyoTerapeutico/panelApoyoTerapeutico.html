@@ -56,15 +56,15 @@ Mayor a un dia
 <div class="marco">
     <ul class="tabs">
         <li><a href="#ApoyoTerapeutico"><span class="fa-solid fa-user-doctor-message"></span> <span class="tab-text"> </span>
-            Ingresos Apoyo Terapeutico </a></li>
-        <li><a href="#Detalle"><span class="fa-solid fa-user-doctor-message"></span> <span class="tab-text"> </span>
-            Detalle Examenes </a></li>
+            Ingresos  </a></li>
+        <li><a href="#Ordenados"><span class="fa-solid fa-user-doctor-message"></span> <span class="tab-text"> </span>
+            Ordenados </a></li>
 	 <li><a href="#RespuestasApoTerap"><span class="fa-solid fa-user-doctor-message"></span> <span class="tab-text"> </span>
-            Responder Examenes</a></li>
-	 <li><a href="#ConsultaResultados"><span class="fa-solid fa-user-doctor-message"></span> <span class="tab-text"> </span>
-            Resultados</a></li>
-	 <li><a href="#DetalleResultados"><span class="fa-solid fa-user-doctor-message"></span> <span class="tab-text"> </span>
-             Detalle Resultados </a></li>
+            A Responder Examen</a></li>
+	 <li><a href="#NoOrdenados"><span class="fa-solid fa-user-doctor-message"></span> <span class="tab-text"> </span>
+            Con tramite</a></li>
+	 <li><a href="#Resultados"><span class="fa-solid fa-user-doctor-message"></span> <span class="tab-text"> </span>
+             Resultados </a></li>
 
 
     </ul>
@@ -104,17 +104,15 @@ Mayor a un dia
                                         <thead>
                                         <tr>
                                             <th style="width:5%;">Action</th>
+                                            <th style="width:5%;">tipoIng</th>
                                             <th style="width:5%;">id</th>
                                             <th style="width:5%;">TipoDoc</th>
                                             <th style="width:12%;">Documento</th>
                                             <th style="width:20%;">Paciente</th>
                                             <th style="width:3%;">#</th>
-                                            <th style="width:3%;">FecExamen</th>
-                                            <th style="width:12%;">TipoExamen</th>
-                                            <th style="width:12%;">Examen</th>
-                                            <th style="width:12%;">Estado</th>
-                                            <th style="width:12%;">Cantidad</th>
-                                            <th style="width:12%;">Folio</th>
+                                            <th style="width:3%;">FecIngreso</th>
+                                            <th style="width:12%;">ServicioIngreso</th>
+                                            <th style="width:12%;">Cama</th>
                          
                                         </tr>
                                         </thead>
@@ -125,35 +123,8 @@ Mayor a un dia
                             </div> 
         </article>
 
-        <article id="Detalle">
 
-            <!-- INICIO TABLE DE  EL DATATABLE  -->
-          		<div class="container my-2" style="width:100%">
-          		   <div class="row" style="width:100%">
- 				    <table  id= "tablaDetalleApoyoTerapeutico" class="display table table-striped table-sm fs-6 nowrap" style="width:100%;">                                    
-                                        <thead>
-                                        <tr>
-                                            <th style="width:5%;">Action</th>
-                                            <th style="width:5%;">id</th>
-                                            <th style="width:5%;">TipoDoc</th>
-                                            <th style="width:12%;">Documento</th>
-                                            <th style="width:20%;">Paciente</th>
-                                            <th style="width:3%;">#</th>
-                                            <th style="width:3%;">FecExamen</th>
-                                            <th style="width:12%;">TipoExamen</th>
-                                            <th style="width:12%;">Examen</th>
-                                            <th style="width:12%;">Estado</th>
-                                            <th style="width:12%;">Cantidad</th>
-                                            <th style="width:12%;">Folio</th>
-                         
-                                        </tr>
-                                        </thead>
-                                        <tbody style="margin-left:0">
-                                        </tbody>
-                                    </table>
-                                </div> 
-                            </div> 
-        </article>
+
 
        <article id="RespuestasApoTerap">
             <center>
@@ -417,42 +388,39 @@ Mayor a un dia
 
                    
          </article>
-  <article id="ConsultaResultados">
-            <center>
-                <h3>Consulta de Resultados</h3></center>
 
-           <!-- INICIO TABLE DE  EL DATATABLE  -->
+<article id="NoOrdenados">
+          
           		<div class="container my-2" style="width:100%">
           		   <div class="row" style="width:100%">
- 				    <table  id= "tablaTerapeuticoConsulta" class="display table table-striped table-sm fs-6 nowrap" style="width:100%;">                                    
-                                       <thead>
+ 				    <table  id= "tablaNoOrdenadosApoyoTerapeutico" class="display table table-striped table-sm fs-6 nowrap" style="width:100%;">                                    
+                                        <thead>
                                         <tr>
-                                            <th>Action</th>
-                                            <th>id</th>
-                                            <th>TipoDoc</th>
-                                            <th>Documento</th>
-                                            <th>Paciente</th>
-                                            <th>#</th>
-                                            <th>FecExamen</th>
-                                            <th>TipoExamen</th>
-                                            <th>Examen</th>
-                                            <th>Estado</th>
-                                            <th>Cantidad</th>
-                                            <th>Folio</th>
+                                                <th style="width:5%;">Action</th>
+                                            <th style="width:5%;">id</th>
+                                            <th style="width:3%;">FecExamen</th>
+                                            <th style="width:12%;">TipoExamen</th>
+                                            <th style="width:12%;">Examen</th>
+                                            <th style="width:12%;">Estado</th>
+                                            <th style="width:12%;">#</th>
+                                            <th style="width:12%;">Cups</th>
+                                            <th style="width:12%;">Cantidad</th>
+                                            <th style="width:12%;">Observa</th>
+                                            <th style="width:12%;">Folio</th>
                                         </tr>
                                         </thead>
-                                        <tbody>
+                                        <tbody style="margin-left:0">
                                         </tbody>
                                     </table>
                                 </div> 
-            </div>  
+                            </div> 
 
-        </article>
-	<!-- Aqui  Otro Article de consultaDetallado  -->
 
-        <article id="DetalleResultados">
+</article>	<!-- Aqui  Otro Article de consultaDetallado  -->
+
+        <article id="Resultados">
             <center>
-                <h3>Detalle Resultados </h3></center>
+                <h3>Resultados </h3></center>
             <table class="table" style="height: 80px; background-color:LightGray;  width:100%;">
                 <tr>
                     <td>
@@ -476,6 +444,12 @@ Mayor a un dia
                                         <label for="ztipoDocPaci" class="col-sm-3 control-label"> TipoDoc:</label>
                                         <input type="text" class="form-control form-control-sm" id="ztipoDocPaci"
                                                name="ztipoDocPaci" value="" readonly>
+                                    </div>
+
+<div class="col">
+                                        <label for="zdocumentoPaci" class="col-sm-3 control-label">Paciente:</label>
+                                        <input type="text" class="form-control form-control-sm" id="zdocumentoPaci"
+                                               name="zdocumentoPaciente" value="" readonly>
                                     </div>
 
 
@@ -691,6 +665,36 @@ Mayor a un dia
 
     </table>
     </article>
+
+<article id="Ordenados">
+          
+          		<div class="container my-2" style="width:100%">
+          		   <div class="row" style="width:100%">
+ 				    <table  id= "tablaOrdenadosApoyoTerapeutico" class="display table table-striped table-sm fs-6 nowrap" style="width:100%;">                                    
+                                        <thead>
+                                        <tr>
+                                                <th style="width:5%;">Action</th>
+                                            <th style="width:5%;">id</th>
+                                            <th style="width:3%;">FecExamen</th>
+                                            <th style="width:12%;">TipoExamen</th>
+                                            <th style="width:12%;">Examen</th>
+                                            <th style="width:12%;">Estado</th>
+                                            <th style="width:12%;">#</th>
+                                            <th style="width:12%;">Cups</th>
+                                            <th style="width:12%;">Cantidad</th>
+                                            <th style="width:12%;">Observa</th>
+                                            <th style="width:12%;">Folio</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody style="margin-left:0">
+                                        </tbody>
+                                    </table>
+                                </div> 
+                            </div> 
+
+
+</article>
+
 
 	<!-- Aqui  Fin Otro Article de consultaDetallado  -->
 

@@ -1432,7 +1432,7 @@ formHistoriaClinica.addEventListener('submit', e=>{
 
 	signos = [];
 
-	fecha=vale2.get("fecha");
+	// fecha=vale2.get("fecha");
 	frecCardiaca=vale2.get("frecCardiaca");
 	frecRespiratoria=vale2.get("frecRespiratoria");
 	tensionADiastolica=vale2.get("tensionADiastolica");
@@ -1451,7 +1451,7 @@ formHistoriaClinica.addEventListener('submit', e=>{
 	glasgowMotora=vale2.get("glasgowMotora");
 
 
-   signos.push({"fecha":fecha,
+   signos.push({                // "fecha":fecha,
             "frecCardiaca":frecCardiaca,
             "frecRespiratoria":frecRespiratoria,
             "tensionADiastolica" :tensionADiastolica,

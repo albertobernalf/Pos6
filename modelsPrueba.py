@@ -893,3 +893,4 @@ LUNES 15-SEPTIEMBRE: Ademas de revizar lo de arriba: ver acomodar columnas grade
 -- OPS PELIGRO PELIGRO PEÑIGRO CUANDO HAY ERRO EN REPORTES YA HA GRABADO Y S VUELVEN A GRABAR QUEDA REPETIDO ÑUCAS LA VEPONEGRA SOLUCIONAR
 --falta impresion NoQx
 --verificar si graba vomito etc en HC
+-- Ojo imprime ordenesDeControl vacias
