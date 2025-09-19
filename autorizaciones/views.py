@@ -283,12 +283,12 @@ def ActualizarAutorizacionDetalle(request):
 
         if (tipoTipoExamen == 'CUPS'):
 
-            comando = 'INSERT INTO facturacion_liquidaciondetalle (consecutivo,fecha, cantidad, "valorUnitario", "valorTotal",cirugia_id,"fechaCrea", "fechaRegistro", "estadoRegistro", "examen_id",  "usuarioRegistro_id", liquidacion_id, "tipoRegistro") VALUES (' + "'" + str(
+            comando = 'INSERT INTO facturacion_liquidaciondetalle (consecutivo,fecha, cantidad, "valorUnitario", "valorTotal",cirugia_id,"fechaCrea", "fechaRegistro", "estadoRegistro", "examen_id",  "usuarioRegistro_id", liquidacion_id, "tipoRegistro",anulado) VALUES (' + "'" + str(
                 consecLiquidacion) + "','" + str(fechaRegistro) + "','" + str(cantidadAutorizada) + "','" + str(
                 valorAutorizado) + "','" + str(valorAutorizado) + "',null," + "'" + str(
                 fechaRegistro) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(
                 examenId) + "','" + str(usuarioRegistro_id) + "','" + str(liquidacionId) + "','" + str(
-                'SISTEMA') + "'" + ')'
+                'SISTEMA') + "'" + ",'A')"
             print("comando = ", comando)
             curt.execute(comando)
 
@@ -336,6 +336,9 @@ def ActualizarAutorizacionDetalle(request):
         print ("Voy a grabar el cabezote")
         print ("liquidacionId = ", liquidacionId)
 
+
+        miConexiont.commit()
+
         totalSuministros = LiquidacionDetalle.objects.all().filter(liquidacion_id=liquidacionId).filter(
             examen_id=None).exclude(estadoRegistro='N').aggregate(totalS=Coalesce(Sum('valorTotal'), 0))
         totalSuministros = (totalSuministros['totalS']) + 0
@@ -349,23 +352,19 @@ def ActualizarAutorizacionDetalle(request):
         # Continua Aqui
 
         totalCopagos = Pagos.objects.all().filter(tipoDoc_id=datosHc.tipoDoc_id).filter(
-            documento_id=datosHc.documento_id).filter(consec=datosHc.consecAdmision).filter(formaPago_id=4).exclude(
-            estadoReg='N').aggregate(totalC=Coalesce(Sum('valor'), 0))
+            documento_id=datosHc.documento_id).filter(consec=datosHc.consecAdmision).filter(formaPago_id=4).exclude(estadoReg='N').exclude(anulado='S').aggregate(totalC=Coalesce(Sum('valor'), 0))
         totalCopagos = (totalCopagos['totalC']) + 0
         print("totalCopagos", totalCopagos)
         totalCuotaModeradora = Pagos.objects.all().filter(tipoDoc_id=datosHc.tipoDoc_id).filter(
-            documento_id=datosHc.documento_id).filter(consec=datosHc.consecAdmision).filter(formaPago_id=3).exclude(
-            estadoReg='N').aggregate(totalM=Coalesce(Sum('valor'), 0))
+            documento_id=datosHc.documento_id).filter(consec=datosHc.consecAdmision).filter(formaPago_id=3).exclude(estadoReg='N').exclude(anulado='S').aggregate(totalM=Coalesce(Sum('valor'), 0))
         totalCuotaModeradora = (totalCuotaModeradora['totalM']) + 0
         print("totalCuotaModeradora", totalCuotaModeradora)
         totalAnticipos = Pagos.objects.all().filter(tipoDoc_id=datosHc.tipoDoc_id).filter(
-            documento_id=datosHc.documento_id).filter(consec=datosHc.consecAdmision).filter(formaPago_id=1).exclude(
-            estadoReg='N').aggregate(Anticipos=Coalesce(Sum('valor'), 0))
+            documento_id=datosHc.documento_id).filter(consec=datosHc.consecAdmision).filter(formaPago_id=1).exclude(estadoReg='N').exclude(anulado='S').aggregate(Anticipos=Coalesce(Sum('valor'), 0))
         totalAnticipos = (totalAnticipos['Anticipos']) + 0
         print("totalAnticipos", totalAnticipos)
         totalAbonos = Pagos.objects.all().filter(tipoDoc_id=datosHc.tipoDoc_id).filter(
-            documento_id=datosHc.documento_id).filter(consec=datosHc.consecAdmision).filter(formaPago_id=2).exclude(
-            estadoReg='N').aggregate(totalAb=Coalesce(Sum('valor'), 0))
+            documento_id=datosHc.documento_id).filter(consec=datosHc.consecAdmision).filter(formaPago_id=2).exclude(estadoReg='N').exclude(anulado='S').aggregate(totalAb=Coalesce(Sum('valor'), 0))
         totalAbonos = (totalAbonos['totalAb']) + 0
         # totalAbonos = totalCopagos + totalAnticipos + totalCuotaModeradora
         print("totalAbonos", totalAbonos)

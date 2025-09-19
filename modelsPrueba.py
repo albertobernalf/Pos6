@@ -894,3 +894,5 @@ LUNES 15-SEPTIEMBRE: Ademas de revizar lo de arriba: ver acomodar columnas grade
 --falta impresion NoQx
 --verificar si graba vomito etc en HC
 -- Ojo imprime ordenesDeControl vacias
+-- Ojo en cirugias que pasas si es triage debe salir mensaje, debe estar hospitalizado o en urgnecia para que pueda hacer la solicitud
+-- Ops no he desarrollado autorizaciones de cirugia OPS

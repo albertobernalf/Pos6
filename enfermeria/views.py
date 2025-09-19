@@ -22,6 +22,7 @@ from django.http import JsonResponse
 #import MySQLdb
 import pyodbc
 import psycopg2
+from django.db import transaction, IntegrityError
 import json
 import datetime
 from datetime import date, timedelta
@@ -38,6 +39,7 @@ from cirugia.models import EstadosCirugias, EstadosSalas, EstadosProgramacion, P
 from contratacion.models import Convenios
 from django.db.models import Min, Max, Avg
 from django.db.models import F
+from triage.models import Triage
 
 # Create your views here.
 
@@ -59,7 +61,8 @@ def Load_dataPanelEnfermeria(request, data):
 
     #detalle = 'SELECT i.id id, tp.nombre tipoDoc,  u.documento documento, u.nombre  nombre , i.consec consec , i."fechaIngreso" , ser.nombre servicioNombreIng, dep.nombre camaNombreIng , diag.nombre dxActual, (select count(*)  from facturacion_conveniospacienteingresos conv where conv."tipoDoc_id" = i."tipoDoc_id" and conv.documento_id=i.documento_id  and conv."consecAdmision"=i.consec) numConvenios,(select count(*)  from cartera_pagos pag where pag."tipoDoc_id" = i."tipoDoc_id" and pag.documento_id=i.documento_id  and pag.consec=i.consec) numPagos, empresa.nombre Empresa  FROM admisiones_ingresos i, usuarios_usuarios u, facturacion_empresas empresa , sitios_dependencias dep , clinico_servicios ser ,usuarios_tiposDocumento tp , sitios_dependenciastipo deptip  , clinico_Diagnosticos diag , sitios_serviciosSedes sd WHERE sd."sedesClinica_id" = i."sedesClinica_id"  and empresa.id = i.empresa_id AND sd.servicios_id  = ser.id and  i."sedesClinica_id" = dep."sedesClinica_id" AND i."sedesClinica_id" = ' + "'" + str(
     #        Sede) + "'" + ' AND  deptip.id = dep."dependenciasTipo_id" and i."serviciosActual_id" = ser.id AND dep.disponibilidad = ' + "'" + 'O' + "'" + ' AND i."salidaDefinitiva" = ' + "'" + 'N' + "'" + ' and tp.id = u."tipoDoc_id" and i."tipoDoc_id" = u."tipoDoc_id" and u.id = i."documento_id" and diag.id = i."dxActual_id" and i."fechaSalida" is null and ser.nombre != ' + "'" + str('TRIAGE') + "'" + ' AND dep."serviciosSedes_id" = sd.id and dep.id = i."dependenciasActual_id"'
-    detalle = 'SELECT i.id id, tp.nombre tipoDoc,  u.documento documento, u.nombre  nombre , i.consec consec , i."fechaIngreso" , ser.nombre servicioNombreIng, dep.nombre camaNombreIng , diag.nombre dxActual, (select count(*)  from facturacion_conveniospacienteingresos conv where conv."tipoDoc_id" = i."tipoDoc_id" and conv.documento_id=i.documento_id  and conv."consecAdmision"=i.consec) numConvenios,	(select count(*)  from cartera_pagos pag where pag."tipoDoc_id" = i."tipoDoc_id" and pag.documento_id=i.documento_id  and pag.consec=i.consec) numPagos,	empresa.nombre Empresa, date_part(' + "'" + str('YEAR') + "'" + ' ,  AGE(CURRENT_DATE , U."fechaNacio")) edad, i."salidaClinica" salidaClinica FROM admisiones_ingresos i inner join usuarios_usuarios u on ( u."tipoDoc_id" = i."tipoDoc_id"  and u.id = i."documento_id" ) left join facturacion_empresas empresa on (empresa.id = i.empresa_id) inner join sitios_dependencias dep on (dep.id = i."dependenciasActual_id" and dep."sedesClinica_id" =  i."sedesClinica_id" AND dep.disponibilidad = ' + "'" + str('O') + "')"  + ' inner join clinico_servicios ser on (ser.id = i."serviciosActual_id" and ser.nombre != ' + "'" + str('TRIAGE') + "')" + ' inner join usuarios_tiposDocumento tp on (tp.id = u."tipoDoc_id") inner join sitios_dependenciastipo deptip on ( deptip.id = dep."dependenciasTipo_id") left join  clinico_Diagnosticos diag on (diag.id = i."dxActual_id") inner join sitios_serviciosSedes sd on (sd."sedesClinica_id" = i."sedesClinica_id" and sd.id= dep."serviciosSedes_id" and sd.servicios_id  = ser.id) WHERE  i."sedesClinica_id" = ' + "'" + str(Sede) + "'" + ' AND i."salidaDefinitiva" = ' + "'" + str('N') + "'" + ' AND i."fechaSalida" is null '
+    #detalle = 'SELECT i.id id, tp.nombre tipoDoc,  u.documento documento, u.nombre  nombre , i.consec consec , i."fechaIngreso" , ser.nombre servicioNombreIng, dep.nombre camaNombreIng , diag.nombre dxActual, (select count(*)  from facturacion_conveniospacienteingresos conv where conv."tipoDoc_id" = i."tipoDoc_id" and conv.documento_id=i.documento_id  and conv."consecAdmision"=i.consec) numConvenios,	(select count(*)  from cartera_pagos pag where pag."tipoDoc_id" = i."tipoDoc_id" and pag.documento_id=i.documento_id  and pag.consec=i.consec) numPagos,	empresa.nombre Empresa, date_part(' + "'" + str('YEAR') + "'" + ' ,  AGE(CURRENT_DATE , U."fechaNacio")) edad, i."salidaClinica" salidaClinica FROM admisiones_ingresos i inner join usuarios_usuarios u on ( u."tipoDoc_id" = i."tipoDoc_id"  and u.id = i."documento_id" ) left join facturacion_empresas empresa on (empresa.id = i.empresa_id) inner join sitios_dependencias dep on (dep.id = i."dependenciasActual_id" and dep."sedesClinica_id" =  i."sedesClinica_id" AND dep.disponibilidad = ' + "'" + str('O') + "')"  + ' inner join clinico_servicios ser on (ser.id = i."serviciosActual_id" and ser.nombre != ' + "'" + str('TRIAGE') + "')" + ' inner join usuarios_tiposDocumento tp on (tp.id = u."tipoDoc_id") inner join sitios_dependenciastipo deptip on ( deptip.id = dep."dependenciasTipo_id") left join  clinico_Diagnosticos diag on (diag.id = i."dxActual_id") inner join sitios_serviciosSedes sd on (sd."sedesClinica_id" = i."sedesClinica_id" and sd.id= dep."serviciosSedes_id" and sd.servicios_id  = ser.id) WHERE  i."sedesClinica_id" = ' + "'" + str(Sede) + "'" + ' AND i."salidaDefinitiva" = ' + "'" + str('N') + "'" + ' AND i."fechaSalida" is null '
+    detalle = 'SELECT i.id id, tp.nombre tipoDoc,  u.documento documento, u.nombre  nombre , i.consec consec , i."fechaIngreso" , ser.nombre servicioNombreIng, dep.nombre camaNombreIng , diag.nombre dxActual, (select count(*)  from facturacion_conveniospacienteingresos conv where conv."tipoDoc_id" = i."tipoDoc_id" and conv.documento_id=i.documento_id  and conv."consecAdmision"=i.consec) numConvenios,	(select count(*)  from cartera_pagos pag where pag."tipoDoc_id" = i."tipoDoc_id" and pag.documento_id=i.documento_id  and pag.consec=i.consec) numPagos,	empresa.nombre Empresa, date_part(' + "'" + str('YEAR') + "'" + ' ,  AGE(CURRENT_DATE , U."fechaNacio")) edad, i."salidaClinica" salidaClinica FROM admisiones_ingresos i inner join usuarios_usuarios u on ( u."tipoDoc_id" = i."tipoDoc_id"  and u.id = i."documento_id" ) left join facturacion_empresas empresa on (empresa.id = i.empresa_id) inner join sitios_dependencias dep on (dep.id = i."dependenciasActual_id" and dep."sedesClinica_id" =  i."sedesClinica_id" AND dep.disponibilidad = ' + "'" + str('O') + "')"  + ' inner join clinico_servicios ser on (ser.id = i."serviciosActual_id" and ser.nombre != ' + "'" + str('TRIAGE') + "')" + ' inner join usuarios_tiposDocumento tp on (tp.id = u."tipoDoc_id") inner join sitios_dependenciastipo deptip on ( deptip.id = dep."dependenciasTipo_id") left join  clinico_Diagnosticos diag on (diag.id = i."dxActual_id") inner join sitios_serviciosSedes sd on (sd."sedesClinica_id" = i."sedesClinica_id" and sd.id= dep."serviciosSedes_id" and sd.servicios_id  = ser.id) ' + ' union SELECT tri.id id, tp.nombre tipoDoc,  u.documento documento, u.nombre  nombre , tri.consec consec , tri."fechaSolicita" , ser.nombre servicioNombreIng, ' + "'" + str('TRIAGE') + "'" + ' camaNombreIng , ' + "'" + str('' ) + "'" +  '  dxActual, (select count(*) from facturacion_conveniospacienteingresos conv where conv."tipoDoc_id" = tri."tipoDoc_id" and conv.documento_id=tri.documento_id  and conv."consecAdmision"=tri.consec) numConvenios,    (select count(*)  from cartera_pagos pag where pag."tipoDoc_id" = tri."tipoDoc_id" and pag.documento_id=tri.documento_id  and pag.consec=tri.consec) numPagos,  empresa.nombre Empresa, date_part(' + "'" + str('YEAR') + "'" + ' ,  AGE(CURRENT_DATE , U."fechaNacio")) edad, ' + "'" + str('N') + "'" + ' salidaClinica FROM triage_triage tri 	inner join usuarios_usuarios u on ( u."tipoDoc_id" = tri."tipoDoc_id"  and u.id = tri."documento_id" ) left join facturacion_empresas empresa on (empresa.id = tri.empresa_id) 	inner join usuarios_tiposDocumento tp on (tp.id = u."tipoDoc_id")  inner join sitios_serviciosSedes sd on (sd."sedesClinica_id" = tri."sedesClinica_id" and sd.id= tri."serviciosSedes_id" ) inner join clinico_servicios ser on (ser.id = sd.servicios_id )  WHERE  tri."sedesClinica_id" = ' + "'" + str(Sede) + "'" + ' AND tri."salidaDefinitiva" = ' + "'" + str('N') + "'" + ' AND tri."consecAdmision" = 0 '
     print(detalle)
 
     curx.execute(detalle)
@@ -132,14 +135,34 @@ def Load_dataMedicamentosEnfermeria(request, data):
     print ("ingresoId =", ingresoId)
 
 
+    esTriage='N'
+    try:
+        with transaction.atomic():
+
+           ingresoId = Ingresos.objects.get(id=ingresoId)
+
+    except Exception as e:
+            # Aquí ya se hizo rollback automáticamente
+            print("Se hizo rollback por PRONO SE HACE NADA:", e)
+            triageId = Triage.objects.get(id=ingresoId)
+            esTriage = 'S'
+
+    finally:
+        print("No haga nada")
+
+
     medicamentosEnfermeria = []
 
     miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
                                        password="123456")
     curx = miConexionx.cursor()
 
-    detalle = 'SELECT recibe.id id, tipos.nombre tipoDoc, usu.documento documento, usu.nombre paciente, hist.folio folio,   fardet."consecutivoMedicamento" consecutivoMedicamento, recibe."dosisCantidad" dosis, recibe."cantidadDispensada" cantidad, 	  medida.descripcion UnidadMedida, sum.nombre medicamento, via.nombre via , frec.descripcion frecuencia, enfdet."diasTratamiento" FROM admisiones_ingresos ing INNER JOIN clinico_historia hist ON (hist."tipoDoc_id" = ing."tipoDoc_id" AND hist.documento_id=ing.documento_id AND hist."consecAdmision" = ing.consec) INNER JOIN farmacia_farmacia far ON (far.historia_id= hist.id) INNER JOIN farmacia_farmaciadetalle fardet ON (fardet.farmacia_id = far.id) INNER JOIN	enfermeria_enfermeriarecibe recibe ON (recibe."farmaciaDetalle_id" = fardet.id) INNER JOIN	enfermeria_enfermeriadetalle enfdet ON (enfdet.id = recibe."enfermeriaDetalle_id") INNER JOIN facturacion_suministros sum ON (sum.id = recibe.suministro_id) INNER JOIN clinico_viasadministracion via ON (via.id = recibe."viaAdministracion_id") INNER JOIN clinico_unidadesdemedidadosis medida ON (medida.id = recibe."dosisUnidad_id") LEFT JOIN clinico_frecuenciasaplicacion frec ON (frec.id = enfdet."frecuencia_id") INNER JOIN usuarios_usuarios usu ON (usu.id = ing.documento_id) INNER JOIN usuarios_tiposdocumento tipos ON (tipos.id = usu."tipoDoc_id")	WHERE ing.id=' + "'" + str(ingresoId) + "' UNION " + ' SELECT recibe.id id, tipos.nombre tipoDoc, usu.documento documento, usu.nombre paciente, 0 folio,  fardet."consecutivoMedicamento" consecutivoMedicamento, recibe."dosisCantidad" dosis,  recibe."cantidadDispensada" cantidad, 	  medida.descripcion UnidadMedida, sum.nombre medicamento, via.nombre via , frec.descripcion frecuencia, enfdet."diasTratamiento"  FROM admisiones_ingresos ing INNER JOIN farmacia_farmacia far ON (far."ingresoPaciente_id"= ing.id and far.historia_id <= 0) INNER JOIN farmacia_farmaciadetalle fardet ON (fardet.farmacia_id = far.id) INNER JOIN enfermeria_enfermeriarecibe recibe ON (recibe."farmaciaDetalle_id" = fardet.id) INNER JOIN	enfermeria_enfermeriadetalle enfdet ON (enfdet.id = recibe."enfermeriaDetalle_id")  INNER JOIN facturacion_suministros sum ON (sum.id = recibe.suministro_id) INNER JOIN clinico_viasadministracion via ON (via.id = recibe."viaAdministracion_id") INNER JOIN clinico_unidadesdemedidadosis medida ON (medida.id = recibe."dosisUnidad_id") LEFT JOIN clinico_frecuenciasaplicacion frec ON (frec.id = enfdet."frecuencia_id") INNER JOIN usuarios_usuarios usu ON (usu.id = ing.documento_id) INNER JOIN usuarios_tiposdocumento tipos ON (tipos.id = usu."tipoDoc_id")	WHERE ing.id=' + "'" + str(ingresoId) + "' ORDER BY 5,6"
+    if (esTriage == 'N'):
 
+        detalle = 'SELECT recibe.id id, tipos.nombre tipoDoc, usu.documento documento, usu.nombre paciente, hist.folio folio,   fardet."consecutivoMedicamento" consecutivoMedicamento, recibe."dosisCantidad" dosis, recibe."cantidadDispensada" cantidad, 	  medida.descripcion UnidadMedida, sum.nombre medicamento, via.nombre via , frec.descripcion frecuencia, enfdet."diasTratamiento" FROM admisiones_ingresos ing INNER JOIN clinico_historia hist ON (hist."tipoDoc_id" = ing."tipoDoc_id" AND hist.documento_id=ing.documento_id AND hist."consecAdmision" = ing.consec) INNER JOIN farmacia_farmacia far ON (far.historia_id= hist.id) INNER JOIN farmacia_farmaciadetalle fardet ON (fardet.farmacia_id = far.id) INNER JOIN	enfermeria_enfermeriarecibe recibe ON (recibe."farmaciaDetalle_id" = fardet.id) INNER JOIN	enfermeria_enfermeriadetalle enfdet ON (enfdet.id = recibe."enfermeriaDetalle_id") INNER JOIN facturacion_suministros sum ON (sum.id = recibe.suministro_id) INNER JOIN clinico_viasadministracion via ON (via.id = recibe."viaAdministracion_id") INNER JOIN clinico_unidadesdemedidadosis medida ON (medida.id = recibe."dosisUnidad_id") LEFT JOIN clinico_frecuenciasaplicacion frec ON (frec.id = enfdet."frecuencia_id") INNER JOIN usuarios_usuarios usu ON (usu.id = ing.documento_id) INNER JOIN usuarios_tiposdocumento tipos ON (tipos.id = usu."tipoDoc_id")	WHERE ing.id=' + "'" + str(ingresoId) + "' UNION " + ' SELECT recibe.id id, tipos.nombre tipoDoc, usu.documento documento, usu.nombre paciente, 0 folio,  fardet."consecutivoMedicamento" consecutivoMedicamento, recibe."dosisCantidad" dosis,  recibe."cantidadDispensada" cantidad, 	  medida.descripcion UnidadMedida, sum.nombre medicamento, via.nombre via , frec.descripcion frecuencia, enfdet."diasTratamiento"  FROM admisiones_ingresos ing INNER JOIN farmacia_farmacia far ON (far."ingresoPaciente_id"= ing.id and far.historia_id <= 0) INNER JOIN farmacia_farmaciadetalle fardet ON (fardet.farmacia_id = far.id) INNER JOIN enfermeria_enfermeriarecibe recibe ON (recibe."farmaciaDetalle_id" = fardet.id) INNER JOIN	enfermeria_enfermeriadetalle enfdet ON (enfdet.id = recibe."enfermeriaDetalle_id")  INNER JOIN facturacion_suministros sum ON (sum.id = recibe.suministro_id) INNER JOIN clinico_viasadministracion via ON (via.id = recibe."viaAdministracion_id") INNER JOIN clinico_unidadesdemedidadosis medida ON (medida.id = recibe."dosisUnidad_id") LEFT JOIN clinico_frecuenciasaplicacion frec ON (frec.id = enfdet."frecuencia_id") INNER JOIN usuarios_usuarios usu ON (usu.id = ing.documento_id) INNER JOIN usuarios_tiposdocumento tipos ON (tipos.id = usu."tipoDoc_id")	WHERE ing.id=' + "'" + str(ingresoId) + "' ORDER BY 5,6"
+    else:
+
+        detalle = 'SELECT recibe.id id, tipos.nombre tipoDoc, usu.documento documento, usu.nombre paciente, hist.folio folio,  fardet."consecutivoMedicamento" consecutivoMedicamento, recibe."dosisCantidad" dosis, recibe."cantidadDispensada" cantidad,   medida.descripcion UnidadMedida, sum.nombre medicamento,via.nombre via , frec.descripcion frecuencia, enfdet."diasTratamiento"  FROM triage_triage tri 	INNER JOIN clinico_historia hist ON (hist."tipoDoc_id" = tri."tipoDoc_id" AND hist.documento_id=tri.documento_id AND hist."consecAdmision" = tri.consec) INNER JOIN farmacia_farmacia far ON (far.historia_id= hist.id) INNER JOIN farmacia_farmaciadetalle fardet ON (fardet.farmacia_id = far.id) INNER JOIN enfermeria_enfermeriarecibe recibe ON (recibe."farmaciaDetalle_id" = fardet.id) INNER JOIN      enfermeria_enfermeriadetalle enfdet ON (enfdet.id = recibe."enfermeriaDetalle_id") INNER JOIN facturacion_suministros sum ON (sum.id = recibe.suministro_id) 	INNER JOIN clinico_viasadministracion via ON (via.id = recibe."viaAdministracion_id") INNER JOIN clinico_unidadesdemedidadosis medida ON (medida.id = recibe."dosisUnidad_id") LEFT JOIN clinico_frecuenciasaplicacion frec ON (frec.id = enfdet."frecuencia_id") INNER JOIN usuarios_usuarios usu ON (usu.id = tri.documento_id) INNER JOIN usuarios_tiposdocumento tipos ON (tipos.id = usu."tipoDoc_id") WHERE tri.id=' + "'" + str(triageId.id) + "'" + ' UNION  SELECT recibe.id id, tipos.nombre tipoDoc, usu.documento documento, usu.nombre paciente, 0 folio, fardet."consecutivoMedicamento" consecutivoMedicamento, recibe."dosisCantidad" dosis,  recibe."cantidadDispensada" cantidad,  medida.descripcion UnidadMedida, sum.nombre medicamento, via.nombre via , frec.descripcion frecuencia, enfdet."diasTratamiento"  FROM triage_triage tri INNER JOIN farmacia_farmacia far ON (far."ingresoPaciente"= tri.id and far.historia_id is null) INNER JOIN farmacia_farmaciadetalle fardet ON (fardet.farmacia_id = far.id) INNER JOIN enfermeria_enfermeriarecibe recibe ON (recibe."farmaciaDetalle_id" = fardet.id) INNER JOIN   enfermeria_enfermeriadetalle enfdet ON (enfdet.id = recibe."enfermeriaDetalle_id") INNER JOIN facturacion_suministros sum ON (sum.id = recibe.suministro_id) 	INNER JOIN clinico_viasadministracion via ON (via.id = recibe."viaAdministracion_id") INNER JOIN clinico_unidadesdemedidadosis medida ON (medida.id = recibe."dosisUnidad_id") 	LEFT JOIN clinico_frecuenciasaplicacion frec ON (frec.id = enfdet."frecuencia_id") INNER JOIN usuarios_usuarios usu ON (usu.id = tri.documento_id) INNER JOIN usuarios_tiposdocumento tipos ON (tipos.id = usu."tipoDoc_id") WHERE tri.id=' + "'" + str(triageId.id) + "'" + ' ORDER BY 5,6'
 
     print(detalle)
 
@@ -170,7 +193,21 @@ def Load_dataParaClinicosEnfermeria(request, data):
 
     print ("ingresoId =", ingresoId)
 
-    ingresoAdmision = Ingresos.objects.get(id=ingresoId)
+    esTriage='N'
+    try:
+        with transaction.atomic():
+
+           ingresoAdmision = Ingresos.objects.get(id=ingresoId)
+
+    except Exception as e:
+            # Aquí ya se hizo rollback automáticamente
+            print("Se hizo rollback por PRONO SE HACE NADA:", e)
+            triageId = Triage.objects.get(id=ingresoId)
+            esTriage = 'S'
+
+    finally:
+        print("No haga nada")
+
 
 
     paraClinicosEnfermeria = []
@@ -180,7 +217,10 @@ def Load_dataParaClinicosEnfermeria(request, data):
     curx = miConexionx.cursor()
 
 
-    detalle = 'SELECT histExa.id id ,planta.nombre medico,hist.fecha fecha,hist.folio folio, tiposExa.nombre tipo ,histExa.consecutivo consecutivo,   histExa."codigoCups" cups,  exa.nombre examen, histExa.cantidad FROM clinico_historia hist INNER JOIN 	clinico_historiaexamenes histExa ON (histExa.historia_id = hist.id) INNER JOIN 	clinico_tiposexamen tiposExa ON ( tiposExa.id = histExa."tiposExamen_id") INNER JOIN clinico_examenes exa ON (exa."TiposExamen_id" = tiposExa.id and exa."codigoCups" = histExa."codigoCups") INNER JOIN planta_planta planta on (planta.id=hist.planta_id) WHERE hist."tipoDoc_id" = ' + "'" + str(ingresoAdmision.tipoDoc_id) + "' AND hist.documento_id = " + "'" + str(ingresoAdmision.documento_id) + "'" + ' and hist."consecAdmision" = ' + "'" + str(ingresoAdmision.consec) + "'" + ' order by hist.fecha, hist.folio'
+    if (esTriage=='N'):
+        detalle = 'SELECT histExa.id id ,planta.nombre medico,hist.fecha fecha,hist.folio folio, tiposExa.nombre tipo ,histExa.consecutivo consecutivo,   histExa."codigoCups" cups,  exa.nombre examen, histExa.cantidad FROM clinico_historia hist INNER JOIN 	clinico_historiaexamenes histExa ON (histExa.historia_id = hist.id) INNER JOIN 	clinico_tiposexamen tiposExa ON ( tiposExa.id = histExa."tiposExamen_id") INNER JOIN clinico_examenes exa ON (exa."TiposExamen_id" = tiposExa.id and exa."codigoCups" = histExa."codigoCups") INNER JOIN planta_planta planta on (planta.id=hist.planta_id) WHERE hist."tipoDoc_id" = ' + "'" + str(ingresoAdmision.tipoDoc_id) + "' AND hist.documento_id = " + "'" + str(ingresoAdmision.documento_id) + "'" + ' and hist."consecAdmision" = ' + "'" + str(ingresoAdmision.consec) + "'" + ' order by hist.fecha, hist.folio'
+    else:
+        detalle = 'SELECT histExa.id id ,planta.nombre medico,hist.fecha fecha,hist.folio folio, tiposExa.nombre tipo ,histExa.consecutivo consecutivo,   histExa."codigoCups" cups,  exa.nombre examen, histExa.cantidad FROM clinico_historia hist INNER JOIN 	clinico_historiaexamenes histExa ON (histExa.historia_id = hist.id) INNER JOIN 	clinico_tiposexamen tiposExa ON ( tiposExa.id = histExa."tiposExamen_id") INNER JOIN clinico_examenes exa ON (exa."TiposExamen_id" = tiposExa.id and exa."codigoCups" = histExa."codigoCups") INNER JOIN planta_planta planta on (planta.id=hist.planta_id) WHERE hist."tipoDoc_id" = ' + "'" + str(triageId.tipoDoc_id) + "' AND hist.documento_id = " + "'" + str(triageId.documento_id) + "'" + ' and hist."consecAdmision" = ' + "'" + str(triageId.consec) + "'" + ' order by hist.fecha, hist.folio'
 
     print(detalle)
 
@@ -210,7 +250,22 @@ def Load_dataPedidosEnfermeria(request, data):
 
     print ("ingresoId =", ingresoId)
 
-    ingresoAdmision = Ingresos.objects.get(id=ingresoId)
+
+    esTriage='N'
+    try:
+        with transaction.atomic():
+
+           ingresoAdmision = Ingresos.objects.get(id=ingresoId)
+
+    except Exception as e:
+            # Aquí ya se hizo rollback automáticamente
+            print("Se hizo rollback por PRONO SE HACE NADA:", e)
+            triageId = Triage.objects.get(id=ingresoId)
+            esTriage = 'S'
+
+    finally:
+        print("No haga nada")
+
 
 
     username = d['username']
@@ -228,10 +283,11 @@ def Load_dataPedidosEnfermeria(request, data):
                                    password="123456")
     curx = miConexionx.cursor()
 
+    if (esTriage=='N'):
 
-
-    detalle = '	select enf.id id,origen.nombre origen, mov.nombre mov , serv.nombre servicio, tipos.nombre tipoDoc, usu.documento documento, usu.nombre paciente, serv.nombre servicio FROM enfermeria_enfermeria enf INNER JOIN enfermeria_enfermeriatipoorigen origen ON (origen.id =  enf."tipoOrigen_id") INNER JOIN enfermeria_enfermeriatipomovimiento mov ON (mov.id= enf."tipoMovimiento_id")  INNER JOIN sitios_serviciosadministrativos serv ON (serv.id = enf."serviciosAdministrativos_id") INNER JOIN admisiones_ingresos adm ON (adm.id = enf."ingresoPaciente_id" AND adm.id=' + "'" +  str(ingresoId) + "')"  + ' INNER JOIN usuarios_usuarios usu ON (usu.id = adm.documento_id ) INNER JOIN usuarios_tiposdocumento tipos ON (tipos.id = adm."tipoDoc_id") WHERE enf."sedesClinica_id" = ' + "'" + str(sede) + "'" + ' AND enf."fechaRegistro" >= ' + "'" + str('2025-01-01') + "'"  +  ' AND origen.nombre = ' + "'" + str('ENFERMERIA') +"'" + ' AND mov.nombre='  + "'" + str('PEDIDOS ENFERMERIA') + "'" + ' ORDER BY enf."fechaRegistro" desc'
-
+        detalle = '	select enf.id id,origen.nombre origen, mov.nombre mov , serv.nombre servicio, tipos.nombre tipoDoc, usu.documento documento, usu.nombre paciente, serv.nombre servicio FROM enfermeria_enfermeria enf INNER JOIN enfermeria_enfermeriatipoorigen origen ON (origen.id =  enf."tipoOrigen_id") INNER JOIN enfermeria_enfermeriatipomovimiento mov ON (mov.id= enf."tipoMovimiento_id")  INNER JOIN sitios_serviciosadministrativos serv ON (serv.id = enf."serviciosAdministrativos_id") INNER JOIN admisiones_ingresos adm ON (adm.id = enf."ingresoPaciente_id" AND adm.id=' + "'" +  str(ingresoId) + "')"  + ' INNER JOIN usuarios_usuarios usu ON (usu.id = adm.documento_id ) INNER JOIN usuarios_tiposdocumento tipos ON (tipos.id = adm."tipoDoc_id") WHERE enf."sedesClinica_id" = ' + "'" + str(sede) + "'" + ' AND enf."fechaRegistro" >= ' + "'" + str('2025-01-01') + "'"  +  ' AND origen.nombre = ' + "'" + str('ENFERMERIA') +"'" + ' AND mov.nombre='  + "'" + str('PEDIDOS ENFERMERIA') + "'" + ' ORDER BY enf."fechaRegistro" desc'
+    else:
+        detalle = '	select enf.id id,origen.nombre origen, mov.nombre mov , serv.nombre servicio, tipos.nombre tipoDoc, usu.documento documento, usu.nombre paciente, serv.nombre servicio FROM enfermeria_enfermeria enf INNER JOIN enfermeria_enfermeriatipoorigen origen ON (origen.id =  enf."tipoOrigen_id") INNER JOIN enfermeria_enfermeriatipomovimiento mov ON (mov.id= enf."tipoMovimiento_id")  INNER JOIN sitios_serviciosadministrativos serv ON (serv.id = enf."serviciosAdministrativos_id") INNER JOIN admisiones_ingresos adm ON (adm.id = enf."ingresoPaciente_id" AND adm.id=' + "'" +  str(triageId.id) + "')"  + ' INNER JOIN usuarios_usuarios usu ON (usu.id = adm.documento_id ) INNER JOIN usuarios_tiposdocumento tipos ON (tipos.id = adm."tipoDoc_id") WHERE enf."sedesClinica_id" = ' + "'" + str(sede) + "'" + ' AND enf."fechaRegistro" >= ' + "'" + str('2025-01-01') + "'"  +  ' AND origen.nombre = ' + "'" + str('ENFERMERIA') +"'" + ' AND mov.nombre='  + "'" + str('PEDIDOS ENFERMERIA') + "'" + ' ORDER BY enf."fechaRegistro" desc'
 
     print(detalle)
 
@@ -306,7 +362,22 @@ def BuscaDatosPacienteEnfermeria(request):
     ingresoId = request.POST['ingresoId']
     print ("ingresoId =", ingresoId)
 
-    ingresoAdmision = Ingresos.objects.get(id=ingresoId)
+
+    esTriage='N'
+    try:
+        with transaction.atomic():
+
+           ingresoAdmision = Ingresos.objects.get(id=ingresoId)
+
+    except Exception as e:
+            # Aquí ya se hizo rollback automáticamente
+            print("Se hizo rollback por PRONO SE HACE NADA:", e)
+            triageId = Triage.objects.get(id=ingresoId)
+            esTriage = 'S'
+
+    finally:
+        print("No haga nada")
+
 
     # Combo Datos Paciente
 
@@ -316,7 +387,14 @@ def BuscaDatosPacienteEnfermeria(request):
                                    password="123456")
     curx = miConexionx.cursor()
 
-    detalle = 'select usu.id id,  i."tipoDoc_id" tipoDoc, tipos.nombre nombreTipoDoc, usu.documento documento, usu.nombre paciente, i."consec" consecutivoAdmision, serv.nombre servicio, dep.numero cama FROM admisiones_ingresos i INNER JOIN usuarios_usuarios usu ON (usu.id=i.documento_id) INNER JOIN usuarios_tiposdocumento tipos ON (tipos.id=i."tipoDoc_id")  INNER Join sitios_dependencias dep on (dep.id=i."dependenciasActual_id") INNER Join clinico_servicios serv on (serv.id=i."serviciosActual_id") where i.id= ' + "'" + str(ingresoId) + "'"
+    if (esTriage == 'N'):
+
+        detalle = 'select usu.id id,  i."tipoDoc_id" tipoDoc, tipos.nombre nombreTipoDoc, usu.documento documento, usu.nombre paciente, i."consec" consecutivoAdmision, serv.nombre servicio, dep.numero cama FROM admisiones_ingresos i INNER JOIN usuarios_usuarios usu ON (usu.id=i.documento_id) INNER JOIN usuarios_tiposdocumento tipos ON (tipos.id=i."tipoDoc_id")  INNER Join sitios_dependencias dep on (dep.id=i."dependenciasActual_id") INNER JOIN sitios_serviciossedes sd ON (sd.id=i."serviciosActual_id") INNER Join clinico_servicios serv on (serv.id=sd.servicios_id) where i.id= ' + "'" + str(ingresoId) + "'"
+    else:
+
+        detalle = 'select usu.id id,  tri."tipoDoc_id" tipoDoc, tipos.nombre nombreTipoDoc, usu.documento documento, usu.nombre paciente, tri."consec" consecutivoAdmision, serv.nombre servicio, ' + "'" + str('TRIAGE') + "'" + ' cama FROM triage_triage tri INNER JOIN usuarios_usuarios usu ON (usu.id=tri.documento_id) INNER JOIN usuarios_tiposdocumento tipos ON (tipos.id=tri."tipoDoc_id")    INNER JOIN sitios_serviciossedes sd ON (sd.id=tri."serviciosSedes_id")  INNER Join clinico_servicios serv on (serv.id=sd.servicios_id ) where tri.id= ' + "'" + str(triageId.id) + "'"
+
+
     print(detalle)
 
     curx.execute(detalle)
@@ -341,6 +419,21 @@ def CreaPedidosEnfermeriaCabezote(request):
 
     ingresoId = request.POST['ingresoId']
     print ("ingresoId =", ingresoId)
+
+    esTriage='N'
+    try:
+        with transaction.atomic():
+
+           ingresoAdmision = Ingresos.objects.get(id=ingresoId)
+
+    except Exception as e:
+            # Aquí ya se hizo rollback automáticamente
+            print("Se hizo rollback por PRONO SE HACE NADA:", e)
+            triageId = Triage.objects.get(id=ingresoId)
+            esTriage = 'S'
+
+    finally:
+        print("No haga nada")
 
 
     username_id = request.POST['username_id']
@@ -368,7 +461,12 @@ def CreaPedidosEnfermeriaCabezote(request):
                                    password="123456")
     curx = miConexionx.cursor()
 
-    detalle = 'INSERT INTO enfermeria_enfermeria ( "tipoMovimiento_id", "fechaRegistro", "estadoReg", historia_id, "serviciosAdministrativos_id", "usuarioRegistro_id", "tipoOrigen_id", "sedesClinica_id","ingresoPaciente_id") VALUES (' + "'" + str(enfermeriaTipoMovimiento) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "',null,'" + str(servicioEnfermeria) + "','" + str(username_id) + "','"  + str(enfermeriaTipoOrigen) + "','" + str(sede) + "','" + str(ingresoId) + "')"
+    if (esTriage == 'N'):
+
+        detalle = 'INSERT INTO enfermeria_enfermeria ( "tipoMovimiento_id", "fechaRegistro", "estadoReg", historia_id, "serviciosAdministrativos_id", "usuarioRegistro_id", "tipoOrigen_id", "sedesClinica_id","ingresoPaciente") VALUES (' + "'" + str(enfermeriaTipoMovimiento) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "',null,'" + str(servicioEnfermeria) + "','" + str(username_id) + "','"  + str(enfermeriaTipoOrigen) + "','" + str(sede) + "','" + str(ingresoId) + "')"
+    else:
+        detalle = 'INSERT INTO enfermeria_enfermeria ( "tipoMovimiento_id", "fechaRegistro", "estadoReg", historia_id, "serviciosAdministrativos_id", "usuarioRegistro_id", "tipoOrigen_id", "sedesClinica_id","ingresoPaciente") VALUES (' + "'" + str(enfermeriaTipoMovimiento) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "',null,'" + str(servicioEnfermeria) + "','" + str(username_id) + "','"  + str(enfermeriaTipoOrigen) + "','" + str(sede) + "','" + str(triageId.id) + "')"
+
     print(detalle)
 
     curx.execute(detalle)
@@ -563,6 +661,22 @@ def Load_dataPlaneacionEnfermeria(request, data):
 
     print ("ingresoId =", ingresoId)
 
+    esTriage='N'
+    try:
+        with transaction.atomic():
+
+           ingresoAdmision = Ingresos.objects.get(id=ingresoId)
+
+    except Exception as e:
+            # Aquí ya se hizo rollback automáticamente
+            print("Se hizo rollback por PRONO SE HACE NADA:", e)
+            triageId = Triage.objects.get(id=ingresoId)
+            esTriage = 'S'
+
+    finally:
+        print("No haga nada")
+
+
     enfermeriaRecibeId = d['enfermeriaRecibeId']
     print("enfermeriaRecibeId =", enfermeriaRecibeId)
 
@@ -573,7 +687,11 @@ def Load_dataPlaneacionEnfermeria(request, data):
                                        password="123456")
     curx = miConexionx.cursor()
 
-    detalle = 'select pla.id id, pla."fechaPlanea" fechaPlanea, tipos1.nombre turnoPlanea, planta1.nombre enfermeraPlanea, pla."cantidadPlaneada" cantidadPlaneada, 	 pla."fechaAplica" fechaAplica, tipos2.nombre turnoAplica, planta2.nombre enfermeraAplica,   pla."cantidadAplicada" cantidadAplicada,	 pla."dosisCantidad" dosis, medida.descripcion medida, sum.nombre suministro, vias.nombre via, frec.descripcion frecuencia,	pla."diasTratamiento" dias FROM enfermeria_enfermeriaplaneacion pla INNER JOIN enfermeria_enfermeria enf ON (enf.id=pla.enfermeria_id)	 LEFT JOIN planta_planta planta1 ON (planta1.id = pla."enfermeraPlanea_id") LEFT JOIN planta_planta planta2 ON (planta2.id = pla."enfermeraAplica_id") INNER JOIN clinico_viasadministracion vias ON (vias.id = pla."viaAdministracion_id") INNER JOIN clinico_unidadesdemedidadosis medida ON (medida.id = pla."dosisUnidad_id") INNER JOIN clinico_frecuenciasaplicacion frec ON (frec.id = pla.frecuencia_id) INNER JOIN facturacion_suministros sum	ON (sum.id = pla.suministro_id) LEFT JOIN enfermeria_tiposturnosenfermeria tipos1 ON ( tipos1.id = pla."turnoEnfermeriaPlanea_id") LEFT JOIN enfermeria_tiposturnosenfermeria tipos2 ON ( tipos2.id = pla."turnoEnfermeriaAplica_id") WHERE enf."sedesClinica_id" = ' + "'" + str(sede) + "'" +  ' AND enf."ingresoPaciente_id" = ' + "'" + str(ingresoId) + "'" + ' AND pla."enfermeriaRecibe_id" = ' + "'" + str(enfermeriaRecibeId) + "'"
+    if (esTriage=='N'):
+        detalle = 'select pla.id id, pla."fechaPlanea" fechaPlanea, tipos1.nombre turnoPlanea, planta1.nombre enfermeraPlanea, pla."cantidadPlaneada" cantidadPlaneada, 	 pla."fechaAplica" fechaAplica, tipos2.nombre turnoAplica, planta2.nombre enfermeraAplica,   pla."cantidadAplicada" cantidadAplicada,	 pla."dosisCantidad" dosis, medida.descripcion medida, sum.nombre suministro, vias.nombre via, frec.descripcion frecuencia,	pla."diasTratamiento" dias FROM enfermeria_enfermeriaplaneacion pla INNER JOIN enfermeria_enfermeria enf ON (enf.id=pla.enfermeria_id)	 LEFT JOIN planta_planta planta1 ON (planta1.id = pla."enfermeraPlanea_id") LEFT JOIN planta_planta planta2 ON (planta2.id = pla."enfermeraAplica_id") INNER JOIN clinico_viasadministracion vias ON (vias.id = pla."viaAdministracion_id") INNER JOIN clinico_unidadesdemedidadosis medida ON (medida.id = pla."dosisUnidad_id") INNER JOIN clinico_frecuenciasaplicacion frec ON (frec.id = pla.frecuencia_id) INNER JOIN facturacion_suministros sum	ON (sum.id = pla.suministro_id) LEFT JOIN enfermeria_tiposturnosenfermeria tipos1 ON ( tipos1.id = pla."turnoEnfermeriaPlanea_id") LEFT JOIN enfermeria_tiposturnosenfermeria tipos2 ON ( tipos2.id = pla."turnoEnfermeriaAplica_id") WHERE enf."sedesClinica_id" = ' + "'" + str(sede) + "'" +  ' AND enf."ingresoPaciente" = ' + "'" + str(ingresoId) + "'" + ' AND pla."enfermeriaRecibe_id" = ' + "'" + str(enfermeriaRecibeId) + "'"
+    else:
+        detalle = 'select pla.id id, pla."fechaPlanea" fechaPlanea, tipos1.nombre turnoPlanea, planta1.nombre enfermeraPlanea, pla."cantidadPlaneada" cantidadPlaneada, 	 pla."fechaAplica" fechaAplica, tipos2.nombre turnoAplica, planta2.nombre enfermeraAplica,   pla."cantidadAplicada" cantidadAplicada,	 pla."dosisCantidad" dosis, medida.descripcion medida, sum.nombre suministro, vias.nombre via, frec.descripcion frecuencia,	pla."diasTratamiento" dias FROM enfermeria_enfermeriaplaneacion pla INNER JOIN enfermeria_enfermeria enf ON (enf.id=pla.enfermeria_id)	 LEFT JOIN planta_planta planta1 ON (planta1.id = pla."enfermeraPlanea_id") LEFT JOIN planta_planta planta2 ON (planta2.id = pla."enfermeraAplica_id") INNER JOIN clinico_viasadministracion vias ON (vias.id = pla."viaAdministracion_id") INNER JOIN clinico_unidadesdemedidadosis medida ON (medida.id = pla."dosisUnidad_id") INNER JOIN clinico_frecuenciasaplicacion frec ON (frec.id = pla.frecuencia_id) INNER JOIN facturacion_suministros sum	ON (sum.id = pla.suministro_id) LEFT JOIN enfermeria_tiposturnosenfermeria tipos1 ON ( tipos1.id = pla."turnoEnfermeriaPlanea_id") LEFT JOIN enfermeria_tiposturnosenfermeria tipos2 ON ( tipos2.id = pla."turnoEnfermeriaAplica_id") WHERE enf."sedesClinica_id" = ' + "'" + str(sede) + "'" + ' AND enf."ingresoPaciente" = ' + "'" + str(triageId.id) + "'" + ' AND pla."enfermeriaRecibe_id" = ' + "'" + str(enfermeriaRecibeId) + "'"
+
 
     print(detalle)
 
@@ -937,6 +1055,21 @@ def Load_dataDietasEnfermeria(request, data):
 
     print ("ingresoId =", ingresoId)
 
+    esTriage='N'
+    try:
+        with transaction.atomic():
+
+           ingresoId = Ingresos.objects.get(id=ingresoId)
+
+    except Exception as e:
+            # Aquí ya se hizo rollback automáticamente
+            print("Se hizo rollback por PRONO SE HACE NADA:", e)
+            triageId = Triage.objects.get(id=ingresoId)
+            esTriage = 'S'
+
+    finally:
+        print("No haga nada")
+
 
     dietasEnfermeria = []
 
@@ -944,9 +1077,15 @@ def Load_dataDietasEnfermeria(request, data):
                                        password="123456")
     curx = miConexionx.cursor()
 
+    if (esTriage=='N'):
 
-    detalle = 'SELECT dieta.id id, dieta.consecutivo consecutivo, his.folio folio, tipoDieta.nombre nombreTipoDieta, dieta.observaciones, pla.nombre profesional FROM clinico_historialdietas dieta INNER JOIN clinico_tipodietas tipoDieta ON (tipoDieta.id = dieta."tipoDieta_id") INNER JOIN clinico_historia his ON (his.id = dieta.historia_id) INNER JOIN admisiones_ingresos ing on (ing."tipoDoc_id" = his."tipoDoc_id" AND ing.documento_id = his.documento_id AND ing.consec = his."consecAdmision") INNER JOIN planta_planta pla on (pla.id = his."usuarioRegistro_id") WHERE ing.id = ' + "'" + str(
-        ingresoId) + "'"
+        detalle = 'SELECT dieta.id id, dieta.consecutivo consecutivo, his.folio folio, tipoDieta.nombre nombreTipoDieta, dieta.observaciones, pla.nombre profesional FROM clinico_historialdietas dieta INNER JOIN clinico_tipodietas tipoDieta ON (tipoDieta.id = dieta."tipoDieta_id") INNER JOIN clinico_historia his ON (his.id = dieta.historia_id) INNER JOIN admisiones_ingresos ing on (ing."tipoDoc_id" = his."tipoDoc_id" AND ing.documento_id = his.documento_id AND ing.consec = his."consecAdmision") INNER JOIN planta_planta pla on (pla.id = his."usuarioRegistro_id") WHERE ing.id = ' + "'" + str(
+            ingresoId) + "'"
+    else:
+
+        detalle = 'SELECT dieta.id id, dieta.consecutivo consecutivo, his.folio folio, tipoDieta.nombre nombreTipoDieta, dieta.observaciones, pla.nombre profesional FROM clinico_historialdietas dieta INNER JOIN clinico_tipodietas tipoDieta ON (tipoDieta.id = dieta."tipoDieta_id") INNER JOIN clinico_historia his ON (his.id = dieta.historia_id) INNER JOIN admisiones_ingresos ing on (ing."tipoDoc_id" = his."tipoDoc_id" AND ing.documento_id = his.documento_id AND ing.consec = his."consecAdmision") INNER JOIN planta_planta pla on (pla.id = his."usuarioRegistro_id") WHERE ing.id = ' + "'" + str(
+            triageId.id) + "'"
+
 
     print(detalle)
 
@@ -979,7 +1118,21 @@ def GuardaDietasEnfermeria(request):
 
     ingresoId = request.POST['ingresoId']
     print ("ingresoId =", ingresoId)
-    ingreso = Ingresos.objects.get(id=ingresoId)
+
+    esTriage='N'
+    try:
+        with transaction.atomic():
+
+           ingreso = Ingresos.objects.get(id=ingresoId)
+
+    except Exception as e:
+            # Aquí ya se hizo rollback automáticamente
+            print("Se hizo rollback por PRONO SE HACE NADA:", e)
+            triageId = Triage.objects.get(id=ingresoId)
+            esTriage = 'S'
+
+    finally:
+        print("No haga nada")
 
     tiposDietas = request.POST['tiposDietasD']
     print ("tiposDietas =", tiposDietas)
@@ -1007,7 +1160,12 @@ def GuardaDietasEnfermeria(request):
         cur3 = miConexion3.cursor()
 
         # Primero buscamos el numero del folio nuevo
-        ultimofolio = Historia.objects.all().filter(tipoDoc_id=ingreso.tipoDoc_id).filter(documento_id=ingreso.documento_id).aggregate(maximo=Coalesce(Max('folio'), 0))
+
+        if (esTriage=='N'):
+
+            ultimofolio = Historia.objects.all().filter(tipoDoc_id=ingreso.tipoDoc_id).filter(documento_id=ingreso.documento_id).aggregate(maximo=Coalesce(Max('folio'), 0))
+        else:
+            ultimofolio = Historia.objects.all().filter(tipoDoc_id=triageId.tipoDoc_id).filter(documento_id=triageId.documento_id).aggregate(maximo=Coalesce(Max('folio'), 0))
 
         print("ultimo folio = ", ultimofolio)
         print("ultimo folio = ", ultimofolio['maximo'])
@@ -1016,7 +1174,12 @@ def GuardaDietasEnfermeria(request):
 
         # Segundo  INSERT en clinico_historial
 
-        detalle = 'INSERT INTO clinico_historia ("consecAdmision", folio, fecha, "fechaRegistro", "estadoReg", documento_id, "tipoDoc_id" , planta_id, "tiposFolio_id" , "usuarioRegistro_id", "sedesClinica_id", "serviciosAdministrativos_id" ) VALUES (' + "'" + str(ingreso.consec) + "','" + str(ultimofolio2) +  "','" + str(fechaRegistro) + "','" + str(fechaRegistro) + "','" + str(estadoReg) +"','" + str(ingreso.documento_id) + "','" + str(ingreso.tipoDoc_id) + "','" + str(username_id)  + "','" + str(tiposFolio.id)  + "','" + str(username_id) + "','" + str(sede) + "','" + str(serviciosAdministrativos) + "') RETURNING id"
+        if (esTriage == 'N'):
+
+            detalle = 'INSERT INTO clinico_historia ("consecAdmision", folio, fecha, "fechaRegistro", "estadoReg", documento_id, "tipoDoc_id" , planta_id, "tiposFolio_id" , "usuarioRegistro_id", "sedesClinica_id", "serviciosAdministrativos_id" ) VALUES (' + "'" + str(ingreso.consec) + "','" + str(ultimofolio2) +  "','" + str(fechaRegistro) + "','" + str(fechaRegistro) + "','" + str(estadoReg) +"','" + str(ingreso.documento_id) + "','" + str(ingreso.tipoDoc_id) + "','" + str(username_id)  + "','" + str(tiposFolio.id)  + "','" + str(username_id) + "','" + str(sede) + "','" + str(serviciosAdministrativos) + "') RETURNING id"
+        else:
+            detalle = 'INSERT INTO clinico_historia ("consecAdmision", folio, fecha, "fechaRegistro", "estadoReg", documento_id, "tipoDoc_id" , planta_id, "tiposFolio_id" , "usuarioRegistro_id", "sedesClinica_id", "serviciosAdministrativos_id" ) VALUES (' + "'" + str(triageId.consec) + "','" + str(ultimofolio2) +  "','" + str(fechaRegistro) + "','" + str(fechaRegistro) + "','" + str(estadoReg) +"','" + str(triageId.documento_id) + "','" + str(triageId.tipoDoc_id) + "','" + str(username_id)  + "','" + str(tiposFolio.id)  + "','" + str(username_id) + "','" + str(sede) + "','" + str(serviciosAdministrativos) + "') RETURNING id"
+
         print(detalle)
         resultado = cur3.execute(detalle)
         historiaId = cur3.fetchone()[0]
@@ -1037,7 +1200,7 @@ def GuardaDietasEnfermeria(request):
         if miConexion3:
             print("Entro ha hacer el Rollback")
             miConexion3.rollback()
-        raise error
+
         return JsonResponse({'success': False, 'Mensaje': error})
 
     finally:
@@ -1058,7 +1221,21 @@ def GuardaNotasEnfermeria(request):
 
     ingresoId = request.POST['ingresoId']
     print ("ingresoId =", ingresoId)
-    ingreso = Ingresos.objects.get(id=ingresoId)
+
+    esTriage='N'
+    try:
+        with transaction.atomic():
+
+           ingreso = Ingresos.objects.get(id=ingresoId)
+
+    except Exception as e:
+            # Aquí ya se hizo rollback automáticamente
+            print("Se hizo rollback por PRONO SE HACE NADA:", e)
+            triageId = Triage.objects.get(id=ingresoId)
+            esTriage = 'S'
+
+    finally:
+        print("No haga nada")
 
 
     observaciones = request.POST['observacionesN']
@@ -1081,7 +1258,13 @@ def GuardaNotasEnfermeria(request):
         cur3 = miConexion3.cursor()
 
         # Primero buscamos el numero del folio nuevo
-        ultimofolio = Historia.objects.all().filter(tipoDoc_id=ingreso.tipoDoc_id).filter(documento_id=ingreso.documento_id).aggregate(maximo=Coalesce(Max('folio'), 0))
+        if (esTriage=='N'):
+            ultimofolio = Historia.objects.all().filter(tipoDoc_id=ingreso.tipoDoc_id).filter(documento_id=ingreso.documento_id).aggregate(maximo=Coalesce(Max('folio'), 0))
+        else:
+            ultimofolio = Historia.objects.all().filter(tipoDoc_id=triageId.tipoDoc_id).filter(documento_id=triageId.documento_id).aggregate(maximo=Coalesce(Max('folio'), 0))
+
+
+
 
         print("ultimo folio = ", ultimofolio)
         print("ultimo folio = ", ultimofolio['maximo'])
@@ -1090,7 +1273,11 @@ def GuardaNotasEnfermeria(request):
 
         # Segundo  INSERT en clinico_historial
 
-        detalle = 'INSERT INTO clinico_historia ("consecAdmision", folio, fecha, "fechaRegistro", "estadoReg", documento_id, "tipoDoc_id" , planta_id, "tiposFolio_id" , "usuarioRegistro_id", "sedesClinica_id", "serviciosAdministrativos_id" ) VALUES (' + "'" + str(ingreso.consec) + "','" + str(ultimofolio2) +  "','" + str(fechaRegistro) + "','" + str(fechaRegistro) + "','" + str(estadoReg) +"','" + str(ingreso.documento_id) + "','" + str(ingreso.tipoDoc_id) + "','" + str(username_id)  + "','" + str(tiposFolio.id)  + "','" + str(username_id) + "','" + str(sede) + "','" + str(serviciosAdministrativos) + "') RETURNING id"
+        if (esTriage=='N'):
+            detalle = 'INSERT INTO clinico_historia ("consecAdmision", folio, fecha, "fechaRegistro", "estadoReg", documento_id, "tipoDoc_id" , planta_id, "tiposFolio_id" , "usuarioRegistro_id", "sedesClinica_id", "serviciosAdministrativos_id" ) VALUES (' + "'" + str(ingreso.consec) + "','" + str(ultimofolio2) +  "','" + str(fechaRegistro) + "','" + str(fechaRegistro) + "','" + str(estadoReg) +"','" + str(ingreso.documento_id) + "','" + str(ingreso.tipoDoc_id) + "','" + str(username_id)  + "','" + str(tiposFolio.id)  + "','" + str(username_id) + "','" + str(sede) + "','" + str(serviciosAdministrativos) + "') RETURNING id"
+        else:
+            detalle = 'INSERT INTO clinico_historia ("consecAdmision", folio, fecha, "fechaRegistro", "estadoReg", documento_id, "tipoDoc_id" , planta_id, "tiposFolio_id" , "usuarioRegistro_id", "sedesClinica_id", "serviciosAdministrativos_id" ) VALUES (' + "'" + str(triageId.consec) + "','" + str(ultimofolio2) +  "','" + str(fechaRegistro) + "','" + str(fechaRegistro) + "','" + str(estadoReg) +"','" + str(triageId.documento_id) + "','" + str(triageId.tipoDoc_id) + "','" + str(username_id)  + "','" + str(tiposFolio.id)  + "','" + str(username_id) + "','" + str(sede) + "','" + str(serviciosAdministrativos) + "') RETURNING id"
+
         print(detalle)
         resultado = cur3.execute(detalle)
         historiaId = cur3.fetchone()[0]
@@ -1129,6 +1316,22 @@ def Load_dataNotasEnfermeria(request, data):
 
     print ("ingresoId =", ingresoId)
 
+    esTriage='N'
+    try:
+        with transaction.atomic():
+
+           ingresoId = Ingresos.objects.get(id=ingresoId)
+
+    except Exception as e:
+            # Aquí ya se hizo rollback automáticamente
+            print("Se hizo rollback por PRONO SE HACE NADA:", e)
+            triageId = Triage.objects.get(id=ingresoId)
+            esTriage = 'S'
+
+    finally:
+        print("No haga nada")
+
+
 
     notasEnfermeria = []
 
@@ -1136,9 +1339,14 @@ def Load_dataNotasEnfermeria(request, data):
                                        password="123456")
     curx = miConexionx.cursor()
 	
+    if (esTriage == 'N'):
+        detalle = 'SELECT notas.id id, his.folio folio,  notas.observaciones, pla.nombre profesional FROM clinico_historialnotasenfermeria notas  INNER JOIN clinico_historia his ON (his.id = notas.historia_id) INNER JOIN admisiones_ingresos ing on (ing."tipoDoc_id" = his."tipoDoc_id" AND ing.documento_id = his.documento_id AND ing.consec = his."consecAdmision") INNER JOIN planta_planta pla on (pla.id = his."usuarioRegistro_id") WHERE ing.id = ' + "'" + str(
+            ingresoId) + "'"
+    else:
 
-    detalle = 'SELECT notas.id id, his.folio folio,  notas.observaciones, pla.nombre profesional FROM clinico_historialnotasenfermeria notas  INNER JOIN clinico_historia his ON (his.id = notas.historia_id) INNER JOIN admisiones_ingresos ing on (ing."tipoDoc_id" = his."tipoDoc_id" AND ing.documento_id = his.documento_id AND ing.consec = his."consecAdmision") INNER JOIN planta_planta pla on (pla.id = his."usuarioRegistro_id") WHERE ing.id = ' + "'" + str(
-        ingresoId) + "'"
+        detalle = 'SELECT notas.id id, his.folio folio,  notas.observaciones, pla.nombre profesional FROM clinico_historialnotasenfermeria notas  INNER JOIN clinico_historia his ON (his.id = notas.historia_id) INNER JOIN admisiones_ingresos ing on (ing."tipoDoc_id" = his."tipoDoc_id" AND ing.documento_id = his.documento_id AND ing.consec = his."consecAdmision") INNER JOIN planta_planta pla on (pla.id = his."usuarioRegistro_id") WHERE ing.id = ' + "'" + str(
+            triageId.id) + "'"
+
 
     print(detalle)
 
@@ -1166,6 +1374,21 @@ def Load_dataDevolucionEnfermeria(request, data):
 
     print ("ingresoId =", ingresoId)
 
+    esTriage='N'
+    try:
+        with transaction.atomic():
+
+           ingresoId = Ingresos.objects.get(id=ingresoId)
+
+    except Exception as e:
+            # Aquí ya se hizo rollback automáticamente
+            print("Se hizo rollback por PRONO SE HACE NADA:", e)
+            triageId = Triage.objects.get(id=ingresoId)
+            esTriage = 'S'
+
+    finally:
+        print("No haga nada")
+
 
     devolucionEnfermeria = []
 
@@ -1173,7 +1396,12 @@ def Load_dataDevolucionEnfermeria(request, data):
                                        password="123456")
     curx = miConexionx.cursor()
 
-    detalle = 'SELECT recibe.id id, tipos.nombre tipoDoc, usu.documento documento, usu.nombre paciente, hist.folio folio,   fardet."consecutivoMedicamento" consecutivoMedicamento, recibe."dosisCantidad" dosis, recibe."cantidadDispensada" cantidad, 	  medida.descripcion UnidadMedida, sum.nombre medicamento, via.nombre via , frec.descripcion frecuencia, enfdet."diasTratamiento" FROM admisiones_ingresos ing INNER JOIN clinico_historia hist ON (hist."tipoDoc_id" = ing."tipoDoc_id" AND hist.documento_id=ing.documento_id AND hist."consecAdmision" = ing.consec) INNER JOIN farmacia_farmacia far ON (far.historia_id= hist.id) INNER JOIN farmacia_farmaciadetalle fardet ON (fardet.farmacia_id = far.id) INNER JOIN	enfermeria_enfermeriarecibe recibe ON (recibe."farmaciaDetalle_id" = fardet.id) INNER JOIN	enfermeria_enfermeriadetalle enfdet ON (enfdet.id = recibe."enfermeriaDetalle_id") INNER JOIN facturacion_suministros sum ON (sum.id = recibe.suministro_id) INNER JOIN clinico_viasadministracion via ON (via.id = recibe."viaAdministracion_id") INNER JOIN clinico_unidadesdemedidadosis medida ON (medida.id = recibe."dosisUnidad_id") LEFT JOIN clinico_frecuenciasaplicacion frec ON (frec.id = enfdet."frecuencia_id") INNER JOIN usuarios_usuarios usu ON (usu.id = ing.documento_id) INNER JOIN usuarios_tiposdocumento tipos ON (tipos.id = usu."tipoDoc_id")	WHERE ing.id=' + "'" + str(ingresoId) + "' UNION " + ' SELECT recibe.id id, tipos.nombre tipoDoc, usu.documento documento, usu.nombre paciente, 0 folio,  fardet."consecutivoMedicamento" consecutivoMedicamento, recibe."dosisCantidad" dosis,  recibe."cantidadDispensada" cantidad, 	  medida.descripcion UnidadMedida, sum.nombre medicamento, via.nombre via , frec.descripcion frecuencia, enfdet."diasTratamiento"  FROM admisiones_ingresos ing INNER JOIN farmacia_farmacia far ON (far."ingresoPaciente_id"= ing.id) INNER JOIN farmacia_farmaciadetalle fardet ON (fardet.farmacia_id = far.id) INNER JOIN enfermeria_enfermeriarecibe recibe ON (recibe."farmaciaDetalle_id" = fardet.id) INNER JOIN	enfermeria_enfermeriadetalle enfdet ON (enfdet.id = recibe."enfermeriaDetalle_id")  INNER JOIN facturacion_suministros sum ON (sum.id = recibe.suministro_id) INNER JOIN clinico_viasadministracion via ON (via.id = recibe."viaAdministracion_id") INNER JOIN clinico_unidadesdemedidadosis medida ON (medida.id = recibe."dosisUnidad_id") LEFT JOIN clinico_frecuenciasaplicacion frec ON (frec.id = enfdet."frecuencia_id") INNER JOIN usuarios_usuarios usu ON (usu.id = ing.documento_id) INNER JOIN usuarios_tiposdocumento tipos ON (tipos.id = usu."tipoDoc_id")	WHERE ing.id=' + "'" + str(ingresoId) + "' ORDER BY 5,6"
+    if (esTriage=='N'):
+
+            detalle = 'SELECT recibe.id id, tipos.nombre tipoDoc, usu.documento documento, usu.nombre paciente, hist.folio folio,   fardet."consecutivoMedicamento" consecutivoMedicamento, recibe."dosisCantidad" dosis, recibe."cantidadDispensada" cantidad, 	  medida.descripcion UnidadMedida, sum.nombre medicamento, via.nombre via , frec.descripcion frecuencia, enfdet."diasTratamiento" FROM admisiones_ingresos ing INNER JOIN clinico_historia hist ON (hist."tipoDoc_id" = ing."tipoDoc_id" AND hist.documento_id=ing.documento_id AND hist."consecAdmision" = ing.consec) INNER JOIN farmacia_farmacia far ON (far.historia_id= hist.id) INNER JOIN farmacia_farmaciadetalle fardet ON (fardet.farmacia_id = far.id) INNER JOIN	enfermeria_enfermeriarecibe recibe ON (recibe."farmaciaDetalle_id" = fardet.id) INNER JOIN	enfermeria_enfermeriadetalle enfdet ON (enfdet.id = recibe."enfermeriaDetalle_id") INNER JOIN facturacion_suministros sum ON (sum.id = recibe.suministro_id) INNER JOIN clinico_viasadministracion via ON (via.id = recibe."viaAdministracion_id") INNER JOIN clinico_unidadesdemedidadosis medida ON (medida.id = recibe."dosisUnidad_id") LEFT JOIN clinico_frecuenciasaplicacion frec ON (frec.id = enfdet."frecuencia_id") INNER JOIN usuarios_usuarios usu ON (usu.id = ing.documento_id) INNER JOIN usuarios_tiposdocumento tipos ON (tipos.id = usu."tipoDoc_id")	WHERE ing.id=' + "'" + str(ingresoId) + "' UNION " + ' SELECT recibe.id id, tipos.nombre tipoDoc, usu.documento documento, usu.nombre paciente, 0 folio,  fardet."consecutivoMedicamento" consecutivoMedicamento, recibe."dosisCantidad" dosis,  recibe."cantidadDispensada" cantidad, 	  medida.descripcion UnidadMedida, sum.nombre medicamento, via.nombre via , frec.descripcion frecuencia, enfdet."diasTratamiento"  FROM admisiones_ingresos ing INNER JOIN farmacia_farmacia far ON (far."ingresoPaciente"= ing.id) INNER JOIN farmacia_farmaciadetalle fardet ON (fardet.farmacia_id = far.id) INNER JOIN enfermeria_enfermeriarecibe recibe ON (recibe."farmaciaDetalle_id" = fardet.id) INNER JOIN	enfermeria_enfermeriadetalle enfdet ON (enfdet.id = recibe."enfermeriaDetalle_id")  INNER JOIN facturacion_suministros sum ON (sum.id = recibe.suministro_id) INNER JOIN clinico_viasadministracion via ON (via.id = recibe."viaAdministracion_id") INNER JOIN clinico_unidadesdemedidadosis medida ON (medida.id = recibe."dosisUnidad_id") LEFT JOIN clinico_frecuenciasaplicacion frec ON (frec.id = enfdet."frecuencia_id") INNER JOIN usuarios_usuarios usu ON (usu.id = ing.documento_id) INNER JOIN usuarios_tiposdocumento tipos ON (tipos.id = usu."tipoDoc_id")	WHERE ing.id=' + "'" + str(ingresoId) + "' ORDER BY 5,6"
+    else:
+            detalle = 'SELECT recibe.id id, tipos.nombre tipoDoc, usu.documento documento, usu.nombre paciente, hist.folio folio,   fardet."consecutivoMedicamento" consecutivoMedicamento, recibe."dosisCantidad" dosis, recibe."cantidadDispensada" cantidad, 	  medida.descripcion UnidadMedida, sum.nombre medicamento, via.nombre via , frec.descripcion frecuencia, enfdet."diasTratamiento" FROM admisiones_ingresos ing INNER JOIN clinico_historia hist ON (hist."tipoDoc_id" = ing."tipoDoc_id" AND hist.documento_id=ing.documento_id AND hist."consecAdmision" = ing.consec) INNER JOIN farmacia_farmacia far ON (far.historia_id= hist.id) INNER JOIN farmacia_farmaciadetalle fardet ON (fardet.farmacia_id = far.id) INNER JOIN	enfermeria_enfermeriarecibe recibe ON (recibe."farmaciaDetalle_id" = fardet.id) INNER JOIN	enfermeria_enfermeriadetalle enfdet ON (enfdet.id = recibe."enfermeriaDetalle_id") INNER JOIN facturacion_suministros sum ON (sum.id = recibe.suministro_id) INNER JOIN clinico_viasadministracion via ON (via.id = recibe."viaAdministracion_id") INNER JOIN clinico_unidadesdemedidadosis medida ON (medida.id = recibe."dosisUnidad_id") LEFT JOIN clinico_frecuenciasaplicacion frec ON (frec.id = enfdet."frecuencia_id") INNER JOIN usuarios_usuarios usu ON (usu.id = ing.documento_id) INNER JOIN usuarios_tiposdocumento tipos ON (tipos.id = usu."tipoDoc_id")	WHERE ing.id=' + "'" + str(ingresoId) + "' UNION " + ' SELECT recibe.id id, tipos.nombre tipoDoc, usu.documento documento, usu.nombre paciente, 0 folio,  fardet."consecutivoMedicamento" consecutivoMedicamento, recibe."dosisCantidad" dosis,  recibe."cantidadDispensada" cantidad, 	  medida.descripcion UnidadMedida, sum.nombre medicamento, via.nombre via , frec.descripcion frecuencia, enfdet."diasTratamiento"  FROM admisiones_ingresos ing INNER JOIN farmacia_farmacia far ON (far."ingresoPaciente"= ing.id) INNER JOIN farmacia_farmaciadetalle fardet ON (fardet.farmacia_id = far.id) INNER JOIN enfermeria_enfermeriarecibe recibe ON (recibe."farmaciaDetalle_id" = fardet.id) INNER JOIN	enfermeria_enfermeriadetalle enfdet ON (enfdet.id = recibe."enfermeriaDetalle_id")  INNER JOIN facturacion_suministros sum ON (sum.id = recibe.suministro_id) INNER JOIN clinico_viasadministracion via ON (via.id = recibe."viaAdministracion_id") INNER JOIN clinico_unidadesdemedidadosis medida ON (medida.id = recibe."dosisUnidad_id") LEFT JOIN clinico_frecuenciasaplicacion frec ON (frec.id = enfdet."frecuencia_id") INNER JOIN usuarios_usuarios usu ON (usu.id = ing.documento_id) INNER JOIN usuarios_tiposdocumento tipos ON (tipos.id = usu."tipoDoc_id")	WHERE ing.id=' + "'" + str(triageId.id) + "' ORDER BY 5,6"
+
 
 
     print(detalle)
@@ -1286,13 +1514,34 @@ def Load_dataSignosVitalesEnfermeria(request, data):
 
     print ("ingresoId =", ingresoId)
 
+    esTriage='N'
+    try:
+        with transaction.atomic():
+
+           ingresoId = Ingresos.objects.get(id=ingresoId)
+
+    except Exception as e:
+            # Aquí ya se hizo rollback automáticamente
+            print("Se hizo rollback por PRONO SE HACE NADA:", e)
+            triageId = Triage.objects.get(id=ingresoId)
+            esTriage = 'S'
+
+    finally:
+        print("No haga nada")
+
+
+
     signosVitalesEnfermeria = []
 
     miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
                                        password="123456")
     curx = miConexionx.cursor()
 
-    detalle = 'SELECT sig.id, sig.fecha, his.folio, "frecCardiaca", "frecRespiratoria", "tensionADiastolica", "tensionASistolica", "tensionAMedia", temperatura, saturacion, glucometria, glasgow, apache, pvc, cuna, ic, "glasgowOcular", "glasgowVerbal", "glasgowMotora", sig.observacion, sig."fechaRegistro",  pla.nombre usuarioRegistro FROM clinico_historiasignosvitales sig INNER JOIN clinico_historia his on (his.id = sig.historia_id) INNER JOIN admisiones_ingresos adm on (adm."tipoDoc_id" = his."tipoDoc_id"  and adm.documento_id=his.documento_id and adm.consec=his."consecAdmision") INNER JOIN planta_planta pla on (pla.id= sig."usuarioRegistro_id")	WHERE adm.id = ' + "'" + str(ingresoId) + "'"
+    if (esTriage=='N'):
+
+        detalle = 'SELECT sig.id, sig.fecha, his.folio, "frecCardiaca", "frecRespiratoria", "tensionADiastolica", "tensionASistolica", "tensionAMedia", temperatura, saturacion, glucometria, glasgow, apache, pvc, cuna, ic, "glasgowOcular", "glasgowVerbal", "glasgowMotora", sig.observacion, sig."fechaRegistro",  pla.nombre usuarioRegistro FROM clinico_historiasignosvitales sig INNER JOIN clinico_historia his on (his.id = sig.historia_id) INNER JOIN admisiones_ingresos adm on (adm."tipoDoc_id" = his."tipoDoc_id"  and adm.documento_id=his.documento_id and adm.consec=his."consecAdmision") INNER JOIN planta_planta pla on (pla.id= sig."usuarioRegistro_id")	WHERE adm.id = ' + "'" + str(ingresoId) + "'"
+    else:
+        detalle = 'SELECT sig.id, sig.fecha, his.folio, "frecCardiaca", "frecRespiratoria", "tensionADiastolica", "tensionASistolica", "tensionAMedia", temperatura, saturacion, glucometria, glasgow, apache, pvc, cuna, ic, "glasgowOcular", "glasgowVerbal", "glasgowMotora", sig.observacion, sig."fechaRegistro",  pla.nombre usuarioRegistro FROM clinico_historiasignosvitales sig INNER JOIN clinico_historia his on (his.id = sig.historia_id) INNER JOIN admisiones_ingresos adm on (adm."tipoDoc_id" = his."tipoDoc_id"  and adm.documento_id=his.documento_id and adm.consec=his."consecAdmision") INNER JOIN planta_planta pla on (pla.id= sig."usuarioRegistro_id")	WHERE adm.id = ' + "'" + str(triageId.id) + "'"
 
     print(detalle)
 
@@ -1321,7 +1570,21 @@ def GuardaSignosVitalEnfermeria(request):
     print ("sede =", sede)
     ingresoId = request.POST['ingresoId']
     print ("ingresoId =", ingresoId)
-    ingreso = Ingresos.objects.get(id=ingresoId)
+
+    esTriage='N'
+    try:
+        with transaction.atomic():
+
+           ingreso = Ingresos.objects.get(id=ingresoId)
+
+    except Exception as e:
+            # Aquí ya se hizo rollback automáticamente
+            print("Se hizo rollback por PRONO SE HACE NADA:", e)
+            triageId = Triage.objects.get(id=ingresoId)
+            esTriage = 'S'
+
+    finally:
+        print("No haga nada")
 
     #fecha = request.POST['fecha']
     #print ("fecha =", fecha)
@@ -1381,7 +1644,12 @@ def GuardaSignosVitalEnfermeria(request):
         cur3 = miConexion3.cursor()
 
         # Primero buscamos el numero del folio nuevo
-        ultimofolio = Historia.objects.all().filter(tipoDoc_id=ingreso.tipoDoc_id).filter(documento_id=ingreso.documento_id).aggregate(maximo=Coalesce(Max('folio'), 0))
+        if (esTriage=='N'):
+
+            ultimofolio = Historia.objects.all().filter(tipoDoc_id=ingreso.tipoDoc_id).filter(documento_id=ingreso.documento_id).aggregate(maximo=Coalesce(Max('folio'), 0))
+        else:
+            ultimofolio = Historia.objects.all().filter(tipoDoc_id=triageId.tipoDoc_id).filter(documento_id=triageId.documento_id).aggregate(maximo=Coalesce(Max('folio'), 0))
+
 
         print("ultimo folio = ", ultimofolio)
         print("ultimo folio = ", ultimofolio['maximo'])
@@ -1390,7 +1658,11 @@ def GuardaSignosVitalEnfermeria(request):
 
         # Segundo  INSERT en clinico_historial
 
-        detalle = 'INSERT INTO clinico_historia ("consecAdmision", folio, fecha, "fechaRegistro", "estadoReg", documento_id, "tipoDoc_id" , planta_id, "tiposFolio_id" , "usuarioRegistro_id", "sedesClinica_id", "serviciosAdministrativos_id" ) VALUES (' + "'" + str(ingreso.consec) + "','" + str(ultimofolio2) +  "','" + str(fechaRegistro) + "','" + str(fechaRegistro) + "','" + str(estadoReg) +"','" + str(ingreso.documento_id) + "','" + str(ingreso.tipoDoc_id) + "','" + str(username_id)  + "','" + str(tiposFolio.id)  + "','" + str(username_id) + "','" + str(sede) + "','" + str(serviciosAdministrativos) + "') RETURNING id"
+        if (esTriage=='N'):
+            detalle = 'INSERT INTO clinico_historia ("consecAdmision", folio, fecha, "fechaRegistro", "estadoReg", documento_id, "tipoDoc_id" , planta_id, "tiposFolio_id" , "usuarioRegistro_id", "sedesClinica_id", "serviciosAdministrativos_id" ) VALUES (' + "'" + str(ingreso.consec) + "','" + str(ultimofolio2) +  "','" + str(fechaRegistro) + "','" + str(fechaRegistro) + "','" + str(estadoReg) +"','" + str(ingreso.documento_id) + "','" + str(ingreso.tipoDoc_id) + "','" + str(username_id)  + "','" + str(tiposFolio.id)  + "','" + str(username_id) + "','" + str(sede) + "','" + str(serviciosAdministrativos) + "') RETURNING id"
+        else:
+            detalle = 'INSERT INTO clinico_historia ("consecAdmision", folio, fecha, "fechaRegistro", "estadoReg", documento_id, "tipoDoc_id" , planta_id, "tiposFolio_id" , "usuarioRegistro_id", "sedesClinica_id", "serviciosAdministrativos_id" ) VALUES (' + "'" + str(triageId.consec) + "','" + str(ultimofolio2) +  "','" + str(fechaRegistro) + "','" + str(fechaRegistro) + "','" + str(estadoReg) +"','" + str(triageId.documento_id) + "','" + str(triageId.tipoDoc_id) + "','" + str(username_id)  + "','" + str(tiposFolio.id)  + "','" + str(username_id) + "','" + str(sede) + "','" + str(serviciosAdministrativos) + "') RETURNING id"
+
         print(detalle)
         resultado = cur3.execute(detalle)
         historiaId = cur3.fetchone()[0]

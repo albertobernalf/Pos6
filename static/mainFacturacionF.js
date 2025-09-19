@@ -997,9 +997,9 @@ window.addEventListener('load', async () => {
 
 
                   },
-	   		    error: function (request, status, error) {
-			document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
-	   	    	}
+	   	        error: function(data){
+		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+			        },
 	     });
 
         });
@@ -1029,22 +1029,23 @@ window.addEventListener('load', async () => {
 	           dataType : 'json',
 	  		success: function (data) {
 
-		if (data.success== false)
-				{
-				alert("entro False");
-				document.getElementById("mensajes").innerHTML = data.Mensaje;
-				return;
-				}
-
-
+			if (data.success == true)
+			 {
+			  document.getElementById("mensajes").innerHTML = data.Mensaje;
+			 }
+			else
+			{
+			document.getElementById("mensajesError").innerHTML = data.Mensaje;
+			return;
+			}
 
 			 $('#pk').val(data.pk);
 				document.getElementById("mensajes").innerHTML = data.Mensaje;	       	     
 
                   },
-	   		    error: function (request, status, error) {
-	   			   document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
-	   	    	}
+	   	        error: function(data){
+		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+			        },
 	     });
 
         });
@@ -1135,9 +1136,9 @@ $('#RvalorAPagarLetras').val(data.valorAPagarLetras);
 
 			// document.getElementById("mensajesError").innerHTML = data.Mensaje
                   },
-	   		    error: function (request, status, error) {
-		document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
-	   	    	}
+	   	        error: function(data){
+		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+			        },
 	     });
 
         });
@@ -1161,6 +1162,15 @@ $('#RvalorAPagarLetras').val(data.valorAPagarLetras);
 		            $('#post_id').val('');
 		            //  $('#postFormModalApliqueParcial').trigger("reset");
 		         $('#modelHeadingAplique').html("Aplicar abono a Factura");
+			if (data.success == true)
+			 {
+			  document.getElementById("mensajes").innerHTML = data.Mensaje;
+			 }
+			else
+			{
+			document.getElementById("mensajesError").innerHTML = data.Mensaje;
+			return;
+			}
 			
 			$('#aabonoId').val(data.id);
 			
@@ -1202,8 +1212,9 @@ $('#RvalorAPagarLetras').val(data.valorAPagarLetras);
 			}
 
                 },
-                error: function (data) {
-		document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error                }
+                    error: function(data){
+		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+			        },
             });
 
 	});
@@ -1248,6 +1259,16 @@ $('#RvalorAPagarLetras').val(data.valorAPagarLetras);
                 //  $('#postFormModalApliqueParcial').trigger("reset");
     		  $('#crearAplique').modal('hide');
 
+			if (data.success == true)
+			 {
+			  document.getElementById("mensajes").innerHTML = data.Mensaje;
+			 }
+			else
+			{
+			document.getElementById("mensajesError").innerHTML = data.Mensaje;
+			return;
+			}
+
 
 			 var data2 =  {}   ;
 			data2['username'] = username;
@@ -1273,8 +1294,10 @@ $('#RvalorAPagarLetras').val(data.valorAPagarLetras);
 		    dataTableLiquidacionDetalleInitialized = true;
 
                 },
-                error: function (data) {
-		document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error                }
+                             error: function(data){
+		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+			        },
+
             });
       });
 
@@ -1318,7 +1341,17 @@ $('#RvalorAPagarLetras').val(data.valorAPagarLetras);
                 dataType: 'json',
                 success: function (data) {
 
-		   $("#mensajes").html(data.message);
+			if (data.success == true)
+			 {
+			  document.getElementById("mensajes").innerHTML = data.Mensaje;
+			 }
+			else
+			{
+			document.getElementById("mensajesError").innerHTML = data.Mensaje;
+			return;
+			}
+
+
                   $('#postFormCrearAbonosFacturacion').trigger("reset");
 
 
@@ -1347,8 +1380,10 @@ $('#RvalorAPagarLetras').val(data.valorAPagarLetras);
 
  		 $('#crearAbonosModelFacturacion').modal('hide');
                 },
-                error: function (data) {
-document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error                }
+                    error: function(data){
+		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+			        },
+
             });
 	LeerTotales();
         });
@@ -1370,7 +1405,16 @@ document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Admini
 	           dataType : 'json',
 	  		success: function (data) {
 
-                     //  alert("data="  + data);
+			if (data.success == true)
+			 {
+			  document.getElementById("mensajes").innerHTML = data.Mensaje;
+			 }
+			else
+			{
+			document.getElementById("mensajesError").innerHTML = data.Mensaje;
+			return;
+			}
+
 
 			 $('#pk').val(data.pk);
 	       	        $('#ldconsecutivo').val(data.consecutivo);
@@ -1421,9 +1465,10 @@ document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Admini
             $('#crearModelLiquidacionDetalle').modal('show');
 
                   },
-	   		    error: function (request, status, error) {
-			document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
-	   	    	}
+	   	                    error: function(data){
+		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+			        },
+
 	     });
 
         });
@@ -1451,16 +1496,19 @@ document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Admini
                 type: "POST",
                 dataType: 'json',
                 success: function (data) {
-			printErrorMsg(data.error)
-                    if ($.isEmptyObject(data.error)) {
 
-                        //  $("input[name='description']").val('');
+			if (data.success == true)
+			 {
+			  document.getElementById("mensajes").innerHTML = data.Mensaje;
+			 }
+			else
+			{
+			document.getElementById("mensajesError").innerHTML = data.Mensaje;
+			return;
+			}
                         $('#crearModelLiquidacionDetalle').modal('hide');
-                        $('.success-msg').css('display','block');
-                        $('.success-msg').text(data.message);
-                    }else{
-                        printErrorMsg(data.error)
-                    }
+
+
                     $('#postFormLiquidacionDetalle').trigger("reset");
 	 	
 			 var data2 =  {}   ;
@@ -1490,10 +1538,10 @@ document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Admini
 			document.getElementById("mensajesError").innerHTML = data.message;
 
                 },
-                error: function (data) {
-	document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
+                             error: function(data){
+		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+			        },
 
-                }
             });
 	LeerTotales();
         });
@@ -1524,6 +1572,18 @@ document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Admini
 	           dataType : 'json',
 	  		success: function (data) {
 
+			if (data.success == true)
+			 {
+			  document.getElementById("mensajes").innerHTML = data.Mensaje;
+			 }
+			else
+			{
+			document.getElementById("mensajesError").innerHTML = data.Mensaje;
+			return;
+			}
+
+
+
 			 var data2 =  {}   ;
 			data2['username'] = username;
 		        data2['sedeSeleccionada'] = sedeSeleccionada;
@@ -1547,11 +1607,10 @@ document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Admini
 
 			document.getElementById("mensajesError").innerHTML = data.message;
                     },
-	   		    error: function (request, status, error) {
-			alert("Tengo ERROR");
+	   		                     error: function(data){
+		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+			        },
 
-			document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
-	   	    	}
 	           });
 	LeerTotales();
 	});
@@ -1582,8 +1641,16 @@ document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Admini
 	           dataType : 'json',
 	  		success: function (data) {
 
-		        	  $('.success-msg').css('display','block');
-                        $('.success-msg').text(data.message);
+			if (data.success == true)
+			 {
+			  document.getElementById("mensajes").innerHTML = data.Mensaje;
+			 }
+			else
+			{
+			document.getElementById("mensajesError").innerHTML = data.Mensaje;
+			return;
+			}
+
 
 			 var data2 =  {}   ;
 			data2['username'] = username;
@@ -1610,9 +1677,10 @@ document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Admini
 
 			document.getElementById("mensajesError").innerHTML = data.message;
                     },
-	   		    error: function (request, status, error) {
-			document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
-	   	    	}
+	   	                    error: function(data){
+		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+			        },
+
 	           });
 	});
 
@@ -1676,13 +1744,16 @@ function AFacturar()
 				$('#imprimir').val(data.Factura);
 
 
-			
-			if (data.success== false)
-				{
-				alert("entro False");
-				document.getElementById("mensajes").innerHTML = data.Mensaje;
-				return;
-				}
+			if (data.success == true)
+			 {
+			  document.getElementById("mensajes").innerHTML = data.Mensaje;
+			 }
+			else
+			{
+			document.getElementById("mensajesError").innerHTML = data.Mensaje;
+			return;
+			}
+
 										
 
             	        var data2 =  {}   ;
@@ -1745,9 +1816,10 @@ function AFacturar()
 		document.getElementById("mensajes").innerHTML = data.Mensaje;
 		
                   },
-	   		    error: function (request, status, error) {
-		document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
-	   	    	}
+	                      error: function(data){
+		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+			        },
+
 	     });
 }
 
@@ -1782,6 +1854,18 @@ function AdicionarLiquidacion()
 	  		success: function (data) {
 
 
+			if (data.success == true)
+			 {
+			  document.getElementById("mensajes").innerHTML = data.Mensaje;
+			 }
+			else
+			{
+			document.getElementById("mensajesError").innerHTML = data.Mensaje;
+			return;
+			}
+
+
+
 			 var data2 =  {}   ;
 			data2['username'] = username;
 		        data2['sedeSeleccionada'] = sedeSeleccionada;
@@ -1811,15 +1895,13 @@ function AdicionarLiquidacion()
 	         document.getElementById("valorTotal").value = '';
 	         document.getElementById("lobservaciones").value = '';
 
-
-
-
 			document.getElementById("mensajesError").innerHTML = data.message;
 
                   },
-	   		    error: function (request, status, error) {
-			document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
-	   	    	}
+	   	                    error: function(data){
+		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+			        },
+
 	     });
 }
 
@@ -1850,9 +1932,10 @@ function LeerTotales()
 
 			document.getElementById("mensajesError").innerHTML = data.message;
                   },
-	   		    error: function (request, status, error) {
-document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
-	   	    	}
+	   	                    error: function(data){
+		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+			        },
+
 	     });
 }
 
@@ -1878,12 +1961,16 @@ function AnularFactura()
 	           dataType : 'json',
 	  		success: function (data) {
 
-			if (data.success== false)
-				{
-			
-				document.getElementById("mensajes").innerHTML = data.Mensaje;
-				return;
-				}
+
+			if (data.success == true)
+			 {
+			  document.getElementById("mensajes").innerHTML = data.Mensaje;
+			 }
+			else
+			{
+			document.getElementById("mensajesError").innerHTML = data.Mensaje;
+			return;
+			}
 
 
 
@@ -1933,9 +2020,10 @@ function AnularFactura()
 		
 
                   },
-	   		    error: function (request, status, error) {
-		document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
-	   	    	}
+	   	                    error: function(data){
+		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+			        },
+
 	     });
 }
 
@@ -1964,14 +2052,16 @@ function ReFacturar()
 	  		success: function (data) {
 				$('#imprimir').val(data.Factura);
 
-				if (data.success== false)
-				{
-			
-				document.getElementById("mensajes").innerHTML = data.Mensaje;
-				return;
-				}
 
-
+			if (data.success == true)
+			 {
+			  document.getElementById("mensajes").innerHTML = data.Mensaje;
+			 }
+			else
+			{
+			document.getElementById("mensajesError").innerHTML = data.Mensaje;
+			return;
+			}
 
             	        var data2 =  {}   ;
         		data2['username'] = username;
@@ -1999,9 +2089,10 @@ function ReFacturar()
 	    dataTableFacturacionInitialized = true;
 
                   },
-	   		    error: function (request, status, error) {
-		document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
-	   	    	}
+	   	                    error: function(data){
+		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+			        },
+
 	     });
 }
 
@@ -2058,9 +2149,10 @@ function RefrescarLiquidacionDetalle()
 		document.getElementById("mensajes").innerHTML = data.message;
 
                   },
-	   		    error: function (request, status, error) {
-document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
-	   	    	}
+	                       error: function(data){
+		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+			        },
+
 	     });
 
 
@@ -2150,6 +2242,18 @@ function TrasladoConvenio()
 	           type: 'POST',
 	           dataType : 'json',
 	  		success: function (data) {
+
+
+			if (data.success == true)
+			 {
+			  document.getElementById("mensajes").innerHTML = data.Mensaje;
+			 }
+			else
+			{
+			document.getElementById("mensajesError").innerHTML = data.Mensaje;
+			return;
+			}
+
 			
 
             	        var data2 =  {}   ;
@@ -2175,13 +2279,10 @@ function TrasladoConvenio()
 
 
                   },
-	   		    error: function(data){
-		           alert("data = " + JSON.stringify(data)); // data
-		           alert(data.status); // the status code
-		   
-		           alert(data.JsonResponse['error']); // the message
-		document.getElementById("mensajesError").innerHTML =  data.JsonResponse.error
+	   	                    error: function(data){
+		       		document.getElementById("mensajesError").innerHTML =  data.responseText
 			        },
+
 	     });
 }
 

@@ -932,6 +932,7 @@ $('#tablaPanelFarmacia tbody').on('click', '.miSelFarmacia', function() {
                 type: "POST",
                 dataType: 'json',
                 success: function (info) {
+
 			
 		document.getElementById("nombreTipoDoc").innerHTML = info[0].fields.nombreTipoDoc;
 		document.getElementById("documento").innerHTML = info[0].fields.documento;
@@ -950,10 +951,9 @@ $('#tablaPanelFarmacia tbody').on('click', '.miSelFarmacia', function() {
 
 
                 },
-            error: function (request, status, error) {
-		alert("llegue con error ", error);
-		document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error + ' ' + error
-	   	    	}
+     	        error: function(data){
+		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+			        },
             });
 
 	     arrancaFarmacia(3,data);
@@ -1161,10 +1161,10 @@ function CambiaEstadoDespacho()
 		document.getElementById("mensajes").innerHTML = 'Se actualiza cambio de estado';
 
                 },
-            error: function (request, status, error) {
+             	        error: function(data){
+		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+			        },
 
-		document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error + ' ' + error
-	   	    	}
             });
 		   $('#creaModalEstadoFarmacia').modal('hide');  
 		     arrancaFarmacia(1,data);
@@ -1303,30 +1303,26 @@ function AdicionarDespachosDispensa()
 
         // aqui inicializar tablaFormulacion etc
 
-        /// Aqui inicializar combos
-
- document.getElementById("servicioAdmonEntrega").selectedIndex = 0;
- document.getElementById("plantaEntrega").selectedIndex = 0;
- document.getElementById("servicioAdmonRecibe").selectedIndex = 0;
- document.getElementById("plantaRecibe").selectedIndex = 0;
-
 
         var tabla = $('#tablaFormulacion').DataTable();
         tabla.rows().remove().draw();
 
 
+        /// Aqui inicializar combos
+
+servicioAdmonEntrega.selectedIndex = 0;
+plantaEntrega.selectedIndex = 0;
+servicioAdmonRecibe.selectedIndex = 0;
+plantaRecibe.selectedIndex = 0;
+
+
+
+
  	      		}, // cierra function sucess
-			 error: function(data){
-		           alert(data.status); // the status code
-		           alert(data.responseJSON.error); // the message
-		document.getElementById("mensajesError").innerHTML =  data.responseJSON.error
+		     	        error: function(data){
+		       		document.getElementById("mensajesError").innerHTML =  data.responseText
 			        },
 
-
- 	      		//error: function (request, status, error) {
- 	      		//	document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
- 	      		//	
-			//
  	      	//	}, // cierra error function
   	        });  // cierra ajax
 
@@ -1375,11 +1371,10 @@ function RecibirDevolucionFarmacia()
       
 
  	      		}, // cierra function sucess
- 	      		error: function (request, status, error) {
- 	      			document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
- 	      			
-
- 	      		}, // cierra error function
+ 	      		     	        error: function(data){
+		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+			        },
+					 // cierra error function
   	        });  // cierra ajax
 
 }
@@ -1427,11 +1422,10 @@ function RecibirDevolucionDetalleFarmacia()
       
 
  	      		}, // cierra function sucess
- 	      		error: function (request, status, error) {
- 	      			document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
- 	      			
-
- 	      		}, // cierra error function
+ 	      	     	        error: function(data){
+		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+			        },
+		 // cierra error function
   	        });  // cierra ajax
 
 }

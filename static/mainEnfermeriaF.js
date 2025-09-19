@@ -1448,13 +1448,10 @@ $('#tablaPanelEnfermeria tbody').on('click', '.miIngresoEnfermeriaId', function(
 
 	alert ("Seleccione Enfermeria");
 
-	     var post_id = $(this).data('pk');
+        var post_id = $(this).data('pk');
 	ingresoId =   post_id;
 
-
 	document.getElementById("ingresoId").value = ingresoId;
-
-	
 
     	var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
         var username = document.getElementById("username").value;
@@ -1546,10 +1543,9 @@ $('#tablaPanelEnfermeria tbody').on('click', '.miIngresoEnfermeriaId', function(
 
 
                 },
-            error: function (request, status, error) {
-		alert("llegue con error ", error);
-		document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error + ' ' + error
-	   	    	}
+         error: function(data){
+		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+			        },
             });
 
 
@@ -1694,7 +1690,15 @@ function CreaPedidosEnfermeriaCabezote()
                 type: "POST",
                 dataType: 'json',
                 success: function (info) {
+
+		if (info.success=true)
+		{
 		document.getElementById("mensajes").innerHTML = 'Se actualiza cambio de estado';
+		}
+		else
+		{
+		document.getElementById("mensajesError").innerHTML = info.Mensaje
+		}
 
 
 	         var data =  {}   ;
@@ -1713,10 +1717,10 @@ function CreaPedidosEnfermeriaCabezote()
 
 
                 },
-            error: function (request, status, error) {
+               error: function(data){
+		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+			        },
 
-		document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error + ' ' + error
-	   	    	}
             });
 		   $('#creaModalPedidosEnfermeria').modal('hide');  
 
@@ -1954,13 +1958,21 @@ function GuardarPlaneacion()
                 type: "POST",
                 dataType: 'json',
                 success: function (info) {
-			
-
+		if (info.success = true)
+		{
+		document.getElementById("mensajes").innerHTML =	info.Mensaje;	
+		}
+		else
+		{
+		document.getElementById("mensajesError").innerHTML = info.Mensaje;			
+		}
+	
+	
                 },
-            error: function (request, status, error) {
-		alert("llegue con error ", error);
-		document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error + ' ' + error
-	   	    	}
+         error: function(data){
+		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+			        },
+
             });
 
 		 $('#postFormModalPlaneacionEnfermeria').trigger("reset");
@@ -2035,12 +2047,22 @@ function GuardarAplicacion()
                 dataType: 'json',
                 success: function (info) {
 			
+		if (info.success = true)
+		{
+		document.getElementById("mensajes").innerHTML =	info.Mensaje;	
+		}
+		else
+		{
+		document.getElementById("mensajesError").innerHTML = info.Mensaje;			
+		}
+
+
 
                 },
-            error: function (request, status, error) {
-		alert("llegue con error ", error);
-		document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error + ' ' + error
-	   	    	}
+                  error: function(data){
+		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+			        },
+
             });
 
 		 $('#postFormModalAplicacionEnfermeria').trigger("reset");
@@ -2146,9 +2168,15 @@ function GuardarPedido()
                             'servicioAdmonEnfermeria':servicioAdmonEnfermeria,'enfermeriaId':enfermeriaId},
  	      		success: function (data) {
 
-     			    $("#mensajes").html(data.message);
+			if (info.success = true)
+			{
+			document.getElementById("mensajes").innerHTML =	info.Mensaje;	
+			}
+			else
+			{
+			document.getElementById("mensajesError").innerHTML = info.Mensaje;			
+			}
 
-			document.getElementById("mensajes").innerHTML = data.message;
 
     	var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
         var username = document.getElementById("username").value;
@@ -2187,11 +2215,10 @@ function GuardarPedido()
 
 
  	      		}, // cierra function sucess
- 	      		error: function (request, status, error) {
- 	      			document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
- 	      			
-
- 	      		}, // cierra error function
+ 	      	         error: function(data){
+		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+			        },
+			 // cierra error function
   	        });  // cierra ajax
 
 
@@ -2238,12 +2265,23 @@ function GuardarDietas()
                 dataType: 'json',
                 success: function (info) {
 
+		if (info.success = true)
+		{
+		document.getElementById("mensajes").innerHTML =	info.Mensaje;	
+		}
+		else
+		{
+		document.getElementById("mensajesError").innerHTML = info.Mensaje;			
+		}
+
+
+
 		alert ("llegue listop");
 
 
     /// Aqui inicializar combos
 
- document.getElementById("serviciosAdministrativosD").selectedIndex = 0;
+	 document.getElementById("serviciosAdministrativosD").selectedIndex = 0;
         $("tiposDietasD").prop('selectedIndex', 0);
 
 
@@ -2251,10 +2289,10 @@ function GuardarDietas()
 			document.getElementById("mensajes").innerHTML = 'Error Contacte a su Administrador' + ': ' + info
 
                 },
-            error: function (request, status, error) {
-		alert("llegue con error ", error);
-		document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error + ' ' + error
-	   	    	}
+                   error: function(data){
+		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+			        },
+
             });
 
 
@@ -2306,20 +2344,27 @@ function GuardarNotasEnfermeria()
                 dataType: 'json',
                 success: function (info) {
 
-		alert ("llegue listop");
+		if (info.success = true)
+		{
+		document.getElementById("mensajes").innerHTML =	info.Mensaje;	
+		}
+		else
+		{
+		document.getElementById("mensajesError").innerHTML = info.Mensaje;			
+		}
+
 
 
     /// Aqui inicializar combos
 	 document.getElementById("serviciosAdministrativosN").selectedIndex = 0;
 	document.getElementById("observacionesN").value = '';
 
-			document.getElementById("mensajes").innerHTML =  + info
 
                 },
-            error: function (request, status, error) {
-		alert("llegue con error ", error);
-		document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error + ' ' + error
-	   	    	}
+              error: function(data){
+		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+			        },
+
             });
 
 
@@ -2378,9 +2423,14 @@ function GuardarDevolucion()
                             'servicioAdmonEnfermeria':servicioAdmonEnfermeria,'enfermeriaId':enfermeriaId},
  	      		success: function (data) {
 
-     			    $("#mensajes").html(data.message);
-
-			document.getElementById("mensajes").innerHTML = data.message;
+		if (info.success = true)
+		{
+		document.getElementById("mensajes").innerHTML =	info.Mensaje;	
+		}
+		else
+		{
+		document.getElementById("mensajesError").innerHTML = info.Mensaje;			
+		}
 
     	var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
         var username = document.getElementById("username").value;
@@ -2416,11 +2466,10 @@ function GuardarDevolucion()
 
 
  	      		}, // cierra function sucess
- 	      		error: function (request, status, error) {
- 	      			document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
- 	      			
-
- 	      		}, // cierra error function
+ 	      	         error: function(data){
+		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+			        },
+ // cierra error function
   	        });  // cierra ajax
 
 
@@ -2508,12 +2557,22 @@ document.getElementById("observacionSig").value= '';
 
 	     arrancaEnfermeria(13,data);
 	     dataTableSignosVitalesEnfermeriaInitialized = true;
-   	document.getElementById("mensajes").innerHTML = info
+
+		if (info.success = true)
+		{
+		document.getElementById("mensajes").innerHTML =	info.Mensaje;	
+		}
+		else
+		{
+		document.getElementById("mensajesError").innerHTML = info.Mensaje;			
+		}
+
+
                 },
-            error: function (request, status, error) {
-		alert("llegue con error ", error);
-		document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error + ' ' + error
-	   	    	}
+                 error: function(data){
+		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+			        },
+
             });
 
       

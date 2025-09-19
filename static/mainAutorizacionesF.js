@@ -345,9 +345,9 @@ window.addEventListener('load', async () => {
 
 
                 },
-                 error: function (request, status, error) {
-			document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
-	   	    	}
+     	   	        error: function(data){
+		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+			        },
             });
 
   });
@@ -389,13 +389,14 @@ function ActualizarAut()
 	        arrancaAutorizaciones(2,data);
 	    dataTableAutorizacionesDetalleInitialized = true;
 	
+	
 
  		 $('#crearModelAutorizacionesDetalle').modal('hide');
 
                 },
-            error: function (request, status, error) {
-		document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
-	   	    	}
+      	   	        error: function(data){
+		       		document.getElementById("mensajesErrorAutorizacionesDetalle").innerHTML =  data.responseText;
+			        },
             });
 
 
@@ -430,9 +431,9 @@ function CerrarModalJson()
 	       	     
 
                   },
-	   		    error: function (request, status, error) {
-	   			   document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
-	   	    	}
+		   	        error: function(data){
+		       		document.getElementById("mensajesErrorAbonos").innerHTML =  data.responseText
+			        },
 	     });
 
         });

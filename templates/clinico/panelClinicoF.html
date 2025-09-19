@@ -57,13 +57,14 @@ Ambulatorios:  <span id="amb" name="amb" style='color:red'>{{Ambulatorios}} </sp
     <ul class="tabs">
         <li><a href="#Clinica">	     <span class="fa-solid fa-user-doctor-message"></span> <span class="tab-text"> </span> Ingresos Clinicos </a></li>
 	<li><a href="#InterConsulta"><span class="fa-solid fa-user-doctor-message"></span> <span class="tab-text"> </span> Inter</a></li>
+	<li><a href="#ImpresionOrdenesMedicas"><span class="fa-solid fa-user-doctor-message"></span> <span class="tab-text"> </span> Impresion Ordenes Medica</a></li>
+	<li><a href="#ConsultaFolios"><span class="fa-solid fa-user-doctor-message"></span> <span class="tab-text"> </span> Consulta Folios</a></li>
+
     </ul>
 </div>
 
 <div class="marco">
 <div class="secciones0">
-
-
 
 
     <article id="Clinica">
@@ -90,6 +91,7 @@ Ambulatorios:  <span id="amb" name="amb" style='color:red'>{{Ambulatorios}} </sp
 		<input type="hidden" id="documento2" name="documento2" value="">
 		<input type="hidden" id="consec" name="consec" value="">
 	        <input type="hidden" id="tipoIng" name="tipoIng" value="{{tipoIng}}">
+	
 
 		 <table class="table " id="tablaClinicobottom"  style="height: 3px; background-color:LightGray; border: 1px solid black; border-radius: 10px;width:95%;">
                         <tr>
@@ -114,12 +116,12 @@ Ambulatorios:  <span id="amb" name="amb" style='color:red'>{{Ambulatorios}} </sp
                                <input type="submit" id="btnCargaHc1" name="btnCargaHc1" value="Registrar Folio"></input>
                             </td>
 			    <td>
-                               <!-- <input type="button" id="btnRefrescar" name="btnRefrescar" value="Refrescar" onclick="RefrescarPantalla()"></input> -->
+
 			       <input type="button" id="btnRefrescar" name="btnRefrescar" value="Refrescar" onclick="RefrescarPantalla()">
                             </td>
                         </tr>
                     </table>
-	   </form>
+     </form>	
 
     <!-- INICIO TABLE DE  EL DATATABLE  -->
    		<div class="container my-2">           
@@ -150,10 +152,9 @@ Ambulatorios:  <span id="amb" name="amb" style='color:red'>{{Ambulatorios}} </sp
                               
                             </table>
                         </div>
-                    </div>
-
-          
+                    </div>        
   </article>
+
 
 
       <article id="InterConsulta">
@@ -279,6 +280,18 @@ Ambulatorios:  <span id="amb" name="amb" style='color:red'>{{Ambulatorios}} </sp
 
   </article>
 
+
+
+
+<article id="ImpresionOrdenesMedicas">
+
+
+</article>
+
+<article id="ConsultaFolios">
+
+
+</article>
 
 </div>
 </div>
