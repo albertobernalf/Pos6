@@ -1563,6 +1563,7 @@ formHistoriaClinica.addEventListener('submit', e=>{
             var movilidadLimitada = document.getElementById("id_movilidadLimitada").value;
 
             var nauseas = document.getElementById("id_nauseas").value;
+            var vomito = document.getElementById("id_vomito").value;
             var llenadoCapilar = document.getElementById("id_llenadoCapilar").value;
             var neurologia =document.getElementById("id_neurologia").value;
             var irritacion =document.getElementById("id_irritacion").value;
@@ -1773,6 +1774,7 @@ formHistoriaClinica.addEventListener('submit', e=>{
 	                        'consecutivoIngresoCirugia':consecutivoIngresoCirugia,
 				'ordenDeControl':ordenDeControl,
 				'notasEnfermeria':notasEnfermeria,
+				'vomito':vomito,
 
 				   },
  	      		success: function (data) {

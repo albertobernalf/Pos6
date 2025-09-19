@@ -860,11 +860,8 @@ ojo pendiente en aplicacion de medicamentos arreglar cuando aplica la modal no p
 	1. combo localidades en actualizar usuaro de triage NO FUNCIONa, CREO QUE EN ADMISIONES TAMPOCO
 	2. en crear responsables y acompañamtes No esta hecho hay que hacerlo
 	3. ops crre un servicio admon y no aparece en dependencia ???
-        7. verificar por que alnombre de los laboratorio , radio, terapia en pdf enerados tienenel numeorp del imgreso mejor colocar tambienm otro flag
-        8.ops error en apoyo terapeutico cuando voy a ver el resultado pailas (NO ESTA LLEGANDO LOS ERRORES A PATALLA)
 	10. ojo dese autorizaciones no actuliza los cabezotes de TOATLE Liquidacion poroced, vapagar etc PPERSISTE OJO ARREGLAR, es como el orden de los fatcires 
         11. OJO TOCO EN TARIFARIOS update tarifarios_TarifariosDescripcion set columna = 'colValorBase' where id=36 AL MOMENTO DE CREAR UNA DESCRICOPMN  ES MEJOPR SOLO DESDE "ColValorBase"
-        12. No esata funcionando bien el tema de si no encuentyrtavtarifa en convenio coloque el del particular
 
 --------------------
 LUNES 15-SEPTIEMBRE: Ademas de revizar lo de arriba: ver acomodar columnas grades word-wrap en historia clinica , ordenes medica etc
@@ -874,7 +871,7 @@ LUNES 15-SEPTIEMBRE: Ademas de revizar lo de arriba: ver acomodar columnas grade
 			Colocar boton REFRESCAR en block Indicadores
 			Crear orden de Interconsulta .pdf y em historia Clinica
 			pdf.multi_cell(0, 10, long_text, border=0, align='J', fill=Fals  para lineas grandes que verraquera VER IA (probar con la HC)
- 			PILAS NO PERMITIR GUARDAR FOLIOS CLINICOS DUPÑLICADOS ALINEAR TAB SACAR COPIA DE CLINICO.VIEWS PRIMERO Y HACER EL AJUSTE
+
 --------------------
         
 
@@ -883,7 +880,6 @@ LUNES 15-SEPTIEMBRE: Ademas de revizar lo de arriba: ver acomodar columnas grade
 4. viewd. try, catch,finaly
 5. css: span message size, color
 6. pdf : multicell
-7. arreglar apoyp terapeutico
 8. modales antigiuas vs nuevas
 8. hoistoria: try, catch GLOBAL TABS
 10. usuarios de bases de datos probar
@@ -892,7 +888,24 @@ LUNES 15-SEPTIEMBRE: Ademas de revizar lo de arriba: ver acomodar columnas grade
 
 -- OPS PELIGRO PELIGRO PEÑIGRO CUANDO HAY ERRO EN REPORTES YA HA GRABADO Y S VUELVEN A GRABAR QUEDA REPETIDO ÑUCAS LA VEPONEGRA SOLUCIONAR
 --falta impresion NoQx
---verificar si graba vomito etc en HC
 -- Ojo imprime ordenesDeControl vacias
 -- Ojo en cirugias que pasas si es triage debe salir mensaje, debe estar hospitalizado o en urgnecia para que pueda hacer la solicitud
 -- Ops no he desarrollado autorizaciones de cirugia OPS
+-- PREGUNTA PREGUNTA PREGUNTA, SE debe facturar un TRIAGE ??
+-- ops facture el triage y no sale enla pantalla facturaciuon ??
+
+--EL DIA LUNES 22 DE SEPTIEMBRE
+
+-- MEMETI EN LA GRANDE CON LODE FACTIRAR UN TRIAGE, SENCILLAENTE NO HAY QUE HACERLO, HACER UNA NUEVA PRUEBA O SINO PAILANDER PAILAS
+ -- INGRESAR MAS multicell()
+ -- ver como sacar lafactura d etriage en pantalle
+ -- Ingresar mas coasa a paciente imhoep
+ -- Probar facturacion /refacturar, / anular etc
+--  Para evitar problemas mejor que al momento de faturar se pase el pacinte minimo a urgencias, obligue y luego si factura o sea hace admision antes de facturar 
+   CREO DEFINITIVAMENTE NO ES BUENO FACTURA UN TRIAGE,, DEBE OBLIGAR A LTRASLADERDE DE CAMA
+-- OPS SACO ERROR AL IMPRIMIR LA AUTORIZACION DEL TRIAGE. PREGUNTA PORQUE SALE EN AUTORIZACIONES SI YA NO ESTA EN CLINICA?
+-- OJO HACER IMPRESION DE ORDENES E IMPRESION DE FOLIOS EN HCLINICA
+-- UM NO VE FACTURE EL TRIAGE Y AN SIGUE SALIENDO EN ENFERMREIA
+ -- OPS EL TRIAGE FACTURTADO SIGUE SALIENDO EN LA PANTALLA DE FGARMACIA OPS GRVISISIMO (HAY ALGO QUE NO ENTIENDO EN LA PANTALLA DE FARMACIA, PARCIALMENTE DESPACHADO)
+-- OPS EN FARMACIA LE CAMIE EL ESTATDO A DESPACHADO Y NO LO HIZO D PRONTO PORUQE ERA TRIAGE Y ADEMAS FACTUTRADO
+

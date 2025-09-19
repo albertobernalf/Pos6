@@ -1401,11 +1401,17 @@ def FacturarCuenta(request):
 
 	               print ("nO HAGA NADA")       
 
-
             if (numConveniosActivos<=1):
 
                     ## AQUI RUTINA HISTORICO CAMA-DEPENDENCIA
-                    comando1 = 'INSERT INTO sitios_historialdependencias (consec,"fechaLiberacion","fechaRegistro","estadoReg", dependencias_id,documento_id,"tipoDoc_id","usuarioRegistro_id",disponibilidad)  SELECT consec,' + "'" + str(fechaRegistro) + "'," + "'" + str(fechaRegistro) + "'," + "'" + str('A') + "'" + ", id" + ",'" + str(ingresoId.documento_id) + "'," + "'" + str(ingresoId.tipoDoc_id) + "'," + "'" + str(username_id) + "'," + "'" + str('L') + "'" +  ' from sitios_dependencias where "tipoDoc_id" = ' + "'" + str(ingresoId.tipoDoc_id) + "' AND documento_id = "  + "'" + str(ingresoId.documento_id) + "' AND consec = " + "'" + str(ingresoId.consec) + "'"
+                    if (flag != 'TRIAGE'):
+
+                        comando1 = 'INSERT INTO sitios_historialdependencias (consec,"fechaLiberacion","fechaRegistro","estadoReg", dependencias_id,documento_id,"tipoDoc_id","usuarioRegistro_id",disponibilidad)  SELECT consec,' + "'" + str(fechaRegistro) + "'," + "'" + str(fechaRegistro) + "'," + "'" + str('A') + "'" + ", id" + ",'" + str(ingresoId.documento_id) + "'," + "'" + str(ingresoId.tipoDoc_id) + "'," + "'" + str(username_id) + "'," + "'" + str('L') + "'" +  ' from sitios_dependencias where "tipoDoc_id" = ' + "'" + str(ingresoId.tipoDoc_id) + "' AND documento_id = "  + "'" + str(ingresoId.documento_id) + "' AND consec = " + "'" + str(ingresoId.consec) + "'"
+                    else:
+                        comando1 = 'INSERT INTO sitios_historialdependencias (consec,"fechaLiberacion","fechaRegistro","estadoReg", dependencias_id,documento_id,"tipoDoc_id","usuarioRegistro_id",disponibilidad)  SELECT consec,' + "'" + str(fechaRegistro) + "'," + "'" + str(fechaRegistro) + "'," + "'" + str('A') + "'" + ", id" + ",'" + str(triageId.documento_id) + "'," + "'" + str(triageId.tipoDoc_id) + "'," + "'" + str(username_id) + "'," + "'" + str('L') + "'" +  ' from sitios_dependencias where "tipoDoc_id" = ' + "'" + str(triageId.tipoDoc_id) + "' AND documento_id = "  + "'" + str(triageId.documento_id) + "' AND consec = " + "'" + str(triageId.consec) + "'"
+
+
+
                     print(comando1)
                     cur3.execute(comando1)
 
@@ -1413,7 +1419,12 @@ def FacturarCuenta(request):
 
                        ## AQUI RUTINA DESOCUPAR CAMA-DEPENDENCIA
 
-                    comando2 = 'UPDATE sitios_dependencias SET disponibilidad = ' + "'" + str('L') + "'," + ' "tipoDoc_id" = null , documento_id = null,  consec= null, "fechaLiberacion" = null , "fechaOcupacion" = null  WHERE "tipoDoc_id" = ' + "'" + str(ingresoId.tipoDoc_id) + "'" + ' AND documento_id = ' + "'" + str(ingresoId.documento_id) + "'" + ' AND consec = ' + str(ingresoId.consec)
+                    if (flag != 'TRIAGE'):
+
+                        comando2 = 'UPDATE sitios_dependencias SET disponibilidad = ' + "'" + str('L') + "'," + ' "tipoDoc_id" = null , documento_id = null,  consec= null, "fechaLiberacion" = null , "fechaOcupacion" = null  WHERE "tipoDoc_id" = ' + "'" + str(ingresoId.tipoDoc_id) + "'" + ' AND documento_id = ' + "'" + str(ingresoId.documento_id) + "'" + ' AND consec = ' + str(ingresoId.consec)
+                    else:
+                        comando2 = 'UPDATE sitios_dependencias SET disponibilidad = ' + "'" + str('L') + "'," + ' "tipoDoc_id" = null , documento_id = null,  consec= null, "fechaLiberacion" = null , "fechaOcupacion" = null  WHERE "tipoDoc_id" = ' + "'" + str(triageId.tipoDoc_id) + "'" + ' AND documento_id = ' + "'" + str(triageId.documento_id) + "'" + ' AND consec = ' + str(triageId.consec)
+
                     print(comando2)
                     cur3.execute(comando2)
 
@@ -1443,7 +1454,7 @@ def FacturarCuenta(request):
 
                 # AHORA EL DETALLE
 
-                comando5 = 'INSERT INTO facturacion_facturaciondetalle ("consecutivoFactura", fecha, cantidad, "valorUnitario", "valorTotal",  cirugia_id , "fechaCrea", "fechaModifica", observaciones, "fechaRegistro", "estadoRegistro", "examen_id", cums_id, "usuarioModifica_id", "usuarioRegistro_id", facturacion_id, "tipoHonorario_id", "tipoRegistro") SELECT  consecutivo, fecha, cantidad, "valorUnitario", "valorTotal",  cirugia_id , "fechaCrea", "fechaModifica", observaciones, "fechaRegistro", "estadoRegistro", "examen_id", cums_id, "usuarioModifica_id", "usuarioRegistro_id", ' + str(facturacionId) + ', "tipoHonorario_id", "tipoRegistro" FROM facturacion_liquidaciondetalle WHERE liquidacion_id =  ' + liquidacionId + ' AND "estadoRegistro" != ' + "'" + str('N') + "'"
+                comando5 = 'INSERT INTO facturacion_facturaciondetalle ("consecutivoFactura", fecha, cantidad, "valorUnitario", "valorTotal",  cirugia_id , "fechaCrea", "fechaModifica", observaciones, "fechaRegistro", "estadoRegistro", "examen_id", cums_id, "usuarioModifica_id", "usuarioRegistro_id", facturacion_id, "tipoHonorario_id", "tipoRegistro", anulado) SELECT  consecutivo, fecha, cantidad, "valorUnitario", "valorTotal",  cirugia_id , "fechaCrea", "fechaModifica", observaciones, "fechaRegistro", "estadoRegistro", "examen_id", cums_id, "usuarioModifica_id", "usuarioRegistro_id", ' + str(facturacionId) + ', "tipoHonorario_id", "tipoRegistro", anulado FROM facturacion_liquidaciondetalle WHERE liquidacion_id =  ' + liquidacionId + ' AND "estadoRegistro" != ' + "'" + str('N') + "'"
                 print(comando5)
                 cur3.execute(comando5)
 
@@ -1472,11 +1483,13 @@ def FacturarCuenta(request):
 
         ## COLOCAR EN LA TABLA INGRESOS , LA FECHA DE EGRESO Y EL NUMERO DE LA FACTURA GENERADO SI SE FACTURA
 
-        if (tipoFactura == 'FACTURA'):
+        if (tipoFactura == 'FACTURA' and flag != 'TRIAGE'):
 
                 comando4 = 'UPDATE admisiones_ingresos SET "fechaSalida" = ' + "'" +  str(fechaRegistro) + "'" + ', factura = ' + str(facturacionId)  +  ', "dependenciasSalida_id" = "dependenciasActual_id" ' +  ' WHERE id =' + str(ingresoId.id)
                 cur3.execute(comando4)
-        else:
+
+        if (tipoFactura == 'REFACTURA' and flag != 'TRIAGE'):
+
             comando4 = 'UPDATE admisiones_ingresos SET "salidaDefinitiva" = ' + "'" + str('R') + "'" + ', factura = ' + str(facturacionId)  + ' WHERE id =' + str(ingresoId.id)
             cur3.execute(comando4)
 
