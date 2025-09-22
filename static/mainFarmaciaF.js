@@ -1158,7 +1158,17 @@ function CambiaEstadoDespacho()
                 type: "POST",
                 dataType: 'json',
                 success: function (info) {
-		document.getElementById("mensajes").innerHTML = 'Se actualiza cambio de estado';
+
+		if (info.success == true)
+			 {
+			  document.getElementById("mensajes").innerHTML = data.Mensaje;
+			 }
+			else
+			{
+			document.getElementById("mensajesError").innerHTML = data.Mensaje;
+			return;
+			}
+
 
                 },
              	        error: function(data){
@@ -1316,8 +1326,6 @@ servicioAdmonRecibe.selectedIndex = 0;
 plantaRecibe.selectedIndex = 0;
 
 
-
-
  	      		}, // cierra function sucess
 		     	        error: function(data){
 		       		document.getElementById("mensajesError").innerHTML =  data.responseText
@@ -1354,7 +1362,16 @@ function RecibirDevolucionFarmacia()
                             'servicioRecibeId':servicioRecibeId,'plantaRecibeId':plantaRecibeId},
  	      		success: function (data) {
 
-    			    $("#mensajes").html(data.message);
+		if (data.success == true)
+			 {
+			  document.getElementById("mensajes").innerHTML = data.Mensaje;
+			 }
+			else
+			{
+			document.getElementById("mensajesError").innerHTML = data.Mensaje;
+			return;
+			}
+
 
 	       $('#ModalRecibirDevolucionFarmacia').modal('hide');  
 	         var data =  {}   ;
@@ -1404,7 +1421,17 @@ function RecibirDevolucionDetalleFarmacia()
                             'cantidadDevueltaRecibida':cantidadDevueltaRecibida},
  	      		success: function (data) {
 
-    			    $("#mensajes").html(data.message);
+		if (data.success == true)
+			 {
+			  document.getElementById("mensajes").innerHTML = data.Mensaje;
+			 }
+			else
+			{
+			document.getElementById("mensajesError").innerHTML = data.Mensaje;
+			return;
+			}
+
+
 
 	       $('#ModalRecibirDevolucionDetalleFarmacia').modal('hide');  
 	         var data =  {}   ;

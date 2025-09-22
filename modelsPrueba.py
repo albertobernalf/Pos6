@@ -891,21 +891,19 @@ LUNES 15-SEPTIEMBRE: Ademas de revizar lo de arriba: ver acomodar columnas grade
 -- Ojo imprime ordenesDeControl vacias
 -- Ojo en cirugias que pasas si es triage debe salir mensaje, debe estar hospitalizado o en urgnecia para que pueda hacer la solicitud
 -- Ops no he desarrollado autorizaciones de cirugia OPS
--- PREGUNTA PREGUNTA PREGUNTA, SE debe facturar un TRIAGE ??
--- ops facture el triage y no sale enla pantalla facturaciuon ??
 
 --EL DIA LUNES 22 DE SEPTIEMBRE
 
--- MEMETI EN LA GRANDE CON LODE FACTIRAR UN TRIAGE, SENCILLAENTE NO HAY QUE HACERLO, HACER UNA NUEVA PRUEBA O SINO PAILANDER PAILAS
  -- INGRESAR MAS multicell()
- -- ver como sacar lafactura d etriage en pantalle
  -- Ingresar mas coasa a paciente imhoep
  -- Probar facturacion /refacturar, / anular etc
---  Para evitar problemas mejor que al momento de faturar se pase el pacinte minimo a urgencias, obligue y luego si factura o sea hace admision antes de facturar 
-   CREO DEFINITIVAMENTE NO ES BUENO FACTURA UN TRIAGE,, DEBE OBLIGAR A LTRASLADERDE DE CAMA
 -- OPS SACO ERROR AL IMPRIMIR LA AUTORIZACION DEL TRIAGE. PREGUNTA PORQUE SALE EN AUTORIZACIONES SI YA NO ESTA EN CLINICA?
 -- OJO HACER IMPRESION DE ORDENES E IMPRESION DE FOLIOS EN HCLINICA
--- UM NO VE FACTURE EL TRIAGE Y AN SIGUE SALIENDO EN ENFERMREIA
  -- OPS EL TRIAGE FACTURTADO SIGUE SALIENDO EN LA PANTALLA DE FGARMACIA OPS GRVISISIMO (HAY ALGO QUE NO ENTIENDO EN LA PANTALLA DE FARMACIA, PARCIALMENTE DESPACHADO)
 -- OPS EN FARMACIA LE CAMIE EL ESTATDO A DESPACHADO Y NO LO HIZO D PRONTO PORUQE ERA TRIAGE Y ADEMAS FACTUTRADO
-
+-- tengo un erro me creo encabezado en loiquadcion o cunados salida clinica o cuando aviso no factura triage o cuando facture a normebro aceres
+   hay un error poruq creo convenio particular y factro pop particular y no me dicuenta
+-- ojo vovio a pasar error en reporte de hc, me grabo le folio y quedo para seguir grbando
+-- ojo parece ser que cuando admisiones el pacinet desde triage me lo creo partiuclar y con compensar EPS
+-- Tocaria arrastra el consecAdmision de clinico_historia desde 0 al numero del ingreso en el momento de la admison
+-- ojo hau que hacer un refres a farmaciades´pachos

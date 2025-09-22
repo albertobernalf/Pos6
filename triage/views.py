@@ -1092,6 +1092,9 @@ def crearTriage(request):
         except Exception as e:
             print ("todo bien")
 
+        finally:
+            print("nada")
+
         try:
             with transaction.atomic():
 
@@ -1198,6 +1201,7 @@ def crearTriage(request):
                 print("triage1 = ", triage1)
 
                 context['Triage'] = triage1
+                quepaso
 
                 # FIN RUTINA ARMADO CONTEXT
 
@@ -1208,7 +1212,11 @@ def crearTriage(request):
             # return JsonResponse({'success': False, 'Mensaje': e})
             # return HttpResponse (e)
             context['Mensajes'] = e
+            quepaso
             return render(request, "triage/panelTriage.html", context)
+
+        finally:
+            print("nada")
 
         print(triage1)
         context['Mensajes'] = 'Triage Creado ... '
@@ -3089,7 +3097,7 @@ def guardarAdmisionTriage(request):
                 consecParaTriage = Ingresos.objects.get(id=grabo.id)
 
 
-                print("Grabe HISTPRICO DEPENDENCIAS")
+                print("Grabe HISTORICO DEPENDENCIAS")
 
                 # Actualizo consecutivo de admision en TRIAGE
 
@@ -3149,7 +3157,7 @@ def guardarAdmisionTriage(request):
 
         if liq != 0:
 
-                ## Desde Aqui traslado a la nueva Cuenta
+                ## Desde Aqui traslado a la nueva Cuenta Y los folios TRIAGE al nuevo ingreso
                 miConexion3 = None
                 try:
 
@@ -3162,6 +3170,21 @@ def guardarAdmisionTriage(request):
                     comando1 = 'UPDATE facturacion_liquidacion set "consecAdmision" = ' + "'" + str(consecAdmision) + "' WHERE id = " +  str(liquidacionDesdeId)
                     print("comando = ", comando1)
                     cur3.execute(comando1)
+
+                    try:
+                        with transaction.atomic():
+
+                               Historia.objects.filter(tipoDoc_id=idTipoDocFinal  , documento_id=documento_llave.id ,consecAdmision=0).update(consecAdmision=consecAdmision)
+
+
+                    except Exception as e:
+                        # Aquí ya se hizo rollback automáticamente
+                        print("Se hizo rollback por PRONO SE HACE NADA:", e)
+
+                    finally:
+                        print("No haga nada")
+
+
                     miConexion3.commit()
                     cur3.close()
 

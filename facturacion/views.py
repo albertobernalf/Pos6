@@ -1338,6 +1338,8 @@ def FacturarCuenta(request):
 	    triageId = Triage.objects.get(tipoDoc_id=usuarioId.tipoDoc_id , documento_id=usuarioId.documento_id ,consec=usuarioId.consecAdmision)
 	    print ("triageId = ", triageId.id)
 	    flag='TRIAGE'
+	    return JsonResponse({'success': False, 'Mensaje': 'No es posible facturar cuenta Triage. Favor hospitalizar o a cama de Urgencias!'})
+
     else:
 	    ingresoId = Ingresos.objects.get(tipoDoc_id=usuarioId.tipoDoc_id , documento_id=usuarioId.documento_id ,consec=usuarioId.consecAdmision)
 	    print ("ingresoId = ", ingresoId.id)

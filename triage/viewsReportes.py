@@ -830,62 +830,31 @@ def ImprimirHojaAdmision(ingresoId):
     #pdf.rect(200.0, 49, 200.0, 100.0)  # Coordenadas x, y, ancho, alto
 
     pdf.set_font('Times', 'B', 9)
-    pdf.cell(200, 57,
-             '(Ley 1438 del 2011 Art. 143 Según Circular externa 0000033 de 2011 del MINISTERIO DE LA PROTECCION SOCIAL y Resolución 1915 del 2008)',
-             0, 0, 'L')
-    pdf.ln(2)
-    pdf.cell(200, 58,
-             'La informacion aquí registrada del evento catalogado como accidente de transito, es declarada bajo la gravedad de juramento por el usuario:',
-             0, 0, 'L')
-    pdf.ln(2)
-    pdf.cell(200, 59,
-             'con documento de identificación numero:',
-             0, 0, 'L')
-    pdf.ln(2)
-    pdf.cell(200, 60,
-             'quien reside en la dirección:',
-             0, 0, 'L')
-    pdf.ln(2)
-    pdf.cell(200, 61,
-             'barrio:',
-             0, 0, 'L')
-    pdf.ln(2)
-    pdf.cell(200, 62,
-             'del municipio de:',
-             0, 0, 'L')
-    pdf.ln(2)
-    pdf.cell(200, 63,
-             'en calidad de paciente y/o acudiente del paciente:___________________________ con documento de identificación numero:_______________, ',
-             0, 0, 'L')
-    pdf.ln(2)
-    pdf.cell(200, 64,
-             'donde resulto afectado por vehiculo automotor en movimiento.: - Mediante la firma de esta declaración, confirma la veracidad y exactitud de las declaraciones que formulay  ',
-             0, 0, 'L')
-    pdf.ln(2)
-    pdf.cell(200, 64,
-             ', manifestando que nada ha ocultado ,omitido o alterado y se da por enterado que esta declaración constituye para la Compañía prestadora de servcicios en salud información determinante del siniestro  ',
-             0, 0, 'L')
-    pdf.ln(2)
-    pdf.cell(200, 64,
-             ', provocándolo intencionalmente, presentándolo ante el asegurador como ocurrido por causas o en circunstancias distintas a las verdaderas, ocultando la cosa asegurada o aumentando fraudulentamente las pérdidas efectivamente sufridas, incurre en el delito de fraude al seguro establecido en el artículo 470, número 10 del código final',
-             0, 0, 'L')
 
 
-    pdf.ln(3)
-    pdf.cell(200, 65,
-             'Yo:',
-             0, 0, 'L')
-    pdf.ln(3)
-    pdf.cell(200, 66,
-             'o en mi representacion __________________________________________ identificado con ___________________ ',
-             0, 0, 'L')
+    textoImpresion1 = '(Ley 1438 del 2011 Art. 143 Según Circular externa 0000033 de 2011 del MINISTERIO DE LA PROTECCION SOCIAL y Resolución 1915 del 2008). La informacion aquí registrada del evento catalogado como accidente de transito, es declarada bajo la gravedad de juramento por el usuario: con documento de identificación numero:'
+    textoImpresion2 = 'quien reside en la dirección: '
+    textoImpresion3 = 'Barrio: '
+    textoImpresion4 = 'Municipio de: '
+    textoImpresion5 = 'en calidad de paciente y/o acudiente del paciente:___________________________ con documento de identificación numero:_______________, '
+    textoImpresion6 = 'donde resulto afectado por vehiculo automotor en movimiento.: - Mediante la firma de esta declaración, confirma la veracidad y exactitud de las declaraciones que formula y , manifestando que nada ha ocultado ,omitido o alterado y se da por enterado que esta declaración constituye para la Compañía prestadora de servcicios en salud información determinante del siniestro , provocándolo intencionalmente, presentándolo ante el asegurador como ocurrido por causas o en circunstancias distintas a las verdaderas, ocultando la cosa asegurada o aumentando fraudulentamente las pérdidas efectivamente sufridas, incurre en el delito de fraude al seguro establecido en el artículo 470, número 10 del código final.g o en mi representacion __________________________________________ identificado con ___________________ '
+    textoImpresion7 = 'Declaro que la informacion y/o documentacion aportada y consignada en el presente formato es cierta, veraz y verificable; razón por la cual autorizo su posterior verificacion por parte de la aseguradora y de la misma institucion. Teniendo en cuenta el artículo 9 de la Ley 1581 de 2012 “Por la cual se dictan disposiciones generales para la proteccion de datos personales”, autorizo expresamente a la Clínica Medical S.A.S. a divulgar la informacion aqui reposada tanto internamente como a EPS, aseguradoras, entes de control y demas entidades que la requieran y que esten autorizadas para tal fin, siempre y cuando dicha divulgacion este relacionada con los motivos por los cuales recibí tratamiento en esta Institucion prestadora de salud. De igual'
+
+    pdf.multi_cell(w=0, h=4, txt=textoImpresion1, border=0, align='J', fill=False)           
     pdf.ln(2)
-    #pdf.cell(200, 67,
-    #         'Declaro que la informacion y/o documentacion aportada y consignada en el presente formato es cierta, veraz y verificable; razón por la cual autorizo su posterior verificacion por parte de la aseguradora y de la misma institucion. Teniendo en cuenta el artículo 9 de la Ley 1581 de 2012 “Por la cual se dictan disposiciones generales para la proteccion de datos personales”, autorizo expresamente a la Clínica Medical S.A.S. a divulgar la informacion aqui reposada tanto internamente como a EPS, aseguradoras, entes de control y demas entidades que la requieran y que esten autorizadas para tal fin, siempre y cuando dicha divulgacion este relacionada con los motivos por los cuales recibí tratamiento en esta Institucion prestadora de salud. De igual',
-    #         0, 0, 'C')
-
-
-
+    pdf.multi_cell(w=0, h=4, txt=textoImpresion2, border=0, align='J', fill=False)      
+    # Aqui va la direccion del paciente
+    pdf.ln(2)
+    pdf.multi_cell(w=0, h=4, txt=textoImpresion3, border=0, align='J', fill=False)      
+    # Aqui va el barrio
+    pdf.multi_cell(w=0, h=4, txt=textoImpresion4, border=0, align='J', fill=False)      
+    # Aqui va el municipio
+    pdf.ln(2)
+    pdf.multi_cell(w=0, h=4, txt=textoImpresion5, border=0, align='J', fill=False)      
+    pdf.ln(2)
+    pdf.multi_cell(w=0, h=4, txt=textoImpresion6, border=0, align='J', fill=False)      
+    pdf.ln(7)
+    pdf.multi_cell(w=0, h=4, txt=textoImpresion7, border=0, align='J', fill=False)      
     pdf.ln(4)
     pdf.cell(30, 68,
              'Nombre Completo:',
@@ -1184,4 +1153,5 @@ def ImprimirTriageParametro(triageId):
         print(f"Error al abrir el archivo: {e}")
 
     return JsonResponse({'success': True, 'message': 'Autorizacion impresa!'})
+
 

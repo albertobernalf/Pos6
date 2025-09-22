@@ -644,7 +644,7 @@ def crearHistoriaClinica(request):
                                 fechaRegistro) + "'," + '0,0,0,0,0,0,0,' + "'" + str(fechaRegistro) + "','" + str(
                                 estadoReg) + "'," + str(convenioId) + ',' + "'" + str(usuarioRegistro) + "',0,'N') RETURNING id "
                             cur3.execute(comando)
-                            liquidacionId = curt.fetchone()[0]
+                            liquidacionId = cur3.fetchone()[0]
 
                             print("resultado liquidacionId = " , liquidacionId)
 
@@ -2056,19 +2056,33 @@ def crearHistoriaClinica(request):
                             #
                         ## Vamops a actualizar los totales de la Liquidacion:
                         #
-                        totalSuministros = LiquidacionDetalle.objects.all().filter(liquidacion_id=liquidacionId).filter(examen_id = None).exclude(estadoRegistro='I').exclude(anulado='N').aggregate(totalS=Coalesce(Sum('valorTotal'), 0))
+                        totalSuministros = LiquidacionDetalle.objects.all().filter(liquidacion_id=liquidacionId).filter(examen_id = None).exclude(estadoRegistro='I').exclude(anulado='S').aggregate(totalS=Coalesce(Sum('valorTotal'), 0))
                         totalSuministros = (totalSuministros['totalS']) + 0
                         print("totalSuministros", totalSuministros)
-                        totalProcedimientos = LiquidacionDetalle.objects.all().filter(liquidacion_id=liquidacionId).filter(cums_id = None).exclude(estadoRegistro='I').exclude(anulado='N').aggregate(totalP=Coalesce(Sum('valorTotal'), 0))
+                        totalProcedimientos = LiquidacionDetalle.objects.all().filter(liquidacion_id=liquidacionId).filter(cums_id = None).exclude(estadoRegistro='I').exclude(anulado='S').aggregate(totalP=Coalesce(Sum('valorTotal'), 0))
                         totalProcedimientos = (totalProcedimientos['totalP']) + 0
                         print("totalProcedimientos", totalProcedimientos)
-                        registroPago = Liquidacion.objects.get(id=liquidacionId)
+                        print ("liquidacionId = ",liquidacionId )
+
+                        try:
+                            with transaction.atomic():
+
+                                registroPago = Liquidacion.objects.get(id=liquidacionId)
+
+                        except Exception as e:
+                            # Aquí ya se hizo rollback automáticamente
+                            print("Se hizo rollback por PRONO SE HACE NADA:", e)
+
+                        finally:
+                            print("No haga nada")
+
 
                     # Continua Aqui
 
                         totalCopagos = Pagos.objects.all().filter(tipoDoc_id=tipoDocId.id).filter(documento_id=documentoId.id).filter(consec=ingresoPaciente).filter(formaPago_id=4).exclude(estadoReg='I').exclude(anulado='N').aggregate(totalC=Coalesce(Sum('valor'), 0))
                         totalCopagos = (totalCopagos['totalC']) + 0
                         print("totalCopagos", totalCopagos)
+                        print("ingresoPaciente = ", ingresoPaciente)
                         totalCuotaModeradora = Pagos.objects.all().filter(tipoDoc_id=tipoDocId.id).filter(documento_id=documentoId.id).filter(consec=ingresoPaciente).filter(formaPago_id=3).exclude(estadoReg='I').exclude(anulado='N').aggregate(totalM=Coalesce(Sum('valor'), 0))
                         totalCuotaModeradora = (totalCuotaModeradora['totalM']) + 0
                         print("totalCuotaModeradora", totalCuotaModeradora)
@@ -2081,8 +2095,11 @@ def crearHistoriaClinica(request):
                         print("totalAbonos", totalAbonos)
 
                         totalRecibido = totalCopagos + totalCuotaModeradora + totalAnticipos + totalAbonos
+                        print("totalRecibido", totalRecibido)
                         totalApagar = totalSuministros + totalProcedimientos - totalRecibido
+                        print("totalApagar", totalApagar)
                         totalLiquidacion = totalSuministros + totalProcedimientos
+                        print("totalLiquidacion", totalLiquidacion)
                         print("totalLiquidacion", totalLiquidacion)
                         print("totalAPagar", totalApagar)
 
@@ -2090,6 +2107,7 @@ def crearHistoriaClinica(request):
 
                         print ("Voy a grabar el cabezote")
                         print ("liquidacionId = ", liquidacionId)
+
 
                         comando = 'UPDATE facturacion_liquidacion SET "totalSuministros" = ' +  "'" +  str(totalSuministros) + "'" + ',"totalProcedimientos" = ' + "'" +  str(totalProcedimientos) + "'"  + ', "totalCopagos" = ' + "'" +  str(totalCopagos) + "'"  + ' , "totalCuotaModeradora" = ' + "'" +  str(totalCuotaModeradora) + "'" + ', anticipos = ' + "'" +  str(totalAnticipos) + "'"  + ' ,"totalAbonos" = ' + "'" + str(totalAbonos) + "'" + ', "totalLiquidacion" = ' + "'" + str(totalLiquidacion) + "'" + ', "valorApagar" = ' + "'" + str(totalApagar) + "'"   + ', "totalRecibido" = ' + "'" + str(totalRecibido) + "'"  + ' WHERE id =' + str(liquidacionId)
                         print("COMANDO = " , comando)
@@ -2106,7 +2124,7 @@ def crearHistoriaClinica(request):
                             print(comando)
                             cur3.execute(comando)
                             #miConexion3.commit()
-                            miConexion3.close()
+                            #miConexion3.close()
 
                         # Aqui RUTINA CREA Solicitud - Programacion de Cirugia. Ojo hacer filtro por si si o no la cirugia. No es todo mundo
 
@@ -2282,11 +2300,11 @@ def crearHistoriaClinica(request):
                         # Imprimir OrdenDeControl
                         print("ordenDeControl = ", ordenDeControl)
                         miConexion3.commit()
-                        cur3.close()
+                        #cur3.close()
                         miConexion3.close()
 
 
-                        if (ordenDeControl != None):
+                        if (ordenDeControl != ''):
 
                             print("Entre imprimir orden de control")
                             ingresoId2=ingresosPaciente.id
