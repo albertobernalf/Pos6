@@ -826,12 +826,9 @@ $.ajax({
 $(document).on('change', '#busServicio', function(event) {
 
        var serv =   $(this).val()
-    //  alert("Este es mi servicio codigo = " + serv);
-
-    //   alert("Entre para llamar a buscarServiciosTriage : " + Serv)
-
-        var sede =  document.getElementById("sede").value;
-       // var Sede1 = document.getElementById("FormBuscar").elements["Sede"];
+      alert("Este es mi servicio codigo = " + serv);
+        var sede =  document.getElementById("sede").value;		
+	alert("sede = " + sede);
 
 
 
@@ -936,10 +933,9 @@ $(document).on('change', '#busServicioX', function(event) {
 
        var serv =   $(this).val()
 
-      // alert("Servicio = " + serv)
-
+       alert("Servicio = " + serv);
         var sede =  document.getElementById("sede").value;
-       // var Sede1 = document.getElementById("FormBuscar").elements["Sede"];
+ alert("Sede = " + sede);
 
 
 
@@ -1047,7 +1043,7 @@ $(document).on('change', '#busSubServicioT', function(event) {
 
      //   alert("Entre a busSubServicioT");
 
-        var select = document.getElementById('busServicioX'); /*Obtener el SELECT */
+        var select = document.getElementById('busServicioT'); /*Obtener el SELECT */
 
         var serv = select.options[select.selectedIndex].value; /* Obtener el valor */
 
@@ -1499,19 +1495,18 @@ $('#tablaDatosTriage tbody').on('click', '.ImprimirTriage', function() {
 
     });
 
-$(document).on('change', '#busServicioX', function(event) {
+$(document).on('change', '#busServicioT', function(event) {
 
-       let ServId = document.getElementById('busServicioX');
-	let Serv = ServId.value;
-       // var Serv =   $(this).val()
+	var serv =   $(this).val()
 
-	alert("Entre para llamar a buscarServiciosTriage : " + Serv)
+	alert("Entre para llamar a buscarServiciosTriage : " + serv)
 
-        var Sede =  document.getElementById("sede").value;
+        var sede =  document.getElementById("sede").value;
+	alert("sede : " + sede)
 
         $.ajax({
 	           url: '/buscarSubServiciosTriage',
-	            data : {Serv:Serv, Sede:Sede},
+	            data : {serv:serv, sede:sede},
 	           type: 'GET',
 	           dataType : 'json',
 

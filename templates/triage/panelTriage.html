@@ -845,9 +845,9 @@ function RefrescarPantalla() {
                                     <div class="form-row">
                                         <div class="col">
 						<div class="col-sm-8">					
-                                            <label for="busServicioX" class="col-sm-1 control-label">Servicio:</label>
+                                            <label for="busServicioT" class="col-sm-1 control-label">Servicio:</label>
                                             <select class="form-select  h-10 w-100 form-control form-control-sm"
-                                                    aria-label="" id="busServicioX" name="busServicioX">
+                                                    aria-label="" id="busServicioT" name="busServicioT">
                                                 {% for servicios in Servicios %}
                                                 <option value="{{servicios.id}}"> {{servicios.nombre}}</option>
                                                 {% endfor %}
@@ -1262,7 +1262,7 @@ function RefrescarPantalla() {
 
 {% block mensajeria %}
 <div class="marco">
-     <span id="mensajes" name="mensajes" class="mensajes" ></span>
+     <span id="mensajes" name="mensajes" class="mensajes" value="{{Mensajes}}" ></span>
      <span id="mensajesError" name="mensajesError" class="mensajesError" value="{{Mensajes}}"> </span>
 
 </div>

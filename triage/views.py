@@ -1008,7 +1008,7 @@ def crearTriage(request):
         serviciosAdministrativos = request.POST["serviciosAdministrativos"]
         print(" serviciosAdministrativos = " , serviciosAdministrativos)
 
-        busServicioT = request.POST["busServicioX"]
+        busServicioT = request.POST["busServicioT"]
         print(" busServicioT = ", busServicioT)
         context['BusServicioT'] = busServicioT
 
@@ -1081,12 +1081,14 @@ def crearTriage(request):
         print("el id del planta = ", usernameId.id)
 
 
+
         try:
             with transaction.atomic():
                 estaElPaciente = Dependencias.objects.get(documento_id=idPacienteFinal)
 
                 if (estaElPaciente.id >0):
                     context['Mensajes'] = 'Paciente se encuentra eh Clinica. Verificar.!'
+
                     return render(request, "triage/panelTriage.html", context)
 
         except Exception as e:
@@ -1094,6 +1096,7 @@ def crearTriage(request):
 
         finally:
             print("nada")
+
 
         try:
             with transaction.atomic():
@@ -1170,13 +1173,6 @@ def crearTriage(request):
 
                     # FIN UPDATE actualiza dependencia
 
-                #except Exception as e:
-                #    # Aquí ya se hizo rollback automáticamente
-                #    print("Se hizo rollback por:", e)
-                #    #return JsonResponse({'success': False, 'Mensaje': e})
-                #    #return HttpResponse (e)
-                #    context['Mensajes'] = e
-                #    return render(request, "triage/panelTriage.html", context)
 
                 # RUTINA ARMADO CONTEXT
 
@@ -1201,7 +1197,7 @@ def crearTriage(request):
                 print("triage1 = ", triage1)
 
                 context['Triage'] = triage1
-                quepaso
+
 
                 # FIN RUTINA ARMADO CONTEXT
 
@@ -1212,11 +1208,37 @@ def crearTriage(request):
             # return JsonResponse({'success': False, 'Mensaje': e})
             # return HttpResponse (e)
             context['Mensajes'] = e
-            quepaso
+
             return render(request, "triage/panelTriage.html", context)
 
         finally:
             print("nada")
+
+
+
+
+        # RUTINA ARMADO CONTEXT
+
+        triage1 = []
+
+        miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                               password="123456")
+        curx = miConexionx.cursor()
+
+        comando = 'SELECT  tp.nombre tipoDoc,  u.documento documento, u.nombre  nombre , t.consec consec , dep.nombre camaNombre,t."fechaSolicita" solicita,t.motivo motivo, t."clasificacionTriage_id" triage FROM triage_triage t, usuarios_usuarios u, sitios_dependencias dep , usuarios_tiposDocumento tp , sitios_dependenciastipo deptip  ,sitios_serviciosSedes sd, clinico_servicios ser  WHERE sd."sedesClinica_id" = t."sedesClinica_id"  and t."sedesClinica_id" = dep."sedesClinica_id" AND t."sedesClinica_id" =' + "'" + str(Sede) + "'" + ' AND dep."sedesClinica_id" =  sd."sedesClinica_id" AND dep.id = t.dependencias_id AND t."serviciosSedes_id" = sd.id  AND deptip.id = dep."dependenciasTipo_id" and  tp.id = u."tipoDoc_id" and t."tipoDoc_id" = u."tipoDoc_id" and  u.id = t."documento_id"  and ser.id = sd.servicios_id and dep."serviciosSedes_id" = sd.id and t."serviciosSedes_id" = sd.id and dep."tipoDoc_id" = t."tipoDoc_id" and dep."documento_id" = t."documento_id" and ser.nombre = ' + "'" + str('TRIAGE') + "'"
+
+        print(comando)
+
+        curx.execute(comando)
+
+        for tipoDoc, documento, nombre, consec, camaNombre, solicita, motivo, triage in curx.fetchall():
+                    triage1.append({'tipoDoc': tipoDoc, 'Documento': documento, 'Nombre': nombre, 'Consec': consec,
+                                   'camaNombre': camaNombre, 'solicita': solicita, 'motivo': motivo, 'triage': triage})
+
+        miConexionx.close()
+        print("triage1 = ", triage1)
+
+        context['Triage'] = triage1
 
         print(triage1)
         context['Mensajes'] = 'Triage Creado ... '
@@ -1690,18 +1712,20 @@ def buscarTriage(request):
 
 def buscarSubServiciosTriage(request):
     context = {}
-    Serv = request.GET["Serv"]
-    Sede = request.GET["sede"]
+    print("que esta poasando")
+
+    Serv = request.GET['serv']
+    Sede = request.GET['sede']
     print ("Entre buscar  Subservicios del servicio  =",Serv)
     print ("Sede = ", Sede)
 
     print ("Serv = ", Serv)
 
     # Combo de SubServicios
-    #miConexiont = MySQLdb.connect(host='CMKSISTEPC07', user='sa', passwd='75AAbb??', db='vulnerable')
+
     miConexiont =psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres", password="123456")
     curt = miConexiont.cursor()
-    #comando = 'SELECT sub.id id ,sub.nombre nombre FROM sitios_serviciosSedes sed ,sitios_subserviciossedes sub Where sed."sedesClinica_id" = ' + "'" + str(Sede) + "'" + '  and sed."sedesClinica_id" = sub."sedesClinica_id" and sed.id = sub."serviciosSedes_id" and sub."serviciosSedes_id" = ' + "'" + str(Serv) + "'"
+
     comando = 'SELECT sub.id id ,sub.nombre nombre FROM sitios_serviciosSedes sed ,sitios_subserviciossedes sub , clinico_servicios serv Where sed."sedesClinica_id" = ' + "'" + str(Sede) + "'" + ' and sed."sedesClinica_id" = sub."sedesClinica_id" and sed.id = sub."serviciosSedes_id"  and sub."serviciosSedes_id" = sed.id and sed.id= ' + "'" + str(Serv) + "'" + ' and sed.servicios_id=serv.id' + ' AND serv.nombre = ' + "'" + str('TRIAGE') + "'"
     curt.execute(comando)
     print(comando)
@@ -3171,31 +3195,19 @@ def guardarAdmisionTriage(request):
                     print("comando = ", comando1)
                     cur3.execute(comando1)
 
-                    try:
-                        with transaction.atomic():
-
-                               Historia.objects.filter(tipoDoc_id=idTipoDocFinal  , documento_id=documento_llave.id ,consecAdmision=0).update(consecAdmision=consecAdmision)
-
-
-                    except Exception as e:
-                        # Aquí ya se hizo rollback automáticamente
-                        print("Se hizo rollback por PRONO SE HACE NADA:", e)
-
-                    finally:
-                        print("No haga nada")
-
+                    comando2 = 'UPDATE clinico_historia SET "consecAdmision" = ' + "'" + str(consecAdmision) + "'" + ' WHERE "tipoDoc_id" = ' + "'" + str(idTipoDocFinal) + "' AND documento_id"  + "'" + str(documento_llave.id) + "' AND "  + ' "consecAdmision" = ' + "'" +str(consecAdmision) + "'"
+                    print("comando2 = ", comando2)
+                    cur3.execute(comando2)
 
                     miConexion3.commit()
                     cur3.close()
 
-                    ## PENDIENTE ACTUALIZAR cONVENIOS USUARIOS Y ABONOS USUARIOS
 
                 except psycopg2.DatabaseError as error:
                     print("Entre por rollback", error)
                     if miConexion3:
                         print("Entro ha hacer el Rollback")
                         miConexion3.rollback()
-                    #raise error
                     datos = {'Mensaje': error}
                     return JsonResponse(datos, safe=False)
 
@@ -3992,7 +4004,7 @@ def Load_dataTriage(request, data):
     miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",  password="123456")
     curx = miConexionx.cursor()
 
-    detalle = 'SELECT  t.id, tp.nombre tipoDoc,  u.documento documento, u.nombre  nombre , t.consec consec , dep.nombre camaNombre,t."fechaSolicita" solicita,t.motivo motivo, t."clasificacionTriage_id" triage FROM triage_triage t, usuarios_usuarios u, sitios_dependencias dep , usuarios_tiposDocumento tp , sitios_dependenciastipo deptip  ,sitios_serviciosSedes sd, clinico_servicios ser  WHERE sd."sedesClinica_id" = t."sedesClinica_id"  and t."sedesClinica_id" = dep."sedesClinica_id" AND t."sedesClinica_id" =' + "'" + str(sede) + "'" + ' AND dep."sedesClinica_id" =  sd."sedesClinica_id" AND dep.id = t.dependencias_id AND t."serviciosSedes_id" = sd.id  AND deptip.id = dep."dependenciasTipo_id" and  tp.id = u."tipoDoc_id" and t."tipoDoc_id" = u."tipoDoc_id" and  u.id = t."documento_id"  and ser.id = sd.servicios_id and dep."serviciosSedes_id" = sd.id and t."serviciosSedes_id" = sd.id and dep."tipoDoc_id" = t."tipoDoc_id" and dep."documento_id" = t."documento_id" and ser.nombre = ' + "'" + str('TRIAGE') + "'"
+    detalle = 'SELECT  t.id, tp.nombre tipoDoc,  u.documento documento, u.nombre  nombre , t.consec consec , dep.nombre camaNombre,t."fechaSolicita" solicita,t.motivo motivo, t."clasificacionTriage_id" triage FROM triage_triage t, usuarios_usuarios u, sitios_dependencias dep , usuarios_tiposDocumento tp , sitios_dependenciastipo deptip  ,sitios_serviciosSedes sd, clinico_servicios ser  WHERE sd."sedesClinica_id" = t."sedesClinica_id"  and t."sedesClinica_id" = dep."sedesClinica_id" AND t."sedesClinica_id" =' + "'" + str(sede) + "'" + ' AND dep."sedesClinica_id" =  sd."sedesClinica_id" AND dep.id = t.dependencias_id AND t."serviciosSedes_id" = sd.id  AND deptip.id = dep."dependenciasTipo_id" and  tp.id = u."tipoDoc_id" and t."tipoDoc_id" = u."tipoDoc_id" and  u.id = t."documento_id"  and ser.id = sd.servicios_id and dep."serviciosSedes_id" = sd.id and t."serviciosSedes_id" = sd.id and dep."tipoDoc_id" = t."tipoDoc_id" and dep."documento_id" = t."documento_id" and ser.nombre = ' + "'" + str('TRIAGE') + "' AND " + ' t."consecAdmision" = 0'
 
     print(detalle)
 

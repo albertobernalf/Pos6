@@ -900,10 +900,12 @@ LUNES 15-SEPTIEMBRE: Ademas de revizar lo de arriba: ver acomodar columnas grade
 -- OPS SACO ERROR AL IMPRIMIR LA AUTORIZACION DEL TRIAGE. PREGUNTA PORQUE SALE EN AUTORIZACIONES SI YA NO ESTA EN CLINICA?
 -- OJO HACER IMPRESION DE ORDENES E IMPRESION DE FOLIOS EN HCLINICA
  -- OPS EL TRIAGE FACTURTADO SIGUE SALIENDO EN LA PANTALLA DE FGARMACIA OPS GRVISISIMO (HAY ALGO QUE NO ENTIENDO EN LA PANTALLA DE FARMACIA, PARCIALMENTE DESPACHADO)
--- OPS EN FARMACIA LE CAMIE EL ESTATDO A DESPACHADO Y NO LO HIZO D PRONTO PORUQE ERA TRIAGE Y ADEMAS FACTUTRADO
 -- tengo un erro me creo encabezado en loiquadcion o cunados salida clinica o cuando aviso no factura triage o cuando facture a normebro aceres
    hay un error poruq creo convenio particular y factro pop particular y no me dicuenta
 -- ojo vovio a pasar error en reporte de hc, me grabo le folio y quedo para seguir grbando
 -- ojo parece ser que cuando admisiones el pacinet desde triage me lo creo partiuclar y con compensar EPS
 -- Tocaria arrastra el consecAdmision de clinico_historia desde 0 al numero del ingreso en el momento de la admison
 -- ojo hau que hacer un refres a farmaciades´pachos
+-- COMO PUEDE SER POSIBE QUE UN TRIAGE CON SOLO UN LAB Y UN MEDICAMENTO Y YA ÑUCAS NO ACTULIZA TOTALLIQUI Y APAGAR
+-- volver a probar el pasaoi de triage a admision
+-- ops acumule la urgencia pero en farmacia me parece pendiente por despáchar como hacer si ya salio????
