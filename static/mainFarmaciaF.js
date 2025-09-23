@@ -536,6 +536,7 @@ function arrancaFarmacia(valorTabla,valorData)
 	  "render": function ( data, type, row ) {
                         var btn = '';
 
+
 		 btn = btn + " <input type='radio' name='miDespachoFarmacia2' class='miDespachoFarmacia2 form-check-input ' data-pk='"  + row.pk + "'>" + "</input>";
 
 
@@ -869,8 +870,8 @@ const initDataTablePanelFarmacia = async () => {
         arrancaFarmacia(1,data);
 	    dataTablePanelFarmaciaInitialized = true;
 
-        //arrancaFarmacia(3,data);
-	    //dataTableFarmaciaDetalleInitialized = true;
+        arrancaFarmacia(5,data);
+	dataTableDespachosFarmaciaInitialized = true;
 
 
         //arrancaFarmacia(2,data);
@@ -959,11 +960,11 @@ $('#tablaPanelFarmacia tbody').on('click', '.miSelFarmacia', function() {
 	     arrancaFarmacia(3,data);
 	     dataTableFarmaciaDetalleInitialized = true;
 
-	     arrancaFarmacia(5,data);
-	     dataTableDespachosFarmaciaInitialized = true;
+	     //arrancaFarmacia(5,data);
+	     //dataTableDespachosFarmaciaInitialized = true;
 
-	     arrancaFarmacia(7,data);
-	     dataTableDespachosFarmaciaInitialized = true;
+	    // arrancaFarmacia(7,data);
+	    // dataTableDespachosFarmaciaInitialized = true;
 
      
   });
@@ -1096,8 +1097,9 @@ $('#tablaPanelFarmacia tbody').on('click', '.miEditaFarmaciaEstadoDespacho', fun
 		alert("ENTRE miEditaFarmaciaEstadoDespach");
 
 	     var post_id = $(this).data('pk');
-	farmaciaId =   post_id;
+	var farmaciaId =   post_id;
 	alert("farmaciaId = " +  farmaciaId);
+
  $('#postFormModalEstadoFarmacia').trigger("reset");
 
             $('#modelHeadingProgramacionCirugia').html("Actualiza Estado Despacho");
@@ -1109,10 +1111,13 @@ $('#tablaPanelFarmacia tbody').on('click', '.miEditaFarmaciaEstadoDespacho', fun
 
 $('#tablaDespachosFarmacia tbody').on('click', '.miDespachoFarmacia2', function() {
 
-		alert("ENTRE tablaDespachosFarmacia");
+		alert("ENTRE tablaDespachosFarmacia VE");
 
-		     var post_id = $(this).data('pk');
-		despachoId =   post_id;
+   	        var post_id = $(this).data('pk');
+
+		var despachoId =   post_id;
+		alert("despacho = " +  despachoId);
+
 	var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
         var username = document.getElementById("username").value;
         var nombreSede = document.getElementById("nombreSede").value;
@@ -1131,7 +1136,11 @@ $('#tablaDespachosFarmacia tbody').on('click', '.miDespachoFarmacia2', function(
 		     arrancaFarmacia(6,data);
 		     	dataTableDespachosDetalleFarmaciaInitialized = true;
 
+		     arrancaFarmacia(7,data);
+		     	dataTableDevolucionesFarmaciaInitialized = true;
    
+		     arrancaFarmacia(8,data);
+		     	dataTableDevolucionesDetalleFarmaciaInitialized = true;
 
 
 

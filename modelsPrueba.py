@@ -920,3 +920,7 @@ LUNES 15-SEPTIEMBRE: Ademas de revizar lo de arriba: ver acomodar columnas grade
 -- ops notengo devolucionmes por triage, hay que incluirlasen el query load_datadevolucones
 -- ops no me lista las facturs con fechasalida=null que ya tienen una factura antes
 -- ops en farmacia las devolucones ARREGLAR el em
+-- Revizar el tema de las devoluciones de enfermeria. esta mal el query de dev enfer creop
+-- Que pasa cuando se fatura y quedan despachos pendientes en farmacia?.debe desaparecer de la pantallafamacia hacer esto mañna. cUANDO FACTURE MARQUE no despachado lo pendiente por despachar
+  Y NO LO MUESTRE EN LA PANTALL FAMACIA LOS facturads
+-- OJO MAÑANA VER PORQUE NO DEJA CAMBIAR DE STADO A NO DESPACHADO EN PANTALLAFARMACIA, YA LOHIZO PERO TIENE PROBLEMA CON EL FARMACIA_ID A VECES LO COGE A VECES NOP

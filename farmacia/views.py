@@ -804,7 +804,7 @@ def CambiaEstadoDespacho(request):
                                        password="123456")
         cur3 = miConexion3.cursor()
 
-        detalle = 'UPDATE farmacia_farmacia SET estado_id = ' + "'" + str(estadoDespachado.id) + "' WHERE id = " + "'"  + str(farmaciaId) + "'"
+        detalle = 'UPDATE farmacia_farmacia SET estado_id = ' + "'" + str(estadoFarmaciaDespacho) + "' WHERE id = " + "'"  + str(farmaciaId) + "'"
         print(detalle)
         cur3.execute(detalle)
 
@@ -845,6 +845,9 @@ def Load_dataDespachosFarmacia(request, data):
 
 
     fechaRegistro = timezone.now()
+    haceUnMes = fechaRegistro - datetime.timedelta(days=90)
+    print(" haceUnMes = ", haceUnMes)
+
 
 
     año_actual = fechaRegistro.year  # Puedes cambiar este valor
@@ -858,7 +861,7 @@ def Load_dataDespachosFarmacia(request, data):
                                    password="123456")
     curx = miConexionx.cursor()
 
-    detalle = 'select desp.id id, desp.id despacho,serv1.nombre servEntrega ,  pla1.nombre entrega , serv2.nombre servRecibe, pla2.nombre recibe FROM farmacia_farmaciadespachos desp INNER JOIN farmacia_farmacia far ON (far.id = desp.farmacia_id and far."sedesClinica_id" = ' + "'" + str(sede) + "'" + ')  LEFT JOIN sitios_serviciosadministrativos serv1 ON (serv1.id = desp."serviciosAdministrativosEntrega_id") LEFT JOIN sitios_serviciosadministrativos serv2 ON (serv2.id = desp."serviciosAdministrativosRecibe_id") LEFT JOIN planta_planta pla1 ON (pla1.id = desp."usuarioEntrega_id") LEFT JOIN planta_planta pla2 ON (pla2.id = desp."usuarioRecibe_id") WHERE desp."fechaRegistro" >= ' + "'" + str(fechaRegistro) + "'"
+    detalle = 'select desp.id id, desp.id despacho,serv1.nombre servEntrega ,  pla1.nombre entrega , serv2.nombre servRecibe, pla2.nombre recibe FROM farmacia_farmaciadespachos desp INNER JOIN farmacia_farmacia far ON (far.id = desp.farmacia_id and far."sedesClinica_id" = ' + "'" + str(sede) + "'" + ')  LEFT JOIN sitios_serviciosadministrativos serv1 ON (serv1.id = desp."serviciosAdministrativosEntrega_id") LEFT JOIN sitios_serviciosadministrativos serv2 ON (serv2.id = desp."serviciosAdministrativosRecibe_id") LEFT JOIN planta_planta pla1 ON (pla1.id = desp."usuarioEntrega_id") LEFT JOIN planta_planta pla2 ON (pla2.id = desp."usuarioRecibe_id") WHERE desp."fechaRegistro" >= ' + "'" + str(haceUnMes) + "'"
 
     print(detalle)
 
@@ -925,6 +928,8 @@ def Load_dataDevolucionesFarmacia(request, data):
     context = {}
     d = json.loads(data)
 
+    despachoId = d['despachoId']
+    print("despachoId =" , despachoId)
 
     fechaRegistro = timezone.now()
 
@@ -940,7 +945,8 @@ def Load_dataDevolucionesFarmacia(request, data):
                                        password="123456")
     curx = miConexionx.cursor()
 
-    detalle = 'select dev.id, dev."fechaRegistro" fechaRegistro ,servDevuelve.nombre servicioDevuelve,plantaDevuelve.nombre usuarioDevuelve,servRecibe.nombre servicioRecibe,plantaRecibe.nombre usuarioRecibe FROM farmacia_farmaciadevolucion dev INNER JOIN sitios_serviciosadministrativos servDevuelve ON (servDevuelve.id = dev."serviciosAdministrativosDevuelve_id") LEFT JOIN 	sitios_serviciosadministrativos servRecibe ON (servRecibe.id = dev."serviciosAdministrativosRecibe_id" ) INNER JOIN planta_planta plantaDevuelve  ON (plantaDevuelve.id = dev."usuarioDevuelve_id") LEFT JOIN planta_planta plantaRecibe ON (plantaRecibe.id = dev."usuarioRecibe_id") WHERE dev."fechaRegistro" >=' + "'" + str(fechaRegistro) + "'" + ' order by dev.id'
+    #detalle = 'select dev.id, dev."fechaRegistro" fechaRegistro ,servDevuelve.nombre servicioDevuelve,plantaDevuelve.nombre usuarioDevuelve,servRecibe.nombre servicioRecibe,plantaRecibe.nombre usuarioRecibe FROM farmacia_farmaciadevolucion dev INNER JOIN sitios_serviciosadministrativos servDevuelve ON (servDevuelve.id = dev."serviciosAdministrativosDevuelve_id") LEFT JOIN 	sitios_serviciosadministrativos servRecibe ON (servRecibe.id = dev."serviciosAdministrativosRecibe_id" ) INNER JOIN planta_planta plantaDevuelve  ON (plantaDevuelve.id = dev."usuarioDevuelve_id") LEFT JOIN planta_planta plantaRecibe ON (plantaRecibe.id = dev."usuarioRecibe_id") WHERE dev."fechaRegistro" >=' + "'" + str(fechaRegistro) + "'" + ' order by dev.id'
+    detalle = 'select dev.id, dev."fechaRegistro" fechaRegistro ,servDevuelve.nombre servicioDevuelve,plantaDevuelve.nombre usuarioDevuelve, servRecibe.nombre servicioRecibe,plantaRecibe.nombre usuarioRecibe FROM farmacia_farmaciadevolucion dev INNER JOIN farmacia_farmaciadevoluciondetalle devDetalle ON (devDetalle."farmaciaDevolucion_id" = dev.id) INNER JOIN farmacia_farmaciadespachosdispensa dispensa ON (dispensa.id = devDetalle."farmaciaDespachosDispensa_id") INNER JOIN farmacia_farmaciadespachos despacho ON (despacho.id = dispensa.despacho_id  ) INNER JOIN sitios_serviciosadministrativos servDevuelve ON (servDevuelve.id = dev."serviciosAdministrativosDevuelve_id") LEFT JOIN 	sitios_serviciosadministrativos servRecibe ON (servRecibe.id = dev."serviciosAdministrativosRecibe_id" ) INNER JOIN planta_planta plantaDevuelve  ON (plantaDevuelve.id = dev."usuarioDevuelve_id")  LEFT JOIN planta_planta plantaRecibe ON (plantaRecibe.id = dev."usuarioRecibe_id") WHERE  despacho.id=' + "'" + str(despachoId) + "'	order by dev.id"
 
     print(detalle)
 
