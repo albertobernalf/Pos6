@@ -1485,12 +1485,12 @@ def FacturarCuenta(request):
 
         ## COLOCAR EN LA TABLA INGRESOS , LA FECHA DE EGRESO Y EL NUMERO DE LA FACTURA GENERADO SI SE FACTURA
 
-        if (tipoFactura == 'FACTURA' and flag != 'TRIAGE'):
+        if (tipoFactura == 'FACTURA' and flag != 'TRIAGE'  and numConveniosActivos <= 1):
 
-                comando4 = 'UPDATE admisiones_ingresos SET "fechaSalida" = ' + "'" +  str(fechaRegistro) + "'" + ', factura = ' + str(facturacionId)  +  ', "dependenciasSalida_id" = "dependenciasActual_id" ' +  ' WHERE id =' + str(ingresoId.id)
+                comando4 = 'UPDATE admisiones_ingresos SET "salidaDefinitiva" = ' + "'" + str('S') + "'" + ' "fechaSalida" = ' + "'" +  str(fechaRegistro) + "'" + ', factura = ' + str(facturacionId)  +  ', "dependenciasSalida_id" = "dependenciasActual_id" ' +  ' WHERE id =' + str(ingresoId.id)
                 cur3.execute(comando4)
 
-        if (tipoFactura == 'REFACTURA' and flag != 'TRIAGE'):
+        if (tipoFactura == 'REFACTURA' and flag != 'TRIAGE'  and numConveniosActivos <= 1):
 
             comando4 = 'UPDATE admisiones_ingresos SET "salidaDefinitiva" = ' + "'" + str('R') + "'" + ', factura = ' + str(facturacionId)  + ' WHERE id =' + str(ingresoId.id)
             cur3.execute(comando4)

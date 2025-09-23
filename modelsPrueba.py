@@ -909,3 +909,4 @@ LUNES 15-SEPTIEMBRE: Ademas de revizar lo de arriba: ver acomodar columnas grade
 -- COMO PUEDE SER POSIBE QUE UN TRIAGE CON SOLO UN LAB Y UN MEDICAMENTO Y YA ÑUCAS NO ACTULIZA TOTALLIQUI Y APAGAR
 -- volver a probar el pasaoi de triage a admision
 -- ops acumule la urgencia pero en farmacia me parece pendiente por despáchar como hacer si ya salio????
+-- OPS parece que hay une error al factuarr al paciente que ingreso trige y fue a urgeicas, pues parce que aun esta en depéndencis activo
