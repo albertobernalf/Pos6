@@ -1056,7 +1056,7 @@ function arrancaEnfermeria(valorTabla,valorData)
 		{ className: 'centered', targets: [0, 1, 2, 3] },
 	    { width: '10%', targets: [2,3] },
 		{  
-                    "targets": 12
+                    "targets": 13
                }
             ],
 	 pageLength: 3,
@@ -1114,6 +1114,7 @@ function arrancaEnfermeria(valorTabla,valorData)
                 { data: "fields.consecutivoMedicamento"},
                 { data: "fields.dosis"},
                 { data: "fields.cantidad"},
+                { data: "fields.cantidadDevuelta"},
                 { data: "fields.UnidadMedida"},
                 { data: "fields.medicamento"},
                 { data: "fields.via"},
@@ -1911,7 +1912,7 @@ function GuardarPlaneacion()
 	alert ("A Guardar planeacion medicamentos");
 
 	     var post_id = $(this).data('pk');
-	alert ("post_id = " + post_id);
+	// alert ("post_id = " + post_id);
 	var ingresoId = document.getElementById("ingresoId").value ;
 
    	var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
@@ -1948,8 +1949,6 @@ function GuardarPlaneacion()
 	data['frecuenciaP'] = frecuenciaP;
 	data['ingresoId'] = ingresoId;
 
-
-	
  	    data = JSON.stringify(data);
 
 	  $.ajax({
@@ -1965,7 +1964,12 @@ function GuardarPlaneacion()
 		else
 		{
 		document.getElementById("mensajesError").innerHTML = info.Mensaje;			
+		return;
 		}
+
+	     arrancaEnfermeria(7,data);
+	     dataTablePlaneacionEnfermeriaInitialized = true;
+
 	
 	
                 },
@@ -1980,8 +1984,6 @@ function GuardarPlaneacion()
 
 
 
-	     arrancaEnfermeria(7,data);
-	     dataTablePlaneacionEnfermeriaInitialized = true;
 
       
   };
@@ -2010,6 +2012,7 @@ function GuardarAplicacion()
 	var fechaAplica = document.getElementById("fechaAplica").value;
 
 	alert(" ingresoId= " + ingresoId);
+	alert("fechaAplica= " + fechaAplica);
 
 
 	var enfermeriaRecibeId  = document.getElementById("enfermeriaRecibeId").value;
@@ -2054,9 +2057,12 @@ function GuardarAplicacion()
 		else
 		{
 		document.getElementById("mensajesError").innerHTML = info.Mensaje;			
+		return;
 		}
 
-
+	
+	     arrancaEnfermeria(7,data);
+	     dataTablePlaneacionEnfermeriaInitialized = true;
 
                 },
                   error: function(data){
@@ -2069,8 +2075,6 @@ function GuardarAplicacion()
 		 $('#ModalAplicacionEnfermeria').modal('hide');  
 
 
-	     arrancaEnfermeria(7,data);
-	     dataTablePlaneacionEnfermeriaInitialized = true;
 
       
   };

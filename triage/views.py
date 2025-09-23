@@ -2865,7 +2865,8 @@ def guardarAdmisionTriage(request):
         DocumentoId = Usuarios.objects.get(documento=documento.strip(), tipoDoc_id=idTipoDocFinal)
         idPacienteFinal = DocumentoId.id
 
-
+        triageActual = Triage.objects.get(tipoDoc_id=dTipoDocFinal, documento_id=idPacienteFinal,consecAdmision=0)
+        print("Triage Actual = ", triageActual.id)
 
         print("idPacienteFinal", idPacienteFinal)
 
@@ -3198,6 +3199,16 @@ def guardarAdmisionTriage(request):
                     comando2 = 'UPDATE clinico_historia SET "consecAdmision" = ' + "'" + str(consecAdmision) + "'" + ' WHERE "tipoDoc_id" = ' + "'" + str(idTipoDocFinal) + "' AND documento_id"  + "'" + str(documento_llave.id) + "' AND "  + ' "consecAdmision" = ' + "'" +str(consecAdmision) + "'"
                     print("comando2 = ", comando2)
                     cur3.execute(comando2)
+
+                    try:
+                        with transaction.atomic():
+                            pacienteEnfermeria = Enfermeria.objects.filter(ingresoPaciente=triageActual).update(ingresoPaciente=grabo.id)
+
+                    except Exception as e:
+                            print("Se hizo rollback HAY QUE  CREAR PATRICULAR :", e)
+
+                    finally:
+                            print("No haga nada")
 
                     miConexion3.commit()
                     cur3.close()

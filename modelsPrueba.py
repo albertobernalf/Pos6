@@ -910,3 +910,13 @@ LUNES 15-SEPTIEMBRE: Ademas de revizar lo de arriba: ver acomodar columnas grade
 -- volver a probar el pasaoi de triage a admision
 -- ops acumule la urgencia pero en farmacia me parece pendiente por despáchar como hacer si ya salio????
 -- OPS parece que hay une error al factuarr al paciente que ingreso trige y fue a urgeicas, pues parce que aun esta en depéndencis activo
+
+-- en enfermeria la dieta la grabo pero no larefresoc
+-- ojo las devluones en farmacia no sale la cantiad devuelta
+-- ono en enfermeria al planear encuentyra suministrto duplicado linea 750
+-- ojo cuando aplica no refresca la planeaciodeenfereria
+- no guardo la fecha de apcacon
+-- ops actualzar ingresopaciete ciando pasa de triage a admisonion
+-- ops notengo devolucionmes por triage, hay que incluirlasen el query load_datadevolucones
+-- ops no me lista las facturs con fechasalida=null que ya tienen una factura antes
+-- ops en farmacia las devolucones ARREGLAR el em
