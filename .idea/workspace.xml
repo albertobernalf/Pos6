@@ -3,12 +3,19 @@
   <component name="ChangeListManager">
     <list default="true" id="d041c887-ab16-4071-a5e4-52a8295bbd5d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/clinico/viewsReportes.py" beforeDir="false" afterPath="$PROJECT_DIR$/clinico/viewsReportes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JSONCLINICA/HistoriasClinicas/Factura_93.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/JSONCLINICA/HistoriasClinicas/Factura_93.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/autorizaciones/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/autorizaciones/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/autorizaciones/viewsReportes.py" beforeDir="false" afterPath="$PROJECT_DIR$/autorizaciones/viewsReportes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clinico/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/clinico/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/facturacion/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/facturacion/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/facturacion/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/facturacion/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/farmacia/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/farmacia/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/farmacia02.sql" beforeDir="false" afterPath="$PROJECT_DIR$/farmacia02.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modelsPrueba.py" beforeDir="false" afterPath="$PROJECT_DIR$/modelsPrueba.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/mainFarmaciaF.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/mainFarmaciaF.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/farmacia/panelFarmaciaF.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/farmacia/panelFarmaciaF.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/planta/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/planta/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/mainEnfermeriaF.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/mainEnfermeriaF.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/mainFacturacionF.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/mainFacturacionF.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/facturacion/panelFacturacionF.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/facturacion/panelFacturacionF.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,7 +75,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/farmacia/views.py</url>
-          <line>371</line>
+          <line>369</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">

@@ -899,28 +899,24 @@ LUNES 15-SEPTIEMBRE: Ademas de revizar lo de arriba: ver acomodar columnas grade
  -- Probar facturacion /refacturar, / anular etc
 -- OPS SACO ERROR AL IMPRIMIR LA AUTORIZACION DEL TRIAGE. PREGUNTA PORQUE SALE EN AUTORIZACIONES SI YA NO ESTA EN CLINICA?
 -- OJO HACER IMPRESION DE ORDENES E IMPRESION DE FOLIOS EN HCLINICA
- -- OPS EL TRIAGE FACTURTADO SIGUE SALIENDO EN LA PANTALLA DE FGARMACIA OPS GRVISISIMO (HAY ALGO QUE NO ENTIENDO EN LA PANTALLA DE FARMACIA, PARCIALMENTE DESPACHADO)
 -- tengo un erro me creo encabezado en loiquadcion o cunados salida clinica o cuando aviso no factura triage o cuando facture a normebro aceres
    hay un error poruq creo convenio particular y factro pop particular y no me dicuenta
--- ojo vovio a pasar error en reporte de hc, me grabo le folio y quedo para seguir grbando
+-- ojo vovio a pasar error en reporte de hc, me grabo le folio y quedo para seguir grbando OJOOOOOOOOOOOOOOOOO
 -- ojo parece ser que cuando admisiones el pacinet desde triage me lo creo partiuclar y con compensar EPS
 -- Tocaria arrastra el consecAdmision de clinico_historia desde 0 al numero del ingreso en el momento de la admison
 -- ojo hau que hacer un refres a farmaciades´pachos
 -- COMO PUEDE SER POSIBE QUE UN TRIAGE CON SOLO UN LAB Y UN MEDICAMENTO Y YA ÑUCAS NO ACTULIZA TOTALLIQUI Y APAGAR
--- volver a probar el pasaoi de triage a admision
--- ops acumule la urgencia pero en farmacia me parece pendiente por despáchar como hacer si ya salio????
--- OPS parece que hay une error al factuarr al paciente que ingreso trige y fue a urgeicas, pues parce que aun esta en depéndencis activo
-
--- en enfermeria la dieta la grabo pero no larefresoc
--- ojo las devluones en farmacia no sale la cantiad devuelta
 -- ono en enfermeria al planear encuentyra suministrto duplicado linea 750
--- ojo cuando aplica no refresca la planeaciodeenfereria
-- no guardo la fecha de apcacon
 -- ops actualzar ingresopaciete ciando pasa de triage a admisonion
 -- ops notengo devolucionmes por triage, hay que incluirlasen el query load_datadevolucones
--- ops no me lista las facturs con fechasalida=null que ya tienen una factura antes
 -- ops en farmacia las devolucones ARREGLAR el em
 -- Revizar el tema de las devoluciones de enfermeria. esta mal el query de dev enfer creop
--- Que pasa cuando se fatura y quedan despachos pendientes en farmacia?.debe desaparecer de la pantallafamacia hacer esto mañna. cUANDO FACTURE MARQUE no despachado lo pendiente por despachar
-  Y NO LO MUESTRE EN LA PANTALL FAMACIA LOS facturads
 -- OJO MAÑANA VER PORQUE NO DEJA CAMBIAR DE STADO A NO DESPACHADO EN PANTALLAFARMACIA, YA LOHIZO PERO TIENE PROBLEMA CON EL FARMACIA_ID A VECES LO COGE A VECES NOP
+-- Toca cuadrar las unidades devueltas desde enfermria no dejar devolver mas de la cuenta
+-- creo que tengo un error en los pedidos de nefermeria de o paciente
+-- OJO HICO NA FACTURA PARTICULAR CON 0 PESOS DE TOTAL CUANDO HABIan registos liquidados
+-- no saleel valor a pagar en letras d ela factura
+-- ops al refacturar no blanquea bien las pantallas
+-- ops al refacturar una cuenta cuto paciente tenia 2 convenios el select de liqudcionsaca dos registros ER OJOO
+-- no graba el servicioadministrativo desde la refacturacion
+-  ops tengo un problema cuando refactura por liquiadaciond  ecuenta se enreda y no distingue sui esta FACTURANDO O REFACTURANDO QUE HACER ??

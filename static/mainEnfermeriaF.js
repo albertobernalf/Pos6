@@ -2278,9 +2278,10 @@ function GuardarDietas()
 		document.getElementById("mensajesError").innerHTML = info.Mensaje;			
 		}
 
+	    arrancaEnfermeria(8,data);
+	    dataTableDietaEnfermeriaInitialized = true;
 
 
-		alert ("llegue listop");
 
 
     /// Aqui inicializar combos

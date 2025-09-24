@@ -331,7 +331,7 @@ autoWidth: false,
             columnDefs: [
 		{ className: 'centered', targets: [0, 1, 2, 3, 4, 5] },
 		{     
-                    "targets": 15
+                    "targets": 16
                }
             ],
 	 pageLength: 3,
@@ -390,6 +390,7 @@ autoWidth: false,
 		 { data: "fields.convenio"},
 		 { data: "fields.salidaClinica"},
 		 { data: "fields.estadoReg"},
+		 { data: "fields.anulado"},
                      ]
             }
 
@@ -1086,6 +1087,8 @@ window.addEventListener('load', async () => {
 		$('#AconsecAdmision').val(data.consecAdmision);
 		$('#AnombreConvenio').val(data.nombreConvenio);
 		$('#AestadoFactura').val(data.estadoReg);
+		$('#Aanulado').val(data.anulado);
+
 
 
 		 $('#Rfactura').val(data.factura);
@@ -1096,6 +1099,7 @@ window.addEventListener('load', async () => {
 		 $('#RconsecAdmision').val(data.consecAdmision);
 		 $('#RnombreConvenio').val(data.nombreConvenio);
 		 $('#RestadoFactura').val(data.estadoReg);
+  		 $('#Ranulado').val(data.anulado);
 
 $('#RtotalSuministros').val(data.totalSuministros);
 $('#RtotalProcedimientos').val(data.totalProcedimientos);
@@ -1956,7 +1960,7 @@ function AnularFactura()
 		$.ajax({
 	           url: '/anularFactura/',
 	            data :
-	            {'facturacionId':facturacionId},
+	            {'facturacionId':facturacionId, 'username_id':username_id},
 	           type: 'POST',
 	           dataType : 'json',
 	  		success: function (data) {

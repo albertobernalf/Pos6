@@ -56,7 +56,7 @@ select * from farmacia_farmaciadespachosdispensa -- farmaciadetalle_id, despacho
 	select * from farmacia_farmaciadespachos  -- id
 	select * from farmacia_farmaciadetalle -- farmacia_id
 
-
+ 
 select dev.id, dev."fechaRegistro" fechaRegistro ,servDevuelve.nombre servicioDevuelve,plantaDevuelve.nombre usuarioDevuelve,
 	servRecibe.nombre servicioRecibe,plantaRecibe.nombre usuarioRecibe 
 	FROM farmacia_farmaciadevolucion dev
@@ -67,5 +67,9 @@ select dev.id, dev."fechaRegistro" fechaRegistro ,servDevuelve.nombre servicioDe
 	LEFT JOIN 	sitios_serviciosadministrativos servRecibe ON (servRecibe.id = dev."serviciosAdministrativosRecibe_id" )
 	INNER JOIN planta_planta plantaDevuelve  ON (plantaDevuelve.id = dev."usuarioDevuelve_id") 
 	LEFT JOIN planta_planta plantaRecibe ON (plantaRecibe.id = dev."usuarioRecibe_id") 
-	WHERE dev."fechaRegistro" >='2025-01-01 00:00:00' and despacho.id=65
+	WHERE dev."fechaRegistro" >='2025-01-01 00:00:00' and despacho.id=98
 	order by dev.id
+
+detalle ='select dev.id, dev."fechaRegistro" fechaRegistro ,servDevuelve.nombre servicioDevuelve,plantaDevuelve.nombre usuarioDevuelve, servRecibe.nombre servicioRecibe,plantaRecibe.nombre usuarioRecibe FROM farmacia_farmaciadevolucion dev INNER JOIN farmacia_farmaciadevoluciondetalle devDetalle ON (devDetalle."farmaciaDevolucion_id" = dev.id) INNER JOIN farmacia_farmaciadespachosdispensa dispensa ON (dispensa.id = devDetalle."farmaciaDespachosDispensa_id") INNER JOIN farmacia_farmaciadespachos despacho ON (despacho.id = dispensa.despacho_id  ) INNER JOIN sitios_serviciosadministrativos servDevuelve ON (servDevuelve.id = dev."serviciosAdministrativosDevuelve_id") LEFT JOIN 	sitios_serviciosadministrativos servRecibe ON (servRecibe.id = dev."serviciosAdministrativosRecibe_id" ) INNER JOIN planta_planta plantaDevuelve  ON (plantaDevuelve.id = dev."usuarioDevuelve_id")  LEFT JOIN planta_planta plantaRecibe ON (plantaRecibe.id = dev."usuarioRecibe_id") WHERE  despacho.id=' + "'" + str(despachoId) + "'	order by dev.id"
+select *	 from farmacia_farmaciaestados
+SELECT * FROM FARMACIA_FARMACIA;	

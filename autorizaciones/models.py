@@ -28,6 +28,7 @@ class Autorizaciones(models.Model):
     numeroAutorizacion=  models.CharField(max_length=5000,blank=True,null= True, editable=True,)
     fechaAutorizacion = models.DateTimeField( editable=True, null=True, blank=True)
     #plantaAutoriza = models.ForeignKey('planta.Planta',blank=True,null= True, editable=True, on_delete=models.PROTECT , related_name ='Planta1')
+    autorizadoPor =  models.CharField(max_length=80,blank=True,null= True, editable=True,)
     observaciones =  models.CharField(max_length=1000,blank=True,null= True, editable=True,)
     estadoAutorizacion = models.ForeignKey('autorizaciones.EstadosAutorizacion',blank=True,null= True, editable=True, on_delete=models.PROTECT)
     fechaModifica = models.DateTimeField( editable=True, null=True, blank=True)

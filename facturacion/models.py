@@ -121,6 +121,7 @@ class Suministros (models.Model):
         ]
     id = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=300, blank=True,null= True, editable=True)
+    #nombre = models.CharField(max_length=300, null=False,  blank=False  , editable=True , unique=True)
     tipoSuministro =   models.ForeignKey('facturacion.TiposSuministro', blank=True,null= True, editable=True, on_delete=models.PROTECT)
     nombreGenerico  =  models.CharField(max_length=300, blank=True,null= True,  editable=True )
     descripcionComercial  =  models.CharField(max_length=250,blank=True,null= True,  editable=True )
@@ -337,6 +338,7 @@ class Facturacion(models.Model):
     FLAG_CHOICES = [
         ('S', 'Si'),
         ('N', 'No'),
+        ('R', 'Refacturada'),
         ]
     id  = models.AutoField(primary_key=True)
     sedesClinica = models.ForeignKey('sitios.SedesClinica',   blank=True,null= True, on_delete=models.PROTECT ,related_name ='sedesClinica398')

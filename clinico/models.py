@@ -255,6 +255,7 @@ class Examenes(models.Model):
     TiposExamen = models.ForeignKey('clinico.TiposExamen',  blank=True, null=True, editable=True, on_delete=models.PROTECT)
     codigoCups = models.CharField(max_length=20, null=False,  blank=True)
     nombre = models.CharField(max_length=300)
+    #nombre = models.CharField(max_length=300 , null=False,  blank=False , unique=True)
     edadIni = models.IntegerField(blank=True, null=True, editable=True)
     edadFin = models.IntegerField( blank=True, null=True, editable=True)
     solicitaEnfermeria = models.CharField(max_length=1, choices=FLAG_CHOICES, default='N', null=False, blank=True, )
