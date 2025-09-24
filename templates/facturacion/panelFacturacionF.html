@@ -978,6 +978,26 @@ div.dataTables_filter input {
           	                            </div>
                                       </div>
 				</div>
+				
+
+			
+			 <div class="row row-cols-1" style="height=1px;">
+
+					<div class="col">
+			  		     <div class="form-group row">
+					
+				                <label for="RserviciosAdministrativos" class="col-sm-1">Cups:</label>
+				       
+					             <select class="select-css"  id="RserviciosAdministrativos" name="RserviciosAdministrativos">
+                                                    {% for serviciosAdministrativos in ServiciosAdministrativos %}
+                                                            <option value="{{serviciosAdministrativos.id}}"> {{serviciosAdministrativos.nombre}}
+                                                            </option>
+                                                            {% endfor %}
+                                            </select>
+				        
+			                      </div>
+                                      </div>
+				</div>
 
 
 

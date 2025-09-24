@@ -1395,7 +1395,7 @@ def FacturarCuenta(request):
 
                 if (numConveniosActivos <= 1):
 
-                    comando = 'UPDATE admisiones_ingresos SET  "dxSalida_id"= "dxActual_id", "medicoSalida_id" = "medicoActual_id",  "serviciosSalida_id" = "serviciosActual_id" , "dependenciasSalida_id" = "dependenciasActual_id", "especialidadesMedicosSalida_id" = "especialidadesMedicosActual_id" ,"salidaDefinitiva" = ' + "'" + str('N') + "'" + ' WHERE id =  ' + "'" +  str(ingresoId.id) + "'"
+                    comando = 'UPDATE admisiones_ingresos SET  "dxSalida_id"= "dxActual_id", "medicoSalida_id" = "medicoActual_id",  "serviciosSalida_id" = "serviciosActual_id" , "dependenciasSalida_id" = "dependenciasActual_id", "especialidadesMedicosSalida_id" = "especialidadesMedicosActual_id" ,"salidaDefinitiva" = ' + "'" + str('S') + "'" + ',"fechaSalida"= ' + "'" + str(fechaRegistro) + "'"  + ' WHERE id =  ' + "'" +  str(ingresoId.id) + "'"
                     print(comando)
                     cur3.execute(comando)
 
@@ -1482,14 +1482,9 @@ def FacturarCuenta(request):
 
         ## COLOCAR EN LA TABLA INGRESOS , LA FECHA DE EGRESO Y EL NUMERO DE LA FACTURA GENERADO SI SE FACTURA
 
-        if (tipoFactura == 'FACTURA' and flag != 'TRIAGE'  and numConveniosActivos <= 1):
-
-                comando4 = 'UPDATE admisiones_ingresos SET "salidaDefinitiva" = ' + "'" + str('S') + "'," + ' "fechaSalida" = ' + "'" +  str(fechaRegistro) + "'" + ', factura = ' + str(facturacionId)  +  ', "dependenciasSalida_id" = "dependenciasActual_id" ' +  ' WHERE id =' + str(ingresoId.id)
-                cur3.execute(comando4)
-
         if (tipoFactura == 'REFACTURA' and flag != 'TRIAGE'  and numConveniosActivos <= 1):
 
-            comando4 = 'UPDATE admisiones_ingresos SET "salidaDefinitiva" = ' + "'" + str('R') + "'" + ', factura = ' + str(facturacionId)  + ' WHERE id =' + str(ingresoId.id)
+            comando4 = 'UPDATE admisiones_ingresos SET "salidaDefinitiva" = ' + "'" + str('S') + "'" + ', factura = ' + str(facturacionId)  + ' WHERE id =' + str(ingresoId.id)
             cur3.execute(comando4)
 
         #AQUI ACTUALIZAMOS LOS PAGOS DEL PACIENTE
@@ -1636,12 +1631,16 @@ def load_dataFacturacion(request, data):
     print ("username:", username)
     print ("username_id:", username_id)
 
-    desdeFecha = d['desdeFecha']
-    hastaFecha = d['hastaFecha']
     hastaFecha = timezone.now()
-    desdeFactura = d['desdeFactura']
-    hastaFactura = d['hastaFactura']
     bandera = d['bandera']
+    if bandera == "Por Fecha":
+        desdeFecha = '2025-01-01 00:00:00'
+        hastaFecha = timezone.now()
+
+    else:
+        desdeFactura = d['desdeFactura']
+        hastaFactura = d['hastaFactura']
+
 
     # Combo Indicadores
 
@@ -1795,6 +1794,10 @@ def ReFacturar(request):
     facturacionId = request.POST["facturacionId"]
     print ("el id es = ", facturacionId)
 
+    serviciosAdministrativos = request.POST["RserviciosAdministrativos"]
+    print ("serviciosAdministrativos", serviciosAdministrativos)
+
+
     facturacionId2 = Facturacion.objects.get(id=facturacionId)
 
 
@@ -1811,7 +1814,7 @@ def ReFacturar(request):
                 miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",  password="123456")
                 cur3 = miConexion3.cursor()
 
-                comando = 'UPDATE facturacion_facturacion SET "anulado" = ' + "'" + str('R') + "'"  +  ', "usuarioRegistro_id" = ' + "'" + str(usuarioRegistro) + "'"  +  ', "fechaRegistro" = ' + "'" + str(fechaRegistro) + "'"  +  ' WHERE id =  ' + facturacionId
+                comando = 'UPDATE facturacion_facturacion SET "anulado" = ' + "'" + str('R') + "'"  +  ', "usuarioRegistro_id" = ' + "'" + str(usuarioRegistro) + "'"  +  ', "fechaRegistro" = ' + "'" + str(fechaRegistro) + "'," + '"serviciosAdministrativos_id" = ' + "'" + str(serviciosAdministrativos) + "'"  +  ' WHERE id =  ' + facturacionId
                 print (comando)
                 cur3.execute(comando)
 
@@ -2325,7 +2328,7 @@ def load_dataFacturacionDetalle(request, data):
                                    password="123456")
     cur = miConexionx.cursor()
 
-    comando = 'select liq.id id,"consecutivoFactura" consecutivo ,  cast(date(fecha)||\' \'||to_char(fecha, \'HH:MI:SS\') as text) fecha  ,  liq.cantidad ,  "valorUnitario" ,  "valorTotal" ,  cirugia_id ,  cast(date("fechaCrea")||\' \'||to_char("fechaCrea", \'HH:MI:SS\') as text)  fechaCrea , liq.observaciones ,  "estadoRegistro" ,  "examen_id" ,  cums_id , exa.nombre  nombreExamen  ,  facturacion_id ,  liq."tipoHonorario_id" ,  "tipoRegistro" , liq."estadoRegistro" estadoReg FROM facturacion_facturaciondetalle liq inner join clinico_examenes exa on (exa.id = liq."examen_id")  where facturacion_id= ' + "'" +  str(liquidacionId) + "'" +  ' UNION select liq.id id,"consecutivoFactura"  consecutivo, cast(date(fecha)||\' \'||to_char(fecha, \'HH:MI:SS\') as text) fecha  ,  liq.cantidad ,  "valorUnitario" ,  "valorTotal" ,  cirugia_id ,  cast(date("fechaCrea")||\' \'||to_char("fechaCrea", \'HH:MI:SS\') as text)  fechaCrea , liq.observaciones ,  "estadoRegistro" ,  "examen_id" ,  cums_id , sum.nombre  nombreExamen  ,  facturacion_id ,  liq."tipoHonorario_id" ,  "tipoRegistro" , liq."estadoRegistro" estadoReg FROM facturacion_facturaciondetalle liq inner join facturacion_suministros sum on (sum.id = liq.cums_id)  where facturacion_id= '  + "'" +  str(liquidacionId) + "'" + ' AND "estadoRegistro" = ' + "'" + str('A') + "'" + ' order by consecutivo'
+    comando = 'select liq.id id,"consecutivoFactura" consecutivo ,  cast(date(fecha)||\' \'||to_char(fecha, \'HH:MI:SS\') as text) fecha  ,  liq.cantidad ,  "valorUnitario" ,  "valorTotal" ,  cirugia_id ,  cast(date("fechaCrea")||\' \'||to_char("fechaCrea", \'HH:MI:SS\') as text)  fechaCrea , liq.observaciones ,  "estadoRegistro" ,  "examen_id" ,  cums_id , exa.nombre  nombreExamen  ,  facturacion_id ,  liq."tipoHonorario_id" ,  "tipoRegistro" , liq."estadoRegistro" estadoReg FROM facturacion_facturaciondetalle liq inner join clinico_examenes exa on (exa.id = liq."examen_id")  where facturacion_id= ' + "'" +  str(liquidacionId) + "'" +  ' AND "estadoRegistro" = ' + "'" + str('A') + "'" + ' and anulado=' + "'" + str('N') + "'" + ' UNION select liq.id id,"consecutivoFactura"  consecutivo, cast(date(fecha)||\' \'||to_char(fecha, \'HH:MI:SS\') as text) fecha  ,  liq.cantidad ,  "valorUnitario" ,  "valorTotal" ,  cirugia_id ,  cast(date("fechaCrea")||\' \'||to_char("fechaCrea", \'HH:MI:SS\') as text)  fechaCrea , liq.observaciones ,  "estadoRegistro" ,  "examen_id" ,  cums_id , sum.nombre  nombreExamen  ,  facturacion_id ,  liq."tipoHonorario_id" ,  "tipoRegistro" , liq."estadoRegistro" estadoReg FROM facturacion_facturaciondetalle liq inner join facturacion_suministros sum on (sum.id = liq.cums_id)  where facturacion_id= '  + "'" +  str(liquidacionId) + "'" + ' AND "estadoRegistro" = ' + "'" + str('A') + "' and anulado='N'" + ' order by consecutivo'
 
     print(comando)
 

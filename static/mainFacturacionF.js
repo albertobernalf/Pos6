@@ -1714,16 +1714,18 @@ function AFacturar()
 
  	var liquidacionId = document.getElementById("liquidacionId").value;
  	var username_id = document.getElementById("username_id").value;
-	var salidaDefinitiva = document.getElementById("salidaDefinitiva").value;
+	var salidaDefinitiva = document.getElementById("salidaDefinitiva").innerHTML;
 
 	if (salidaDefinitiva=='R')
 		{
 			tipoFactura= 'REFACTURA';
+			alert(" ES REFACTURA : ");
 		}
 
 	else
 		{
 			tipoFactura= 'FACTURA';
+			alert(" ES FACTURA : ");
 		}
 
 
@@ -1756,9 +1758,7 @@ function AFacturar()
 			{
 			document.getElementById("mensajesError").innerHTML = data.Mensaje;
 			return;
-			}
-
-										
+			}					
 
             	        var data2 =  {}   ;
         		data2['username'] = username;
@@ -1797,11 +1797,6 @@ function AFacturar()
 
 		        data2 = JSON.stringify(data2);
 	
-
-
-                     if (data.message != 'Paciente NO tiene Salida Clinica. Consultar medico tratante !')
-			{
-
 			    arrancaLiquidacion(2,data2);
 			    dataTableFacturacionInitialized = true;
 
@@ -1816,8 +1811,6 @@ function AFacturar()
 
 			 window.location.reload();
 		
-		}
-		document.getElementById("mensajes").innerHTML = data.Mensaje;
 		
                   },
 	                      error: function(data){
@@ -1976,9 +1969,7 @@ function AnularFactura()
 			return;
 			}
 
-
-
-				
+			
 			 var data2 =  {}   ;
 			data2['username'] = username;
 		        data2['sedeSeleccionada'] = sedeSeleccionada;
@@ -2019,9 +2010,7 @@ function AnularFactura()
 
 		        arrancaLiquidacion(3,data2);
 			    dataTableFacturacionInitialized = true;
- 
-		document.getElementById("mensajes").innerHTML = data.Mensaje;
-		
+	
 
                   },
 	   	                    error: function(data){
@@ -2045,12 +2034,12 @@ function ReFacturar()
     	var sede = document.getElementById("sede").value;
         var username_id = document.getElementById("username_id").value;
 	tipoFactura= 'REFACTURA';
+        var serviciosAdministrativos = document.getElementById("RserviciosAdministrativos").value;
 	
-
 		$.ajax({
 	           url: '/reFacturar/',
 	            data :
-	            {'facturacionId':facturacionId, 'username_id':username_id,'tipoFactura':tipoFactura},
+	            {'facturacionId':facturacionId, 'username_id':username_id,'tipoFactura':tipoFactura,'serviciosAdministrativos'serviciosAdministrativos},
 	           type: 'POST',
 	           dataType : 'json',
 	  		success: function (data) {
@@ -2075,18 +2064,16 @@ function ReFacturar()
 
 	                var username_id = document.getElementById("username_id").value;
   	                data2['username_id'] = username_id;
-                     //   alert("numero de la liquidacionId = " + liquidacionId);
 
 		        data2['valor'] = liquidacionId;
+			data2['bandera'] = 'Por Fecha';
+			data2['desdeFecha'] = 'Por Fecha';
+			data2['hastaFecha'] = 'Por Fecha';
 			data2['facturacionId'] = facturacionId;
 		        data2 = JSON.stringify(data2);
-	document.getElementById("mensajes").innerHTML = data.Mensaje;
 
 
         arrancaLiquidacion(3,data2);
-	    dataTableFacturacionInitialized = true;
-
-        arrancaLiquidacion(5,data2);
 	    dataTableFacturacionInitialized = true;
 
         arrancaLiquidacion(6,data2);

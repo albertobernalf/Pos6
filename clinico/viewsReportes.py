@@ -2970,7 +2970,7 @@ def ImprimirOrdenDeControl(ingresoId2, historiaId, convenioId, tipoAdmision):
         print(f"Error al abrir el archivo: {e}")
         datosMensaje = {'success': True, 'Mensaje': 'Cerrar Archivo cargado en browser'}
         json_data = json.dumps(datosMensaje, default=str)
-        return HttpResponse(json_data, content_type='application/json')
+        #return HttpResponse(json_data, content_type='application/json')
 
 
     return JsonResponse({'success': True, 'message': 'Orden De COntrol impresa!'})

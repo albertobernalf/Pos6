@@ -901,7 +901,7 @@ LUNES 15-SEPTIEMBRE: Ademas de revizar lo de arriba: ver acomodar columnas grade
 -- OJO HACER IMPRESION DE ORDENES E IMPRESION DE FOLIOS EN HCLINICA
 -- tengo un erro me creo encabezado en loiquadcion o cunados salida clinica o cuando aviso no factura triage o cuando facture a normebro aceres
    hay un error poruq creo convenio particular y factro pop particular y no me dicuenta
--- ojo vovio a pasar error en reporte de hc, me grabo le folio y quedo para seguir grbando OJOOOOOOOOOOOOOOOOO
+-- ojo vovio a pasar error en reporte de hc, me grabo le folio y quedo para seguir grbando OJOOOOOOOOOOOOOOOOOoooooooooooooooooo
 -- ojo parece ser que cuando admisiones el pacinet desde triage me lo creo partiuclar y con compensar EPS
 -- Tocaria arrastra el consecAdmision de clinico_historia desde 0 al numero del ingreso en el momento de la admison
 -- ojo hau que hacer un refres a farmaciades´pachos

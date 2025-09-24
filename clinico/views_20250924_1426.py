@@ -2304,9 +2304,56 @@ def crearHistoriaClinica(request):
                         miConexion3.close()
 
 
+                        if (ordenDeControl != ''):
 
-                        # Aqui estaban los reportes en caso de devolverse
+                            print("Entre imprimir orden de control")
+                            ingresoId2=ingresosPaciente.id
+                            ImprimirOrdenDeControl(ingresoId2, historiaId, convenioId, tipoAdmision)
 
+                        print("Ya grabe el cabezote")
+
+
+                        ##Aqui vendiran los reportes
+
+                        if conteoLab >= 1:
+                            print("Encontre ordenes de laboratrio")
+                            print("Encontre ordenes de laboratrio")
+                            ingresoId2=ingresosPaciente.id
+                            ImprimirOrdenLaboratorio(ingresoId2, historiaId, convenioId, tipoAdmision)
+                        else:
+                            print("No Encontre ordenes de laboratrio")
+                            print("No Encontre ordenes de laboratrio")
+
+                        if conteoRad >=  1:
+                            print("Encontre ordenes de radiologia")
+                            print("Encontre ordenes de radiologia")
+                            ingresoId2 = ingresosPaciente.id
+                            ImprimirOrdenRadiologia(ingresoId2, historiaId, convenioId, tipoAdmision)
+                        else:
+                            print("No Encontre ordenes de radiologia")
+                            print("No Encontre ordenes de radiologia")
+
+                        if conteoTer >= 1:
+                            print("Encontre ordenes de terapias")
+                            print("Encontre ordenes de terapias")
+                            ingresoId2 = ingresosPaciente.id
+                            ImprimirOrdenTerapia(ingresoId2, historiaId, convenioId, tipoAdmision)
+                        else:
+                            print("No Encontre ordenes de terapias")
+                            print("No Encontre ordenes de terapias")
+
+                        if conteoMed >= 1:
+                           print("Entre imprimir Medicamentos")
+                           ingresoId2 = ingresosPaciente.id
+                           ImprimirOrdenMedicamentos(ingresoId2, historiaId, convenioId, tipoAdmision)
+
+                        if conteoInca >= 1:
+                           print("Entre imprimir Incapacidades")
+                           ingresoId2 = ingresosPaciente.id
+                           ImprimirOrdenIncapacidad(ingresoId2, historiaId, convenioId, tipoAdmision)
+
+
+                        return JsonResponse({'success': True, 'Mensaje': 'Folio Actualizado !'})
 
 
                 except psycopg2.DatabaseError as error:
@@ -2319,60 +2366,6 @@ def crearHistoriaClinica(request):
                     if miConexion3:
                         cur3.close()
                         miConexion3.close()
-
-
-
-                ##Aqui vendiran los reportes
-
-                if (ordenDeControl != ''):
-
-                    print("Entre imprimir orden de control")
-                    ingresoId2=ingresosPaciente.id
-                    ImprimirOrdenDeControl(ingresoId2, historiaId, convenioId, tipoAdmision)
-
-                print("Ya imprimi orden de control")
-
-
-                if conteoLab >= 1:
-                    print("Encontre ordenes de laboratrio")
-                    print("Encontre ordenes de laboratrio")
-                    ingresoId2=ingresosPaciente.id
-                    ImprimirOrdenLaboratorio(ingresoId2, historiaId, convenioId, tipoAdmision)
-                else:
-                    print("No Encontre ordenes de laboratrio")
-                    print("No Encontre ordenes de laboratrio")
-
-                if conteoRad >=  1:
-                    print("Encontre ordenes de radiologia")
-                    print("Encontre ordenes de radiologia")
-                    ingresoId2 = ingresosPaciente.id
-                    ImprimirOrdenRadiologia(ingresoId2, historiaId, convenioId, tipoAdmision)
-                else:
-                    print("No Encontre ordenes de radiologia")
-                    print("No Encontre ordenes de radiologia")
-
-                if conteoTer >= 1:
-                    print("Encontre ordenes de terapias")
-                    print("Encontre ordenes de terapias")
-                    ingresoId2 = ingresosPaciente.id
-                    ImprimirOrdenTerapia(ingresoId2, historiaId, convenioId, tipoAdmision)
-                else:
-                    print("No Encontre ordenes de terapias")
-                    print("No Encontre ordenes de terapias")
-
-                if conteoMed >= 1:
-                   print("Entre imprimir Medicamentos")
-                   ingresoId2 = ingresosPaciente.id
-                   ImprimirOrdenMedicamentos(ingresoId2, historiaId, convenioId, tipoAdmision)
-
-                if conteoInca >= 1:
-                   print("Entre imprimir Incapacidades")
-                   ingresoId2 = ingresosPaciente.id
-                   ImprimirOrdenIncapacidad(ingresoId2, historiaId, convenioId, tipoAdmision)
-
-
-                return JsonResponse({'success': True, 'Mensaje': 'Folio Actualizado !'})
-
 
 
     if request.method == "POST":
@@ -2417,6 +2410,8 @@ def crearHistoriaClinica(request):
 
         TipoIng = request.GET["tipoIng"]
         print("TipoIng = ", TipoIng )
+
+
 
         print("Sede = ", Sede)
 
