@@ -3,13 +3,22 @@
   <component name="ChangeListManager">
     <list default="true" id="d041c887-ab16-4071-a5e4-52a8295bbd5d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JSONCLINICA/HistoriasClinicas/20248592_HistoriaClinica.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/JSONCLINICA/HistoriasClinicas/20248592_HistoriaClinica.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JSONCLINICA/HistoriasClinicas/20248592_Triage.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/JSONCLINICA/HistoriasClinicas/20248592_Triage.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/autorizaciones/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/autorizaciones/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clinico/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/clinico/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/clinico/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/clinico/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/clinico/viewsReportes.py" beforeDir="false" afterPath="$PROJECT_DIR$/clinico/viewsReportes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/enfermeria/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/enfermeria/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/factura01.sql" beforeDir="false" afterPath="$PROJECT_DIR$/factura01.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/facturacion/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/facturacion/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modelsPrueba.py" beforeDir="false" afterPath="$PROJECT_DIR$/modelsPrueba.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rips/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/rips/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/static/mainFacturacionF.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/mainFacturacionF.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/facturacion/panelFacturacionF.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/facturacion/panelFacturacionF.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/mainTriage.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/mainTriage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/clinico/panelClinicoF.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/clinico/panelClinicoF.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/triage/panelTriage.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/triage/panelTriage.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/triage/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/triage/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/triage/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/triage/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

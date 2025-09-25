@@ -920,3 +920,8 @@ LUNES 15-SEPTIEMBRE: Ademas de revizar lo de arriba: ver acomodar columnas grade
 -- ops al refacturar una cuenta cuto paciente tenia 2 convenios el select de liqudcionsaca dos registros ER OJOO
 -- no graba el servicioadministrativo desde la refacturacion
 -  ops tengo un problema cuando refactura por liquiadaciond  ecuenta se enreda y no distingue sui esta FACTURANDO O REFACTURANDO QUE HACER ??
+-- ojo en farmacia--> dispensaciongeneral muestra despachos de dias pasados
+-- ops los paraclinicos en enfermea me muetyra de otros folios '???
+-- ops en enfermeria me muestra las devolucones de antes, se supone estan facturados o fue porque hice una factura manual o borre cargos manuales ??
+-- ops  si arregle paraclinico en enfereria triage supongo hay que arreglar las demas , medicamentos, 
+-- falta concebir una autorizacion aun triage OJO HACERLO

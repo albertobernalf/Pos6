@@ -2033,13 +2033,12 @@ function ReFacturar()
         var nombreSede = document.getElementById("nombreSede").value;
     	var sede = document.getElementById("sede").value;
         var username_id = document.getElementById("username_id").value;
-	tipoFactura= 'REFACTURA';
+	    var tipoFactura = 'REFACTURA';
         var serviciosAdministrativos = document.getElementById("RserviciosAdministrativos").value;
 	
 		$.ajax({
 	           url: '/reFacturar/',
-	            data :
-	            {'facturacionId':facturacionId, 'username_id':username_id,'tipoFactura':tipoFactura,'serviciosAdministrativos'serviciosAdministrativos},
+	            data : {'facturacionId':facturacionId, 'username_id':username_id,'tipoFactura':tipoFactura,'serviciosAdministrativos':serviciosAdministrativos},
 	           type: 'POST',
 	           dataType : 'json',
 	  		success: function (data) {

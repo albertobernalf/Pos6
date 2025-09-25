@@ -1362,23 +1362,11 @@ function guardarAdmisionTriage()
     var ripsNumConsultasCPrenatal = document.getElementById("ripsNumConsultasCPrenatal").value;
     var ripsEdadGestacional = document.getElementById("ripsEdadGestacional").value;
     var ripsDestinoUsuarioEgresoRecienNacido = document.getElementById("ripsDestinoUsuarioEgresoRecienNacido").value;
-    var empresasT = document.getElementById("empresasT").value;
+
 
 	alert("Voy a guardar crear adnmision TRIAGE con empresa = " + empresasT);
 
-	if (empresasT =='')
-		{
-			alert("Error falta ingresar empresas");
-		document.getElementById("mensajesErrorModalCreaAdmisionTriage").innerHTML = 'Suministre Empresa';
-		return;
-		}
 
-	if (conveniosT =='')
-		{
-			alert("Error falta ingresar convenio");
-		document.getElementById("mensajesErrorModalCreaAdmisionTriage").innerHTML = 'Suministre Convenio';
-		return;
-		}
 
 
 	alert("Voy AJAX ");
@@ -1391,8 +1379,18 @@ function guardarAdmisionTriage()
 		success: function (respuesta)
 		        {
 		      	alert("respuesta = " + JSON.stringify(respuesta));
-			alert("Mensajes en repuesta  = " + respuesta['Mensajes']);
        		
+			if (respuesta.success==false)
+			{
+			alert("Entre error");
+			document.getElementById("mensajesError").innerHTML = respuesta['Mensajes'];
+			}
+			else
+			{
+			document.getElementById("mensajes").innerHTML = respuesta['Mensajes'];
+			}
+
+
 		 $('#crearAdmTriage').modal('hide');
 	      	document.getElementById("mensajes").innerHTML = respuesta['Mensajes'];
 		window.location.reload();
@@ -1590,4 +1588,51 @@ $(document).on('change', '#empresasT', function(event) {
 	     });
 });
 
+
+
+$(document).on('change', '#empresasTE', function(event) {
+
+
+       var select = document.getElementById("empresasTE"); /*Obtener el SELECT */
+       var empresaId  = select.options[select.selectedIndex].value; /* Obtener el valor */
+
+
+	alert("Entre para llamar a buscarConvenios de Empresa : " + empresaId)
+
+        $.ajax({
+	           url: '/buscarConvenioEmpresa',
+	            data : {empresaId:empresaId},
+	           type: 'GET',
+	           dataType : 'json',
+
+	  		success: function (respuesta) {
+
+	  		   var options = '<option value="=================="></option>';
+
+	  		  var dato = JSON.parse(respuesta);
+
+
+                     const $id3 = document.querySelector("#conveniosTE");
+
+
+ 	      		     $("#conveniosTE").empty();
+
+
+	                 $.each(dato, function(key,value) {
+                                    options +='<option value="' + value.id + '">' + value.nombre + '</option>';
+                                    option = document.createElement("option");
+                                    option.value = value.id;
+                                    option.text = value.nombre;
+                                    $id3.appendChild(option);
+ 	      		      });
+
+                    },
+		   		  			 error: function(data){
+		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+
+
+	   	    	}
+
+	     });
+});
 

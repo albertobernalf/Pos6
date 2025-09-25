@@ -534,7 +534,7 @@ function RefrescarPantalla() {
                                                            class="col-sm-10 col-form-label col-form-label-sm">Empresas:</label>
                                                     <div class="col-sm-4">
                                                         <select class="form-select  h-40 w-100 form-control form-control-sm"
-                                                                aria-label="" id="empresasT" name="empresasT">
+                                                                aria-label="" id="empresasT" name="empresasT" required>
                                                             {% for empresas in Empresas %}
                                                             <option value="{{empresas.id}}"> {{empresas.nombre}}
                                                             </option>
@@ -548,7 +548,7 @@ function RefrescarPantalla() {
                                         <div class="col-sm-4">
                                             <select autofocus   class="select-css " tabindex= "0" 
                                                     aria-label="" id="conveniosT"
-                                                    name="conveniosT" required>
+                                                    name="conveniosT" >
                                                 {% for conveniosEmpresas in ConveniosEmpresas %}
                                                 <option value="{{conveniosEmpresas.id}}"> {{conveniosEmpresas.nombre}}</option>
                                                 {% endfor %}
@@ -564,7 +564,7 @@ function RefrescarPantalla() {
                                                            class="col-sm-10 col-form-label col-form-label-sm">Regimen:</label>
                                                     <div class="col-sm-4">
                                                         <select class="form-select  h-40 w-100 form-control form-control-sm"
-                                                                aria-label="" id="regimenes" name="regimenes">
+                                                                aria-label="" id="regimenes" name="regimenes" required>
                                                             {% for regimenes in Regimenes %}
                                                             <option value="{{regimenes.id}}"> {{regimenes.nombre}}
                                                             </option>
@@ -578,7 +578,7 @@ function RefrescarPantalla() {
                                                     <div class="col-sm-4">
                                                         <select class="form-select  h-40 w-100 form-control form-control-sm"
                                                                 aria-label="" id="tiposCotizante"
-                                                                name="tiposCotizante">
+                                                                name="tiposCotizante" required>
                                                             {% for tiposCotizante in TiposCotizante %}
                                                             <option value="{{tiposCotizante.id}}">
                                                                 {{tiposCotizante.nombre}}
@@ -603,7 +603,7 @@ function RefrescarPantalla() {
                                                     <label for="ips"
                                                            class="col-sm-10 col-form-label col-form-label-sm">Ips:</label>
                                                     <div class="col-sm-4">
-                                                        <select class="form-select  h-40 w-100 form-control form-control-sm"  aria-label="" id="ips" name="ips">
+                                                        <select class="form-select  h-40 w-100 form-control form-control-sm"  aria-label="" id="ips" name="ips" required>
                                                             {% for ips in Ips %}
                                                             <option value="{{ips.id}}"> {{ips.nombre}}
                                                             </option>
@@ -911,6 +911,46 @@ function RefrescarPantalla() {
                                         </div>
 
                                     </div>
+
+
+
+				<!-- desde aui empresas convenios -->
+
+				   <div class="col">
+                                                    <label for="empresasTE"
+                                                           class="col-sm-1 col-form-label col-form-label-sm">Empresas:</label>
+                                                    <div class="col-sm-4">
+                                                        <select class="form-select  h-10 w-100 form-control form-control-sm"
+                                                                aria-label="" id="empresasTE" name="empresasTE" required>
+                                                            {% for empresas in Empresas %}
+                                                            <option value="{{empresas.id}}"> {{empresas.nombre}}
+                                                            </option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+				<div class="col">
+                                        <label for="conveniosTE" class="col-sm-1 col-form-label col-form-label-sm">Convenio:</label>
+                                        <div class="col-sm-4">
+                                            <select autofocus   class="select-css " tabindex= "0" 
+                                                    aria-label="" id="conveniosTE"
+                                                    name="conveniosTE" >
+                                                {% for conveniosEmpresas in ConveniosEmpresas %}
+                                                <option value="{{conveniosEmpresas.id}}"> {{conveniosEmpresas.nombre}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+
+
+
+
+				<!-- hasta aquip -->
+
+
+
+
 
 
                                     </div>
@@ -1262,8 +1302,8 @@ function RefrescarPantalla() {
 
 {% block mensajeria %}
 <div class="marco">
-     <span id="mensajes" name="mensajes" class="mensajes" value="{{Mensajes}}" ></span>
-     <span id="mensajesError" name="mensajesError" class="mensajesError" value="{{Mensajes}}"> </span>
+     <span id="mensajes" name="mensajes" class="mensajes" value="" ></span>
+     <span id="mensajesError" name="mensajesError" class="mensajesError" value=""> </span>
 
 </div>
 {% endblock %}

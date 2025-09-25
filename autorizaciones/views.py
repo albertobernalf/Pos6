@@ -29,6 +29,8 @@ from facturacion.models import Liquidacion, LiquidacionDetalle
 from django.utils import timezone
 from farmacia.models import FarmaciaEstados
 from cartera.models import Pagos
+from triage.models import Triage
+
 
 def decimal_serializer(obj):
     if isinstance(obj, Decimal):
@@ -266,7 +268,13 @@ def ActualizarAutorizacionDetalle(request):
     print ("TipoDoc Paciente = ", datosHc.tipoDoc_id)
     print ("Paciente Cedula= ", datosHc.documento_id)
     print ("Paciente Ingreso= ", datosHc.consecAdmision)
-    ingresoId = Ingresos.objects.get(tipoDoc_id=datosHc.tipoDoc_id, documento_id=datosHc.documento_id,consec=datosHc.consecAdmision)
+
+    if (datosHc.consecAdmision!=0):
+
+        ingresoId = Ingresos.objects.get(tipoDoc_id=datosHc.tipoDoc_id, documento_id=datosHc.documento_id,consec=datosHc.consecAdmision)
+    else:
+        triageId = Triage.objects.get(tipoDoc_id=datosHc.tipoDoc_id, documento_id=datosHc.documento_id,consec=datosHc.consecAdmision, consecAdmision=0)
+
     estadoFarmaciaSolicitud = FarmaciaEstados.objects.get(nombre='SOLICITUD')
 
     miConexiont = None
@@ -295,22 +303,51 @@ def ActualizarAutorizacionDetalle(request):
         else:
 
             # Aqui Gaurdar FARMACIA
-            comando = 'INSERT INTO farmacia_farmacia(historia_id,"serviciosAdministrativos_id","tipoOrigen_id","tipoMovimiento_id","fechaRegistro", "usuarioRegistro_id","sedesClinica_id",estado_id,"ingresoPaciente_id") VALUES (' + "'" + str(
-                datosAut.historia_id) + "','" + str(serviciosAdministrativos) + "',1,1," + "'" + str(
-                fechaRegistro) + "','" + str(usuarioRegistro_id) + "','" + str(sede) + "','" + str(
-                estadoFarmaciaSolicitud.id) + "','" + str(ingresoId.id) + "') RETURNING id"
-            print("comando = ", comando)
-            resultado = curt.execute(comando)
-            farmaciaId = curt.fetchone()[0]
+
+            if (datosHc.consecAdmision != 0):
+
+                comando = 'INSERT INTO farmacia_farmacia(historia_id,"serviciosAdministrativos_id","tipoOrigen_id","tipoMovimiento_id","fechaRegistro", "usuarioRegistro_id","sedesClinica_id",estado_id,"ingresoPaciente_id") VALUES (' + "'" + str(
+                    datosAut.historia_id) + "','" + str(serviciosAdministrativos) + "',1,1," + "'" + str(
+                    fechaRegistro) + "','" + str(usuarioRegistro_id) + "','" + str(sede) + "','" + str(
+                    estadoFarmaciaSolicitud.id) + "','" + str(ingresoId.id) + "') RETURNING id"
+                print("comando = ", comando)
+                resultado = curt.execute(comando)
+                farmaciaId = curt.fetchone()[0]
+
+            else:
+
+                comando = 'INSERT INTO farmacia_farmacia(historia_id,"serviciosAdministrativos_id","tipoOrigen_id","tipoMovimiento_id","fechaRegistro", "usuarioRegistro_id","sedesClinica_id",estado_id,"ingresoPaciente_id") VALUES (' + "'" + str(
+                    datosAut.historia_id) + "','" + str(serviciosAdministrativos) + "',1,1," + "'" + str(
+                    fechaRegistro) + "','" + str(usuarioRegistro_id) + "','" + str(sede) + "','" + str(
+                    estadoFarmaciaSolicitud.id) + "','" + str(triageId.id) + "') RETURNING id"
+                print("comando = ", comando)
+                resultado = curt.execute(comando)
+                farmaciaId = curt.fetchone()[0]
+
+
+
 
             # Aqui Guardar ENFERMERIA
-            comando = 'INSERT INTO enfermeria_enfermeria(historia_id,"serviciosAdministrativos_id","tipoOrigen_id","tipoMovimiento_id","fechaRegistro", "usuarioRegistro_id","sedesClinica_id","estadoReg","ingresoPaciente_id") VALUES (' + "'" + str(
-                datosAut.historia_id) + "','" + str(serviciosAdministrativos) + "',1,1," + "'" + str(
-                fechaRegistro) + "','" + str(usuarioRegistro_id) + "','" + str(sede) + "','" + str(
-                estadoReg) + "','" + str(ingresoId.id) + "') RETURNING id"
-            resultado = curt.execute(comando)
-            print("comando = ", comando)
-            enfermeriaId = curt.fetchone()[0]
+            if (datosHc.consecAdmision != 0):
+
+                comando = 'INSERT INTO enfermeria_enfermeria(historia_id,"serviciosAdministrativos_id","tipoOrigen_id","tipoMovimiento_id","fechaRegistro", "usuarioRegistro_id","sedesClinica_id","estadoReg","ingresoPaciente_id") VALUES (' + "'" + str(
+                    datosAut.historia_id) + "','" + str(serviciosAdministrativos) + "',1,1," + "'" + str(
+                    fechaRegistro) + "','" + str(usuarioRegistro_id) + "','" + str(sede) + "','" + str(
+                    estadoReg) + "','" + str(ingresoId.id) + "') RETURNING id"
+                resultado = curt.execute(comando)
+                print("comando = ", comando)
+                enfermeriaId = curt.fetchone()[0]
+            else:
+                comando = 'INSERT INTO enfermeria_enfermeria(historia_id,"serviciosAdministrativos_id","tipoOrigen_id","tipoMovimiento_id","fechaRegistro", "usuarioRegistro_id","sedesClinica_id","estadoReg","ingresoPaciente_id") VALUES (' + "'" + str(
+                    datosAut.historia_id) + "','" + str(serviciosAdministrativos) + "',1,1," + "'" + str(
+                    fechaRegistro) + "','" + str(usuarioRegistro_id) + "','" + str(sede) + "','" + str(
+                    estadoReg) + "','" + str(triageId.id) + "') RETURNING id"
+                resultado = curt.execute(comando)
+                print("comando = ", comando)
+                enfermeriaId = curt.fetchone()[0]
+
+
+
 
             # Aqui Guardar FARMACIA DETALLE
             comando = 'INSERT INTO farmacia_farmaciadetalle(farmacia_id, "historiaMedicamentos_id",suministro_id,"dosisCantidad", "dosisUnidad_id","viaAdministracion_id","cantidadOrdenada","fechaRegistro","usuarioRegistro_id", "estadoReg", "consecutivoMedicamento")  SELECT ' + "'" + str(

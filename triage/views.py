@@ -1060,6 +1060,12 @@ def crearTriage(request):
         clasificacionTriage= request.POST['clasificacionTriage']
         print("clasificacionTriage= ", clasificacionTriage)
 
+        empresa = request.POST['empresasTE']
+        print("empresa= ", empresa)
+
+        convenio= request.POST['conveniosTE']
+        print("convenio= ", convenio)
+
 
         fechaRegistro = timezone.now()
         print("fechaRegistro  = ", fechaRegistro )
@@ -1131,6 +1137,8 @@ def crearTriage(request):
                                  fechaRegistro=fechaRegistro,
                                  usuarioCrea_id=usernameId.id,
                                  consecAdmision=0,
+                                 empresa_id=empresa,
+                                 convenio_id=convenio,
                                  #estadoReg=estadoReg,
 
                 )
@@ -1173,6 +1181,26 @@ def crearTriage(request):
 
                     # FIN UPDATE actualiza dependencia
 
+                ## aqui creo el convenio
+
+                grabo880 = ConveniosPacienteIngresos(
+                          tipoDoc_id=tipoDoc,
+                          documento_id=documento_llave.id,
+                          consecAdmision=0,
+                          convenio_id=convenio,
+                          fechaRegistro = fechaRegistro,
+                          usuarioRegistro_id = usernameId.id,
+                          estadoReg = 'A'
+                       )
+                grabo880.save()
+                grabo880.id
+                print("yA grabe pacientes ingresos", grabo880.id)
+
+
+                ## fin crear convenio
+
+
+
 
                 # RUTINA ARMADO CONTEXT
 
@@ -1208,6 +1236,7 @@ def crearTriage(request):
             # return JsonResponse({'success': False, 'Mensaje': e})
             # return HttpResponse (e)
             context['Mensajes'] = e
+            print("context = ",  context['Mensajes'])
 
             return render(request, "triage/panelTriage.html", context)
 
@@ -2864,8 +2893,11 @@ def guardarAdmisionTriage(request):
 
         DocumentoId = Usuarios.objects.get(documento=documento.strip(), tipoDoc_id=idTipoDocFinal)
         idPacienteFinal = DocumentoId.id
+        print(" DocumentoId =", DocumentoId)
+        print(" DocumentoId =", DocumentoId.id)
+        print(" DocumentoId =", DocumentoId.tipoDoc_id)
 
-        triageActual = Triage.objects.get(tipoDoc_id=dTipoDocFinal, documento_id=idPacienteFinal,consecAdmision=0)
+        triageActual = Triage.objects.get(tipoDoc_id=DocumentoId.tipoDoc_id, documento_id=DocumentoId.id,consecAdmision=0)
         print("Triage Actual = ", triageActual.id)
 
         print("idPacienteFinal", idPacienteFinal)
@@ -3121,12 +3153,14 @@ def guardarAdmisionTriage(request):
 
                 consecParaTriage = Ingresos.objects.get(id=grabo.id)
 
+                print("consecParaTriage = ",consecParaTriage )
+                print("consecParaTriage.consec = ", consecParaTriage.consec)
 
                 print("Grabe HISTORICO DEPENDENCIAS")
 
                 # Actualizo consecutivo de admision en TRIAGE
 
-                grabo55 = Triage.objects.filter( tipoDoc_id=idTipoDocFinal,documento_id=documento_llave.id,consec=0).update(consecAdmision=consecParaTriage.consec)
+                grabo55 = Triage.objects.filter( tipoDoc_id=idTipoDocFinal,documento_id=documento_llave.id,consec=0,consecAdmision=0).update(consecAdmision=consecParaTriage.consec)
 
                 #grabo55.save()
 
@@ -3134,29 +3168,29 @@ def guardarAdmisionTriage(request):
 
 		## aqui guarda el convenio que llega desde la pantalla de triage convenio
 
-                grabo88 = ConveniosPacienteIngresos(
-                          tipoDoc_id=idTipoDocFinal,
-                          documento_id=documento_llave.id,
-                          consecAdmision=consecAdmision,
-                          convenio_id=convenio,
-                          fechaRegistro = fechaRegistro,
-                          usuarioRegistro_id = usernameId.id,
-                          estadoReg = estadoReg
-                       )
-                grabo88.save()
-                grabo88.id
-                print("yA grabe pacientes ingresos", grabo88.id)
+                #grabo88 = ConveniosPacienteIngresos(
+                #          tipoDoc_id=idTipoDocFinal,
+                #          documento_id=documento_llave.id,
+                #          consecAdmision=consecAdmision,
+                #          convenio_id=convenio,
+                #          fechaRegistro = fechaRegistro,
+                #          usuarioRegistro_id = usernameId.id,
+                #          estadoReg = estadoReg
+                #       )
+                #grabo88.save()
+                #grabo88.id
+                #print("yA grabe pacientes ingresos", grabo88.id)
 
                 try:
                     with transaction.atomic():
 
-                        grabo66 = ConveniosPacienteIngresos.objects.get(tipoDoc_id=idTipoDocFinal,
-                                                                        documento_id=documento_llave.id,
-                                                                        consecAdmision=0)
+                        #grabo66 = ConveniosPacienteIngresos.objects.get(tipoDoc_id=idTipoDocFinal,
+                        #                                                documento_id=documento_llave.id,
+                        #                                                consecAdmision=0)
                         grabo67 = ConveniosPacienteIngresos.objects.filter(tipoDoc_id=idTipoDocFinal,
                                                                            documento_id=documento_llave.id,
                                                                            consecAdmision=0).update(
-                            consecAdmision=consecAdmision)
+                            consecAdmision=consecAdmision, convenio_id=convenio)
 
                 except Exception as e:
 
@@ -3172,7 +3206,7 @@ def guardarAdmisionTriage(request):
             # Aquí ya se hizo rollback automáticamente
             print("Se hizo rollback por:", e)
             rollo=1
-            datos = {'Mensajes': e}
+            datos = {'success': False, 'Mensajes': e}
             return JsonResponse(datos, safe=False)
             #raise error
 
@@ -3196,7 +3230,7 @@ def guardarAdmisionTriage(request):
                     print("comando = ", comando1)
                     cur3.execute(comando1)
 
-                    comando2 = 'UPDATE clinico_historia SET "consecAdmision" = ' + "'" + str(consecAdmision) + "'" + ' WHERE "tipoDoc_id" = ' + "'" + str(idTipoDocFinal) + "' AND documento_id"  + "'" + str(documento_llave.id) + "' AND "  + ' "consecAdmision" = ' + "'" +str(consecAdmision) + "'"
+                    comando2 = 'UPDATE clinico_historia SET "consecAdmision" = ' + "'" + str(consecAdmision) + "'" + ' WHERE "tipoDoc_id" = ' + "'" + str(idTipoDocFinal) + "' AND documento_id = "  + "'" + str(documento_llave.id) + "' AND "  + ' "consecAdmision" =  0  AND fecha >= ' + "'" +str(triageActual.fechaSolicita) +"'"
                     print("comando2 = ", comando2)
                     cur3.execute(comando2)
 

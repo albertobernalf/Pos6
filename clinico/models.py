@@ -510,7 +510,7 @@ class HistoriaExamenes(models.Model):
     rutaImagen = models.CharField(max_length=100, blank=True, null=True ,default='')
     rutaVideo = models.CharField(max_length=100, default='',blank=True, null=True)
     estadoExamenes = models.ForeignKey('clinico.EstadoExamenes', default=1, on_delete=models.PROTECT)
-    observaciones = models.CharField(max_length=200, editable=True,blank=True, null=True)
+    observaciones = models.CharField(max_length=2000, editable=True,blank=True, null=True)
     usuaroRegistra = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True, on_delete=models.PROTECT, related_name='usuarioRegistra1')
     estadoReg = models.CharField(max_length=1, choices=ESTADOREG_CHOICES,default='A', editable=False)
 
