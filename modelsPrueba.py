@@ -925,3 +925,8 @@ LUNES 15-SEPTIEMBRE: Ademas de revizar lo de arriba: ver acomodar columnas grade
 -- ops en enfermeria me muestra las devolucones de antes, se supone estan facturados o fue porque hice una factura manual o borre cargos manuales ??
 -- ops  si arregle paraclinico en enfereria triage supongo hay que arreglar las demas , medicamentos, 
 -- falta concebir una autorizacion aun triage OJO HACERLO
+-- no sirve el REFRESCAR de liquidaciondetalle
+-- ojo que es eso de que cuando cro un folio hc de paciente triage no guarda motivo,analis,plan,medico,depemdncia etc???
+--´pendiente ver resultados de paciente triage
+-- ojo  en enfermeria las devoluciiones y consulta gral devol mal muestra cosas pasadas
+-- la pantalla de farmacia dispensaacion que debe tener

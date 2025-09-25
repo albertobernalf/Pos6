@@ -1199,9 +1199,6 @@ def crearTriage(request):
 
                 ## fin crear convenio
 
-
-
-
                 # RUTINA ARMADO CONTEXT
 
                 triage1 = []
@@ -1236,7 +1233,9 @@ def crearTriage(request):
             # return JsonResponse({'success': False, 'Mensaje': e})
             # return HttpResponse (e)
             context['Mensajes'] = e
+            context['messages'] = e
             print("context = ",  context['Mensajes'])
+        
 
             return render(request, "triage/panelTriage.html", context)
 
@@ -1271,6 +1270,7 @@ def crearTriage(request):
 
         print(triage1)
         context['Mensajes'] = 'Triage Creado ... '
+        context['messages'] = 'Triage Creado ... '
 
         print("Entre imprimir Triage")
         triageId = grabo.id
@@ -3018,7 +3018,7 @@ def guardarAdmisionTriage(request):
         except ObjectDoesNotExist:
                 rollo=1
                 print("No existe Id de liquidacion")
-                datos = {'Mensajes': 'No existe Id de liquidacion'}
+                datos = {'messages' : 'No existe Id de liquidacion'}
                 #return JsonResponse(datos, safe=False)
 
 
@@ -3206,7 +3206,7 @@ def guardarAdmisionTriage(request):
             # Aquí ya se hizo rollback automáticamente
             print("Se hizo rollback por:", e)
             rollo=1
-            datos = {'success': False, 'Mensajes': e}
+            datos = {'success': False, 'messages': e}
             return JsonResponse(datos, safe=False)
             #raise error
 
@@ -3236,7 +3236,8 @@ def guardarAdmisionTriage(request):
 
                     try:
                         with transaction.atomic():
-                            pacienteEnfermeria = Enfermeria.objects.filter(ingresoPaciente=triageActual).update(ingresoPaciente=grabo.id)
+                            pacienteEnfermeria = Enfermeria.objects.filter(ingresoPaciente=triageActual.id).update(ingresoPaciente=grabo.id)
+                            pacienteFarmacia = Farmacia.objects.filter(ingresoPaciente=triageActual.id).update(ingresoPaciente=grabo.id)
 
                     except Exception as e:
                             print("Se hizo rollback HAY QUE  CREAR PATRICULAR :", e)
@@ -3253,7 +3254,7 @@ def guardarAdmisionTriage(request):
                     if miConexion3:
                         print("Entro ha hacer el Rollback")
                         miConexion3.rollback()
-                    datos = {'Mensaje': error}
+                    datos = {'messages': error}
                     return JsonResponse(datos, safe=False)
 
 
@@ -4014,7 +4015,7 @@ def guardarAdmisionTriage(request):
         context['Empresas'] = empresas
         response_data['Empresas'] = empresas
 
-        response_data['Mensajes'] = 'Admision Creada desde Triage !'
+        response_data['messages'] = 'Admision Creada desde Triage !'
         response_data['success'] = True
 
 
