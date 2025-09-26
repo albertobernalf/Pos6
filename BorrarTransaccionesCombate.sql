@@ -65,6 +65,6 @@ delete from cirugia_cirugiasmaterialqx; -- 20
 delete from cirugia_cirugiasparticipantes; --18
 delete from cirugia_cirugiasprocedimientos;--21
 delete from cirugia_programacioncirugias; -- 9
- 
+  
 select * from sitios_dependencias;
   

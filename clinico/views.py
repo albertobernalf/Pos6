@@ -2547,8 +2547,8 @@ def crearHistoriaClinica(request):
                                        password="123456")
         curt = miConexiont.cursor()
 
-        comando = 'SELECT t.id TipoId, e.id id, e.nombre nombre , e."codigoCups" cups FROM clinico_tiposExamen t, clinico_examenes e WHERE t.id = e."TiposExamen_id" and t.nombre = ' + "'" + str(
-            'LABORATORIO') + "'"
+        comando = 'SELECT t.id TipoId, e.id id, e.nombre ||' + "'" + str(' ') + "'" +  ' ||e."codigoCups" nombre , e."codigoCups" cups FROM clinico_tiposExamen t, clinico_examenes e WHERE t.id = e."TiposExamen_id" and t.nombre = ' + "'" + str(
+            'LABORATORIO') + "' ORDER BY e.nombre"
         curt.execute(comando)
         print(comando)
 
@@ -2573,8 +2573,8 @@ def crearHistoriaClinica(request):
         curt = miConexiont.cursor()
 
         # comando = "SELECT t.id TipoId, e.id id, e.nombre nombre FROM clinico_tiposExamen t, clinico_examenes e WHERE t.id = e.TiposExamen_id and t.id ='1'"
-        comando = 'SELECT t.id TipoId, e.id id, e.nombre nombre , e."codigoCups" cups FROM clinico_tiposExamen t, clinico_examenes e WHERE t.id = e."TiposExamen_id" and t.nombre = ' + "'" + str(
-            'RADIOLOGIA') + "'"
+        comando = 'SELECT t.id TipoId, e.id id, e.nombre ||' + "'" + str(' ') + "'" +  ' ||e."codigoCups" nombre , e."codigoCups" cups FROM clinico_tiposExamen t, clinico_examenes e WHERE t.id = e."TiposExamen_id" and t.nombre = ' + "'" + str(
+            'RADIOLOGIA') + "' ORDER BY e.nombre"
 
         curt.execute(comando)
         print(comando)
@@ -2671,7 +2671,7 @@ def crearHistoriaClinica(request):
                                        password="123456")
         curt = miConexiont.cursor()
 
-        comando = "SELECT d.id id, d.nombre nombre FROM clinico_causasExterna d "
+        comando = "SELECT d.id id, d.nombre nombre FROM clinico_causasExterna d ORDER BY d.nombre"
         curt.execute(comando)
         print(comando)
 
@@ -2720,8 +2720,8 @@ def crearHistoriaClinica(request):
         curt = miConexiont.cursor()
 
         # comando = "SELECT t.id TipoId, e.id id, e.nombre nombre FROM clinico_tiposExamen t, clinico_examenes e WHERE t.id = e.TiposExamen_id and t.id ='3'"
-        comando = 'SELECT t.id TipoId, e.id id, e.nombre nombre , e."codigoCups" cups FROM clinico_tiposExamen t, clinico_examenes e WHERE t.id = e."TiposExamen_id" and t.nombre = ' + "'" + str(
-            'TERAPIAS') + "'"
+        comando = 'SELECT t.id TipoId, e.id id, e.nombre ||' + "'" + str(' ') + "'" +  ' ||e."codigoCups" nombre , e."codigoCups" cups FROM clinico_tiposExamen t, clinico_examenes e WHERE t.id = e."TiposExamen_id" and t.nombre = ' + "'" + str(
+            'TERAPIAS') + "' ORDER BY e.nombre"
 
         curt.execute(comando)
         print(comando)
@@ -2746,8 +2746,8 @@ def crearHistoriaClinica(request):
                                        password="123456")
         curt = miConexiont.cursor()
 
-        comando = 'SELECT t.id TipoId, e.id id, e.nombre nombre , e."codigoCups" cups FROM clinico_tiposExamen t, clinico_examenes e WHERE t.id = e."TiposExamen_id" and t.nombre = ' + "'" + str(
-            'PROCEDIMIENTOS NO QX') + "'"
+        comando = 'SELECT t.id TipoId, e.id id, e.nombre  ||' + "'" + str(' ') + "'" +  ' ||e."codigoCups" nombre , e."codigoCups" cups FROM clinico_tiposExamen t, clinico_examenes e WHERE t.id = e."TiposExamen_id" and t.nombre = ' + "'" + str(
+            'PROCEDIMIENTOS NO QX') + "' ORDER BY e.nombre"
 
         curt.execute(comando)
         print(comando)
@@ -2846,7 +2846,7 @@ def crearHistoriaClinica(request):
                                        password="123456")
         curt = miConexiont.cursor()
 
-        comando = 'SELECT e.id id, e.nombre nombre  FROM clinico_RevisionSistemas e'
+        comando = 'SELECT e.id id, e.nombre nombre  FROM clinico_RevisionSistemas e ORDER BY e.nombre'
 
         curt.execute(comando)
         print(comando)
@@ -2871,7 +2871,7 @@ def crearHistoriaClinica(request):
                                        password="123456")
         curt = miConexiont.cursor()
 
-        comando = 'SELECT e.id id, e.nombre nombre  FROM facturacion_Suministros e, facturacion_tipossuministro t  where e."tipoSuministro_id" = t.id AND t.nombre = ' + "'" + str('MEDICAMENTOS') + "' ORDER BY e.nombre"
+        comando = 'SELECT e.id id, e.nombre||' + "'" + str(' ') + "'" +  ' ||e.cums nombre  FROM facturacion_Suministros e, facturacion_tipossuministro t  where e."tipoSuministro_id" = t.id AND t.nombre = ' + "'" + str('MEDICAMENTOS') + "' ORDER BY e.nombre"
 
         curt.execute(comando)
         print(comando)
@@ -2896,7 +2896,7 @@ def crearHistoriaClinica(request):
                                        password="123456")
         curt = miConexiont.cursor()
 
-        comando = 'SELECT e.id id, e.descripcion nombre  FROM clinico_unidadesdemedidadosis e'
+        comando = 'SELECT e.id id, e.descripcion nombre  FROM clinico_unidadesdemedidadosis e ORDER BY e.descripcion'
 
         curt.execute(comando)
         print(comando)
@@ -2921,7 +2921,7 @@ def crearHistoriaClinica(request):
                                        password="123456")
         curt = miConexiont.cursor()
 
-        comando = 'SELECT e.id id, e.nombre nombre  FROM clinico_formasfarmaceuticas e' 
+        comando = 'SELECT e.id id, e.nombre nombre  FROM clinico_formasfarmaceuticas e ORDER BY e.nombre'
 
         curt.execute(comando)
         print(comando)
@@ -2946,7 +2946,7 @@ def crearHistoriaClinica(request):
                                        password="123456")
         curt = miConexiont.cursor()
 
-        comando = 'SELECT e.id id, e.descripcion nombre  FROM clinico_frecuenciasaplicacion  e'
+        comando = 'SELECT e.id id, e.descripcion nombre  FROM clinico_frecuenciasaplicacion  e ORDER BY e.descripcion'
 
         curt.execute(comando)
         print(comando)
@@ -2971,7 +2971,7 @@ def crearHistoriaClinica(request):
                                        password="123456")
         curt = miConexiont.cursor()
 
-        comando = "SELECT c.id id,c.nombre nombre FROM clinico_viasAdministracion c"
+        comando = "SELECT c.id id,c.nombre nombre FROM clinico_viasAdministracion c order by c.nombre "
 
         curt.execute(comando)
         print(comando)
@@ -3020,7 +3020,7 @@ def crearHistoriaClinica(request):
 
         miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",   password="123456")
         curt = miConexiont.cursor()
-        comando = 'SELECT e.id ,e.nombre FROM clinico_Diagnosticos e'
+        comando = 'SELECT e.id ,e.nombre ||' + "'" + str(' ') + "'" +  ' ||e.cie10 nombre FROM clinico_Diagnosticos e ORDER BY e.nombre '
         curt.execute(comando)
         print(comando)
 
@@ -3099,7 +3099,7 @@ def crearHistoriaClinica(request):
                                        password="123456")
         curt = miConexiont.cursor()
 
-        comando = "SELECT p.id id, p.nombre  nombre FROM  clinico_diagnosticos  p"
+        comando = "SELECT p.id id, p.nombre ||' + "'" + str(' ') + "'" +  ' ||p.cie10 nombre FROM  clinico_diagnosticos  p ORDER BY p.nombre"
 
         curt.execute(comando)
         print(comando)

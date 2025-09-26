@@ -3236,8 +3236,8 @@ def guardarAdmisionTriage(request):
 
                     try:
                         with transaction.atomic():
-                            pacienteEnfermeria = Enfermeria.objects.filter(ingresoPaciente=triageActual.id).update(ingresoPaciente=grabo.id)
-                            pacienteFarmacia = Farmacia.objects.filter(ingresoPaciente=triageActual.id).update(ingresoPaciente=grabo.id)
+                            pacienteEnfermeria = Enfermeria.objects.filter(ingresoPaciente=triageActual.id, sedesClinica_id=sede).update(ingresoPaciente=grabo.id)
+                            pacienteFarmacia = Farmacia.objects.filter(ingresoPaciente=triageActual.id , sedesClinica_id=sede).update(ingresoPaciente=grabo.id)
 
                     except Exception as e:
                             print("Se hizo rollback HAY QUE  CREAR PATRICULAR :", e)

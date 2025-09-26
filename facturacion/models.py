@@ -121,7 +121,7 @@ class Suministros (models.Model):
         ]
     id = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=300, blank=True,null= True, editable=True)
-    #nombre = models.CharField(max_length=300, null=False,  blank=False  , editable=True , unique=True)
+    #nombre = models.CharField(max_length=300, null=True,  blank=True  , editable=True , unique=True)
     tipoSuministro =   models.ForeignKey('facturacion.TiposSuministro', blank=True,null= True, editable=True, on_delete=models.PROTECT)
     nombreGenerico  =  models.CharField(max_length=300, blank=True,null= True,  editable=True )
     descripcionComercial  =  models.CharField(max_length=250,blank=True,null= True,  editable=True )

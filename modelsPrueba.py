@@ -930,3 +930,15 @@ LUNES 15-SEPTIEMBRE: Ademas de revizar lo de arriba: ver acomodar columnas grade
 --´pendiente ver resultados de paciente triage
 -- ojo  en enfermeria las devoluciiones y consulta gral devol mal muestra cosas pasadas
 -- la pantalla de farmacia dispensaacion que debe tener
+-- ops cuando ingreso revision x sistemas me descuadra la grlla
+-- cuando yo autorizo no se desaparece de la pantalla de autorizaciones ver esop
+-- ops no me grabo lo de nota aclaratoria
+-- que paso con los folios hc triage
+-- en ningun registro guaro las enfermedades OPS ??????
+-- OPS NO ME ACTUALIZO EL ingresopaciente en farmaciua y enfermeria al pasar de triage a admisiones por cua ??
+-- 1que pasa con los calendarios son complñicado sno son muy funcinales que digamso
+-- ops el boton editar de liquidaciondetalle no funciona para actualizar tarifa
+-- la ventana creacion de rps no mestra el erro
+-- ops la ventana rips revizar
+-- ops error aparece el paciente ambulatorio que ya se le dio salida ERO ojo, no coloco fecha de salida, el nro de lqa factura no ,o coloco
+  la tabla facturacion_conveniospacienteingresos (fue al momento de facturar) creo un registro de mas a l ambulatorio error, ops no desocupo la habitacion, tampoco desocupo la cama al historialdependencias

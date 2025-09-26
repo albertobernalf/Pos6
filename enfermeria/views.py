@@ -658,8 +658,23 @@ def Load_dataPlaneacionEnfermeria(request, data):
     print ("sede =", sede)
 
     ingresoId = d['ingresoId']
+    username_id = d['username_id']
 
     print ("ingresoId =", ingresoId)
+
+    try:
+        with transaction.atomic():
+
+	        turnoenfermera = TurnosEnfermeria.objects.get(sedesClinica_id=sede,enfermeraTurno_id=username_id)
+
+    except Exception as e:
+            # Aquí ya se hizo rollback automáticamente
+            print("Se hizo rollback por PRONO SE HACE NADA:", e)
+            return JsonResponse({'success': False, 'Mensaje': 'Enfermera  no tiene asignado un turno!'})
+
+    finally:
+        print("No haga nada")
+
 
     esTriage='N'
     try:
@@ -748,7 +763,7 @@ def GuardaPlaneacionEnfermeria(request):
 
     print("medida =", medida)
 
-    sum = Suministros.objects.get(nombre=suministro)
+    sum = Suministros.objects.get(id=recibe.suministro_id)
 
     via = request.POST['viaP']
     print("via =", via)

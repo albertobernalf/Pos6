@@ -2635,7 +2635,7 @@ def escogeAcceso(request, Sede, Username, Profesional, Documento, NombreSede, es
                                        password="123456")
         curt = miConexiont.cursor()
 
-        comando = 'SELECT p.id id, p.nombre  nombre FROM  clinico_examenes  p ORDER BY p.id '
+        comando = 'SELECT p.id id, p.nombre||' + "'" + str(' ') + "'" + '||p."codigoCups"  nombre FROM  clinico_examenes  p ORDER BY p.id '
         print(comando)
         curt.execute(comando)
 
@@ -2662,7 +2662,7 @@ def escogeAcceso(request, Sede, Username, Profesional, Documento, NombreSede, es
                                        password="123456")
         curt = miConexiont.cursor()
 
-        comando = 'SELECT p.id id, p.nombre  nombre FROM  facturacion_suministros  p ORDER BY p.id '
+        comando = 'SELECT p.id id, p.nombre||' + "'" + str(' ') + "'" +  +' ||p.cums  nombre FROM  facturacion_suministros  p ORDER BY p.id '
         print(comando)
         curt.execute(comando)
 
