@@ -33,7 +33,7 @@ from farmacia.models import FarmaciaEstados
 from facturacion.models import ConveniosPacienteIngresos, Liquidacion, LiquidacionDetalle, Facturacion, FacturacionDetalle, Conceptos, Suministros
 from clinico.models import Servicios, EspecialidadesMedicos, UnidadesDeMedidaDosis, ViasAdministracion, FrecuenciasAplicacion, TiposFolio, Historia, TipoDietas
 import io
-from enfermeria.models import Enfermeria,EnfermeriaRecibe, EnfermeriaDetalle, TurnosEnfermeria, TiposTurnosEnfermeria
+from enfermeria.models import Enfermeria,EnfermeriaRecibe, EnfermeriaDetalle, TurnosEnfermeria, TiposTurnosEnfermeria, EnfermeriaPlaneacion
 import pandas as pd
 from cirugia.models import EstadosCirugias, EstadosSalas, EstadosProgramacion, ProgramacionCirugias, Cirugias, ProgramacionCirugias
 from contratacion.models import Convenios
@@ -820,7 +820,7 @@ def GuardaPlaneacionEnfermeria(request):
         if miConexion3:
             print("Entro ha hacer el Rollback")
             miConexion3.rollback()
-        raise error
+        return JsonResponse({'success': False, 'Mensaje': error})
 
     finally:
         if miConexion3:
@@ -970,6 +970,7 @@ def GuardaAplicacionEnfermeria(request):
     registroAplica = request.POST['registroAplica']
     print ("registroAplica =", registroAplica)
 
+    registroPlaneaId = EnfermeriaPlaneacion.objects.get(id=registroAplica)
 
     username_id = request.POST['username_id']
     print ("username_id =", username_id)
@@ -1001,7 +1002,7 @@ def GuardaAplicacionEnfermeria(request):
     suministro = request.POST['suministroA']
     print("suministro =", suministro)
 
-    sum = Suministros.objects.get(nombre=suministro)
+    sum = Suministros.objects.get(id=registroPlaneaId.suministro_id)
 
     via = request.POST['viaA']
     print("via =", via)
@@ -1033,7 +1034,7 @@ def GuardaAplicacionEnfermeria(request):
         print ("aqui voy")
 
 
-        detalle = 'UPDATE enfermeria_enfermeriaplaneacion SET "turnoEnfermeriaAplica_id" = ' + "'" + str(turnoEnfermeria.id) + "'," + '"enfermeraAplica_id" = ' + "'" + str(username_id) + "'"  + ', "fechaAplica" = ' + "'," + str(fechaAplica) + '"cantidadAplicada" = ' + "'" + str(cantidad) +  "' WHERE id =" + "'" + str(registroAplica) +"'"
+        detalle = 'UPDATE enfermeria_enfermeriaplaneacion SET "turnoEnfermeriaAplica_id" = ' + "'" + str(turnoEnfermeria.id) + "'," + '"enfermeraAplica_id" = ' + "'" + str(username_id) + "'"  + ', "fechaAplica" = ' + "'" + str(fechaAplica) + "'" + ',"cantidadAplicada" = ' + "'" + str(cantidad) +  "' WHERE id =" + "'" + str(registroAplica) +"'"
         print(detalle)
         cur3.execute(detalle)
 

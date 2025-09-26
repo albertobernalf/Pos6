@@ -1305,9 +1305,19 @@ def FacturarCuenta(request):
     serviciosAdministrativos = request.POST["serviciosAdministrativos"]
 
     usuarioId = Liquidacion.objects.get(id=liquidacionId)
+    ingresoIdAmb = Ingresos.objects.get(tipoDoc_id=usuarioId.tipoDoc_id, documento_id=usuarioId.documento_id, consec=usuarioId.consecAdmision)
+
+    servicioSedeAmb = ServiciosSedes.objects.get(sedesClinica_id=sede, id=ingresoIdAmb.serviciosActual_id)
+    servicioAmb = Servicios.objects.get(nombre='AMBULATORIO')
+
+    if (servicioSedeAmb.servicios_id==servicioAmb.id):
+        flag='AMBULATORIO'
+
     print ("Usuario", usuarioId.documento_id)
     print ("TipoDoc", usuarioId.tipoDoc_id)
     print ("Consec", usuarioId.consecAdmision)
+
+
 
     totalCirugias=0
 
@@ -1323,8 +1333,6 @@ def FacturarCuenta(request):
             print("ENTRE convenio de la liquidacion = " + liquidacionDatos.convenio_id)
             return JsonResponse({'success': False, 'message': 'Favor ingresar Convenio a Facturar !', 'Factura' : 0 })
 
-
-    servicioAmb = Servicios.objects.get(nombre='AMBULATORIO')
 
 
      # OPS PAILAS SI LO QUE VA A FACTURAR ES UN TRIAGE
@@ -1342,9 +1350,10 @@ def FacturarCuenta(request):
 	    ingresoId = Ingresos.objects.get(tipoDoc_id=usuarioId.tipoDoc_id , documento_id=usuarioId.documento_id ,consec=usuarioId.consecAdmision)
 	    print ("ingresoId = ", ingresoId.id)
 	    flag='INGRESO'
-	    servicioSedeAmb = ServiciosSedes.objects.get(id=ingresoId.serviciosActual_id)
-
+	    
+    print ("IngresoId", ingresoId.id)
     print("falg" ,flag)
+
     if (flag=='INGRESO'):
         print("flag2", flag)
         if (ingresoId.salidaClinica=='N' and servicioSedeAmb.servicios_id != servicioAmb.id  ):
@@ -1480,7 +1489,7 @@ def FacturarCuenta(request):
 
         ## COLOCAR EN LA TABLA INGRESOS , LA FECHA DE EGRESO Y EL NUMERO DE LA FACTURA GENERADO SI SE FACTURA
 
-        if (tipoFactura == 'REFACTURA' and flag != 'TRIAGE'  and numConveniosActivos <= 1):
+        if ((tipoFactura == 'REFACTURA' or tipoFactura == 'FACTURA')  and flag != 'TRIAGE'  and numConveniosActivos <= 1):
 
             comando4 = 'UPDATE admisiones_ingresos SET "salidaDefinitiva" = ' + "'" + str('S') + "'" + ', factura = ' + str(facturacionId)  + ' WHERE id =' + str(ingresoId.id)
             cur3.execute(comando4)
@@ -1792,7 +1801,7 @@ def ReFacturar(request):
     facturacionId = request.POST["facturacionId"]
     print ("el id es = ", facturacionId)
 
-    serviciosAdministrativos = request.POST["RserviciosAdministrativos"]
+    serviciosAdministrativos = request.POST["serviciosAdministrativos"]
     print ("serviciosAdministrativos", serviciosAdministrativos)
 
 

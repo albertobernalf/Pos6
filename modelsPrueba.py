@@ -942,3 +942,8 @@ LUNES 15-SEPTIEMBRE: Ademas de revizar lo de arriba: ver acomodar columnas grade
 -- ops la ventana rips revizar
 -- ops error aparece el paciente ambulatorio que ya se le dio salida ERO ojo, no coloco fecha de salida, el nro de lqa factura no ,o coloco
   la tabla facturacion_conveniospacienteingresos (fue al momento de facturar) creo un registro de mas a l ambulatorio error, ops no desocupo la habitacion, tampoco desocupo la cama al historialdependencias
+-- opsOPS OPS GOLAZAZOO EL BOTON REFRESCAR DE ADMISIONES ME CREO UN NUEVO INGRESO AMBULATORIO (HABRASE VISTO ALGO SEMEJANTEY ESA VAINA POR QUE PASO ) OJO SOLO CUANDO
+   ACABABA DE GUARDAR UN AMBULATORIO OPS REOPS OPS
+-- cuando uno anula una factura refresh que se veal el cambio si se puede
+-- ops refacture el ambykltorio de eumeia consec2 y no me tomo la refactura el acetaminofen verificar (OPS PERO SI ESTA ACUMULADA Y HECHA SOLO QUE NO MUESTRA EN LAIMPRESION ELDETALLE , PERO SI LA MUESTRA EN FACTURACIONDETALLE)-- NADA QUE LE COLOCA LA FACTURA NUEVA
+-- REVISAR TODO EL PROCESO DE REFACTURACION ALGO PASA  . CREO QUE NO HE HECHO EL DATATABLE DE REFACTURTADAS
