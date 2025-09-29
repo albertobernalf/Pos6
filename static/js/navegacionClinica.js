@@ -94,6 +94,23 @@
 	});
 
 
+	/*------------------------------------------
+        --------------------------------------------
+        Delete Post Code Enfermedades
+        --------------------------------------------
+        --------------------------------------------*/
+        $("body").on("click",".deletePostEnfermedades",function(){
+		alert("Entre a borrar el id laboratorio ");
+      	        var rowIndex = $(this).parent().index('#tablaEnfermedades tbody tr');         
+	     	alert("Entre a borrar la fila #  Enfermedad Nro" + rowIndex );
+		var tableL = $('#tablaEnfermedades').DataTable(); 
+		// tableL.row(':eq(rowIndex-1)').remove().draw(false);
+		 tableL.row.remove(rowIndex).draw(false);
+
+		// document.getElementById("tablaEnfermedades").deleteRow(rowIndex);
+                // tableL.ajax.reload();
+	});
+
 
 	/*------------------------------------------
         --------------------------------------------
@@ -262,6 +279,20 @@ $('#tablaLaboratorios tbody').on('click', 'tr', function () {
 		 document.getElementById("tablaLaboratorios").deleteRow(fila-1);
 
 });
+
+$('#tablaEnfermedades tbody').on('click', 'tr', function () {
+    confirm("Desea eliminar LA FILA: ");
+       var tableL = $('#tablaEnfermedades').DataTable();
+      var fila = $(this).parents("tr")['prevObject']['0']['_DT_RowIndex'];
+          alert("Fila a borrar = " + fila);
+		var rows = tableL
+			    .rows(fila)
+			    .remove()
+			    .draw();
+		 document.getElementById("tablaEnfermedades").deleteRow(fila-1);
+
+});
+
 
 $('#tablaRadiologia tbody').on('click', 'tr', function () {
     confirm("Desea eliminar LA FILA: ");
@@ -687,6 +718,41 @@ $('#tablaFacturacions tbody').on('click', 'tr', function () {
         });
       
 
+
+  /*------------------------------------------
+        --------------------------------------------
+        Create Post Code Enfermedades
+        --------------------------------------------
+        --------------------------------------------*/
+        $('#BtnAdicionarEnfermedades').click(function (e) {
+            e.preventDefault();
+         //   $('.success-msg').css('display','block');
+         //   $('.success-msg').text('Dato actualizado');
+
+   	   if (controlLab == 0)
+   	   {
+   	   var tableL = $('#tablaEnfermedadess').DataTable({scrollY: '150px', paging:false,   scrollX: true,  scrollCollapse: true,  lengthMenu: [5]});   // accede de nuevo a la DataTable.
+   	   controlLab=1;
+   	   }
+   	   else
+   	   {
+   	   var tableL = $('#tablaEnfermedades').DataTable();
+   	   }
+   	   var TipoDocPaciente = document.getElementById("tipoDocPaciente1").value;
+	   var documentoPaciente = document.getElementById("documentoPaciente1").value;
+	   var IngresoPaciente = document.getElementById("ingresoPaciente1").value;
+
+	   
+     	   var observa = document.getElementById("observa").value;
+           var select = document.getElementById("enf"); /*Obtener el SELECT */
+      	   var enf = select.options[select.selectedIndex].value; /* Obtener el valor */
+      	   text = select.options[select.selectedIndex].innerText; //El texto de la opción seleccionada
+	        tableL.row.add([enf, text,   observa, '<i class="fa fa-trash"></i>']).draw(false);
+        });
+      
+
+
+
   /*------------------------------------------
         --------------------------------------------
         Create Post Code Notas de Enfermeria
@@ -710,6 +776,45 @@ $('#tablaFacturacions tbody').on('click', 'tr', function () {
      	   var observa = document.getElementById("observacionesNotas").value;
            tableE.row.add([observa, '<i class="fa fa-trash"></i>']).draw(false);
         });
+
+//  -1. ENFERMEDADES
+
+
+function tableActionsEnfermedades() {
+
+   var table= $('#tablaEnfermedades').DataTable({
+                "language": {
+                  "lengthMenu": "Display _MENU_ registros",
+                   "search": "Filtrar registros:",
+                    },
+                processing: true,
+                serverSide: false,
+                scrollY: '250px',
+	            scrollX: true,
+	            scrollCollapse: true,
+                paging:false,
+                 columnDefs: [
+                {
+                    "render": function ( data, type, row ) {
+                        var btn = '';
+			  btn = btn + " <button class='btn btn-danger deletePostEnfermedades' >" + '<i class="fa fa-trash"></i>' + "</button>";
+                        return btn;
+                    },
+                    "targets": 3
+               }
+            ],
+        lengthMenu: [5],
+    columns:[
+
+        { visible: true },
+        { visible: true },
+        { visible: true },
+        { visible: true },
+
+            ],
+    });
+}
+
 // 0. NOTASENFERMERIA
 
 function tableActionsNotasEnfermeria() {
@@ -1224,6 +1329,32 @@ formHistoriaClinica.addEventListener('submit', e=>{
 
         // FIN notasEnfermeria
 
+
+
+        // ENFERMEDADES
+
+        const tablexx = $('#tablaEnfermedades').DataTable();
+        var datos_tabla = tablexx.rows().data().toArray();
+
+
+        enfermedades=[]
+        cadenas = {}
+
+
+	for(var i= 0; i < datos_tabla.length; i++) {
+
+	    enfermedades.push({
+	        "id"  : datos_tabla[i][0],
+		"observa"    : datos_tabla[i][3] 
+	      });
+	   };
+
+	enfermedades  = JSON.stringify(enfermedades);
+
+        // FIN ENFERMEDADES
+
+
+
         // LABORATORIO
 
         const table = $('#tablaLaboratorios').DataTable();
@@ -1712,7 +1843,7 @@ formHistoriaClinica.addEventListener('submit', e=>{
                         'pulsos':pulsos,
                         'retiroPuntos':retiroPuntos,
                         'inmovilizacion':inmovilizacion,
-                        'notaAclaratoria':inmovilizacion,
+                        'notaAclaratoria':notaAclaratoria,
                         'fecNotaAclaratoria':fecNotaAclaratoria,
                         'fecNotaAclaratoria':fecNotaAclaratoria,
                         'examenFisico':examenFisico,
@@ -1775,6 +1906,7 @@ formHistoriaClinica.addEventListener('submit', e=>{
 				'ordenDeControl':ordenDeControl,
 				'notasEnfermeria':notasEnfermeria,
 				'vomito':vomito,
+				'enfermedades':enfermedades,
 
 				   },
  	      		success: function (data) {

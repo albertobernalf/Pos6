@@ -1526,8 +1526,8 @@ def FacturarCuenta(request):
 
         if (tipoFactura == 'REFACTURA'):
 
-            if (flag == 'INGRESO'):
-                comando4 = 'UPDATE facturacion_refacturacion SET "facturaNueva" = ' + "'" +  str(facturacionId) + "'" +  ' WHERE "facturaAnulada"  =' + str(ingresoId.factura)
+            if (flag == 'INGRESO' or flag== 'AMBULATORIO'):
+                comando4 = 'UPDATE facturacion_refacturacion SET "facturaNueva" = ' + "'" +  str(facturacionId) + "'" +  ' WHERE documento_id = ' + "'" + str(ingresoId.documento_id) + "' and " + '"tipoDoc_id" = ' + "'" + str(ingresoId.tipoDoc_id) + "' and " + '"consecAdmision" = ' + "'" + str(ingresoId.consecAdmsion) + "' AND "  + ' "facturaAnulada"  = ' + "'" + + str(ingresoId.factura) + "'"
                 cur3.execute(comando4)
             else:
                 comando4 = 'UPDATE facturacion_refacturacion SET "facturaNueva" = ' + "'" + str(facturacionId) + "'" + ' WHERE "facturaAnulada"   =' + str(TriageId.id)

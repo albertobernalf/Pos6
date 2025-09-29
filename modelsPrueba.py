@@ -739,7 +739,7 @@ BIBLIOGRAFIA:
   -- TENGO LIO ALLI VERIFICAR EL LUNES 19/mayo ,, OPS AHORA ME SALNE DOBLE VALIDAR
 -- OJO EL LUNES 19, TRABAJAR DES LIQUIDACION SALAS DE CIRUGIA/MATERIALES ISS Y LUEGO SI SEGUIR CON SOAT, acercamientos
 
--- OJO para facturar se barre tabla facturacion_conceptos
+
 -- se liquidan los materialesqx + sutura y se sube unoa a uno liquidaiondetalle
 -- solo un valor total de derechos de sala por la cirugia
 -- ojo que pasa con el numero de la factuyra ejemplo FACTURA DE VENTA: TOB15851. Simplemente le agrego dos campos : prefijo y FacturaNo para la DIAN, eso es todo en la tabla facturacion_liquidacion
@@ -761,13 +761,6 @@ AUTORETENEDOR EN RENTA RESOLUCION 151 DEL 14-01-2016
 Cufe: daeeb9343955c6037479b2e1b7bb485526f7524e5b085b4a5eb6e64298b22873bd6ef35b929221
 
 - Aqui en adelante nueva etapa ENFERMERIA/FARMACIA .ALTO TURMEQUE PAPABEROL
-
--- Ojo al ingresar un folio si no tiene convenio se revienta verificar
--- OJO en el ORM esta colocando mal la fecha de registro
--- OJO con los rollback cuango guarda folio de laboratorio
--- cuando dispense al guardar en liquidaciondetalle, tuvoi problema con la escogencia del convenio_id, aquihay problemilla. un ,omento cogio una y en otro momento cogio otro cabezote
--- ojop tenia dos vancomicinas repetidas
--- en farmaia no suma bien los totales del cabezote  suministrois y prceimientos OJOP
 
 -- El boton refrecar en factuyracion esta muy grande
 -- ojo toca mejporar las pántallas en darmacia y enfemeria algo pasa
@@ -802,10 +795,6 @@ ojo pendiente en aplicacion de medicamentos arreglar cuando aplica la modal no p
   -- hacer todos los JSONRESPONSE con dat. Mensaje Erro y no erro
 
 -- los combos sin seleccion de rips despues de que se crea un admison estan con inicio en blanco
--- ojo sale mensaje que pacinte ya esta en la clinica cuando nop por elcotext ver como arreglar
--- ops como asi me borro un acetaminofeen de liquidaciondetalle verificar ???
--- ops agregfue tan solo un aceaminfen y no me refrescon totales no grabo en cabezpote facturacion_lquidacion un registro manul de acetaminofen
--- ojop hay un registro de laliquiacin de eumelia con cums_id y examen_id ala vae en loqudacindetalle ERROR Y ESO COMO PASO ??
 -- ojo en tarifarios, paramettizar la ruta de crague de procedimientos, suminis, honoraro en tabla parametros
 
 -- op el lio es el conscuivoAdmision que se deb actulizar al momento de pasar lel triage al convenio
@@ -821,27 +810,17 @@ ojo pendiente en aplicacion de medicamentos arreglar cuando aplica la modal no p
   -- facturar, pistear abonos
   -- los filtros de las busqueda de facturas por fechas o numero de factura nop funciona
   -- ojo se crea la carpeta jsonclinic/rips, enrutar
-  -- ojo los nombres d elos archvos con el nro del folio, para que norepita
-  -- REALIZAR ejercicio completo desde ceros hasta factura hasta rips una vez mas solidop
   -- como es el lio de la facturacion de una cirugia
   -- la pantalla de farmacia no refrescxa bien cuan hace despacho
-  --como es el lio de los mensajes de error hay que mejorarlos mal
   -- como es eso de tx--> rollback criticos ni permitir basira
  -- no se en qiue lado mecreo un cabezote
-  -- ops validar en ingresos, dx_ingreso, servicio_ingreso, medicoIngreso, actial y salid PILAS
   -- y el repporteaor que pasa ?
   -- Lo ultimo ultimo es tablas particionadas ver cuales. Umm yp creo la gran mayoria.
 
-7. Trabaja impresion de historia clinica, con apoyo terapeutico formato bien bacano ojo lineas no cuadros. por el momento crera nuevos pacientes y hacer pruebas con ellos
--- ojo falta 
--- ops la facturaambulatoria no tiene totales
--- ops los indicadores de hclinica NO MUESTRA AMBULATORIOS y los de facturacion no funcionan (NO FUNCONA NADA)
-2. hacer ejemplocon mas de un medicamento, mas de unat terapia no autoriada en un folio
+
 3. hacer traslados
 4. indicadores
 7. mirar desde autorizaciones los cups que caen a liquidaciondetalle, actualizaen TOTALES
-8. cuando planeo un medicamento en enfermeria sale eroro de turnos catch error
-
  --	OJO PARA EL 8 DE SEPTIEMBRE:
 
 10. ojo el guery load_dataliquidacion me mosytro 2 veces a nataly y no tiene sisno una solo convenio OPS de pronto es popr que tiene otro conevio al refacturar y activarla quedan activos los
@@ -860,7 +839,6 @@ ojo pendiente en aplicacion de medicamentos arreglar cuando aplica la modal no p
 	1. combo localidades en actualizar usuaro de triage NO FUNCIONa, CREO QUE EN ADMISIONES TAMPOCO
 	2. en crear responsables y acompañamtes No esta hecho hay que hacerlo
 	3. ops crre un servicio admon y no aparece en dependencia ???
-	10. ojo dese autorizaciones no actuliza los cabezotes de TOATLE Liquidacion poroced, vapagar etc PPERSISTE OJO ARREGLAR, es como el orden de los fatcires 
         11. OJO TOCO EN TARIFARIOS update tarifarios_TarifariosDescripcion set columna = 'colValorBase' where id=36 AL MOMENTO DE CREAR UNA DESCRICOPMN  ES MEJOPR SOLO DESDE "ColValorBase"
 
 --------------------
@@ -885,10 +863,7 @@ LUNES 15-SEPTIEMBRE: Ademas de revizar lo de arriba: ver acomodar columnas grade
 10. usuarios de bases de datos probar
 11.  hacer exp todo imhoteps conm cpomandos SQL como en vulnerx
 -- permisos OPCIONMESg
-
--- OPS PELIGRO PELIGRO PEÑIGRO CUANDO HAY ERRO EN REPORTES YA HA GRABADO Y S VUELVEN A GRABAR QUEDA REPETIDO ÑUCAS LA VEPONEGRA SOLUCIONAR
 --falta impresion NoQx
--- Ojo imprime ordenesDeControl vacias
 -- Ojo en cirugias que pasas si es triage debe salir mensaje, debe estar hospitalizado o en urgnecia para que pueda hacer la solicitud
 -- Ops no he desarrollado autorizaciones de cirugia OPS
 
@@ -899,51 +874,36 @@ LUNES 15-SEPTIEMBRE: Ademas de revizar lo de arriba: ver acomodar columnas grade
  -- Probar facturacion /refacturar, / anular etc
 -- OPS SACO ERROR AL IMPRIMIR LA AUTORIZACION DEL TRIAGE. PREGUNTA PORQUE SALE EN AUTORIZACIONES SI YA NO ESTA EN CLINICA?
 -- OJO HACER IMPRESION DE ORDENES E IMPRESION DE FOLIOS EN HCLINICA
--- tengo un erro me creo encabezado en loiquadcion o cunados salida clinica o cuando aviso no factura triage o cuando facture a normebro aceres
-   hay un error poruq creo convenio particular y factro pop particular y no me dicuenta
--- ojo vovio a pasar error en reporte de hc, me grabo le folio y quedo para seguir grbando OJOOOOOOOOOOOOOOOOOoooooooooooooooooo
--- ojo parece ser que cuando admisiones el pacinet desde triage me lo creo partiuclar y con compensar EPS
--- Tocaria arrastra el consecAdmision de clinico_historia desde 0 al numero del ingreso en el momento de la admison
 -- ojo hau que hacer un refres a farmaciades´pachos
--- COMO PUEDE SER POSIBE QUE UN TRIAGE CON SOLO UN LAB Y UN MEDICAMENTO Y YA ÑUCAS NO ACTULIZA TOTALLIQUI Y APAGAR
--- ono en enfermeria al planear encuentyra suministrto duplicado linea 750
--- ops actualzar ingresopaciete ciando pasa de triage a admisonion
 -- ops notengo devolucionmes por triage, hay que incluirlasen el query load_datadevolucones
 -- ops en farmacia las devolucones ARREGLAR el em
--- Revizar el tema de las devoluciones de enfermeria. esta mal el query de dev enfer creop
 -- OJO MAÑANA VER PORQUE NO DEJA CAMBIAR DE STADO A NO DESPACHADO EN PANTALLAFARMACIA, YA LOHIZO PERO TIENE PROBLEMA CON EL FARMACIA_ID A VECES LO COGE A VECES NOP
 -- Toca cuadrar las unidades devueltas desde enfermria no dejar devolver mas de la cuenta
 -- creo que tengo un error en los pedidos de nefermeria de o paciente
--- OJO HICO NA FACTURA PARTICULAR CON 0 PESOS DE TOTAL CUANDO HABIan registos liquidados
--- no saleel valor a pagar en letras d ela factura
--- ops al refacturar no blanquea bien las pantallas
 -- ops al refacturar una cuenta cuto paciente tenia 2 convenios el select de liqudcionsaca dos registros ER OJOO
 -- no graba el servicioadministrativo desde la refacturacion
--  ops tengo un problema cuando refactura por liquiadaciond  ecuenta se enreda y no distingue sui esta FACTURANDO O REFACTURANDO QUE HACER ??
 -- ojo en farmacia--> dispensaciongeneral muestra despachos de dias pasados
--- ops los paraclinicos en enfermea me muetyra de otros folios '???
 -- ops en enfermeria me muestra las devolucones de antes, se supone estan facturados o fue porque hice una factura manual o borre cargos manuales ??
--- ops  si arregle paraclinico en enfereria triage supongo hay que arreglar las demas , medicamentos, 
--- falta concebir una autorizacion aun triage OJO HACERLO
+-- falta concebir una autorizacion aun triage OJO HACERLO -- ops creo que ya esta hecho verificar
 -- no sirve el REFRESCAR de liquidaciondetalle
 -- ojo que es eso de que cuando cro un folio hc de paciente triage no guarda motivo,analis,plan,medico,depemdncia etc???
---´pendiente ver resultados de paciente triage
 -- ojo  en enfermeria las devoluciiones y consulta gral devol mal muestra cosas pasadas
 -- la pantalla de farmacia dispensaacion que debe tener
--- ops cuando ingreso revision x sistemas me descuadra la grlla
+-- ops cuando ingreso revision x sistemas me descuadra la grilla
 -- cuando yo autorizo no se desaparece de la pantalla de autorizaciones ver esop
 -- ops no me grabo lo de nota aclaratoria
--- que paso con los folios hc triage
 -- en ningun registro guaro las enfermedades OPS ??????
--- OPS NO ME ACTUALIZO EL ingresopaciente en farmaciua y enfermeria al pasar de triage a admisiones por cua ??
+-- OPS NO ME ACTUALIZO EL ingresopaciente en farmaciua y enfermeria al pasar de triage a admisiones por cua ?? ojooooooooooooooooooooooooooooooooooooooooooojoo
 -- 1que pasa con los calendarios son complñicado sno son muy funcinales que digamso
 -- ops el boton editar de liquidaciondetalle no funciona para actualizar tarifa
--- la ventana creacion de rps no mestra el erro
--- ops la ventana rips revizar
+-- ops la ventana rips revizar(creo no trae mensajes de eroor y otras)
 -- ops error aparece el paciente ambulatorio que ya se le dio salida ERO ojo, no coloco fecha de salida, el nro de lqa factura no ,o coloco
   la tabla facturacion_conveniospacienteingresos (fue al momento de facturar) creo un registro de mas a l ambulatorio error, ops no desocupo la habitacion, tampoco desocupo la cama al historialdependencias
 -- opsOPS OPS GOLAZAZOO EL BOTON REFRESCAR DE ADMISIONES ME CREO UN NUEVO INGRESO AMBULATORIO (HABRASE VISTO ALGO SEMEJANTEY ESA VAINA POR QUE PASO ) OJO SOLO CUANDO
    ACABABA DE GUARDAR UN AMBULATORIO OPS REOPS OPS
--- cuando uno anula una factura refresh que se veal el cambio si se puede
--- ops refacture el ambykltorio de eumeia consec2 y no me tomo la refactura el acetaminofen verificar (OPS PERO SI ESTA ACUMULADA Y HECHA SOLO QUE NO MUESTRA EN LAIMPRESION ELDETALLE , PERO SI LA MUESTRA EN FACTURACIONDETALLE)-- NADA QUE LE COLOCA LA FACTURA NUEVA
+-- cuando uno anula una factura hace el refresh para que se veal el cambio si se puede
 -- REVISAR TODO EL PROCESO DE REFACTURACION ALGO PASA  . CREO QUE NO HE HECHO EL DATATABLE DE REFACTURTADAS
+
+-- OPS EN APOYO RTERPEUDO CAPTURAR LA FECHA DE TOMA, CAPTURAR EL RESLTADO GRANDE
+
+

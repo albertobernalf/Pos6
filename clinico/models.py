@@ -500,7 +500,7 @@ class HistoriaExamenes(models.Model):
     #medicoInterpretacion3 = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True,  on_delete=models.PROTECT, related_name='medInterpreta3')
     medicoInterpretacion3  = models.ForeignKey('clinico.Medicos', blank=True,null= True, editable=True, on_delete=models.PROTECT,   related_name='interpreta03')
     fechaInterpretacion3 = models.DateTimeField(blank=True, null=True)
-    #resultado = models.CharField(max_length=5000, editable=True,blank=True, null=True)
+    resultado = models.CharField(max_length=20000, editable=True,blank=True, null=True)
     medicoReporte = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True,  on_delete=models.PROTECT, related_name='medReporte')
     fechaReporte = models.DateTimeField(blank=True, null=True)
     opinion = models.CharField(max_length=1000, editable=True,blank=True, null=True)
@@ -617,6 +617,21 @@ class HistorialDiagnosticos(models.Model):
     tiposDiagnostico = models.ForeignKey('clinico.TiposDiagnostico',  blank=True, null=True, editable=True, on_delete=models.PROTECT,   related_name='tiposDiagnostico')
     diagnosticos =  models.ForeignKey('clinico.Diagnosticos', blank=True, null=True, editable=True, on_delete=models.PROTECT,   related_name='dxPpal')
     consecutivo = models.IntegerField(blank=True, null=True)
+    observaciones = models.CharField(max_length=2000 ,blank=True, null=True)
+    estadoReg = models.CharField(max_length=1, choices=ESTADOREG_CHOICES,default='A', editable=False)
+
+    def __str__(self):
+        return self.historia
+
+
+
+class HistorialEnfermedades(models.Model):
+    ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
+    id = models.AutoField(primary_key=True)
+    historia =  models.ForeignKey('clinico.Historia',  blank=True, null=True, editable=True, on_delete=models.PROTECT,   related_name='historia_32')
+    enfermedad = models.ForeignKey('clinico.Enfermedades',  blank=True, null=True, editable=True, on_delete=models.PROTECT,   related_name='enfer001')
     observaciones = models.CharField(max_length=2000 ,blank=True, null=True)
     estadoReg = models.CharField(max_length=1, choices=ESTADOREG_CHOICES,default='A', editable=False)
 
@@ -1187,16 +1202,16 @@ class TipoOxigenacion(models.Model):
         ('A', 'Activo'),
         ('I', 'Inactivo'), ]
     id = models.AutoField(primary_key=True)
-    nombre = models.CharField(max_length=50, blank=True)
-    flujoLtsOxigeno = models.DecimalField(max_digits=3, decimal_places=2)
-    flujoLtsAire = models.DecimalField(max_digits=3, decimal_places=2)
+    nombre = models.CharField(max_length=50, blank=True, null=True)
+    flujoLtsOxigeno = models.DecimalField(max_digits=3, decimal_places=0)
+    flujoLtsAire = models.DecimalField(max_digits=3, decimal_places=0)
     codFacturar =  models.CharField(max_length=30, blank=True)
     fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)
     usuarioRegistro = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True, on_delete=models.PROTECT)
     estadoReg = models.CharField(max_length=1,choices=ESTADOREG_CHOICES, default='A', editable=False)
 
     def __str__(self):
-        return str(self.tipoOxigenacion)
+        return str(self.nombre)
 
 
 

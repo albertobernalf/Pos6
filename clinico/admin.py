@@ -4,7 +4,7 @@ from django.contrib import admin
 
 from clinico.models import Medicos, Especialidades , TiposExamen, Examenes, Historia, HistoriaExamenes, HistoriaResultados, EspecialidadesMedicos, Servicios, Diagnosticos, EstadosSalida,   EstadoExamenes,  Enfermedades, TiposFolio, TiposAntecedente,  CausasExterna, ViasIngreso , TiposIncapacidad,  HistorialAntecedentes, TiposDiagnostico, HistorialDiagnosticos, HistorialInterconsultas, EstadosInterconsulta
 from clinico.models import TiposRadiologia,ViasEgreso, RevisionSistemas, NivelesClinica, TiposTriage, TurnosEnfermeria, TiposSalidas, Eps, TiposCotizante,  Regimenes, Recomendaciones, Hallazgos, NivelesRegimenes, Ips, TiposInterconsulta, ViasAdministracion, UnidadesDeMedidaDosis, FrecuenciasAplicacion, HistoriaMedicamentos, PrincipiosActivos, Medicamentos
-from clinico.models import CodigosAtc, FormasFarmaceuticas, HistorialIncapacidades, ExamenesRasgos, HistoriaResultados, HistoriaOxigeno, TipoOxigenacion, TipoDietas, HistorialDietas, HistorialNotasEnfermeria
+from clinico.models import CodigosAtc, FormasFarmaceuticas, HistorialIncapacidades, ExamenesRasgos, HistoriaResultados, HistoriaOxigeno, TipoOxigenacion, TipoDietas, HistorialDietas, HistorialNotasEnfermeria, Enfermedades, HistorialEnfermedades
 
 @admin.register(Servicios)
 class serviciosAdmin(admin.ModelAdmin):
@@ -406,7 +406,7 @@ class tipoOxigenacionAdmin(admin.ModelAdmin):
 class historiaOxigenoAdmin(admin.ModelAdmin):
 
         list_display = ("id", "historia", "tipoOxigenacion","aire","saturacionOxigeno")
-        search_fields = ("id", "historia__id", "tipoOxigenacion","aire","saturacionOxigeno")
+        search_fields = ("id", "historia__id", "tipoOxigenacion__nombre","aire","saturacionOxigeno")
         # Filtrar
         list_filter = ("id", "historia", "tipoOxigenacion","aire","saturacionOxigeno")
 
@@ -422,7 +422,7 @@ class tipoDietasAdmin(admin.ModelAdmin):
 class historialDietasAdmin(admin.ModelAdmin):
 
         list_display = ("id", "historia","tipoDieta","consecutivo","observaciones")
-        search_fields = ("id", "historia__id","tipoDieta","consecutivo","observaciones")
+        search_fields = ("id", "historia__id","tipoDieta__nombre","consecutivo","observaciones")
         # Filtrar
         list_filter = ("id", "historia","tipoDieta","consecutivo","observaciones")
 
@@ -433,3 +433,11 @@ class historialNotasEnfermeriaAdmin(admin.ModelAdmin):
         search_fields = ("id", "historia__id","observaciones","fechaRegistro")
         # Filtrar
         list_filter = ("id", "historia","observaciones","fechaRegistro")
+
+@admin.register(HistorialEnfermedades)
+class historialEnfermedadesAdmin(admin.ModelAdmin):
+
+        list_display = ("id", "historia","enfermedad","observaciones")
+        search_fields = ("id", "historia","enfermedad__nombre","observaciones")
+        # Filtrar
+        list_filter = ("id", "historia","enfermedad","observaciones")

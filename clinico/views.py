@@ -388,14 +388,11 @@ def crearHistoriaClinica(request):
             print("inmovilizacion =", inmovilizacion)
             notaAclaratoria = request.POST["notaAclaratoria"]
             print("notaAclaratoria =", notaAclaratoria)
-            fecNotaAclaratoria = request.POST["fecNotaAclaratoria"]
+            fecNotaAclaratoria = fechaRegistro
             print("fecNotaAclaratoria =", fecNotaAclaratoria)
             if (fecNotaAclaratoria== ''):
                 fecNotaAclaratoria='0001-01-01 00:00:00'
 
-
-            #fecNotaAclaratoria = request.POST["fecNotaAclaratoria"]
-            #print("fecNotaAclaratoria =", fecNotaAclaratoria)
             examenFisico = request.POST["examenFisico"]
             print("examenFisico =", examenFisico)
             noQx1 = request.POST["noQx1"]
@@ -1604,6 +1601,37 @@ def crearHistoriaClinica(request):
                                  ## Fin
 
                              # Fin Grabacion Diagnosticos
+
+
+                        # Grabacion Enfermedades
+
+                        enfermedades = request.POST["enfermedades"]
+                        print("enfermedades =", enfermedades)
+
+                        ## Rutina leer el JSON de enfermedades en python primero
+                        consecutivo=0
+                        jsonEnfermedades = json.loads(enfermedades)
+
+                        for key5 in jsonEnfermedades:
+
+                           print("key5 = ", key5)
+                           queda = key5
+
+                           enfermedadId = key5["enfermedades"]
+                           print("enfermedadId", enfermedadId)
+                           observa = key5["observa"]
+
+                           if enfermedades != "":
+                                  consecutivo = consecutivo + 1
+
+                                  comando = 'INSERT INTO clinico_historialenfermedades (observaciones,enfermedad_id, "estadoReg",historia_id) values (' + "'" + str(
+                                      observa) + "','" + str(enfermedadId) + "','A','" + str(historiaId) + "') RETURNING id"
+                                  print("comando = ", comando)
+                                  resultado = cur3.execute(comando)
+                                  e = cur3.fetchone()[0]
+
+
+                        # Fin Grabacion Enfermedades
 
                         # Antecedentes
 
@@ -3161,6 +3189,56 @@ def crearHistoriaClinica(request):
         context['EspecialidadesMedicosInterConsultas'] = especialidadesMedicosInterConsultas
 
         # Fin combo EspecialidadesMedicosInterconsultas
+
+        # Combo Enfermedades
+
+        miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",   password="123456")
+        curt = miConexiont.cursor()
+        comando = 'SELECT e.id ,e.nombre FROM clinico_Enfermedades e ORDER BY e.nombre'
+        curt.execute(comando)
+        print(comando)
+
+        enfermedades = []
+        enfermedades.append({'id': '', 'nombre': ''})
+
+        for id, nombre in curt.fetchall():
+             enfermedades.append({'id': id, 'nombre': nombre})
+
+        miConexiont.close()
+
+        print(enfermedades)
+
+        context['Enfermedades'] = enfermedades
+
+        print ("enfermedades =", enfermedades)
+
+        # FIN Combo enfermedades
+
+
+        # Combo LaboratoriosHC
+
+        miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",   password="123456")
+        curt = miConexiont.cursor()
+        comando = 'SELECT e.id ,e.nombre FROM clinico_Enfermedades e ORDER BY e.nombre'
+        curt.execute(comando)
+        print(comando)
+
+        laboratoriosHC = []
+
+
+        for id, nombre in curt.fetchall():
+             laboratoriosHC.append({'id': id, 'nombre': nombre})
+
+        miConexiont.close()
+
+        print(laboratoriosHC)
+
+        context['LaboratoriosHC'] = laboratoriosHC
+
+        print ("laboratoriosHC =", laboratoriosHC)
+
+        # FIN Combo enfermedades
+
 
 
 

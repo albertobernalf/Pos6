@@ -1809,6 +1809,10 @@ function AFacturar()
 		        arrancaLiquidacion(5,data2);
 			    dataTableFacturacionInitialized = true;
 
+
+		        arrancaLiquidacion(6,data2);
+			    dataTableReFacturacionInitialized = true;
+
 			 window.location.reload();
 		
 		

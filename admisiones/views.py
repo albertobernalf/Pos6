@@ -1515,6 +1515,33 @@ def escogeAcceso(request, Sede, Username, Profesional, Documento, NombreSede, es
         # FIN Combo TipopsSalidas
 
 
+        # Combo Enfermedades
+
+
+        miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",   password="123456")
+        curt = miConexiont.cursor()
+        comando = 'SELECT e.id ,e.nombre FROM clinico_Enfermedades e ORDER BY e.nombre'
+        curt.execute(comando)
+        print(comando)
+
+        enfermedades = []
+        enfermedades.append({'id': '', 'nombre': ''})
+
+        for id, nombre in curt.fetchall():
+             enfermedades.append({'id': id, 'nombre': nombre})
+
+        miConexiont.close()
+
+        print(enfermedades)
+
+        context['Enfermedades'] = enfermedades
+
+        print ("enfermedades =", enfermedades)
+
+        # FIN Combo enfermedades
+
+
+
 
         # Combo Dx Complicacion
 

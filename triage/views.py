@@ -2897,7 +2897,7 @@ def guardarAdmisionTriage(request):
         print(" DocumentoId =", DocumentoId.id)
         print(" DocumentoId =", DocumentoId.tipoDoc_id)
 
-        triageActual = Triage.objects.get(tipoDoc_id=DocumentoId.tipoDoc_id, documento_id=DocumentoId.id,consecAdmision=0)
+        triageActual = Triage.objects.get(tipoDoc_id=DocumentoId.tipoDoc_id, documento_id=DocumentoId.id,consecAdmision=0, consec=0)
         print("Triage Actual = ", triageActual.id)
 
         print("idPacienteFinal", idPacienteFinal)

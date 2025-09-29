@@ -43,6 +43,8 @@
 
             <li><a href="#Consulta"><span class="fa-solid fa-hand-holding-medical"></span> <span
                     class="tab-text"> </span>Historia Clinica</a></li>
+	    <li><a href="#Enfermedades"><span class="fa-solid fa-hand-holding-medical"></span> <span
+	                    class="tab-text"> </span>Enfermedad</a></li>
             <li><a href="#GuardarFolio"><span class="fa fa-home"></span> <span class="tab-text"> </span>GuardarFolio
             </a>
             </li>
@@ -299,6 +301,100 @@
 
     </article>
 
+    <article id="Enfermedades">
+		<div class="marco">
+             <!-- DESDE AQUIP DATATABLE  -->
+      <table class="table" style="height: 50px; background-color:LightGray;  width:90%;">
+            <tr style="padding: 0;">
+                <td>
+                </td>
+                <td>
+                </td>
+                <td>
+                    <table class="table"  style="height: 99%; background-color:LightGray; BORDERCOLOR=RED ; border: 8px solid black; border-color: #96D4D4;  width:99%;">
+                        <form class="form-inline" action="/crearEnfermedadesDef/" method="POST"
+                              id="FormaEnfermedades">
+                            <!-- INICIO TABLE DE  EL DATATABLE  -->
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="card" >
+                                        <div class="card-header" style="height:4rem;">
+                                            <center>
+                                                <div class="row">
+
+                                                    <div class="col-sm-4">
+                                                        <select class="select-css" id="enf" name="enf">
+                                                            {% for enfermedades in Enfermedades %}
+                                                            <option value="{{enfermedades.id}}">
+                                                                {{enfermedades.nombre}}
+                                                            </option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-sm-5">
+                                                        Observaciones:
+                                                        <input type="text" id="observa" name="observa" value="">
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <span class="text-secondary">Adicionar</span>
+                                                        <a class="btn btn-success" href="javascript:void(0)"
+                                                           id="BtnAdicionarEnfermedades"> <i
+                                                                class="fa fa-battery-half"></i></a>
+                                                    </div>
+						    
+                                                </div>
+                                            </center>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-sm-12">
+
+                                                    <table id=tablaEnfermedades  class="display nowrap table table table-bordered  tablaEnfermedades table-hover table-sm dtr-inline">
+                                                        <thead>
+                                                        <tr>
+                                                            <th style="width:5%;">id</th>
+                                                            <th style="width:5%;">Nombres</th>
+                                                            <th style="width:5%;">Observaciones</th>
+                                                            <th style="width:3%;">Borrar</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody style="vertical-align:bottom">
+                                                        <tr style="height:5%">
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+
+
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- FIN TABLE DE  EL DATATABLE  -->
+                        </form>
+                    </table>
+
+             <!-- HASTA AQUI DATATABLE -->
+
+                </td>
+                <td>
+                </td>
+                <td>
+                </td>
+            </tr>
+        </table>
+	</div>
+    </article>
+
+
+
+
+
 <article id="OrdenDeControl">
 
         <center><h3>Orden De Control</h3></center>
@@ -357,11 +453,13 @@
                 </td>
                 <td>
 
+
+
+
              <!-- DESDE AQUIP DATATABLE  -->
 
                     <table class="table" style="height: 5px; background-color:LightGray; BORDERCOLOR=RED ; border: 8px solid black; border-color: #96D4D4;  width:99%;">
-                        <form class="form-inline" action="/crearRevisionSistemasDef/" method="POST"
-                              id="FormaRevisionSistemas">
+                        <form class="form-inline" action="/crearRevisionSistemasDef/" method="POST" id="FormaRevisionSistemas">
                             <input type="hidden" id="sede1" name="sede1" value="{{Sede}}">
 
                             <!-- INICIO TABLE DE  EL DATATABLE  -->
@@ -373,7 +471,7 @@
                                             <center>
                                                 <div class="row">
                                                     <div class="col-sm-6">
-                                                        <select class="select-css"  id="rev"          name="rev">
+                                                        <select class="select-css"  id="rev"  name="rev">
                                                             {% for revisionSistemas in RevisionSistemas %}
                                                             <option value="{{revisionSistemas.id}}"> {{revisionSistemas.nombre}}
                                                             </option>
@@ -385,7 +483,6 @@
 							Observaciones:
                                                         <input type="text" id="observa9" name="observa9" value="">
                                                     </div>
-
 
                                                     <div class="col-sm-2 text-end">
                                                         <span class="text-secondary">Adicionar</span>
@@ -431,8 +528,6 @@
                     <!-- HASTA AQUI DATATABLE -->
 
 
-
-
                 </td>
                 <td>
                 </td>
@@ -440,6 +535,7 @@
                 </td>
             </tr>
         </table>
+
 
   </article>
 
