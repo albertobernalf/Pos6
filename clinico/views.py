@@ -1617,11 +1617,11 @@ def crearHistoriaClinica(request):
                            print("key5 = ", key5)
                            queda = key5
 
-                           enfermedadId = key5["enfermedades"]
+                           enfermedadId = key5["id"]
                            print("enfermedadId", enfermedadId)
                            observa = key5["observa"]
 
-                           if enfermedades != "":
+                           if enfermedadId != "":
                                   consecutivo = consecutivo + 1
 
                                   comando = 'INSERT INTO clinico_historialenfermedades (observaciones,enfermedad_id, "estadoReg",historia_id) values (' + "'" + str(
@@ -1778,7 +1778,7 @@ def crearHistoriaClinica(request):
                             print ("VOY A GRABAR")
                             print("fecha= ", fecha)
 
-                            if fecha != "":
+                            if frecCardiaca != "" or frecRespiratoria != "" or frecRespiratoria != "" :
                                 print("Entre a imprimir signos vitales")
                                 comando = 'INSERT INTO clinico_historiaSignosVitales (fecha,"frecCardiaca","frecRespiratoria",   "tensionADiastolica","tensionASistolica",temperatura,saturacion, glucometria,glasgow, pvc, ic, cuna, "glasgowOcular",  "glasgowVerbal", "glasgowMotora", historia_id, "estadoReg","fechaRegistro","usuarioRegistro_id") values (' + "'" + str(fecha) + "','" + str(frecCardiaca) + "','" + str(frecRespiratoria) + "','" + str(tensionADiastolica) + "','" + str(tensionASistolica) +  "','"  + str(temperatura) + "','" + str(saturacion)  + "','" + str(glucometria) + "','" + str(glasgow) + "','" + str(pvc) + "','" + str(ic) + "','" + str(cuna)  + "','" + str(glasgowOcular) + "','" + str(glasgowVerbal) + "','" + str(glasgowMotora)  +"','" + str(historiaId)   + "','A','"  + str(fechaRegistro) + "','" + str(plantaId.id) + "') RETURNING id"
                                 print("comando = ", comando)
@@ -3215,29 +3215,6 @@ def crearHistoriaClinica(request):
         # FIN Combo enfermedades
 
 
-        # Combo LaboratoriosHC
-
-        miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",   password="123456")
-        curt = miConexiont.cursor()
-        comando = 'SELECT e.id ,e.nombre FROM clinico_Enfermedades e ORDER BY e.nombre'
-        curt.execute(comando)
-        print(comando)
-
-        laboratoriosHC = []
-
-
-        for id, nombre in curt.fetchall():
-             laboratoriosHC.append({'id': id, 'nombre': nombre})
-
-        miConexiont.close()
-
-        print(laboratoriosHC)
-
-        context['LaboratoriosHC'] = laboratoriosHC
-
-        print ("laboratoriosHC =", laboratoriosHC)
-
-        # FIN Combo enfermedades
 
 
 
@@ -3582,3 +3559,362 @@ def LeerInterConsulta(request):
 
 
     return JsonResponse(json.dumps(interConsulta), safe=False)
+
+
+
+def load_dataInfoRadiologia(request, data):
+    print ("Entre load_dataInfoRadiologia")
+
+    context = {}
+    d = json.loads(data)
+
+    username = d['username']
+    sede = d['sede']
+    username_id = d['username_id']
+    nombreSede = d['nombreSede']
+    print ("sede:", sede)
+    print ("username:", username)
+    print ("username_id:", username_id)
+
+    tipoDoc = d['tipoDoc']
+    documento= d['documento']
+    consec= d['consec']
+
+    documentoId = Usuarios.objects.get(documento=documento)
+    tipodocId = TiposDocumento.objects.get(nombre=tipoDoc)
+
+    infoRadiologia = []
+
+
+    miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",     password="123456")
+    curx = miConexionx.cursor()
+   
+
+    detalle = 'select his.id id,his.folio folio, his.fecha Fecha, hisExa."fechaToma" fechaTomado, hisExa."fechaReporte",  exa.nombre examen , hisExa.resultado resultado,	hisExa.interpretacion1 interpretacion , hisExa."fechaInterpretacion1" fechaInterpretacion , est.nombre estado FROM clinico_historia his INNER JOIN clinico_historiaexamenes hisExa ON (hisExa.historia_id = his.id) INNER JOIN clinico_examenes exa ON (exa."codigoCups" = hisExa."codigoCups") LEFT JOIN clinico_historiaresultados resul ON (resul."historiaExamenes_id" = hisExa.id) LEFT JOIN clinico_estadoexamenes est ON (est.id=hisExa."estadoExamenes_id") INNER JOIN clinico_tiposexamen tip on (tip.id = hisExa."tiposExamen_id" AND  tip.nombre=' + "'" + str('RADIOLOGIA') + "')" + ' WHERE his.documento_id = ' + "'" + str(documentoId.id) + "'" + ' AND his."tipoDoc_id" = ' + "'" + str(tipodocId.id) + "'" + ' And his."consecAdmision"= ' + "'" + str(consec) + "' ORDER BY  his.folio desc"
+
+    print(detalle)
+
+    curx.execute(detalle)
+
+    for id,folio, fecha, fechaTomado, fechaReporte, examen, resultado, interpretacion, fechaInterpretacion, estado in curx.fetchall():
+        infoRadiologia.append(
+		{"model":"clinico.examenes","pk":id,"fields":
+			{'id':id, 'folio': folio, 'fecha': fecha, 'fechaTomado': fechaTomado, 'fechaReporte': fechaReporte,
+                         'examen': examen, 'resultado': resultado,
+                         'interpretacion': interpretacion, 'fechaInterpretacion': fechaInterpretacion,
+                         'estado':estado}})
+
+    miConexionx.close()
+    print(infoRadiologia)
+    context['InfoRadiologia'] = infoRadiologia
+
+    serialized1 = json.dumps(infoRadiologia, default=serialize_datetime)
+
+    return HttpResponse(serialized1, content_type='application/json')
+
+
+def load_dataInfoLaboratorio(request, data):
+    print("Entre load_dataInfoLaboratorio")
+
+    context = {}
+    d = json.loads(data)
+
+    username = d['username']
+    sede = d['sede']
+    username_id = d['username_id']
+    nombreSede = d['nombreSede']
+    print("sede:", sede)
+    print("username:", username)
+    print("username_id:", username_id)
+
+    tipoDoc = d['tipoDoc']
+    documento = d['documento']
+    consec = d['consec']
+
+    documentoId = Usuarios.objects.get(documento=documento)
+    tipodocId = TiposDocumento.objects.get(nombre=tipoDoc)
+
+    infoLaboratorio = []
+
+    miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                   password="123456")
+    curx = miConexionx.cursor()
+
+    detalle = 'select his.id id,his.folio folio, his.fecha Fecha, hisExa."fechaToma" fechaTomado, hisExa."fechaReporte",  exa.nombre examen , hisExa.resultado resultado,	hisExa.interpretacion1 interpretacion , hisExa."fechaInterpretacion1" fechaInterpretacion , est.nombre estado FROM clinico_historia his INNER JOIN clinico_historiaexamenes hisExa ON (hisExa.historia_id = his.id) INNER JOIN clinico_examenes exa ON (exa."codigoCups" = hisExa."codigoCups") LEFT JOIN clinico_historiaresultados resul ON (resul."historiaExamenes_id" = hisExa.id) LEFT JOIN clinico_estadoexamenes est ON (est.id=hisExa."estadoExamenes_id") INNER JOIN clinico_tiposexamen tip on (tip.id = hisExa."tiposExamen_id" AND  tip.nombre=' + "'" + str(
+        'LABORATORIO') + "')" + ' WHERE his.documento_id = ' + "'" + str(
+        documentoId.id) + "'" + ' AND his."tipoDoc_id" = ' + "'" + str(
+        tipodocId.id) + "'" + ' And his."consecAdmision"= ' + "'" + str(consec) + "' ORDER BY  his.folio desc"
+
+    print(detalle)
+
+    curx.execute(detalle)
+
+    for id, folio, fecha, fechaTomado, fechaReporte, examen, resultado, interpretacion, fechaInterpretacion, estado in curx.fetchall():
+        infoLaboratorio.append(
+            {"model": "clinico.examenes", "pk": id, "fields":
+                {'id': id, 'folio': folio, 'fecha': fecha, 'fechaTomado': fechaTomado, 'fechaReporte': fechaReporte,
+                 'examen': examen, 'resultado': resultado,
+                 'interpretacion': interpretacion, 'fechaInterpretacion': fechaInterpretacion,
+                 'estado': estado}})
+
+    miConexionx.close()
+    print(infoLaboratorio)
+    context['InfoLaboratorio'] = infoLaboratorio
+
+    serialized1 = json.dumps(infoLaboratorio, default=serialize_datetime)
+
+    return HttpResponse(serialized1, content_type='application/json')
+
+
+def load_dataInfoTerapia(request, data):
+    print("Entre load_dataInfoTerapia")
+
+    context = {}
+    d = json.loads(data)
+
+    username = d['username']
+    sede = d['sede']
+    username_id = d['username_id']
+    nombreSede = d['nombreSede']
+    print("sede:", sede)
+    print("username:", username)
+    print("username_id:", username_id)
+
+    tipoDoc = d['tipoDoc']
+    documento = d['documento']
+    consec = d['consec']
+
+    documentoId = Usuarios.objects.get(documento=documento)
+    tipodocId = TiposDocumento.objects.get(nombre=tipoDoc)
+
+    infoTerapia = []
+
+    miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                   password="123456")
+    curx = miConexionx.cursor()
+
+    detalle = 'select his.id id,his.folio folio, his.fecha Fecha, hisExa."fechaToma" fechaTomado, hisExa."fechaReporte",  exa.nombre examen , hisExa.resultado resultado,	hisExa.interpretacion1 interpretacion , hisExa."fechaInterpretacion1" fechaInterpretacion , est.nombre estado FROM clinico_historia his INNER JOIN clinico_historiaexamenes hisExa ON (hisExa.historia_id = his.id) INNER JOIN clinico_examenes exa ON (exa."codigoCups" = hisExa."codigoCups") LEFT JOIN clinico_historiaresultados resul ON (resul."historiaExamenes_id" = hisExa.id) LEFT JOIN clinico_estadoexamenes est ON (est.id=hisExa."estadoExamenes_id") INNER JOIN clinico_tiposexamen tip on (tip.id = hisExa."tiposExamen_id" AND  tip.nombre=' + "'" + str(
+        'TERAPIAS') + "')" + ' WHERE his.documento_id = ' + "'" + str(
+        documentoId.id) + "'" + ' AND his."tipoDoc_id" = ' + "'" + str(
+        tipodocId.id) + "'" + ' And his."consecAdmision"= ' + "'" + str(consec) + "' ORDER BY  his.folio desc"
+
+    print(detalle)
+
+    curx.execute(detalle)
+
+    for id, folio, fecha, fechaTomado, fechaReporte, examen, resultado, interpretacion, fechaInterpretacion, estado in curx.fetchall():
+        infoTerapia.append(
+            {"model": "clinico.examenes", "pk": id, "fields":
+                {'id': id, 'folio': folio, 'fecha': fecha, 'fechaTomado': fechaTomado, 'fechaReporte': fechaReporte,
+                 'examen': examen, 'resultado': resultado,
+                 'interpretacion': interpretacion, 'fechaInterpretacion': fechaInterpretacion,
+                 'estado': estado}})
+
+    miConexionx.close()
+    print(infoTerapia)
+    context['InfoTerapia'] = infoTerapia
+
+    serialized1 = json.dumps(infoTerapia, default=serialize_datetime)
+
+    return HttpResponse(serialized1, content_type='application/json')
+
+
+def load_dataInfoNoQx(request, data):
+    print("Entre load_dataInfoNoQx")
+
+    context = {}
+    d = json.loads(data)
+
+    username = d['username']
+    sede = d['sede']
+    username_id = d['username_id']
+    nombreSede = d['nombreSede']
+    print("sede:", sede)
+    print("username:", username)
+    print("username_id:", username_id)
+
+    tipoDoc = d['tipoDoc']
+    documento = d['documento']
+    consec = d['consec']
+
+    documentoId = Usuarios.objects.get(documento=documento)
+    tipodocId = TiposDocumento.objects.get(nombre=tipoDoc)
+
+    infoNoQx = []
+
+    miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                   password="123456")
+    curx = miConexionx.cursor()
+
+    detalle = 'select his.id id,his.folio folio, his.fecha Fecha, hisExa."fechaToma" fechaTomado, hisExa."fechaReporte",  exa.nombre examen , hisExa.resultado resultado,	hisExa.interpretacion1 interpretacion , hisExa."fechaInterpretacion1" fechaInterpretacion , est.nombre estado FROM clinico_historia his INNER JOIN clinico_historiaexamenes hisExa ON (hisExa.historia_id = his.id) INNER JOIN clinico_examenes exa ON (exa."codigoCups" = hisExa."codigoCups") LEFT JOIN clinico_historiaresultados resul ON (resul."historiaExamenes_id" = hisExa.id) LEFT JOIN clinico_estadoexamenes est ON (est.id=hisExa."estadoExamenes_id") INNER JOIN clinico_tiposexamen tip on (tip.id = hisExa."tiposExamen_id" AND  tip.nombre=' + "'" + str(
+        'PROCEDIMIENTOS NO QX') + "')" + ' WHERE his.documento_id = ' + "'" + str(
+        documentoId.id) + "'" + ' AND his."tipoDoc_id" = ' + "'" + str(
+        tipodocId.id) + "'" + ' And his."consecAdmision"= ' + "'" + str(consec) + "' ORDER BY  his.folio desc"
+
+    print(detalle)
+
+    curx.execute(detalle)
+
+    for id, folio, fecha, fechaTomado, fechaReporte, examen, resultado, interpretacion, fechaInterpretacion, estado in curx.fetchall():
+        infoNoQx.append(
+            {"model": "clinico.examenes", "pk": id, "fields":
+                {'id': id, 'folio': folio, 'fecha': fecha, 'fechaTomado': fechaTomado, 'fechaReporte': fechaReporte,
+                 'examen': examen, 'resultado': resultado,
+                 'interpretacion': interpretacion, 'fechaInterpretacion': fechaInterpretacion,
+                 'estado': estado}})
+
+    miConexionx.close()
+    print(infoNoQx)
+    context['InfoNoQx'] = infoNoQx
+
+    serialized1 = json.dumps(infoNoQx, default=serialize_datetime)
+
+    return HttpResponse(serialized1, content_type='application/json')
+
+
+def load_dataInfoAntecedente(request, data):
+    print("Entre load_dataInfoAntecedente")
+
+    context = {}
+    d = json.loads(data)
+
+    username = d['username']
+    sede = d['sede']
+    username_id = d['username_id']
+    nombreSede = d['nombreSede']
+    print("sede:", sede)
+    print("username:", username)
+    print("username_id:", username_id)
+
+    tipoDoc = d['tipoDoc']
+    documento = d['documento']
+    consec = d['consec']
+
+    documentoId = Usuarios.objects.get(documento=documento)
+    tipodocId = TiposDocumento.objects.get(nombre=tipoDoc)
+
+    infoAntecedente = []
+
+    miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                   password="123456")
+    curx = miConexionx.cursor()
+
+    detalle = 'select his.id id,his.folio folio, his.fecha fechaRegistro, tiposAnt.nombre tipo, hisAnt.descripcion FROM clinico_historia his INNER JOIN clinico_historialantecedentes hisAnt ON (hisAnt.historia_id = his.id) INNER JOIN clinico_tiposantecedente  tiposAnt ON (tiposAnt.id = hisAnt."tiposAntecedente_id")  WHERE his.documento_id = ' + "'" + str(
+        documentoId.id) + "'" + ' AND his."tipoDoc_id" = ' + "'" + str(
+        tipodocId.id) + "'" + ' And his."consecAdmision"= ' + "'" + str(consec) + "' ORDER BY  his.folio desc"
+
+    print(detalle)
+
+    curx.execute(detalle)
+
+    for id, folio, fechaRegistro, tipo, descripcion in curx.fetchall():
+        infoAntecedente.append(
+            {"model": "clinico.examenes", "pk": id, "fields":
+                {'id': id, 'folio': folio, 'fechaRegistro': fechaRegistro, 'tipo': tipo,  'descripcion': descripcion}})
+
+    miConexionx.close()
+    print(infoAntecedente)
+    context['InfoAntecedente'] = infoAntecedente
+
+    serialized1 = json.dumps(infoAntecedente, default=serialize_datetime)
+
+    return HttpResponse(serialized1, content_type='application/json')
+
+
+def load_dataInfoNotasEnfermeria(request, data):
+    print("Entre load_dataInfoNotasEnfermeria")
+
+    context = {}
+    d = json.loads(data)
+
+    username = d['username']
+    sede = d['sede']
+    username_id = d['username_id']
+    nombreSede = d['nombreSede']
+    print("sede:", sede)
+    print("username:", username)
+    print("username_id:", username_id)
+
+    tipoDoc = d['tipoDoc']
+    documento = d['documento']
+    consec = d['consec']
+
+    documentoId = Usuarios.objects.get(documento=documento)
+    tipodocId = TiposDocumento.objects.get(nombre=tipoDoc)
+
+    infoNotasEnfermeria = []
+
+    miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                   password="123456")
+    curx = miConexionx.cursor()
+
+    detalle = 'select his.id id,his.folio folio, his.fecha fechaRegistro, hisEnf.observaciones nota FROM clinico_historia his INNER JOIN clinico_historialNotasEnfermeria hisEnf ON (hisEnf.historia_id = his.id)  WHERE his.documento_id = ' + "'" + str(
+        documentoId.id) + "'" + ' AND his."tipoDoc_id" = ' + "'" + str(
+        tipodocId.id) + "'" + ' And his."consecAdmision"= ' + "'" + str(consec) + "' ORDER BY  his.folio desc"
+
+    print(detalle)
+
+    curx.execute(detalle)
+
+    for id, folio, fechaRegistro, nota in curx.fetchall():
+        infoNotasEnfermeria.append(
+            {"model": "clinico.examenes", "pk": id, "fields":
+                {'id': id, 'folio': folio, 'fechaRegistro': fechaRegistro, 'nota': nota}})
+
+    miConexionx.close()
+    print(infoNotasEnfermeria)
+    context['InfoNotasEnfermeria'] = infoNotasEnfermeria
+
+    serialized1 = json.dumps(infoNotasEnfermeria, default=serialize_datetime)
+
+    return HttpResponse(serialized1, content_type='application/json')
+
+
+def load_dataInfoMedicamento(request, data):
+    print("Entre load_dataInfoMedicamento")
+
+    context = {}
+    d = json.loads(data)
+
+    username = d['username']
+    sede = d['sede']
+    username_id = d['username_id']
+    nombreSede = d['nombreSede']
+    print("sede:", sede)
+    print("username:", username)
+    print("username_id:", username_id)
+
+    tipoDoc = d['tipoDoc']
+    documento = d['documento']
+    consec = d['consec']
+
+    documentoId = Usuarios.objects.get(documento=documento)
+    tipodocId = TiposDocumento.objects.get(nombre=tipoDoc)
+
+    infoMedicamento = []
+
+    miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                   password="123456")
+    curx = miConexionx.cursor()
+
+    detalle = 'select his.id id,his.folio folio, his.fecha fechaRegistro, hisEnf.observaciones nota FROM clinico_historia his INNER JOIN clinico_historialNotasEnfermeria hisEnf ON (hisEnf.historia_id = his.id)  WHERE his.documento_id = ' + "'" + str(
+        documentoId.id) + "'" + ' AND his."tipoDoc_id" = ' + "'" + str(
+        tipodocId.id) + "'" + ' And his."consecAdmision"= ' + "'" + str(consec) + "' ORDER BY  his.folio desc"
+
+    print(detalle)
+
+    curx.execute(detalle)
+
+    for id, folio, fechaRegistro, nota in curx.fetchall():
+        infoMedicamento.append(
+            {"model": "clinico.examenes", "pk": id, "fields":
+                {'id': id, 'folio': folio, 'fechaRegistro': fechaRegistro, 'nota': nota}})
+
+    miConexionx.close()
+    print(infoMedicamento)
+    context['InfoMedicamento'] = infoMedicamento
+
+    serialized1 = json.dumps(infoMedicamento, default=serialize_datetime)
+
+    return HttpResponse(serialized1, content_type='application/json')
+

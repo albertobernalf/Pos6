@@ -234,6 +234,17 @@ input[type="date"] {
   }
 }
 
+
+    .tabla-contenedor {
+        height: 130px; /* Define la altura deseada para tu tabla */
+        overflow: auto; /* Permite el desplazamiento si el contenido excede la altura */
+    }
+
+    .tabla-contenedor table {
+        width: 100%; /* Asegura que la tabla ocupe el ancho del contenedor */
+    }
+
+
 .mensajes
 {
 

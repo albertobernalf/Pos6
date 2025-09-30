@@ -886,6 +886,15 @@ function tableActionsLaboratorios() {
             ],
     });
 }
+
+
+
+
+
+
+
+
+
 });  // Aquip fin del document.ready
 
 // II. RADIOLOGIA
@@ -1345,7 +1354,7 @@ formHistoriaClinica.addEventListener('submit', e=>{
 
 	    enfermedades.push({
 	        "id"  : datos_tabla[i][0],
-		"observa"    : datos_tabla[i][3] 
+		"observa"    : datos_tabla[i][2] 
 	      });
 	   };
 
@@ -1936,4 +1945,6 @@ formHistoriaClinica.addEventListener('submit', e=>{
   	        });  // cierra ajax
 
 });  // cierra commit
+
+
 

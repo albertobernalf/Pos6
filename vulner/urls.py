@@ -118,7 +118,13 @@ urlpatterns = [
     path('load_dataInterConsultas/<str:data>', viewsClinico.load_dataInterConsultas),
     path('guardarInterConsulta/', viewsClinico.GuardarInterConsulta),
     path('leerInterConsulta/', viewsClinico.LeerInterConsulta),
-
+    path('load_dataInfoRadiologia/<str:data>', viewsClinico.load_dataInfoRadiologia),
+    path('load_dataInfoLaboratorio/<str:data>', viewsClinico.load_dataInfoLaboratorio),
+    path('load_dataInfoTerapia/<str:data>', viewsClinico.load_dataInfoTerapia),
+    path('load_dataInfoNoQx/<str:data>', viewsClinico.load_dataInfoNoQx),
+    path('load_dataInfoAntecedente/<str:data>', viewsClinico.load_dataInfoAntecedente),
+    path('load_dataInfoNotasEnfermeria/<str:data>', viewsClinico.load_dataInfoNotasEnfermeria),
+    path('load_dataInfoMedicamento/<str:data>', viewsClinico.load_dataInfoMedicamento),
 
     # Actividaes Mecanicas
 

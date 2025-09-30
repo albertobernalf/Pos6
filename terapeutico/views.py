@@ -19,6 +19,7 @@ from usuarios.models import Usuarios, TiposDocumento
 from clinico.forms import  IncapacidadesForm, HistorialDiagnosticosCabezoteForm, HistoriaSignosVitalesForm, HistoriaExamenes, Historia
 from django.db.models import Avg, Max, Min
 from usuarios.models import Usuarios, TiposDocumento
+from django.utils import timezone
 
 from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect, HttpResponse, HttpResponseRedirect
@@ -124,7 +125,7 @@ def load_dataOrdenadosTerapeutico(request, data):
 
     print("pacienteId =", pacienteId.id)
 
-    estadoExamenes = EstadoExamenes.objects.get(nombre='ORDENADO')
+    estadoExamenes = EstadoExamenes.objects.get(nombre='INTERPRETADO')
 
     ingresos1 = []
 
@@ -135,11 +136,11 @@ def load_dataOrdenadosTerapeutico(request, data):
 
     if (tipoIng == 'INGRESO'):
 
-        detalle = 'SELECT histoexa.id examId , historia.fecha fechaExamen,tipoExa.nombre tipoExamen ,exam.nombre examen , estadosExam.nombre estadoExamen ,histoexa.consecutivo consecutivo,histoexa."codigoCups" cups,	histoexa.cantidad cantidad, histoexa.observaciones observa, historia.folio folio FROM clinico_historia historia INNER JOIN clinico_historiaexamenes histoexa on (histoexa.historia_id = historia.id) INNER JOIN clinico_tiposexamen tipoExa ON (tipoExa.id = histoexa."tiposExamen_id" ) INNER JOIN  clinico_examenes exam ON (exam."TiposExamen_id" = tipoExa.id  and  exam."TiposExamen_id" = histoexa."tiposExamen_id" AND  exam."codigoCups" =   Histoexa."codigoCups") INNER JOIN clinico_estadoexamenes estadosExam ON (estadosExam.id = histoexa."estadoExamenes_id" AND estadosExam.id = ' + "'" + str(estadoExamenes.id) + "'" + ') WHERE  historia."sedesClinica_id" = ' + "'" + str(sede) + "'" + ' AND historia."tipoDoc_id" =  ' + "'" + str(pacienteId.tipoDoc_id) + "'" + ' AND historia.documento_id = ' + "'" + str(pacienteId.id) + "'" + ' AND historia."consecAdmision" = ' + "'" + str(ingresoId.consec) + "' ORDER BY historia.folio"
+        detalle = 'SELECT histoexa.id examId , historia.fecha fechaExamen,tipoExa.nombre tipoExamen ,exam.nombre examen , estadosExam.nombre estadoExamen ,histoexa.consecutivo consecutivo,histoexa."codigoCups" cups,	histoexa.cantidad cantidad, histoexa.observaciones observa, historia.folio folio FROM clinico_historia historia INNER JOIN clinico_historiaexamenes histoexa on (histoexa.historia_id = historia.id) INNER JOIN clinico_tiposexamen tipoExa ON (tipoExa.id = histoexa."tiposExamen_id" ) INNER JOIN  clinico_examenes exam ON (exam."TiposExamen_id" = tipoExa.id  and  exam."TiposExamen_id" = histoexa."tiposExamen_id" AND  exam."codigoCups" =   Histoexa."codigoCups") INNER JOIN clinico_estadoexamenes estadosExam ON (estadosExam.id = histoexa."estadoExamenes_id" AND estadosExam.id != ' + "'" + str(estadoExamenes.id) + "'" + ') WHERE  historia."sedesClinica_id" = ' + "'" + str(sede) + "'" + ' AND historia."tipoDoc_id" =  ' + "'" + str(pacienteId.tipoDoc_id) + "'" + ' AND historia.documento_id = ' + "'" + str(pacienteId.id) + "'" + ' AND historia."consecAdmision" = ' + "'" + str(ingresoId.consec) + "' ORDER BY historia.folio desc"
         print ("ENTRE INGRESO")
     else:
         print("ENTRE TRIAGE")
-        detalle = 'SELECT histoexa.id examId , historia.fecha fechaExamen,tipoExa.nombre tipoExamen ,exam.nombre examen , estadosExam.nombre estadoExamen ,histoexa.consecutivo consecutivo,histoexa."codigoCups" cups,	histoexa.cantidad cantidad, histoexa.observaciones observa, historia.folio folio FROM clinico_historia historia INNER JOIN clinico_historiaexamenes histoexa on (histoexa.historia_id = historia.id) INNER JOIN clinico_tiposexamen tipoExa ON (tipoExa.id = histoexa."tiposExamen_id" ) INNER JOIN  clinico_examenes exam ON (exam."TiposExamen_id" = tipoExa.id  and  exam."TiposExamen_id" = histoexa."tiposExamen_id" AND  exam."codigoCups" =   Histoexa."codigoCups") INNER JOIN clinico_estadoexamenes estadosExam ON (estadosExam.id = histoexa."estadoExamenes_id" AND estadosExam.id = ' + "'" + str(estadoExamenes.id) + "'" + ') INNER JOIN triage_triage tri ON (tri."tipoDoc_id" = historia."tipoDoc_id"  AND  tri.documento_id = historia.documento_id and tri.consec=0 and tri."consecAdmision"= 0 and tri."fechaSolicita" <= historia.fecha)   WHERE  historia."sedesClinica_id" = ' + "'" + str(sede) + "'" + ' AND historia."tipoDoc_id" =  ' + "'" + str(pacienteId.tipoDoc_id) + "'" + ' AND historia.documento_id = ' + "'" + str(pacienteId.id) + "'" + ' AND historia."consecAdmision" = ' + "'" + str(triageId.consec) + "' ORDER BY historia.folio "
+        detalle = 'SELECT histoexa.id examId , historia.fecha fechaExamen,tipoExa.nombre tipoExamen ,exam.nombre examen , estadosExam.nombre estadoExamen ,histoexa.consecutivo consecutivo,histoexa."codigoCups" cups,	histoexa.cantidad cantidad, histoexa.observaciones observa, historia.folio folio FROM clinico_historia historia INNER JOIN clinico_historiaexamenes histoexa on (histoexa.historia_id = historia.id) INNER JOIN clinico_tiposexamen tipoExa ON (tipoExa.id = histoexa."tiposExamen_id" ) INNER JOIN  clinico_examenes exam ON (exam."TiposExamen_id" = tipoExa.id  and  exam."TiposExamen_id" = histoexa."tiposExamen_id" AND  exam."codigoCups" =   Histoexa."codigoCups") INNER JOIN clinico_estadoexamenes estadosExam ON (estadosExam.id = histoexa."estadoExamenes_id" AND estadosExam.id != ' + "'" + str(estadoExamenes.id) + "'" + ') INNER JOIN triage_triage tri ON (tri."tipoDoc_id" = historia."tipoDoc_id"  AND  tri.documento_id = historia.documento_id and tri.consec=0 and tri."consecAdmision"= 0 and tri."fechaSolicita" <= historia.fecha)   WHERE  historia."sedesClinica_id" = ' + "'" + str(sede) + "'" + ' AND historia."tipoDoc_id" =  ' + "'" + str(pacienteId.tipoDoc_id) + "'" + ' AND historia.documento_id = ' + "'" + str(pacienteId.id) + "'" + ' AND historia."consecAdmision" = ' + "'" + str(triageId.consec) + "' ORDER BY historia.folio desc"
 
     print(detalle)
 
@@ -830,7 +831,7 @@ def PostConsultaOrdenadosApoyoTerapeutico(request):
             cur = miConexionx.cursor()
 
             # comando = 'SELECT i.id id, i."tipoDoc_id" tipoDocId,td.nombre nombreTipoDoc, i.documento_id documentoId, u.documento documento , i.consec consec FROM admisiones_ingresos i, usuarios_usuarios u, usuarios_tiposDocumento td where i.id=' + "'" +  str(llave[0].strip()) + "'" + ' and i."tipoDoc_id" =td.id and i.documento_id=u.id'
-            comando = 'select exam.id examId,  exam."tiposExamen_id" tipoExamenId, tip.nombre tipoExamen, exam."codigoCups" CupsId , examenes.nombre nombreExamen,exam.cantidad cantidad, exam.observaciones observaciones, exam."estadoExamenes_id" estado,historia.folio folio,exam.interpretacion1 interpretacion1,exam.interpretacion2 interpretacion2, exam."medicoInterpretacion1_id" medicoInterpretacion1_id,exam."medicoInterpretacion2_id" medicoInterpretacion2_id ,exam."medicoReporte_id" medicoReporte_id, exam."rutaImagen" rutaImagen, exam."rutaVideo" rutaVideo , est.nombre estadoNombre, exam."serviciosAdministrativos_id" serviciosAdministrativos  from clinico_historiaexamenes exam, clinico_historia historia, clinico_tiposexamen tip, clinico_examenes examenes , clinico_estadoexamenes est where historia.id= exam.historia_id and exam.id = ' + "'" + str(
+            comando = 'select exam.id examId,  exam."tiposExamen_id" tipoExamenId, tip.nombre tipoExamen, exam."codigoCups" CupsId , examenes.nombre nombreExamen,exam.cantidad cantidad, exam.observaciones observaciones, exam."estadoExamenes_id" estado,historia.folio folio,exam.interpretacion1 interpretacion1,exam.interpretacion2 interpretacion2, exam."medicoInterpretacion1_id" medicoInterpretacion1_id,exam."medicoInterpretacion2_id" medicoInterpretacion2_id ,exam."medicoReporte_id" medicoReporte_id, exam."rutaImagen" rutaImagen, exam."rutaVideo" rutaVideo , est.nombre estadoNombre, exam."serviciosAdministrativos_id" serviciosAdministrativos, exam."fechaToma" , exam.resultado   from clinico_historiaexamenes exam, clinico_historia historia, clinico_tiposexamen tip, clinico_examenes examenes , clinico_estadoexamenes est where historia.id= exam.historia_id and exam.id = ' + "'" + str(
                 llave) + "'" + ' and  tip.id=exam."tiposExamen_id" and exam."tiposExamen_id" = examenes."TiposExamen_id"  And exam."codigoCups" = examenes."codigoCups" and est.id = exam."estadoExamenes_id"'
 
             print(comando)
@@ -839,7 +840,7 @@ def PostConsultaOrdenadosApoyoTerapeutico(request):
 
             resultadoApoyoTerapeutico = []
 
-            for examId, tipoExamenId, tipoExamen, CupsId, nombreExamen, cantidad, observaciones, estado, folio, interpretacion1, interpretacion2, medicoInterpretacion1_id, medicoInterpretacion2_id, medicoReporte_id, rutaImagen, rutaVideo, estadoNombre, serviciosAdministrativos in cur.fetchall():
+            for examId, tipoExamenId, tipoExamen, CupsId, nombreExamen, cantidad, observaciones, estado, folio, interpretacion1, interpretacion2, medicoInterpretacion1_id, medicoInterpretacion2_id, medicoReporte_id, rutaImagen, rutaVideo, estadoNombre, serviciosAdministrativos, fechaToma, resultado in cur.fetchall():
                 resultadoApoyoTerapeutico.append({"examId": examId,
                                                   "tipoExamenId": tipoExamenId,
                                                   "tipoExamen": tipoExamen,
@@ -851,7 +852,7 @@ def PostConsultaOrdenadosApoyoTerapeutico(request):
                                                   "medicoInterpretacion2_id": medicoInterpretacion2_id,
                                                   "medicoReporte_id": medicoReporte_id, "rutaImagen": rutaImagen,
                                                   "rutaVideo": rutaVideo, "estadoNombre": estadoNombre,
-                                                  "serviciosAdministrativos": serviciosAdministrativos})
+                                                  "serviciosAdministrativos": serviciosAdministrativos, 'fechaToma':fechaToma,'resultado':resultado})
 
             miConexionx.close()
             print(resultadoApoyoTerapeutico)
@@ -1366,6 +1367,9 @@ def GuardarResultado ( request):
         medicoReporte = request.POST["medicoReporte"]
         rutaImagen = request.POST["rutaImagen"]
         rutaVideo = request.POST["rutaVideo"]
+        fechaToma = request.POST["fechaToma"]
+        resultado = request.POST["resultado"]
+
         estadoExamen = request.POST["estadoExamen"]
         #dependenciasRealizado = request.POST["dependenciasRealizado"]
         serviciosAdministrativos = request.POST["serviciosAdministrativos"]
@@ -1401,13 +1405,12 @@ def GuardarResultado ( request):
         if serviciosAdministrativos == '':
             serviciosAdministrativos ="null"
 
-
-
+        fechaRegistro = timezone.now()
         estadoReg= 'A'
         usuarioToma = request.POST["usuarioToma"]
-        fechaReporte = datetime.datetime.now()
-        fechaInterpretacion1 = datetime.datetime.now()
-        fechaInterpretacion2 = datetime.datetime.now()
+        fechaReporte = fechaRegistro
+        fechaInterpretacion1 = fechaRegistro
+        fechaInterpretacion2 = fechaRegistro
 
         if fechaInterpretacion1 == '':
             fechaInterpretacion1 ="null"
@@ -1415,6 +1418,8 @@ def GuardarResultado ( request):
         if fechaInterpretacion2 == '':
             fechaInterpretacion2 ="null"
 
+        if fechaToma == '':
+           fechaToma=fechaRegistro
 
         print ("examId =", examId)
 
@@ -1425,7 +1430,7 @@ def GuardarResultado ( request):
 
                 miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",  password="123456")
                 curt = miConexiont.cursor()
-                comando = 'UPDATE clinico_historiaexamenes set interpretacion1 = ' + "'" + str(interpretacion1) + "'," +  '"fechaInterpretacion1" = '  + "'" + str(fechaInterpretacion1) + "'," + ' "medicoInterpretacion1_id" = ' +  str(medicoInterpretacion1) + ","  + '"medicoReporte_id" = ' + str(medicoReporte) + ","  + '  interpretacion2 = '  + "'" +  str(interpretacion2) + "'," + '"fechaInterpretacion2"  = '  + "'"   + str(fechaInterpretacion2) + "'," + ' "medicoInterpretacion2_id" = ' + str(medicoInterpretacion2) + ","  + ' observaciones = ' + "'" +   str(observaciones) + "'," + '"rutaImagen" = ' + "'" + str(rutaImagen) +  "'" + ',"rutaVideo" = ' + "'" + str(rutaVideo) + "'," +  '"fechaReporte" = ' + "'" + str(fechaReporte) + "'," + ' "usuarioToma_id" = ' + "'" + str(usuarioToma) + "'," + '"serviciosAdministrativos_id" = ' + str(serviciosAdministrativos) + "," + '"estadoExamenes_id" = ' + "'" + str(estadoExamen) + "'" + ' WHERE id = ' + "'" + str(examId) + "'"
+                comando = 'UPDATE clinico_historiaexamenes set interpretacion1 = ' + "'" + str(interpretacion1) + "'," +  '"fechaInterpretacion1" = '  + "'" + str(fechaInterpretacion1) + "'," + ' "medicoInterpretacion1_id" = ' +  str(medicoInterpretacion1) + ","  + '"medicoReporte_id" = ' + str(medicoReporte) + ","  + '  interpretacion2 = '  + "'" +  str(interpretacion2) + "'," + '"fechaInterpretacion2"  = '  + "'"   + str(fechaInterpretacion2) + "'," + ' "medicoInterpretacion2_id" = ' + str(medicoInterpretacion2) + ","  + ' observaciones = ' + "'" +   str(observaciones) + "'," + '"rutaImagen" = ' + "'" + str(rutaImagen) +  "'" + ',"rutaVideo" = ' + "'" + str(rutaVideo) + "'," +  '"fechaReporte" = ' + "'" + str(fechaReporte) + "'," + ' "usuarioToma_id" = ' + "'" + str(usuarioToma) + "'," + '"serviciosAdministrativos_id" = ' + str(serviciosAdministrativos) + "," + '"estadoExamenes_id" = ' + "'" + str(estadoExamen) + "'," + ' "fechaToma" = ' + "'" + str(fechaToma) + "', resultado = '" + str(resultado) + "'"  + ' WHERE id = ' + "'" + str(examId) + "'"
                 print(comando)
                 curt.execute(comando)
                 miConexiont.commit()

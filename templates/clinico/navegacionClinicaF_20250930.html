@@ -6,7 +6,6 @@
 <link rel="stylesheet" type="text/css" href={% static 'css/navegacionClinica.css' %} >
 
 <script src={% static 'js/navegacionClinica.js' %} defer >         </script>
-<script src={% static 'js/navegacionClinicaInfo.js' %} defer >         </script>
 <script src={% static 'js/navegacionTabsClinica.js' %} defer> </script>
  
 <div class="marco">
@@ -144,6 +143,9 @@
 {% endfor %}
 </div>
 {% endblock %}
+
+
+
 
 
 {% block content %}
@@ -633,40 +635,6 @@
 
 
     <article id="Laboratorios">
-
-
-	<!-- desde aqui resultados ya de radiologia del ingreso -->
-
-            <!-- INICIO TABLE DE  EL DATATABLE  -->
-
-        <div class="tabla-contenedor">     
-   			   <div class="row">
-				
-                                        <table  id= "tablaInfoLaboratorio" class=" display table table-striped table-sm fs-6 nowrap" style="width: 100%";>
-                                           <thead>
-                                            <tr>    
-						<bold> 
-						<th>id</th>                   
-                                                <th>Folio</th>                   
-                                                <th>Fecha</th>                   
-                                                <th>Fec.Tomado</th>
-                                                <th>Fec.Reporte</th>  
-						<th>Examen</th>                                     
-                                                <th>Interpretacion</th> 
-                                                <th>Fecha interpretacion</th>                                    
-                                                <th>Estado</th>	              
-						</bold>                                  
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            </tbody>
-                                     
-                                        </table>
-                                    </div>
-                                </div>
-
-			<!-- FIN TABLE DE  EL DATATABLE  -->
-
 		<div class="marco">
              <!-- DESDE AQUIP DATATABLE  -->
       <table class="table" style="height: 50px; background-color:LightGray;  width:90%;">
@@ -762,41 +730,9 @@
     </article>
 
     <article id="Radiologia">
-
-	<!-- desde aqui resultados ya de radiologia del ingreso -->
-
-            <!-- INICIO TABLE DE  EL DATATABLE  -->
-
-        <div class="tabla-contenedor">     
-   			   <div class="row">
-				
-                                        <table  id= "tablaInfoRadiologia" class=" display table table-striped table-sm fs-6 nowrap" style="width: 100%";>
-                                           <thead>
-                                            <tr>    
-						<bold> 
-						<th>id</th>                   
-                                                <th>Folio</th>                   
-                                                <th>Fecha</th>                   
-                                                <th>Fec.Tomado</th>
-                                                <th>Fec.Reporte</th>  
-						<th>Examen</th>                                     
-                                                <th>Interpretacion</th> 
-                                                <th>Fecha interpretacion</th>                                    
-                                                <th>Estado</th>	              
-						</bold>                                  
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            </tbody>
-                                     
-                                        </table>
-                                    </div>
-                                </div>
-
-			<!-- FIN TABLE DE  EL DATATABLE  -->
+        <br>
 
 
-	<!-- FIN                                                    -->
 
         <table class="table  " style="height: 50px; background-color:LightGray;  width:100%;">
             <tr>
@@ -898,25 +834,17 @@
             </tr>
         </table>
 
-
-    </article>
-
-
-    <article id="Terapias">
-
-
-	<!-- desde aqui resultados ya de Terapia del ingreso -->
+	<!-- desde aqui resultados ya de radiologia del ingreso -->
 
             <!-- INICIO TABLE DE  EL DATATABLE  -->
-
-        <div class="tabla-contenedor">     
+		<div class="container my-2">
+             
    			   <div class="row">
 				
-                                        <table  id= "tablaInfoTerapia" class=" display table table-striped table-sm fs-6 nowrap" style="width: 100%";>
+                                        <table  id= "tablaInfoRadiologia" class=" display table table-striped table-sm fs-6 nowrap" style="width: 100%";>
                                            <thead>
                                             <tr>    
-						<bold> 
-						<th>id</th>                   
+						<bold>                
                                                 <th>Folio</th>                   
                                                 <th>Fecha</th>                   
                                                 <th>Fec.Tomado</th>
@@ -938,8 +866,14 @@
 			<!-- FIN TABLE DE  EL DATATABLE  -->
 
 
+	<!-- FIN                                                    -->
 
 
+    </article>
+
+
+    <article id="Terapias">
+                <br>
                 <table class="table  " style="height: 50px; background-color:LightGray;  width:100%;">
             <tr>
                 <td>
@@ -1044,44 +978,6 @@
     </article>
 
     <article id="Formulacion">
-
-
-
-	<!-- desde aqui resultados ya de Antecedentedel ingreso -->
-
-            <!-- INICIO TABLE DE  EL DATATABLE  -->
-
-        <div class="tabla-contenedor">     
-   			   <div class="row">
-				
-                                        <table  id= "tablaInfoMedicamento" class=" display table table-striped table-sm fs-6 nowrap" style="width: 100%";>
-                                           <thead>
-                                            <tr>    
-						<bold> 
-						<th>id</th>                   
-                                                <th>Folio</th>                   
-                                                <th>FechaFormulado</th>                   
-                                                <th>Formulado</th>
-                                                <th>FechaAplicado</th>
-                                                <th>Aplicado</th>
-
-						</bold>                                  
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            </tbody>
-                                     
-                                        </table>
-                                    </div>
-                                </div>
-
-			<!-- FIN TABLE DE  EL DATATABLE  -->
-
-
-
-
-
-
              <table class="table  " style="height: 50px; background-color:LightGray;  width:100%;">
             <tr>
                 <td>
@@ -1609,39 +1505,7 @@
 
 
     <article id="ProcedimientosNoQx">
-       
-	<!-- desde aqui resultados ya de NoQx del ingreso -->
-
-            <!-- INICIO TABLE DE  EL DATATABLE  -->
-
-        <div class="tabla-contenedor">     
-   			   <div class="row">
-				
-                                        <table  id= "tablaInfoNoQx" class=" display table table-striped table-sm fs-6 nowrap" style="width: 100%";>
-                                           <thead>
-                                            <tr>    
-						<bold> 
-						<th>id</th>                   
-                                                <th>Folio</th>                   
-                                                <th>Fecha</th>                   
-                                                <th>Fec.Tomado</th>
-                                                <th>Fec.Reporte</th>  
-						<th>Examen</th>                                     
-                                                <th>Interpretacion</th> 
-                                                <th>Fecha interpretacion</th>                                    
-                                                <th>Estado</th>	              
-						</bold>                                  
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            </tbody>
-                                     
-                                        </table>
-                                    </div>
-                                </div>
-
-			<!-- FIN TABLE DE  EL DATATABLE  -->
-
+        <br>
 
 
                 <table class="table  " style="height: 50px; background-color:LightGray;  width:100%;">
@@ -1857,38 +1721,7 @@
     </article>
 
     <article id="Antecedentes">
-      
-	<!-- desde aqui resultados ya de Antecedentedel ingreso -->
-
-            <!-- INICIO TABLE DE  EL DATATABLE  -->
-
-        <div class="tabla-contenedor">     
-   			   <div class="row">
-				
-                                        <table  id= "tablaInfoAntecedente" class=" display table table-striped table-sm fs-6 nowrap" style="width: 100%";>
-                                           <thead>
-                                            <tr>    
-						<bold> 
-						<th>id</th>                   
-                                                <th>Folio</th>                   
-                                                <th>Fecha</th>                   
-                                                <th>Tipo</th>
-                                                <th>Descripcion</th>  
-						</bold>                                  
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            </tbody>
-                                     
-                                        </table>
-                                    </div>
-                                </div>
-
-			<!-- FIN TABLE DE  EL DATATABLE  -->
-
-
-
-
+                <br>
 
              <table class="table  " style="height: 50px; background-color:LightGray;  width:100%;">
             <tr>
@@ -2175,36 +2008,6 @@
     </article>
 
     <article id="NotasEnfermeria">
-
-	<!-- desde aqui resultados ya de Antecedentedel ingreso -->
-
-            <!-- INICIO TABLE DE  EL DATATABLE  -->
-
-        <div class="tabla-contenedor">     
-   			   <div class="row">
-				
-                                        <table  id= "tablaInfoNotasEnfermeria" class=" display table table-striped table-sm fs-6 nowrap" style="width: 100%";>
-                                           <thead>
-                                            <tr>    
-						<bold> 
-						<th>id</th>                   
-                                                <th>Folio</th>                   
-                                                <th>Fecha</th>                   
-                                                <th>Nota</th>
-						</bold>                                  
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            </tbody>
-                                     
-                                        </table>
-                                    </div>
-                                </div>
-
-			<!-- FIN TABLE DE  EL DATATABLE  -->
-
-
-
 		<div class="marco">
              <!-- DESDE AQUIP DATATABLE  -->
       <table class="table" style="height: 50px; background-color:LightGray;  width:90%;">

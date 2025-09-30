@@ -870,6 +870,7 @@ window.addEventListener('load', async () => {
 			document.getElementById("nombreExamen").innerHTML = data[0]['ResultadoApoyoTerapeutico'][0]['nombreExamen'];
 			document.getElementById("cantidad").innerHTML = data[0]['ResultadoApoyoTerapeutico'][0]['cantidad'];
 			document.getElementById("observaciones").innerHTML = data[0]['ResultadoApoyoTerapeutico'][0]['observaciones'];
+
 		
 
 
@@ -894,6 +895,9 @@ window.addEventListener('load', async () => {
 	                $('#rutaImagen').val(data[0]['ResultadoApoyoTerapeutico'][0].rutaImagen);
 	                $('#rutaVideo').val(data[0]['ResultadoApoyoTerapeutico'][0].rutaVideo);
 		//		alert("medicointerpretacion1 = " + data[0]['ResultadoApoyoTerapeutico'][0].medicoInterpretacion1);
+
+	                $('#fechaToma').val(data[0]['ResultadoApoyoTerapeutico'][0].fechaToma);
+	                $('#resultado').val(data[0]['ResultadoApoyoTerapeutico'][0].resultado);
 
 
 			 $('#ingresoIdA').val(data[4]['MedicoReporte']);
@@ -1353,6 +1357,10 @@ function guardarResultado() {
 	 var estadoExamen = document.getElementById("estadoExamen").value;
 	 var serviciosAdministrativos = document.getElementById("serviciosAdministrativos").value;
 	 var estadoExamen = document.getElementById("estadoExamen").value;
+	 var fechaToma = document.getElementById("fechaToma").value;
+
+	var resultado = document.getElementById("resultado").value;
+
 
 
 
@@ -1372,6 +1380,8 @@ function guardarResultado() {
 			estadoExamen:estadoExamen,
 			serviciosAdministrativos:serviciosAdministrativos,
 			estadoExamen:estadoExamen,
+ 			fechaToma:fechaToma,
+			resultado:resultado
 			},
 	           type: 'POST',
 	           dataType : 'json',

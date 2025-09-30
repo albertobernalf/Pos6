@@ -36,15 +36,18 @@ select * from clinico_historiaexamenes;
 select documento_id,* from clinico_historia;
 select * from clinico_estadoexamenes;
 select * from clinico_tiposexamen;
+SELECT * FROM CLINICO_EXAMENESRASGOS;
 
 
-select his.fecha Fecha, hisExa."fechaToma" fechaTomado, hisExa."fechReporte",  exa.nombre ,
-	 hisExa.interpretacion1, hisExa."fechInterpretacion1", est.nombre estado
+select his.folio folio, his.fecha Fecha, hisExa."fechaToma" fechaTomado, hisExa."fechaReporte",  exa.nombre ,
+	hisExa.resultado resultado,
+	hisExa.interpretacion1, hisExa."fechaInterpretacion1", est.nombre estado
 FROM clinico_historia his
 INNER JOIN clinico_historiaexamenes hisExa ON (hisExa.historia_id = his.id)
 INNER JOIN clinico_examenes exa ON (exa."codigoCups" = hisExa."codigoCups")
 LEFT JOIN clinico_historiaresultados resul ON (resul."historiaExamenes_id" = hisExa.id)
-LEFT JOIN clinico_estadoexamenes est ON 8est.id=histExa."estadoExamenes_id"
-INNER JOIN 	clinico_tiposexamen TIP on (tip.id = hisExa."tiposExamen_id")
-WHERE his.documento_id = 60  AND his."tipoDoc_id" = '1'   And his."consecAdmision=" 1
+LEFT JOIN clinico_estadoexamenes est ON (est.id=hisExa."estadoExamenes_id")
+INNER JOIN 	clinico_tiposexamen tip on (tip.id = hisExa."tiposExamen_id" AND  tip.nombre='RADIOLOGIA')
+WHERE his.documento_id = 60  AND his."tipoDoc_id" = '1'   And his."consecAdmision"= 1
+ORDER BY  his.folio
 
