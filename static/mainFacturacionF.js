@@ -1401,13 +1401,15 @@ $('#RvalorAPagarLetras').val(data.valorAPagarLetras);
 
           var post_id = $(this).data('pk');
 
-
+	
 	$.ajax({
 	           url: '/postConsultaLiquidacionDetalle/',
 	            data : {post_id:post_id},
 	           type: 'POST',
 	           dataType : 'json',
 	  		success: function (data) {
+		alert("de regreso");
+
 
 			if (data.success == true)
 			 {
@@ -1415,6 +1417,8 @@ $('#RvalorAPagarLetras').val(data.valorAPagarLetras);
 			 }
 			else
 			{
+			alert("error=" + data.Mensaje);
+	
 			document.getElementById("mensajesError").innerHTML = data.Mensaje;
 			return;
 			}
@@ -1466,6 +1470,8 @@ $('#RvalorAPagarLetras').val(data.valorAPagarLetras);
 		 $('#ldsuministros').val(data.cums_id);
 
             $('#modelHeadingLiquidacionDetalle').html("Edicion Liquidacion");
+		alert("voy a cargar ma modal");
+
             $('#crearModelLiquidacionDetalle').modal('show');
 
                   },

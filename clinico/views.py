@@ -3897,7 +3897,54 @@ def load_dataInfoMedicamento(request, data):
                                    password="123456")
     curx = miConexionx.cursor()
 
-    detalle = 'select his.id id,his.folio folio, his.fecha fechaRegistro, hisEnf.observaciones nota FROM clinico_historia his INNER JOIN clinico_historialNotasEnfermeria hisEnf ON (hisEnf.historia_id = his.id)  WHERE his.documento_id = ' + "'" + str(
+    detalle = 'select his.id id,his.folio folio, his.fecha fechaFormulado, hisMed."dosisCantidad"||' + "' '||dosis.descripcion||' '||sum.nombre||' '||frec.descripcion||' '||via.nombre||' cantidad: '||" + 'hisMed."cantidadOrdenada"||' + "' dias:'||" + 'hisMed."diasTratamiento" formulado,enfPla."dosisCantidad"||' + "' '||dosis1.descripcion||' '||sum1.nombre||' '||via1.nombre SuministroAplicado	," + ' enfPla."consecutivoPlaneacion" consec,  enfPla."fechaPlanea", enfPla."fechaAplica", enfPla."cantidadAplicada" FROM clinico_historia his INNER JOIN clinico_historiaMedicamentos hisMed ON (hisMed.historia_id = his.id) LEFT JOIN clinico_viasadministracion via on (via.id = hisMed."viaAdministracion_id") INNER JOIN facturacion_suministros sum on (sum.id =hisMed.suministro_id) LEFT JOIN clinico_frecuenciasaplicacion frec on (frec.id = hisMed.frecuencia_id) LEFT JOIN clinico_unidadesdemedidadosis dosis on (dosis.id=hisMed."dosisUnidad_id") INNER JOIN 	enfermeria_enfermeriadetalle enfDet ON (enfDet."historiaMedicamentos_id" = hisMed.id) INNER JOIN 	enfermeria_enfermeriarecibe enfRec ON (enfRec."enfermeriaDetalle_id" = enfDet.id) INNER JOIN 	enfermeria_enfermeriaplaneacion enfPla ON (enfPla."enfermeriaRecibe_id" = enfRec.id) LEFT JOIN clinico_viasadministracion via1 on (via1.id = enfPla."viaAdministracion_id") LEFT JOIN facturacion_suministros sum1 on (sum1.id =enfPla.suministro_id) LEFT JOIN clinico_frecuenciasaplicacion frec1 on (frec1.id = enfPla.frecuencia_id) LEFT JOIN clinico_unidadesdemedidadosis dosis1 on (dosis1.id=enfPla."dosisUnidad_id") WHERE his.documento_id = ' + "'" + str(documentoId.id) + "'" + ' AND his."tipoDoc_id" = ' + "'" + str(tipodocId.id) + "'" + ' And his."consecAdmision"= ' + "'" + str(consec) + "' order by his.folio desc," + ' enfPla."consecutivoPlaneacion" asc'
+    print(detalle)
+
+    curx.execute(detalle)
+
+    for id, folio, fechaFormulado, formulado, suministroAplicado, consec, fechaPlanea, fechaAplica, cantidadAplicada in curx.fetchall():
+        infoMedicamento.append(
+            {"model": "clinico.examenes", "pk": id, "fields":
+                {'id': id, 'folio': folio, 'fechaFormulado': fechaFormulado, 'formulado': formulado,'suministroAplicado':suministroAplicado,
+                'consec':consec,'fechaPlanea':fechaPlanea,'fechaAplica':fechaAplica, 'cantidadAplicada':cantidadAplicada }})
+
+    miConexionx.close()
+    print(infoMedicamento)
+    context['InfoMedicamento'] = infoMedicamento
+
+    serialized1 = json.dumps(infoMedicamento, default=str)
+
+    return HttpResponse(serialized1, content_type='application/json')
+
+
+def load_dataInfoInterConsulta(request, data):
+    print("Entre load_dataInfoInterConsulta")
+
+    context = {}
+    d = json.loads(data)
+
+    username = d['username']
+    sede = d['sede']
+    username_id = d['username_id']
+    nombreSede = d['nombreSede']
+    print("sede:", sede)
+    print("username:", username)
+    print("username_id:", username_id)
+
+    tipoDoc = d['tipoDoc']
+    documento = d['documento']
+    consec = d['consec']
+
+    documentoId = Usuarios.objects.get(documento=documento)
+    tipodocId = TiposDocumento.objects.get(nombre=tipoDoc)
+
+    infoInterConsulta = []
+
+    miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                   password="123456")
+    curx = miConexionx.cursor()
+
+    detalle = 'select his.id id,his.folio folio, his.fecha fechaRegistro, tiposInt.nombre tipo, planta1.nombre medicoConsulta, hisInt."descripcionConsulta" , planta2.nombre medicoResponde, hisInt."respuestaConsulta"  FROM clinico_historia his INNER JOIN clinico_historialinterconsultas hisInt ON (hisInt.historia_id = his.id) INNER JOIN clinico_tiposinterconsulta  tiposInt ON (tiposInt.id = hisInt."tipoInterconsulta_id") INNER JOIN clinico_medicos med1 on (med1.id=hisInt."medicoConsulta_id") INNER JOIN  planta_planta planta1 ON (planta1.id=med1.planta_id) LEFT JOIN clinico_medicos med2 on (med2.id=hisInt."medicoConsultado_id") LEFT JOIN  planta_planta planta2 ON (planta2.id=med2.planta_id)  WHERE his.documento_id = ' + "'" + str(
         documentoId.id) + "'" + ' AND his."tipoDoc_id" = ' + "'" + str(
         tipodocId.id) + "'" + ' And his."consecAdmision"= ' + "'" + str(consec) + "' ORDER BY  his.folio desc"
 
@@ -3905,16 +3952,18 @@ def load_dataInfoMedicamento(request, data):
 
     curx.execute(detalle)
 
-    for id, folio, fechaRegistro, nota in curx.fetchall():
-        infoMedicamento.append(
+    for id, folio, fechaRegistro, tipo, medicoConsulta, descripcionConsulta,medicoResponde,respuestaConsulta   in curx.fetchall():
+        infoInterConsulta.append(
             {"model": "clinico.examenes", "pk": id, "fields":
-                {'id': id, 'folio': folio, 'fechaRegistro': fechaRegistro, 'nota': nota}})
+                {'id': id, 'folio': folio, 'fechaRegistro': fechaRegistro, 'tipo': tipo,  'medicoConsulta': medicoConsulta,
+                 'descripcionConsulta':descripcionConsulta, 'medicoResponde':medicoResponde, 'respuestaConsulta':respuestaConsulta
+                 }})
 
     miConexionx.close()
-    print(infoMedicamento)
-    context['InfoMedicamento'] = infoMedicamento
+    print(infoInterConsulta)
+    context['InfoInterConsulta'] = infoInterConsulta
 
-    serialized1 = json.dumps(infoMedicamento, default=serialize_datetime)
+    serialized1 = json.dumps(infoInterConsulta, default=serialize_datetime)
 
     return HttpResponse(serialized1, content_type='application/json')
 

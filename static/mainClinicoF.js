@@ -112,9 +112,7 @@ autoWidth: false,
 
 
 		},
-
-
-      
+     
                 { data: "fields.id"},
                 { data: "fields.tipoDoc"},
                 { data: "fields.documento"},
@@ -240,91 +238,6 @@ autoWidth: false,
 
   }
 
-
-    if (valorTabla == 3)
-    {
-	alert("Entre info radiologia");
-
-        let dataTableOptionsInfoRadiologia  ={
-    dom: "<'row mb-1'<'col-sm-3'B><'col-sm-3'><'col-sm-6'f>>" + // B = Botones a la izquierda, f = filtro a la derecha
-             "<'row'<'col-sm-12'tr>>" +
-             "<'row mt-3'<'col-sm-5'i><'col-sm-7'p>>",
-  buttons: [
-    {
-      extend: 'excelHtml5',
-      text: '<i class="fas fa-file-excel"></i> ',
-      titleAttr: 'Exportar a Excel',
-      className: 'btn btn-success',
-    },
-    {
-      extend: 'pdfHtml5',
-      text: '<i class="fas fa-file-pdf"></i> ',
-      titleAttr: 'Exportar a PDF',
-      className: 'btn btn-danger',
-    },
-    {
-      extend: 'print',
-      text: '<i class="fa fa-print"></i> ',
-      titleAttr: 'Imprimir',
-      className: 'btn btn-info',
-    },
-  ],
-  lengthMenu: [2, 4, 15],
-           processing: true,
-            serverSide: false,
-            scrollY: '275px',
-	    scrollX: true,
-	    scrollCollapse: true,
-            paging:false,
-            columnDefs: [
-		{ className: 'centered', targets: [0, 1, 2, 3, 4, 5] },
-	    { width: '10%', targets: [2,3] },
-	    { width: '10%', targets: [3] },
-		{    
-                    "targets": 8
-               }
-            ],
-	 pageLength: 3,
-	  destroy: true,
-	  language: {
-		    processing: 'Procesando...',
-		    lengthMenu: 'Mostrar _MENU_ registros',
-		    zeroRecords: 'No se encontraron resultados',
-		    emptyTable: 'Ningún dato disponible en esta tabla',
-		    infoEmpty: 'Mostrando registros del 0 al 0 de un total de 0 registros',
-		    infoFiltered: '(filtrado de un total de _MAX_ registros)',
-		    search: 'Buscar:',
-		    infoThousands: ',',
-		    loadingRecords: 'Cargando...',
-		    paginate: {
-			      first: 'Primero',
-			      last: 'Último',
-			      next: 'Siguiente',
-			      previous: 'Anterior',
-		    }
-			},
-
-
-           ajax: {
-                 url:"/load_dataInfoRadiologia/" +  data,
-                 type: "POST",
-                 dataSrc: ""
-            },
-            columns: [
-                { data: "fields.folio"},
-                { data: "fields.fecha"},
-                { data: "fields.fechaTomado"},
-                { data: "fields.fechaReporte"},
-                { data: "fields.examen"},
-                { data: "fields.interpretacion"},
-                { data: "fields.fechaInterpretacion"},
-                { data: "fields.estado"},
-
-
-            ]
-            }
-	        dataTable = $('#tablaInfoRadiologia').DataTable(dataTableOptionsInfoRadiologia);
-  }
 
 }
 

@@ -8,6 +8,7 @@ let dataTableAntecedente;
 let dataTableNotasEnfermeria;
 let dataTableMedicamento;
 let dataTableSignoVital;
+let dataTableInterConsulta;
 
 
 
@@ -19,6 +20,7 @@ let dataTableAntecedenteInfoInitialized = false;
 let dataTableNotasEnfermeriaInfoInitialized = false;
 let dataTableSignosVitalInfoInitialized = false;
 let dataTableMedicamentoInfoInitialized = false;
+let dataTableInterConsultaInfoInitialized = false;
 
 function arrancaInfoClinico(valorTabla,valorData)
 {
@@ -660,7 +662,7 @@ autoWidth: false,
                          //btn = btn + " <button   class='btn btn-primary borrarLiquidacionDetalle' data-pk='" + row.pk + "'>" + "</button>";
                        return btn;
                     },
-                    "targets": 6
+                    "targets": 9
                }
             ],
 	 pageLength: 3,
@@ -692,9 +694,11 @@ autoWidth: false,
 		{ data: "fields.folio"},
                 { data: "fields.fechaFormulado"},
                 { data: "fields.formulado"},
-                { data: "fields.fechaAplicado"},
-                { data: "fields.aplicado"},
-
+                { data: "fields.suministroAplicado"},
+                { data: "fields.consec"},
+                { data: "fields.fechaPlanea"},
+                { data: "fields.fechaAplica"},
+                { data: "fields.cantidadAplicada"},
 
             ]
             }
@@ -710,6 +714,108 @@ autoWidth: false,
 
 	            dataTableMedicamentoInfoInitialized  = true;
       }
+
+
+    if (valorTabla == 8)
+    {
+	
+
+        let dataTableOptionsInfoInterConsulta  ={
+
+   dom: "<'row mb-1'<'col-sm-3'B><'col-sm-3'><'col-sm-6'f>>" + // B = Botones a la izquierda, f = filtro a la derecha
+             "<'row'<'col-sm-12'tr>>" +
+             "<'row mt-3'<'col-sm-5'i><'col-sm-7'p>>",
+  buttons: [
+    {
+      extend: 'excelHtml5',
+      text: '<i class="fas fa-file-excel"></i> ',
+	// text: '<i class="bi bi-file-earmark-excel-fill"></i> Exportar Excel',
+      titleAttr: 'Exportar a Excel',
+      className: 'btn btn-success btn-sm',
+    },
+    {
+      extend: 'pdfHtml5',
+      text: '<i class="fas fa-file-pdf"></i> ',
+      titleAttr: 'Exportar a PDF',
+      className: 'btn btn-danger btn-sm',
+    },
+    {
+      extend: 'print',
+      text: '<i class="fa fa-print"></i> ',
+      titleAttr: 'Imprimir',
+      className: 'btn btn-info btn-sm',
+    },
+  ],
+autoWidth: false,
+  lengthMenu: [2, 4, 15],
+           processing: true,
+            serverSide: false,
+            scrollY: '200px',
+	    scrollX: true,
+	    scrollCollapse: true,
+            paging:false,
+            columnDefs: [
+		  { width: '15%',  targets: [2,3] },
+		{     "render": function ( data, type, row ) {
+                        var btn = '';
+                         // btn = btn + " <button   class='btn btn-primary editPostLiquidacionDetalle' data-pk='" + row.pk + "'>" + "</button>";
+                         //btn = btn + " <button   class='btn btn-primary borrarLiquidacionDetalle' data-pk='" + row.pk + "'>" + "</button>";
+                       return btn;
+                    },
+                    "targets": 8
+               }
+            ],
+	 pageLength: 3,
+	  destroy: true,
+	  language: {
+		    processing: 'Procesando...',
+		    lengthMenu: 'Mostrar _MENU_ registros',
+		    zeroRecords: 'No se encontraron resultados',
+		    emptyTable: 'Ningún dato disponible en esta tabla',
+		    infoEmpty: 'Mostrando registros del 0 al 0 de un total de 0 registros',
+		    infoFiltered: '(filtrado de un total de _MAX_ registros)',
+		    search: 'Buscar:',
+		    infoThousands: ',',
+		    loadingRecords: 'Cargando...',
+		    paginate: {
+			      first: 'Primero',
+			      last: 'Último',
+			      next: 'Siguiente',
+			      previous: 'Anterior',
+		    }
+			},
+           ajax: {
+                 url:"/load_dataInfoInterConsulta/" +  data,
+                 type: "POST",
+                 dataSrc: ""
+            },
+            columns: [
+		{ data: "fields.id"},
+		{ data: "fields.folio"},
+                { data: "fields.fechaRegistro"},
+                { data: "fields.tipo"},
+                { data: "fields.medicoConsulta"},
+                { data: "fields.descripcionConsulta"},
+                { data: "fields.medicoResponde"},
+                { data: "fields.respuestaConsulta"},
+
+
+            ]
+            }
+
+            if  (dataTableInterConsultaInfoInitialized )  {
+
+		            dataTableInterConsulta = $("#tablaInfoInterConsulta").dataTable().fnDestroy();
+
+                    }
+
+	        dataTableInterConsulta = $('#tablaInfoInterConsulta').DataTable(dataTableOptionsInfoInterConsulta);
+
+
+	            dataTableInterConsultaInfoInitialized  = true;
+      }
+
+
 
 
   }
@@ -767,6 +873,10 @@ const initDataTableInfoClinico = async () => {
 
 	    arrancaInfoClinico(7,data);
 	  dataTableMedicamentoInfoInitialized = true;
+
+	    arrancaInfoClinico(8,data);
+	  dataTableInterConsultaInfoInitialized = true;
+
 
 }
 

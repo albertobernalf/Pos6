@@ -18,6 +18,13 @@ select * from clinico_unidadesdemedidadosis;
 select * from clinico_historiaMedicamentos;
 select * from clinico_frecuenciasaplicacion
 
+	 
+select * from enfermeria_enfermeriaplaneacion; -- enfermeriarecibe_id, enfermeria_id
+select * from enfermeria_enfermeriarecibe; -- enfermeriadetalle_id
+select * from enfermeria_enfermeriadetalle; -- historiamedicamentos_id
+
+
+
 select his.id id,his.folio folio, his.fecha fechaRegistro, hisMed."dosisCantidad" ,dosis.descripcion,
 	sum.nombre, frec.descripcion frec, via.nombre, hisMed."cantidadOrdenada",  hisMed."diasTratamiento"
 FROM clinico_historia his
@@ -50,18 +57,30 @@ INNER JOIN 	enfermeria_enfermeriaplaneacion enfPla ON (enfPla."enfermeriaRecibe_
 WHERE his.documento_id = '60' AND his."tipoDoc_id" = '1' And his."consecAdmision"= '1'
 order by his.folio desc, enfPla."consecutivoPlaneacion" asc
 
- 
 
-		
-select his.id id,his.folio folio, his.fecha fechaRegistro, hisMed."dosisCantidad"||' '||dosis.descripcion||' '||
-	sum.nombre||' '||frec.descripcion||' '||via.nombre||' '||hisMed."cantidadOrdenada",  hisMed."diasTratamiento"
-	
-select * from enfermeria_enfermeriaplaneacion; -- enfermeriarecibe_id, enfermeria_id
-select * from enfermeria_enfermeriarecibe; -- enfermeriadetalle_id
-select * from enfermeria_enfermeriadetalle; -- historiamedicamentos_id
-	
-	
-	
-	WHERE his.documento_id = ' + "'" + str(
-        documentoId.id) + "'" + ' AND his."tipoDoc_id" = ' + "'" + str(
-        tipodocId.id) + "'" + ' And his."consecAdmision"= ' + "'" + str(consec) + "' ORDER BY  his.folio desc"
+select * from clinico_historialinterconsultas;
+select * from clinico_tiposinterconsulta;
+select * from planta_planta;
+select * from clinico_medicos;
+
+select * from clinico_historiasignosvitales;
+
+select examen_id,cums_id,* from facturacion_liquidaciondetalle;
+select * from clinico_examenes where id=572
+
+select liq.id id,consecutivo ,    liq.cantidad ,  "valorUnitario" ,  "valorTotal" ,  cirugia_id cirugia ,  
+	liq.observaciones ,  "estadoRegistro" ,  examen_id ,  cums_id , exa.nombre  nombreExamen  ,  liquidacion_id , 
+	liq."tipoHonorario_id" ,  "tipoRegistro" 
+	FROM facturacion_liquidaciondetalle liq 
+	inner join clinico_examenes exa on (exa.id = liq.examen_id)  
+	where liq.liquidacion_id= 1468
+	UNION
+	select liq.id id,consecutivo , liq.cantidad ,  "valorUnitario" ,  "valorTotal" ,  cirugia_id cirugia , 
+	liq.observaciones ,  "estadoRegistro" ,  examen_id ,  cums_id , sum.nombre  nombreExamen  ,  liquidacion_id ,
+	liq."tipoHonorario_id" ,  "tipoRegistro" 
+	FROM facturacion_liquidaciondetalle liq 
+	inner join facturacion_suministros sum on (sum.id = liq.cums_id) 
+	where liq.id= '1468'
+
+
+select liq.id id,consecutivo ,  fecha::timestamp fecha  ,  liq.cantidad ,  "valorUnitario" ,  "valorTotal" ,  cirugia_id cirugia ,  "fechaCrea"::timestamp fechaCrea , liq.observaciones ,  "estadoRegistro" ,  "examen_id" ,  cums_id , exa.nombre  nombreExamen  ,  liquidacion_id ,  liq."tipoHonorario_id" ,  "tipoRegistro"  FROM facturacion_liquidaciondetalle liq left join clinico_examenes exa on (exa.id = liq."examen_id")  where liq.liquidacion_id= 1468 UNION select liq.id id,consecutivo , fecha::timestamp fecha  ,  liq.cantidad ,  "valorUnitario" ,  "valorTotal" ,  cirugia_id cirugia ,  "fechaCrea"::timestamp  fechaCrea , liq.observaciones ,  "estadoRegistro" ,  "examen_id" ,  cums_id , sum.nombre  nombreExamen  ,  liquidacion_id ,  liq."tipoHonorario_id" ,  "tipoRegistro"  FROM facturacion_liquidaciondetalle liq left join facturacion_suministros sum on (sum.id = liq.cums_id)  where liq.id= 1468

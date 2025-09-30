@@ -125,6 +125,7 @@ urlpatterns = [
     path('load_dataInfoAntecedente/<str:data>', viewsClinico.load_dataInfoAntecedente),
     path('load_dataInfoNotasEnfermeria/<str:data>', viewsClinico.load_dataInfoNotasEnfermeria),
     path('load_dataInfoMedicamento/<str:data>', viewsClinico.load_dataInfoMedicamento),
+    path('load_dataInfoInterConsulta/<str:data>', viewsClinico.load_dataInfoInterConsulta),
 
     # Actividaes Mecanicas
 

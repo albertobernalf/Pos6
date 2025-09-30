@@ -663,7 +663,7 @@ def PostConsultaLiquidacionDetalle(request):
         cups.append({'id': id,  'nombre': nombre})
 
     miConexiont.close()
-    print(cups)
+    #print(cups)
 
 
     # Fin combo Cups
@@ -690,7 +690,7 @@ def PostConsultaLiquidacionDetalle(request):
         suministros.append({'id': id,  'nombre': nombre})
 
     miConexiont.close()
-    print(suministros)
+    #print(suministros)
 
     # Fin combo suministros
 
@@ -699,35 +699,30 @@ def PostConsultaLiquidacionDetalle(request):
 
     miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
                                    password="123456")
-    cur = miConexionx.cursor()
+    curx = miConexionx.cursor()
 
-    comando = 'select liq.id id,consecutivo ,  cast(date(fecha)||\' \'||to_char(fecha, \'HH:MI:SS\') as text) fecha  ,  liq.cantidad ,  "valorUnitario" ,  "valorTotal" ,  cirugia_id cirugia ,  cast(date("fechaCrea")||\' \'||to_char("fechaCrea", \'HH:MI:SS\') as text)  fechaCrea , liq.observaciones ,  "estadoRegistro" ,  "examen_id" ,  cums_id , exa.nombre  nombreExamen  ,  liquidacion_id ,  liq."tipoHonorario_id" ,  "tipoRegistro"  FROM facturacion_liquidaciondetalle liq left join clinico_examenes exa on (exa.id = liq."examen_id")  where liq.liquidacion_id= ' + str(post_id)  +  ' UNION select liq.id id,consecutivo , cast(date(fecha)||\' \'||to_char(fecha, \'HH:MI:SS\') as text) fecha  ,  liq.cantidad ,  "valorUnitario" ,  "valorTotal" ,  cirugia_id cirugia ,  cast(date("fechaCrea")||\' \'||to_char("fechaCrea", \'HH:MI:SS\') as text)  fechaCrea , liq.observaciones ,  "estadoRegistro" ,  "examen_id" ,  cums_id , sum.nombre  nombreExamen  ,  liquidacion_id ,  liq."tipoHonorario_id" ,  "tipoRegistro"  FROM facturacion_liquidaciondetalle liq left join facturacion_suministros sum on (sum.id = liq.cums_id)  where liq.id= '  + str(post_id)
+    #comando = 'select liq.id id,consecutivo ,  cast(date(fecha)||\' \'||to_char(fecha, \'HH:MI:SS\') as text) fecha  ,  liq.cantidad ,  "valorUnitario" ,  "valorTotal" ,  cirugia_id cirugia ,  cast(date("fechaCrea")||\' \'||to_char("fechaCrea", \'HH:MI:SS\') as text)  fechaCrea , liq.observaciones ,  "estadoRegistro" ,  "examen_id" ,  cums_id , exa.nombre  nombreExamen  ,  liquidacion_id ,  liq."tipoHonorario_id" ,  "tipoRegistro"  FROM facturacion_liquidaciondetalle liq left join clinico_examenes exa on (exa.id = liq."examen_id")  where liq.liquidacion_id= ' + str(post_id)  +  ' UNION select liq.id id,consecutivo , cast(date(fecha)||\' \'||to_char(fecha, \'HH:MI:SS\') as text) fecha  ,  liq.cantidad ,  "valorUnitario" ,  "valorTotal" ,  cirugia_id cirugia ,  cast(date("fechaCrea")||\' \'||to_char("fechaCrea", \'HH:MI:SS\') as text)  fechaCrea , liq.observaciones ,  "estadoRegistro" ,  "examen_id" ,  cums_id , sum.nombre  nombreExamen  ,  liquidacion_id ,  liq."tipoHonorario_id" ,  "tipoRegistro"  FROM facturacion_liquidaciondetalle liq left join facturacion_suministros sum on (sum.id = liq.cums_id)  where liq.id= '  + str(post_id)
+    comando = 'select liq.id id,consecutivo ,  liq.cantidad ,  "valorUnitario" ,  "valorTotal" ,  cirugia_id cirugia ,    liq.observaciones ,  "estadoRegistro" ,  examen_id ,  cums_id , exa.nombre  nombreExamen  ,  liquidacion_id ,  liq."tipoHonorario_id" ,  "tipoRegistro"  FROM facturacion_liquidaciondetalle liq inner join clinico_examenes exa on (exa.id = liq.examen_id)  where liq.id= ' + str(post_id)  +  ' UNION select liq.id id,consecutivo , liq.cantidad ,  "valorUnitario" ,  "valorTotal" ,  cirugia_id cirugia ,   liq.observaciones ,  "estadoRegistro" ,  "examen_id" ,  cums_id , sum.nombre  nombreExamen  ,  liquidacion_id ,  liq."tipoHonorario_id" ,  "tipoRegistro"  FROM facturacion_liquidaciondetalle liq inner join facturacion_suministros sum on (sum.id = liq.cums_id)  where liq.id= '  + str(post_id)
+
 
     print(comando)
 
-    cur.execute(comando)
+    curx.execute(comando)
 
     liquidacionDetalleU = []
 
-    for id, consecutivo, fecha, cantidad, valorUnitario, valorTotal, cirugia, fechaCrea, observaciones, estadoRegistro, examen_id, cums_id, nombreExamen, liquidacion_id, tipoHonorario_id, tipoRegistro in cur.fetchall():
+    for id, consecutivo, cantidad, valorUnitario, valorTotal, cirugia,  observaciones, estadoRegistro, examen_id, cums_id, nombreExamen, liquidacion_id, tipoHonorario_id, tipoRegistro in curx.fetchall():
         liquidacionDetalleU.append(
-              {"id": id, "consecutivo": consecutivo,
-                 #"fecha": fecha,
-                 "cantidad": cantidad,
-                 "valorUnitario": valorUnitario, "valorTotal": valorTotal,
-                 "cirugia": cirugia,
-                 #"fechaCrea": fechaCrea,
-                 "observaciones": observaciones,
-                 "estadoRegistro": estadoRegistro, "examen_id": examen_id,
-                 "cums_id": cums_id, "nombreExamen": nombreExamen,
-                 "liquidacion_id": liquidacion_id, "tipoHonorario_id": tipoHonorario_id,
-                 "tipoRegistro": tipoRegistro, "cups": cups, "suministros":suministros})
+              {'id': id, 'consecutivo': consecutivo, 'cantidad': cantidad, 'valorUnitario': valorUnitario, 'valorTotal': valorTotal,
+                 'cirugia': cirugia, 'observaciones': observaciones,'estadoRegistro': estadoRegistro, 'examen_id': examen_id,
+                 'cums_id': cums_id, 'nombreExamen': nombreExamen,'liquidacion_id': liquidacion_id, 'tipoHonorario_id': tipoHonorario_id,
+                 'tipoRegistro': tipoRegistro})
 
     miConexionx.close()
+    print("Que pasa liquidacionDetalleU =" , post_id)
     print(liquidacionDetalleU)
-
     # Cierro Conexion
-    #
+
 
     return JsonResponse({'pk':liquidacionDetalleU[0]['id'], 'id':liquidacionDetalleU[0]['id'], 'consecutivo':liquidacionDetalleU[0]['consecutivo'],'cantidad':liquidacionDetalleU[0]['cantidad'],
                              'valorUnitario':liquidacionDetalleU[0]['valorUnitario'],  'valorTotal': liquidacionDetalleU[0]['valorTotal'],
