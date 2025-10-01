@@ -494,9 +494,10 @@ $('#saveBtnResponderInterConsulta').click(function (e) {
 FormEvolucionarHistoria.addEventListener('submit', e=>{
 
 	 var radios = $('input[type="radio"][name="miRadio"]');
+	 var filaSeleccionada =	radios.filter(":checked")
 	
   if (radios.is(':checked')) {
-    alert('Se ha seleccionado una opción.');
+    alert('Se ha seleccionado una opción.' + filaSeleccionada );
 		 $("#FormEvolucionarHistoria").submit();
   } else {
     alert('Por favor, selecciona un Paciente.');

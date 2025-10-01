@@ -33,7 +33,7 @@
 <script>
 
 function RefrescarPantalla() {
- 	 location.reload();
+ 	 location.reload(true);
 }
 </script>
 
@@ -78,6 +78,7 @@ function RefrescarPantalla() {
                 <input type="hidden" id="tipoIng" name="tipoIng" value="{{tipoIng}}">
 		<input type="hidden" id="convenioId" name="convenioId" value="{{convenioId}}">
 		<input type="text" id="farmaciaId" name="farmaciaId" value="" readonly>
+		<input type="button" id="btnRefrescar" name="btnRefrescar" value="Refrescar" onclick="RefrescarPantalla()">
             </form>
 
   <!-- INICIO TABLE DE  EL DATATABLE  -->

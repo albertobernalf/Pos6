@@ -33,9 +33,11 @@
 <script>
 
 function RefrescarPantalla() {
- 	 location.reload();
+ 	 location.reload(true);
 }
 </script>
+<input type="button" id="btnRefrescar" name="btnRefrescar" value="Refrescar" onclick="RefrescarPantalla()">
+
 
 
 {% endblock %}

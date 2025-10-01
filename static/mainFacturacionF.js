@@ -2020,6 +2020,7 @@ function AnularFactura()
 
 		        arrancaLiquidacion(3,data2);
 			    dataTableFacturacionInitialized = true;
+			document.getElementById("Aanulado").value = data.estadoFactura;
 	
 
                   },
@@ -2116,19 +2117,6 @@ function RefrescarLiquidacionDetalle()
 	           dataType : 'json',
 	  		success: function (data) {
 
-			
-
-			$('#totalSuministros').val(data.totalSuministros);
-			$('#totalProcedimientos').val(data.totalProcedimientos);
-			$('#totalCopagos').val(data.totalCopagos);
-			$('#totalCuotaModeradora').val(data.totalCuotaModeradora);
-			$('#anticipos').val(data.totalAnticipos);
-			$('#totalAbonos').val(data.totalAbonos);
-			$('#totalRecibido').val(data.totalRecibido);
-			$('#totalLiquidacion').val(data.totalLiquidacion);
-			$('#valorApagar').val(data.totalAPagar);
-
-
 			 var data2 =  {}   ;
 			data2['username'] = username;
 		        data2['sedeSeleccionada'] = sedeSeleccionada;
@@ -2142,9 +2130,20 @@ function RefrescarLiquidacionDetalle()
 		        data2['liquidacionId'] = valor;
 
 		        data2 = JSON.stringify(data2);
+
 		      arrancaLiquidacion(2,data2);
 		    dataTableLiquidacionDetalleInitialized = true;
 
+	
+			$('#totalSuministros').val(data.totalSuministros);
+			$('#totalProcedimientos').val(data.totalProcedimientos);
+			$('#totalCopagos').val(data.totalCopagos);
+			$('#totalCuotaModeradora').val(data.totalCuotaModeradora);
+			$('#anticipos').val(data.totalAnticipos);
+			$('#totalAbonos').val(data.totalAbonos);
+			$('#totalRecibido').val(data.totalRecibido);
+			$('#totalLiquidacion').val(data.totalLiquidacion);
+			$('#valorApagar').val(data.totalAPagar);
 
 		document.getElementById("mensajes").innerHTML = data.message;
 

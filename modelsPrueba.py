@@ -892,7 +892,6 @@ LUNES 15-SEPTIEMBRE: Ademas de revizar lo de arriba: ver acomodar columnas grade
 -- ops cuando ingreso revision x sistemas me descuadra la grilla
 -- cuando yo autorizo no se desaparece de la pantalla de autorizaciones ver esop
 -- ops no me grabo lo de nota aclaratoria
--- en ningun registro guaro las enfermedades OPS ??????
 -- OPS NO ME ACTUALIZO EL ingresopaciente en farmaciua y enfermeria al pasar de triage a admisiones por cua ?? ojooooooooooooooooooooooooooooooooooooooooooojoo
 -- 1que pasa con los calendarios son complñicado sno son muy funcinales que digamso
 -- ops el boton editar de liquidaciondetalle no funciona para actualizar tarifa
@@ -904,7 +903,5 @@ LUNES 15-SEPTIEMBRE: Ademas de revizar lo de arriba: ver acomodar columnas grade
 -- cuando uno anula una factura hace el refresh para que se veal el cambio si se puede
 -- REVISAR TODO EL PROCESO DE REFACTURACION ALGO PASA  . CREO QUE NO HE HECHO EL DATATABLE DE REFACTURTADAS
 
--- OPS EN APOYO RTERPEUDO CAPTURAR LA FECHA DE TOMA, CAPTURAR EL RESLTADO GRANDE
--- IMPLEMETRA TODA LA INFO D ELOS FOLIOS DEL CORRIENTE INGRESO TODA LA DATA TODOS LOS PAACLINICAO SOLO CONSULTA DATATTBLA PUROS NADA DE OPERACION
 
 

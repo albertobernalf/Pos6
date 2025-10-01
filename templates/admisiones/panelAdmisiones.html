@@ -79,8 +79,10 @@ table.dataTable tbody tr {
 <script>
 
 function RefrescarPantalla() {
- 	 location.reload();
+
+ 	 location.reload(true);
 }
+
 </script>
 
 {% endblock %}
@@ -2088,6 +2090,9 @@ function cargarTablaAbonosPaciente()
 
 <article id="Furips">
 
+
+   <input type="button" class="btn btn-primary" value="Cargar Formulario" onclick="ActivarFurips()">
+
 <!-- Modal FURIPS -->
 
         <div class="card">
@@ -2108,199 +2113,238 @@ function cargarTablaAbonosPaciente()
                     <td>
                         <table class="table" style="height: 5px; background-color:LightGray; BORDERCOLOR=RED ; border: 8px solid black; border-color: #96D4D4;  width:90%;">
                     <form class="form-inline" action="/crearFurips/" method="POST" id="furipsForma">
-                                <input type="text" id="ingresoIdF" name="ingresoIdF" value="">
+                                <input type="hidden" id="ingresoIdF" name="ingresoIdF" value="">
 
                          <div class="row row-cols-8">
-                                        <div class="col-1">
-                                                     <label for="fechaRadicado" class="col-sm-6 control-label">fechaRadicado:</label>
-
-				 <input type="text" id="fechaRadicado" name="fechaRadicado" value="">
+                                        <div class="col-2">
+                                                    fecRadicado:
+						 <input type="text" id="fechaRadicado" name="fechaRadicado" value="" size="10">
 					
-
                                         </div>
-                                        <div class="col-1">
-                                                     <label for="numeroRadicacion" class="col-sm-6 control-label">numeroRadicacion:</label>
-				 <input type="text" id="numeroRadicacion" name="numeroRadicacion" value="">
+                                        <div class="col-2">
+                                                     numeroRadicacion:
+				 <input type="text" id="numeroRadicacion" name="numeroRadicacion" value="" size="10">
+                                            
+                                        </div>
+                                        <div class="col-2">
+                                                     numeroFactura:
+							 <input type="text" id="numeroFactura" name="numeroFactura" value="" size="10">
+					                                            
+                                        </div>
+                                        <div class="col-2">
+                                            primerNombreVictima:
+
+				 <input type="text" id="primerNombreVictima" name="primerNombreVictima" value="" size="10">
 
                                             
                                         </div>
-                                        <div class="col-1">
-                                                     <label for="numeroFactura" class="col-sm-6 control-label">numeroFactura:</label>
-							 <input type="text" id="numeroFactura" name="numeroFactura" value="">
-		
-					
+                                        <div class="col-2">
+		               segundoNombreVictima:
+				 <input type="text" id="segundoNombreVictima" name="segundoNombreVictima" value="" size="10">
                                             
                                         </div>
-                                        <div class="col-1">
-                                            <label for="primerNombreVictima" class="col-sm-6 control-label">primerNombreVictima:</label>
+                                        <div class="col-2">
 
-				 <input type="text" id="primerNombreVictima" name="primerNombreVictima" value="">
-
-                                            
-                                        </div>
-                                        <div class="col-1">
-                                            FuripsForm.segundoNombreVictima.label
-					FuripsForm.segundoNombreVictima
-                                            
-                                        </div>
-                                        <div class="col-1">
-
-                                            <label for="primerApellidoVictima" class="col-sm-6 control-label">primerNombreVictima:</label>
-
-				 <input type="text" id="primerApellidoVictima" name="primerApellidoVictima" value="">
+		               primerApellidoVictima:
+				 <input type="text" id="primerApellidoVictima" name="primerApellidoVictima" value="" size="10">
                                           
                                         </div>
-                                        <div class="col-1">
-                                            FuripsForm.segundoApellidoVictima.label
-					 FuripsForm.segundoApellidoVictima
-                                           
+                                        <div class="col-2">
+
+		               segundoApellidoVictima:
+				 <input type="text" id="segundoApellidoVictima" name="segundoApellidoVictima" value="" size="10">
+                                                 
                                         </div>
-                                       <div class="col-1">
-                                             FuripsForm.tipoDocVictima.label
-                                            FuripsForm.tipoDocVictima
+                                       <div class="col-2">
+		               tipoDocVictima:
+				 <input type="text" id="tipoDocVictima" name="tipoDocVictima" value="" size="10">
+
                                         </div>
                          </div>
                             <div class="row">
                             </div>
                             <div class="row row-cols-8">
-                                        <div class="col-1">
-                                             FuripsForm.documentoVictima.label
-                                            FuripsForm.documentoVictima
+                                        <div class="col-2">
+		               documentoVictima:
+				 <input type="text" id="documentoVictima" name="documentoVictima" value="" size="10">
+
                                         </div>
-                                       <div class="col-1">
-                                            FuripsForm.consecVictima.label 
-                                            FuripsForm.consecVictima 
+                                       <div class="col-2">
+      				consecVictima:
+				 <input type="text" id="consecVictima" name="consecVictima" value="" size="10">
+
                                         </div>
-                                       <div class="col-1">
-                                                FuripsForm.condicionAccidentado.label
-                                            FuripsForm.condicionAccidentado
+                                       <div class="col-2">
+      				condicionAccidentado:
+				 <input type="text" id="condicionAccidentado" name="condicionAccidentado" value="" size="10">
+
                                         </div>
-                                       <div class="col-1">
-                                           FuripsForm.evento.label
-                                            FuripsForm.evento
+                                       <div class="col-2">
+      				evento:
+				 <input type="text" id="evento" name="evento" value="" size="10">
+
                                         </div>
-                                        <div class="col-1">
-                                            FuripsForm.direccionEvento.label
-                                            FuripsForm.direccionEvento
+                                        <div class="col-2">
+      				direccionEvento:
+				 <input type="text" id="direccionEvento" name="direccionEvento" value="" size="10">
+
                                         </div>
-                                       <div class="col-1">
-                                           FuripsForm.tipoDocVictima.label
-                                            FuripsForm.tipoDocVictima
+                                       <div class="col-2">
+      				tipoDocVictima:
+				 <input type="text" id="tipoDocVictima" name="tipoDocVictima" value="" size="10">
+
                                         </div>
-                                       <div class="col-1">
-                                           FuripsForm.departamentoEvento.label
-                                            FuripsForm.departamentoEvento
+                                       <div class="col-2">
+      				departamentoEvento:
+				 <input type="text" id="departamentoEvento" name="departamentoEvento" value="" size="10">
+
                                         </div>
-                                       <div class="col-1">
-                                           FuripsForm.municipioEvento.label
-                                            FuripsForm.municipioEvento
+                                       <div class="col-2">
+      				municipioEvento:
+				 <input type="text" id="municipioEvento" name="municipioEvento" value="" size="10">
+
+                                        
                                         </div>
                         </div>
                                 <div class="row">
                             </div>
 
                              <div class="row row-cols-8">
-                                       <div class="col-1">
-                                           FuripsForm.localidadEvento.label 
-                                            FuripsForm.localidadEvento 
+                                       <div class="col-2">
+				localidadEvento:
+				 <input type="text" id="localidadEvento" name="localidadEvento" value="" size="10">
+
                                         </div>
-                                       <div class="col-1">
-                                           FuripsForm.zonaEvento.label
-                                            FuripsForm.zonaEvento 
+                                       <div class="col-2">
+				zonaEvento:
+				 <input type="text" id="zonaEvento" name="zonaEvento" value="" size="10">
+
+
                                         </div>
-                                 <div class="col-1">
-                                     FuripsForm.fechaEvento.label
-                                            FuripsForm.fechaEvento
+                                 <div class="col-2">
+				fechaEvento:
+				 <input type="text" id="fechaEvento" name="fechaEvento" value="" size="10">
+
+
                                         </div>
-                                       <div class="col-1">
-                                           FuripsForm.eventoDescripcion.label
-                                            FuripsForm.eventoDescripcion
+                                       <div class="col-2">
+				eventoDescripcion:
+				 <input type="text" id="eventoDescripcion" name="eventoDescripcion" value="" size="10">
+
                                         </div>
-                                       <div class="col-1">
-                                               FuripsForm.estado.label
-                                            FuripsForm.estado
+                                       <div class="col-2">
+				estado:
+				 <input type="text" id="estado" name="estado" value="" size="10">
+
                                         </div>
-                                       <div class="col-1">
-                                           FuripsForm.marcaVehiculo.label
-                                            FuripsForm.marcaVehiculo
+                                       <div class="col-2">
+				marcaVehiculo:
+				 <input type="text" id="marcaVehiculo" name="marcaVehiculo" value="" size="10">
+
                                         </div>
-                                       <div class="col-1">
-                                           FuripsForm.placaVehiculo.label 
-                                            FuripsForm.placaVehiculo 
+                                       <div class="col-2">
+				placaVehiculo:
+				 <input type="text" id="placaVehiculo" name="placaVehiculo" value="" size="10">
+
                                         </div>
-                                       <div class="col-1">
-                                           FuripsForm.tipoServicioVehiculo.label 
-                                            FuripsForm.tipoServicioVehiculo 
+                                       <div class="col-2">
+				tipoServicioVehiculo:
+				 <input type="text" id="tipoServicioVehiculo" name="tipoServicioVehiculo" value="" size="10">
+
+
                                         </div>
                         </div>
                         <div class="row">
                         </div>
                             <div class="row row-cols-8">
-                                        <div class="col-1">
-                                            FuripsForm.tipoVehiculo.label
-                                            FuripsForm.tipoVehiculo
-                                        </div>
-                                       <div class="col-1">
-                                           FuripsForm.codigoaseguradora.label
-                                            FuripsForm.codigoaseguradora
-                                        </div>
-                                       <div class="col-1">
-                                           FuripsForm.numeroPoliza.label
-                                            FuripsForm.numeroPoliza
-                                        </div>
-                                       <div class="col-1">
-                                           FuripsForm.fechaIniPoliza.label
-                                            FuripsForm.fechaIniPoliza
-                                        </div>
-                                       <div class="col-1">
-                                           FuripsForm.fechaFinPoliza.label 
-                                            FuripsForm.fechaFinPoliza 
-                                        </div>
-                                       <div class="col-1">
-                                           FuripsForm.intervencionAutoridad.label 
-                                            FuripsForm.intervencionAutoridad 
+                                        <div class="col-2">
+				tipoVehiculo:
+				 <input type="text" id="tipoVehiculo" name="tipoVehiculo" value="" size="10">
+
 
                                         </div>
-                                            <div class="col-1">
-                                                FuripsForm.cobroExcedentePoliza.label
-                                            FuripsForm.cobroExcedentePoliza
+                                       <div class="col-2">
+				codigoaseguradora:
+				 <input type="text" id="codigoaseguradora" name="codigoaseguradora" value="" size="10">
+
                                         </div>
-                                       <div class="col-1">
-                                           FuripsForm.primerNombrePropietario.label
-                                            FuripsForm.primerNombrePropietario
+                                       <div class="col-2">
+				numeroPoliza:
+				 <input type="text" id="numeroPoliza" name="numeroPoliza" value="" size="10">
+
+                                        </div>
+                                       <div class="col-2">
+				fechaIniPoliza:
+				 <input type="text" id="fechaIniPoliza" name="fechaIniPoliza" value="" size="10">
+
+
+                                        </div>
+                                       <div class="col-2">
+				fechaFinPoliza:
+				 <input type="text" id="fechaFinPoliza" name="fechaFinPoliza" value="" size="10">
+
+
+                                        </div>
+                                       <div class="col-2">
+				intervencionAutoridad:
+				 <input type="text" id="intervencionAutoridad" name="intervencionAutoridad" value="" size="10">
+
+
+                                        </div>
+                                            <div class="col-2">
+				cobroExcedentePoliza:
+				 <input type="text" id="cobroExcedentePoliza" name="cobroExcedentePolizad" value="" size="10">
+
+
+                                        </div>
+                                       <div class="col-2">
+				primerNombrePropietario:
+				 <input type="text" id="primerNombrePropietario" name="primerNombrePropietario" value="" size="10">
 
                                         </div>
                         </div>
 
                             <div class="row row-cols-8">
 
-                                       <div class="col-1">
-                                           FuripsForm.segundoNombrePropietario.label
-                                            FuripsForm.segundoNombrePropietario
+                                       <div class="col-2">
+				segundoNombrePropietario:
+				 <input type="text" id="segundoNombrePropietario" name="segundoNombrePropietario" value="" size="10">
+
+
+
                                         </div>
-                                       <div class="col-1">
-                                           FuripsForm.primerApellidoPropietario.label
-                                            FuripsForm.primerApellidoPropietario
+                                       <div class="col-2">
+				primerApellidoPropietario:
+				 <input type="text" id="primerApellidoPropietario" name="primerApellidoPropietario" value="" size="10">
+
+
                                         </div>
-                                       <div class="col-1">
-                                           FuripsForm.segundoApellidoPropietario.label 
-                                            FuripsForm.segundoApellidoPropietario 
+                                       <div class="col-2">
+				segundoApellidoPropietario:
+				 <input type="text" id="segundoApellidoPropietario" name="segundoApellidoPropietario" value="" size="10">
                                         </div>
-                                       <div class="col-1">
-                                           FuripsForm.tipoDocPropietario.label 
-                                            FuripsForm.tipoDocPropietario 
+                                       <div class="col-2">
+				tipoDocPropietario:
+				 <input type="text" id="tipoDocPropietario" name="tipoDocPropietario" value="" size="10">
+
+
                                         </div>
-                                        <div class="col-1">
-                                            FuripsForm.documentoPropietario.label
-                                            FuripsForm.documentoPropietario
+                                        <div class="col-2">
+				documentoPropietario:
+				 <input type="text" id="documentoPropietario" name="documentoPropietario" value="" size="10">
+
                                         </div>
-                                       <div class="col-1">
-                                           FuripsForm.departamentoPropietario.label
-                                            FuripsForm.departamentoPropietario
+                                       <div class="col-2">
+				departamentoPropietario:
+				 <input type="text" id="departamentoPropietario" name="departamentoPropietario" value="" size="10">
+
                                         </div>
-                                       <div class="col-1">
-                                           FuripsForm.municipioPropietario.label
-                                            FuripsForm.municipioPropietario
+                                       <div class="col-2">
+
+				municipioPropietario:
+				 <input type="text" id="municipioPropietario" name="municipioPropietario" value="" size="10">
+
+
                                         </div>
                                        <div class="col-1">
                                            FuripsForm.localidadPropietario.label

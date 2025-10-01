@@ -45,6 +45,7 @@ $(document).ready(function() {
             .search(searchValue[1]) // Segundo término de búsqueda
             .draw();
     });
+marcarRegistroInicial();
 });
 
 function arrancaAdmisiones(valorTabla,valorData)
@@ -696,7 +697,7 @@ const initDataTableAdmisiones = async () => {
         data['sede'] = sede;
         data['username_id'] = username_id;
 
-          $('input[name="ingresoId"]').prop('checked', true);
+
 
          var valor = $('input[name="ingresoId"]:checked').val();
 
@@ -724,14 +725,14 @@ const initDataTableAdmisiones = async () => {
         arrancaAdmisiones(1,data);
 	    dataTableAdmisionesInitialized = true;
 
-
         arrancaAdmisiones(5,data);
 	    dataTableCensoInitialized = true;
 
+	marcarRegistroInicial();
+          $('input[name="ingresoId"]').prop('checked', true);
 
         // arrancaAdmisiones(6,data);
 	//    dataTableHabitacionesInitialized = true;
-
 
 
 }
@@ -740,8 +741,8 @@ const initDataTableAdmisiones = async () => {
 
 window.addEventListener('load', async () => {
     await  initDataTableAdmisiones();
-//	 $('#tablaDatos tbody tr:eq(0) .miIngresoId').prop('checked', true);  // Checkprimera fila el checkbox creo solo javascript
-
+	 //$('#tablaDatos tbody tr:eq(0) .miIngresoId').prop('checked', true);  // Checkprimera fila el checkbox creo solo javascript
+	
 });
 
 
@@ -3428,3 +3429,16 @@ $(document).on('change', '#empresaC', function(event) {
 
 
 
+function marcarRegistroInicial()
+{
+$('#tablaDatos tbody tr:eq(0) input[type="radio"]').prop('checked', true);
+  $('input[name="ingresoId"]').prop('checked', true);
+}
+
+
+function ActivarFurips()
+        {
+            alert ("Entre Activar furips");
+ $('#modalFurips').modal('show');
+
+        }
