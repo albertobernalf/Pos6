@@ -73,7 +73,7 @@ select liq.id id,consecutivo ,    liq.cantidad ,  "valorUnitario" ,  "valorTotal
 	liq."tipoHonorario_id" ,  "tipoRegistro" 
 	FROM facturacion_liquidaciondetalle liq 
 	inner join clinico_examenes exa on (exa.id = liq.examen_id)  
-	where liq.liquidacion_id= 1468
+	where liq.id= 1468
 	UNION
 	select liq.id id,consecutivo , liq.cantidad ,  "valorUnitario" ,  "valorTotal" ,  cirugia_id cirugia , 
 	liq.observaciones ,  "estadoRegistro" ,  examen_id ,  cums_id , sum.nombre  nombreExamen  ,  liquidacion_id ,
@@ -81,6 +81,10 @@ select liq.id id,consecutivo ,    liq.cantidad ,  "valorUnitario" ,  "valorTotal
 	FROM facturacion_liquidaciondetalle liq 
 	inner join facturacion_suministros sum on (sum.id = liq.cums_id) 
 	where liq.id= '1468'
+
+
+
+	select liq.id id,consecutivo ,  liq.cantidad ,  "valorUnitario" ,  "valorTotal" ,  cirugia_id cirugia ,    liq.observaciones ,  "estadoRegistro" ,  examen_id ,  cums_id , exa.nombre  nombreExamen  ,  liquidacion_id ,  liq."tipoHonorario_id" ,  "tipoRegistro"  FROM facturacion_liquidaciondetalle liq inner join clinico_examenes exa on (exa.id = liq.examen_id)  where liq.id= 1468 UNION select liq.id id,consecutivo , liq.cantidad ,  "valorUnitario" ,  "valorTotal" ,  cirugia_id cirugia ,   liq.observaciones ,  "estadoRegistro" ,  "examen_id" ,  cums_id , sum.nombre  nombreExamen  ,  liquidacion_id ,  liq."tipoHonorario_id" ,  "tipoRegistro"  FROM facturacion_liquidaciondetalle liq inner join facturacion_suministros sum on (sum.id = liq.cums_id)  where liq.id= 1468
 
 
 select liq.id id,consecutivo ,  fecha::timestamp fecha  ,  liq.cantidad ,  "valorUnitario" ,  "valorTotal" ,  cirugia_id cirugia ,  "fechaCrea"::timestamp fechaCrea , liq.observaciones ,  "estadoRegistro" ,  "examen_id" ,  cums_id , exa.nombre  nombreExamen  ,  liquidacion_id ,  liq."tipoHonorario_id" ,  "tipoRegistro"  FROM facturacion_liquidaciondetalle liq left join clinico_examenes exa on (exa.id = liq."examen_id")  where liq.liquidacion_id= 1468 UNION select liq.id id,consecutivo , fecha::timestamp fecha  ,  liq.cantidad ,  "valorUnitario" ,  "valorTotal" ,  cirugia_id cirugia ,  "fechaCrea"::timestamp  fechaCrea , liq.observaciones ,  "estadoRegistro" ,  "examen_id" ,  cums_id , sum.nombre  nombreExamen  ,  liquidacion_id ,  liq."tipoHonorario_id" ,  "tipoRegistro"  FROM facturacion_liquidaciondetalle liq left join facturacion_suministros sum on (sum.id = liq.cums_id)  where liq.id= 1468

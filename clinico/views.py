@@ -3967,3 +3967,297 @@ def load_dataInfoInterConsulta(request, data):
 
     return HttpResponse(serialized1, content_type='application/json')
 
+
+def load_dataInfoRevisionSistemas(request, data):
+    print("Entre load_dataInfoRevisionSistemas")
+
+    context = {}
+    d = json.loads(data)
+
+    username = d['username']
+    sede = d['sede']
+    username_id = d['username_id']
+    nombreSede = d['nombreSede']
+    print("sede:", sede)
+    print("username:", username)
+    print("username_id:", username_id)
+
+    tipoDoc = d['tipoDoc']
+    documento = d['documento']
+    consec = d['consec']
+
+    documentoId = Usuarios.objects.get(documento=documento)
+    tipodocId = TiposDocumento.objects.get(nombre=tipoDoc)
+
+    infoRevisionSistemas = []
+
+    miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                   password="123456")
+    curx = miConexionx.cursor()
+
+    detalle = 'select his.id id,his.folio folio, his.fecha fechaRegistro, tiposRev.nombre tipo, hisRev.observacion descripcion FROM clinico_historia his INNER JOIN clinico_historiarevisionsistemas hisRev ON (hisRev.historia_id = his.id) INNER JOIN clinico_revisionsistemas  tiposRev ON (tiposRev.id = hisRev."revisionSistemas_id")  WHERE his.documento_id = ' + "'" + str(
+        documentoId.id) + "'" + ' AND his."tipoDoc_id" = ' + "'" + str(
+        tipodocId.id) + "'" + ' And his."consecAdmision"= ' + "'" + str(consec) + "' ORDER BY  his.folio desc"
+
+    print(detalle)
+
+    curx.execute(detalle)
+
+    for id, folio, fechaRegistro, tipo, descripcion in curx.fetchall():
+        infoRevisionSistemas.append(
+            {"model": "clinico.examenes", "pk": id, "fields":
+                {'id': id, 'folio': folio, 'fechaRegistro': fechaRegistro, 'tipo': tipo,  'descripcion': descripcion}})
+
+    miConexionx.close()
+    print(infoRevisionSistemas)
+    context['InfoRevisionSistemas'] = infoRevisionSistemas
+
+    serialized1 = json.dumps(infoRevisionSistemas, default=serialize_datetime)
+
+    return HttpResponse(serialized1, content_type='application/json')
+
+
+
+
+def load_dataInfoSignosVital(request, data):
+    print("Entre load_dataInfoSignosVital")
+
+    context = {}
+    d = json.loads(data)
+
+    username = d['username']
+    sede = d['sede']
+    username_id = d['username_id']
+    nombreSede = d['nombreSede']
+    print("sede:", sede)
+    print("username:", username)
+    print("username_id:", username_id)
+
+    tipoDoc = d['tipoDoc']
+    documento = d['documento']
+    consec = d['consec']
+
+    documentoId = Usuarios.objects.get(documento=documento)
+    tipodocId = TiposDocumento.objects.get(nombre=tipoDoc)
+
+    infoSignosVital = []
+
+    miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                   password="123456")
+    curx = miConexionx.cursor()
+
+    detalle = 'select his.id id,his.folio folio, his.fecha fechaRegistro, "frecCardiaca", "frecRespiratoria", "tensionADiastolica", "tensionASistolica", "tensionAMedia", temperatura, saturacion, glucometria, glasgow, apache, pvc, cuna, ic, "glasgowOcular", "glasgowVerbal", "glasgowMotora", observacion  FROM clinico_historia his INNER JOIN clinico_historiasignosvitales hisSig ON (hisSig.historia_id = his.id)  WHERE his.documento_id = ' + "'" + str(
+        documentoId.id) + "'" + ' AND his."tipoDoc_id" = ' + "'" + str(
+        tipodocId.id) + "'" + ' And his."consecAdmision"= ' + "'" + str(consec) + "' ORDER BY  his.folio desc"
+
+    print(detalle)
+
+    curx.execute(detalle)
+
+    for id, folio, fechaRegistro, frecCardiaca, frecRespiratoria,tensionADiastolica,tensionASistolica,tensionAMedia,temperatura,saturacion,glucometria,glasgow,apache,pvc,cuna,ic,glasgowOcular,glasgowVerbal,glasgowMotora,observacion in curx.fetchall():
+        infoSignosVital.append(
+            {"model": "clinico.examenes", "pk": id, "fields":
+                {'id': id, 'folio': folio, 'fechaRegistro': fechaRegistro, 'frecCardiaca': frecCardiaca,  
+		'frecRespiratoria': frecRespiratoria,'tensionADiastolica':tensionADiastolica, 'tensionASistolica':tensionASistolica, 'tensionAMedia':tensionAMedia, 'temperatura':temperatura, 'saturacion':saturacion, 'glucometria':glucometria, 'glasgow':glasgow, 'apache':apache
+		, 'pvc':pvc, 'cuna':cuna, 'ic':ic, 'glasgowOcular':glasgowOcular, 'glasgowVerbal':glasgowVerbal,'glasgowMotora':glasgowMotora, 'observacion':observacion}})
+
+    miConexionx.close()
+    print(infoSignosVital)
+    context['InfoSignosVital'] = infoSignosVital
+
+    serialized1 = json.dumps(infoSignosVital, default=serialize_datetime)
+
+    return HttpResponse(serialized1, content_type='application/json')
+
+def load_dataInfoEnfermedad(request, data):
+    print("Entre load_dataInfoEnfermedad")
+
+    context = {}
+    d = json.loads(data)
+
+    username = d['username']
+    sede = d['sede']
+    username_id = d['username_id']
+    nombreSede = d['nombreSede']
+    print("sede:", sede)
+    print("username:", username)
+    print("username_id:", username_id)
+
+    tipoDoc = d['tipoDoc']
+    documento = d['documento']
+    consec = d['consec']
+
+    documentoId = Usuarios.objects.get(documento=documento)
+    tipodocId = TiposDocumento.objects.get(nombre=tipoDoc)
+
+    infoEnfermedad = []
+
+    miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                   password="123456")
+    curx = miConexionx.cursor()
+
+    detalle = 'select his.id id,his.folio folio, his.fecha fechaRegistro, tiposEnf.nombre tipo, hisEnf.observaciones descripcion FROM clinico_historia his INNER JOIN clinico_historialenfermedades hisEnf ON (hisEnf.historia_id = his.id) INNER JOIN clinico_Enfermedades  tiposEnf ON (tiposEnf.id = hisEnf.enfermedad_id)  WHERE his.documento_id = ' + "'" + str(
+        documentoId.id) + "'" + ' AND his."tipoDoc_id" = ' + "'" + str(
+        tipodocId.id) + "'" + ' And his."consecAdmision"= ' + "'" + str(consec) + "' ORDER BY  his.folio desc"
+
+    print(detalle)
+
+    curx.execute(detalle)
+
+    for id, folio, fechaRegistro, tipo, descripcion in curx.fetchall():
+        infoEnfermedad.append(
+            {"model": "clinico.examenes", "pk": id, "fields":
+                {'id': id, 'folio': folio, 'fechaRegistro': fechaRegistro, 'tipo': tipo,  'descripcion': descripcion}})
+
+    miConexionx.close()
+    print(infoEnfermedad)
+    context['InfoEnfermedad'] = infoEnfermedad
+
+    serialized1 = json.dumps(infoEnfermedad, default=serialize_datetime)
+
+    return HttpResponse(serialized1, content_type='application/json')
+
+def load_dataInfoDiagnostico(request, data):
+    print("Entre load_dataInfoDiagnostico")
+
+    context = {}
+    d = json.loads(data)
+
+    username = d['username']
+    sede = d['sede']
+    username_id = d['username_id']
+    nombreSede = d['nombreSede']
+    print("sede:", sede)
+    print("username:", username)
+    print("username_id:", username_id)
+
+    tipoDoc = d['tipoDoc']
+    documento = d['documento']
+    consec = d['consec']
+
+    documentoId = Usuarios.objects.get(documento=documento)
+    tipodocId = TiposDocumento.objects.get(nombre=tipoDoc)
+
+    infoDiagnostico = []
+
+    miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                   password="123456")
+    curx = miConexionx.cursor()
+
+    detalle = 'select his.id id,his.folio folio, his.fecha fechaRegistro, tiposDiag.nombre tipo, hisDiag.observaciones descripcion FROM clinico_historia his INNER JOIN clinico_historialdiagnosticos hisDiag ON (hisDiag.historia_id = his.id) INNER JOIN clinico_tiposdiagnostico  tiposDiag  ON (tiposDiag.id = hisDiag.diagnosticos_id)  WHERE his.documento_id = ' + "'" + str(
+        documentoId.id) + "'" + ' AND his."tipoDoc_id" = ' + "'" + str(
+        tipodocId.id) + "'" + ' And his."consecAdmision"= ' + "'" + str(consec) + "' ORDER BY  his.folio desc"
+
+    print(detalle)
+
+    curx.execute(detalle)
+
+    for id, folio, fechaRegistro, tipo, descripcion in curx.fetchall():
+        infoDiagnostico.append(
+            {"model": "clinico.diagnosticos", "pk": id, "fields":
+                {'id': id, 'folio': folio, 'fechaRegistro': fechaRegistro, 'tipo': tipo,  'descripcion': descripcion}})
+
+    miConexionx.close()
+    print(infoDiagnostico)
+    context['InfoDiagnostico'] = infoDiagnostico
+
+    serialized1 = json.dumps(infoDiagnostico, default=serialize_datetime)
+
+    return HttpResponse(serialized1, content_type='application/json')
+
+def load_dataInfoIncapacidad(request, data):
+    print("Entre load_dataInfoIncapacidad")
+
+    context = {}
+    d = json.loads(data)
+
+    username = d['username']
+    sede = d['sede']
+    username_id = d['username_id']
+    nombreSede = d['nombreSede']
+    print("sede:", sede)
+    print("username:", username)
+    print("username_id:", username_id)
+
+    tipoDoc = d['tipoDoc']
+    documento = d['documento']
+    consec = d['consec']
+
+    documentoId = Usuarios.objects.get(documento=documento)
+    tipodocId = TiposDocumento.objects.get(nombre=tipoDoc)
+
+    infoIncapacidad = []
+
+    miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                   password="123456")
+    curx = miConexionx.cursor()
+
+    detalle = 'select his.id id,his.folio folio, his.fecha fechaRegistro, tiposInc.nombre tipo, diag.nombre diagnostico,  hisInc.descripcion FROM clinico_historia his INNER JOIN clinico_historialincapacidades  hisInc ON (hisInc.historia_id = his.id) INNER JOIN clinico_tiposincapacidad  tiposInc  ON (tiposInc.id = hisInc."tiposIncapacidad_id") INNER JOIN clinico_diagnosticos diag  ON (diag.id = hisInc."diagnosticosIncapacidad_id")   WHERE his.documento_id = ' + "'" + str(
+        documentoId.id) + "'" + ' AND his."tipoDoc_id" = ' + "'" + str(
+        tipodocId.id) + "'" + ' And his."consecAdmision"= ' + "'" + str(consec) + "' ORDER BY  his.folio desc"
+
+    print(detalle)
+
+    curx.execute(detalle)
+
+    for id, folio, fechaRegistro, tipo,diagnostico, descripcion in curx.fetchall():
+        infoIncapacidad.append(
+            {"model": "clinico.incapacidad", "pk": id, "fields":
+                {'id': id, 'folio': folio, 'fechaRegistro': fechaRegistro, 'tipo': tipo,'diagnostico':diagnostico, 'descripcion': descripcion}})
+
+    miConexionx.close()
+    print(infoIncapacidad)
+    context['InfoIncapacidad'] = infoIncapacidad
+
+    serialized1 = json.dumps(infoIncapacidad, default=serialize_datetime)
+
+    return HttpResponse(serialized1, content_type='application/json')
+
+def load_dataInfoEvolucion(request, data):
+    print("Entre load_dataInfoEvolucion")
+
+    context = {}
+    d = json.loads(data)
+
+    username = d['username']
+    sede = d['sede']
+    username_id = d['username_id']
+    nombreSede = d['nombreSede']
+    print("sede:", sede)
+    print("username:", username)
+    print("username_id:", username_id)
+
+    tipoDoc = d['tipoDoc']
+    documento = d['documento']
+    consec = d['consec']
+
+    documentoId = Usuarios.objects.get(documento=documento)
+    tipodocId = TiposDocumento.objects.get(nombre=tipoDoc)
+
+    infoEvolucion = []
+
+    miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                   password="123456")
+    curx = miConexionx.cursor()
+
+    detalle = 'select his.id id,his.folio folio, his.fecha fechaRegistro, his.motivo motivo , his.subjetivo, his.objetivo, his.analisis, his.plann plan   FROM clinico_historia his  WHERE his.documento_id = ' + "'" + str(
+        documentoId.id) + "'" + ' AND his."tipoDoc_id" = ' + "'" + str(
+        tipodocId.id) + "'" + ' And his."consecAdmision"= ' + "'" + str(consec) + "' ORDER BY  his.folio desc"
+
+    print(detalle)
+
+    curx.execute(detalle)
+
+    for id, folio, fechaRegistro,motivo, subjetivo, objetivo, objetivo, plan in curx.fetchall():
+        infoEvolucion.append(
+            {"model": "clinico.incapacidad", "pk": id, "fields":
+                {'id': id, 'folio': folio, 'fechaRegistro': fechaRegistro, 'motivo': motivo,'subjetivo':subjetivo,
+                 'objetivo': objetivo,'objetivo':objetivo,'plan':plan }})
+
+    miConexionx.close()
+    print(infoEvolucion)
+    context['InfoEvolucion'] = infoEvolucion
+
+    serialized1 = json.dumps(infoEvolucion, default=serialize_datetime)
+
+    return HttpResponse(serialized1, content_type='application/json')

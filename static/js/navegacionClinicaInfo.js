@@ -9,7 +9,11 @@ let dataTableNotasEnfermeria;
 let dataTableMedicamento;
 let dataTableSignoVital;
 let dataTableInterConsulta;
-
+let dataTableRevisionSistemas;
+let dataTableEnfermedad;
+let dataTableDiagnostico;
+let dataTableIncapacidad;
+let dataTableEvolucion;
 
 
 let dataTableRadiologiaInfoInitialized = false;
@@ -21,6 +25,11 @@ let dataTableNotasEnfermeriaInfoInitialized = false;
 let dataTableSignosVitalInfoInitialized = false;
 let dataTableMedicamentoInfoInitialized = false;
 let dataTableInterConsultaInfoInitialized = false;
+let dataTableRevisionSistemasInfoInitialized = false;
+let dataTableEnfermedadInfoInitialized = false;
+let dataTableDiagnosticoInfoInitialized = false;
+let dataTableIncapacidadInfoInitialized = false;
+let dataTableEvolucionInfoInitialized = false;
 
 function arrancaInfoClinico(valorTabla,valorData)
 {
@@ -816,6 +825,600 @@ autoWidth: false,
       }
 
 
+    if (valorTabla == 9)
+    {
+	
+
+        let dataTableOptionsInfoRevisionSistemas  ={
+
+   dom: "<'row mb-1'<'col-sm-3'B><'col-sm-3'><'col-sm-6'f>>" + // B = Botones a la izquierda, f = filtro a la derecha
+             "<'row'<'col-sm-12'tr>>" +
+             "<'row mt-3'<'col-sm-5'i><'col-sm-7'p>>",
+  buttons: [
+    {
+      extend: 'excelHtml5',
+      text: '<i class="fas fa-file-excel"></i> ',
+	// text: '<i class="bi bi-file-earmark-excel-fill"></i> Exportar Excel',
+      titleAttr: 'Exportar a Excel',
+      className: 'btn btn-success btn-sm',
+    },
+    {
+      extend: 'pdfHtml5',
+      text: '<i class="fas fa-file-pdf"></i> ',
+      titleAttr: 'Exportar a PDF',
+      className: 'btn btn-danger btn-sm',
+    },
+    {
+      extend: 'print',
+      text: '<i class="fa fa-print"></i> ',
+      titleAttr: 'Imprimir',
+      className: 'btn btn-info btn-sm',
+    },
+  ],
+autoWidth: false,
+  lengthMenu: [2, 4, 15],
+           processing: true,
+            serverSide: false,
+            scrollY: '200px',
+	    scrollX: true,
+	    scrollCollapse: true,
+            paging:false,
+            columnDefs: [
+		  { width: '15%',  targets: [2,3] },
+		{     "render": function ( data, type, row ) {
+                        var btn = '';
+                         // btn = btn + " <button   class='btn btn-primary editPostLiquidacionDetalle' data-pk='" + row.pk + "'>" + "</button>";
+                         //btn = btn + " <button   class='btn btn-primary borrarLiquidacionDetalle' data-pk='" + row.pk + "'>" + "</button>";
+                       return btn;
+                    },
+                    "targets": 5
+               }
+            ],
+	 pageLength: 3,
+	  destroy: true,
+	  language: {
+		    processing: 'Procesando...',
+		    lengthMenu: 'Mostrar _MENU_ registros',
+		    zeroRecords: 'No se encontraron resultados',
+		    emptyTable: 'Ningún dato disponible en esta tabla',
+		    infoEmpty: 'Mostrando registros del 0 al 0 de un total de 0 registros',
+		    infoFiltered: '(filtrado de un total de _MAX_ registros)',
+		    search: 'Buscar:',
+		    infoThousands: ',',
+		    loadingRecords: 'Cargando...',
+		    paginate: {
+			      first: 'Primero',
+			      last: 'Último',
+			      next: 'Siguiente',
+			      previous: 'Anterior',
+		    }
+			},
+           ajax: {
+                 url:"/load_dataInfoRevisionSistemas/" +  data,
+                 type: "POST",
+                 dataSrc: ""
+            },
+            columns: [
+		{ data: "fields.id"},
+		{ data: "fields.folio"},
+                { data: "fields.fechaRegistro"},
+                { data: "fields.tipo"},
+                { data: "fields.descripcion"},
+            ]
+            }
+
+            if  (dataTableRevisionSistemasInfoInitialized )  {
+
+		            dataTableRevisionSistemas = $("#tablaInfoRevisionSistemas").dataTable().fnDestroy();
+
+                    }
+
+	        dataTableRevisionSistemas = $('#tablaInfoRevisionSistemas').DataTable(dataTableOptionsInfoRevisionSistemas);
+
+
+	            dataTableRevisionSistemasInfoInitialized  = true;
+      }
+
+
+
+
+    if (valorTabla == 10)
+    {
+	
+
+        let dataTableOptionsInfoSignosVital  ={
+
+   dom: "<'row mb-1'<'col-sm-3'B><'col-sm-3'><'col-sm-6'f>>" + // B = Botones a la izquierda, f = filtro a la derecha
+             "<'row'<'col-sm-12'tr>>" +
+             "<'row mt-3'<'col-sm-5'i><'col-sm-7'p>>",
+  buttons: [
+    {
+      extend: 'excelHtml5',
+      text: '<i class="fas fa-file-excel"></i> ',
+	// text: '<i class="bi bi-file-earmark-excel-fill"></i> Exportar Excel',
+      titleAttr: 'Exportar a Excel',
+      className: 'btn btn-success btn-sm',
+    },
+    {
+      extend: 'pdfHtml5',
+      text: '<i class="fas fa-file-pdf"></i> ',
+      titleAttr: 'Exportar a PDF',
+      className: 'btn btn-danger btn-sm',
+    },
+    {
+      extend: 'print',
+      text: '<i class="fa fa-print"></i> ',
+      titleAttr: 'Imprimir',
+      className: 'btn btn-info btn-sm',
+    },
+  ],
+autoWidth: false,
+  lengthMenu: [2, 4, 15],
+           processing: true,
+            serverSide: false,
+            scrollY: '200px',
+	    scrollX: true,
+	    scrollCollapse: true,
+            paging:false,
+            columnDefs: [
+		  { width: '15%',  targets: [2,3] },
+		{     "render": function ( data, type, row ) {
+                        var btn = '';
+                         // btn = btn + " <button   class='btn btn-primary editPostLiquidacionDetalle' data-pk='" + row.pk + "'>" + "</button>";
+                         //btn = btn + " <button   class='btn btn-primary borrarLiquidacionDetalle' data-pk='" + row.pk + "'>" + "</button>";
+                       return btn;
+                    },
+                    "targets": 20
+               }
+            ],
+	 pageLength: 3,
+	  destroy: true,
+	  language: {
+		    processing: 'Procesando...',
+		    lengthMenu: 'Mostrar _MENU_ registros',
+		    zeroRecords: 'No se encontraron resultados',
+		    emptyTable: 'Ningún dato disponible en esta tabla',
+		    infoEmpty: 'Mostrando registros del 0 al 0 de un total de 0 registros',
+		    infoFiltered: '(filtrado de un total de _MAX_ registros)',
+		    search: 'Buscar:',
+		    infoThousands: ',',
+		    loadingRecords: 'Cargando...',
+		    paginate: {
+			      first: 'Primero',
+			      last: 'Último',
+			      next: 'Siguiente',
+			      previous: 'Anterior',
+		    }
+			},
+           ajax: {
+                 url:"/load_dataInfoSignosVital/" +  data,
+                 type: "POST",
+                 dataSrc: ""
+            },
+            columns: [
+		{ data: "fields.id"},
+		{ data: "fields.folio"},
+                { data: "fields.fechaRegistro"},
+                { data: "fields.frecCardiaca"},
+                { data: "fields.frecRespiratoria"},
+                { data: "fields.tensionADiastolica"},
+                { data: "fields.tensionASistolica"},
+                { data: "fields.tensionAMedia"},
+                { data: "fields.temperatura"},
+                { data: "fields.saturacion"},
+                { data: "fields.glucometria"},
+                { data: "fields.glasgow"},
+                { data: "fields.apache"},
+                { data: "fields.pvc"},
+                { data: "fields.cuna"},
+                { data: "fields.ic"},
+                { data: "fields.glasgowOcular"},
+                { data: "fields.glasgowVerbal"},
+                { data: "fields.glasgowMotora"},
+                { data: "fields.observacion"},
+            ]
+            }
+
+            if  (dataTableSignosVitalInfoInitialized )  {
+
+		            dataTableSignosVital = $("#tablaInfoSignosVital").dataTable().fnDestroy();
+
+                    }
+
+	        dataTableSignosVital = $('#tablaInfoSignosVital').DataTable(dataTableOptionsInfoSignosVital);
+
+
+	            dataTableSignosVitalInfoInitialized  = true;
+      }
+
+
+
+    if (valorTabla == 11)
+    {
+	
+
+        let dataTableOptionsInfoEnfermedad  ={
+
+   dom: "<'row mb-1'<'col-sm-3'B><'col-sm-3'><'col-sm-6'f>>" + // B = Botones a la izquierda, f = filtro a la derecha
+             "<'row'<'col-sm-12'tr>>" +
+             "<'row mt-3'<'col-sm-5'i><'col-sm-7'p>>",
+  buttons: [
+    {
+      extend: 'excelHtml5',
+      text: '<i class="fas fa-file-excel"></i> ',
+	// text: '<i class="bi bi-file-earmark-excel-fill"></i> Exportar Excel',
+      titleAttr: 'Exportar a Excel',
+      className: 'btn btn-success btn-sm',
+    },
+    {
+      extend: 'pdfHtml5',
+      text: '<i class="fas fa-file-pdf"></i> ',
+      titleAttr: 'Exportar a PDF',
+      className: 'btn btn-danger btn-sm',
+    },
+    {
+      extend: 'print',
+      text: '<i class="fa fa-print"></i> ',
+      titleAttr: 'Imprimir',
+      className: 'btn btn-info btn-sm',
+    },
+  ],
+autoWidth: false,
+  lengthMenu: [2, 4, 15],
+           processing: true,
+            serverSide: false,
+            scrollY: '200px',
+	    scrollX: true,
+	    scrollCollapse: true,
+            paging:false,
+            columnDefs: [
+		  { width: '15%',  targets: [2,3] },
+		{     "render": function ( data, type, row ) {
+                        var btn = '';
+                         // btn = btn + " <button   class='btn btn-primary editPostLiquidacionDetalle' data-pk='" + row.pk + "'>" + "</button>";
+                         //btn = btn + " <button   class='btn btn-primary borrarLiquidacionDetalle' data-pk='" + row.pk + "'>" + "</button>";
+                       return btn;
+                    },
+                    "targets": 5
+               }
+            ],
+	 pageLength: 3,
+	  destroy: true,
+	  language: {
+		    processing: 'Procesando...',
+		    lengthMenu: 'Mostrar _MENU_ registros',
+		    zeroRecords: 'No se encontraron resultados',
+		    emptyTable: 'Ningún dato disponible en esta tabla',
+		    infoEmpty: 'Mostrando registros del 0 al 0 de un total de 0 registros',
+		    infoFiltered: '(filtrado de un total de _MAX_ registros)',
+		    search: 'Buscar:',
+		    infoThousands: ',',
+		    loadingRecords: 'Cargando...',
+		    paginate: {
+			      first: 'Primero',
+			      last: 'Último',
+			      next: 'Siguiente',
+			      previous: 'Anterior',
+		    }
+			},
+           ajax: {
+                 url:"/load_dataInfoEnfermedad/" +  data,
+                 type: "POST",
+                 dataSrc: ""
+            },
+            columns: [
+		{ data: "fields.id"},
+		{ data: "fields.folio"},
+                { data: "fields.fechaRegistro"},
+                { data: "fields.tipo"},
+                { data: "fields.descripcion"},
+            ]
+            }
+
+            if  (dataTableEnfermedadInfoInitialized )  {
+
+		            dataTableEnfermedad= $("#tablaInfoEnfermedad").dataTable().fnDestroy();
+
+                    }
+
+	        dataTableEnfermedad = $('#tablaInfoEnfermedad').DataTable(dataTableOptionsInfoEnfermedad);
+
+
+	            dataTableEnfermedadInfoInitialized  = true;
+      }
+
+
+
+    if (valorTabla == 12)
+    {
+	
+
+        let dataTableOptionsInfoDiagnostico  ={
+
+   dom: "<'row mb-1'<'col-sm-3'B><'col-sm-3'><'col-sm-6'f>>" + // B = Botones a la izquierda, f = filtro a la derecha
+             "<'row'<'col-sm-12'tr>>" +
+             "<'row mt-3'<'col-sm-5'i><'col-sm-7'p>>",
+  buttons: [
+    {
+      extend: 'excelHtml5',
+      text: '<i class="fas fa-file-excel"></i> ',
+	// text: '<i class="bi bi-file-earmark-excel-fill"></i> Exportar Excel',
+      titleAttr: 'Exportar a Excel',
+      className: 'btn btn-success btn-sm',
+    },
+    {
+      extend: 'pdfHtml5',
+      text: '<i class="fas fa-file-pdf"></i> ',
+      titleAttr: 'Exportar a PDF',
+      className: 'btn btn-danger btn-sm',
+    },
+    {
+      extend: 'print',
+      text: '<i class="fa fa-print"></i> ',
+      titleAttr: 'Imprimir',
+      className: 'btn btn-info btn-sm',
+    },
+  ],
+autoWidth: false,
+  lengthMenu: [2, 4, 15],
+           processing: true,
+            serverSide: false,
+            scrollY: '200px',
+	    scrollX: true,
+	    scrollCollapse: true,
+            paging:false,
+            columnDefs: [
+		  { width: '15%',  targets: [2,3] },
+		{     "render": function ( data, type, row ) {
+                        var btn = '';
+                         // btn = btn + " <button   class='btn btn-primary editPostLiquidacionDetalle' data-pk='" + row.pk + "'>" + "</button>";
+                         //btn = btn + " <button   class='btn btn-primary borrarLiquidacionDetalle' data-pk='" + row.pk + "'>" + "</button>";
+                       return btn;
+                    },
+                    "targets": 5
+               }
+            ],
+	 pageLength: 3,
+	  destroy: true,
+	  language: {
+		    processing: 'Procesando...',
+		    lengthMenu: 'Mostrar _MENU_ registros',
+		    zeroRecords: 'No se encontraron resultados',
+		    emptyTable: 'Ningún dato disponible en esta tabla',
+		    infoEmpty: 'Mostrando registros del 0 al 0 de un total de 0 registros',
+		    infoFiltered: '(filtrado de un total de _MAX_ registros)',
+		    search: 'Buscar:',
+		    infoThousands: ',',
+		    loadingRecords: 'Cargando...',
+		    paginate: {
+			      first: 'Primero',
+			      last: 'Último',
+			      next: 'Siguiente',
+			      previous: 'Anterior',
+		    }
+			},
+           ajax: {
+                 url:"/load_dataInfoDiagnostico/" +  data,
+                 type: "POST",
+                 dataSrc: ""
+            },
+            columns: [
+		{ data: "fields.id"},
+		{ data: "fields.folio"},
+                { data: "fields.fechaRegistro"},
+                { data: "fields.tipo"},
+                { data: "fields.descripcion"},
+            ]
+            }
+
+            if  (dataTableDiagnosticoInfoInitialized )  {
+
+		            dataTableDiagnostico= $("#tablaInfoDiagnostico").dataTable().fnDestroy();
+
+                    }
+
+	        dataTableDiagnostico = $('#tablaInfoDiagnostico').DataTable(dataTableOptionsInfoDiagnostico);
+
+
+	            dataTableDiagnosticoInfoInitialized  = true;
+      }
+
+
+
+    if (valorTabla == 13)
+    {
+	
+
+        let dataTableOptionsInfoIncapacidad  ={
+
+   dom: "<'row mb-1'<'col-sm-3'B><'col-sm-3'><'col-sm-6'f>>" + // B = Botones a la izquierda, f = filtro a la derecha
+             "<'row'<'col-sm-12'tr>>" +
+             "<'row mt-3'<'col-sm-5'i><'col-sm-7'p>>",
+  buttons: [
+    {
+      extend: 'excelHtml5',
+      text: '<i class="fas fa-file-excel"></i> ',
+	// text: '<i class="bi bi-file-earmark-excel-fill"></i> Exportar Excel',
+      titleAttr: 'Exportar a Excel',
+      className: 'btn btn-success btn-sm',
+    },
+    {
+      extend: 'pdfHtml5',
+      text: '<i class="fas fa-file-pdf"></i> ',
+      titleAttr: 'Exportar a PDF',
+      className: 'btn btn-danger btn-sm',
+    },
+    {
+      extend: 'print',
+      text: '<i class="fa fa-print"></i> ',
+      titleAttr: 'Imprimir',
+      className: 'btn btn-info btn-sm',
+    },
+  ],
+autoWidth: false,
+  lengthMenu: [2, 4, 15],
+           processing: true,
+            serverSide: false,
+            scrollY: '200px',
+	    scrollX: true,
+	    scrollCollapse: true,
+            paging:false,
+            columnDefs: [
+		  { width: '15%',  targets: [2,3] },
+		{     "render": function ( data, type, row ) {
+                        var btn = '';
+                         // btn = btn + " <button   class='btn btn-primary editPostLiquidacionDetalle' data-pk='" + row.pk + "'>" + "</button>";
+                         //btn = btn + " <button   class='btn btn-primary borrarLiquidacionDetalle' data-pk='" + row.pk + "'>" + "</button>";
+                       return btn;
+                    },
+                    "targets": 6
+               }
+            ],
+	 pageLength: 3,
+	  destroy: true,
+	  language: {
+		    processing: 'Procesando...',
+		    lengthMenu: 'Mostrar _MENU_ registros',
+		    zeroRecords: 'No se encontraron resultados',
+		    emptyTable: 'Ningún dato disponible en esta tabla',
+		    infoEmpty: 'Mostrando registros del 0 al 0 de un total de 0 registros',
+		    infoFiltered: '(filtrado de un total de _MAX_ registros)',
+		    search: 'Buscar:',
+		    infoThousands: ',',
+		    loadingRecords: 'Cargando...',
+		    paginate: {
+			      first: 'Primero',
+			      last: 'Último',
+			      next: 'Siguiente',
+			      previous: 'Anterior',
+		    }
+			},
+           ajax: {
+                 url:"/load_dataInfoIncapacidad/" +  data,
+                 type: "POST",
+                 dataSrc: ""
+            },
+            columns: [
+		{ data: "fields.id"},
+		{ data: "fields.folio"},
+                { data: "fields.fechaRegistro"},
+                { data: "fields.tipo"},
+                { data: "fields.diagnostico"},
+                { data: "fields.descripcion"},
+            ]
+            }
+
+            if  (dataTableIncapacidadInfoInitialized )  {
+
+		            dataTableIncapacidad= $("#tablaInfoIncapacidad").dataTable().fnDestroy();
+
+                    }
+
+	        dataTableIncapacidad = $('#tablaInfoIncapacidad').DataTable(dataTableOptionsInfoIncapacidad);
+
+
+	            dataTableIncapacidadInfoInitialized  = true;
+      }
+
+
+
+    if (valorTabla == 14)
+    {
+	
+
+        let dataTableOptionsInfoEvolucion  ={
+
+   dom: "<'row mb-1'<'col-sm-3'B><'col-sm-3'><'col-sm-6'f>>" + // B = Botones a la izquierda, f = filtro a la derecha
+             "<'row'<'col-sm-12'tr>>" +
+             "<'row mt-3'<'col-sm-5'i><'col-sm-7'p>>",
+  buttons: [
+    {
+      extend: 'excelHtml5',
+      text: '<i class="fas fa-file-excel"></i> ',
+	// text: '<i class="bi bi-file-earmark-excel-fill"></i> Exportar Excel',
+      titleAttr: 'Exportar a Excel',
+      className: 'btn btn-success btn-sm',
+    },
+    {
+      extend: 'pdfHtml5',
+      text: '<i class="fas fa-file-pdf"></i> ',
+      titleAttr: 'Exportar a PDF',
+      className: 'btn btn-danger btn-sm',
+    },
+    {
+      extend: 'print',
+      text: '<i class="fa fa-print"></i> ',
+      titleAttr: 'Imprimir',
+      className: 'btn btn-info btn-sm',
+    },
+  ],
+autoWidth: false,
+  lengthMenu: [2, 4, 15],
+           processing: true,
+            serverSide: false,
+            scrollY: '200px',
+	    scrollX: true,
+	    scrollCollapse: true,
+            paging:false,
+            columnDefs: [
+		  { width: '15%',  targets: [2,3] },
+		{     "render": function ( data, type, row ) {
+                        var btn = '';
+                         // btn = btn + " <button   class='btn btn-primary editPostLiquidacionDetalle' data-pk='" + row.pk + "'>" + "</button>";
+                         //btn = btn + " <button   class='btn btn-primary borrarLiquidacionDetalle' data-pk='" + row.pk + "'>" + "</button>";
+                       return btn;
+                    },
+                    "targets": 8
+               }
+            ],
+	 pageLength: 3,
+	  destroy: true,
+	  language: {
+		    processing: 'Procesando...',
+		    lengthMenu: 'Mostrar _MENU_ registros',
+		    zeroRecords: 'No se encontraron resultados',
+		    emptyTable: 'Ningún dato disponible en esta tabla',
+		    infoEmpty: 'Mostrando registros del 0 al 0 de un total de 0 registros',
+		    infoFiltered: '(filtrado de un total de _MAX_ registros)',
+		    search: 'Buscar:',
+		    infoThousands: ',',
+		    loadingRecords: 'Cargando...',
+		    paginate: {
+			      first: 'Primero',
+			      last: 'Último',
+			      next: 'Siguiente',
+			      previous: 'Anterior',
+		    }
+			},
+           ajax: {
+                 url:"/load_dataInfoEvolucion/" +  data,
+                 type: "POST",
+                 dataSrc: ""
+            },
+            columns: [
+		{ data: "fields.id"},
+		{ data: "fields.folio"},
+                { data: "fields.fechaRegistro"},
+                { data: "fields.motivo"},
+                { data: "fields.subjetivo"},
+                { data: "fields.objetivo"},
+                { data: "fields.analisis"},
+                { data: "fields.plan"},
+            ]
+            }
+
+            if  (dataTableEvolucionInfoInitialized )  {
+
+		            dataTableEvolucion= $("#tablaInfoEvolucion").dataTable().fnDestroy();
+
+                    }
+
+	        dataTableEvolucion = $('#tablaInfoEvolucion').DataTable(dataTableOptionsInfoEvolucion);
+
+
+	            dataTableEvolucionInfoInitialized  = true;
+      }
+
 
 
   }
@@ -876,6 +1479,24 @@ const initDataTableInfoClinico = async () => {
 
 	    arrancaInfoClinico(8,data);
 	  dataTableInterConsultaInfoInitialized = true;
+
+	    arrancaInfoClinico(9,data);
+	  dataTableRevisionSistemasInfoInitialized = true;
+
+	    arrancaInfoClinico(10,data);
+	  dataTableSignosVitalInfoInitialized = true;
+
+	    arrancaInfoClinico(11,data);
+	  dataTableEnfermedadInfoInitialized = true;
+
+	    arrancaInfoClinico(12,data);
+	  dataTableDiagnosticoInfoInitialized = true;
+
+	    arrancaInfoClinico(13,data);
+	  dataTableIncapacidadInfoInitialized = true;
+
+	    arrancaInfoClinico(14,data);
+	  dataTableEvolucionInfoInitialized = true;
 
 
 }

@@ -97,7 +97,7 @@ autoWidth: false,
 		{"render": function ( data, type, row ) {
                         var btn = '';
 
-				    btn = btn + " <input type='radio'  class='miClinico form-check-input ' data-pk='" + row.pk + "'>" + "</input>";
+				    btn = btn + " <input type='radio' name='miRadio'  class='miClinico form-check-input ' data-pk='" + row.pk + "'>" + "</input>";
                        return btn;
                     },
 
@@ -491,3 +491,17 @@ $('#saveBtnResponderInterConsulta').click(function (e) {
      });
 
 
+FormEvolucionarHistoria.addEventListener('submit', e=>{
+
+	 var radios = $('input[type="radio"][name="miRadio"]');
+	
+  if (radios.is(':checked')) {
+    alert('Se ha seleccionado una opción.');
+		 $("#FormEvolucionarHistoria").submit();
+  } else {
+    alert('Por favor, selecciona un Paciente.');
+	event.preventDefault();
+		return;
+  }
+
+})
