@@ -1378,12 +1378,11 @@ function guardarAdmisionTriage()
 	    dataType: 'json',
 		success: function (respuesta)
 		        {
-		      	alert("respuesta = " + JSON.stringify(respuesta));
-       		
+		      
 			if (respuesta.success==false)
 			{
 			alert("Entre error");
-			document.getElementById("mensajesError").innerHTML = respuesta['Mensajes'];
+			document.getElementById("mensajesErrorModalCreaAdmisionTriage").value = respuesta['Mensajes'];
 			}
 			else
 			{
@@ -1392,14 +1391,16 @@ function guardarAdmisionTriage()
 
 
 		 $('#crearAdmTriage').modal('hide');
-	      	document.getElementById("mensajes").innerHTML = respuesta['Mensajes'];
+	      
 		window.location.reload();
+	document.getElementById("mensajes").innerHTML = respuesta['Mensajes'];
 
 		document.getElementById("mensajes").innerHTML = respuesta['Mensajes'];
 
               },
 		   		  			 error: function(data){
-		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+
+		       		document.getElementById("mensajesErrorModalCreaAdmisionTriage").value =  data.responseText
 
 
 	   	    	}

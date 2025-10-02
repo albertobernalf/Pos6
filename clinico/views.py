@@ -3580,8 +3580,9 @@ def load_dataInfoRadiologia(request, data):
     documento= d['documento']
     consec= d['consec']
 
-    documentoId = Usuarios.objects.get(documento=documento)
+
     tipodocId = TiposDocumento.objects.get(nombre=tipoDoc)
+    documentoId = Usuarios.objects.get(documento=documento, tipoDoc_id=tipodocId.id)
 
     infoRadiologia = []
 
@@ -3631,8 +3632,9 @@ def load_dataInfoLaboratorio(request, data):
     documento = d['documento']
     consec = d['consec']
 
-    documentoId = Usuarios.objects.get(documento=documento)
+
     tipodocId = TiposDocumento.objects.get(nombre=tipoDoc)
+    documentoId = Usuarios.objects.get(documento=documento, tipoDoc_id=tipodocId.id)
 
     infoLaboratorio = []
 
@@ -3684,8 +3686,9 @@ def load_dataInfoTerapia(request, data):
     documento = d['documento']
     consec = d['consec']
 
-    documentoId = Usuarios.objects.get(documento=documento)
+
     tipodocId = TiposDocumento.objects.get(nombre=tipoDoc)
+    documentoId = Usuarios.objects.get(documento=documento, tipoDoc_id=tipodocId.id)
 
     infoTerapia = []
 
@@ -3737,8 +3740,9 @@ def load_dataInfoNoQx(request, data):
     documento = d['documento']
     consec = d['consec']
 
-    documentoId = Usuarios.objects.get(documento=documento)
+
     tipodocId = TiposDocumento.objects.get(nombre=tipoDoc)
+    documentoId = Usuarios.objects.get(documento=documento, tipoDoc_id=tipodocId.id)
 
     infoNoQx = []
 
@@ -3790,8 +3794,9 @@ def load_dataInfoAntecedente(request, data):
     documento = d['documento']
     consec = d['consec']
 
-    documentoId = Usuarios.objects.get(documento=documento)
+
     tipodocId = TiposDocumento.objects.get(nombre=tipoDoc)
+    documentoId = Usuarios.objects.get(documento=documento, tipoDoc_id=tipodocId.id)
 
     infoAntecedente = []
 
@@ -3839,8 +3844,9 @@ def load_dataInfoNotasEnfermeria(request, data):
     documento = d['documento']
     consec = d['consec']
 
-    documentoId = Usuarios.objects.get(documento=documento)
+
     tipodocId = TiposDocumento.objects.get(nombre=tipoDoc)
+    documentoId = Usuarios.objects.get(documento=documento, tipoDoc_id=tipodocId.id)
 
     infoNotasEnfermeria = []
 
@@ -3888,8 +3894,9 @@ def load_dataInfoMedicamento(request, data):
     documento = d['documento']
     consec = d['consec']
 
-    documentoId = Usuarios.objects.get(documento=documento)
+
     tipodocId = TiposDocumento.objects.get(nombre=tipoDoc)
+    documentoId = Usuarios.objects.get(documento=documento, tipoDoc_id=tipodocId.id)
 
     infoMedicamento = []
 
@@ -3935,8 +3942,10 @@ def load_dataInfoInterConsulta(request, data):
     documento = d['documento']
     consec = d['consec']
 
-    documentoId = Usuarios.objects.get(documento=documento)
+
     tipodocId = TiposDocumento.objects.get(nombre=tipoDoc)
+    documentoId = Usuarios.objects.get(documento=documento, tipoDoc_id=tipodocId.id)
+
 
     infoInterConsulta = []
 
@@ -3986,8 +3995,9 @@ def load_dataInfoRevisionSistemas(request, data):
     documento = d['documento']
     consec = d['consec']
 
-    documentoId = Usuarios.objects.get(documento=documento)
     tipodocId = TiposDocumento.objects.get(nombre=tipoDoc)
+    documentoId = Usuarios.objects.get(documento=documento, tipoDoc_id=tipodocId.id)
+
 
     infoRevisionSistemas = []
 
@@ -4037,8 +4047,9 @@ def load_dataInfoSignosVital(request, data):
     documento = d['documento']
     consec = d['consec']
 
-    documentoId = Usuarios.objects.get(documento=documento)
     tipodocId = TiposDocumento.objects.get(nombre=tipoDoc)
+    documentoId = Usuarios.objects.get(documento=documento, tipoDoc_id=tipodocId.id)
+
 
     infoSignosVital = []
 
@@ -4087,8 +4098,8 @@ def load_dataInfoEnfermedad(request, data):
     documento = d['documento']
     consec = d['consec']
 
-    documentoId = Usuarios.objects.get(documento=documento)
     tipodocId = TiposDocumento.objects.get(nombre=tipoDoc)
+    documentoId = Usuarios.objects.get(documento=documento, tipoDoc_id=tipodocId.id)
 
     infoEnfermedad = []
 
@@ -4135,8 +4146,9 @@ def load_dataInfoDiagnostico(request, data):
     documento = d['documento']
     consec = d['consec']
 
-    documentoId = Usuarios.objects.get(documento=documento)
     tipodocId = TiposDocumento.objects.get(nombre=tipoDoc)
+    documentoId = Usuarios.objects.get(documento=documento, tipoDoc_id=tipodocId.id)
+
 
     infoDiagnostico = []
 
@@ -4183,8 +4195,9 @@ def load_dataInfoIncapacidad(request, data):
     documento = d['documento']
     consec = d['consec']
 
-    documentoId = Usuarios.objects.get(documento=documento)
     tipodocId = TiposDocumento.objects.get(nombre=tipoDoc)
+    documentoId = Usuarios.objects.get(documento=documento, tipoDoc_id=tipodocId.id)
+
 
     infoIncapacidad = []
 
@@ -4231,8 +4244,9 @@ def load_dataInfoEvolucion(request, data):
     documento = d['documento']
     consec = d['consec']
 
-    documentoId = Usuarios.objects.get(documento=documento)
     tipodocId = TiposDocumento.objects.get(nombre=tipoDoc)
+    documentoId = Usuarios.objects.get(documento=documento,tipoDoc_id=tipodocId.id)
+
 
     infoEvolucion = []
 

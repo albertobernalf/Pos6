@@ -1,0 +1,31 @@
+    miConexion3 = None
+    try:
+
+            print(comando)
+            cur3.execute(comando)
+            miConexion3.commit()
+            miConexion3.close()
+
+            return JsonResponse({'success': True, 'message': 'Abono Actualizado satisfactoriamente!'})
+
+
+
+    except psycopg2.DatabaseError as error:
+        print("Entre por rollback", error)
+        if miConexion3:
+            print("Entro ha hacer el Rollback")
+            miConexion3.rollback()
+
+    finally:
+        if miConexion3:
+            cur3.close()
+            miConexion3.close()
+
+
+		  {% if messages %}
+				         <ul class="messages">
+				             {% for message in messages %}
+				                 <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+				             {% endfor %}
+				         </ul>
+				     {% endif %}

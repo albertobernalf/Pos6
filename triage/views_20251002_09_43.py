@@ -11,7 +11,7 @@ from planta.models import Planta
 from django.db.models import Max
 from django.db.models.functions import Cast, Coalesce
 
-import json
+
 import pytz
 import tzlocal
 import datetime as dt
@@ -31,8 +31,8 @@ from clinico.models import Servicios, Medicos, EspecialidadesMedicos
 from triage.viewsReportes import ImprimirAtencionInicialUrgencias, ImprimirHojaAdmision, ImprimirManilla, ImprimirTriage, ImprimirTriageParametro
 from facturacion.models import ConveniosPacienteIngresos
 from contratacion.models import Convenios
-#from enfermeria.models import Enfermeria
-#from farmacia.models import Farmacia
+from enfermeria.models import Enfermeria
+from farmacia.models import Farmacia
 
 # Create your views here.
 
@@ -3033,21 +3033,67 @@ def guardarAdmisionTriage(request):
 
         print("liq = ", liq)
 
-
-        miConexion3 = None
         try:
+            with transaction.atomic():
 
-                miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
-                                           password="123456")
-                cur3 = miConexion3.cursor()
-
-                comando='INSERT INTO admisiones_ingresos ("sedesClinica_id","tipoDoc_id", documento_id, consec,"fechaIngreso",empresa_id,factura,numcita,  "serviciosIng_id","dependenciasIngreso_id", "dxIngreso_id", "medicoIngreso_id","especialidadesMedicosIngreso_id",  "serviciosActual_id", "dependenciasActual_id", "dxActual_id", "medicoActual_id", "especialidadesMedicosActual_id", "ViasIngreso_id",  "causasExterna_id", regimen_id,"tiposCotizante_id", "ipsRemite_id", "numManilla", remitido, "ripsServiciosIng_id", "ripsServiciosActual_id", "ripsmodalidadGrupoServicioTecSal_id", "ripsViaIngresoServicioSalud_id", "ripsGrupoServicios_id","ripsCondicionDestinoUsuarioEgreso_id", "ripsCausaMotivoAtencion_id", "ripsRecienNacido","ripsPesoRecienNacido", "ripsNumConsultasCPrenatal", "ripsEdadGestacional", "ripsDestinoUsuarioEgresoRecienNacido_id", "fechaRegistro", "usuarioRegistro_id","estadoReg", "serviciosAdministrativos_id","salidaClinica","salidaDefinitiva",muerte) VALUES (' + "'" + str(sede) + "','"  + str(idTipoDocFinal) + "','"  + str(documento_llave.id) + "','"   + str(consecAdmision) + "','"   + str(fechaIngreso) + "','"  + str(empresa) + "','"  + str(factura) + "','"   + str(numcita) + "','"   + str(busServicio2) + "','" + str(dependenciasIngreso) + "','"  + str(dxIngreso) + "','"  + str(medicoIngreso) + "','"  + str(especialidadesMedicos) + "','"  + str(busServicio2) + "','" + str(dependenciasIngreso) + "','"  + str(dxIngreso) + "','"  + str(medicoIngreso) + "','" + str(especialidadesMedicos) + "','"  + str(viasIngreso) + "','"  + str(causasExterna) + "','"  + str(regimenes) + "','"  + str(tiposCotizante) + "','"  + str(ipsRemite) + "','"   + str(numManilla) + "','" + str(remitido) + "','" + str(ripsServiciosIng) + "','"  + str(ripsServiciosIng) + "','"   + str(ripsmodalidadGrupoServicioTecSal) + "','"   + str(ripsViaIngresoServicioSalud) + "','"   + str(ripsGrupoServicios) + "','"  + str(ripsCondicionDestinoUsuarioEgreso) + "','"  + str(ripsCausaMotivoAtencion) + "','"  + str(ripsRecienNacido) + "','"  + str(ripsPesoRecienNacido) + "','"  + str(ripsNumConsultasCPrenatal) + "','"  + str(ripsEdadGestacional) + "','"  + str(ripsDestinoUsu1.id) + "','"  + str(fechaRegistro) + "','"  + str(usernameId.id) + "','"  + str(estadoReg) + "','"   + str(servicioAdmTriage) + "','N','N','N') RETURNING id"
-
-
+                grabo = Ingresos(
+                                 sedesClinica_id=sede,
+                                 tipoDoc_id=idTipoDocFinal,
+                                 documento_id=documento_llave.id,
+                                 consec=consecAdmision,
+                                 fechaIngreso=fechaIngreso,
+                                 empresa_id=empresa,
+                                 #fechaSalida=NULL,
+                                 factura=factura,
+                                 numcita=numcita,
+                                 serviciosIng_id=  busServicio2,
+                                 dependenciasIngreso_id=dependenciasIngreso,
+                                 dxIngreso_id=dxIngreso,
+                                 medicoIngreso_id=medicoIngreso,
+                                 especialidadesMedicosIngreso_id=especialidadesMedicos,
+                                 serviciosActual_id=busServicio2,
+                                 dependenciasActual_id=dependenciasIngreso,
+                                 dxActual_id = dxIngreso,
+                                 medicoActual_id=medicoIngreso,
+                                 especialidadesMedicosActual_id=especialidadesMedicos,
+                                 #dependenciasSalida_id = dependenciasSalida,
+                                 #dxSalida_id = dxSalida,
+                                 #medicoSalida_id=medicoSalida,
+                                 #especialidadesMedicosSalida_id="",
+                                 #estadoSalida_id = estadoSalida,
+                                 ViasIngreso_id=viasIngreso,
+                                 causasExterna_id=causasExterna,
+                                 regimen_id=regimenes,
+                                 tiposCotizante_id=tiposCotizante,
+                                 ipsRemite_id=ipsRemite,
+                                 numManilla=numManilla,
+                                 #contactoAcompañante_id=contactoAcompanante,
+                                 #contactoResponsable_id=contactoResponsable,
+                                 remitido=remitido,
+                                 #salidaClinica=salidaClinica,
+                                 #salidaDefinitiva=salidaDefinitiva,
+                                 ripsServiciosIng_id=ripsServiciosIng,
+                                 ripsServiciosActual_id=ripsServiciosIng,
+                                 ripsmodalidadGrupoServicioTecSal_id=ripsmodalidadGrupoServicioTecSal,
+                                 ripsViaIngresoServicioSalud_id=ripsViaIngresoServicioSalud,
+                                 ripsGrupoServicios_id=ripsGrupoServicios,
+                                 ripsCondicionDestinoUsuarioEgreso_id=ripsCondicionDestinoUsuarioEgreso,
+                                 ripsCausaMotivoAtencion_id=ripsCausaMotivoAtencion,
+                                 ripsRecienNacido=ripsRecienNacido,
+                                 ripsPesoRecienNacido=ripsPesoRecienNacido,
+                                 ripsNumConsultasCPrenatal=ripsNumConsultasCPrenatal,
+                                 ripsEdadGestacional=ripsEdadGestacional,
+                                 ripsDestinoUsuarioEgresoRecienNacido=ripsDestinoUsu1,
+                                 fechaRegistro=fechaRegistro,
+                                 usuarioRegistro_id=usernameId.id,
+                                 estadoReg=estadoReg,
+                                 serviciosAdministrativos_id= servicioAdmTriage ,
+                )
                 print("Voy a guardar la INFO-ADMISION-TRIAGE")
-                print(comando)
-                cur3.execute(comando)
-                nuevoIngreso = cur3.fetchone()[0]
+
+                grabo.save()
+                print("yA grabe" , grabo.id)
+
                 # Consigo la Dependencia Triage Actual que ocupa
 
                 depActual = Dependencias.objects.get(documento_id=idPacienteFinal)
@@ -3055,135 +3101,177 @@ def guardarAdmisionTriage(request):
 
                 # Grabo la Dependencias triage
 
-
                 print("Voy a guardar dependencias OJO ESTO ES UN UPDATE")
                 # ejemplo
-
-
-                comando='UPDATE sitios_dependencias  SET "tipoDoc_id" =null, documento_id=null, consec=0, disponibilidad = ' + "'" + str('L') + "'," + '"fechaRegistro" = ' + "'" + str(fechaRegistro) + "'," + '"fechaLiberacion"=null,"fechaOcupacion"=null WHERE  id = ' + "'" + str(depActual.id) + "'"
-                print(comando)
-                cur3.execute(comando)
+                grabo5 = Dependencias.objects.filter(id=depActual.id).update(tipoDoc_id='',documento_id='',consec=0, disponibilidad='L', fechaRegistro=fechaRegistro, fechaLiberacion=None, fechaOcupacion=None)
 
                 # Fin Grabo Desmarcar la Dependencias triage
 
                 print("Voy a guardar HISTORICO dependencias para TRIAGE ")
-                comando='INSERT INTO sitios_historialDependencias ("tipoDoc_id",documento_id,consec,dependencias_id,disponibilidad ,"fechaRegistro","usuarioRegistro_id" ,"fechaLiberacion","fechaOcupacion","estadoReg")  values (' + "'" + str(idTipoDocFinal) + "','" + str(documento_llave.id) + "',0,'" +str(depActual.id) + "','L','" + str(fechaRegistro) + "','" + str(usernameId.id) + "','" + str(fechaRegistro) + "',null,'" + str(estadoReg) + "')"
-                print(comando)
-                cur3.execute(comando)
-                print("yA grabe dependencias historico para triage")
+
+                grabo6 = HistorialDependencias(
+                    tipoDoc_id=idTipoDocFinal,
+                    documento_id=documento_llave.id,
+                    consec=0,
+                    dependencias_id=depActual.id,
+                    disponibilidad='L',
+                    fechaRegistro=fechaRegistro,
+                    usuarioRegistro_id=usernameId.id,
+                    fechaLiberacion=fechaRegistro,
+                    fechaOcupacion=None,
+                    estadoReg=estadoReg
+
+                )
+                grabo6.save()
+                print("yA grabe dependencias historico para triage", grabo6.id)
+
 
                 # Grabo Dependencias
 
                 print("Voy a guardar dependencias OJO ESTO ES UN UPDATE")
-                # ejemplo fata hacerlo
-
-                comando='UPDATE sitios_dependencias SET "tipoDoc_id" = ' + "'" + str(idTipoDocFinal) + "', documento_id=" + "'" + str(documento_llave.id) + "',consec="  + "'" + str(consecAdmision) + "',disponibilidad='O', " + '"fechaRegistro" = ' + "'" + str(fechaRegistro) + "'," + '"fechaLiberacion"= null,"fechaOcupacion"=  ' + "'" + str(fechaRegistro) + "'" + ' WHERE id = ' + "'" + str(dependenciasIngreso) + "'"
-                print(comando)
-                cur3.execute(comando)
+                # ejemplo
+                grabo4 =  Dependencias.objects.filter(id = dependenciasIngreso).update(tipoDoc_id=idTipoDocFinal, documento_id=documento_llave.id, consec=consecAdmision, disponibilidad='O',fechaRegistro=fechaRegistro, fechaLiberacion = None,fechaOcupacion= fechaRegistro)
 
                 # Grabo Dependencia Historico
 
                 print("Voy a guardar HISTORICO dependencias ")
 
-                comando='INSERT INTO sitios_historialDependencias ("tipoDoc_id",documento_id, consec,dependencias_id,disponibilidad,"fechaRegistro", "usuarioRegistro_id","fechaLiberacion","fechaOcupacion","estadoReg") VALUES (' + "'" + str(idTipoDocFinal) + "','" + str(documento_llave.id) + "','" + str(consecAdmision) + "','" + str(dependenciasIngreso) + "','O','" + str(fechaRegistro) + "','" + str(usernameId.id) + "',null,'" + str(fechaRegistro) + "','" + str(estadoReg) + "')"
-                print(comando)
-                cur3.execute(comando)
+                grabo2 = HistorialDependencias(
+                    tipoDoc_id=idTipoDocFinal,
+                    documento_id=documento_llave.id,
+                    consec=consecAdmision,
+                    dependencias_id=dependenciasIngreso,
+                    disponibilidad='O',
+                    fechaRegistro=fechaRegistro,
+                    usuarioRegistro_id=usernameId.id,
+                    fechaLiberacion=None,
+                    fechaOcupacion=fechaRegistro,
+                    estadoReg=estadoReg
+
+                )
+                grabo2.save()
+                print("yA grabe dependencias historico", grabo2.id)
+
 
                 #Consigo el consecutivo de admison
-                print("nuevoIngreso =" , nuevoIngreso)
 
-                #consecParaTriage = Ingresos.objects.get(id=nuevoIngreso)
-
-                comando = 'SELECT consec FROM admisiones_ingresos WHERE id = ' + "'" + str(nuevoIngreso) + "'"
-                print(comando)
-                cur3.execute(comando)
-
-                consecutivoAdmision = []
-
-                for consec in cur3.fetchall():
-                    consecutivoAdmision.append({'consec': consec})
-
-
-                consecutivoAdmision = str(consecutivoAdmision)
-                print("consecutivoAdmision = ", consecutivoAdmision)
-                consecutivoAdmision = consecutivoAdmision.replace("consec", ' ')
-                consecutivoAdmision = consecutivoAdmision.replace("(", ' ')
-                consecutivoAdmision = consecutivoAdmision.replace(")", ' ')
-                consecutivoAdmision = consecutivoAdmision.replace(",", ' ')
-                consecutivoAdmision = consecutivoAdmision.replace(" ", '')
-                consecutivoAdmision = consecutivoAdmision.replace(":", '')
-                consecutivoAdmision = consecutivoAdmision.replace("'", '')
-                consecutivoAdmision = consecutivoAdmision.replace("{", '')
-                consecutivoAdmision = consecutivoAdmision.replace("}", '')
-                consecutivoAdmision = consecutivoAdmision.replace("[", '')
-                consecutivoAdmision = consecutivoAdmision.replace("]", '')
-                print("consecutivoAdmision = ", consecutivoAdmision)
-
-                consecParaTriage = consecutivoAdmision
+                consecParaTriage = Ingresos.objects.get(id=grabo.id)
 
                 print("consecParaTriage = ",consecParaTriage )
-                print("consecParaTriage.consec = ", consecParaTriage)
+                print("consecParaTriage.consec = ", consecParaTriage.consec)
 
                 print("Grabe HISTORICO DEPENDENCIAS")
 
                 # Actualizo consecutivo de admision en TRIAGE
 
-                comando='UPDATE triage_triage SET "consecAdmision" = ' + "'" + str(consecParaTriage) + "' WHERE" + '"tipoDoc_id" = ' + "'" + str(idTipoDocFinal) + "' AND documento_id= '" + str(documento_llave.id) + "' AND consec=0" + ' AND "consecAdmision" = 0 '
-                print(comando)
-                cur3.execute(comando)
+                grabo55 = Triage.objects.filter( tipoDoc_id=idTipoDocFinal,documento_id=documento_llave.id,consec=0,consecAdmision=0).update(consecAdmision=consecParaTriage.consec)
 
-                ## aqui guarda el convenio que llega desde la pantalla de triage convenio
-
-                comando='UPDATE facturacion_ConveniosPacienteIngresos SET "consecAdmision" =' + "'" + str(consecAdmision) + "',convenio_id="  + "'" + str(convenio) + "' WHERE" + '"tipoDoc_id" = ' + "'" + str(idTipoDocFinal) + "' AND documento_id= '" + str(documento_llave.id) + "'" + ' AND "consecAdmision"=0'
-                print(comando)
-                cur3.execute(comando)
-
-                #convenioParticular = Convenios.objects.get(particular='S')
+                #grabo55.save()
 
 
-                if liq != 0:
 
+		## aqui guarda el convenio que llega desde la pantalla de triage convenio
+
+                #grabo88 = ConveniosPacienteIngresos(
+                #          tipoDoc_id=idTipoDocFinal,
+                #          documento_id=documento_llave.id,
+                #          consecAdmision=consecAdmision,
+                #          convenio_id=convenio,
+                #          fechaRegistro = fechaRegistro,
+                #          usuarioRegistro_id = usernameId.id,
+                #          estadoReg = estadoReg
+                #       )
+                #grabo88.save()
+                #grabo88.id
+                #print("yA grabe pacientes ingresos", grabo88.id)
+
+                try:
+                    with transaction.atomic():
+
+                        #grabo66 = ConveniosPacienteIngresos.objects.get(tipoDoc_id=idTipoDocFinal,
+                        #                                                documento_id=documento_llave.id,
+                        #                                                consecAdmision=0)
+                        grabo67 = ConveniosPacienteIngresos.objects.filter(tipoDoc_id=idTipoDocFinal,
+                                                                           documento_id=documento_llave.id,
+                                                                           consecAdmision=0).update(
+                            consecAdmision=consecAdmision, convenio_id=convenio)
+
+                except Exception as e:
+
+                    print("Se hizo rollback HAY QUE  CREAR PATRICULAR :", e)
+                    convenioParticular = Convenios.objects.get(particular='S')
+                    print("convenioParticular =", convenioParticular.id)
+
+                finally:
+                    print("No haga nada")
+
+
+        except Exception as e:
+            # Aquí ya se hizo rollback automáticamente
+            print("Se hizo rollback por:", e)
+            rollo=1
+            #datos = {'success': False, 'messages': e}
+	    return JsonResponse('success':False, 'Mensaje':e)
+            #raise error
+
+        finally:
+                print("No haga nada")
+
+
+        if liq != 0:
+
+                ## Desde Aqui traslado a la nueva Cuenta Y los folios TRIAGE al nuevo ingreso
+                miConexion3 = None
+                try:
+
+                    miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                                   password="123456")
+                    cur3 = miConexion3.cursor()
 
                     # Tan solo UPDATE al consecutivo
 
                     comando1 = 'UPDATE facturacion_liquidacion set "consecAdmision" = ' + "'" + str(consecAdmision) + "' WHERE id = " +  str(liquidacionDesdeId)
                     print("comando = ", comando1)
-                    print(comando1)
                     cur3.execute(comando1)
 
                     comando2 = 'UPDATE clinico_historia SET "consecAdmision" = ' + "'" + str(consecAdmision) + "'" + ' WHERE "tipoDoc_id" = ' + "'" + str(idTipoDocFinal) + "' AND documento_id = "  + "'" + str(documento_llave.id) + "' AND "  + ' "consecAdmision" =  0  AND fecha >= ' + "'" +str(triageActual.fechaSolicita) +"'"
                     print("comando2 = ", comando2)
                     cur3.execute(comando2)
                     print("AQUI VOY")
+                    try:
+                        with transaction.atomic():
+                            print("Triage Actual = ", triageActual.id)
 
-                    comando2= 'UPDATE enfermeria_enfermeria SET "ingresoPaciente" = ' + "'" + str(nuevoIngreso) + "' WHERE "	+ '"ingresoPaciente" = ' + "'" + str(triageActual.id) +  "' AND " + '"sedesClinica_id" = ' + "'" + str(sede) + "'"
-                    print("comando2 = ", comando2)
-                    cur3.execute(comando2)
+                            Enfermeria.objects.filter(ingresoPaciente=triageActual.id, sedesClinica_id=sede).update(ingresoPaciente=grabo.id)
+                            Farmacia.objects.filter(ingresoPaciente=triageActual.id , sedesClinica_id=sede).update(ingresoPaciente=grabo.id)
 
-                    comando2= 'UPDATE farmacia_farmacia SET "ingresoPaciente" = ' + "'" + str(nuevoIngreso) + "' WHERE "	+ '"ingresoPaciente" = ' + "'" + str(triageActual.id) + "' AND " + '"sedesClinica_id" = ' + "'" + str(sede) + "'"
-                    print("comando2 = ", comando2)
-                    cur3.execute(comando2)
+                    except Exception as e:
+                            print("Se hizo rollback HAY QUE  CREAR PATRICULAR :", e)
 
+		            return JsonResponse('success':False, 'Mensaje':e)
+
+                    finally:
+                            print("No haga nada")
 
                     miConexion3.commit()
                     cur3.close()
 
+
+                except psycopg2.DatabaseError as error:
+                    print("Entre por rollback", error)
+                    if miConexion3:
+                        print("Entro ha hacer el Rollback")
+                        miConexion3.rollback()
+                    #datos = {'messages': error}
+		    return JsonResponse('success':False, 'Mensaje':error)
+
+
+                finally:
+                    if miConexion3:
+                        cur3.close()
+                        miConexion3.close()
+
         ## Fin traslado a la nueva Cuenta
-
-        except psycopg2.DatabaseError as error:
-            print("Entre por rollback", error)
-            if miConexion3:
-                print("Entro ha hacer el Rollback")
-                miConexion3.rollback()
-
-            error_message = str(error)
-            return JsonResponse({'success': False, 'Mensajes':  error_message}, status=500)
-
-
-        finally:
-            if miConexion3:
-                cur3.close()
-                miConexion3.close()
 
         # Aqui reporte de inicial URGENCIAS
 
@@ -3198,7 +3286,7 @@ def guardarAdmisionTriage(request):
                 print("Entre rollo=1 URGENCIAS")
 
                 print("Entre imprimir inicial UREGNCIAS")
-                ingresoId2 = nuevoIngreso
+                ingresoId2 = grabo.id
                 print("ingresoId2 = ",ingresoId2 )
                 ImprimirAtencionInicialUrgencias(ingresoId2)
 
@@ -3208,10 +3296,10 @@ def guardarAdmisionTriage(request):
 
             if servicioHospitalizacion.nombre == 'HOSPITALIZACION':
                 print("Entre imprimir Hoja de admision paciente")
-                ingresoId2 = nuevoIngreso
+                ingresoId2 = grabo.id
                 ImprimirHojaAdmision(ingresoId2)
                 print("Entre imprimir MaNILLA  paciente")
-                ingresoId2 = nuevoIngreso
+                ingresoId2 = grabo.id
                 ImprimirManilla(ingresoId2)
 
 
@@ -3935,7 +4023,7 @@ def guardarAdmisionTriage(request):
         context['Empresas'] = empresas
         response_data['Empresas'] = empresas
 
-        response_data['Mensajes'] = 'Admision Creada desde Triage !'
+        response_data['messages'] = 'Admision Creada desde Triage !'
         response_data['success'] = True
 
 

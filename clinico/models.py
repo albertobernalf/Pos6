@@ -348,6 +348,10 @@ class HistorialInterconsultas(models.Model):
     def __str__(self):
         return self.descripcionConsulta
 
+    class Meta:
+        indexes = [
+            Index(fields=['historia']),
+        ]
 
 
 
@@ -517,6 +521,11 @@ class HistoriaExamenes(models.Model):
     def __str__(self):
         return str(self.codigoCups)
 
+    class Meta:
+        indexes = [
+            Index(fields=['historia']),
+        ]
+
 
 class HistoriaResultados(models.Model):
     ESTADOREG_CHOICES = [
@@ -538,6 +547,11 @@ class HistoriaResultados(models.Model):
 
     def __str__(self):
         return self.historiaExamenes
+
+    class Meta:
+        indexes = [
+            Index(fields=['historiaExamenes']),
+        ]
 
 
 class TiposDiagnostico(models.Model):
@@ -607,6 +621,12 @@ class HistorialIncapacidades(models.Model):
     def __str__(self):
         return self.historia
 
+    class Meta:
+        indexes = [
+            Index(fields=['historia']),
+        ]
+
+
 
 class HistorialDiagnosticos(models.Model):
     ESTADOREG_CHOICES = [
@@ -623,6 +643,11 @@ class HistorialDiagnosticos(models.Model):
     def __str__(self):
         return self.historia
 
+    class Meta:
+        indexes = [
+            Index(fields=['historia']),
+        ]
+
 
 
 class HistorialEnfermedades(models.Model):
@@ -637,6 +662,11 @@ class HistorialEnfermedades(models.Model):
 
     def __str__(self):
         return self.historia
+
+    class Meta:
+        indexes = [
+            Index(fields=['historia']),
+        ]
 
 
 class HistorialAntecedentes(models.Model):
@@ -654,6 +684,12 @@ class HistorialAntecedentes(models.Model):
 
     def __str__(self):
         return self.descripcion
+
+    class Meta:
+        indexes = [
+            Index(fields=['historia']),
+        ]
+
 
 ## Desde aquip ingresar en Admin
 
@@ -1129,6 +1165,12 @@ class HistoriaRevisionSistemas(models.Model):
     def __str__(self):
         return str(self.id)
 
+    class Meta:
+        indexes = [
+            Index(fields=['historia']),
+        ]
+
+
 class Trasfusiones(models.Model):
     ESTADOREG_CHOICES = [
         ('A', 'Activo'),
@@ -1195,6 +1237,11 @@ class HistoriaOxigeno(models.Model):
 
     def __str__(self):
         return str(self.tipoOxigenacion)
+
+    class Meta:
+        indexes = [
+            Index(fields=['historia']),
+        ]
 
 
 class TipoOxigenacion(models.Model):
@@ -1326,6 +1373,12 @@ class HistoriaMedicamentos(models.Model):
     def __str__(self):
         return str(self.historia)
 
+    class Meta:
+        indexes = [
+            Index(fields=['historia']),
+        ]
+
+
 class PrincipiosActivos(models.Model):
     ESTADOREG_CHOICES = [
         ('A', 'Activo'),
@@ -1394,6 +1447,11 @@ class HistorialDietas(models.Model):
     def __str__(self):
         return self.observaciones
 
+    class Meta:
+        indexes = [
+            Index(fields=['historia']),
+        ]
+
 
 class HistorialNotasEnfermeria(models.Model):
     ESTADOREG_CHOICES = [
@@ -1407,3 +1465,8 @@ class HistorialNotasEnfermeria(models.Model):
 
     def __str__(self):
         return self.historia
+
+    class Meta:
+        indexes = [
+            Index(fields=['historia']),
+        ]

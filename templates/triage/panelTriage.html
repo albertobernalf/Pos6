@@ -361,15 +361,13 @@ function RefrescarPantalla() {
         <div class="container">
             <div class="card">
                 <div class="myForm">
-                    <form id="AdmisionTriage" method="POST"  >
-                        <div class="modal fade" id="crearAdmTriage" tabindex="-1" role="dialog"
-                             aria-labelledby="exampleModalLabel1" aria-hidden="true" data-bs-backdrop="static">
+                    <form id="AdmisionTriage" method="POST">
+                        <div class="modal fade" id="crearAdmTriage" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1" aria-hidden="true" data-bs-backdrop="static">
                             <div class="modal-dialog  modal-fullscreen  modal-dialog-scrollable modal-dialog-center" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                        <div  class="modal-title" id="exampleModalLabel" style="text-align:center;"><font gont-family="Times New roman" size=3"><center>Creacion Admision desde Triage</center></font> </div>
-                                        <button type="button" class="close" data-bs-dismiss="modal"  aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
+                                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
                                     <div class="modal-body">
@@ -378,22 +376,11 @@ function RefrescarPantalla() {
                                         <input type="hidden" id="servicio" name="servicio" value="{{Servicio}}">
                                         <input type="hidden" id="documento" name="documento" value="{{Documento}}">
                                         <input type="hidden" id="username" name="username" value="{{Username}}">
-                                        <input type="hidden" id="username_id" name="username_id"
-                                               value="{{Username_id}}">
-                                        <input type="hidden" id="profesional" name="profesional"
-                                               value="{{Profesional}}">
+                                        <input type="hidden" id="username_id" name="username_id"  value="{{Username_id}}">
+                                        <input type="hidden" id="profesional" name="profesional" value="{{Profesional}}">
                                         <input type="hidden" id="nombreSede" name="nombreSede" value="{{NombreSede}}">
-                                        <input type="hidden" id="escogeModulo" name="escogeModulo"
-                                               value="{{EscogeModulo}}">
-
-				  {% if messages %}
-				         <ul class="messages">
-				             {% for message in messages %}
-				                 <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-				             {% endfor %}
-				         </ul>
-				     {% endif %}
-
+                                        <input type="hidden" id="escogeModulo" name="escogeModulo"   value="{{EscogeModulo}}">
+	
 
                                         <div class="form-row">
 
@@ -792,8 +779,8 @@ function RefrescarPantalla() {
 
 
                                 <div class="modal-footer">
-			  <span id="mensajesErrorModalCreaAdmisionTriage" name="mensajesErrorModalCreaAdmisionTriage" style= "color:red; font-size:15px; line-height:35px; font-family: Times Neww Roman;" > </span>
-
+					<!--  <span id="mensajesErrorModalCreaAdmisionTriage" name="mensajesErrorModalCreaAdmisionTriage" style= "color:red; font-size:15px; line-height:35px; font-family: Times Neww Roman;" > </span> -->
+						<textarea id="mensajesErrorModalCreaAdmisionTriage" name="mensajesErrorModalCreaAdmisionTriage" rows="2" cols="160" placeholder="Mensajes..."  wrap="hard"></textarea>
                                  	  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar   </button>
                                    
 			<!-- 	<input type="submit" class="btn btn-primary" value="save"> -->
