@@ -904,4 +904,5 @@ LUNES 15-SEPTIEMBRE: Ademas de revizar lo de arriba: ver acomodar columnas grade
 -- REVISAR TODO EL PROCESO DE REFACTURACION ALGO PASA  . CREO QUE NO HE HECHO EL DATATABLE DE REFACTURTADAS
 
 
-
+-- ojo al editar una liquiaciondetalle, guarada el valor, actuliza el total de proced, pero no los totales y valoraagar
+-- mañana, anular, (ver actulkiza epantall), refacturar (actulzi pantalle) refacturar norberto, ver tabla refacturacion funcione y grabe la nueva factura en refactuarcion

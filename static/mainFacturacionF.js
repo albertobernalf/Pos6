@@ -1408,20 +1408,20 @@ $('#RvalorAPagarLetras').val(data.valorAPagarLetras);
 	           type: 'POST',
 	           dataType : 'json',
 	  		success: function (data) {
-		alert("de regreso");
+		// alert("de regreso" + JSON.stringify(data));
 
 
-			if (data.success == true)
-			 {
-			  document.getElementById("mensajes").innerHTML = data.Mensaje;
-			 }
-			else
-			{
-			alert("error=" + data.Mensaje);
+	//		if (data.success == true)
+	//		 {
+	//		  document.getElementById("mensajes").innerHTML = data.Mensaje;
+	//		 }
+	//		else
+	//		{
+	//		alert("error=" + data.Mensaje);
 	
-			document.getElementById("mensajesError").innerHTML = data.Mensaje;
-			return;
-			}
+	//		document.getElementById("mensajesError").innerHTML = data.Mensaje;
+	//		return;
+	//		}
 
 
 			 $('#pk').val(data.pk);
