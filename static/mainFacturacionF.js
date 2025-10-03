@@ -812,7 +812,7 @@ window.addEventListener('load', async () => {
 	           dataType : 'json',
 	  		success: function (data) {
 
-	//		alert("llegue con esta data" + data);
+			alert("llegue con esta data" + JSON.stringify(data));
 	//		alert("llegue con esta data.id" + data.id);
 
 		var liquidacionId = data.id;
@@ -1718,7 +1718,7 @@ function AFacturar()
 
 	else
 		{
-			vartipoFactura= 'FACTURA';
+			var tipoFactura= 'FACTURA';
 			alert(" ES FACTURA : ");
 		}
 
@@ -1954,11 +1954,11 @@ function AnularFactura()
 	           type: 'POST',
 	           dataType : 'json',
 	  		success: function (data) {
-			
+					alert("llega=" + JSON.stringify(data));
 
 			if (data.success == true)
 			 {
-			  document.getElementById("mensajes").value = data.Mensajess;
+			  document.getElementById("mensajes").value = data.Mensajes;
 			 }
 			else
 			{
@@ -2007,6 +2007,9 @@ function AnularFactura()
 
 		        arrancaLiquidacion(3,data2);
 			    dataTableFacturacionInitialized = true;
+
+			alert("estadoAnulado = " +  data.estadoFactura);
+
 			document.getElementById("Aanulado").value = data.estadoFactura;
 	
 

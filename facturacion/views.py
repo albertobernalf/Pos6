@@ -1395,7 +1395,7 @@ def FacturarCuenta(request):
         print("flag2", flag)
         if (ingresoId.salidaClinica=='N' and servicioSedeAmb.servicios_id != servicioAmb.id  ):
             print("flag3", flag)
-            return JsonResponse({'success': False, 'Mensaje': 'Paciente NO tiene Salida Clinica. Consultar medico tratante !', 'Factura' : 0 })
+            return JsonResponse({'success': False, 'Mensajes': 'Paciente NO tiene Salida Clinica. Consultar medico tratante !', 'Factura' : 0 })
 
 
     # AQUI VALDAR SI HAY CIRUGIAS QUE NO ESTEN REALIZADAS  ## OPS ESTO SI HAY QUE REVIZARLO
@@ -1778,7 +1778,6 @@ def PostConsultaFacturacion(request):
 
 
 
-
 def AnularFactura(request):
     print ("Entre AnularFactura")
     facturacionId = request.POST["facturacionId"]
@@ -1826,7 +1825,7 @@ def AnularFactura(request):
             miConexion3.close()
 
 
-    return JsonResponse({'success': True, 'Mensajes': 'Factura ANULADA !'})
+    return JsonResponse({'success': True, 'Mensajes': 'Factura ANULADA !', 'estadoFactura':'S'})
 
 
 def ReFacturar(request):

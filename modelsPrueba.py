@@ -686,4 +686,20 @@ LUNES 15-SEPTIEMBRE: Ademas de revizar lo de arriba: ver acomodar columnas grade
 -- ojo al editar una liquiaciondetalle, guarada el valor, actuliza el total de proced, pero no los totales y valoraagar
 -- ojo persiste el proble del reload de admisioes_ingresos duplica el laboratioro
 
+-- lunes 6 de octubre
+
+-- tengo un problema serio al facturar una refactura lo toima como factura OJO y no compo refactura error
+-- tengo 2 erores cuando refacturo request.post(tipoingreso)   d['triageId']
+-- LO MEJOR ES coger o arrancar de ceros nuevo caso crearlo, con dos conveios, 1. sin traslados. 2. con traslados a ver donde esta el error .OJO paso a paso
+
+ -- TIPS CONSULTA EXTERNA
+
+-- Las agendas son independientes solo competen con medicos, especialidades y horarios de atencon
+-- Consultorios solo compete disponibilidad de los consultyaros. se asignan dinamicamet a o medicos
+-- Mismomdelo
+   -- Tabla ingresos, creo se pued emantener un consecutivo nortmal que hosp.urge, amb
+  --  se creat ciatMedicas, citasMedicasDetalle-- para los datos de la cita como tal con consecuticpo propio
+  -- lA HCLINICA JALADA DE LA QUE HAY PERO S ETRASQUILAN MUCHAS COSA...
+
+--- FIN TIPS
 
