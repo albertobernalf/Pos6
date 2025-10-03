@@ -1167,8 +1167,6 @@ def EditarGuardarLiquidacionDetalle(request):
     if suministros == '':
            suministros="null"
 
-
-
     fechaRegistro = timezone.now()
 
     registroId = LiquidacionDetalle.objects.get(id=liquidacionDetalleId)
@@ -1185,57 +1183,92 @@ def EditarGuardarLiquidacionDetalle(request):
         print(comando)
         cur3.execute(comando)
 
-        # Falta la RUTINA que actualica los cabezotes de la liquidacion
-
-        totalSuministros = LiquidacionDetalle.objects.all().filter(liquidacion_id=registroId.liquidacion_id).filter(examen_id = None).exclude(estadoRegistro='N').aggregate(totalS=Coalesce(Sum('valorTotal'), 0))
-        totalSuministros = (totalSuministros['totalS']) + 0
-        print("totalSuministros", totalSuministros)
-        totalProcedimientos = LiquidacionDetalle.objects.all().filter(liquidacion_id=registroId.liquidacion_id).filter(cums_id = None).exclude(estadoRegistro='N').aggregate(totalP=Coalesce(Sum('valorTotal'), 0))
-        totalProcedimientos = (totalProcedimientos['totalP']) + 0
-        print("totalProcedimientos", totalProcedimientos)
-        registroPago = Liquidacion.objects.get(id=registroId.liquidacion_id)
-        totalCopagos = registroPago.totalCopagos
-        totalCuotaModeradora = registroPago.totalCuotaModeradora
-        totalAnticipos = registroPago.anticipos
-        totalAbonos = registroPago.totalAbonos
-        #valorEnCurso = registroPago.valorEnCurso
-        totalRecibido = registroPago.totalRecibido
-        if totalRecibido == None:
-               totalRecibido=0
-
-        print ("totalRecibido", totalRecibido )
-        totalAnticipos = registroPago.anticipos
-        totalLiquidacion = totalSuministros + totalProcedimientos
-        print("totalLiquidacion", totalLiquidacion)
-        valorApagar = totalLiquidacion -  totalRecibido
-        print("valorApagar", valorApagar)
-
 
         # Rutina Guarda en cabezote los totales
 
-        print ("Voy a grabar el cabezote")
 
-        comando1 = 'UPDATE facturacion_liquidacion SET "totalSuministros" = ' + str(totalSuministros) + ',"totalProcedimientos" = ' + str(totalProcedimientos) + ', "totalCopagos" = ' + str(totalCopagos) + ' , "totalCuotaModeradora" = ' + str(totalCuotaModeradora) + ', anticipos = ' +  str(totalAnticipos) + ' ,"totalAbonos" = ' + str(totalAbonos) + ', "totalLiquidacion" = ' + str(totalLiquidacion) + ', "valorApagar" = ' + str(valorApagar) +  ', "totalRecibido" = ' + str(totalRecibido) +  ' WHERE id =' + str(registroId.liquidacion_id)
-        cur3.execute(comando1)
         miConexion3.commit()
         cur3.close()
         miConexion3.close()
 
-        return JsonResponse({'success': True, 'message': 'Registro Actualizado satisfactoriamente!'})
 
     except psycopg2.DatabaseError as error:
         print ("Entre por rollback" , error)
         if miConexion3:
             print("Entro ha hacer el Rollback")
             miConexion3.rollback()
-
+        message_error=str(error)
         print ("Voy a hacer el jsonresponde")
-        return JsonResponse({'success': False, 'Mensaje': error})
+        return JsonResponse({'success': False, 'Mensajes': message_error})
 
     finally:
         if miConexion3:
             cur3.close()
             miConexion3.close()
+
+
+    # Falta la RUTINA que actualica los cabezotes de la liquidacion
+
+    totalSuministros = LiquidacionDetalle.objects.all().filter(liquidacion_id=registroId.liquidacion_id).filter(examen_id = None).exclude(estadoRegistro='N').aggregate(totalS=Coalesce(Sum('valorTotal'), 0))
+    totalSuministros = (totalSuministros['totalS']) + 0
+    print("totalSuministros", totalSuministros)
+    totalProcedimientos = LiquidacionDetalle.objects.all().filter(liquidacion_id=registroId.liquidacion_id).filter(cums_id = None).exclude(estadoRegistro='N').aggregate(totalP=Coalesce(Sum('valorTotal'), 0))
+    totalProcedimientos = (totalProcedimientos['totalP']) + 0
+    print("totalProcedimientos", totalProcedimientos)
+    registroPago = Liquidacion.objects.get(id=registroId.liquidacion_id)
+    totalCopagos = registroPago.totalCopagos
+    totalCuotaModeradora = registroPago.totalCuotaModeradora
+    totalAnticipos = registroPago.anticipos
+    totalAbonos = registroPago.totalAbonos
+    #valorEnCurso = registroPago.valorEnCurso
+    totalRecibido = registroPago.totalRecibido
+    if totalRecibido == None:
+           totalRecibido=0
+
+    print ("totalRecibido", totalRecibido )
+    totalAnticipos = registroPago.anticipos
+    totalLiquidacion = totalSuministros + totalProcedimientos
+    print("totalLiquidacion", totalLiquidacion)
+    valorApagar = totalLiquidacion -  totalRecibido
+    print("valorApagar", valorApagar)
+
+
+    miConexion3 = None
+    try:
+
+        miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",  password="123456")
+        cur3 = miConexion3.cursor()
+
+        print("Voy a grabar el cabezote")
+
+        comando1 = 'UPDATE facturacion_liquidacion SET "totalSuministros" = ' + str(
+            totalSuministros) + ',"totalProcedimientos" = ' + str(totalProcedimientos) + ', "totalCopagos" = ' + str(
+            totalCopagos) + ' , "totalCuotaModeradora" = ' + str(totalCuotaModeradora) + ', anticipos = ' + str(
+            totalAnticipos) + ' ,"totalAbonos" = ' + str(totalAbonos) + ', "totalLiquidacion" = ' + str(
+            totalLiquidacion) + ', "valorApagar" = ' + str(valorApagar) + ', "totalRecibido" = ' + str(
+            totalRecibido) + ' WHERE id =' + str(registroId.liquidacion_id)
+        cur3.execute(comando1)
+
+        miConexion3.commit()
+        cur3.close()
+        miConexion3.close()
+
+    except psycopg2.DatabaseError as error:
+        print ("Entre por rollback" , error)
+        if miConexion3:
+            print("Entro ha hacer el Rollback")
+            miConexion3.rollback()
+        message_error=str(error)
+        print ("Voy a hacer el jsonresponde")
+        return JsonResponse({'success': False, 'Mensajes': message_error})
+
+    finally:
+        if miConexion3:
+            cur3.close()
+            miConexion3.close()
+
+    return JsonResponse({'success': True, 'Mensajes': 'Registro Actualizado satisfactoriamente!'})
+
 
 def load_dataAbonosFacturacion(request, data):
     print("Entre  load_dataAbonosFacturacion")
@@ -1322,8 +1355,6 @@ def FacturarCuenta(request):
     print ("TipoDoc", usuarioId.tipoDoc_id)
     print ("Consec", usuarioId.consecAdmision)
 
-
-
     totalCirugias=0
 
     fechaRegistro = timezone.now()
@@ -1355,7 +1386,8 @@ def FacturarCuenta(request):
 	    ingresoId = Ingresos.objects.get(tipoDoc_id=usuarioId.tipoDoc_id , documento_id=usuarioId.documento_id ,consec=usuarioId.consecAdmision)
 	    print ("ingresoId = ", ingresoId.id)
 	    flag='INGRESO'
-	    
+
+
     print ("IngresoId", ingresoId.id)
     print("falg" ,flag)
 
@@ -1520,6 +1552,9 @@ def FacturarCuenta(request):
 
         # AQUI ACTUALIZAMOS EL ESTADO DE LA CIRUGIA
 
+        print("tipofactura =", tipoFactura)
+        print("flag =", flag)
+
 
         if (totalCirugias >= 1):
 
@@ -1529,25 +1564,26 @@ def FacturarCuenta(request):
             print(comando10)
             cur3.execute(comando10)
 
+
         if (tipoFactura == 'REFACTURA'):
 
+
             if (flag == 'INGRESO' or flag== 'AMBULATORIO'):
-                comando4 = 'UPDATE facturacion_refacturacion SET "facturaNueva" = ' + "'" +  str(facturacionId) + "'" +  ' WHERE documento_id = ' + "'" + str(ingresoId.documento_id) + "' and " + '"tipoDoc_id" = ' + "'" + str(ingresoId.tipoDoc_id) + "' and " + '"consecAdmision" = ' + "'" + str(ingresoId.consecAdmsion) + "' AND "  + ' "facturaAnulada"  = ' + "'" + + str(ingresoId.factura) + "'"
+                print("facturaInicial = ", ingresoId.factura)
+                comando4 = 'UPDATE facturacion_refacturacion SET "facturaNueva" = ' + "'" +  str(facturacionId) + "'" +  ' WHERE documento_id = ' + "'" + str(ingresoId.documento_id) + "' and " + '"tipoDoc_id" = ' + "'" + str(ingresoId.tipoDoc_id) + "' and " + '"consecAdmision" = ' + "'" + str(ingresoId.consec) + "' AND "  + ' "facturaAnulada"  = ' + "'"  + str(ingresoId.factura) + "'"
                 cur3.execute(comando4)
+                print(comando4)
+
             else:
                 comando4 = 'UPDATE facturacion_refacturacion SET "facturaNueva" = ' + "'" + str(facturacionId) + "'" + ' WHERE "facturaAnulada"   =' + str(TriageId.id)
                 cur3.execute(comando4)
-
 
         miConexion3.commit()
         cur3.close()
         miConexion3.close()
 
-        datosMensaje = {'success': True, 'Mensaje': 'Factura Elaborada  No !'}
-        json_data = json.dumps(datosMensaje, default=str)
-        return HttpResponse(json_data, content_type='application/json')
+        return JsonResponse({'success': True, 'Mensajes': 'Factura Elaborada  No !'})
 
-        #return JsonResponse({'success': True, 'Mensaje': 'Factura Elaborada!', 'Factura' : facturacionId})
 
     except psycopg2.DatabaseError as error:
 
@@ -1557,9 +1593,9 @@ def FacturarCuenta(request):
                 miConexion3.rollback()
 
             print("Voy a hacer el jsonresponde")
-            datosMensaje = {'success': False, 'Mensaje': error}
-            json_data = json.dumps(datosMensaje , default=str)
-            return HttpResponse(json_data, content_type='application/json')
+            message_error= str(error)
+            return JsonResponse({'success': True, 'Mensajes': message_error})
+
 
 
     finally:
@@ -1773,12 +1809,6 @@ def AnularFactura(request):
         miConexion3.commit()
         miConexion3.close()
 
-        datosMensaje = {'success': True, 'Mensaje': 'Factura ANULADA !', 'estadoFactura':'S'}
-        json_data = json.dumps(datosMensaje, default=str)
-        return HttpResponse(json_data, content_type='application/json')
-
-
-        #return JsonResponse({'success': True, 'Mensaje': 'Factura ANULADA !'})
 
     except psycopg2.DatabaseError as error:
         print("Entre por rollback", error)
@@ -1787,7 +1817,8 @@ def AnularFactura(request):
             miConexion3.rollback()
 
         print("Voy a hacer el jsonresponde")
-        return JsonResponse({'success': False, 'Mensaje': error})
+        message_error=str(error)
+        return JsonResponse({'success': False, 'Mensajes': error})
 
     finally:
         if miConexion3:
@@ -1795,7 +1826,7 @@ def AnularFactura(request):
             miConexion3.close()
 
 
-        return JsonResponse({'success': True, 'Mensaje': 'Factura Anulada!'})
+    return JsonResponse({'success': True, 'Mensajes': 'Factura ANULADA !'})
 
 
 def ReFacturar(request):
@@ -1809,9 +1840,7 @@ def ReFacturar(request):
     serviciosAdministrativos = request.POST["serviciosAdministrativos"]
     print ("serviciosAdministrativos", serviciosAdministrativos)
 
-
     facturacionId2 = Facturacion.objects.get(id=facturacionId)
-
 
     fechaRegistro = timezone.now()
 
@@ -2113,20 +2142,20 @@ def TrasladarConvenio(request):
 
         ## Segundo busco los Cups desde y los envio Hasta
         #
-        comando3 = 'INSERT INTO facturacion_liquidaciondetalle ( consecutivo, fecha, cantidad, "valorUnitario", "valorTotal", cirugia_id, "fechaCrea", "fechaModifica", observaciones, "fechaRegistro", "estadoRegistro",examen_id,  "usuarioModifica_id", "usuarioRegistro_id", liquidacion_id, "tipoHonorario_id", "tipoRegistro", "historiaMedicamento_id") select  det.consecutivo, liq.fecha, cantidad, proc."' + str(columnaProcedimientos) + '"' + ', proc."' + str(columnaProcedimientos) + '"' + ' * cantidad, cirugia_id, "fechaCrea", "fechaModifica", liq.observaciones, liq."fechaRegistro", liq."estadoRegistro", examen_id, "usuarioModifica_id", liq."usuarioRegistro_id",' + "'" + str(liquidacionIdHasta.id) + "'" + ' , "tipoHonorario_id",	"tipoRegistro", "historiaMedicamento_id" from facturacion_liquidacion liq  , facturacion_liquidaciondetalle det, contratacion_convenios conv,	  tarifarios_tarifariosdescripcion descrip, tarifarios_tipostarifa tiptar, tarifarios_tarifariosProcedimientos proc where det.liquidacion_id = liq.id and det.liquidacion_id = ' + "'" + str(liquidacionIdDesde.id) + "'" + ' and conv.id = ' + "'" + str(liquidacionIdHasta.convenio_id) + "'" + ' and det."estadoRegistro" = ' + "'" + str('A') + "'" + ' and descrip.id = conv."tarifariosDescripcionProc_id" and tiptar.id = descrip."tiposTarifa_id" and tiptar.id = proc."tiposTarifa_id" and proc."codigoCups_id" = det.examen_id'
+        comando3 = 'INSERT INTO facturacion_liquidaciondetalle ( consecutivo, fecha, cantidad, "valorUnitario", "valorTotal", cirugia_id, "fechaCrea", "fechaModifica", observaciones, "fechaRegistro", "estadoRegistro",examen_id,  "usuarioModifica_id", "usuarioRegistro_id", liquidacion_id, "tipoHonorario_id", "tipoRegistro", "historiaMedicamento_id",anulado) select  det.consecutivo, liq.fecha, cantidad, proc."' + str(columnaProcedimientos) + '"' + ', proc."' + str(columnaProcedimientos) + '"' + ' * cantidad, cirugia_id, "fechaCrea", "fechaModifica", liq.observaciones, liq."fechaRegistro", liq."estadoRegistro", examen_id, "usuarioModifica_id", liq."usuarioRegistro_id",' + "'" + str(liquidacionIdHasta.id) + "'" + ' , "tipoHonorario_id",	"tipoRegistro", "historiaMedicamento_id", ' + "'" + str('N') + "'" + ' from facturacion_liquidacion liq  , facturacion_liquidaciondetalle det, contratacion_convenios conv,	  tarifarios_tarifariosdescripcion descrip, tarifarios_tipostarifa tiptar, tarifarios_tarifariosProcedimientos proc where det.liquidacion_id = liq.id and det.liquidacion_id = ' + "'" + str(liquidacionIdDesde.id) + "'" + ' and conv.id = ' + "'" + str(liquidacionIdHasta.convenio_id) + "'" + ' and det."estadoRegistro" = ' + "'" + str('A') + "'" + ' and descrip.id = conv."tarifariosDescripcionProc_id" and tiptar.id = descrip."tiposTarifa_id" and tiptar.id = proc."tiposTarifa_id" and proc."codigoCups_id" = det.examen_id'
         print("comando = ", comando3)
         curt.execute(comando3)
 
 
         ## Tercero busco los Cums desde y los envio Hasta
 
-        comando4 = 'INSERT INTO facturacion_liquidaciondetalle ( consecutivo, fecha, cantidad, "valorUnitario", "valorTotal", cirugia_id, "fechaCrea", "fechaModifica", observaciones, "fechaRegistro", "estadoRegistro",cums_id,  "usuarioModifica_id", "usuarioRegistro_id", liquidacion_id, "tipoHonorario_id", "tipoRegistro", "historiaMedicamento_id") select  det.consecutivo, liq.fecha, cantidad, sum.' + '"' + str(columnaSuministros) + '"' + ', sum."' + str(columnaSuministros) + '"'  + ' * cantidad, cirugia_id, "fechaCrea", "fechaModifica", liq.observaciones, liq."fechaRegistro", liq."estadoRegistro", cums_id, "usuarioModifica_id", liq."usuarioRegistro_id",' + "'" + str(liquidacionIdHasta.id) + "'" + ' , "tipoHonorario_id",	"tipoRegistro", "historiaMedicamento_id" from facturacion_liquidacion liq  , facturacion_liquidaciondetalle det, contratacion_convenios conv,	  tarifarios_tarifariosdescripcion descrip, tarifarios_tipostarifa tiptar, tarifarios_tarifariosSuministros sum where det.liquidacion_id = liq.id and det.liquidacion_id = ' + "'" + str(liquidacionIdDesde.id) + "'" + ' and conv.id = ' + "'" + str(liquidacionIdHasta.convenio_id) + "'" + ' and det."estadoRegistro" =  ' + "'" + str('A') + "'" + ' and descrip.id = conv."tarifariosDescripcionSum_id" and tiptar.id = descrip."tiposTarifa_id" and tiptar.id = sum."tiposTarifa_id" and sum."codigoCum_id" = det.cums_id'
+        comando4 = 'INSERT INTO facturacion_liquidaciondetalle ( consecutivo, fecha, cantidad, "valorUnitario", "valorTotal", cirugia_id, "fechaCrea", "fechaModifica", observaciones, "fechaRegistro", "estadoRegistro",cums_id,  "usuarioModifica_id", "usuarioRegistro_id", liquidacion_id, "tipoHonorario_id", "tipoRegistro", "historiaMedicamento_id", anulado) select  det.consecutivo, liq.fecha, cantidad, sum.' + '"' + str(columnaSuministros) + '"' + ', sum."' + str(columnaSuministros) + '"'  + ' * cantidad, cirugia_id, "fechaCrea", "fechaModifica", liq.observaciones, liq."fechaRegistro", liq."estadoRegistro", cums_id, "usuarioModifica_id", liq."usuarioRegistro_id",' + "'" + str(liquidacionIdHasta.id) + "'" + ' , "tipoHonorario_id",	"tipoRegistro", "historiaMedicamento_id", ' + "'" + str('N') + "'" + ' from facturacion_liquidacion liq  , facturacion_liquidaciondetalle det, contratacion_convenios conv,	  tarifarios_tarifariosdescripcion descrip, tarifarios_tipostarifa tiptar, tarifarios_tarifariosSuministros sum where det.liquidacion_id = liq.id and det.liquidacion_id = ' + "'" + str(liquidacionIdDesde.id) + "'" + ' and conv.id = ' + "'" + str(liquidacionIdHasta.convenio_id) + "'" + ' and det."estadoRegistro" =  ' + "'" + str('A') + "'" + ' and descrip.id = conv."tarifariosDescripcionSum_id" and tiptar.id = descrip."tiposTarifa_id" and tiptar.id = sum."tiposTarifa_id" and sum."codigoCum_id" = det.cums_id'
         print("comando = ", comando4)
         curt.execute(comando4)
 
         # Ops fata Anular todo el detalle de la cuenta donde estaba
 
-        comando5 = 'UPDATE facturacion_liquidaciondetalle set "estadoRegistro" = ' + "'" +str('N') + "'," + '"fechaRegistro" = ' + "'" + str(fechaRegistro) + "' WHERE liquidacion_id = " + "'" + str(liquidacionIdDesde.id) + "'"
+        comando5 = 'UPDATE facturacion_liquidaciondetalle set anulado=' + "'" + str('S') + "'" + '"fechaRegistro" = ' + "'" + str(fechaRegistro) + "' WHERE liquidacion_id = " + "'" + str(liquidacionIdDesde.id) + "'"
         print("comando = ", comando5)
         curt.execute(comando5)
 
@@ -2144,12 +2173,9 @@ def TrasladarConvenio(request):
             print("Entro ha hacer el Rollback")
             miConexiont.rollback()
 
-
+        message_error=error
         print ("Voy a hacer el jsonresponde")
-
-        datosMensaje = {'success': True, 'Mensaje': error}
-        json_data = json.dumps(datosMensaje, default=str)
-        return HttpResponse(json_data, content_type='application/json')
+        return JsonResponse({'success': False, 'Mensajes': error})
 
     finally:
         if miConexiont:
@@ -2158,14 +2184,19 @@ def TrasladarConvenio(request):
 
     print ("Voy a grabar el cabezote")
 
-    totalSuministros = LiquidacionDetalle.objects.all().filter(liquidacion_id=liquidacionIdHasta.id).filter(examen_id = None).exclude(estadoRegistro='N').aggregate(totalS=Coalesce(Sum('valorTotal'), 0))
+    totalSuministros = LiquidacionDetalle.objects.all().filter(liquidacion_id=liquidacionIdHasta.id).filter(examen_id = None).exclude(anulado='S').aggregate(totalS=Coalesce(Sum('valorTotal'), 0))
     totalSuministros = (totalSuministros['totalS']) + 0
     print("totalSuministros", totalSuministros)
-    totalProcedimientos = LiquidacionDetalle.objects.all().filter(liquidacion_id=liquidacionIdHasta.id).filter(cums_id = None).exclude(estadoRegistro='N').aggregate(totalP=Coalesce(Sum('valorTotal'), 0))
+    totalProcedimientos = LiquidacionDetalle.objects.all().filter(liquidacion_id=liquidacionIdHasta.id).filter(cums_id = None).exclude(anulado='S').aggregate(totalP=Coalesce(Sum('valorTotal'), 0))
     totalProcedimientos = (totalProcedimientos['totalP']) + 0
     print("totalProcedimientos", totalProcedimientos)
     registroPago = Liquidacion.objects.get(id=liquidacionIdHasta.id)
     totalCopagos = registroPago.totalCopagos
+    totalRecibido=0
+    totalRecibido = registroPago.totalRecibido
+    totalAnticipos = registroPago.anticipos
+
+
     if (totalCopagos==None):
         totalCopagos=0
 
@@ -2173,17 +2204,15 @@ def TrasladarConvenio(request):
     if (totalCuotaModeradora==None):
         totalCuotaModeradora=0
     totalAnticipos = registroPago.anticipos
+
     if (totalRecibido==None):
         totalRecibido=0
+
     totalAbonos = registroPago.totalAbonos
     if (totalAbonos==None):
         totalAbonoso=0
 
     #valorEnCurso = registroPago.valorEnCurso
-    totalRecibido = registroPago.totalRecibido
-
-
-    totalAnticipos = registroPago.anticipos
 
     totalLiquidacion = float(totalSuministros) + float(totalProcedimientos)
     print("totalLiquidacion", totalLiquidacion)
@@ -2206,15 +2235,19 @@ def TrasladarConvenio(request):
             totalLiquidacion) + "'" + ', "valorApagar" = ' + "'" + str(valorApagar) +"'" + ', "totalRecibido" = ' + "'" +  str(
             totalRecibido) + "'"  + ' WHERE id =' + str(liquidacionIdHasta.id)
         curt.execute(comando)
+
+        comando = 'UPDATE facturacion_liquidacion SET "totalSuministros" = 0,"totalProcedimientos" =0 , "totalCopagos" = 0, "totalCuotaModeradora" = 0 anticipos = 0, "totalAbonos" = 0, "totalLiquidacion" = 0, "valorApagar" = 0 , "totalRecibido" = 0 WHERE id =' + str(liquidacionIdDesde.id)
+
+        curt.execute(comando)
         miConexiont.commit()
         curt.close()
         miConexiont.close()
 
         # Rutina Guarda en cabezote los totales
 
-        datosMensaje = {'success': True, 'Mensaje': 'Traslado realizado satisfactoriamente!'}
-        json_data = json.dumps(datosMensaje, default=str)
-        return HttpResponse(json_data, content_type='application/json')
+
+        print ("Voy a hacer el jsonresponde")
+        return JsonResponse({'success': False, 'Mensajes': 'Traslado realizado satisfactoriamente!'})
 
 
     except psycopg2.DatabaseError as error:
@@ -2224,7 +2257,8 @@ def TrasladarConvenio(request):
             miConexiont.rollback()
 
         print("Voy a hacer el jsonresponde")
-        return JsonResponse({'success': False, 'Mensaje': error})
+        message_error=str(error)
+        return JsonResponse({'success': False, 'Mensajes': error})
 
     finally:
         if miConexiont:
@@ -2387,15 +2421,27 @@ def load_dataReFacturacion(request, data):
     print ("sede:", sede)
     print ("username:", username)
     print ("username_id:", username_id)
-    facturacionId = d['facturacionId']
+    tipoIngreso = d['tipoIngreso']
+    ingreso = d['ingresoId']
+    triage = d['triageId']
+    print("ingreso:", ingreso)
+
 
     reFacturacion = []
 
     miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",     password="123456")
     curx = miConexionx.cursor()
 
+    if (tipoIngreso=='INGRESO'):
+
+        ingresoId= Ingresos.objects.get(id=ingreso)
        
-    detalle = 'SELECT fac.id id , fac.fecha fecha,fac."facturaNueva" , fac."facturaAnulada"  , serv.nombre servicio FROM facturacion_refacturacion fac LEFT JOIN sitios_serviciosadministrativos serv  ON (serv.id= fac."serviciosAdministrativos_id") WHERE fac."facturaAnulada" = ' + "'" + str(facturacionId) + "'"
+        detalle = 'SELECT fac.id id , fac.fecha fecha,fac."facturaNueva" , fac."facturaAnulada"  , serv.nombre servicio FROM facturacion_refacturacion fac LEFT JOIN sitios_serviciosadministrativos serv  ON (serv.id= fac."serviciosAdministrativos_id") WHERE fac."tipoDoc_id" = ' + "'" + str(ingresoId.tipoDoc_id) + "' and fac.documento_id = " + "'" + str(ingresoId.documento_id) + "'"
+
+    else:
+        print("estriage")
+        triageId = Triage.objects.get(id=triage)
+        pass
 
     print("detalle = ", detalle)
 

@@ -969,26 +969,24 @@ window.addEventListener('load', async () => {
        
 			document.getElementById("tipoIngreso").value = data.tipo;
 
+
 			if (data.tipo == 'INGRESO')
 			{
-
 		        data2['ingresoId'] = ingresoId;
 			data2['tipoIngreso'] = 'INGRESO'
-
-
+			data2['triageId'] ='';
 			}
 			else
 			{
 		        data2['triageId'] = data.triageId1;
 			data2['tipoIngreso'] = 'TRIAGE'
-
-
+			data2['ingresoId'] ='';
 			}
 
 		        data2 = JSON.stringify(data2);
 
 
-			document.getElementById("mensajesError").innerHTML = data.Mensaje;
+			document.getElementById("mensajesError").value = data.Mensajes;
 
 		            arrancaLiquidacion(2,data2);
 	  	            dataTableLiquidacionDetalleInitialized = true;
@@ -996,10 +994,13 @@ window.addEventListener('load', async () => {
 	       		     arrancaLiquidacion(4,data2);
 			     dataTableFacAbonosInitialized = true;
 
+	       		     arrancaLiquidacion(6,data2);
+			     dataTableFacRefacturacionInitialized = true;
+
 
                   },
 	   	        error: function(data){
-		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+		       		document.getElementById("mensajesError").value =  data.responseText
 			        },
 	     });
 
@@ -1032,20 +1033,20 @@ window.addEventListener('load', async () => {
 
 			if (data.success == true)
 			 {
-			  document.getElementById("mensajes").innerHTML = data.Mensaje;
+			  document.getElementById("mensajes").value = data.Mensajes;
 			 }
 			else
 			{
-			document.getElementById("mensajesError").innerHTML = data.Mensaje;
+			document.getElementById("mensajesError").value = data.Mensajes;
 			return;
 			}
 
 			 $('#pk').val(data.pk);
-				document.getElementById("mensajes").innerHTML = data.Mensaje;	       	     
+		       	     
 
                   },
 	   	        error: function(data){
-		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+		       		document.getElementById("mensajesError").value =  data.responseText
 			        },
 	     });
 
@@ -1138,10 +1139,10 @@ $('#RvalorAPagarLetras').val(data.valorAPagarLetras);
 		    dataTableReFacturacionInitialized = true;
 		
 
-			// document.getElementById("mensajesError").innerHTML = data.Mensaje
+
                   },
 	   	        error: function(data){
-		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+		       		document.getElementById("mensajesError").value =  data.responseText
 			        },
 	     });
 
@@ -1168,11 +1169,11 @@ $('#RvalorAPagarLetras').val(data.valorAPagarLetras);
 		         $('#modelHeadingAplique').html("Aplicar abono a Factura");
 			if (data.success == true)
 			 {
-			  document.getElementById("mensajes").innerHTML = data.Mensaje;
+			  document.getElementById("mensajes").value = data.Mensajes;
 			 }
 			else
 			{
-			document.getElementById("mensajesError").innerHTML = data.Mensaje;
+			document.getElementById("mensajesError").value = data.Mensajes;
 			return;
 			}
 			
@@ -1217,7 +1218,7 @@ $('#RvalorAPagarLetras').val(data.valorAPagarLetras);
 
                 },
                     error: function(data){
-		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+		       		document.getElementById("mensajesError").value =  data.responseText
 			        },
             });
 
@@ -1265,11 +1266,11 @@ $('#RvalorAPagarLetras').val(data.valorAPagarLetras);
 
 			if (data.success == true)
 			 {
-			  document.getElementById("mensajes").innerHTML = data.Mensaje;
+			  document.getElementById("mensajes").value = data.Mensajes;
 			 }
 			else
 			{
-			document.getElementById("mensajesError").innerHTML = data.Mensaje;
+			document.getElementById("mensajesError").value = data.Mensajes;
 			return;
 			}
 
@@ -1299,7 +1300,7 @@ $('#RvalorAPagarLetras').val(data.valorAPagarLetras);
 
                 },
                              error: function(data){
-		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+		       		document.getElementById("mensajesError").value =  data.responseText
 			        },
 
             });
@@ -1347,11 +1348,11 @@ $('#RvalorAPagarLetras').val(data.valorAPagarLetras);
 
 			if (data.success == true)
 			 {
-			  document.getElementById("mensajes").innerHTML = data.Mensaje;
+			  document.getElementById("mensajes").value = data.Mensajes;
 			 }
 			else
 			{
-			document.getElementById("mensajesError").innerHTML = data.Mensaje;
+			document.getElementById("mensajesError").value = data.Mensajes;
 			return;
 			}
 
@@ -1385,7 +1386,7 @@ $('#RvalorAPagarLetras').val(data.valorAPagarLetras);
  		 $('#crearAbonosModelFacturacion').modal('hide');
                 },
                     error: function(data){
-		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+		       		document.getElementById("mensajesError").value =  data.responseText
 			        },
 
             });
@@ -1409,19 +1410,6 @@ $('#RvalorAPagarLetras').val(data.valorAPagarLetras);
 	           dataType : 'json',
 	  		success: function (data) {
 		// alert("de regreso" + JSON.stringify(data));
-
-
-	//		if (data.success == true)
-	//		 {
-	//		  document.getElementById("mensajes").innerHTML = data.Mensaje;
-	//		 }
-	//		else
-	//		{
-	//		alert("error=" + data.Mensaje);
-	
-	//		document.getElementById("mensajesError").innerHTML = data.Mensaje;
-	//		return;
-	//		}
 
 
 			 $('#pk').val(data.pk);
@@ -1476,7 +1464,7 @@ $('#RvalorAPagarLetras').val(data.valorAPagarLetras);
 
                   },
 	   	                    error: function(data){
-		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+		       		document.getElementById("mensajesError").value =  data.responseText
 			        },
 
 	     });
@@ -1509,11 +1497,11 @@ $('#RvalorAPagarLetras').val(data.valorAPagarLetras);
 
 			if (data.success == true)
 			 {
-			  document.getElementById("mensajes").innerHTML = data.Mensaje;
+			  document.getElementById("mensajes").value = data.Mensajes;
 			 }
 			else
 			{
-			document.getElementById("mensajesError").innerHTML = data.Mensaje;
+			document.getElementById("mensajesErrorModelLiquidacionDetalle").value = data.Mensajes;
 			return;
 			}
                         $('#crearModelLiquidacionDetalle').modal('hide');
@@ -1545,11 +1533,11 @@ $('#RvalorAPagarLetras').val(data.valorAPagarLetras);
 			LeerTotales();
 
 
-			document.getElementById("mensajesError").innerHTML = data.message;
+			document.getElementById("mensajesError").value = data.Mensajes;
 
                 },
                              error: function(data){
-		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+		       		document.getElementById("mensajesError").valueL =  data.responseText
 			        },
 
             });
@@ -1584,11 +1572,11 @@ $('#RvalorAPagarLetras').val(data.valorAPagarLetras);
 
 			if (data.success == true)
 			 {
-			  document.getElementById("mensajes").innerHTML = data.Mensaje;
+			  document.getElementById("mensajes").value = data.Mensajes;
 			 }
 			else
 			{
-			document.getElementById("mensajesError").innerHTML = data.Mensaje;
+			document.getElementById("mensajesError").value = data.Mensajes;
 			return;
 			}
 
@@ -1615,10 +1603,10 @@ $('#RvalorAPagarLetras').val(data.valorAPagarLetras);
 		    dataTableFacAbonosInitialized = true;
 		   			
 
-			document.getElementById("mensajesError").innerHTML = data.message;
+			document.getElementById("mensajesError").value = data.Mensajes;
                     },
 	   		                     error: function(data){
-		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+		       		document.getElementById("mensajesError").value =  data.responseText
 			        },
 
 	           });
@@ -1653,11 +1641,11 @@ $('#RvalorAPagarLetras').val(data.valorAPagarLetras);
 
 			if (data.success == true)
 			 {
-			  document.getElementById("mensajes").innerHTML = data.Mensaje;
+			  document.getElementById("mensajes").value = data.Mensajes;
 			 }
 			else
 			{
-			document.getElementById("mensajesError").innerHTML = data.Mensaje;
+			document.getElementById("mensajesError").value = data.Mensajes;
 			return;
 			}
 
@@ -1685,10 +1673,10 @@ $('#RvalorAPagarLetras').val(data.valorAPagarLetras);
 
 			LeerTotales();
 
-			document.getElementById("mensajesError").innerHTML = data.message;
+			document.getElementById("mensajesError").value = data.Mensajes;
                     },
 	   	                    error: function(data){
-		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+		       		document.getElementById("mensajesError").value =  data.responseText
 			        },
 
 	           });
@@ -1724,18 +1712,17 @@ function AFacturar()
 
 	if (salidaDefinitiva=='R')
 		{
-			tipoFactura= 'REFACTURA';
+			var tipoFactura= 'REFACTURA';
 			alert(" ES REFACTURA : ");
 		}
 
 	else
 		{
-			tipoFactura= 'FACTURA';
+			vartipoFactura= 'FACTURA';
 			alert(" ES FACTURA : ");
 		}
 
 
-	var tipoFactura = document.getElementById("tipoFactura").value;
 	var sede = document.getElementById("sede").value;
 
         var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
@@ -1758,11 +1745,11 @@ function AFacturar()
 
 			if (data.success == true)
 			 {
-			  document.getElementById("mensajes").innerHTML = data.Mensaje;
+			  document.getElementById("mensajes").value = data.Mensajes;
 			 }
 			else
 			{
-			document.getElementById("mensajesError").innerHTML = data.Mensaje;
+			document.getElementById("mensajesError").value = data.Mensajes;
 			return;
 			}					
 
@@ -1824,7 +1811,7 @@ function AFacturar()
 		
                   },
 	                      error: function(data){
-		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+		       		document.getElementById("mensajesError").value =  data.responseText
 			        },
 
 	     });
@@ -1863,11 +1850,11 @@ function AdicionarLiquidacion()
 
 			if (data.success == true)
 			 {
-			  document.getElementById("mensajes").innerHTML = data.Mensaje;
+			  document.getElementById("mensajes").value = data.Mensajes;
 			 }
 			else
 			{
-			document.getElementById("mensajesError").innerHTML = data.Mensaje;
+			document.getElementById("mensajesError").value = data.Mensajes;
 			return;
 			}
 
@@ -1902,11 +1889,11 @@ function AdicionarLiquidacion()
 	         document.getElementById("valorTotal").value = '';
 	         document.getElementById("lobservaciones").value = '';
 
-			document.getElementById("mensajesError").innerHTML = data.message;
+			document.getElementById("mensajesError").value = data.Mensajes;
 
                   },
 	   	                    error: function(data){
-		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+		       		document.getElementById("mensajesError").value =  data.responseText
 			        },
 
 	     });
@@ -1937,10 +1924,10 @@ function LeerTotales()
 		$('#totalAbonos').val(data.totalAbonos);
 
 
-			document.getElementById("mensajesError").innerHTML = data.message;
+			document.getElementById("mensajesError").value = data.Mensajes;
                   },
 	   	                    error: function(data){
-		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+		       		document.getElementById("mensajesError").value =  data.responseText
 			        },
 
 	     });
@@ -1967,15 +1954,15 @@ function AnularFactura()
 	           type: 'POST',
 	           dataType : 'json',
 	  		success: function (data) {
-
+			
 
 			if (data.success == true)
 			 {
-			  document.getElementById("mensajes").innerHTML = data.Mensaje;
+			  document.getElementById("mensajes").value = data.Mensajess;
 			 }
 			else
 			{
-			document.getElementById("mensajesError").innerHTML = data.Mensaje;
+			document.getElementById("mensajesError").value = data.Mensajes;
 			return;
 			}
 
@@ -2025,7 +2012,7 @@ function AnularFactura()
 
                   },
 	   	                    error: function(data){
-		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+		       		document.getElementById("mensajesError").value =  data.responseText
 			        },
 
 	     });
@@ -2058,11 +2045,11 @@ function ReFacturar()
 
 			if (data.success == true)
 			 {
-			  document.getElementById("mensajes").innerHTML = data.Mensaje;
+			  document.getElementById("mensajes").value = data.Mensajes;
 			 }
 			else
 			{
-			document.getElementById("mensajesError").innerHTML = data.Mensaje;
+			document.getElementById("mensajesError").valueL = data.Mensajes;
 			return;
 			}
 
@@ -2083,6 +2070,11 @@ function ReFacturar()
 		        data2 = JSON.stringify(data2);
 
 
+
+        arrancaLiquidacion(1,data2);
+	    dataTableFacturacionInitialized = true;
+
+
         arrancaLiquidacion(3,data2);
 	    dataTableFacturacionInitialized = true;
 
@@ -2091,7 +2083,7 @@ function ReFacturar()
 
                   },
 	   	                    error: function(data){
-		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+		       		document.getElementById("mensajesError").value =  data.responseText
 			        },
 
 	     });
@@ -2149,7 +2141,7 @@ function RefrescarLiquidacionDetalle()
 
                   },
 	                       error: function(data){
-		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+		       		document.getElementById("mensajesError").value =  data.responseText
 			        },
 
 	     });
@@ -2245,11 +2237,11 @@ function TrasladoConvenio()
 
 			if (data.success == true)
 			 {
-			  document.getElementById("mensajes").innerHTML = data.Mensaje;
+			  document.getElementById("mensajes").value = data.Mensajes;
 			 }
 			else
 			{
-			document.getElementById("mensajesError").innerHTML = data.Mensaje;
+			document.getElementById("mensajesError").value = data.Mensajes;
 			return;
 			}
 
@@ -2274,12 +2266,11 @@ function TrasladoConvenio()
             	    dataTableLiquidacionDetalleInitialized = true;
 
 
-			document.getElementById("mensajes").innerHTML = data.message;
 
 
                   },
 	   	                    error: function(data){
-		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+		       		document.getElementById("mensajesError").value =  data.responseText
 			        },
 
 	     });

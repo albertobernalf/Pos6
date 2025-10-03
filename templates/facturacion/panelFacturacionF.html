@@ -856,7 +856,9 @@ div.dataTables_filter input {
                                     <input type="text" id="ldtipoRegistro" name="ldtipoRegistro" value="MANUAL" readonly> </input>
                                 </div>
                                 <div class="col-sm-offset-2 col-sm-10 mt-2">
-		 <span id="mensajesErrorModelLiquidacionDetalle" name="mensajesErrorModelLiquidacionDetalle" > </span>
+
+		<textarea id="mensajesErrorModelLiquidacionDetalle" name="mensajesErrorModelLiquidacionDetalle" style="background-color: lightred; color: navy;"  rows="1" cols="60" placeholder="Mensajes..."  wrap="hard"></textarea>
+
                                     <button type="submit" class="btn btn-primary" id="saveBtnCrearLiquidacionDetalle" 
                                             value="create">Guardar
                                     </button>
@@ -1118,7 +1120,9 @@ div.dataTables_filter input {
 					</div>
                                 </div>
                                 <div class="col-sm-offset-2 col-sm-10 mt-2">
-		 <span id="mensajesErrorAbonosModelFacturacion" name="mensajesErrorAbonosModelFacturacion" > </span>
+
+	<textarea id="mensajesErrorAbonosModelFacturacion" name="mensajesErrorAbonosModelFacturacion" style="background-color: lightred; color: navy;"  rows="1" cols="180" placeholder="Mensajes..."  wrap="hard"></textarea>
+
                                     <button type="button" class="btn btn-primary" id="saveBtnCrearAbonosFacturacion" name = "saveBtnCrearAbonosFacturacion"
                                             value="create">Guardar
                                     </button>
@@ -1238,7 +1242,8 @@ div.dataTables_filter input {
 
 
                                 <div class="col">
-			 <span id="mensajesErrorModalCrearAplique" name="mensajesErrorModalCrearAplique" > </span>
+
+			<textarea id="mensajesErrorModalCrearAplique" name="mensajesErrorModalCrearAplique" style="background-color: lightred; color: navy;"  rows="1" cols="180" placeholder="Mensajes..."  wrap="hard"></textarea>
                                     <button type="button" class="btn btn-primary" id="saveBtnApliqueAbonosFacturacion" name="saveBtnApliqueAbonosFacturacion"  value="create">Guardar
                                     </button>
                                 </div>
@@ -1393,8 +1398,10 @@ div.dataTables_filter input {
 
 {% block mensajeria %}
 <div class="marco">
-     <span id="mensajes" name="mensajes" style= "color:blue; font-size:18px; line-height:35px; font-family: Calibri;" > </span>
-     <span id="mensajesError" name="mensajesError" style= "color:red; font-size:18px; line-height:35px; font-family: Calibri;" > </span>
+
+	<textarea id="mensajes" name="mensajes" style="background-color: lightblue; color: navy;"  rows="1" cols="180" placeholder="Mensajes..."  wrap="hard"></textarea>
+	<textarea id="mensajesError" name="mensajesError" style="background-color: lightred; color: navy;"  rows="1" cols="180" placeholder="Mensajes..."  wrap="hard"></textarea>
+
 
 
 </div>

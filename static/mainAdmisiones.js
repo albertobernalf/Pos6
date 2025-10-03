@@ -45,7 +45,10 @@ $(document).ready(function() {
             .search(searchValue[1]) // Segundo término de búsqueda
             .draw();
     });
-marcarRegistroInicial();
+
+
+
+
 });
 
 function arrancaAdmisiones(valorTabla,valorData)
@@ -3442,3 +3445,5 @@ function ActivarFurips()
  $('#modalFurips').modal('show');
 
         }
+
+

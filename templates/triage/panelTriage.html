@@ -337,7 +337,8 @@ function RefrescarPantalla() {
 
                                 </div>
                                 <div class="modal-footer">
-					  <span id="mensajesErrorTriage" name="mensajesErrorModalUsuario" style= "color:red; font-size:15px; line-height:35px; font-family: Times Neww Roman;" > </span>
+					  
+						<textarea id="mensajesErrorTriage" name="mensajesErrorTriage" style="background-color: lightred; color: navy;"  rows="2" cols="160" placeholder="Mensajes..."  wrap="hard"></textarea>
                                    	  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar   </button>
 				 <input type="button" class="btn btn-primary" value="save"
                                            onclick="guardaTriageModal()">
@@ -541,7 +542,7 @@ function RefrescarPantalla() {
                                                 </div>
 
 				<div class="col">
-                                        <label for="conveniosT" class="col-sm-1 col-form-label col-form-label-sm">Convenio:</label>
+                                        <label for="conveniosT" class="col-sm-10 col-form-label col-form-label-sm">Convenio:</label>
                                         <div class="col-sm-4">
                                             <select autofocus   class="select-css " tabindex= "0" 
                                                     aria-label="" id="conveniosT"
@@ -839,7 +840,8 @@ function RefrescarPantalla() {
                                 {% endif %}
 
                                 <div class="row justify-content-center">
-                                    <div class="form-row">
+				<!-- <div class="row row-cols-8 mt-3"> -->
+                                    <div class="form-row"> 
                                         <div class="col">
 						<div class="col-sm-8">					
                                             <label for="busServicioT" class="col-sm-1 control-label">Servicio:</label>
@@ -897,8 +899,8 @@ function RefrescarPantalla() {
 
 				  <div class="col">
                                         <label for="serviciosAdministrativos" class="col-sm-1 control-label">SeviciosAdmon:</label>
-                                        <div class="col-sm-8">
-                                            <select class="select-css h-40 w-10" id="serviciosAdministrativos"  tabindex= "0"
+                                        <div class="col-sm-4">
+                                            <select class="select-css h-10 w-10" id="serviciosAdministrativos"  tabindex= "0"
                                                     name="serviciosAdministrativos"
                                                     required>
                                                 {% for serviciosAdministrativos in ServiciosAdministrativos %}
@@ -909,16 +911,12 @@ function RefrescarPantalla() {
 
                                     </div>
 
-
-
 				<!-- desde aui empresas convenios -->
 
 				   <div class="col">
-                                                    <label for="empresasTE"
-                                                           class="col-sm-1 col-form-label col-form-label-sm">Empresas:</label>
+                                                    <label for="empresasTE"  class="col-sm-1 control-label">Empresas:</label>
                                                     <div class="col-sm-4">
-                                                        <select class="form-select  h-10 w-100 form-control form-control-sm"
-                                                                aria-label="" id="empresasTE" name="empresasTE" required>
+                                                        <select class="form-select  h-10 w-10  aria-label="" id="empresasTE" name="empresasTE" required>
                                                             {% for empresas in Empresas %}
                                                             <option value="{{empresas.id}}"> {{empresas.nombre}}
                                                             </option>
@@ -930,9 +928,9 @@ function RefrescarPantalla() {
 				<div class="col">
                                         <label for="conveniosTE" class="col-sm-1 col-form-label col-form-label-sm">Convenio:</label>
                                         <div class="col-sm-4">
-                                            <select autofocus   class="select-css " tabindex= "0" 
-                                                    aria-label="" id="conveniosTE"
-                                                    name="conveniosTE" >
+
+						 <select  autofocus class="form-select  h-10 w-10 form-control form-control-sm" tabindex= "0" 
+                                                                aria-label="" id="conveniosTE" name="conveniosTE" required>
                                                 {% for conveniosEmpresas in ConveniosEmpresas %}
                                                 <option value="{{conveniosEmpresas.id}}"> {{conveniosEmpresas.nombre}}</option>
                                                 {% endfor %}
@@ -1272,7 +1270,8 @@ function RefrescarPantalla() {
                                         </div> <!-- Cierra row -->
                                     </div> <!-- Cierra body -->
                                     <div class="modal-footer">
-			 <span id="mensajesErrorModalUsuario" name="mensajesErrorModalUsuario" style= "color:red; font-size:18px; line-height:35px; font-family: Calibri;" > </span>
+						<textarea id="mensajesErrorModalUsuario" name="mensajesErrorModalUsuario" style="background-color: lightred; color: navy;"  rows="2" cols="160" placeholder="Mensajes..."  wrap="hard"></textarea>
+
                                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar   </button>
 
                                          <input type="button" class="btn btn-primary" value="save"  onclick="AUsuarioTriage()"> 
@@ -1299,8 +1298,9 @@ function RefrescarPantalla() {
 
 {% block mensajeria %}
 <div class="marco">
-     <span id="mensajes" name="mensajes" class="mensajes" value="" ></span>
-     <span id="mensajesError" name="mensajesError" class="mensajesError" value=""> </span>
+
+	<textarea id="mensajes" name="mensajes" style="background-color: lightblue; color: navy;"  rows="1" cols="180" placeholder="Mensajes..."  wrap="hard"></textarea>
+	<textarea id="mensajesError" name="mensajesError" style="background-color: lightred; color: navy;"  rows="1" cols="180" placeholder="Mensajes..."  wrap="hard"></textarea>
 
 </div>
 {% endblock %}

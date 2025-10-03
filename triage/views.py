@@ -31,8 +31,7 @@ from clinico.models import Servicios, Medicos, EspecialidadesMedicos
 from triage.viewsReportes import ImprimirAtencionInicialUrgencias, ImprimirHojaAdmision, ImprimirManilla, ImprimirTriage, ImprimirTriageParametro
 from facturacion.models import ConveniosPacienteIngresos
 from contratacion.models import Convenios
-#from enfermeria.models import Enfermeria
-#from farmacia.models import Farmacia
+
 
 # Create your views here.
 
@@ -1231,11 +1230,11 @@ def crearTriage(request):
         except Exception as e:
             # Aquí ya se hizo rollback automáticamente
             print("Se hizo rollback por:", e)
-            # return JsonResponse({'success': False, 'Mensaje': e})
-            # return HttpResponse (e)
-            context['Mensajes'] = e
-            context['messages'] = e
+            error_message = str(e)
+            context['Mensajes'] = error_message
             print("context = ",  context['Mensajes'])
+
+
         
 
             return render(request, "triage/panelTriage.html", context)
@@ -2122,7 +2121,9 @@ def grabaUsuariosTriage(request):
         if miConexion3:
             print("Entro ha hacer el Rollback")
             miConexion3.rollback()
-        raise error
+        error_message = str(error)
+        return JsonResponse({'success': False, 'Mensajes':  error_message}, status=500)
+
 
 
     finally:
@@ -2195,7 +2196,8 @@ def grabaTriageModal(request):
             if miConexion3:
                 print("Entro ha hacer el Rollback")
                 miConexion3.rollback()
-            raise error
+            error_message = str(error)
+            return JsonResponse({'success': False, 'Mensajes':  error_message}, status=500)
 
 
         finally:
@@ -2227,7 +2229,7 @@ def admisionTriageModal(request):
                                    password="123456")
     curt = miConexiont.cursor()
     comando = 'SELECT ser.id id ,ser.nombre nombre FROM sitios_serviciosSedes sed, clinico_servicios ser Where sed."sedesClinica_id" =' + "'" + str(
-        sede) + "'" + ' AND sed."servicios_id" = ser.id AND ser.nombre != ' + "'" + str('TRIAGE') + "'"
+        sede) + "'" + ' AND sed."servicios_id" = ser.id AND ser.nombre != ' + "'" + str('TRIAGE') + "' AND ser.nombre !=  'AMBULATORIO' "
     curt.execute(comando)
     print(comando)
 
@@ -2250,7 +2252,7 @@ def admisionTriageModal(request):
                                    password="123456")
     curt = miConexiont.cursor()
     comando = 'SELECT sub.id id ,sub.nombre nombre  FROM sitios_serviciosSedes sed, clinico_servicios ser  , sitios_subserviciossedes sub Where sed."sedesClinica_id" =' + "'" + str(
-        sede) + "'" + ' AND sed."servicios_id" = ser.id and  sed."sedesClinica_id" = sub."sedesClinica_id" and sed.id = sub."serviciosSedes_id" and sed.servicios_id = ser.id and sub."serviciosSedes_id" = sed.id AND ser.nombre != ' + "'" + str('TRIAGE') + "'"
+        sede) + "'" + ' AND sed."servicios_id" = ser.id and  sed."sedesClinica_id" = sub."sedesClinica_id" and sed.id = sub."serviciosSedes_id" and sed.servicios_id = ser.id and sub."serviciosSedes_id" = sed.id AND ser.nombre != ' + "'" + str('TRIAGE') + "'  AND ser.nombre !=  'AMBULATORIO'"
     curt.execute(comando)
     print(comando)
 
@@ -3165,8 +3167,8 @@ def guardarAdmisionTriage(request):
                     cur3.execute(comando2)
 
 
-                    miConexion3.commit()
-                    cur3.close()
+                miConexion3.commit()
+                cur3.close()
 
         ## Fin traslado a la nueva Cuenta
 

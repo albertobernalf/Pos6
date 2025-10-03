@@ -1,0 +1,20 @@
+// 1. Selecciona el elemento del formulario desde el DOM
+const miFormulario = document.getElementById('myForm');
+
+// 2. Crea el objeto FormData pasando el formulario como argumento
+const formData = new FormData(miFormulario);
+
+// Guardar datos en localStorage
+localStorage.setItem('datosFormulario', JSON.stringify(formData));
+
+// Recargar la página
+window.location.reload();
+
+// Al cargar la página, recuperar y usar los datos si existen
+window.onload = function() {
+  const datosGuardados = localStorage.getItem('datosFormulario');
+  if (datosGuardados) {
+    // Procesar datosGuardados y luego limpiar el localStorage si ya no es necesario
+    localStorage.removeItem('datosFormulario');
+  }
+};
