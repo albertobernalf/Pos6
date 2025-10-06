@@ -267,12 +267,15 @@ function RefrescarPantalla() {
             <!-- Espacio Modales  Descripcion Procedimientos -->
 
 
-            <div class="modal fade" id="crearModelDescripcionProcedimientos" tabindex="-1" role="dialog"  style="overflow-y:scroll;" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document" modal-lg>
+            <div class="modal fade" id="crearModelDescripcionProcedimientos" tabindex="-1" role="dialog"  style="overflow-y:scroll;" aria-labelledby="exampleModalLabel" aria-hidden="true"  data-bs-backdrop="static">
+ <div class="modal-dialog modal-lg modal-dialog-scrollable  modal-dialog-center " role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                             <h4 class="modal-title" id="modelHeadingDescripcionProcedimientos"> </h4> 
+
+  <div  class="modal-title" id="modelHeadingDescripcionProcedimientos" style="text-align:center;"><font gont-family="Times New roman" size=5"></font> </div>
+			 <button type="button" class="close" data-bs-dismiss="modal"  aria-label="Close"> <span aria-hidden="true">&times;</span>  </button>
 			<button type="button" class="btn btn-primary" id="saveBtnDescripcionProcedimientos" onclick="GuardarDescripcionProcedimientos()">Grabar!</button> 
+
                         </div>
 		<div style="width:500px; heigth:100px; ">
                         <div class="modal-body">
@@ -368,6 +371,16 @@ function RefrescarPantalla() {
                             </form>
 
                         </div> <!-- CIERRA BODY -->
+			   <div class="modal-footer">
+
+			<textarea id="mensajesErrorcrearModelDescripcionProcedimientos" name="mensajesErrorcrearModelDescripcionProcedimientos" style="background-color: lightred; color: navy;"  rows="1" cols="60" placeholder="Mensajes..."  wrap="hard"></textarea>
+
+			  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar   </button>
+
+                               </div>
+
+
+
 			</div> <!-- CIERRA DIV TAMANO -->	
                         </div> <!-- CIERRA MODAL CONTENTE -->
                     </div> <!-- CIERRA MODAL DIALOG -->
@@ -376,13 +389,15 @@ function RefrescarPantalla() {
 		<!-- Otra Modal -->
 
 
-         <div class="modal fade" id="crearModelCrearTarifarioProcedimientos" tabindex="-1" role="dialog"  style="overflow-y:scroll;" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document" modal-lg>
+         <div class="modal fade" id="crearModelCrearTarifarioProcedimientos" tabindex="-1" role="dialog"  style="overflow-y:scroll;" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+		 <div class="modal-dialog modal-lg modal-dialog-scrollable  modal-dialog-center " role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                             <h4 class="modal-title" id="modelHeadingCrearTarifarioProcedimientos"> </h4> 
+                  <div  class="modal-title" id="modelHeadingCrearTarifarioProcedimiento" style="text-align:center;"><font gont-family="Times New roman" size=5"></font>Tarifario Procedimientos </div>
+	     <button type="button" class="close" data-bs-dismiss="modal"  aria-label="Close"> <span aria-hidden="true">&times;</span>  </button>
 			<button type="button" class="btn btn-primary" id="saveBtnCrearTarifarioProcedimientos" onclick="CrearTarifarioProcedimientos()">Grabar!</button> 
-                        </div>
+                
+		        </div>
 		<div style="width:500px; heigth:100px; ">
                         <div class="modal-body">
                             <div class="alert alert-danger error-msg" style="display:none">
@@ -435,6 +450,16 @@ function RefrescarPantalla() {
                             </form>
 
                         </div> <!-- CIERRA BODY -->
+		   <div class="modal-footer">
+
+			<textarea id="mensajesErrorcrearModelCrearTarifarioProcedimientos" name="mensajesErrorcrearModelCrearTarifarioProcedimientos" style="background-color: lightred; color: navy;"  rows="1" cols="60" placeholder="Mensajes..."  wrap="hard"></textarea>
+
+			  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar   </button>
+
+                               </div>
+
+
+
 			</div> <!-- CIERRA DIV TAMANO -->			
                         </div> <!-- CIERRA MODAL CONTENTE -->
                     </div> <!-- CIERRA MODAL DIALOG -->
@@ -446,12 +471,15 @@ function RefrescarPantalla() {
 
       		<!-- Modal Aplicar Tarifarios -->
 
-            <div class="modal fade" id="crearModelAplicarTarifario" tabindex="-1" role="dialog"  style="overflow-y:scroll;" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document" modal-lg>
+            <div class="modal fade" id="crearModelAplicarTarifario" tabindex="-1" role="dialog"  style="overflow-y:scroll;" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+                <div class="modal-dialog modal-lg modal-dialog-scrollable  modal-dialog-center " role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                             <h4 class="modal-title" id="modelHeadingAplicarTarifario"> </h4> 
-			<button type="button" class="btn btn-primary" id="saveBtnAplicarTarifario" onclick="AplicarTarifario()">Grabar!</button> 
+
+			  <div  class="modal-title" id="modelHeadingAplicarTarifario" style="text-align:center;"><font gont-family="Times New roman" size=5">Aplicar tarifario</font> </div>
+			  <button type="button" class="close" data-bs-dismiss="modal"  aria-label="Close"> <span aria-hidden="true">&times;</span>  </button>
+ 			 <button type="button" class="btn btn-primary" id="saveBtnAplicarTarifario" onclick="AplicarTarifario()">Grabar!</button> 
+
                         </div>
 		<div style="width:500px; heigth:100px; ">
                         <div class="modal-body">
@@ -555,6 +583,15 @@ function RefrescarPantalla() {
                             </form>
 
                         </div> <!-- CIERRA BODY -->
+	   <div class="modal-footer">
+
+			<textarea id="mensajesErrorcrearModelAplicarTarifari" name="mensajesErrorcrearModelAplicarTarifari" style="background-color: lightred; color: navy;"  rows="1" cols="60" placeholder="Mensajes..."  wrap="hard"></textarea>
+
+			  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar   </button>
+
+                               </div>
+
+
 			</div> <!-- CIERRA DIV TAMANO -->			
                         </div> <!-- CIERRA MODAL CONTENTE -->
                     </div> <!-- CIERRA MODAL DIALOG -->
@@ -565,11 +602,12 @@ function RefrescarPantalla() {
 
 		<!--  Otra Modal  crearModelEditarTarifarioProcedimientos -->
 
-         <div class="modal fade" id="crearModelEditarTarifarioProcedimientos" tabindex="-1" role="dialog"  style="overflow-y:scroll;" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document" modal-lg>
+         <div class="modal fade" id="crearModelEditarTarifarioProcedimientos" tabindex="-1" role="dialog"  style="overflow-y:scroll;" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+                <div class="modal-dialog modal-lg modal-dialog-scrollable  modal-dialog-center " role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                             <h4 class="modal-title" id="modelHeadingEditarTarifarioProcedimientos"> </h4> 
+	<div  class="modal-title" id="modelHeadingEditarTarifarioProcedimientos" style="text-align:center;"><font gont-family="Times New roman" size=5">Editar Tarifa Procedimientos</font> </div>
+     <button type="button" class="close" data-bs-dismiss="modal"  aria-label="Close"> <span aria-hidden="true">&times;</span>  </button>
 			<button type="button" class="btn btn-primary" id="saveBtnEditarTarifarioProcedimientos" onclick="GuardarEditarTarifarioProcedimientos()">Grabar!</button> 
                         </div>
 		<div style="width:500px; heigth:100px; ">
@@ -692,6 +730,16 @@ function RefrescarPantalla() {
                             </form>
 
                         </div> <!-- CIERRA BODY -->
+   <div class="modal-footer">
+
+			<textarea id="mensajesErrorcrearModelEditarTarifarioProcedimiento" name="mensajesErrorcrearModelEditarTarifarioProcedimiento" style="background-color: lightred; color: navy;"  rows="1" cols="60" placeholder="Mensajes..."  wrap="hard"></textarea>
+
+			  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar   </button>
+
+                               </div>
+
+
+
 			</div> <!-- CIERRA DIV TAMANO -->			
                         </div> <!-- CIERRA MODAL CONTENTE -->
                     </div> <!-- CIERRA MODAL DIALOG -->
@@ -878,11 +926,13 @@ function RefrescarPantalla() {
             <!-- Espacio Modales  Descripcion Suministros -->
 
 
-            <div class="modal fade" id="crearModelDescripcionSuministros" tabindex="-1" role="dialog"  style="overflow-y:scroll;" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document" modal-lg>
+            <div class="modal fade" id="crearModelDescripcionSuministros" tabindex="-1" role="dialog"  style="overflow-y:scroll;" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static>
+                <div class="modal-dialog modal-lg modal-dialog-scrollable  modal-dialog-center " role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                             <h4 class="modal-title" id="modelHeadingDescripcionSuministros"> </h4> 
+
+     <div  class="modal-title" id="modelHeadingDescripcionSuministros" style="text-align:center;"><font gont-family="Times New roman" size=5">Descripcion Suinistros</font> </div>
+     <button type="button" class="close" data-bs-dismiss="modal"  aria-label="Close"> <span aria-hidden="true">&times;</span>  </button>
 			<button type="button" class="btn btn-primary" id="saveBtnDescripcionSuministros" onclick="GuardarDescripcionSuministros()">Grabar!</button> 
                         </div>
 		<div style="width:500px; heigth:100px; ">
@@ -979,6 +1029,15 @@ function RefrescarPantalla() {
                             </form>
 
                         </div> <!-- CIERRA BODY -->
+		   <div class="modal-footer">
+
+			<textarea id="mensajesErrorcrearModelDescripcionSuministr" name="mensajesErrorcrearModelDescripcionSuministr" style="background-color: lightred; color: navy;"  rows="1" cols="60" placeholder="Mensajes..."  wrap="hard"></textarea>
+			  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar   </button>
+
+                               </div>
+
+
+
 			</div> <!-- CIERRA DIV TAMANO -->	
                         </div> <!-- CIERRA MODAL CONTENTE -->
                     </div> <!-- CIERRA MODAL DIALOG -->
@@ -987,11 +1046,13 @@ function RefrescarPantalla() {
 		<!-- Otra Modal -->
 
 
-         <div class="modal fade" id="crearModelCrearTarifarioSuministros" tabindex="-1" role="dialog"  style="overflow-y:scroll;" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document" modal-lg>
+         <div class="modal fade" id="crearModelCrearTarifarioSuministros" tabindex="-1" role="dialog"  style="overflow-y:scroll;" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+                <div class="modal-dialog modal-lg modal-dialog-scrollable  modal-dialog-center " role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                             <h4 class="modal-title" id="modelHeadingCrearTarifarioSuministros"> </h4> 
+
+		   <div  class="modal-title" id="modelHeadingCrearTarifarioSuministros" style="text-align:center;"><font gont-family="Times New roman" size=5">Tarifario suministros</font> </div>
+		     <button type="button" class="close" data-bs-dismiss="modal"  aria-label="Close"> <span aria-hidden="true">&times;</span>  </button>
 			<button type="button" class="btn btn-primary" id="saveBtnCrearTarifarioSuministros" onclick="CrearTarifarioSuministros()">Grabar!</button> 
                         </div>
 		<div style="width:500px; heigth:100px; ">
@@ -1048,6 +1109,12 @@ function RefrescarPantalla() {
                             </form>
 
                         </div> <!-- CIERRA BODY -->
+		   <div class="modal-footer">
+			<textarea id="mensajesErrorcrearModelCrearTarifarioSuministro" name="mensajesErrorcrearModelCrearTarifarioSuministro" style="background-color: lightred; color: navy;"  rows="1" cols="60" placeholder="Mensajes..."  wrap="hard"></textarea>
+			  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar   </button>
+                               </div>
+
+
 			</div> <!-- CIERRA DIV TAMANO -->			
                         </div> <!-- CIERRA MODAL CONTENTE -->
                     </div> <!-- CIERRA MODAL DIALOG -->
@@ -1059,11 +1126,12 @@ function RefrescarPantalla() {
 
       		<!-- Modal Aplicar Tarifarios -->
 
-            <div class="modal fade" id="crearModelAplicarTarifarioSuministros" tabindex="-1" role="dialog"  style="overflow-y:scroll;" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document" modal-lg>
+            <div class="modal fade" id="crearModelAplicarTarifarioSuministros" tabindex="-1" role="dialog"  style="overflow-y:scroll;" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+                 <div class="modal-dialog modal-lg modal-dialog-scrollable  modal-dialog-center " role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                             <h4 class="modal-title" id="modelHeadingAplicarTarifarioSuministros"> </h4> 
+modelHeadingAplicarTarifarioSuministrosexampleModalLabel" style="text-align:center;"><font gont-family="Times New roman" size=5">Editar Admision</font> </div>
+		     <button type="button" class="close" data-bs-dismiss="modal"  aria-label="Close"> <span aria-hidden="true">&times;</span>  </button>
 			<button type="button" class="btn btn-primary" id="saveBtnAplicarTarifarioSuministros" onclick="AplicarTarifarioSuministros()">Grabar!</button> 
                         </div>
 		<div style="width:500px; heigth:100px; ">
@@ -1155,6 +1223,13 @@ function RefrescarPantalla() {
                             </form>
 
                         </div> <!-- CIERRA BODY -->
+  <div class="modal-footer">
+
+			<textarea id="mensajesErrorcrearModelAplicarTarifarioSuministro" name="mensajesErrorcrearModelAplicarTarifarioSuministros" style="background-color: lightred; color: navy;"  rows="1" cols="60" placeholder="Mensajes..."  wrap="hard"></textarea>
+			  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar   </button>
+
+                               </div>
+
 			</div> <!-- CIERRA DIV TAMANO -->			
                         </div> <!-- CIERRA MODAL CONTENTE -->
                     </div> <!-- CIERRA MODAL DIALOG -->
@@ -1165,11 +1240,12 @@ function RefrescarPantalla() {
 
 		<!--  Otra Modal  crearModelEditarTarifarioSuministros -->
 
-         <div class="modal fade" id="crearModelEditarTarifarioSuministros" tabindex="-1" role="dialog"  style="overflow-y:scroll;" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document" modal-lg>
+         <div class="modal fade" id="crearModelEditarTarifarioSuministros" tabindex="-1" role="dialog"  style="overflow-y:scroll;" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+                <div class="modal-dialog modal-lg modal-dialog-scrollable  modal-dialog-center " role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                             <h4 class="modal-title" id="modelHeadingEditarTarifarioSuministros"> </h4> 
+			     <div  class="modal-title" id="modelHeadingEditarTarifarioSuministrosl" style="text-align:center;"><font gont-family="Times New roman" size=5">Editar Admision</font> </div>
+			     <button type="button" class="close" data-bs-dismiss="modal"  aria-label="Close"> <span aria-hidden="true">&times;</span>  </button>
 			<button type="button" class="btn btn-primary" id="saveBtnEditarTarifarioSuministros" onclick="GuardarEditarTarifarioSuministros()">Grabar!</button> 
                         </div>
 		<div style="width:500px; heigth:100px; ">
@@ -1292,6 +1368,15 @@ function RefrescarPantalla() {
                             </form>
 
                         </div> <!-- CIERRA BODY -->
+		   <div class="modal-footer">
+			
+			<textarea id="mensajescrearModelEditarTarifarioSuministro" name="mensajesErrorcrearModelEditarTarifarioSuministros" style="background-color: lightred; color: navy;"  rows="1" cols="60" placeholder="Mensajes..."  wrap="hard"></textarea>
+			  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar   </button>
+
+                               </div>
+
+
+
 			</div> <!-- CIERRA DIV TAMANO -->			
                         </div> <!-- CIERRA MODAL CONTENTE -->
                     </div> <!-- CIERRA MODAL DIALOG -->
@@ -1319,8 +1404,8 @@ function RefrescarPantalla() {
 
 {% block mensajeria %}
 <div class="marco">
-     <span id="mensajes" name="mensajes" style= "color:blue; font-size:18px; line-height:35px; font-family: Calibri;" > </span>
-     <span id="mensajesError" name="mensajesError" style= "color:red; font-size:18px; line-height:35px; font-family: Calibri;" > </span>
+	<textarea id="mensajes" name="mensajes" style="background-color: lightblue; color: navy;"  rows="1" cols="180" placeholder="Mensajes..."  wrap="hard"></textarea>
+	<textarea id="mensajesError" name="mensajesError" style="background-color: lightred; color: navy;"  rows="1" cols="180" placeholder="Mensajes..."  wrap="hard"></textarea>
 
 </div>
 {% endblock %}

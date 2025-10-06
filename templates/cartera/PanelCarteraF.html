@@ -305,8 +305,9 @@ function RefrescarPantalla() {
 
                         </div> <!-- CIERRA BODY -->
 			<div class="modal-footer">
-				<span id="mensajesErrorModalCaja" name="mensajesErrorModalCaja" style= "color:red; font-size:15px; line-height:35px; font-family: Calibri;" > </span>
-				  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar   </button>
+
+		<textarea id="mensajesErrorModalCaja" name="mensajesErrorModalCaja" style="background-color: lightred; color: navy;"  rows="1" cols="60" placeholder="Mensajes..."  wrap="hard"></textarea>			
+	  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar   </button>
 				<button type="button" class="btn btn-primary" id="saveBtnGuardarCaja" onclick="GuardarCaja()">Grabar!</button> 
                         
 			    </div> <!-- CIERRA FOOTER -->			
@@ -326,8 +327,8 @@ function RefrescarPantalla() {
 {% block mensajeria %}
 <div class="marco">
 <span> ... </span>
-     <span id="mensajes" name="mensajes" style= "color:blue; font-size:18px; line-height:35px; font-family: Calibri;" > </span>
-     <span id="mensajesError" name="mensajesError" style= "color:red; font-size:18px; line-height:35px; font-family: Calibri;" > </span>
+ 	<textarea id="mensajes" name="mensajes" style="background-color: lightblue; color: navy;"  rows="1" cols="180" placeholder="Mensajes..."  wrap="hard"></textarea>
+	<textarea id="mensajesError" name="mensajesError" style="background-color: lightred; color: navy;"  rows="1" cols="180" placeholder="Mensajes..."  wrap="hard"></textarea>
 
 
 </div>

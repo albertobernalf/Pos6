@@ -343,7 +343,8 @@ function RefrescarPantalla() {
 
         
                                 <div class="modal-footer">
-					  <span id="mensajesErrorModalConvenios" name="mensajesErrorModalConvenios" style= "color:red; font-size:15px; line-height:35px; font-family: Calibri;" > </span>
+
+	<textarea id="mensajesErrorModalConvenios" name="mensajesErrorModalConvenios" style="background-color: lightred; color: navy;"  rows="1" cols="60" placeholder="Mensajes..."  wrap="hard"></textarea>																						
 			  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar   </button>
 					<button type="button" class="btn btn-primary" id="saveBtnEditarConvenios"   value="create" onclick="EditarGuardarConvenios()">Guardar </button> 
 
@@ -592,7 +593,8 @@ function RefrescarPantalla() {
                         </div> <!-- CIERRA BODY -->
 
 		    <div class="modal-footer">
-					  <span id="mensajesErrorModalConvenios" name="mensajesErrorModalConvenios" style= "color:red; font-size:15px; line-height:35px; font-family: Calibri;" > </span>
+
+	<textarea id="mensajesErrorModalConvenios" name="mensajesErrorModalConvenios" style="background-color: lightred; color: navy;"  rows="1" cols="60" placeholder="Mensajes..."  wrap="hard"></textarea>																						
 			  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar   </button>
 		<button type="button" class="btn btn-primary" id="saveBtnCrearConvenios1" onclick="CrearGuardarConvenios()">Grabar!</button>                 
 
@@ -782,9 +784,8 @@ function RefrescarPantalla() {
 
 {% block mensajeria %}
 <div class="marco">
-     <span id="mensajes" name="mensajes" style= "color:blue; font-size:18px; line-height:35px; font-family: Calibri;" > </span>
-     <span id="mensajesError" name="mensajesError" style= "color:red; font-size:18px; line-height:35px; font-family: Calibri;" > </span>
-
+	<textarea id="mensajes" name="mensajes" style="background-color: lightblue; color: navy;"  rows="1" cols="180" placeholder="Mensajes..."  wrap="hard"></textarea>
+	<textarea id="mensajesError" name="mensajesError" style="background-color: lightred; color: navy;"  rows="1" cols="180" placeholder="Mensajes..."  wrap="hard"></textarea>
 
 </div>
 {% endblock %}

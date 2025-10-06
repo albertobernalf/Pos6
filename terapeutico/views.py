@@ -1312,7 +1312,7 @@ def GuardarResultadoRasgo ( request):
 
 
 
-                return JsonResponse({'success': True, 'Mensaje': 'Responsable Actualizado satisfactoriamente!'})
+                return JsonResponse({'success': True, 'Mensajes': 'Responsable Actualizado satisfactoriamente!'})
 
         except psycopg2.DatabaseError as error:
             print ("Entre por rollback" , error)
@@ -1320,8 +1320,8 @@ def GuardarResultadoRasgo ( request):
                 print("Entro ha hacer el Rollback")
                 miConexiont.rollback()
 
-            print ("Voy a hacer el jsonresponde")
-            return JsonResponse({'success': False, 'Mensaje': error})
+            message_error= str(error)
+            return JsonResponse({'success': False, 'Mensajes': message_error})
 
         finally:
             if miConexiont:
@@ -1437,7 +1437,7 @@ def GuardarResultado ( request):
                 miConexiont.close()
                 curt.close()
 
-                return JsonResponse({'success': True, 'message': 'Responsable Actualizado satisfactoriamente!'})
+                return JsonResponse({'success': True, 'Mensajes': 'Responsable Actualizado satisfactoriamente!'})
 
         except psycopg2.DatabaseError as error:
             print ("Entre por rollback" , error)
@@ -1445,8 +1445,8 @@ def GuardarResultado ( request):
                 print("Entro ha hacer el Rollback")
                 miConexiont.rollback()
 
-            print ("Voy a hacer el jsonresponde")
-            return JsonResponse({'success': False, 'Mensaje': error})
+            message_error= str(error)
+            return JsonResponse({'success': False, 'Mensajes': message_error})
 
         finally:
             if miConexiont:

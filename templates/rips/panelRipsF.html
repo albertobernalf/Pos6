@@ -157,12 +157,16 @@ function RefrescarPantalla() {
 
 	            <!-- Espacio Modales  EnviosRips-->
 
-            <div class="modal fade" id="crearModelEnviosRips" tabindex="-1" role="dialog"  style="overflow-y:scroll;" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document" modal-lg>
+	    <div class="modal fade" id="crearModelEnviosRips" tabindex="-1" role="dialog"  style="overflow-y:scroll;" aria-labelledby="exampleModalLabel" aria-hidden="true"  data-bs-backdrop="static">
+
+		<div class="modal-dialog modal-lg modal-dialog-scrollable  modal-dialog-center " role="document">
+	
                     <div class="modal-content">
                         <div class="modal-header">
-                             <h4 class="modal-title" id="modelHeadingEnviosRips"> </h4> 
+
+    <div  class="modal-title" id="modelHeadingEnviosRips" style="text-align:center;"><font gont-family="Times New roman" size=5"></font> </div>
 			<button type="button" class="btn btn-primary" id="saveBtnCrearEnviosRips" onclick="CrearEnviosRips()">Grabar!</button> 
+     <button type="button" class="close" data-bs-dismiss="modal"  aria-label="Close"> <span aria-hidden="true">&times;</span>  </button>
                         </div>
 		<div style="width:500px; heigth:100px; ">
                         <div class="modal-body">
@@ -292,6 +296,17 @@ function RefrescarPantalla() {
                             </form>
 
                         </div> <!-- CIERRA BODY -->
+			   <div class="modal-footer">
+
+			<textarea id="mensajesErrorcrearModelEnviosRips" name="mensajesErrorcrearModelEnviosRips" style="background-color: lightred; color: navy;"  rows="1" cols="60" placeholder="Mensajes..."  wrap="hard"></textarea>
+
+			  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar   </button>
+			<button type="button" class="btn btn-primary" id="saveBtnCrearEnviosRips" onclick="CrearEnviosRips()">Grabar!</button> 
+
+
+                               </div>
+
+
 			</div> <!-- CIERRA DIV TAMANO -->			
                         </div> <!-- CIERRA MODAL CONTENTE -->
                     </div> <!-- CIERRA MODAL DIALOG -->
@@ -303,8 +318,8 @@ function RefrescarPantalla() {
 	<!-- Otra Modal -->
 
 
-            <div class="modal fade" id="crearModelRipsEnvioJson" tabindex="-1" role="dialog"  style="overflow-y:scroll;" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg">
+            <div class="modal fade" id="crearModelRipsEnvioJson" tabindex="-1" role="dialog"  style="overflow-y:scroll;" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+		 <div class="modal-dialog modal-lg modal-dialog-scrollable  modal-dialog-center " role="document">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h4 class="modal-title" id="modelHeadingRipsEnvioJson"></h4>
@@ -333,6 +348,18 @@ function RefrescarPantalla() {
 
                             </form>
                         </div> <!-- CIERRA BODY -->
+
+			   <div class="modal-footer">
+
+			<textarea id="mensajesErrorcrearModelRipsEnvioJson" name="mensajesErrorcrearModelRipsEnvioJson" style="background-color: lightred; color: navy;"  rows="1" cols="60" placeholder="Mensajes..."  wrap="hard"></textarea>
+
+			  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar   </button>
+
+                               </div>
+
+
+
+
                         </div> <!-- CIERRA MODAL CONTENTE -->
                     </div> <!-- CIERRA MODAL DIALOG -->
                 </div>  <!-- CIERRA MODAL FADE -->
@@ -424,8 +451,8 @@ Envio No: <input type="text" name="envioRipsId" id="envioRipsId" readonly>
 
 	            <!-- Espacio Modales  RipsDetalle-->
 
-            <div class="modal fade" id="crearModelRipsDetalle" tabindex="-1" role="dialog"  style="overflow-y:scroll;" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document" modal-lg>
+            <div class="modal fade" id="crearModelRipsDetalle" tabindex="-1" role="dialog"  style="overflow-y:scroll;" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+		<div class="modal-dialog modal-lg modal-dialog-scrollable  modal-dialog-center " role="document">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h4 class="modal-title" id="modelHeadingRipsDetalle"></h4>
@@ -529,6 +556,16 @@ Envio No: <input type="text" name="envioRipsId" id="envioRipsId" readonly>
 
                             </form>
                         </div> <!-- CIERRA BODY -->
+			   <div class="modal-footer">
+
+				<textarea id="mensajesErrorcrearModelRipsDetalle" name="mensajesErrorcrearModelRipsDetalle" style="background-color: lightred; color: navy;"  rows="1" cols="60" placeholder="Mensajes..."  wrap="hard"></textarea>
+
+			  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar   </button>
+                             
+
+
+                               </div>
+
                         </div> <!-- CIERRA MODAL CONTENTE -->
                     </div> <!-- CIERRA MODAL DIALOG -->
                 </div>  <!-- CIERRA MODAL FADE -->
@@ -538,8 +575,8 @@ Envio No: <input type="text" name="envioRipsId" id="envioRipsId" readonly>
 	<!-- Otra Modal -->
 
 
-            <div class="modal fade" id="crearModelRipsJson" tabindex="-1" role="dialog"  style="overflow-y:scroll;" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg">
+            <div class="modal fade" id="crearModelRipsJson" tabindex="-1" role="dialog"  style="overflow-y:scroll;" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+                <div class="modal-dialog modal-lg modal-dialog-scrollable  modal-dialog-center " role="document">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h4 class="modal-title" id="modelHeadingRipsJson"></h4>
@@ -569,6 +606,14 @@ Envio No: <input type="text" name="envioRipsId" id="envioRipsId" readonly>
 
                             </form>
                         </div> <!-- CIERRA BODY -->
+		   <div class="modal-footer">
+
+			<textarea id="mensajesErrorcrearModelRipsJson" name="mensajesErrorcrearModelRipsJson" style="background-color: lightred; color: navy;"  rows="1" cols="60" placeholder="Mensajes..."  wrap="hard"></textarea>
+
+			  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar   </button>
+
+                               </div>
+
                         </div> <!-- CIERRA MODAL CONTENTE -->
                     </div> <!-- CIERRA MODAL DIALOG -->
                 </div>  <!-- CIERRA MODAL FADE -->
@@ -928,9 +973,8 @@ Envio No: <input type="text" name="envioRipsId" id="envioRipsId" readonly>
 
 {% block mensajeria %}
 <div class="marco">
-     <span id="mensajes" name="mensajes" style= "color:blue; font-size:18px; line-height:35px; font-family: Calibri;" > </span>
-     <span id="mensajesError" name="mensajesError" style= "color:red; font-size:18px; line-height:35px; font-family: Calibri;" > </span>
-
+ 	<textarea id="mensajes" name="mensajes" style="background-color: lightblue; color: navy;"  rows="1" cols="180" placeholder="Mensajes..."  wrap="hard"></textarea>
+	<textarea id="mensajesError" name="mensajesError" style="background-color: lightred; color: navy;"  rows="1" cols="180" placeholder="Mensajes..."  wrap="hard"></textarea>
 
 </div>
 {% endblock %}

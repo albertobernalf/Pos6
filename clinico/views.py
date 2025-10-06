@@ -2301,6 +2301,8 @@ def crearHistoriaClinica(request):
                     if miConexion3:
                         print("Entro ha hacer el Rollback")
                         miConexion3.rollback()
+                        message_error= str(error)
+                        return JsonResponse({'success': False, 'Mensajes': message_error})
 
                 finally:
                     if miConexion3:
@@ -3512,10 +3514,8 @@ def GuardarInterConsulta(request):
             print("Entro ha hacer el Rollback")
             #miConexion3.rollback()
 
-        print ("Voy a hacer el jsonresponde")
-        datosMensaje = {'success': False, 'Mensaje': error}
-        json_data = json.dumps(datosMensaje, default=str)
-        return HttpResponse(json_data, content_type='application/json')
+        message_error= str(error)
+        return JsonResponse({'success': False, 'Mensajes': message_error})
 
 
 

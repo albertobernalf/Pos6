@@ -586,7 +586,7 @@ def AdicionarFormulacionEnfermeria(request):
         cur3.close()
         miConexion3.close()
 
-        return JsonResponse({'success': True, 'Mensaje': 'Pedido Enferemria creado satisfactoriamente!' })
+        return JsonResponse({'success': True, 'Mensajes': 'Pedido Enferemria creado satisfactoriamente!' })
 
 
     except psycopg2.DatabaseError as error:
@@ -594,7 +594,8 @@ def AdicionarFormulacionEnfermeria(request):
         if miConexion3:
             print("Entro ha hacer el Rollback")
             miConexion3.rollback()
-        raise error
+            message_error= str(error)
+            return JsonResponse({'success': False, 'Mensajes': message_error})
 
     finally:
         if miConexion3:
@@ -670,7 +671,7 @@ def Load_dataPlaneacionEnfermeria(request, data):
     except Exception as e:
             # Aquí ya se hizo rollback automáticamente
             print("Se hizo rollback por PRONO SE HACE NADA:", e)
-            return JsonResponse({'success': False, 'Mensaje': 'Enfermera  no tiene asignado un turno!'})
+            return JsonResponse({'success': False, 'Mensajes': 'Enfermera  no tiene asignado un turno!'})
 
     finally:
         print("No haga nada")
@@ -813,14 +814,16 @@ def GuardaPlaneacionEnfermeria(request):
         miConexion3.commit()
         miConexion3.close()
 
-        return JsonResponse({'success': True, 'Mensaje': 'Planeacion de Enfermeria Creado!'})
+        return JsonResponse({'success': True, 'Mensajes': 'Planeacion de Enfermeria Creado!'})
 
     except psycopg2.DatabaseError as error:
         print("Entre por rollback", error)
         if miConexion3:
             print("Entro ha hacer el Rollback")
             miConexion3.rollback()
-        return JsonResponse({'success': False, 'Mensaje': error})
+        message_error= str(error)
+        return JsonResponse({'success': False, 'Mensajes': message_error})
+
 
     finally:
         if miConexion3:
@@ -948,7 +951,7 @@ def GuardarDevolucionEnfermeria(request):
         # Tercero actualizamos acumulados
 
 
-        return JsonResponse({'success': True, 'Mensaje': 'Devolucion de Enfermeria Creado! ' })
+        return JsonResponse({'success': True, 'Mensajes': 'Devolucion de Enfermeria Creado! ' })
 
 
     except psycopg2.DatabaseError as error:
@@ -956,7 +959,8 @@ def GuardarDevolucionEnfermeria(request):
         if miConexion3:
             print("Entro ha hacer el Rollback")
             miConexion3.rollback()
-        raise error
+        message_error= str(error)
+        return JsonResponse({'success': False, 'Mensajes': message_error})
 
     finally:
         if miConexion3:
@@ -1042,15 +1046,15 @@ def GuardaAplicacionEnfermeria(request):
         miConexion3.commit()
         miConexion3.close()
 
-        return JsonResponse({'success': True, 'Mensaje': 'Aplicacion de Enfermeria Creado!'})
+        return JsonResponse({'success': True, 'Mensajes': 'Aplicacion de Enfermeria Creado!'})
 
     except psycopg2.DatabaseError as error:
         print("Entre por rollback", error)
         if miConexion3:
             print("Entro ha hacer el Rollback")
             miConexion3.rollback()
-        raise error
-        return JsonResponse({'success': False, 'Mensaje': error})
+        message_error= str(error)
+        return JsonResponse({'success': False, 'Mensajes': message_error})
 
     finally:
         if miConexion3:
@@ -1210,15 +1214,15 @@ def GuardaDietasEnfermeria(request):
         miConexion3.commit()
         miConexion3.close()
 
-        return JsonResponse({'success': True, 'Mensaje': 'Dieta Paciente Creada!'})
+        return JsonResponse({'success': True, 'Mensajes': 'Dieta Paciente Creada!'})
 
     except psycopg2.DatabaseError as error:
         print("Entre por rollback", error)
         if miConexion3:
             print("Entro ha hacer el Rollback")
             miConexion3.rollback()
-
-        return JsonResponse({'success': False, 'Mensaje': error})
+        message_error= str(error)
+        return JsonResponse({'success': False, 'Mensajes': message_error})
 
     finally:
         if miConexion3:
@@ -1308,14 +1312,15 @@ def GuardaNotasEnfermeria(request):
         miConexion3.commit()
         miConexion3.close()
 
-        return JsonResponse({'success': True, 'Mensaje': 'Dieta Paciente Creada!'})
+        return JsonResponse({'success': True, 'Mensajes': 'Dieta Paciente Creada!'})
 
     except psycopg2.DatabaseError as error:
         print("Entre por rollback", error)
         if miConexion3:
             print("Entro ha hacer el Rollback")
             miConexion3.rollback()
-        raise error
+        message_error= str(error)
+        return JsonResponse({'success': False, 'Mensajes': message_error})
 
     finally:
         if miConexion3:
@@ -1693,14 +1698,15 @@ def GuardaSignosVitalEnfermeria(request):
         miConexion3.commit()
         miConexion3.close()
 
-        return JsonResponse({'success': True, 'Mensaje  ': 'Signo Vital Creado!'})
+        return JsonResponse({'success': True, 'Mensajes': 'Signo Vital Creado!'})
 
     except psycopg2.DatabaseError as error:
         print("Entre por rollback", error)
         if miConexion3:
             print("Entro ha hacer el Rollback")
             miConexion3.rollback()
-        raise error
+        message_error= str(error)
+        return JsonResponse({'success': False, 'Mensajes': message_error})
 
     finally:
         if miConexion3:

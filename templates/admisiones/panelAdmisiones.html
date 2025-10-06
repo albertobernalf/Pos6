@@ -79,7 +79,7 @@ table.dataTable tbody tr {
 <script>
 
 function RefrescarPantalla() {
-	 location.reload(true);
+	 window.location.reload(true);
 }
 
 </script>
@@ -531,7 +531,9 @@ Ambulatorios:  <span id="amb" name="amb" style='color:red'>{{Ambulatorios}} </sp
 
                                 </div>
                                 <div class="modal-footer">
-					  <span id="mensajesErrorModalEdicionAdmisiones" name="mensajesErrorModalEdicionAdmisiones" > </span>
+
+			<textarea id="mensajesErrorModalEdicionAdmisiones" name="mensajesErrorModalEdicionAdmisiones" style="background-color: lightred; color: navy;"  rows="1" cols="60" placeholder="Mensajes..."  wrap="hard"></textarea>
+
 			  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar   </button>
                                         <input type="button" class="btn btn-primary" value="save" onclick="actualizaAdmision()">
 
@@ -1234,8 +1236,8 @@ Ambulatorios:  <span id="amb" name="amb" style='color:red'>{{Ambulatorios}} </sp
                                     </div>
                                     <div class="modal-footer">
 
-					  <span id="mensajesErrorModalUsuario" name="mensajesErrorModalUsuario" style= "color:red; font-size:15px; line-height:35px; font-family: Times Neww Roman;" > </span>
-					
+
+								<textarea id="mensajesErrorModalUsuario" name="mensajesErrorModalUsuario" style="background-color: lightred; color: navy;"  rows="1" cols="60" placeholder="Mensajes..."  wrap="hard"></textarea>
 					  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar   </button>
 
                                         <input type="button" class="btn btn-primary" value="save" onclick="AUsuario()">
@@ -1412,7 +1414,8 @@ function cargarTablaConmveniosPaciente()
                             </select>
 			</div>
 			<div class="form-group">
-			  <span id="mensajesErrorModalConvenio" name="mensajesErrorModalConvenio" style= "color:red; font-size:18px; line-height:35px; font-family: Calibri;" > </span>
+
+			<textarea id="mensajesErrorModalConvenio" name="mensajesErrorModalConvenio" style="background-color: lightred; color: navy;"  rows="1" cols="60" placeholder="Mensajes..."  wrap="hard"></textarea>
 			</div>
 
 
@@ -1621,7 +1624,8 @@ function cargarTablaAbonosPaciente()
 	           </form>
         	 </div>
 		 <div class="modal-footer">
-			<span class="mensajesErrorAbonos" id="mensajesErrorAbonos" name="mensajesErrorAbonos" > </span>
+
+			<textarea id="mensajesErrorAbonos" name="mensajesErrorAbonos" style="background-color: lightred; color: navy;"  rows="1" cols="60" placeholder="Mensajes..."  wrap="hard"></textarea>
                          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar   </button>
                  </div>
 
@@ -2534,6 +2538,7 @@ function cargarTablaAbonosPaciente()
                                             FuripsForm.amparoReclamaAFosygaGastos
                                         </div>
 					<div class="col-1">
+			<textarea id="mensajesErrorFurips" name="mensajesErrorFurips" style="background-color: lightred; color: navy;"  rows="1" cols="60" placeholder="Mensajes..."  wrap="hard"></textarea>
 				  <input type="button" id="furips" name="furips" class="btn btn-primary" value="save" onclick="Furips()">
                                         </div>
                         </div>
@@ -2554,7 +2559,7 @@ function cargarTablaAbonosPaciente()
 
                                 </div>
                                 <div class="modal-footer">
-					  <span id="mensajesErrorModalFurips" name="mensajesErrorModalFuripss" style= "color:red; font-size:18px; line-height:35px; font-family: Calibri;" > </span>
+
                                      <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="CierraModalActualiza()">Close
                                         </button>
                                         <input type="button" class="btn btn-primary" value="save" onclick="FuripsActualiza()">
@@ -2580,8 +2585,10 @@ function cargarTablaAbonosPaciente()
 {% block mensajeria %}
 <div class="marco">
 
-        <span id="mensajes" name="mensajes" style= "color:green; font-size:12px; line-height:35px; font-family: Calibri;" > </span>
-     <span id="mensajesError" name="mensajesError" > </span>
+	<textarea id="mensajes" name="mensajes" style="background-color: lightblue; color: navy;"  rows="1" cols="180" placeholder="Mensajes..."  wrap="hard"></textarea>
+	<textarea id="mensajesError" name="mensajesError" style="background-color: lightred; color: navy;"  rows="1" cols="180" placeholder="Mensajes..."  wrap="hard"></textarea>
+
+
 
 </div>
 {% endblock %}

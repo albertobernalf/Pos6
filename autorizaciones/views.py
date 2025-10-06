@@ -424,21 +424,18 @@ def ActualizarAutorizacionDetalle(request):
         miConexiont.commit()
         miConexiont.close()
 
-
-        datosMensaje = {'success': True, 'Mensaje': 'Detalle de Autorizacion actualizado satisfactoriamente!'}
-        json_data = json.dumps(datosMensaje, default=str)
-        return HttpResponse(json_data, content_type='application/json')
+        message_error= str(error)
+        return JsonResponse({'success': True, 'Mensajes': 'Detalle de Autorizacion actualizado satisfactoriamente!'})
 
 
     except psycopg2.DatabaseError as error:
         print("Entre por rollback", error)
         if miConexiont:
             print("Entro ha hacer el Rollback")
-            #miConexiont.rollback()
+            miConexiont.rollback()
 
-        datosMensaje = {'success': False, 'Mensaje': error}
-        json_data = json.dumps(datosMensaje, default=str)
-        return HttpResponse(json_data, content_type='application/json')
+        message_error= str(error)
+        return JsonResponse({'success': False, 'Mensajes': message_error})
 
     finally:
         if miConexiont:

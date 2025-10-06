@@ -3,10 +3,34 @@
   <component name="ChangeListManager">
     <list default="true" id="d041c887-ab16-4071-a5e4-52a8295bbd5d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/autorizaciones/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/autorizaciones/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cartera/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/cartera/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cirugia/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/cirugia/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clinico/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/clinico/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/contratacion/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/contratacion/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/enfermeria/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/enfermeria/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/facturacion/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/facturacion/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/farmacia/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/farmacia/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modelsPrueba.py" beforeDir="false" afterPath="$PROJECT_DIR$/modelsPrueba.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rips/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/rips/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/mainAdmisiones.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/mainAdmisiones.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/mainApoyoTerapeutico.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/mainApoyoTerapeutico.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/static/mainFacturacionF.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/mainFacturacionF.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/facturacion/panelFacturacionF.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/facturacion/panelFacturacionF.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tarifarios/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/tarifarios/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/admisiones/panelAdmisiones.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/admisiones/panelAdmisiones.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/apoyoTerapeutico/panelApoyoTerapeutico.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/apoyoTerapeutico/panelApoyoTerapeutico.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/autorizaciones/panelAutorizacionesF.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/autorizaciones/panelAutorizacionesF.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/cartera/PanelCarteraF.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/cartera/PanelCarteraF.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/cartera/PanelGlosasFU.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/cartera/PanelGlosasFU.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/cirugia/panelCirugiaF.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/cirugia/panelCirugiaF.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/clinico/navegacionClinicaF.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/clinico/navegacionClinicaF.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/clinico/panelClinicoF.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/clinico/panelClinicoF.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/contratacion/panelConveniosF.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/contratacion/panelConveniosF.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/enfermeria/panelEnfermeriaF.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/enfermeria/panelEnfermeriaF.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/farmacia/panelFarmaciaF.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/farmacia/panelFarmaciaF.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/rips/panelRipsF.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/rips/panelRipsF.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/tarifarios/panelTarifariosF.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/tarifarios/panelTarifariosF.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/terapeutico/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/terapeutico/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

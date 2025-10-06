@@ -174,7 +174,7 @@ def GuardaEnviosRips(request):
 
 
 
-        return JsonResponse({'success': True, 'message': 'Envio realizado satisfactoriamente!'})
+        return JsonResponse({'success': True, 'Mensajes': 'Envio realizado satisfactoriamente!'})
 
     except psycopg2.DatabaseError as error:
         print ("Entre por rollback" , error)
@@ -182,8 +182,8 @@ def GuardaEnviosRips(request):
             print("Entro ha hacer el Rollback")
             miConexion3.rollback()
 
-        print ("Voy a hacer el jsonresponde")
-        return JsonResponse({'success': False, 'Mensaje': error})
+        message_error= str(error)
+        return JsonResponse({'success': False, 'Mensajes': message_error})
 
     finally:
         if miConexion3:
@@ -292,7 +292,7 @@ def GuardaDetalleRips(request):
         cur3.close()
         miConexion3.close()
 
-        return JsonResponse({'success': True, 'message': 'Factura Adicionada al Envio satisfactoriamente!'})
+        return JsonResponse({'success': True, 'Mensajes': 'Factura Adicionada al Envio satisfactoriamente!'})
 
     except psycopg2.DatabaseError as error:
         print ("Entre por rollback" , error)
@@ -300,8 +300,8 @@ def GuardaDetalleRips(request):
             print("Entro ha hacer el Rollback")
             miConexion3.rollback()
 
-        print ("Voy a hacer el jsonresponde")
-        return JsonResponse({'success': False, 'Mensaje': error})
+        message_error= str(error)
+        return JsonResponse({'success': False, 'Mensajes': message_error})
 
     finally:
         if miConexion3:
@@ -431,7 +431,7 @@ def ActualizarEmpresaDetalleRips(request):
             miConexion3.close()
 
 
-            return JsonResponse({'success': True, 'message': 'Factura Adicionada al Envio satisfactoriamente!'})
+            return JsonResponse({'success': True, 'Mensajes': 'Factura Adicionada al Envio satisfactoriamente!'})
 
     except psycopg2.DatabaseError as error:
         print ("Entre por rollback" , error)
@@ -439,8 +439,8 @@ def ActualizarEmpresaDetalleRips(request):
             print("Entro ha hacer el Rollback")
             miConexion3.rollback()
 
-        print ("Voy a hacer el jsonresponde")
-        return JsonResponse({'success': False, 'Mensaje': error})
+        message_error= str(error)
+        return JsonResponse({'success': False, 'Mensajes': message_error})
 
     finally:
         if miConexion3:
@@ -584,9 +584,8 @@ def GenerarJsonRips(request):
             print("Entro ha hacer el Rollback")
             miConexionx.rollback()
 
-        print ("Voy a hacer el jsonresponde")
-        return JsonResponse({'success': False, 'Mensaje': error})
-
+        message_error= str(error)
+        return JsonResponse({'success': False, 'Mensajes': message_error})
     finally:
         if miConexionx:
             curx.close()
@@ -1078,7 +1077,7 @@ def EnviarJsonRips(request):
 
         miConexionx.close()
 
-        return JsonResponse({'success': True, 'message': 'Rips JSON marcados para Envio satisfactoriamente!'})
+        return JsonResponse({'success': True, 'Mensajes': 'Rips JSON marcados para Envio satisfactoriamente!'})
 
     except psycopg2.DatabaseError as error:
         print ("Entre por rollback" , error)
@@ -1086,8 +1085,8 @@ def EnviarJsonRips(request):
             print("Entro ha hacer el Rollback")
             miConexionx.rollback()
 
-        print ("Voy a hacer el jsonresponde")
-        return JsonResponse({'success': False, 'Mensaje': error})
+        message_error= str(error)
+        return JsonResponse({'success': False, 'Mensajes': message_error})
 
     finally:
         if miConexionx:
@@ -1419,7 +1418,7 @@ def BorrarDetalleRips(request):
 
         # Despues tengo que actualizar en la factura el campo enviorips_id a NULL , por ORM
 
-        return JsonResponse({'success': True, 'message': 'Detalle de Rips eliminado !'})
+        return JsonResponse({'success': True, 'Mensajes': 'Detalle de Rips eliminado !'})
 
     except psycopg2.DatabaseError as error:
         print ("Entre por rollback" , error)
@@ -1427,8 +1426,8 @@ def BorrarDetalleRips(request):
             print("Entro ha hacer el Rollback")
             miConexion3.rollback()
 
-        print ("Voy a hacer el jsonresponde")
-        return JsonResponse({'success': False, 'Mensaje': error})
+        message_error= str(error)
+        return JsonResponse({'success': False, 'Mensajes': message_error})
 
     finally:
         if miConexion3:
@@ -1463,7 +1462,7 @@ def GuardarRadicacionRips(request):
         miConexion3.commit()
         miConexion3.close()
 
-        return JsonResponse({'success': True, 'message': 'Fecha de radicacion actualizada satisfactoriamente!'})
+        return JsonResponse({'success': True, 'Mensajes': 'Fecha de radicacion actualizada satisfactoriamente!'})
 
     except psycopg2.DatabaseError as error:
         print ("Entre por rollback" , error)
@@ -1471,8 +1470,8 @@ def GuardarRadicacionRips(request):
             print("Entro ha hacer el Rollback")
             miConexion3.rollback()
 
-        print ("Voy a hacer el jsonresponde")
-        return JsonResponse({'success': False, 'Mensaje': error})
+        message_error= str(error)
+        return JsonResponse({'success': False, 'Mensajes': message_error})
 
     finally:
         if miConexion3:

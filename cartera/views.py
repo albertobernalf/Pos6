@@ -181,14 +181,17 @@ def GuardaGlosas(request):
         cur3.close()
         miConexion3.close()
 
-        return JsonResponse({'success': True, 'message': 'Glosa creada satisfactoriamente!'})
+        return JsonResponse({'success': True, 'Mensajes': 'Glosa creada satisfactoriamente!'})
 
     except psycopg2.DatabaseError as error:
         print ("Entre por rollback" , error)
         if miConexion3:
             print("Entro ha hacer el Rollback")
             miConexion3.rollback()
-        raise error
+
+        message_error= str(error)
+        return JsonResponse({'success': False, 'Mensajes': message_error})
+
 
     finally:
         if miConexion3:
@@ -930,6 +933,8 @@ def GuardarGlosasDetalle(request):
             print(comando6)
             cur3.execute(comando6)
 
+            return JsonResponse({'success': False, 'Mensajes': 'Glosa Detalle actualizada !'})
+
             ## AQUI FALTA EL INSERT A LA TABLA GLOSASDETALLE
 
             miConexion3.commit()
@@ -941,7 +946,8 @@ def GuardarGlosasDetalle(request):
         if miConexion3:
             print("Entro ha hacer el Rollback")
             miConexion3.rollback()
-        raise error
+        message_error= str(error)
+        return JsonResponse({'success': False, 'Mensajes': message_error})
 
     finally:
         if miConexion3:
@@ -1033,7 +1039,7 @@ def GuardaGlosasEstados(request):
         cur3.close()
         miConexion3.close()
 
-        return JsonResponse({'success': True, 'message': 'Glosa Actualizada satisfactoriamente!'})
+        return JsonResponse({'success': True, 'Mensajes': 'Glosa Actualizada satisfactoriamente!'})
 
 
     except psycopg2.DatabaseError as error:
@@ -1041,7 +1047,8 @@ def GuardaGlosasEstados(request):
         if miConexion3:
             print("Entro ha hacer el Rollback")
             miConexion3.rollback()
-        raise error
+        message_error= str(error)
+        return JsonResponse({'success': False, 'Mensajes': message_error})
 
     finally:
         if miConexion3:
@@ -1189,10 +1196,7 @@ def GuardarCaja(request):
         cur3.close()
         miConexion3.close()
 
-        datosMensaje = {'success': True, 'Mensaje': 'Caja Actualizada satisfactoriamente!'}
-        json_data = json.dumps(datosMensaje, default=str)
-        return HttpResponse(json_data, content_type='application/json')
-
+        return JsonResponse({'success': False, 'Mensajes': 'Caja actualizada satisfactoriamente!'})
 
     except psycopg2.DatabaseError as error:
         print ("Entre por rollback" , error)
@@ -1200,10 +1204,8 @@ def GuardarCaja(request):
             print("Entro ha hacer el Rollback")
             #miConexion3.rollback()
 
-        datosMensaje = {'success': False, 'Mensaje': error}
-        json_data = json.dumps(datosMensaje, default=str)
-        return HttpResponse(json_data, content_type='application/json')
-
+        message_error= str(error)
+        return JsonResponse({'success': False, 'Mensajes': message_error})
 
     finally:
         if miConexion3:

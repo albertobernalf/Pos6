@@ -289,8 +289,10 @@ table.dataTable tbody tr {
 
                         </div> <!-- CIERRA BODY -->
 			<div class="modal-footer">
-				<span id="mensajesErrorModalGlosas" name="mensajesErrorModalGlosas" style= "color:red; font-size:15px; line-height:35px; font-family: Calibri;" > </span>
-				  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar   </button>
+		
+		
+		<textarea id="mensajesErrorModalGlosas" name="mensajesErrorModalGlosas" style="background-color: lightred; color: navy;"  rows="1" cols="60" placeholder="Mensajes..."  wrap="hard"></textarea>				
+			  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar   </button>
 				<button type="button" class="btn btn-primary" id="saveBtnCrearGlosas" onclick="CrearGlosas()">Grabar!</button> 
                         
 			    </div> <!-- CIERRA FOOTER -->			
@@ -715,8 +717,8 @@ table.dataTable tbody tr {
                         </div> <!-- CIERRA BODY -->
      			 <div class="modal-footer">
 
-					  <span id="mensajesErrorDetalleModal" name="mensajesErrorDetalleModal" style= "color:red; font-size:15px; line-height:35px; font-family: Times Neww Roman;" > </span>
-					
+
+					<textarea id="mensajesErrorDetalleModal" name="mensajesErrorDetalleModal" style="background-color: lightred; color: navy;"  rows="1" cols="60" placeholder="Mensajes..."  wrap="hard"></textarea>				
 					  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar   </button>
 
 	<button type="button" class="btn btn-primary" id="saveBtnCrearGlosasDetalle" onclick="GuardarGlosasDetalle()">Grabar!</button> 
@@ -1019,8 +1021,8 @@ table.dataTable tbody tr {
 {% block mensajeria %}
 <div class="marco">
 <span> ... </span>
-     <span id="mensajes" name="mensajes" style= "color:blue; font-size:18px; line-height:35px; font-family: Calibri;" > </span>
-     <span id="mensajesError" name="mensajesError" style= "color:red; font-size:18px; line-height:35px; font-family: Calibri;" > </span>
+ 	<textarea id="mensajes" name="mensajes" style="background-color: lightblue; color: navy;"  rows="1" cols="180" placeholder="Mensajes..."  wrap="hard"></textarea>
+	<textarea id="mensajesError" name="mensajesError" style="background-color: lightred; color: navy;"  rows="1" cols="180" placeholder="Mensajes..."  wrap="hard"></textarea>
 
 
 </div>

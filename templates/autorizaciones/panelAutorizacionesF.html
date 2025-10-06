@@ -263,7 +263,10 @@ function RefrescarPantalla() {
 
 
                                 <div class="col-sm-offset-2 col-sm-10 mt-2">
-				  <span id="mensajesErrorAutorizaciones" name="mensajesErrorAutorizaciones" > </span>
+
+		<textarea id="mensajesErrorAutorizaciones" name="mensajesErrorAutorizaciones" style="background-color: lightred; color: navy;"  rows="1" cols="60" placeholder="Mensajes..."  wrap="hard"></textarea>
+
+	
                                     <button type="button" class="btn btn-primary" id="saveBtnCrearAutorizaciones"   value="create" onclick="CrearAutorizaciones()">Guardar </button>
                                 </div>
                                 </div> <!-- CIERRA ROW 8 COLUMNAS  -->
@@ -443,7 +446,8 @@ function RefrescarPantalla() {
 
 
                                 <div class="col-sm-offset-2 col-sm-10 mt-2">
-				  <span id="mensajesErrorAutorizacionesDetalle" name="mensajesErrorAutorizacionesDetalle" > </span>
+
+		<textarea id="mensajesErrorAutorizacionesDetalle" name="mensajesErrorAutorizacionesDetalle" style="background-color: lightred; color: navy;"  rows="1" cols="60" placeholder="Mensajes..."  wrap="hard"></textarea>
                                     <button type="button" class="btn btn-primary" id="saveBtnActualizarAut"   value="create" onclick="ActualizarAut()">Guardar </button>
                                 </div>
                                 </div> 
@@ -482,8 +486,8 @@ function RefrescarPantalla() {
 {% block mensajeria %}
 <div class="marco">
 <span> ... </span>
-     <span id="mensajes" name="mensajes" style= "color:blue; font-size:18px; line-height:35px; font-family: Calibri;" > </span>
-     <span id="mensajesError" name="mensajesError" style= "color:red; font-size:18px; line-height:35px; font-family: Calibri;" > </span>
+  	<textarea id="mensajes" name="mensajes" style="background-color: lightblue; color: navy;"  rows="1" cols="180" placeholder="Mensajes..."  wrap="hard"></textarea>
+	<textarea id="mensajesError" name="mensajesError" style="background-color: lightred; color: navy;"  rows="1" cols="180" placeholder="Mensajes..."  wrap="hard"></textarea>
 
 
 </div>

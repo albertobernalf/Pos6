@@ -238,7 +238,7 @@ def CrearProgramacionCirugia(request):
         cur3.close()
         miConexion3.close()
 
-        return JsonResponse({'success': True, 'message': 'Programacion Actualizada satisfactoriamente!'})
+        return JsonResponse({'success': True, 'Mensajes': 'Programacion Actualizada satisfactoriamente!'})
 
 
     except psycopg2.DatabaseError as error:
@@ -246,7 +246,8 @@ def CrearProgramacionCirugia(request):
         if miConexion3:
             print("Entro ha hacer el Rollback")
             miConexion3.rollback()
-        raise error
+        message_error= str(error)
+        return JsonResponse({'success': False, 'Mensajes': message_error})
 
     finally:
         if miConexion3:
@@ -602,7 +603,7 @@ def CrearSolicitudCirugia(request):
         cur3.close()
         miConexion3.close()
 
-        return JsonResponse({'success': True, 'message': 'Solicitud Actualizada satisfactoriamente!'})
+        return JsonResponse({'success': True, 'Mensajes': 'Solicitud Actualizada satisfactoriamente!'})
 
 
     except psycopg2.DatabaseError as error:
@@ -610,7 +611,8 @@ def CrearSolicitudCirugia(request):
         if miConexion3:
             print("Entro ha hacer el Rollback")
             miConexion3.rollback()
-        raise error
+        message_error= str(error)
+        return JsonResponse({'success': False, 'Mensajes': message_error})
 
     finally:
         if miConexion3:
@@ -1024,7 +1026,7 @@ def CrearProcedimientosCirugia(request):
         cur3.close()
         miConexion3.close()
 
-        return JsonResponse({'success': True, 'message': 'Procedimiento Actualizado satisfactoriamente!'})
+        return JsonResponse({'success': True, 'Mensajes': 'Procedimiento Actualizado satisfactoriamente!'})
 
 
     except psycopg2.DatabaseError as error:
@@ -1032,7 +1034,8 @@ def CrearProcedimientosCirugia(request):
         if miConexion3:
             print("Entro ha hacer el Rollback")
             miConexion3.rollback()
-        raise error
+        message_error= str(error)
+        return JsonResponse({'success': False, 'Mensajes': message_error})
 
     finally:
         if miConexion3:
@@ -1089,7 +1092,7 @@ def CrearProcedimientosInformeCirugia(request):
         cur3.close()
         miConexion3.close()
 
-        return JsonResponse({'success': True, 'message': 'Procedimiento Actualizado satisfactoriamente!'})
+        return JsonResponse({'success': True, 'Mensajes': 'Procedimiento Actualizado satisfactoriamente!'})
 
 
     except psycopg2.DatabaseError as error:
@@ -1097,7 +1100,8 @@ def CrearProcedimientosInformeCirugia(request):
         if miConexion3:
             print("Entro ha hacer el Rollback")
             miConexion3.rollback()
-        raise error
+        message_error= str(error)
+        return JsonResponse({'success': False, 'Mensajes': message_error})
 
     finally:
         if miConexion3:
@@ -1150,7 +1154,7 @@ def CrearParticipantesInformeCirugia(request):
         cur3.close()
         miConexion3.close()
 
-        return JsonResponse({'success': True, 'message': 'Participante Actualizado satisfactoriamente!'})
+        return JsonResponse({'success': True, 'Mensajes': 'Participante Actualizado satisfactoriamente!'})
 
 
     except psycopg2.DatabaseError as error:
@@ -1158,7 +1162,8 @@ def CrearParticipantesInformeCirugia(request):
         if miConexion3:
             print("Entro ha hacer el Rollback")
             miConexion3.rollback()
-        raise error
+        message_error= str(error)
+        return JsonResponse({'success': False, 'Mensajes': message_error})
 
     finally:
         if miConexion3:
@@ -1205,7 +1210,7 @@ def CrearParticipantesCirugia(request):
         cur3.close()
         miConexion3.close()
 
-        return JsonResponse({'success': True, 'message': 'Participante Actualizado satisfactoriamente!'})
+        return JsonResponse({'success': True, 'Mensajes': 'Participante Actualizado satisfactoriamente!'})
 
 
     except psycopg2.DatabaseError as error:
@@ -1213,7 +1218,8 @@ def CrearParticipantesCirugia(request):
         if miConexion3:
             print("Entro ha hacer el Rollback")
             miConexion3.rollback()
-        raise error
+        message_error= str(error)
+        return JsonResponse({'success': False, 'Mensajes': message_error})
 
     finally:
         if miConexion3:
@@ -1324,7 +1330,7 @@ def CrearMaterialCirugia(request):
         cur3.close()
         miConexion3.close()
 
-        return JsonResponse({'success': True, 'message': 'Material Actualizado satisfactoriamente!'})
+        return JsonResponse({'success': True, 'Mensajes': 'Material Actualizado satisfactoriamente!'})
 
 
     except psycopg2.DatabaseError as error:
@@ -1332,7 +1338,8 @@ def CrearMaterialCirugia(request):
         if miConexion3:
             print("Entro ha hacer el Rollback")
             miConexion3.rollback()
-        raise error
+        message_error= str(error)
+        return JsonResponse({'success': False, 'Mensajes': message_error})
 
     finally:
         if miConexion3:
@@ -1380,7 +1387,7 @@ def CrearMaterialInformeCirugia(request):
         cur3.close()
         miConexion3.close()
 
-        return JsonResponse({'success': True, 'message': 'Material Actualizado satisfactoriamente!'})
+        return JsonResponse({'success': True, 'Mensajes': 'Material Actualizado satisfactoriamente!'})
 
 
     except psycopg2.DatabaseError as error:
@@ -1388,7 +1395,8 @@ def CrearMaterialInformeCirugia(request):
         if miConexion3:
             print("Entro ha hacer el Rollback")
             miConexion3.rollback()
-        raise error
+        message_error= str(error)
+        return JsonResponse({'success': False, 'Mensajes': message_error})
 
     finally:
         if miConexion3:
@@ -1422,14 +1430,15 @@ def BorraProcedimientosInformeCirugia(request):
         cur3.close()
         miConexion3.close()
 
-        return JsonResponse({'success': True, 'message': 'Procedimiento cancelado!'})
+        return JsonResponse({'success': True, 'Mensajes': 'Procedimiento cancelado!'})
 
     except psycopg2.DatabaseError as error:
         print ("Entre por rollback" , error)
         if miConexion3:
             print("Entro ha hacer el Rollback")
             miConexion3.rollback()
-        raise error
+        message_error= str(error)
+        return JsonResponse({'success': False, 'Mensajes': message_error})
 
     finally:
         if miConexion3:
@@ -1464,14 +1473,15 @@ def BorraParticipanteInformeCirugia(request):
         cur3.close()
         miConexion3.close()
 
-        return JsonResponse({'success': True, 'message': 'Participante cancelado!'})
+        return JsonResponse({'success': True, 'Mensajes': 'Participante cancelado!'})
 
     except psycopg2.DatabaseError as error:
         print ("Entre por rollback" , error)
         if miConexion3:
             print("Entro ha hacer el Rollback")
             miConexion3.rollback()
-        raise error
+        message_error= str(error)
+        return JsonResponse({'success': False, 'Mensajes': message_error})
 
     finally:
         if miConexion3:
@@ -1503,14 +1513,15 @@ def BorraMaterialInformeCirugia(request):
         cur3.close()
         miConexion3.close()
 
-        return JsonResponse({'success': True, 'message': 'Material cancelado!'})
+        return JsonResponse({'success': True, 'Mensajes': 'Material cancelado!'})
 
     except psycopg2.DatabaseError as error:
         print ("Entre por rollback" , error)
         if miConexion3:
             print("Entro ha hacer el Rollback")
             miConexion3.rollback()
-        raise error
+        message_error= str(error)
+        return JsonResponse({'success': False, 'Mensajes': message_error})
 
     finally:
         if miConexion3:
@@ -1610,7 +1621,7 @@ def CrearAdicionQx(request):
             cur3.close()
             miConexion3.close()
 
-            return JsonResponse({'success': True, 'message': 'Cirugia Actualizada!'})
+            return JsonResponse({'success': True, 'Mensajes': 'Cirugia Actualizada!'})
 
 
     except psycopg2.DatabaseError as error:
@@ -1618,7 +1629,8 @@ def CrearAdicionQx(request):
         if miConexion3:
             print("Entro ha hacer el Rollback")
             miConexion3.rollback()
-        raise error
+        message_error= str(error)
+        return JsonResponse({'success': False, 'Mensajes': message_error})
 
     finally:
         if miConexion3:
@@ -1750,7 +1762,7 @@ def CrearHojaDeGastoCirugia(request):
         cur3.close()
         miConexion3.close()
 
-        return JsonResponse({'success': True, 'message': 'Hoja De Gastos  Actualizado satisfactoriamente!'})
+        return JsonResponse({'success': True, 'Mensajes': 'Hoja De Gastos  Actualizado satisfactoriamente!'})
 
 
     except psycopg2.DatabaseError as error:
@@ -1758,7 +1770,8 @@ def CrearHojaDeGastoCirugia(request):
         if miConexion3:
             print("Entro ha hacer el Rollback")
             miConexion3.rollback()
-        raise error
+        message_error= str(error)
+        return JsonResponse({'success': False, 'Mensajes': message_error})
 
     finally:
         if miConexion3:
@@ -1790,14 +1803,15 @@ def BorraHojaDeGastoCirugia(request):
         cur3.close()
         miConexion3.close()
 
-        return JsonResponse({'success': True, 'message': 'Hoja de Gasto cancelado!'})
+        return JsonResponse({'success': True, 'Mensajes': 'Hoja de Gasto cancelado!'})
 
     except psycopg2.DatabaseError as error:
         print ("Entre por rollback" , error)
         if miConexion3:
             print("Entro ha hacer el Rollback")
             miConexion3.rollback()
-        raise error
+        message_error= str(error)
+        return JsonResponse({'success': False, 'Mensajes': message_error})
 
     finally:
         if miConexion3:
@@ -1907,14 +1921,15 @@ def GuardarEstadoProgramacionCirugia(request):
         cur3.close()
         miConexion3.close()
 
-        return JsonResponse({'success': True, 'message': 'Estado Programacion Actualizado!'})
+        return JsonResponse({'success': True, 'Mensajes': 'Estado Programacion Actualizado!'})
 
     except psycopg2.DatabaseError as error:
         print ("Entre por rollback" , error)
         if miConexion3:
             print("Entro ha hacer el Rollback")
             miConexion3.rollback()
-        raise error
+        message_error= str(error)
+        return JsonResponse({'success': False, 'Mensajes': message_error})
 
     finally:
         if miConexion3:
@@ -1953,14 +1968,15 @@ def GuardarEstadoCirugia(request):
         cur3.close()
         miConexion3.close()
 
-        return JsonResponse({'success': True, 'message': 'Estado Cirugia Actualizado!'})
+        return JsonResponse({'success': True, 'Mensajes': 'Estado Cirugia Actualizado!'})
 
     except psycopg2.DatabaseError as error:
         print ("Entre por rollback" , error)
         if miConexion3:
             print("Entro ha hacer el Rollback")
             miConexion3.rollback()
-        raise error
+        message_error= str(error)
+        return JsonResponse({'success': False, 'Mensajes': message_error})
 
     finally:
         if miConexion3:
@@ -2370,7 +2386,7 @@ def GenerarLiquidacionCirugia(request):
             cur3.close()
             miConexion3.close()
 
-            return JsonResponse({'success': True, 'message': 'Liquidacion Honorarios Iss cargada a cuenta Paciente Verificar valores !'})
+            return JsonResponse({'success': True, 'Mensajes': 'Liquidacion Honorarios Iss cargada a cuenta Paciente Verificar valores !'})
 
         except NotFoundError:
             # Code to handle the FileNotFoundError
@@ -2382,7 +2398,8 @@ def GenerarLiquidacionCirugia(request):
             if miConexion3:
                 print("Entro ha hacer el Rollback")
                 miConexion3.rollback()
-            raise error
+            message_error= str(error)
+            return JsonResponse({'success': False, 'Mensajes': message_error})
 
         finally:
             if miConexion3:
@@ -2770,7 +2787,7 @@ def GenerarLiquidacionCirugia(request):
             cur3.close()
             miConexion3.close()
 
-            return JsonResponse({'success': True, 'message': 'Liquidacion Honorarios Soat cargada a cuenta Paciente Verificar valores !'})
+            return JsonResponse({'success': True, 'Mensajes': 'Liquidacion Honorarios Soat cargada a cuenta Paciente Verificar valores !'})
 
         except psycopg2.Error as e:
 
@@ -2782,7 +2799,8 @@ def GenerarLiquidacionCirugia(request):
             if miConexion3:
                 print("Entro ha hacer el Rollback")
                 miConexion3.rollback()
-            raise error
+            message_error= str(error)
+            return JsonResponse({'success': False, 'Mensajes': message_error})
 
         finally:
             if miConexion3:
@@ -2826,14 +2844,15 @@ def GenerarLiquidacionCirugia(request):
             cur3.close()
             miConexion3.close()
 
-            return JsonResponse({'success': True, 'message': 'Liquidacion Honorarios Particular cargada a cuenta Paciente Verificar valores !'})
+            return JsonResponse({'success': True, 'Mensajes': 'Liquidacion Honorarios Particular cargada a cuenta Paciente Verificar valores !'})
 
         except psycopg2.DatabaseError as error:
             print("Entre por rollback", error)
             if miConexion3:
                 print("Entro ha hacer el Rollback")
                 miConexion3.rollback()
-            raise error
+                message_error= str(error)
+                return JsonResponse({'success': False, 'Mensajes': message_error})
 
         finally:
             if miConexion3:

@@ -771,13 +771,13 @@ window.addEventListener('load', async () => {
 
 
 
-		  $("#mensajes").html(" ! Registro Borrado !");
-		document.getElementById("mensajes").innerHTML = '! Registro Borrado !';
+		  $("#mensajes").value(" ! Registro Borrado !");
+		document.getElementById("mensajes").value = '! Registro Borrado !';
 	
 
                     },
 	   		    error: function (request, status, error) {
-			document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
+			document.getElementById("mensajesError").value = 'Error Contacte a su Administrador' + ': ' + error
 	   	    	}
 	           });
 	});
@@ -1018,7 +1018,7 @@ window.addEventListener('load', async () => {
 
                   },
 	   		    error: function(data){
-		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+		       		document.getElementById("mensajesError").value =  data.responseText
 
 	   	    	}
 
@@ -1206,7 +1206,7 @@ window.addEventListener('load', async () => {
 
                   },
   error: function(data){
-		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+		       		document.getElementById("mensajesError").value =  data.responseText
 
 	   	    	}
 	     });
@@ -1249,12 +1249,12 @@ window.addEventListener('load', async () => {
                         alert("respuesta="  + data);
 
 
-		document.getElementById("mensajesError").innerHTML = 'Registro Creado ! ';
+		document.getElementById("mensajesError").value = 'Registro Creado ! ';
 
 
                     },
   error: function(data){
-		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+		       		document.getElementById("mensajesError").value =  data.responseText
 
 	   	    	}
 	     });
@@ -1281,7 +1281,7 @@ window.addEventListener('load', async () => {
 	    dataTableRasgosInitialized = true;
 
 
-	           $("#mensajes").html(" ! Registro Guardado !");
+	           $("#mensajes").value(" ! Registro Guardado !");
   		
         });
 
@@ -1332,7 +1332,7 @@ function clickEvent() {
              alert("llegue cambio rasgos");
 	},
   error: function(data){
-		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+		       		document.getElementById("mensajesError").value =  data.responseText
 
 	   	    	}
          })
@@ -1389,13 +1389,13 @@ function guardarResultado() {
                         alert("Regrese");
                         alert("respuesta="  + data);
 	           
-			  $("#mensajes").html(" ! Registro Actualizado !");
+			  $("#mensajes").value(" ! Registro Actualizado !");
 			  window.location.reload();
-			  $("#mensajes").html(" ! Registro Actualizado !");
+			  $("#mensajes").value(" ! Registro Actualizado !");
 
                     },
 	   		   error: function(data){
-		       		document.getElementById("mensajesError").innerHTML =  data.responseText
+		       		document.getElementById("mensajesError").value =  data.responseText
 
 	   	    	}
 

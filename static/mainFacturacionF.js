@@ -1745,7 +1745,7 @@ function AFacturar()
 
 			if (data.success == true)
 			 {
-			  document.getElementById("mensajes").value = data.Mensajes;
+			  document.getElementById("mensajes").value = data.Mensajes + ' ' + data.Factura;
 			 }
 			else
 			{

@@ -192,7 +192,7 @@ def GuardarDescripcionProcedimientos(request):
         cur3.close()
         miConexion3.close()
 
-        return JsonResponse({'success': True, 'message': 'Tarifario Descripcon Procedimientos Actualizado!'})
+        return JsonResponse({'success': True, 'Mensajes': 'Tarifario Descripcon Procedimientos Actualizado!'})
 
     except psycopg2.DatabaseError as error:
         print ("Entre por rollback" , error)
@@ -200,7 +200,8 @@ def GuardarDescripcionProcedimientos(request):
             print("Entro ha hacer el Rollback")
             miConexion3.rollback()
 
-        raise error
+        message_error= str(error)
+        return JsonResponse({'success': False, 'Mensajes': message_error})
 
 
     finally:
@@ -264,7 +265,7 @@ def CrearTarifarioProcedimientos(request):
             miConexion3.commit()
             cur3.close()
             miConexion3.close()
-            return JsonResponse({'success': True, 'message': 'Tarifario Sabana creado !'})
+            return JsonResponse({'success': True, 'Mensajes': 'Tarifario Sabana creado !'})
 
     except psycopg2.DatabaseError as error:
         print ("Entre por rollback" , error)
@@ -272,7 +273,8 @@ def CrearTarifarioProcedimientos(request):
             print("Entro ha hacer el Rollback")
             miConexion3.rollback()
 
-        raise error
+        message_error= str(error)
+        return JsonResponse({'success': False, 'Mensajes': message_error})
 
     finally:
         if miConexion3:
@@ -335,14 +337,15 @@ def CrearItemTarifario(request):
         miConexion3.commit()
         cur3.close()
         miConexion3.close()
-        return JsonResponse({'success': True, 'message': 'Item Tarifario creado !'})
+        return JsonResponse({'success': True, 'Mensajes': 'Item Tarifario creado !'})
 
     except psycopg2.DatabaseError as error:
         print ("Entre por rollback" , error)
         if miConexion3:
             print("Entro ha hacer el Rollback")
             miConexion3.rollback()
-        raise error
+        message_error= str(error)
+        return JsonResponse({'success': False, 'Mensajes': message_error})
 
     finally:
         if miConexion3:
@@ -433,7 +436,7 @@ def AplicarTarifas(request):
         cur3.close()
         miConexion3.close()
 
-        return JsonResponse({'success': True, 'message': 'Tarifario Sabana creado !'})
+        return JsonResponse({'success': True, 'Mensajes': 'Tarifario Sabana creado !'})
 
     except psycopg2.DatabaseError as error:
         print ("Entre por rollback" , error)
@@ -441,7 +444,8 @@ def AplicarTarifas(request):
             print("Entro ha hacer el Rollback")
             miConexion3.rollback()
 
-        raise error
+        message_error= str(error)
+        return JsonResponse({'success': False, 'Mensajes': message_error})
 
 
     finally:
@@ -553,14 +557,15 @@ def GuardarEditarTarifarioProcedimientos(request):
         cur3.close()
         miConexion3.close()
 
-        return JsonResponse({'success': True, 'message': 'Tarifario Actualizado !'})
+        return JsonResponse({'success': True, 'Mensajes': 'Tarifario Actualizado !'})
 
     except psycopg2.DatabaseError as error:
         print ("Entre por rollback" , error)
         if miConexion3:
             print("Entro ha hacer el Rollback")
             miConexion3.rollback()
-        raise error
+        message_error= str(error)
+        return JsonResponse({'success': False, 'Mensajes': message_error})
 
 
     finally:
@@ -771,7 +776,7 @@ def CrearTarifarioSuministros(request):
             miConexion3.commit()
             cur3.close()
             miConexion3.close()
-            return JsonResponse({'success': True, 'message': 'Tarifario Sabana Suministros creado !'})
+            return JsonResponse({'success': True, 'Mensajes': 'Tarifario Sabana Suministros creado !'})
 
 
     except psycopg2.DatabaseError as error:
@@ -779,7 +784,8 @@ def CrearTarifarioSuministros(request):
         if miConexion3:
             print("Entro ha hacer el Rollback")
             miConexion3.rollback()
-        raise error
+        message_error= str(error)
+        return JsonResponse({'success': False, 'Mensajes': message_error})
 
 
     finally:
@@ -945,7 +951,7 @@ def AplicarTarifasSuministros(request):
             print(comando)
             cur3.execute(comando)
 
-            return JsonResponse({'success': True, 'message': 'Tarifario Suministro Actualizado !'})
+            return JsonResponse({'success': True, 'Mensajes': 'Tarifario Suministro Actualizado !'})
 
     except psycopg2.DatabaseError as error:
         print ("Entre por rollback" , error)
@@ -953,7 +959,8 @@ def AplicarTarifasSuministros(request):
             print("Entro ha hacer el Rollback")
             miConexion3.rollback()
 
-        raise error
+        message_error= str(error)
+        return JsonResponse({'success': False, 'Mensajes': message_error})
 
     finally:
         if miConexion3:
@@ -1013,6 +1020,8 @@ def CrearItemTarifarioSuministros(request):
             #print ("Entre Error Base de datos" ,  error)
             #transaction.rollback()
             #miConexion3.close()
+            #message_error= str(error)
+            #return JsonResponse({'success': False, 'Mensajes': message_error})
             #return JsonResponse({'success': True, 'message': 'Tarifa Suministro existente !'})
 
         miConexion3.commit()
@@ -1021,14 +1030,15 @@ def CrearItemTarifarioSuministros(request):
 
 
 
-        return JsonResponse({'success': True, 'message': 'Item Tarifario Suministro creado !'})
+        return JsonResponse({'success': True, 'Mensajes': 'Item Tarifario Suministro creado !'})
 
     except psycopg2.DatabaseError as error:
         print ("Entre por rollback" , error)
         if miConexion3:
             print("Entro ha hacer el Rollback")
             miConexion3.rollback()
-        raise error
+        message_error= str(error)
+        return JsonResponse({'success': False, 'Mensajes': message_error})
 
 
     finally:
@@ -1138,14 +1148,15 @@ def GuardarEditarTarifarioSuministros(request):
         cur3.close()
         miConexion3.close()
 
-        return JsonResponse({'success': True, 'message': 'Tarifario Actualizado !'})
+        return JsonResponse({'success': True, 'Mensajes': 'Tarifario Actualizado !'})
 
     except psycopg2.DatabaseError as error:
         print ("Entre por rollback" , error)
         if miConexion3:
             print("Entro ha hacer el Rollback")
             miConexion3.rollback()
-        raise error
+        message_error= str(error)
+        return JsonResponse({'success': False, 'Mensajes': message_error})
 
 
     finally:

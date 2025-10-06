@@ -708,10 +708,10 @@ def AdicionarDespachosDispensa(request):
 
         ## Vamops a actualizar los totales de la Liquidacion:
         #
-        totalSuministros = LiquidacionDetalle.objects.all().filter(liquidacion_id=liquidacionId).filter(examen_id=None).exclude(estadoRegistro='N').aggregate(totalS=Coalesce(Sum('valorTotal'), 0))
+        totalSuministros = LiquidacionDetalle.objects.all().filter(liquidacion_id=liquidacionId).filter(examen_id=None).exclude(estadoRegistro='I').exclude(anulado='S').aggregate(totalS=Coalesce(Sum('valorTotal'), 0))
         totalSuministros = (totalSuministros['totalS']) + 0
         print("totalSuministros", totalSuministros)
-        totalProcedimientos = LiquidacionDetalle.objects.all().filter(liquidacion_id=liquidacionId).filter(cums_id=None).exclude(estadoRegistro='N').aggregate(totalP=Coalesce(Sum('valorTotal'), 0))
+        totalProcedimientos = LiquidacionDetalle.objects.all().filter(liquidacion_id=liquidacionId).filter(cums_id=None).exclude(estadoRegistro='I').exclude(anulado='S').aggregate(totalP=Coalesce(Sum('valorTotal'), 0))
         totalProcedimientos = (totalProcedimientos['totalP']) + 0
         print("totalProcedimientos", totalProcedimientos)
         registroPago = Liquidacion.objects.get(id=liquidacionId)
@@ -756,7 +756,7 @@ def AdicionarDespachosDispensa(request):
         ## OJOOOO
         ## AQUI FALTA UN except
 
-        return JsonResponse({'success': True, 'Mensaje': 'Despacho creado satisfactoriamente!' })
+        return JsonResponse({'success': True, 'Mensajes': 'Despacho creado satisfactoriamente!' })
 
 
     except psycopg2.DatabaseError as error:
@@ -764,8 +764,8 @@ def AdicionarDespachosDispensa(request):
         if miConexion3:
             print("Entro ha hacer el Rollback")
             miConexion3.rollback()
-
-        return JsonResponse({'success': False, 'Mensaje': error})
+        message_error= str(error)
+        return JsonResponse({'success': False, 'Mensajes': message_error})
 
 
     finally:
@@ -810,7 +810,7 @@ def CambiaEstadoDespacho(request):
         cur3.close()
         miConexion3.close()
 
-        return JsonResponse({'success': True, 'Mensaje': 'Despacho actualizado !'})
+        return JsonResponse({'success': True, 'Mensajes': 'Despacho actualizado !'})
 
     except psycopg2.DatabaseError as error:
         print("Entre por rollback", error)
@@ -818,7 +818,8 @@ def CambiaEstadoDespacho(request):
             print("Entro ha hacer el Rollback")
             miConexion3.rollback()
 
-        return JsonResponse({'success': False, 'Mensaje': error})
+        message_error= str(error)
+        return JsonResponse({'success': False, 'Mensajes': message_error})
 
     finally:
         if miConexion3:
@@ -1028,7 +1029,7 @@ def RecibirDevolucionFarmacia(request):
         cur3.close()
         miConexion3.close()
 
-        return JsonResponse({'success': True, 'Mensaje': 'Recibida Devolucion Actualizada!'})
+        return JsonResponse({'success': True, 'Mensajes': 'Recibida Devolucion Actualizada!'})
 
     except psycopg2.DatabaseError as error:
         print("Entre por rollback", error)
@@ -1036,7 +1037,8 @@ def RecibirDevolucionFarmacia(request):
             print("Entro ha hacer el Rollback")
             miConexion3.rollback()
 
-        return JsonResponse({'success': False, 'Mensaje': error})
+        message_error= str(error)
+        return JsonResponse({'success': False, 'Mensajes': message_error})
 
     finally:
         if miConexion3:
@@ -1072,14 +1074,15 @@ def RecibirDevolucionDetalleFarmacia(request):
         cur3.close()
         miConexion3.close()
 
-        return JsonResponse({'success': True, 'Mensaje': 'Recibida Devolucion Detalle Actualizada!'})
+        return JsonResponse({'success': True, 'Mensajes': 'Recibida Devolucion Detalle Actualizada!'})
 
     except psycopg2.DatabaseError as error:
         print("Entre por rollback", error)
         if miConexion3:
             print("Entro ha hacer el Rollback")
             miConexion3.rollback()
-        return JsonResponse({'success': False, 'Mensaje': error})
+        message_error= str(error)
+        return JsonResponse({'success': False, 'Mensajes': message_error})
 
     finally:
         if miConexion3:

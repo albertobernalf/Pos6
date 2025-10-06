@@ -800,7 +800,7 @@ window.addEventListener('load', async () => {
 
                     },
 	   	        error: function(data){
-		       		document.getElementById("mensajesErrorAbonos").innerHTML =  data.responseText
+		       		document.getElementById("mensajesErrorAbonos").value =  data.responseText
 			        },
       });
         });
@@ -837,7 +837,7 @@ window.addEventListener('load', async () => {
 			if (data2 == '')
 				{
 				alert("Debe crear un Convenio");
-				document.getElementById("mensajesErrorAbonos").innerHTML = 'Debe crear un Convenio';
+				document.getElementById("mensajesErrorAbonos").value = 'Debe crear un Convenio';
 				return;
 				}
 
@@ -861,7 +861,7 @@ window.addEventListener('load', async () => {
             $('#crearAbonosModel').modal('show');
                     },
 	   		                error: function(data){
-		       		document.getElementById("mensajesErrorAbonos").innerHTML =  data.responseText
+		       		document.getElementById("mensajesErrorAbonos").value =  data.responseText
 			        },
       });
         });
@@ -898,7 +898,7 @@ window.addEventListener('load', async () => {
 
 			if (data.success==true)
 			{
-			document.getElementById("mensajes").innerHTML = data.Mensaje;
+			document.getElementById("mensajes").value = data.Mensaje;
 			}
 
 		    $('#crearConvenioModel').modal('hide');
@@ -928,7 +928,7 @@ window.addEventListener('load', async () => {
 
 	   		    error: function (data) {
 	
-				document.getElementById("mensajesErrorModalConvenio").innerHTML =  data.responseText;
+				document.getElementById("mensajesErrorModalConvenio").value =  data.responseText;
 
 		  var table = $('#tablaConveniosAdmisiones').DataTable(); // accede de nuevo a la DataTable.
 	          table.ajax.reload();
@@ -956,7 +956,7 @@ window.addEventListener('load', async () => {
 
 			if (data.success==true)
 			{
-			document.getElementById("mensajes").innerHTML = data.Mensaje;
+			document.getElementById("mensajes").value = data.Mensaje;
 			}
 
                     $('#crearAbonosModel').modal('hide');
@@ -985,7 +985,7 @@ window.addEventListener('load', async () => {
                 error: function (data) {
 
 		      
-			document.getElementById("mensajesErrorAbonos").innerHTML =   data.responseText;
+			document.getElementById("mensajesErrorAbonos").value =   data.responseText;
 
 		  var tableA = $('#tablaAbonosAdmisiones').DataTable(); // accede de nuevo a la DataTable.
 	          tableA.ajax.reload();
@@ -1013,7 +1013,7 @@ window.addEventListener('load', async () => {
 	           dataType : 'json',
 	  		success: function (data) {
 				
-				document.getElementById("mensajes").innerHTML =   data['Mensaje'];
+				document.getElementById("mensajes").valueL =   data['Mensaje'];
 			
 
 			            var table = $('#tablaConveniosAdmisiones').DataTable(); // accede de nuevo a la DataTable.
@@ -1022,7 +1022,7 @@ window.addEventListener('load', async () => {
 	   		    error: function (data) {
     
 
-				document.getElementById("mensajesErrorModalUsuario").innerHTML =  data.JresponseText;
+				document.getElementById("mensajesErrorModalUsuario").value =  data.responseText;
 
 	   	    	}
 
@@ -1058,7 +1058,7 @@ window.addEventListener('load', async () => {
 	   		    error: function (data) {
 		  
 
-				document.getElementById("mensajesErrorModalUsuario").innerHTML =  data.JresponseText;
+				document.getElementById("mensajesErrorModalUsuario").value =  data.JresponseText;
 
 	   	    	}
 
@@ -1183,7 +1183,7 @@ $('#tablaDatos tbody').on('change', '.miIngresoId', function() {
                     },
 	   		    error: function (data) {
 		 
-	document.getElementById("mensajesError").innerHTML =  data.responseText;
+	document.getElementById("mensajesError").value =  data.responseText;
 
 	   	    	}
 	});
@@ -1258,14 +1258,14 @@ function AUsuario()
 if (genero =='')
 		{
 
-		document.getElementById("mensajesErrorModalUsuario").innerHTML = 'Suministre Genero';
+		document.getElementById("mensajesErrorModalUsuario").valueL = 'Suministre Genero';
 		return;
 		}
 
 				if (fechaNacio =='')
 		{
 
-		document.getElementById("mensajesErrorModalUsuario").innerHTML = 'Suministre Fecha nacimiento';
+		document.getElementById("mensajesErrorModalUsuario").value = 'Suministre Fecha nacimiento';
 		return;
 		}
 
@@ -1274,7 +1274,7 @@ if (genero =='')
 		if (pais =='')
 		{
 
-		document.getElementById("mensajesErrorModalUsuario").innerHTML = 'Suministre Pais';
+		document.getElementById("mensajesErrorModalUsuario").value = 'Suministre Pais';
         return;
 		}
 
@@ -1283,21 +1283,21 @@ if (genero =='')
 	if (departamentos =='')
 		{
 
-		document.getElementById("mensajesErrorModalUsuario").innerHTML = 'Suministre Departamento';
+		document.getElementById("mensajesErrorModalUsuario").value = 'Suministre Departamento';
         return;
 		}
 
 			if (municipio =='')
 		{
 
-		document.getElementById("mensajesErrorModalUsuario").innerHTML = 'Suministre Municipio';
+		document.getElementById("mensajesErrorModalUsuario").value = 'Suministre Municipio';
 		return;
 		}
 
 			if (localidad =='')
 		{
 
-		document.getElementById("mensajesErrorModalUsuario").innerHTML = 'Suministre Localidad';
+		document.getElementById("mensajesErrorModalUsuario").value = 'Suministre Localidad';
 		return;
 		}
 
@@ -1305,28 +1305,28 @@ if (genero =='')
 
 		if (ciudades =='')
 		{
-		document.getElementById("mensajesErrorModalUsuario").innerHTML = 'Suministre Ciudad';
+		document.getElementById("mensajesErrorModalUsuario").value = 'Suministre Ciudad';
 		return;
 		}
 		if (direccion =='')
 		{
-		document.getElementById("mensajesErrorModalUsuario").innerHTML = 'Suministre Direccion';
+		document.getElementById("mensajesErrorModalUsuario").value = 'Suministre Direccion';
 		return;
 		}
 		if (telefono =='')
 		{
-		document.getElementById("mensajesErrorModalUsuario").innerHTML = 'Suministre Telefono';
+		document.getElementById("mensajesErrorModalUsuario").value = 'Suministre Telefono';
 		return;
 		}
 		if (estadoCivil =='')
 		{
-		document.getElementById("mensajesErrorModalUsuario").innerHTML = 'Suministre Estado Civil';
+		document.getElementById("mensajesErrorModalUsuario").value = 'Suministre Estado Civil';
 		return;
 		}
 
 			if (centrosC_id =='')
 		{
-		document.getElementById("mensajesErrorModalUsuario").innerHTML = 'Suministre Centro de donde viene el paciente';
+		document.getElementById("mensajesErrorModalUsuario").value = 'Suministre Centro de donde viene el paciente';
 		return;
 		}
 
@@ -1334,7 +1334,7 @@ if (genero =='')
 
 		if (tiposUsuario =='')
 		{
-		document.getElementById("mensajesErrorModalUsuario").innerHTML = 'Suministre Tipo Usuario';
+		document.getElementById("mensajesErrorModalUsuario").value = 'Suministre Tipo Usuario';
 		return;
 		}
 
@@ -1376,7 +1376,7 @@ if (genero =='')
                     },
 	   		    error: function (sata) {
   
-				document.getElementById("mensajesErrorModalUsuario").innerHTML = data.responseText;
+				document.getElementById("mensajesErrorModalUsuario").value = data.responseText;
 
 	   	    	}
 	});
@@ -1416,7 +1416,7 @@ $(document).on('change', '#servicioCambio', function(event) {
                     },
 	   		    error: function (data) {
 			
-	   			  	document.getElementById("mensajesError").innerHTML =  data.responseText;
+	   			  	document.getElementById("mensajesError").value =  data.responseText;
 
 	   	    	}
 	     });
@@ -1454,7 +1454,7 @@ $(document).on('change', '#subServicioCambio', function(event) {
                     },
 	   		    error: function (data) {
      		
-	   			   	document.getElementById("mensajesError").innerHTML =  data.responseText;
+	   			   	document.getElementById("mensajesError").value =  data.responseText;
 
 	   	    	}
 	     });
@@ -1527,7 +1527,7 @@ $(document).on('change', '#busDocumentoSel', function(event) {
                     },
 	   		    error: function (data) {
 	   
-	document.getElementById("mensajesError").innerHTML =  data.responseText;
+	document.getElementById("mensajesError").value =  data.responseText;
 
 	   	    	}
 	});
@@ -1591,7 +1591,7 @@ $(document).on('change', '#busDocumentoSelTriage', function(event) {
                     },
 	   		    error: function (data) {
 			
-	document.getElementById("mensajesError").innerHTML =  data.responseText;
+	document.getElementById("mensajesError").value =  data.responseText;
 
 	   	    	}
 	});
@@ -1656,7 +1656,7 @@ function findOneUsuarioTriage()
 	   		    error: function (data) {
 		       
 
-	document.getElementById("mensajesError").innerHTML =  data.responseText;
+	document.getElementById("mensajesError").value =  data.responseText;
 
 
 	   	    	}
@@ -1725,7 +1725,7 @@ $(document).on('change', '#busDocumentoSel22', function(event) {
                     },
 	   		    error: function (data) {
 		
-	document.getElementById("mensajesError").innerHTML =  data.responseText;
+	document.getElementById("mensajesError").value =  data.responseText;
 
 	   	    	}
 	});
@@ -1792,7 +1792,7 @@ function findOneUsuario1()
                     },
 	   		    error: function (data) {
         
-	document.getElementById("mensajesError").innerHTML =  data.responseText;
+	document.getElementById("mensajesError").value =  data.responseText;
 
 	   	    	}
 	});
@@ -1901,7 +1901,7 @@ alert("llegue medicoIngreso = " + Usuarios.medicoIngreso);
                     },
 	   		    error: function (data) {
 		       
-	document.getElementById("mensajesError").innerHTML = data.responseText;
+	document.getElementById("mensajesError").value = data.responseText;
 	   	    	}
 	});
 
@@ -1980,7 +1980,7 @@ $(document).on('change', '#pais', function(event) {
 	   		    error: function (data) {
 	
 
-	document.getElementById("mensajesError").innerHTML =  data.responseText;
+	document.getElementById("mensajesError").value =  data.responseText;
 
 	   	    	}
 
@@ -2032,7 +2032,7 @@ $(document).on('change', '#departamentos', function(event) {
 	   		    error: function (data) {
 		
 
-	document.getElementById("mensajesError").innerHTML =   data.responseText;
+	document.getElementById("mensajesError").value =   data.responseText;
 
 	   	    	}
 
@@ -2078,7 +2078,7 @@ $.ajax({
 	   		    error: function (data) {
       		
 
-	document.getElementById("mensajesError").innerHTML =  data.responseText;
+	document.getElementById("mensajesError").value =  data.responseText;
 
 	   	    	}
 
@@ -2134,7 +2134,7 @@ $(document).on('change', '#departamentosViejo', function(event) {
 	   		    error: function (data) {
 		      
 
-	   			  	document.getElementById("mensajesError").innerHTML =  data.responseText;
+	   			  	document.getElementById("mensajesError").value =  data.responseText;
 
 	   	    	}
 
@@ -2193,7 +2193,7 @@ $(document).on('change', '#busEspecialidad', function(event) {
 	   		    error: function (data) {
 
 
-	   			 	document.getElementById("mensajesError").innerHTML =  data.responseText;
+	   			 	document.getElementById("mensajesError").value =  data.responseText;
 
 	   	    	}
 
@@ -2250,7 +2250,7 @@ $(document).on('change', '#busEspecialidadP', function(event) {
 	   		    error: function (data) {
 
 
-	   			 	document.getElementById("mensajesError").innerHTML =  data.responseText;
+	   			 	document.getElementById("mensajesError").value =  data.responseText;
 
 	   	    	}
 
@@ -2301,7 +2301,7 @@ $(document).on('change', '#tiposAntecedente', function(event) {
 		 error: function (data) {
     
 
-				document.getElementById("mensajesError").innerHTML =  data.responseText;
+				document.getElementById("mensajesError").value =  data.responseText;
 
 	   	    	}            
 	     });
@@ -2355,7 +2355,7 @@ $(document).on('change', '#busServicio', function(event) {
                     },
 	   		    error: function (data) {
       
-	document.getElementById("mensajesError").innerHTML =  data.responseText;
+	document.getElementById("mensajesError").value =  data.responseText;
 
 	   	    	}
 
@@ -2406,7 +2406,7 @@ $(document).on('change', '#busServicioT', function(event) {
                     },
 	   		    error: function (data) {
 
-	   			    	document.getElementById("mensajesError").innerHTML =  data.responseText;
+	   			    	document.getElementById("value").value =  data.responseText;
 
 	   	    	}
 
@@ -2452,7 +2452,7 @@ $(document).on('change', '#busSubServicio', function(event) {
                     },
 	   		    error: function (data) {
 
-	document.getElementById("mensajesError").innerHTML =  data.JsonResponse.errodata.responseText;
+	document.getElementById("mensajesError").value =  data.JsonResponse.errodata.responseText;
 
 	   	    	}
 
@@ -2516,7 +2516,7 @@ $(document).on('change', '#busSubServicioT', function(event) {
 	   		    error: function (data) {
 
 
-	   				document.getElementById("mensajesError").innerHTML =  data.responseText;
+	   				document.getElementById("mensajesError").value =  data.responseText;
 
 	   	    	}
 
@@ -2573,7 +2573,7 @@ $(document).on('change', '#busServicio22', function(event) {
 	   		    error: function (data) {
      
 
-	   			  	document.getElementById("mensajesError").innerHTML =  data.responseText;
+	   			  	document.getElementById("mensajesError").value =  data.responseText;
 
 	   	    	}
 
@@ -2627,7 +2627,7 @@ $(document).on('change', '#busSubServicio22', function(event) {
 	   		    error: function (data) {
    
 
-	   			document.getElementById("mensajesError").innerHTML =  data.responseText;
+	   			document.getElementById("mensajesError").value =  data.responseText;
 
 	   	    	}
 
@@ -2750,7 +2750,7 @@ function findOneAdmision(tipoDoc,Documento,consec, sede)
 		           alert(data.JsonResponse['error']); // the message
                     },
 	   		    error: function (data) {
-	document.getElementById("mensajesError").innerHTML =  data.responseText;
+	document.getElementById("mensajesError").value =  data.responseText;
 
 	   	    	}
 	});
@@ -2918,7 +2918,7 @@ var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
 		 error: function (data) {
   
 
-				document.getElementById("mensajesError").innerHTML =  data.responseText;
+				document.getElementById("mensajesError").value =  data.responseText;
 
 	   	    	}            
 	});
@@ -2979,7 +2979,7 @@ $(document).on('click', '#Convenios', function(event) {
 		 error: function (data) {
 
 
-				document.getElementById("mensajesError").innerHTML =  data.responseText;
+				document.getElementById("mensajesError").valueL =  data.responseText;
 
 	   	    	}            
 });
@@ -3019,7 +3019,7 @@ $(document).on('click', '#Convenios', function(event) {
 
 
 
-				document.getElementById("mensajesError").innerHTML = data.responseText;
+				document.getElementById("mensajesError").value = data.responseText;
 
 	   	    	}
 
@@ -3073,7 +3073,7 @@ var valor = $('input[name="ingresoId"]:checked').val();
 			 error: function (data) {
 
 
-				document.getElementById("mensajesError").innerHTML =  data.responseText;
+				document.getElementById("mensajesError").value =  data.responseText;
 
 	   	    	}	});
 
@@ -3198,7 +3198,7 @@ function actualizaAdmision()
                     },
 		 error: function (data) {
      
-					document.getElementById("mensajesError").innerHTML =  data.responseText;
+					document.getElementById("mensajesError").value =  data.responseText;
 
 
 	   	    	}            
@@ -3234,13 +3234,13 @@ $('#tablaDatos tbody').on('click', '.ImprimirHojaAdmision', function() {
 			 $('#pk').val(data.pk);
 			   info = data['message']
 
- 		        document.getElementById("mensajes").innerHTML = 'Revize la informacion completa de la Hoja de Admision '  + info;
+ 		        document.getElementById("mensajes").value = 'Revize la informacion completa de la Hoja de Admision '  + info;
 	       	     
 
                   },
 	   		    error: function (data) {
         
-	   			   document.getElementById("mensajesError").innerHTML = data.responseText;
+	   			   document.getElementById("mensajesError").value = data.responseText;
 	   	    	}
 	     });
 
@@ -3269,7 +3269,7 @@ $('#tablaDatos tbody').on('click', '.ImprimirManilla', function() {
                   },
 	   		    error: function (data) {
 	       
-	   			   document.getElementById("mensajesError").innerHTML =data.responseText;
+	   			   document.getElementById("mensajesError").value =data.responseText;
 	   	    	}
 	     });
 
@@ -3300,7 +3300,7 @@ $('#tablaDatos tbody').on('click', '.ImprimirAtencionInicialUrgencias', function
                   },
 	   		    error: function (data) {
 
-	   			   document.getElementById("mensajesError").innerHTML = data.responseText;
+	   			   document.getElementById("mensajesError").value = data.responseText;
 	   	    	}
 	     });
 
@@ -3352,7 +3352,7 @@ $(document).on('change', '#municipios', function(event) {
 	   		    error: function (data) {
     
 
-	document.getElementById("mensajesError").innerHTML = data.responseText;
+	document.getElementById("mensajesError").value = data.responseText;
 
 	   	    	}
 
@@ -3382,7 +3382,7 @@ $(document).on('change', '#municipios', function(event) {
                   },
 	   		    error: function (data) {
     
-	   			   document.getElementById("mensajesError").innerHTML = data.responseText;
+	   			   document.getElementById("mensajesError").value = data.responseText;
 	   	    	}
 	     });
 
@@ -3423,7 +3423,7 @@ $(document).on('change', '#empresaC', function(event) {
  	      		      });
                     },
                     error: function (data) {
-	   			    	document.getElementById("mensajesError").innerHTML =   data.responseText;
+	   			    	document.getElementById("mensajesError").value =   data.responseText;
 
 	   	    	}
 

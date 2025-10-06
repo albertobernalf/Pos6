@@ -660,8 +660,9 @@ function RefrescarPantalla() {
 
                                     </div> <!-- Cierra body -->
                                     <div class="modal-footer">
-				 <span id="mensajesErrorModalDevolverEnfermeria" name="mensajesErrorModalDevolverEnfermeria" style= "color:red; font-size:18px; line-height:35px; font-family: Calibri;" > </span>
-                                       <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar   </button>
+
+		<textarea id="mensajesErrorModalDevolverEnfermeria" name="mensajesErrorModalDevolverEnfermeria" style="background-color: lightred; color: navy;"  rows="1" cols="60" placeholder="Mensajes..."  wrap="hard"></textarea>                             
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar   </button>
 
                                          <input type="button" class="btn btn-primary" id='BtnFormulacionDev' name='BtnFormulacionDev' value="Devolver"> 
                                         
@@ -835,8 +836,9 @@ function RefrescarPantalla() {
 
                                     </div> <!-- Cierra body -->
                                     <div class="modal-footer">
-				 <span id="mensajesErrorModalPlaneacionEnfermeria" name="mensajesErrorModalPlaneacionEnfermeria" style= "color:red; font-size:18px; line-height:35px; font-family: Calibri;" > </span>
-                                       <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar   </button>
+
+		<textarea id="mensajesErrorModalPlaneacionEnfermeria" name="mensajesErrorModalPlaneacionEnfermeria" style="background-color: lightred; color: navy;"  rows="1" cols="60" placeholder="Mensajes..."  wrap="hard"></textarea>                                  
+                                  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar   </button>
 
                                          <input type="button" class="btn btn-primary" value="save"  onclick="GuardarPlaneacion()"> 
                                         
@@ -1391,8 +1393,9 @@ function RefrescarPantalla() {
 
                                     </div> <!-- Cierra body -->
                                     <div class="modal-footer">
-				 <span id="mensajesErrorModalPedidosEnfermeria" name="mensajesErrorPedidosEnfermeria" style= "color:red; font-size:18px; line-height:35px; font-family: Calibri;" > </span>
-                                       <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar   </button>
+
+		<textarea id="mensajesErrorModalPedidosEnfermeria" name="mensajesErrorModalPedidosEnfermeria" style="background-color: lightred; color: navy;"  rows="1" cols="60" placeholder="Mensajes..."  wrap="hard"></textarea>                                                       
+                  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar   </button>
 
                                          <input type="button" class="btn btn-primary" value="save"  onclick="CreaPedidosEnfermeriaCabezote()"> 
                                         
@@ -1432,8 +1435,9 @@ function RefrescarPantalla() {
 
 {% block mensajeria %}
 <div class="marco">
-     <span id="mensajes" name="mensajes" style= "color:blue; font-size:18px; line-height:35px; font-family: Calibri;" > </span>
-     <span id="mensajesError" name="mensajesError" style= "color:red; font-size:18px; line-height:35px; font-family: Calibri;" > </span>
+     	<textarea id="mensajes" name="mensajes" style="background-color: lightblue; color: navy;"  rows="1" cols="180" placeholder="Mensajes..."  wrap="hard"></textarea>
+	<textarea id="mensajesError" name="mensajesError" style="background-color: lightred; color: navy;"  rows="1" cols="180" placeholder="Mensajes..."  wrap="hard"></textarea>
+
 </div>
 {% endblock %}
 

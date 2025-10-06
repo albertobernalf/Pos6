@@ -691,6 +691,8 @@ LUNES 15-SEPTIEMBRE: Ademas de revizar lo de arriba: ver acomodar columnas grade
 -- tengo un problema serio al facturar una refactura lo toima como factura OJO y no compo refactura error
 -- tengo 2 erores cuando refacturo request.post(tipoingreso)   d['triageId']
 -- LO MEJOR ES coger o arrancar de ceros nuevo caso crearlo, con dos conveios, 1. sin traslados. 2. con traslados a ver donde esta el error .OJO paso a paso
+--  es mejor trabaja rcon estilops los textarea, para no tener que repetir en caso de cambio de style
+
 
  -- TIPS CONSULTA EXTERNA
 
