@@ -14,7 +14,8 @@ from django.core.exceptions import ValidationError
 from django.urls import reverse, reverse_lazy
 # from django.core.urlresolvers import reverse_lazy
 from django.views.generic import ListView, CreateView, TemplateView
-from django.http import JsonResponse
+from django.http \
+import JsonResponse
 #import MySQLdb
 import pyodbc
 import psycopg2
@@ -23,7 +24,7 @@ import datetime
 from django.utils import timezone
 from decimal import Decimal
 from admisiones.models import Ingresos
-from facturacion.models import ConveniosPacienteIngresos, Liquidacion, LiquidacionDetalle, Facturacion, FacturacionDetalle
+from facturacion.models import ConveniosPacienteIngresos, Liquidacion, LiquidacionDetalle, Facturacion, FacturacionDetalle, Refacturacion
 from cartera.models import TiposPagos, FormasPagos, Pagos, PagosFacturas
 from triage.models import Triage
 from clinico.models import Servicios
@@ -1333,9 +1334,9 @@ def FacturarCuenta(request):
 
     #usuarioId = Liquidacion.objects.get(id=liquidacionId)
 
-    print ("Usuario", usuarioId.documento_id)
-    print ("TipoDoc", usuarioId.tipoDoc_id)
-    print ("Consec", usuarioId.consecAdmision)
+    #print ("Usuario", usuarioId.documento_id)
+    #print ("TipoDoc", usuarioId.tipoDoc_id)
+    #print ("Consec", usuarioId.consecAdmision)
 
     totalCirugias=0
 
@@ -1345,21 +1346,22 @@ def FacturarCuenta(request):
     print("convenio de la liquidacion = " , liquidacionDatos.convenio_id);
 
     facturaConvenio = liquidacionDatos.convenio_id
-    facturaAnula = Refacturacion.objects.get(tipoDoc_id=liquidacionDatos.tipoDoc_id, documento_id=liquidacionDatos.documento_id,consecAdmision=liquidacionDatos.consecAdmision)
-    facturaAnulada = facturaAnula.anulada
+
+    if (tipoFactura == 'REFACTURA'):
+
+        facturaAnula = Refacturacion.objects.get(tipoDoc_id=liquidacionDatos.tipoDoc_id, documento_id=liquidacionDatos.documento_id,consecAdmision=liquidacionDatos.consecAdmision)
+        facturaAnulada = facturaAnula.facturaAnulada
 
     numConveniosActivos=0
 
-
     try:
 	
-	    numConveniosActivos =  Liquidacion.objects.filter(tipoDoc_id=usuarioId.tipoDoc_id, documento_id=usuarioId.documento_id, consecAdmision=usuarioId.consecAdmision ).count()
+	    numConveniosActivos =  Liquidacion.objects.filter(tipoDoc_id=liquidacionDatos.tipoDoc_id, documento_id=liquidacionDatos.documento_id, consecAdmision=liquidacionDatos.consecAdmision ).count()
 
     except (ValueError, TypeError) as e:
 
         message_error= str(e)
         return JsonResponse({'success': False, 'Mensajes': message_error})
-
 
     finally:
 	    print ("ok")
@@ -1368,20 +1370,19 @@ def FacturarCuenta(request):
             print("ENTRE convenio de la liquidacion = " + liquidacionDatos.convenio_id)
             return JsonResponse({'success': False, 'message': 'Favor ingresar Convenio a Facturar !', 'Factura' : 0 })
 
-
      # OPS PAILAS SI LO QUE VA A FACTURAR ES UN TRIAGE
 
     flag=''
 
-    if	(usuarioId.consecAdmision == 0 ): #Es triage
+    if	(liquidacionDatos.consecAdmision == 0 ): #Es triage
 
-	    triageId = Triage.objects.get(tipoDoc_id=usuarioId.tipoDoc_id , documento_id=usuarioId.documento_id ,consec=usuarioId.consecAdmision)
+	    triageId = Triage.objects.get(tipoDoc_id=liquidacionDatos.tipoDoc_id , documento_id=liquidacionDatos.documento_id ,consec=liquidacionDatos.consecAdmision)
 	    print ("triageId = ", triageId.id)
 	    flag='TRIAGE'
 	    return JsonResponse({'success': False, 'Mensaje': 'No es posible facturar cuenta Triage. Favor hospitalizar o a cama de Urgencias!'})
 
     else:
-	    ingresoId = Ingresos.objects.get(tipoDoc_id=usuarioId.tipoDoc_id , documento_id=usuarioId.documento_id ,consec=usuarioId.consecAdmision)
+	    ingresoId = Ingresos.objects.get(tipoDoc_id=liquidacionDatos.tipoDoc_id , documento_id=liquidacionDatos.documento_id ,consec=liquidacionDatos.consecAdmision)
 	    print ("ingresoId = ", ingresoId.id)
 	    flag='INGRESO'
 	    servicioSedeAmb = ServiciosSedes.objects.get(sedesClinica_id=sede, id=ingresoId.serviciosActual_id)
@@ -1398,7 +1399,6 @@ def FacturarCuenta(request):
         if (ingresoId.salidaClinica=='N' and servicioSedeAmb.servicios_id != servicioAmb.id  ):
             print("flag3", flag)
             return JsonResponse({'success': False, 'Mensajes': 'Paciente NO tiene Salida Clinica. Consultar medico tratante !', 'Factura' : 0 })
-
 
     # AQUI VALDAR SI HAY CIRUGIAS QUE NO ESTEN REALIZADAS  ## OPS ESTO SI HAY QUE REVIZARLO
     
@@ -1421,7 +1421,6 @@ def FacturarCuenta(request):
     finally:
         print("No haga nada")
 
-
     ## RUTINA ACTUALIZA DX, SERV ,
 
     miConexion3 = None
@@ -1431,7 +1430,7 @@ def FacturarCuenta(request):
 
         if (tipoFactura == 'FACTURA'):
 
-            if (flag=='INGRESO'):
+            if (flag=='INGRESO' or flag=='AMBULATORIO'):
 
                 if (numConveniosActivos <= 1):
 
@@ -1452,8 +1451,6 @@ def FacturarCuenta(request):
                     else:
                         comando1 = 'INSERT INTO sitios_historialdependencias (consec,"fechaLiberacion","fechaRegistro","estadoReg", dependencias_id,documento_id,"tipoDoc_id","usuarioRegistro_id",disponibilidad)  SELECT consec,' + "'" + str(fechaRegistro) + "'," + "'" + str(fechaRegistro) + "'," + "'" + str('A') + "'" + ", id" + ",'" + str(triageId.documento_id) + "'," + "'" + str(triageId.tipoDoc_id) + "'," + "'" + str(username_id) + "'," + "'" + str('L') + "'" +  ' from sitios_dependencias where "tipoDoc_id" = ' + "'" + str(triageId.tipoDoc_id) + "' AND documento_id = "  + "'" + str(triageId.documento_id) + "' AND consec = " + "'" + str(triageId.consec) + "'"
 
-
-
                     print(comando1)
                     cur3.execute(comando1)
 
@@ -1469,8 +1466,6 @@ def FacturarCuenta(request):
 
                     print(comando2)
                     cur3.execute(comando2)
-
-
 
         comando3 = 'INSERT INTO facturacion_facturacion ("sedesClinica_id", documento_id, "consecAdmision", "fechaFactura", "totalCopagos", "totalCuotaModeradora","totalProcedimientos",   "totalSuministros", "totalFactura", "valorApagar", anulado, anticipos, "fechaRegistro", "estadoReg", "fechaAnulacion", observaciones, "fechaCorte",convenio_id, "tipoDoc_id","usuarioAnula_id","usuarioRegistro_id",  "totalAbonos", "totalRecibido", "serviciosAdministrativos_id") SELECT ' "'" + str(sede) + "'" + ', documento_id, "consecAdmision", ' + "'" + str(fechaRegistro) + "'" + ' , "totalCopagos", "totalCuotaModeradora", "totalProcedimientos",  "totalSuministros", "totalLiquidacion", "valorApagar", ' + "'" + str('N') + "'" + ' , anticipos, ' + "'" + str(fechaRegistro) + "'" + ' ,  ' + "'" + str('A') + "'" + ' , "fechaAnulacion", observaciones, "fechaCorte",convenio_id, "tipoDoc_id","usuarioAnula_id", ' + "'" + str(username_id) + "'" + '  , "totalAbonos", "totalRecibido" , ' + "'" + str(serviciosAdministrativos) + "'" + '  FROM facturacion_liquidacion WHERE id =  ' + liquidacionId + ' RETURNING id  '
 
@@ -1506,7 +1501,7 @@ def FacturarCuenta(request):
 
         # ACTALIZAMPOS LA FACTURA EN LA TABLA CONVENIONPACIENTEINGRESOS
 
-        comando10 = 'UPDATE facturacion_conveniospacienteingresos  SET factura_id = ' + "'" + str(facturacionId) + "'" + ' WHERE documento_id = ' + "'" + str(liquidacionDatos.documento_id) + "'" + ' AND "tipoDoc_id" = ' + "'" + str(liquidacionDatos.tipoDoc_id) + "'" + ' AND "consecAdmision" = ' + "'" + str(liquidaciondatos.consecAdmision) + "'  AND convenio_id = " + "'" + str(liquidacionDatos.convenio_id) + "'"
+        comando10 = 'UPDATE facturacion_conveniospacienteingresos  SET factura_id = ' + "'" + str(facturacionId) + "'" + ' WHERE documento_id = ' + "'" + str(liquidacionDatos.documento_id) + "'" + ' AND "tipoDoc_id" = ' + "'" + str(liquidacionDatos.tipoDoc_id) + "'" + ' AND "consecAdmision" = ' + "'" + str(liquidacionDatos.consecAdmision) + "'  AND convenio_id = " + "'" + str(liquidacionDatos.convenio_id) + "'"
 
         print(comando10)
         cur3.execute(comando10)
@@ -1525,17 +1520,17 @@ def FacturarCuenta(request):
 
         #AQUI ACTUALIZAMOS LOS PAGOS DEL PACIENTE
 
-        comando6 = 'INSERT INTO cartera_pagosFacturas ("valorAplicado", "fechaRegistro","estadoReg", "facturaAplicada_id",pago_id, "serviciosAdministrativos_id") SELECT "valorEnCurso", ' + "'" + str(fechaRegistro) + "','A'," + str(facturacionId) + ', id ,' + "'" + str(serviciosAdministrativos) + "'" + ' FROM cartera_pagos WHERE documento_id = ' + "'" + str(usuarioId.documento_id) + "'" + ' AND "tipoDoc_id" = ' + "'" + str(usuarioId.tipoDoc_id) + "'" + ' AND consec = ' + "'" + str(usuarioId.consecAdmision) + "'"
+        comando6 = 'INSERT INTO cartera_pagosFacturas ("valorAplicado", "fechaRegistro","estadoReg", "facturaAplicada_id",pago_id, "serviciosAdministrativos_id") SELECT "valorEnCurso", ' + "'" + str(fechaRegistro) + "','A'," + str(facturacionId) + ', id ,' + "'" + str(serviciosAdministrativos) + "'" + ' FROM cartera_pagos WHERE documento_id = ' + "'" + str(liquidacionDatos.documento_id) + "'" + ' AND "tipoDoc_id" = ' + "'" + str(liquidacionDatos.tipoDoc_id) + "'" + ' AND consec = ' + "'" + str(liquidacionDatos.consecAdmision) + "'"
 
         print(comando6)
         cur3.execute(comando6)
 
-        comando7 = 'UPDATE cartera_pagos SET "totalAplicado" =  "totalAplicado" + "valorEnCurso", "valorEnCurso" = 0 ' + ' WHERE documento_id = ' + "'" + str(usuarioId.documento_id) + "'" + ' AND "tipoDoc_id" = ' + "'" + str(usuarioId.tipoDoc_id) + "'" + ' AND consec = ' + "'" + str(usuarioId.consecAdmision) + "'"
+        comando7 = 'UPDATE cartera_pagos SET "totalAplicado" =  "totalAplicado" + "valorEnCurso", "valorEnCurso" = 0 ' + ' WHERE documento_id = ' + "'" + str(liquidacionDatos.documento_id) + "'" + ' AND "tipoDoc_id" = ' + "'" + str(liquidacionDatos.tipoDoc_id) + "'" + ' AND consec = ' + "'" + str(liquidacionDatos.consecAdmision) + "'"
 
         print(comando7)
         cur3.execute(comando7)
 
-        comando7 = 'UPDATE cartera_pagos SET saldo  = valor - "totalAplicado" ' + ' WHERE documento_id = ' + "'" + str(usuarioId.documento_id) + "'" + ' AND "tipoDoc_id" = ' + "'" + str(usuarioId.tipoDoc_id) + "'" + ' AND consec = ' + "'" + str(usuarioId.consecAdmision) + "'"
+        comando7 = 'UPDATE cartera_pagos SET saldo  = valor - "totalAplicado" ' + ' WHERE documento_id = ' + "'" + str(liquidacionDatos.documento_id) + "'" + ' AND "tipoDoc_id" = ' + "'" + str(liquidacionDatos.tipoDoc_id) + "'" + ' AND consec = ' + "'" + str(liquidacionDatos.consecAdmision) + "'"
 
         print(comando7)
         cur3.execute(comando7)
@@ -1549,7 +1544,7 @@ def FacturarCuenta(request):
 
             estadoCirugiaFacturada = EstadosCirugias.objects.get(nombre='FACTURADA')
 
-            comando10= 'UPDATE cirugia_cirugias SET "estadoCirugia_id" = ' + "'" + str(estadoCirugiaFacturada) + "' WHERE documento_id = " + "'" + str(usuarioId.documento_id) + "'" + ' AND "tipoDoc_id" = ' + "'" + str(usuarioId.tipoDoc_id) + "', " + '"consecAdmision" = ' + "'" +  str(usuarioId.consecAdmision) + "' AND " + '"estadoCirugia_id" = ' + "'" + str(estadoCirugiaRealizada.id) + "'"
+            comando10= 'UPDATE cirugia_cirugias SET "estadoCirugia_id" = ' + "'" + str(estadoCirugiaFacturada) + "' WHERE documento_id = " + "'" + str(liquidacionDatos.documento_id) + "'" + ' AND "tipoDoc_id" = ' + "'" + str(liquidacionDatos.tipoDoc_id) + "', " + '"consecAdmision" = ' + "'" +  str(liquidacionDatos.consecAdmision) + "' AND " + '"estadoCirugia_id" = ' + "'" + str(estadoCirugiaRealizada.id) + "'"
             print(comando10)
             cur3.execute(comando10)
 
@@ -1789,7 +1784,7 @@ def AnularFactura(request):
         cur3.execute(comando)
 
 
-        comando1 = 'UPDATE facturacion_facturaciondetalle SET "estadoRegistro" = ' + "'" + str('N') + "' WHERE facturacion_id =  " + str(facturacionId )
+        comando1 = 'UPDATE facturacion_facturaciondetalle SET "estadoRegistro" = ' + "'" + str('I') + "'" + ', anulado = ' + "'" + str('S')  + "' WHERE facturacion_id =  " + str(facturacionId )
         print(comando1)
         cur3.execute(comando1)
 
@@ -1846,6 +1841,12 @@ def ReFacturar(request):
                 comando = 'UPDATE facturacion_facturacion SET "anulado" = ' + "'" + str('R') + "'"  +  ', "usuarioRegistro_id" = ' + "'" + str(usuarioRegistro) + "'"  +  ', "fechaRegistro" = ' + "'" + str(fechaRegistro) + "'," + '"serviciosAdministrativos_id" = ' + "'" + str(serviciosAdministrativos) + "'"  +  ' WHERE id =  ' + facturacionId
                 print (comando)
                 cur3.execute(comando)
+
+
+                comando = 'UPDATE facturacion_facturaciondetalle SET "anulado" = ' + "'" + str('R') + "'"  +  ', "usuarioRegistro_id" = ' + "'" + str(usuarioRegistro) + "'"  +  ', "fechaRegistro" = ' + "'" + str(fechaRegistro) + "'," + '"serviciosAdministrativos_id" = ' + "'" + str(serviciosAdministrativos) + "'"  +  ' WHERE facturacion_id =  ' + facturacionId
+                print (comando)
+                cur3.execute(comando)
+
 
                 liquidacionU = Liquidacion.objects.all().aggregate(maximo=Coalesce(Max('id'), 0))
                 liquidacionId = (liquidacionU['maximo']) + 1
@@ -2411,11 +2412,46 @@ def load_dataReFacturacion(request, data):
     print ("sede:", sede)
     print ("username:", username)
     print ("username_id:", username_id)
-    tipoIngreso = d['tipoIngreso']
-    ingreso = d['ingresoId']
-    triage = d['triageId']
-    print("ingreso:", ingreso)
+    flag = d['flag']
+    if (flag=='FACTURACION'):
+        facturacion = d['facturacionId']
+        print("facturacion:", facturacion)
+        facturacionId = Facturacion.objects.get(id=facturacion)
+    else:
+        liquidacion = d['liquidacionId']
+        print("liquidacion:", liquidacion)
+        liquidacionId = Liquidacion.objects.get(id=liquidacion)
 
+
+    try:
+        with transaction.atomic():
+
+            if (flag == 'FACTURACION'):
+
+                ingresoId=Ingresos.objects.get(tipoDoc_id=facturacionId.tipoDoc_id, documento_id=facturacionId.documento_id, consec=facturacionId.consecAdmision)
+                ingreso=ingresoId.id
+            else:
+                ingresoId=Ingresos.objects.get(tipoDoc_id=liquidacionId.tipoDoc_id, documento_id=liquidacionId.documento_id, consec=liquidacionId.consecAdmision)
+                ingreso=ingresoId.id
+
+
+
+            tipoIngreso= 'INGRESO'
+
+    except Exception as e:
+        # Aquí ya se hizo rollback automáticamente
+        print("Se hizo rollback por PRONO SE HACE NADA:", e)
+
+        if (flag == 'FACTURACION'):
+
+            triageId = Triage.objects.get(tipoDoc_id=facturacionId.tipoDoc_id, documento_id=facturacionId.documento_id,consecAdmision=facturacionId.consecAdmision)
+        else:
+            triageId = Triage.objects.get(tipoDoc_id=liquidacionId.tipoDoc_id, documento_id=liquidacionId.documento_id,consecAdmision=liquidacionId.consecAdmision)
+            triage = triageId.id
+            tipoIngreso = 'TRIAGE'
+
+    finally:
+        print("No haga nada")
 
     reFacturacion = []
 
@@ -2424,8 +2460,6 @@ def load_dataReFacturacion(request, data):
 
     if (tipoIngreso=='INGRESO'):
 
-        ingresoId= Ingresos.objects.get(id=ingreso)
-       
         detalle = 'SELECT fac.id id , fac.fecha fecha,fac."facturaNueva" , fac."facturaAnulada"  , serv.nombre servicio FROM facturacion_refacturacion fac LEFT JOIN sitios_serviciosadministrativos serv  ON (serv.id= fac."serviciosAdministrativos_id") WHERE fac."tipoDoc_id" = ' + "'" + str(ingresoId.tipoDoc_id) + "' and fac.documento_id = " + "'" + str(ingresoId.documento_id) + "'"
 
     else:

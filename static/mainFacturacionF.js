@@ -983,6 +983,8 @@ window.addEventListener('load', async () => {
 			data2['ingresoId'] ='';
 			}
 
+			data2['flag'] = 'LIQUIDACION';
+
 		        data2 = JSON.stringify(data2);
 
 
@@ -1125,8 +1127,9 @@ $('#RvalorAPagarLetras').val(data.valorAPagarLetras);
 			var valor = document.getElementById("liquidacionId").value;
 			var ingresoId = document.getElementById("ingresoId").value;
 			data2['tipoIngreso'] = document.getElementById("tipoIngreso").value;
+			data2['flag'] = 'FACTURACION'
 		        data2['valor'] = valor;
-		        data2['ingresoId'] = ingresoId;
+		        //data2['ingresoId'] = ingresoId;
 		        data2['liquidacionId'] = post_id;
 		        data2['facturacionId'] = post_id;
 		        data2 = JSON.stringify(data2);
