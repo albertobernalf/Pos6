@@ -21,7 +21,7 @@ from django.conf.urls.static import  static
 from django.urls import path, include
 from camara import  views as viewsCamara
 
-from Reportes import views as viewsReportes
+#from Reportes import views as viewsReportes
 
 from admisiones import views as viewsAdmisiones
 from admisiones import viewsReportes as viewsAdmisionesReportes
@@ -43,6 +43,7 @@ from cartera import views as viewsCartera
 from cirugia import views as viewsCirugia
 from farmacia import views as viewsFarmacia
 from enfermeria import views as viewsEnfermeria
+from Reportes import views as  viewsReportesR
 
 from autorizaciones import views as viewsAutorizaciones
 from autorizaciones import viewsReportes as viewsAutorizacionesReportes
@@ -57,13 +58,14 @@ urlpatterns = [
     # Primero Reporteador
 
     path('chaining/', include('smart_selects.urls')),
-    path('medicalReport/', viewsReportes.menuAcceso),
-
+    #path('medicalReport/', viewsReportesR.menuAcceso),
+    #path('medicalReport/', viewsReportesR.menuAcceso),
     #path('validaAcceso/', viewsReportes.validaAcceso),
+    path('validaAccesoR/', viewsReportesR.validaAccesoR),
     path('salir/', viewsAdmisiones.menuAcceso),
-    path('pantallaSubgrupos/<str:username>, <str:sedeSeleccionada>, <str:grupo>', viewsReportes.pantallaSubgrupos),
-    path('emergenteGrupos/<str:username>, <str:sedeSeleccionada>, <str:grupo>', viewsReportes.emergenteGrupos),
-    path('combo/<str:username>, <str:sedeSeleccionada>, <str:grupo>, <str:subGrupo>', viewsReportes.combo),
+    path('pantallaSubgrupos/<str:username>, <str:sedeSeleccionada>, <str:grupo>', viewsReportesR.pantallaSubgrupos),
+    path('emergenteGrupos/<str:username>, <str:sedeSeleccionada>, <str:grupo>', viewsReportesR.emergenteGrupos),
+    path('combo/<str:username>, <str:sedeSeleccionada>, <str:grupo>, <str:subGrupo>', viewsReportesR.combo),
     #path('/combo/<str:username>, <str:sedeSeleccionada>, <str:grupo>, <str:subGrupo>', views.combo),
 
     # path('contrasena/<str:documento>', views.contrasena),
@@ -71,7 +73,7 @@ urlpatterns = [
     ## Invoca Reporte
 
     path('Reporte1/<str:numreporte>,<str:username>,<str:sedeSeleccionada>,<str:grupo>,<str:subGrupo>',
-         viewsReportes.Reporte1PdfView.as_view()),
+         viewsReportesR.Reporte1PdfView.as_view()),
     # path('Reporte2/<str:numreporte>,<str:username>,<str:sedeSeleccionada>,<str:grupo>,<str:subGrupo>', views.Reporte1PdfView.as_view()),
 
     # Fin Reporteador

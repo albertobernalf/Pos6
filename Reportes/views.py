@@ -90,9 +90,9 @@ def menuAcceso(request):
     return render(request, "accesoPrincipal.html", context)
 
 
-def validaAcceso(request):
+def validaAccesoR(request):
 
-    print ("Entre Validacion")
+    print ("Entre Validacion Reporteador")
     context = {}
 
     # Sedes

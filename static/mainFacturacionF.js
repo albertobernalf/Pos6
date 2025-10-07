@@ -232,7 +232,10 @@ autoWidth: false,
 	    scrollCollapse: true,
             paging:false,
             columnDefs: [
-		  { width: '800px',  targets: [0,1,2,3] },
+		  { width: "2px",  targets: [0] },
+		  { width: "500px",  targets: [1] },
+		  { width: "1900",  targets: [2] },
+		  { width: "40px",  targets: [3] },
 		{     "render": function ( data, type, row ) {
                         var btn = '';
                          btn = btn + " <button   class='btn btn-primary editPostLiquidacionDetalle' data-pk='" + row.pk + "'>" + "</button>";
@@ -267,6 +270,8 @@ autoWidth: false,
                  dataSrc: ""
             },
             columns: [
+		
+
         { data: "fields.consecutivo"},
                 { data: "fields.fecha"},
                 { data: "fields.nombreExamen"},

@@ -29,7 +29,30 @@ tablaApoyoTerapeutico tr {
 <script>
 
 function RefrescarPantalla() {
- 	 location.reload();
+ 	var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
+        var username = document.getElementById("username").value;
+        var nombreSede = document.getElementById("nombreSede").value;
+    	var sede = document.getElementById("sede").value;
+        var username_id = document.getElementById("username_id").value;
+         var data =  {}   ;
+        data['username'] = username;
+        data['sedeSeleccionada'] = sedeSeleccionada;
+        data['nombreSede'] = nombreSede;
+        data['sede'] = sede;
+        data['username_id'] = username_id;
+
+
+	 var sede = document.getElementById("sede").value;
+
+          data['sede'] = sede;
+        
+
+ 	    data = JSON.stringify(data);
+
+
+
+        arrancaApoyoTerapeutico(1,data);
+	    dataTableApoyoTerapeuticoInitialized = true;
 }
 </script>
 
@@ -95,6 +118,7 @@ Mayor a un dia
                 <input type="hidden" id="documento2" name="documento2" value="">
                 <input type="hidden" id="consec" name="consec" value="">
                 <input type="hidden" id="tipoIng" name="tipoIng" value="{{tipoIng}}">
+<input type="button" id="btnRefrescar" name="btnRefrescar" value="Refrescar" onclick="RefrescarPantalla()">
             </form>
 
             <!-- INICIO TABLE DE  EL DATATABLE  -->

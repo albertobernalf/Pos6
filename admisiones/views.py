@@ -2728,7 +2728,7 @@ def escogeAcceso(request, Sede, Username, Profesional, Documento, NombreSede, es
                                        password="123456")
         curt = miConexiont.cursor()
 
-        comando = 'SELECT p.id id, p.nombre||' + "'" + str(' ') + "'" +  +' ||p.cums  nombre FROM  facturacion_suministros  p ORDER BY p.id '
+        comando = 'SELECT p.id id, p.nombre||' + "'" + str(' ') + "'"  +' ||p.cums  nombre FROM  facturacion_suministros  p ORDER BY p.id '
         print(comando)
         curt.execute(comando)
 
@@ -3450,6 +3450,38 @@ def escogeAcceso(request, Sede, Username, Profesional, Documento, NombreSede, es
 
         ## FIN CONTEXTO
         return render(request, "farmacia/PanelFarmaciaF.html", context)
+
+    if (escogeModulo == 'REPORTES'):
+        print("ENTRE PERMSISO REPORTES")
+        ## Aqui contexto
+        # Combo de sedes
+
+        # Combo de SubServicios
+
+        miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                       password="123456")
+        curt = miConexiont.cursor()
+        comando = "SELECT sed.id codreg_sede ,sed.nombre nom_sede  FROM sitios_sedesClinica sed WHERE sed.id ='" + str(Sede) + "' ORDER BY sed.nombre"
+        curt.execute(comando)
+        print(comando)
+
+        Sedes = []
+        Sedes.append({'id': '', 'nombre': ''})
+
+        for codreg_sede, nom_sede in curt.fetchall():
+            subServicios.append({'codreg_sede': codreg_sede, 'nom_sede': nom_sede})
+
+        miConexiont.close()
+        print(subServicios)
+
+        context['Sedes'] = Sedes
+
+
+        # Fin combo de sedes
+
+        return render(request, "accesoPrincipal.html", context)
+
+
 
     return render(request, "panelVacio.html", context)
 

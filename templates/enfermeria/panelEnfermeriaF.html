@@ -27,7 +27,23 @@
 <script>
 
 function RefrescarPantalla() {
- 	 location.reload(true);
+ 	    	var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
+        var username = document.getElementById("username").value;
+        var nombreSede = document.getElementById("nombreSede").value;
+    	var sede = document.getElementById("sede").value;
+        var username_id = document.getElementById("username_id").value;
+         var data =  {}   ;
+        data['username'] = username;
+        data['sedeSeleccionada'] = sedeSeleccionada;
+        data['nombreSede'] = nombreSede;
+        data['sede'] = sede;
+        data['username_id'] = username_id;
+ 	    data = JSON.stringify(data);
+
+	alert("sede = " + sede);
+
+        arrancaEnfermeria(1,data);
+	    dataTablePanelEnfermeriaInitialized = true;
 }
 </script>
 

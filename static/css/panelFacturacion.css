@@ -24,7 +24,7 @@ th {     font-size: 13px;     font-weight: normal;     padding: 8px;     backgro
 
 td {   font-size: 10px;    padding: 8px;     background: #e8edff;     border-bottom: 1px solid #fff;
     color: #669;    border-top: 1px solid transparent;   text-align: left;
-    padding: 8px;}
+    padding: 8px; overflow: hidden; text-overflow: ellipsis}
 
 
 .marco {
