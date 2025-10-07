@@ -232,7 +232,7 @@ autoWidth: false,
 	    scrollCollapse: true,
             paging:false,
             columnDefs: [
-		  { width: '15%',  targets: [2,3] },
+		  { width: '800px',  targets: [0,1,2,3] },
 		{     "render": function ( data, type, row ) {
                         var btn = '';
                          btn = btn + " <button   class='btn btn-primary editPostLiquidacionDetalle' data-pk='" + row.pk + "'>" + "</button>";
@@ -812,7 +812,7 @@ window.addEventListener('load', async () => {
 	           dataType : 'json',
 	  		success: function (data) {
 
-			alert("llegue con esta data" + JSON.stringify(data));
+			// alert("llegue con esta data" + JSON.stringify(data));
 	//		alert("llegue con esta data.id" + data.id);
 
 		var liquidacionId = data.id;
@@ -1113,7 +1113,7 @@ $('#RtotalAbonos').val(data.totalAbonos);
 $('#RtotalRecibido').val(data.totalRecibido);
 $('#RvalorApagar').val(data.valorApagar);
 $('#RtotalFactura').val(data.totalFactura);
-alert("En letras = " + data.valorAPagarLetras );
+// alert("En letras = " + data.valorAPagarLetras );
 $('#RvalorAPagarLetras').val(data.valorAPagarLetras);
 
 
@@ -1461,7 +1461,7 @@ $('#RvalorAPagarLetras').val(data.valorAPagarLetras);
 		 $('#ldsuministros').val(data.cums_id);
 
             $('#modelHeadingLiquidacionDetalle').html("Edicion Liquidacion");
-		alert("voy a cargar ma modal");
+		// alert("voy a cargar ma modal");
 
             $('#crearModelLiquidacionDetalle').modal('show');
 
@@ -1716,13 +1716,13 @@ function AFacturar()
 	if (salidaDefinitiva=='R')
 		{
 			var tipoFactura= 'REFACTURA';
-			alert(" ES REFACTURA : ");
+			// alert(" ES REFACTURA : ");
 		}
 
 	else
 		{
 			var tipoFactura= 'FACTURA';
-			alert(" ES FACTURA : ");
+			// alert(" ES FACTURA : ");
 		}
 
 
@@ -1957,7 +1957,7 @@ function AnularFactura()
 	           type: 'POST',
 	           dataType : 'json',
 	  		success: function (data) {
-					alert("llega=" + JSON.stringify(data));
+					// alert("llega=" + JSON.stringify(data));
 
 			if (data.success == true)
 			 {
@@ -2011,7 +2011,7 @@ function AnularFactura()
 		        arrancaLiquidacion(3,data2);
 			    dataTableFacturacionInitialized = true;
 
-			alert("estadoAnulado = " +  data.estadoFactura);
+			// alert("estadoAnulado = " +  data.estadoFactura);
 
 			document.getElementById("Aanulado").value = data.estadoFactura;
 	
@@ -2030,7 +2030,7 @@ function ReFacturar()
   //	alert ("Entre Refacturar ");
 
  	var facturacionId = document.getElementById("Rfactura").value;
-	alert("Factura No " + facturacionId);
+	// alert("Factura No " + facturacionId);
 
         var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
         var username = document.getElementById("username").value;
@@ -2194,13 +2194,13 @@ function ConsultarFacturas()
 	{
 
 		data['bandera'] = 'Factura';
-		alert("Entre Bandera Por Factura");
+		// alert("Entre Bandera Por Factura");
 
 	}
 	else
 	{
 		data['bandera'] = 'Por Fecha';
-		alert("Entre BanderaPor Fecha");
+		// alert("Entre BanderaPor Fecha");
 	}
 
         data = JSON.stringify(data);
@@ -2216,13 +2216,13 @@ function TrasladoConvenio()
 
  	var liquidacionId = document.getElementById("liquidacionId").value;
  	var tipoIng = document.getElementById("tipoIng").value;
-	alert("liquidacionId " + liquidacionId);
-	alert("tipoIng " + tipoIng);
+	// alert("liquidacionId " + liquidacionId);
+	// alert("tipoIng " + tipoIng);
 	var username_id = document.getElementById("username_id").value;
 	var convenioId = document.getElementById("conveniosPaciente").value;
 	var convenioIdHacia = document.getElementById("conveniosPacienteHacia").value;
-	alert(" Desde convenio = " + convenioId )
-	alert(" Nuevo convenioIdHacia = " + convenioIdHacia )
+	// alert(" Desde convenio = " + convenioId )
+	// alert(" Nuevo convenioIdHacia = " + convenioIdHacia )
 
         var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
         var username = document.getElementById("username").value;
@@ -2387,4 +2387,29 @@ function RefrescarFacturas() {
 	    dataTableFacturacionInitialized = true;
 
 }
+
+$(document).on('change', '#ldcantidad', function(event) {
+
+ 
+
+
+       var ldcantidad =   document.getElementById("ldcantidad").value;
+       var ldvalorUnitario =   document.getElementById("ldvalorUnitario").value;
+	document.getElementById("ldvalorTotal").value = ldcantidad * ldvalorUnitario;
+
+});
+
+
+$(document).on('change', '#ldvalorUnitario', function(event) {
+
+      
+
+
+       var ldcantidad =   document.getElementById("ldcantidad").value;
+       var ldvalorUnitario =   document.getElementById("ldvalorUnitario").value;
+	document.getElementById("ldvalorTotal").value = ldcantidad * ldvalorUnitario;
+
+});
+
+
 

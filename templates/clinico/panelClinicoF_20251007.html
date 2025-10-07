@@ -4,6 +4,8 @@
 {% block head %}
 
 <link rel="stylesheet" type="text/css" href={% static 'css/navegacionClinica.css' %} >
+
+
 <link rel="stylesheet" type="text/css"  href = {% static 'css/litle.css' %}>
 <script src={% static 'js/panelTabsClinico.js' %} defer>         </script>
 
@@ -13,7 +15,7 @@ tablaClinico td {
   text-align: center;
   padding: 1px;
   /* Alto de las celdas */
-  height: 0.1 rem;
+  height: 1px;
   font-size:40%
   font-weight: bold;
 }
@@ -21,8 +23,7 @@ tablaClinico td {
 tablaClinico tr {
   padding: 1px;
   /* Alto de las celdas */
- /*  height: 1px; */
-   height: 0.1 rem;
+  height: 1px;
 
 }
 </style>
@@ -34,14 +35,10 @@ function RefrescarPantalla() {
 }
 </script>
 
-<div class="marco">
-    <ul class="tabs">
-        <li><a href="#Clinica">	     <span class="fa-solid fa-user-doctor-message"></span> <span class="tab-text"> </span> Ingresos Clinicos </a></li>
-	<li><a href="#InterConsulta"><span class="fa-solid fa-user-doctor-message"></span> <span class="tab-text"> </span> Interconsultas</a></li>
-	<li><a href="#Impresionordenesmedicas"><span class="fa-solid fa-user-doctor-message"></span> <span class="tab-text"> </span> Impresion Ordenes Medica </a> </li>
-	<li><a href="#ConsultaFolios"><span class="fa-solid fa-user-doctor-message"></span> <span class="tab-text"> </span> Consulta Folios</a></li>
-    </ul>
-</div>
+{% endblock %}
+
+
+{% block indicadores %}
 
 <span style="padding-left:8px; padding-right:3px; padding-top: 3px; display:inline-block;">
 Alta Medica:  <span id="alta" name="alta" style='color:red'>{{altaMedica}} </span>
@@ -53,13 +50,26 @@ Ambulatorios:  <span id="amb" name="amb" style='color:red'>{{Ambulatorios}} </sp
 
 {% endblock %}
 
+
+
 {% block content %}
+
+<div class="marco">
+    <ul class="tabs">
+        <li><a href="#Clinica">	     <span class="fa-solid fa-user-doctor-message"></span> <span class="tab-text"> </span> Ingresos Clinicos </a></li>
+	<li><a href="#InterConsulta"><span class="fa-solid fa-user-doctor-message"></span> <span class="tab-text"> </span> Inter</a></li>
+	<li><a href="#ImpresionOrdenesMedicas"><span class="fa-solid fa-user-doctor-message"></span> <span class="tab-text"> </span> Impresion Ordenes Medica</a></li>
+	<li><a href="#ConsultaFolios"><span class="fa-solid fa-user-doctor-message"></span> <span class="tab-text"> </span> Consulta Folios</a></li>
+    </ul>
+</div>
 
 <div class="marco">
 <div class="secciones0">
 
+
     <article id="Clinica">
 	   <form  action="/crearHistoriaClinica/" method="get" id="FormEvolucionarHistoria" name="FormEvolucionarHistoria">
+	
 		<input type="hidden" id="username" name="username" value = "{{Username}}">
 		<input type="hidden" id="sedeSeleccionada" name="sedeSeleccionada" value = "{{SedeSeleccionada}}">
 		<input type="hidden" id="numreporte" name="numreporte" value = "{{numreporte}}">
@@ -82,11 +92,11 @@ Ambulatorios:  <span id="amb" name="amb" style='color:red'>{{Ambulatorios}} </sp
 		<input type="hidden" id="consec" name="consec" value="">
 	        <input type="hidden" id="tipoIng" name="tipoIng" value="{{tipoIng}}">
 
-		 <table class="table " id="tablaClinicobottom"  style="height: 1px; background-color:LightGray; border: 1px solid black; border-radius: 10px;width:95%;">
+		 <table class="table " id="tablaClinicobottom"  style="height: 3px; background-color:LightGray; border: 1px solid black; border-radius: 10px;width:95%;">
                         <tr>
                             <td>
                                 <label for="espMedico" class="col-sm-3 control-label">Especialidad :</label>
-                                <select class="form-select h-10 w-4" aria-label="" id="espMedico" name="espMedico">
+                                <select form-select h-100 w-500" aria-label="" id="espMedico" name="espMedico">
                                     {% for especialidadesMedicos in EspecialidadesMedicos %}
                                     <option value="{{especialidadesMedicos.id}}"> {{especialidadesMedicos.nombre}}
                                     </option>
@@ -94,17 +104,18 @@ Ambulatorios:  <span id="amb" name="amb" style='color:red'>{{Ambulatorios}} </sp
                                 </select>
                             </td>
                              <td>
-                                <label for="tiposFolio" class="col-sm-3 control-label">Tipo de Folio : </label>
-                                <select class="form-select h-10 w-4" aria-label="" id="tiposFolio" name="tiposFolio">
+                                <label for="tiposFolio" class="col-sm-1 control-label">Tipo de Folio : </label>
+                                <select form-select h-100 w-100" aria-label="" id="tiposFolio" name="tiposFolio">
                                     {% for tiposFolio in TiposFolio %}
                                     <option value="{{tiposFolio.id}}"> {{tiposFolio.nombre}}    </option>
                                     {% endfor %}
                                 </select>
                             </td>
                             <td>
-                               <input type="submit" id="btnCargaHc1" name="btnCargaHc1" value="Registrar Folio" size="8"></input>
+                               <input type="submit" id="btnCargaHc1" name="btnCargaHc1" value="Registrar Folio"></input>
                             </td>
 			    <td>
+
 			       <input type="button" id="btnRefrescar" name="btnRefrescar" value="Refrescar" onclick="RefrescarPantalla()">
                             </td>
                         </tr>
@@ -143,10 +154,6 @@ Ambulatorios:  <span id="amb" name="amb" style='color:red'>{{Ambulatorios}} </sp
                     </div>        
   </article>
 
-<article id="Impresionordenesmedicas">
-
-	impresion ordenes
-</article>
 
       <article id="InterConsulta">
 
@@ -272,6 +279,10 @@ Ambulatorios:  <span id="amb" name="amb" style='color:red'>{{Ambulatorios}} </sp
   </article>
 
 
+<article id="ImpresionOrdenesMedicas">
+
+	impresion ordenes
+</article>
 
 
 

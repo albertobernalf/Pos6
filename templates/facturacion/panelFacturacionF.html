@@ -679,21 +679,7 @@ div.dataTables_filter input {
                                             </thead>
                                             <tbody>
                                             </tbody>
-                                            <tfoot>
-                                            <tr>
-                                                <th>Cons</th>
-                                                <th>Fecha</th>
-                                                <th>NombreExamen</th>
-                                                <th>Cantidad</th>
-                                                <th>ValorUnida</th>
-                                                <th>ValorTotal</th>
-                                                <th>Honorario</th>
-                                                <th>Observaciones</th>
-                                                <th>TipoRegistro</th>
-						<th>Estado</th>
-                                                <th>Editar Borrar</th>                                         
-                                            </tr>
-                                            </tfoot>
+                           
 
                                         </table>
 
@@ -701,10 +687,11 @@ div.dataTables_filter input {
 
 		 <!--  Totales  (Crear Div De Totales)-->
 
-		 <!--	<div style="height: 30px;  width:100%;  background-color:#EBEBEB;">  -->
 
-	       <div class="row row-cols-9" style="height=1px;">
-					
+		        <div class="tabla-contenedor">     
+   			   <div class="row">
+				
+			
  				   <div class="col">
 			  		     
 						 <label for="totalCopagos" class="col-form-label col-sm-4">Copagos:</label>
@@ -719,41 +706,6 @@ div.dataTables_filter input {
 						
 							  <input type="text" id="totalCuotaModeradora" name="totalCuotaModeradora" size=7 value="0" readonly>
 	                                      
-                                      </div>
-
-					<div class="col">
-			  		    
-						 <label for="totalProcedimientos" class="col-form-label col-sm-4">Proc:</label>
-						
-							  <input type="text" id="totalProcedimientos" name="Procedimientos" size=7 value="0" readonly>
-	                                      
-                                      </div>
-
-					<div class="col">
-			  		     <div class="form-group row">
-					<label for="totalSuministros" class="col-form-label col-sm-8">Suministros:</label>
-						 <div class="col-sm-1">
-							  <input type="text" id="totalSuministros" name="Suministros" size=7  value="0" readonly>
-	                                        </div>
-          	                            </div>
-                                      </div>
-
-					<div class="col">
-			  		     <div class="form-group row">
-						 <label for="totalLiquidacion" class="col-form-label col-sm-8">Total:</label>
-						 <div class="col-sm-1">
-							  <input type="text" id="totalLiquidacion" name="totalLiquidacion" size=7 value="0" readonly>
-	                                        </div>
-          	                            </div>
-                                      </div>
-
-					<div class="col">
-			  		     <div class="form-group row">
-						 <label for="valorApagar" class="col-form-label col-sm-6">Apagar:</label>
-						 <div class="col-sm-2">
-							  <input type="text" id="valorApagar" name="valorApagar" size=7 value="0" readonly>
-	                                        </div>
-          	                            </div>
                                       </div>
 
 					<div class="col">
@@ -776,7 +728,7 @@ div.dataTables_filter input {
 		
 					<div class="col">
 			  		     <div class="form-group row">
-						 <label for="totalRecibido" class="col-form-label col-sm-6">Recibido:</label>
+						 <label for="totalRecibido" class="col-form-label col-sm-6">Total Recibido:</label>
 						 <div class="col-sm-2">
 							  <input type="text" id="totalRecibido" name="totalRecibido" size=7 value="0" readonly>
 	                                        </div>
@@ -784,7 +736,53 @@ div.dataTables_filter input {
                                       </div>
 
 
-		       </div>  <!-- Cierra el rop de 8 columnas -->
+
+
+
+			    </div>
+   			   <div class="row">
+
+					<div class="col">
+			  		    
+						 <label for="totalProcedimientos" class="col-form-label col-sm-4">Procedimientos:</label>
+						
+							  <input type="text" id="totalProcedimientos" name="Procedimientos" size=7 value="0" readonly>
+	                                      
+                                      </div>
+
+					<div class="col">
+			  		     <div class="form-group row">
+					<label for="totalSuministros" class="col-form-label col-sm-4">Suministros:</label>
+						 <div class="col-sm-1">
+							  <input type="text" id="totalSuministros" name="Suministros" size=7  value="0" readonly>
+	                                        </div>
+          	                            </div>
+                                      </div>
+
+					<div class="col">
+			  		     <div class="form-group row">
+						 <label for="totalLiquidacion" class="col-form-label col-sm-8">Total Liquidacion:</label>
+						 <div class="col-sm-1">
+							  <input type="text" id="totalLiquidacion" name="totalLiquidacion" size=7 value="0" readonly>
+	                                        </div>
+          	                            </div>
+                                      </div>
+
+					<div class="col">
+			  		     <div class="form-group row">
+						 <label for="valorApagar" class="col-form-label col-sm-6">Apagar:</label>
+						 <div class="col-sm-2">
+							  <input type="text" id="valorApagar" name="valorApagar" size=7 value="0" readonly>
+	                                        </div>
+          	                            </div>
+                                      </div>
+
+
+                                  
+                            </div>
+                        </div>
+
+
 
 		 <!--  Fin Totales  (Crear Div De Totales)-->
 
@@ -845,7 +843,7 @@ div.dataTables_filter input {
                                 </div>
 				<div class="col">
                                     Valor total:
-                                    <input type="text" id="ldvalorTotal" name="ldvalorTotal" value="0"></input>
+                                    <input type="text" id="ldvalorTotal" name="ldvalorTotal" value="0" readonly></input>
                                 </div>
                                 <div class="col">
                                     Observaciones:

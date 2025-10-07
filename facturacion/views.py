@@ -1020,8 +1020,8 @@ def GuardarLiquidacionDetalle(request):
         miConexion3.commit()
         cur3.close()
         miConexion3.close()
-        message_error= str(error)
-        return JsonResponse({'success': False, 'Mensajes': 'Registro guardado stisfactoriamente !'})
+
+        return JsonResponse({'success': True, 'Mensajes': 'Registro guardado stisfactoriamente !'})
 
 
 
@@ -1053,19 +1053,46 @@ def PostDeleteLiquidacionDetalle(request):
     #post = LiquidacionDetalle.objects.get(id=id)
     #post.delete()
 
+    liqId= LiquidacionDetalle.objects.get(id=liquidacionId)
+
+    if(liqId.anulado=='S'):
+        return JsonResponse({'success': False, 'Mensajes': 'Registro ya ANULADO. No se puede anular!'})
+
+
     miConexion3 = None
     try:
 
         miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",  password="123456")
         cur3 = miConexion3.cursor()
 
-        comando = 'UPDATE facturacion_liquidaciondetalle SET "estadoRegistro" = ' + "'" + str('N') + "' WHERE id =  " + id
+        comando = 'UPDATE facturacion_liquidaciondetalle SET "estadoRegistro" = ' + "'" + str('I') + "', anulado = " + "'" + str('S') + "'" + '  WHERE id =  ' + id
         print(comando)
         cur3.execute(comando)
 
+        miConexion3.commit()
+        cur3.close()
+        miConexion3.close()
 
-    # Ops falta rutina actualiza TOTALES
-    # Falta la RUTINA que actualica los cabezotes de la liquidacion
+
+
+    except psycopg2.DatabaseError as error:
+        print ("Entre por rollback" , error)
+        if miConexion3:
+            print("Entro ha hacer el Rollback")
+            miConexion3.rollback()
+
+        message_error= str(error)
+        return JsonResponse({'success': False, 'Mensajes': message_error})
+
+
+
+    finally:
+        if miConexion3:
+            cur3.close()
+            miConexion3.close()
+
+    miConexion3 = None
+    try:
 
         totalSuministros = LiquidacionDetalle.objects.all().filter(liquidacion_id=liquidacionId).filter(examen_id = None).exclude(estadoRegistro='I').exclude(anulado='S').aggregate(totalS=Coalesce(Sum('valorTotal'), 0))
         totalSuministros = (totalSuministros['totalS']) + 0
@@ -1093,18 +1120,26 @@ def PostDeleteLiquidacionDetalle(request):
         print ("totalRecibido = ",totalRecibido )
         print("totalLiquidacion = ",totalLiquidacion )
 
-        valorApagar = totalLiquidacion -  totalRecibido
 
+        valorApagar = totalLiquidacion -  totalRecibido
 
         # Rutina Guarda en cabezote los totales
 
         print ("Voy a grabar el cabezote")
 
-        comando1 = 'UPDATE facturacion_liquidacion SET "totalSuministros" = ' + str(totalSuministros) + ',"totalProcedimientos" = ' + str(totalProcedimientos) + ', "totalCopagos" = ' + str(totalCopagos) + ' , "totalCuotaModeradora" = ' + str(totalCuotaModeradora) + ', anticipos = ' +  str(totalAnticipos) + ' ,"totalAbonos" = ' + str(totalAbonos) + ', "totalLiquidacion" = ' + str(totalLiquidacion) + ', "valorApagar" = ' + str(valorApagar) +  ', "totalRecibido" = ' + str(totalRecibido) +  ' WHERE id =' + str(liquidacionId)
+        miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",  password="123456")
+        cur3 = miConexion3.cursor()
+
+        comando1 = 'UPDATE facturacion_liquidacion SET "totalSuministros" = ' + "'" + str(totalSuministros) +  "'" + ',"totalProcedimientos" = ' + "'" +  str(totalProcedimientos) + "'" + ', "totalCopagos" = ' + "'" + str(totalCopagos) + "'" + ' , "totalCuotaModeradora" = ' + "'"  + str(totalCuotaModeradora) + "'" + ', anticipos = ' + "'" +  str(totalAnticipos) + "'" + ' ,"totalAbonos" = ' + "'" + str(totalAbonos) + "'" + ', "totalLiquidacion" = ' + "'" + str(totalLiquidacion) + "'" + ', "valorApagar" = ' + "'" + str(valorApagar)  + "'" +  ', "totalRecibido" = ' + "'" + str(totalRecibido) + "'"  +  ' WHERE id =' + str(liqId.liquidacion_id)
+        print(comando1)
         cur3.execute(comando1)
+
         miConexion3.commit()
         cur3.close()
         miConexion3.close()
+
+        return JsonResponse({'success': True, 'Mensajes': 'Registro de Liquidacion Anulado!'})
+
 
     except psycopg2.DatabaseError as error:
         print ("Entre por rollback" , error)
@@ -1122,12 +1157,6 @@ def PostDeleteLiquidacionDetalle(request):
             cur3.close()
             miConexion3.close()
 
-
-    ## Fin rutina actualiza cabezotes
-
-    datosMensaje = {'success': True, 'Mensaje':'Registro de Liquidacion Anulado!'}
-    json_data = json.dumps(datosMensaje, default=str)
-    return HttpResponse(json_data, content_type='application/json')
 
 
 
@@ -1843,7 +1872,7 @@ def ReFacturar(request):
                 cur3.execute(comando)
 
 
-                comando = 'UPDATE facturacion_facturaciondetalle SET "anulado" = ' + "'" + str('R') + "'"  +  ', "usuarioRegistro_id" = ' + "'" + str(usuarioRegistro) + "'"  +  ', "fechaRegistro" = ' + "'" + str(fechaRegistro) + "'," + '"serviciosAdministrativos_id" = ' + "'" + str(serviciosAdministrativos) + "'"  +  ' WHERE facturacion_id =  ' + facturacionId
+                comando = 'UPDATE facturacion_facturaciondetalle SET "anulado" = ' + "'" + str('R') + "'"  +  ', "usuarioRegistro_id" = ' + "'" + str(usuarioRegistro) + "'"  +  ', "fechaRegistro" = ' + "'" + str(fechaRegistro) + "'"  +  ' WHERE facturacion_id =  ' + facturacionId
                 print (comando)
                 cur3.execute(comando)
 

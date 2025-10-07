@@ -1672,7 +1672,7 @@ def escogeAcceso(request, Sede, Username, Profesional, Documento, NombreSede, es
         curt = miConexiont.cursor()
 
         comando = 'SELECT ser.nombre nombre, count(*) total FROM admisiones_ingresos i, usuarios_usuarios u, sitios_dependencias dep , clinico_servicios ser ,usuarios_tiposDocumento tp , sitios_dependenciastipo deptip  , clinico_Diagnosticos diag , sitios_serviciosSedes sd  WHERE sd."sedesClinica_id" = i."sedesClinica_id"  and sd.servicios_id  = ser.id and i."sedesClinica_id" = dep."sedesClinica_id" AND i."sedesClinica_id" = ' + "'" + str(
-            sede) + "'" + ' AND  deptip.id = dep."dependenciasTipo_id" and i."serviciosActual_id" = sd.id AND dep.disponibilidad = ' + "'" + str(
+            sede) + "'" + ' AND  deptip.id = dep."dependenciasTipo_id" and i."serviciosActual_id" = ser.id AND dep.disponibilidad = ' + "'" + str(
             'O') + "'" + ' AND i."salidaDefinitiva" = ' + "'" + str(
             'N') + "'" + ' and tp.id = u."tipoDoc_id" and  i."tipoDoc_id" = u."tipoDoc_id" and u.id = i."documento_id" and diag.id = i."dxActual_id" and i."fechaSalida" is null and dep."serviciosSedes_id" = sd.id and dep.id = i."dependenciasActual_id"  group by ser.nombre UNION SELECT ser.nombre, count(*) total FROM triage_triage t, usuarios_usuarios u, sitios_dependencias dep , usuarios_tiposDocumento tp , sitios_dependenciastipo deptip  , sitios_serviciosSedes sd, clinico_servicios ser WHERE sd."sedesClinica_id" = t."sedesClinica_id"  and t."sedesClinica_id" = dep."sedesClinica_id" AND  t."sedesClinica_id" =  ' + "'" + str(
             sede) + "'" + ' AND dep."sedesClinica_id" =  sd."sedesClinica_id" AND dep.id = t.dependencias_id AND  t."serviciosSedes_id" = sd.id  AND deptip.id = dep."dependenciasTipo_id" and  tp.id = u."tipoDoc_id" and  t."tipoDoc_id" = u."tipoDoc_id" and u.id = t."documento_id"  and ser.id = sd.servicios_id and  dep."serviciosSedes_id" = sd.id and t."serviciosSedes_id" = sd.id and dep."tipoDoc_id" = t."tipoDoc_id" and  t."consecAdmision" = 0 and dep."documento_id" = t."documento_id" and ser.nombre = ' + "'" + str(
@@ -2113,45 +2113,6 @@ def escogeAcceso(request, Sede, Username, Profesional, Documento, NombreSede, es
         ## Aqui contexto para solo Facturacion
 
         ## FIN CONTEXTO
-
-        # Combo Indicadores
-
-        miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
-                                       password="123456")
-        curt = miConexiont.cursor()
-
-
-        comando = 'SELECT ser.nombre nombre, count(*) total FROM admisiones_ingresos i, usuarios_usuarios u, sitios_dependencias dep , clinico_servicios ser ,usuarios_tiposDocumento tp , sitios_dependenciastipo deptip  , clinico_Diagnosticos diag , sitios_serviciosSedes sd  WHERE sd."sedesClinica_id" = i."sedesClinica_id"  and sd.servicios_id  = ser.id and i."sedesClinica_id" = dep."sedesClinica_id" AND i."sedesClinica_id" = ' + "'" + str(sede) + "'" + ' AND  deptip.id = dep."dependenciasTipo_id" and i."serviciosActual_id" = sd.id AND dep.disponibilidad = ' + "'" + str('O') + "'" + ' AND i."salidaDefinitiva" = ' + "'" + str('N') + "'" + ' and tp.id = u."tipoDoc_id" and  i."tipoDoc_id" = u."tipoDoc_id" and u.id = i."documento_id" and diag.id = i."dxActual_id" and i."fechaSalida" is null and dep."serviciosSedes_id" = sd.id and dep.id = i."dependenciasActual_id"  group by ser.nombre UNION SELECT ser.nombre, count(*) total FROM triage_triage t, usuarios_usuarios u, sitios_dependencias dep , usuarios_tiposDocumento tp , sitios_dependenciastipo deptip  , sitios_serviciosSedes sd, clinico_servicios ser WHERE sd."sedesClinica_id" = t."sedesClinica_id"  and t."sedesClinica_id" = dep."sedesClinica_id" AND  t."sedesClinica_id" =  ' + "'" + str(sede) + "'" + ' AND dep."sedesClinica_id" =  sd."sedesClinica_id" AND dep.id = t.dependencias_id AND  t."serviciosSedes_id" = sd.id  AND deptip.id = dep."dependenciasTipo_id" and  tp.id = u."tipoDoc_id" and  t."tipoDoc_id" = u."tipoDoc_id" and u.id = t."documento_id"  and ser.id = sd.servicios_id and  dep."serviciosSedes_id" = sd.id and t."serviciosSedes_id" = sd.id and dep."tipoDoc_id" = t."tipoDoc_id" and  t."consecAdmision" = 0 and dep."documento_id" = t."documento_id" and ser.nombre = '  + "'" + str('TRIAGE') + "'" + ' group by ser.nombre'
-
-        curt.execute(comando)
-        print(comando)
-
-        indicadores = []
-
-        for nombre, total in curt.fetchall():
-            indicadores.append({'nombre': nombre, 'total':total})
-            if (nombre == 'HOSPITALIZACION' ):
-                context['Hospitalizados'] = total
-            if (nombre == 'TRIAGE'):
-                context['Triage'] = total
-            if (nombre == 'URGENCIAS'):
-                context['Urgencias'] = total
-            if (nombre == 'AMBULATORIO'):
-                context['Ambulatorios'] = total
-
-        miConexiont.close()
-        print(indicadores)
-
-        context['Indicadores'] = indicadores
-
-        total = len(indicadores)
-
-        print ("total ", total)
-
-        print("YA PASE INDICADORES")
-
-    # Fin combo Indicadores
-
 
         return render(request, "facturacion/panelFacturacionF.html", context)
 
@@ -5166,6 +5127,9 @@ def crearAdmisionDef(request):
     print("Entre a Craer Admision definitiva")
 
     if request.method == 'POST':
+
+     if request.is_ajax and request.method == "POST":
+
         print("EntrePost Graba Admision Def")
         data = {}
         context = {}
@@ -5201,8 +5165,6 @@ def crearAdmisionDef(request):
 
         serviciosAdministrativos = request.POST["serviciosAdministrativos"]
         print(" serviciosAdministrativos = ", serviciosAdministrativos)
-
-
 
         Username_id = request.POST["username_id"]
         print("Username_id = ", Username_id)
@@ -5459,6 +5421,40 @@ def crearAdmisionDef(request):
             print("Entre imprimir Hoja de admision paciente")
             ingresoId2 = grabo.id
             ImprimirHojaAdmision(ingresoId2)
+
+        return JsonResponse({'success': True, 'Mensajes': 'Admision creada !'})
+
+
+    #return render(request, "admisiones/panelAdmisiones.html", context)
+    #ops por aqui que iria??
+
+
+    ## AQUI POR GET
+
+    if request.method == 'GET':
+
+
+        print("EntrePost Graba Admision Def")
+        data = {}
+        context = {}
+
+        #sedesClinica = request.POST['sedesClinica']
+        sedesClinica = request.POST['Sede']
+        Sede = request.POST['Sede']
+        sede = request.POST['Sede']
+        context['Sede'] = Sede
+        NombreSede = request.POST['nombreSede']
+        nombreSede = request.POST['nombreSede']
+        print("Sedes Clinica = ", sedesClinica)
+        print ("Sede = ",Sede)
+
+        username = request.POST["username"].strip()
+        print(" Username = " , username)
+        context['Username'] = username
+
+        Profesional = request.POST["profesional"]
+        print(" Profesional = " , Profesional)
+        context['Profesional'] = Profesional
 
         # RUTINA ARMADO CONTEXT
         #
@@ -6463,11 +6459,7 @@ def crearAdmisionDef(request):
     # Fin combo Indicadores
 
 
-    # FIN RUTINA ARMADO CONTEXT
-
-
-    return render(request, "admisiones/panelAdmisiones.html", context)
-
+        return render(request, "admisiones/panelAdmisiones.html", context)
 
 
 # fin nuevo mcodigo crear admison DEF
