@@ -2136,7 +2136,6 @@ function RefrescarLiquidacionDetalle()
 
 		      arrancaLiquidacion(2,data2);
 		    dataTableLiquidacionDetalleInitialized = true;
-
 	
 			$('#totalSuministros').val(data.totalSuministros);
 			$('#totalProcedimientos').val(data.totalProcedimientos);
@@ -2148,7 +2147,7 @@ function RefrescarLiquidacionDetalle()
 			$('#totalLiquidacion').val(data.totalLiquidacion);
 			$('#valorApagar').val(data.totalAPagar);
 
-		document.getElementById("mensajes").innerHTML = data.message;
+		document.getElementById("mensajes").value = data.Mensajes;
 
                   },
 	                       error: function(data){
@@ -2156,10 +2155,6 @@ function RefrescarLiquidacionDetalle()
 			        },
 
 	     });
-
-
-
-
 }
 
 

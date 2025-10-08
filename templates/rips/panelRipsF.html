@@ -175,7 +175,7 @@ function RefrescarPantalla() {
 
 	    <div class="modal fade" id="crearModelEnviosRips" tabindex="-1" role="dialog"  style="overflow-y:scroll;" aria-labelledby="exampleModalLabel" aria-hidden="true"  data-bs-backdrop="static">
 
-		<div class="modal-dialog modal-lg modal-dialog-scrollable  modal-dialog-center " role="document">
+		<div class="modal-dialog modal-mg modal-dialog-scrollable  modal-dialog-center " role="document">
 	
                     <div class="modal-content">
                         <div class="modal-header">
@@ -186,26 +186,24 @@ function RefrescarPantalla() {
                         </div>
 		<div style="width:500px; heigth:100px; ">
                         <div class="modal-body">
-                            <div class="alert alert-danger error-msg" style="display:none">
-                                <ul class="mb-0"></ul>
-                            </div>
-			
+          			
   			  <form id="postFormEnviosRips" name="postFormEnviosRips">
 
                                 <input type="hidden" name="post_id" id="post_id">
 
-                      <div class="row row-cols-lg-auto g-3 align-items-center mb-3">
+                    
+		<!--  <div class="row row-cols-lg-auto g-3 align-items-center mb-3">  -->
+		<div class="row row-cols-4 g-3 align-items-center mb-3">  
 
 
-				  <div class="col-12">
-					
+				  <div class="col-1">			
                                     
                                     <input type="text" class="form-control" id="sedesClinica_id" name="sedesClinica_id"  value="1" readonly></input>
                                 </div>
 
-			  <div class="col-12">
-                                        <label for="serviciosAdministrativos" class="col-sm-1 control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SeviciosAdmon:</label>
-                                        <div class="col-sm-8">
+			  <div class="col-4">
+                                        <label for="serviciosAdministrativos" class="col-sm-1 control-label">ServiciosAdmon:</label>
+                                        <div class="col-sm-4">
                                             <select class="select-css h-40 w-20" id="serviciosAdministrativos"  tabindex= "0"
                                                     name="serviciosAdministrativos"
                                                     required>
@@ -218,7 +216,7 @@ function RefrescarPantalla() {
                                     </div>
 
 
-				<div class="col-12">
+				<div class="col-4">
                                     Empresa:
 				<select class="select-css"  id="empresa_id"
                                                                 name="empresa_id">
@@ -229,10 +227,8 @@ function RefrescarPantalla() {
                                                             {% endfor %}
                                                         </select>
                                 </div>
-
-
-				<div class="col-12">
-                                    Tipo Nota:
+				<div class="col-3">
+                                    Tipo Envio:
 				<select class="select-css"  id="ripsTiposNotas"  name="ripsTiposNotas">
                                                            {% for ripsTiposNotas in RipsTiposNotas %}
                                                             <option value="{{ripsTiposNotas.id}}">
@@ -242,59 +238,67 @@ function RefrescarPantalla() {
                                                           
                                                         </select>
                                 </div>
+                               </div>
+
+
+	<div class="row row-cols-5 g-3 align-items-center mb-3">  
+
                           
-				<div class="col-12">
-				  <label class="visually-hidden" for="fechaEnvio">Fecha Envio:</label>
+				<div class="col-4">
+				  FechaEnvio:
                                    	 <label class="visually-hidden" for="fechaEnvio">FechaEnvio:</label>
                                
 					 <input type="datetime-local"  class="form-control form-control-sm" id="fechaEnvio" name="fechaEnvio" placeholder="fechaEnvio"  >
                                 </div>
 
-				<div class="col-12">
-				 <label class="visually-hidden" for="fechaRespuesta">Fecha Respuesta:</label>
+				<div class="col-4">
+				 FechaRespuesta:
                                     
-					 <input type="datetime-local"  class="form-control form-control-sm" id="fechaRespuesta" name="fechaRespuesta" placeholder="fechaRespuesta"  readonly>
+					 <input type="datetime-local"  class="form-control form-control-sm" id="fechaRespuesta" name="fechaRespuesta" placeholder="Respuesta"  readonly>
                                 </div>
 
-				<div class="col-12">
+				<div class="col-1">
                                     
-				 <label  for="cantidadFacturas">CantidadFacturas:</label>
-                                    <input type="text" class="form-control form-control-sm" id="cantidadFacturas" name="cantidadFacturas" value="0" placeholder="CantidadFacturas:" readonly></input>
+				 <label  for="cantidadFacturas">Facturas:</label>
+                                    <input type="text"  id="cantidadFacturas" name="cantidadFacturas" value="0" placeholder="Facturas:" readonly></input>
                                 </div>
-				<div class="col-12">
+				<div class="col-1">
 				
                                     Pasaron:
                                     <input type="text" id="cantidadPasaron" name="cantidadPasaron" value="0" readonly></input>
                                 </div>
-				<div class="col-12">
-				<label  for="cantidadFacturas">CantidadRechazadas:</label>
-
-                                    
-                                    <input type="text" class="form-control form-control-sm" id="cantidadRechazadas" name="cantidadRechazadas" value="0" placeholder="CantidadRechazadas:"  readonly></input>
+				<div class="col-1">
+				Rechazadas:
+                                     <input type="text"  id="cantidadRechazadas" name="cantidadRechazadas" value="0" placeholder="Rechazadas:"  readonly></input>
 	                                </div>
 
 
-                                <div class="col-12">
-                                    Estado:
+                              </div>
+
+			<div class="row row-cols-4 g-3 align-items-center mb-3">   
+
+
+                                <div class="col-2">
+                                    EstadoEnvio:
                                     <input type="text" id="estadoMinisterio" name="estadoMinisterio" value="PENDIENTE" readonly></input>
                                 </div>
            
-                                <div class="col-12">
+                                <div class="col-1">
                                    
                                     <input type="hidden" id="fechaRegistro" name="fechaRegistro" value="" > </input>
                                 </div>
 
 
 
-                                <div class="col-12">
-				 <label  for="estadoReg">EstadoRegistro:</label>
-                                    
-                                    <input type="text" class="form-control form-control-sm" id="estadoReg" name="estadoReg" value="A" placeholder="CantidadRechazadas:"  estadoReg> </input>
+                                <div class="col-1">
+				
+                                    EstadoReg:
+                                    <input type="text" class="form-control form-control-sm" id="estadoReg" name="estadoReg" value="A" placeholder="estadoReg"  estadoReg> </input>
                                 </div>
 
 
 
-                                <div class="col-12">
+                                <div class="col-2">
                                     Usuario:
                                     <input type="text" id="usuarioRegistro_id" name="usuarioRegistro_id" value="{{Username_id}}" readonly > </input>
                                 </div>
@@ -314,7 +318,7 @@ function RefrescarPantalla() {
                         </div> <!-- CIERRA BODY -->
 			   <div class="modal-footer">
 
-			<textarea id="mensajesErrorcrearModelEnviosRips" name="mensajesErrorcrearModelEnviosRips" style="background-color: lightred; color: navy;"  rows="1" cols="60" placeholder="Mensajes..."  wrap="hard"></textarea>
+			<textarea id="mensajesErrorcrearModelEnviosRips" name="mensajesErrorCrearModelEnviosRips" style="background-color: lightred; color: navy;"  rows="1" cols="60" placeholder="Mensajes..."  wrap="hard"></textarea>
 
 			  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar   </button>
 			<button type="button" class="btn btn-primary" id="saveBtnCrearEnviosRips" onclick="CrearEnviosRips()">Grabar!</button> 
@@ -367,7 +371,7 @@ function RefrescarPantalla() {
 
 			   <div class="modal-footer">
 
-			<textarea id="mensajesErrorcrearModelRipsEnvioJson" name="mensajesErrorcrearModelRipsEnvioJson" style="background-color: lightred; color: navy;"  rows="1" cols="60" placeholder="Mensajes..."  wrap="hard"></textarea>
+			<textarea id="mensajesErrorcrearModelRipsEnvioJson" name="mensajesErrorCrearModelRipsEnvioJson" style="background-color: lightred; color: navy;"  rows="1" cols="60" placeholder="Mensajes..."  wrap="hard"></textarea>
 
 			  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar   </button>
 
@@ -574,7 +578,7 @@ Envio No: <input type="text" name="envioRipsId" id="envioRipsId" readonly>
                         </div> <!-- CIERRA BODY -->
 			   <div class="modal-footer">
 
-				<textarea id="mensajesErrorcrearModelRipsDetalle" name="mensajesErrorcrearModelRipsDetalle" style="background-color: lightred; color: navy;"  rows="1" cols="60" placeholder="Mensajes..."  wrap="hard"></textarea>
+				<textarea id="mensajesErrorcrearModelRipsDetalle" name="mensajesErrorCrearModelRipsDetalle" style="background-color: lightred; color: navy;"  rows="1" cols="60" placeholder="Mensajes..."  wrap="hard"></textarea>
 
 			  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar   </button>
                              
@@ -624,7 +628,7 @@ Envio No: <input type="text" name="envioRipsId" id="envioRipsId" readonly>
                         </div> <!-- CIERRA BODY -->
 		   <div class="modal-footer">
 
-			<textarea id="mensajesErrorcrearModelRipsJson" name="mensajesErrorcrearModelRipsJson" style="background-color: lightred; color: navy;"  rows="1" cols="60" placeholder="Mensajes..."  wrap="hard"></textarea>
+			<textarea id="mensajesErrorcrearModelRipsJson" name="mensajesErrorCrearModelRipsJson" style="background-color: lightred; color: navy;"  rows="1" cols="60" placeholder="Mensajes..."  wrap="hard"></textarea>
 
 			  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar   </button>
 

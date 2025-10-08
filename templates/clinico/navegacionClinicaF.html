@@ -265,12 +265,13 @@
                 {{ historiaForm.tratamiento.label }}
                 {{ historiaForm.tratamiento }}
             </div>
-
+<!--
 	   <div class="col">
                 {{ historiaForm.mipres.label }}
                 {{ historiaForm.mipres }}
             </div>
 
+-->
 
             <div class="col">
                 </div>
@@ -279,10 +280,11 @@
 
 <!-- segunda fila -->
 
-
+<!--
         <div class="row row-cols-8 mt-3">
             <div class="col">
                 </div>
+
 
             <div class="col">
                 {{ historiaForm.ordenMedicaLab.label }} Consulta
@@ -318,6 +320,7 @@
                 </div>
 
         </div>
+-->
 
 <!--  fin segunda fila -->
 
@@ -829,10 +832,17 @@
                                                         Cant:
                                                         <input type="text" id="cantidad" name="cantidad" value="1">
                                                     </div>
-                                                    <div class="col-sm-5">
+                                                    <div class="col-sm-3">
                                                         Observaciones:
                                                         <input type="text" id="observa" name="observa" value="">
                                                     </div>
+
+                                                    <div class="col-sm-2">
+                                                        Numero Orden:
+                                                        <input type="text" id="ordenMedicaLab" name="ordenMedicaLab" value="">
+                                                    </div>
+
+
                                                     <div class="col-sm-2">
                                                         <span class="text-secondary">Adicionar</span>
                                                         <a class="btn btn-success" href="javascript:void(0)"
@@ -969,10 +979,16 @@
                                                     </div>
 
 
-                                                    <div class="col-sm-5">
+                                                    <div class="col-sm-2">
 							Observaciones:
                                                         <input type="text" id="observa3" name="observa3" value="">
                                                     </div>
+
+					  <div class="col-sm-2">
+                                                        Numero Orden:
+                                                        <input type="text" id="ordenMedicaRad" name="ordenMedicaRad" value="">
+                                                    </div>
+
 
 
                                                     <div class="col-sm-2 text-end">
@@ -1110,9 +1126,14 @@
                                                     </div>
 
 
-                                                    <div class="col-sm-5">
+                                                    <div class="col-sm-2">
 							Observaciones:
                                                         <input type="text" id="observa4" name="observa4" value="">
+                                                    </div>
+
+					  <div class="col-sm-2">
+                                                        Numero Orden:
+                                                        <input type="text" id="ordenMedicaTer" name="ordenMedicaTer" value="">
                                                     </div>
 
 
@@ -1235,7 +1256,7 @@
                                         <div class="card-header" style="height:100px;">
                                             <center>
                                                 <div class="row">
-                                                    <div class="col-sm-2">
+                                                    <div class="col-sm-1">
                     							    Medicamento
                                                         <select class="select-css"  id="medicamentos"
                                                                 name="medicamentos">
@@ -1285,7 +1306,7 @@
                                                         </select>
                                                     </div>
 
-						                <div class="col-sm-2">
+						                <div class="col-sm-1">
 							                        Vias Adm
                                                         <select class="select-css" id="vias"
                                                                 name="vias">
@@ -1306,6 +1327,17 @@
 							                            DiasTratamiento:
                                                         <input type="text" id="diasTratamiento" name="diasTratamiento" value="" size="1">
                                                     </div>
+
+						  <div class="col-sm-1">
+                                                        Numero Orden:
+                                                        <input type="text" id="ordenMedicaMed" name="ordenMedicaMed" value="">
+                                                    </div>
+
+						  <div class="col-sm-1">
+                                                        Numero Orden:
+                                                        <input type="text" id="mipres" name="mipres" value="">
+                                                    </div>
+
 
                                                     <div class="col-sm-1 text-end">
                                                         <span class="text-secondary">Adicionar</span>
@@ -2277,7 +2309,7 @@
                                             <center>
                                                 <div class="row">
 
-                                                    <div class="col-sm-2">
+                                                    <div class="col-sm-1">
                                                         Tipo Interconsulta:
                                                         <select class="select-css"  id="tiposInterconsulta"
                                                                 name="tiposInterconsulta">
@@ -2289,7 +2321,7 @@
                                                         </select>
                                                    </div>
 
-                                                    <div class="col-sm-2">
+                                                    <div class="col-sm-1">
                                                         Especialidad consultada:</label>
                                                         <select class="select-css"  id="especialidadConsultada"
                                                                 name="especialidadConsultada">
@@ -2332,6 +2364,11 @@
                                                             </option>
                                                             {% endfor %}
                                                         </select>
+
+						  <div class="col-sm-2">
+                                                        Numero Orden:
+                                                        <input type="text" id="ordenMedicaInt" name="ordenMedicaInt" value="">
+                                                    </div>
                                                     </div>
 
 

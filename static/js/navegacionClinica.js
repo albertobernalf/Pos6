@@ -1756,17 +1756,17 @@ formHistoriaClinica.addEventListener('submit', e=>{
          // alert("tiposSalidas =" + tiposSalidas);
 
 	var dxComplicacion =  document.getElementById("dxComplicacion").value;
-	var mipres =  document.getElementById("id_mipres").value;
+	var mipres =  document.getElementById("mipres").value;
 
 	
 
 
-	var ordenMedicaLab =  document.getElementById("id_ordenMedicaLab").value;
-	var ordenMedicaRad =  document.getElementById("id_ordenMedicaRad").value;
-	var ordenMedicaTer =  document.getElementById("id_ordenMedicaTer").value;
-	var ordenMedicaMed =  document.getElementById("id_ordenMedicaMed").value;
-	var ordenMedicaOxi =  document.getElementById("id_ordenMedicaOxi").value;
-	var ordenMedicaInt =  document.getElementById("id_ordenMedicaInt").value;
+	var ordenMedicaLab =  document.getElementById("ordenMedicaLab").value;
+	var ordenMedicaRad =  document.getElementById("ordenMedicaRad").value;
+	var ordenMedicaTer =  document.getElementById("ordenMedicaTer").value;
+	var ordenMedicaMed =  document.getElementById("ordenMedicaMed").value;
+	// var ordenMedicaOxi =  document.getElementById("ordenMedicaOxi").value;
+	var ordenMedicaInt =  document.getElementById("ordenMedicaInt").value;
     // DESDE AQUI LOS DATOS DE CIRUGIA
 
 
@@ -1880,7 +1880,7 @@ formHistoriaClinica.addEventListener('submit', e=>{
                                 'ordenMedicaRad':ordenMedicaRad,
                                 'ordenMedicaTer':ordenMedicaTer,
                                 'ordenMedicaMed':ordenMedicaMed,
-                                'ordenMedicaOxi':ordenMedicaOxi,
+                            //    'ordenMedicaOxi':ordenMedicaOxi,
                                 'ordenMedicaInt':ordenMedicaInt,
 				                'serviciosAdministrativos':serviciosAdministrativos,
 				                'cBoxCirugia':cBoxCirugia,

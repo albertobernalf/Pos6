@@ -7,7 +7,7 @@ from django.core.serializers import serialize
 from django.db.models.functions import Cast, Coalesce
 from django.utils.timezone import now
 from django.db.models import Avg, Max, Min, Sum
-
+from django.db import transaction, IntegrityError
 from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect, HttpResponse, HttpResponseRedirect
 from django.core.exceptions import ValidationError
@@ -157,11 +157,19 @@ def GuardaEnviosRips(request):
     estadoReg = 'A'
     fechaRegistro = datetime.datetime.now()
 
+    if (fechaEnvio==''):
+        fechaEnvio= fechaRegistro
+
+    if (fechaRespuesta==''):
+        fechaRespuesta= None
+
+    print("fechaEnvio =", fechaEnvio)
+    print ("fechaRespuesta =", fechaRespuesta)
+
     estadoRips = RipsEstados.objects.get(nombre='PENDIENTE')
 
     miConexion3 = None
     try:
-
 
         miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",  password="123456")
         cur3 = miConexion3.cursor()
@@ -172,9 +180,7 @@ def GuardaEnviosRips(request):
         cur3.close()
         miConexion3.close()
 
-
-
-        return JsonResponse({'success': True, 'Mensajes': 'Envio realizado satisfactoriamente!'})
+        return JsonResponse({'success': True, 'Mensajes': 'Envio creado satisfactoriamente!'})
 
     except psycopg2.DatabaseError as error:
         print ("Entre por rollback" , error)
@@ -875,9 +881,18 @@ def GenerarJsonRips(request):
 
         # Aqui crea el archivo
 
-        file = open(nombreCarpeta, "w")
-        file.writelines(funcionJson[0]['dato'])
-        file.close()
+        try:
+
+            file = open(nombreCarpeta, "w")
+            file.writelines(funcionJson[0]['dato'])
+            file.close()
+
+        except Exception as e:
+            print ("error ", e)
+
+            message_error= str(e)
+            return JsonResponse({'success': False, 'Mensajes': message_error})
+
 
         # Aqui Actualiza la ruta en la tabla rips_ripsdetalle
 
@@ -1325,34 +1340,60 @@ def TraerJsonEnvioRips(request):
 
     jsonRips = []
 
-    miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
-                                   password="123456")
-    curx = miConexionx.cursor()
+    try:
+        miConexion3 = None
+        try:
 
-    if (tipoRips == 'Factura'):
+            miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                           password="123456")
+            cur3 = miConexion3.cursor()
+            # Primero creamos el despacho
 
-        detalle = 'select generaEnvioRipsJSON('  + "'" + str(envioRipsId) + "','" + str('FACTURA') + "'" + ') valorJson'
+            if (tipoRips == 'Factura'):
 
-    if (tipoRips == 'Glosa'):
+                detalle = 'select generaEnvioRipsJSON('  + "'" + str(envioRipsId) + "','" + str('FACTURA') + "'" + ') valorJson'
 
-        detalle = 'select generaEnvioRipsJSON('  + "'" + str(envioRipsId) +  "','" + str('GLOSA') + "'" + ') valorJson'
+            if (tipoRips == 'Glosa'):
 
-    print(detalle)
+                detalle = 'select generaEnvioRipsJSON('  + "'" + str(envioRipsId) +  "','" + str('GLOSA') + "'" + ') valorJson'
 
-    curx.execute(detalle)
+            print(detalle)
 
-    for valorJson in curx.fetchall():
-        jsonRips.append(
-            {"model": "rips_ripsdetalle", "pk": id, "fields":
-                {'valorJson':valorJson }})
+            cur3.execute(detalle)
 
-    miConexionx.close()
-    print("jsonRips ", jsonRips)
-    context['JsonRips'] = jsonRips
+            for valorJson in cur3.fetchall():
+                jsonRips.append(
+                    {"model": "rips_ripsdetalle", "pk": id, "fields":
+                        {'valorJson':valorJson }})
 
-    serialized1 = json.dumps(jsonRips, default=str)
 
-    return HttpResponse(serialized1, content_type='application/json')
+            miConexion3.close()
+            print("jsonRips ", jsonRips)
+            context['JsonRips'] = jsonRips
+
+            serialized1 = json.dumps(jsonRips, default=str)
+
+            return HttpResponse(serialized1, content_type='application/json')
+
+
+        except psycopg2.DatabaseError as error:
+            print("Entre por rollback", error)
+            if miConexion3:
+                print("Entro ha hacer el Rollback")
+                miConexion3.rollback()
+
+            message_error= str(error)
+            return JsonResponse({'success': False, 'Mensajes': message_error})
+
+        finally:
+            if miConexion3:
+                cur3.close()
+                miConexion3.close()
+
+    except Exception as e:
+        message_error = 'Debe seleccionar el envio Rips . Mensaje:' + str(e)
+        print ("entre por qui", message_error)
+        return JsonResponse({'success': False, 'Mensajes': message_error})
 
 
 def BorrarDetalleRips(request):
@@ -1387,20 +1428,17 @@ def BorrarDetalleRips(request):
 
             if (tipoNota.nombre == 'Factura'):
 
-                a = Facturacion.objects.get(id=envioDetalle.numeroFactura_id)
-                a.ripsEnvio_id = ""
-                a.save()
+                a = Facturacion.objects.filter(id=envioDetalle.numeroFactura_id).update(ripsEnvio_id = '')
 
             if (tipoNota.nombre == 'Glosa'):
 
-                a = Glosas.objects.get(id=envioDetalle.glosa_id)
-                a.ripsEnvio_id = ""
-                a.save()
+                a = Glosas.objects.filter(id=envioDetalle.glosa_id).update(ripsEnvio_id = '')
 
     except Exception as e:
             # Aquí ya se hizo rollback automáticamente
-            print("Se hizo rollback por:", e)
-
+            print("Se hizo rollback por esto :", e)
+            message_error= str(e)
+            return JsonResponse({'success': False, 'Mensajes': message_error})
 
 
     miConexion3 = None
