@@ -424,8 +424,8 @@ def ActualizarAutorizacionDetalle(request):
         miConexiont.commit()
         miConexiont.close()
 
-        message_error= str(error)
-        return JsonResponse({'success': True, 'Mensajes': 'Detalle de Autorizacion actualizado satisfactoriamente!'})
+        #message_error= str(error)
+
 
 
     except psycopg2.DatabaseError as error:
@@ -443,8 +443,16 @@ def ActualizarAutorizacionDetalle(request):
             miConexiont.close()
 
     ## si no existe hay que crear cabezote
+    ## Aqui actualiza el numero de autorizacion para medicamentos
+
+    if (tipoTipoExamen != 'CUPS'):
+
+        HistorialMedicamentos.objects.filter(historia_id=datosHc.id),update(autorizacion_id=autorizacionDetalleId)
 
 
+    ## Fin Actualiza autorizacion para medicamentos
+
+    return JsonResponse({'success': True, 'Mensajes': 'Detalle de Autorizacion actualizado satisfactoriamente!'})
 
 
 def LeerDetalleAutorizacion(request):

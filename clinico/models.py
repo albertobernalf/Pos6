@@ -1344,7 +1344,7 @@ class HistoriaMedicamentos(models.Model):
     viaAdministracion = models.ForeignKey('clinico.ViasAdministracion', blank=True, null=True, editable=True,   on_delete=models.PROTECT)
     concentracionMedicamento = 	models.CharField(max_length=100, blank=True, null=True)
     nota = models.CharField(max_length=5000, blank=True , null=True)
-    autorizacion = models.ForeignKey('autorizaciones.Autorizaciones', blank=True, null=True, editable=True, on_delete=models.PROTECT , related_name='aut02') 
+    autorizacion = models.ForeignKey('autorizaciones.AutorizacionesDetalle', blank=True, null=True, editable=True, on_delete=models.PROTECT , related_name='aut02') 
     cantidadOrdenada = models.DecimalField(max_digits=10, decimal_places=0, blank=True, null=True, editable=True)
     diasTratamiento =  models.DecimalField(max_digits=10, decimal_places=0, blank=True, null=True, editable=True)
     cantidadSolicitada = models.DecimalField(max_digits=10, decimal_places=0, blank=True, null=True, editable=True)
