@@ -102,7 +102,7 @@ def load_dataEnviosRips(request, data):
                                    password="123456")
     curx = miConexionx.cursor()
 
-    detalle = 'SELECT env.id,  env."fechaEnvio", env."fechaRespuesta", env."cantidadFacturas", env."cantidadPasaron", env."cantidadRechazadas",env."ripsEstados_id",  estrips.nombre estadoMinisterio, env."fechaRegistro", env."estadoReg", env."usuarioRegistro_id", env.empresa_id, env."sedesClinica_id" , sed.nombre nombreClinica, emp.nombre nombreEmpresa , pla.nombre nombreRegistra , tiposNotas.nombre tipoNota FROM public.rips_ripsenvios env, sitios_sedesclinica sed, facturacion_empresas emp, planta_planta pla , rips_ripstiposnotas tiposNotas , rips_ripsestados estrips where env."sedesClinica_id" = sed.id and env.empresa_id=emp.id AND pla.id = env."usuarioRegistro_id" AND env."ripsTiposNotas_id" = tiposNotas.id AND estrips.id = env."ripsEstados_id" AND env."sedesClinica_id" =' +  "'" + str(sede) + "'"
+    detalle = 'SELECT env.id,  env."fechaEnvio", env."fechaRespuesta", env."cantidadFacturas", env."cantidadPasaron", env."cantidadRechazadas",env."ripsEstados_id",  estrips.nombre estadoMinisterio, env."fechaRegistro", env."estadoReg", env."usuarioRegistro_id", env.empresa_id, env."sedesClinica_id" , sed.nombre nombreClinica, emp.nombre nombreEmpresa , pla.nombre nombreRegistra , tiposNotas.nombre tipoNota FROM public.rips_ripsenvios env, sitios_sedesclinica sed, facturacion_empresas emp, planta_planta pla , rips_ripstiposnotas tiposNotas , rips_ripsestados estrips where env."sedesClinica_id" = sed.id and env.empresa_id=emp.id AND pla.id = env."usuarioRegistro_id" AND env."ripsTiposNotas_id" = tiposNotas.id AND estrips.id = env."ripsEstados_id" AND env."sedesClinica_id" =' +  "'" + str(sede) + "' AND (estRips.nombre = " + "'" + str('PENDIENTE') + "' or estRips.nombre = '" + str('PENDIENTE CON JSON GENERADO') + "' or estRips.nombre = '" + str('RADICADO') + "')"
 
     print(detalle)
 
@@ -1128,7 +1128,7 @@ def EnviarJsonRips(request):
     fechaRegistro = timezone.now()
     print("fechaRegistro = ", fechaRegistro)
 
-    ripsEstadosId = RipsEstados.objects.get(nombre="ENVIADO")
+    ripsEstadosId = RipsEstados.objects.get(nombre="ENVIADA")
     print ("El estado es = ", ripsEstadosId.id )
 
 
@@ -1141,7 +1141,7 @@ def EnviarJsonRips(request):
                                        password="123456")
         curx = miConexionx.cursor()
 
-        detalle = 'UPDATE rips_ripsEnvios SET "fechaEnvio" = ' + "'" + str(fechaRegistro) + "'" +', "ripsEstados_id" = ' + "'" + str(ripsEstadosId.id) + "'" + ' , "estadoPasoMinisterio" = ' + "'" + str('ENVIADA') + "' WHERE id =" + "'" + str(envioRipsId) + "'"
+        detalle = 'UPDATE rips_ripsEnvios SET "fechaEnvio" = ' + "'" + str(fechaRegistro) + "'" +', "ripsEstados_id" = ' + "'" + str(ripsEstadosId.id) + "'," + '"usuarioEnvia_id"= ' + "'" + str(username_id)  + "' WHERE id =" + "'" + str(envioRipsId) + "'"
         curx.execute(detalle)
         miConexionx.commit()
 
@@ -1543,14 +1543,14 @@ def GuardarRadicacionRips(request):
     fechaRegistro = timezone.now()
     print("fechaRegistro = ", fechaRegistro)
 
-
-    if (fechaRadicacion == NoNe):
+    if (fechaRadicacion == None):
         print("Entre Fecha radiacion NONE")
         fechaRadicacion=fechaRegistro
 
     usuarioRadicacion= request.POST['username_id']
-    print ("usuarioRegistro_id =", usuarioRegistro_id)
+    print ("usuarioRegistro_id =", usuarioRadicacion)
     estadoReg = 'A'
+
     fechaRegistro = datetime.datetime.now()
 
 
@@ -1563,7 +1563,7 @@ def GuardarRadicacionRips(request):
 
         miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",  password="123456")
         cur3 = miConexion3.cursor()
-        comando = 'UPDATE rips_ripsEnvios  SET "fechaRadicacion" = ' + "'" +str(fechaRadicacion) + "'," + '"usuarioRadicacion_id" = ' + "'" + str(username_id) + "'"+ '"ripsEstado_id" = ' + "'" + str(rispEstadosId.id) + "'" +  ' WHERE id =' + str(envioRipsId)
+        comando = 'UPDATE rips_ripsEnvios  SET "fechaRadicacion" = ' + "'" +str(fechaRadicacion) + "'," + '"usuarioRadicacion_id" = ' + "'" + str(usuarioRadicacion) + "'," + '"ripsEstados_id" = ' + "'" + str(ripsEstadosId.id) + "'" +  ' WHERE id =' + str(envioRipsId)
         print(comando)
         cur3.execute(comando)
         miConexion3.commit()

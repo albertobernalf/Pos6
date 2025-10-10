@@ -797,3 +797,7 @@ class ProgramacionCitasMedicas(models.Model):
 
 -- OPS REOJO. AL SACAR rips de procedimiento de pacientes clinico con autorizacion l campo consecutivoliquidcion no es adecuado porque no es posible hacerlos
   onmordar conm el consecutivofacturab de una factura que le parece. Complicado RESOLVER
+ - ops tengo un erro como grave pero no mencontre donde es la cantiadaOrdenada y los diasdetratamiento estan iveritos en clinico_historiamediamentos,
+   fe por un  proceso de autporizacion de mediamentos , en cambio el rips si estarria bien. Mirar el martes 14de oct
+
+-- ojo radiccion  boton de nviar ripsen el mismo datatable implementar el martes 14 de octubrte

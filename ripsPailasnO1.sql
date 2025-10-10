@@ -7,8 +7,18 @@ select * from facturacion_facturaciondetalle where facturacion_id =138
 select * from clinico_historiamedicamentos;
 select * from rips_ripshospitalizacion;
 
+select * from clinico_historiamedicamentos order by id desc;
+
+select * from autorizaciones_autorizacionesdetalle;
+select * from cli
+
+select "requiereAutorizacion", * from facturacion_suministros order by  "requiereAutorizacion" desc
+
 select "requiereAutorizacion",* from clinico_examenes 
+	select * from clinico_historiamedicamentos order by id desc;
 update facturacion_facturaciondetalle set cantidad = 1,anulado='N' where id=385
+
+	select * from farmacia_farmacia;
 
 select * from autorizaciones_autorizaciones
 select * from autorizaciones_autorizacionesdetalle
@@ -17,7 +27,7 @@ select * from rips_ripstransaccion order by id desc
 select * from rips_ripsusuarios where "ripsTransaccion_id" = 270
 select * from rips_ripshospitalizacion where "ripsTransaccion_id" = 270
 select * from rips_ripsurgenciasobservacion where "ripsTransaccion_id" = 270
-select * from rips_ripsprocedimientos where "ripsTransaccion_id" = 270
+select * from rips_ripsprocedimientos where "ripsTransaccion_id" = 271
 select * from rips_ripsmedicamentos where "ripsTransaccion_id" = 270
 
 INSERT INTO rips_ripsprocedimientos ("codPrestador", "fechaInicioAtencion", "idMIPRES", "numAutorizacion","numDocumentoIdentificacion",
@@ -28,7 +38,7 @@ INSERT INTO rips_ripsprocedimientos ("codPrestador", "fechaInicioAtencion", "idM
 	"ripsTipos_id", "tipoPagoModerador_id", "ripsTransaccion_id", "estadoReg", ingreso_id )  
 	
 SELECT sed."codigoHabilitacion", facdet."fecha", his.mipres, autdet."numeroAutorizacion", usu.documento,
-	facdet."valorTotal", ' + str(proRata) + ', fac.id, row_number()  OVER(ORDER BY facdet.id) +1 AS consecutivo, now(), 
+	facdet."valorTotal", '0', fac.id, row_number()  OVER(ORDER BY facdet.id) +1 AS consecutivo, now(), 
 	(select max(diag4.id) from clinico_diagnosticos diag4 where  diag4.id = i."dxComplicacion_id"),
 	(select  max(diag1.id) from clinico_historialdiagnosticos histdiag1, clinico_diagnosticos diag1 
 	where histdiag1.historia_id = his.id and histdiag1."tiposDiagnostico_id" = '1'), 
@@ -51,9 +61,22 @@ inner join usuarios_tiposdocumento tipdoc ON (tipdoc.id = fac."tipoDoc_id" )
 left join  rips_ripstiposdocumento tipdocrips on (tipdocrips.id = tipdoc."tipoDocRips_id" ) 
 inner join usuarios_usuarios usu ON (usu."tipoDoc_id" = fac."tipoDoc_id" and usu.id = fac.documento_id ) 
 inner join clinico_historia his ON (his."tipoDoc_id" = i."tipoDoc_id" and his.documento_id = i.documento_id and his."consecAdmision" = i.consec )
-inner join clinico_historiaexamenes hisexa ON (hisexa.historia_id = his.id and hisexa."codigoCups" = exa."codigoCups" and hisexa."consecutivoLiquidacion" = facdet."consecutivoFactura"  )
+left join clinico_historiaexamenes hisexa ON (hisexa.historia_id = his.id and hisexa."codigoCups" = exa."codigoCups"  and hisexa."consecutivoLiquidacion" = facdet."consecutivoFactura"  )
 left join autorizaciones_autorizaciones  aut on (aut.historia_id = his.id) 
 left join autorizaciones_autorizacionesdetalle autdet on (autdet.autorizaciones_id = aut.id and autdet.examenes_id = facdet.examen_id)
 where sed.id = ' 1' and e.id = '63' and fac.id = '138'
 
+
+select * from autorizaciones_autorizaciones -- 1475
+select * from autorizaciones_autorizacionesdetalle -- 648 examenId
+
+	
+select * from clinico_examenes where id = 648; -- 904101
+select * FROM CLINICO_historia order by id desc
+select historia_id,"consecutivoLiquidacion",* from clinico_historiaexamenes order by historia_id,"consecutivoLiquidacion"  asc
+select examen_id, * from facturacion_facturaciondetalle where facturacion_id =138
+select * from cartera_FormasPagos
+
+SELECT * from cartera_pagos;
+SELECT * from cartera_pagosfacturas;
 
