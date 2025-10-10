@@ -1990,13 +1990,13 @@ def crearHistoriaClinica(request):
                                     cur3.execute(comando)
                                     hayAut = []
 
-                                    for id in curt.fetchall():
+                                    for id in cur3.fetchall():
                                         hayAut.append({'id': id})
 
 
                                     estadoAutorizacionId = EstadosAutorizacion.objects.get(nombre='PENDIENTE')
 
-                                    hayAut = str(hayAut[0]['id'])
+                                    hayAut = str(hayAut)
                                     hayAut = hayAut.replace("None", ' ')
                                     hayAut = hayAut.replace("(", ' ')
                                     hayAut = hayAut.replace(")", ' ')
@@ -2007,7 +2007,7 @@ def crearHistoriaClinica(request):
 
                                     print("hayAut = ", hayAut)
 
-                                    if hayAut == '':
+                                    if hayAut == '[]':
 
 
                                         #comando = 'INSERT INTO autorizaciones_autorizaciones ("estadoAutorizacion_id","fechaModifica", "fechaRegistro", "estadoReg",empresa_id, "plantaOrdena_id", "sedesClinica_id", "usuarioRegistro_id", historia_id )  SELECT ' + "'" + str(estadoAutorizacionId.id) + "'" + ', now(), now(), ' + "'" + str('A') + "'" + ', conv.empresa_id,  ' + "'" + str(plantaId.id) + "','" +  str(sede) + "','" + str(usuarioRegistro) + "'," + "'" + str(historiaId) + "'" + ' FROM facturacion_conveniospacienteingresos convIngreso, contratacion_conveniosprocedimientos proc, contratacion_convenios conv WHERE conv.id = convIngreso.convenio_id AND convIngreso."tipoDoc_id" = ' + "'" +  str(tipoDocId.id) + "' AND convIngreso.documento_id = " + "'" + str(documentoId.id) + "'" + ' AND convIngreso."consecAdmision" = ' + "'" + str(ingresoPaciente) + "' AND conv.id = proc.convenio_id AND proc.cups_id = " + "'" +  str(medicamentos) + "' RETURNING id"
@@ -2015,6 +2015,7 @@ def crearHistoriaClinica(request):
                                         print("comando " , comando)
                                         cur3.execute(comando)
                                         autorizacionId = cur3.fetchone()[0]
+                                        print("Autorizacion Temporal = ", autorizacionId)
                                         #miConexiont.commit()
 
                                         #autorizacionIdU = Autorizaciones.objects.all().filter(historia_id=historiaId).aggregate(maximo=Coalesce(Max('id'), 0))
@@ -2025,9 +2026,9 @@ def crearHistoriaClinica(request):
 
                                     print("Autorizacion Final = ", autorizacionId)
 
-                                    miConexiont.close()
 
-                                    comando = 'INSERT INTO autorizaciones_autorizacionesdetalle ("estadoAutorizacion_id", "cantidadSolicitada", "cantidadAutorizada", "fechaRegistro", "estadoReg", autorizaciones_id, "usuarioRegistro_id", "tipoSuministro_id", cums_id,"historiaMedicamentos_id")  VALUES (' + "'" + str(estadoAutorizacionId.id) + "'," + "'" + str(cantidadMedicamento) + "'" + ' ,0, now(),' + "'" + str('A') + "','"  + str(autorizacionId) + "','" + str(usuarioRegistro)  + "','" + str(tiposSuministroId.id) + "','" + str(medicamentos) + "','" + str(i.id) + "')"
+
+                                    comando = 'INSERT INTO autorizaciones_autorizacionesdetalle ("estadoAutorizacion_id", "cantidadSolicitada", "cantidadAutorizada", "fechaRegistro", "estadoReg", autorizaciones_id, "usuarioRegistro_id", "tipoSuministro_id", cums_id,"historiaMedicamentos_id")  VALUES (' + "'" + str(estadoAutorizacionId.id) + "'," + "'" + str(cantidadMedicamento) + "'" + ' ,0, now(),' + "'" + str('A') + "','"  + str(autorizacionId) + "','" + str(usuarioRegistro)  + "','" + str(tiposSuministroId.id) + "','" + str(medicamentos) + "','" + str(i) + "')"
 
 
                                     cur3.execute(comando)

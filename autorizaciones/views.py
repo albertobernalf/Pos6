@@ -297,7 +297,7 @@ def ActualizarAutorizacionDetalle(request):
                 valorAutorizado) + "','" + str(valorAutorizado) + "',null," + "'" + str(
                 fechaRegistro) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(
                 examenId) + "','" + str(usuarioRegistro_id) + "','" + str(liquidacionId) + "','" + str(
-                'SISTEMA') + "'" + ",'A')"
+                'SISTEMA') + "'" + ",'N')"
             print("comando = ", comando)
             curt.execute(comando)
 
@@ -307,7 +307,7 @@ def ActualizarAutorizacionDetalle(request):
 
             if (datosHc.consecAdmision != 0):
 
-                comando = 'INSERT INTO farmacia_farmacia(historia_id,"serviciosAdministrativos_id","tipoOrigen_id","tipoMovimiento_id","fechaRegistro", "usuarioRegistro_id","sedesClinica_id",estado_id,"ingresoPaciente_id") VALUES (' + "'" + str(
+                comando = 'INSERT INTO farmacia_farmacia(historia_id,"serviciosAdministrativos_id","tipoOrigen_id","tipoMovimiento_id","fechaRegistro", "usuarioRegistro_id","sedesClinica_id",estado_id,"ingresoPaciente") VALUES (' + "'" + str(
                     datosAut.historia_id) + "','" + str(serviciosAdministrativos) + "',1,1," + "'" + str(
                     fechaRegistro) + "','" + str(usuarioRegistro_id) + "','" + str(sede) + "','" + str(
                     estadoFarmaciaSolicitud.id) + "','" + str(ingresoId.id) + "') RETURNING id"
@@ -317,7 +317,7 @@ def ActualizarAutorizacionDetalle(request):
 
             else:
 
-                comando = 'INSERT INTO farmacia_farmacia(historia_id,"serviciosAdministrativos_id","tipoOrigen_id","tipoMovimiento_id","fechaRegistro", "usuarioRegistro_id","sedesClinica_id",estado_id,"ingresoPaciente_id") VALUES (' + "'" + str(
+                comando = 'INSERT INTO farmacia_farmacia(historia_id,"serviciosAdministrativos_id","tipoOrigen_id","tipoMovimiento_id","fechaRegistro", "usuarioRegistro_id","sedesClinica_id",estado_id,"ingresoPaciente") VALUES (' + "'" + str(
                     datosAut.historia_id) + "','" + str(serviciosAdministrativos) + "',1,1," + "'" + str(
                     fechaRegistro) + "','" + str(usuarioRegistro_id) + "','" + str(sede) + "','" + str(
                     estadoFarmaciaSolicitud.id) + "','" + str(triageId.id) + "') RETURNING id"
@@ -330,18 +330,18 @@ def ActualizarAutorizacionDetalle(request):
             # Aqui Guardar ENFERMERIA
             if (datosHc.consecAdmision != 0):
 
-                comando = 'INSERT INTO enfermeria_enfermeria(historia_id,"serviciosAdministrativos_id","tipoOrigen_id","tipoMovimiento_id","fechaRegistro", "usuarioRegistro_id","sedesClinica_id","estadoReg","ingresoPaciente_id") VALUES (' + "'" + str(
+                comando = 'INSERT INTO enfermeria_enfermeria(historia_id,"serviciosAdministrativos_id","tipoOrigen_id","tipoMovimiento_id","fechaRegistro", "usuarioRegistro_id","sedesClinica_id","estadoReg","ingresoPaciente",anulado) VALUES (' + "'" + str(
                     datosAut.historia_id) + "','" + str(serviciosAdministrativos) + "',1,1," + "'" + str(
                     fechaRegistro) + "','" + str(usuarioRegistro_id) + "','" + str(sede) + "','" + str(
-                    estadoReg) + "','" + str(ingresoId.id) + "') RETURNING id"
+                    estadoReg) + "','" + str(ingresoId.id) + "','N') RETURNING id"
                 resultado = curt.execute(comando)
                 print("comando = ", comando)
                 enfermeriaId = curt.fetchone()[0]
             else:
-                comando = 'INSERT INTO enfermeria_enfermeria(historia_id,"serviciosAdministrativos_id","tipoOrigen_id","tipoMovimiento_id","fechaRegistro", "usuarioRegistro_id","sedesClinica_id","estadoReg","ingresoPaciente_id") VALUES (' + "'" + str(
+                comando = 'INSERT INTO enfermeria_enfermeria(historia_id,"serviciosAdministrativos_id","tipoOrigen_id","tipoMovimiento_id","fechaRegistro", "usuarioRegistro_id","sedesClinica_id","estadoReg","ingresoPaciente", anulado) VALUES (' + "'" + str(
                     datosAut.historia_id) + "','" + str(serviciosAdministrativos) + "',1,1," + "'" + str(
                     fechaRegistro) + "','" + str(usuarioRegistro_id) + "','" + str(sede) + "','" + str(
-                    estadoReg) + "','" + str(triageId.id) + "') RETURNING id"
+                    estadoReg) + "','" + str(triageId.id) + "','A') RETURNING id"
                 resultado = curt.execute(comando)
                 print("comando = ", comando)
                 enfermeriaId = curt.fetchone()[0]
@@ -353,16 +353,16 @@ def ActualizarAutorizacionDetalle(request):
             comando = 'INSERT INTO farmacia_farmaciadetalle(farmacia_id, "historiaMedicamentos_id",suministro_id,"dosisCantidad", "dosisUnidad_id","viaAdministracion_id","cantidadOrdenada","fechaRegistro","usuarioRegistro_id", "estadoReg", "consecutivoMedicamento")  SELECT ' + "'" + str(
                 farmaciaId) + "', id," + ' suministro_id,"dosisCantidad" , "dosisUnidad_id" , "viaAdministracion_id" ,"cantidadSolicitada",' + "'"  + str(
                 fechaRegistro) + "'," + "'"  + str(usuarioRegistro_id) + "',"  + "'A'" + ', "consecutivoMedicamento"  FROM clinico_HistoriaMedicamentos WHERE historia_id = ' + "'" + str(
-                datosAut.historia_id) + "' AND " + ' id = ' + "'" + str(datosAut1.historiaMedicamentos) + "' RETURNING id"
+                datosAut.historia_id) + "' AND " + ' id = ' + "'" + str(datosAut1.historiaMedicamentos_id) + "' RETURNING id"
             print("comando = ", comando)
 
             resultado = curt.execute(comando)
             farmaciaDetalleId = curt.fetchone()[0]
 
             # Aqui Guardar ENFERMERIA DETALLE
-            comando = 'INSERT INTO enfermeria_enfermeriadetalle(enfermeria_id, "historiaMedicamentos_id","farmaciaDetalle_id", suministro_id,"dosisCantidad", "dosisUnidad_id","viaAdministracion_id","cantidadOrdenada","fechaRegistro","usuarioRegistro_id", "estadoReg", frecuencia_id, "diasTratamiento")  SELECT ' + "'" + str(
-                enfermeriaId) + "'," + ' id,' + "'" + str(farmaciaDetalleId) + "'," + ' suministro_id,"dosisCantidad" , "dosisUnidad_id" , "viaAdministracion_id" ,"cantidadSolicitada",' + "'" + str(fechaRegistro) + "','" + str(usuarioRegistro_id) + "','A'," + ' frecuencia_id, "diasTratamiento"  FROM clinico_HistoriaMedicamentos WHERE historia_id = ' + "'" + str(
-                datosAut.historia_id) + "' AND " + ' id = ' + "'" + str(datosAut1.historiaMedicamentos) + "'"
+            comando = 'INSERT INTO enfermeria_enfermeriadetalle(enfermeria_id, "historiaMedicamentos_id","farmaciaDetalle_id", suministro_id,"dosisCantidad", "dosisUnidad_id","viaAdministracion_id","cantidadOrdenada","fechaRegistro","usuarioRegistro_id", "estadoReg", frecuencia_id, "diasTratamiento",anulado)  SELECT ' + "'" + str(
+                enfermeriaId) + "'," + ' id,' + "'" + str(farmaciaDetalleId) + "'," + ' suministro_id,"dosisCantidad" , "dosisUnidad_id" , "viaAdministracion_id" ,"cantidadSolicitada",' + "'" + str(fechaRegistro) + "','" + str(usuarioRegistro_id) + "','A'," + ' frecuencia_id, "diasTratamiento" ,' + "'" + str('N') + "'" + ' FROM clinico_HistoriaMedicamentos WHERE historia_id = ' + "'" + str(
+                datosAut.historia_id) + "' AND " + ' id = ' + "'" + str(datosAut1.historiaMedicamentos_id) + "'"
             print("comando = ", comando)
             curt.execute(comando)
 
@@ -447,7 +447,7 @@ def ActualizarAutorizacionDetalle(request):
 
     if (tipoTipoExamen != 'CUPS'):
 
-        HistorialMedicamentos.objects.filter(historia_id=datosHc.id),update(autorizacion_id=autorizacionDetalleId)
+        HistoriaMedicamentos.objects.filter(historia_id=datosHc.id).update(autorizacion_id=autorizacionDetalleId)
 
 
     ## Fin Actualiza autorizacion para medicamentos

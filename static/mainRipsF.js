@@ -1641,20 +1641,35 @@ function EnviarJsonRips()
                 type: "POST",
                 dataType: 'json',
                 success: function (data2) {
+			if (data2.success=true)
+			{
+		document.getElementById("mensajes").value =   data.Mensajes;
+			}
+			else
+			{
+		document.getElementById("mensajesError").value =   data.Mensajes;
+		return;
+			}
 		
-		var data =  {}   ;
-	        data['username'] = username;
-	       data['sedeSeleccionada'] = sedeSeleccionada;
-	       data['nombreSede'] = nombreSede;
-	      data['sede'] = sede;
-	        data['username_id'] = username_id;
-	        data = JSON.stringify(data);
-	
-		  var tableA = $('#tablaEnviosRips').DataTable();
-	          tableA.ajax.reload();
+    	var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
+        var username = document.getElementById("username").value;
+        var nombreSede = document.getElementById("nombreSede").value;
+    	var sede = document.getElementById("sede").value;
+        var username_id = document.getElementById("username_id").value;
+         var data =  {}   ;
+        data['username'] = username;
+        data['sedeSeleccionada'] = sedeSeleccionada;
+        data['nombreSede'] = nombreSede;
+        data['sede'] = sede;
+        data['username_id'] = username_id;
+ 	    data = JSON.stringify(data);
 
 
-		document.getElementById("mensajesError").value = data2.Mensajes;
+        arrancaEnviosRips(1,data);
+	    dataTableEnviosRipsInitialized = true;
+
+		document.getElementById("mensajes").value = data2.Mensajes;
+
                          },
                  error: function (data) {	      
 			document.getElementById("mensajesErrorCrearModelRipsJson").value =   data.responseText;
@@ -1701,18 +1716,35 @@ function GuardarRadicacionRips()
                 type: "POST",
                 dataType: 'json',
                 success: function (data2) {
-		
-		var data =  {}   ;
-	        data['username'] = username;
-	       data['sedeSeleccionada'] = sedeSeleccionada;
-	       data['nombreSede'] = nombreSede;
-	      data['sede'] = sede;
-	        data['username_id'] = username_id;
-	        data = JSON.stringify(data);
-	
+			if (data2.success=true)
+			{
+		document.getElementById("mensajes").value =   data.Mensajes;
+			}
+			else
+			{
+		document.getElementById("mensajesError").value =   data.Mensajes;
+		return;
+			}
+
+    	var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
+        var username = document.getElementById("username").value;
+        var nombreSede = document.getElementById("nombreSede").value;
+    	var sede = document.getElementById("sede").value;
+        var username_id = document.getElementById("username_id").value;
+         var data =  {}   ;
+        data['username'] = username;
+        data['sedeSeleccionada'] = sedeSeleccionada;
+        data['nombreSede'] = nombreSede;
+        data['sede'] = sede;
+        data['username_id'] = username_id;
+ 	    data = JSON.stringify(data);
 
 
-		document.getElementById("mensajesError").value = data2.Mensajes;
+        arrancaEnviosRips(1,data);
+	    dataTableEnviosRipsInitialized = true;
+
+		document.getElementById("mensajes").value = data2.Mensajes;
+
                          },
             error: function (data) {	      
 			document.getElementById("mensajesErrorCrearModelRipsJson").value =   data.responseText;

@@ -568,18 +568,9 @@ ojo pendiente en aplicacion de medicamentos arreglar cuando aplica la modal no p
 
    crear modelos referneica/contrareferencia
 
-
-  -- LUNES 11 DE AGOSTO
-	<div class="modal-dialog modal-fullscreen" role="document">
-
       -- seguiir probando la actualziadion editar admision desde admsiion
-      --  comenzar con los reportyes de hojadeadmision y FACTURA
      -- ops los formatos estan iniciados y hay que revizarlos a fondop
 
- -- no cloca bien la hora del ingreso desde triage a urgencias
-
--- ojo martes 18-agoiso
-  -- hacer todos los JSONRESPONSE con dat. Mensaje Erro y no erro
 
 -- los combos sin seleccion de rips despues de que se crea un admison estan con inicio en blanco
 -- ojo en tarifarios, paramettizar la ruta de crague de procedimientos, suminis, honoraro en tabla parametros
@@ -682,9 +673,7 @@ LUNES 15-SEPTIEMBRE: Ademas de revizar lo de arriba: ver acomodar columnas grade
 -- ops la ventana rips revizar(creo no trae mensajes de eroor y otras)
 -- ops error aparece el paciente ambulatorio que ya se le dio salida ERO ojo, no coloco fecha de salida, el nro de lqa factura no ,o coloco
   la tabla facturacion_conveniospacienteingresos (fue al momento de facturar) creo un registro de mas a l ambulatorio error, ops no desocupo la habitacion, tampoco desocupo la cama al historialdependencias
--- cuando uno anula una factura hace el refresh para que se veal el cambio si se puede
--- ojo al editar una liquiaciondetalle, guarada el valor, actuliza el total de proced, pero no los totales y valoraagar
--- ojo persiste el proble del reload de admisioes_ingresos duplica el laboratioro
+
 
 -- lunes 6 de octubre
 
@@ -696,12 +685,115 @@ LUNES 15-SEPTIEMBRE: Ademas de revizar lo de arriba: ver acomodar columnas grade
 
  -- TIPS CONSULTA EXTERNA
 
--- Las agendas son independientes solo competen con medicos, especialidades y horarios de atencon
--- Consultorios solo compete disponibilidad de los consultyaros. se asignan dinamicamet a o medicos
+-- Las agendas son independientes solo competen con medicos, especialidades y horarios de atencon: AgendasMedicas--> menuaAgenda, panelAgenda
+-- Consultorios solo compete disponibilidad de los consultyaros. se asignan dinamicamet a o medicos: Consultorios, Calendario
 -- Mismomdelo
    -- Tabla ingresos, creo se pued emantener un consecutivo nortmal que hosp.urge, amb
-  --  se creat ciatMedicas, citasMedicasDetalle-- para los datos de la cita como tal con consecuticpo propio
-  -- lA HCLINICA JALADA DE LA QUE HAY PERO S ETRASQUILAN MUCHAS COSA...
+  --  se creat ciatMedicas, citasMedicasDetalle-- para los datos de la cita como tal con consecuticpo propio: CitasMedicas, CitasMedicasDetalle--> menuCitasMedicas , panelCitasMedicas
+  -- lA HCLINICA JALADA DE LA QUE HAY PERO S ETRASQUILAN MUCHAS COSAS...
+
+Calendario:
+
+class Calendario(models.Model):
+    STATUS_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'),
+        ]
+    id = models.AutoField(primary_key=True)
+    sedesClinica = models.ForeignKey('sitios.SedesClinica',   blank=True,null= True, on_delete=models.PROTECT ,related_name ='sedesClinica301')
+    fechaDia =
+    nombre = models.CharField(max_length=30, default="" , null = False)
+    fechaRegistro = models.DateTimeField(default=now, editable=False)
+    usuarioRegistro = models.ForeignKey('planta.Planta',  blank=True, null=True, editable=True, on_delete=models.PROTECT,related_name ='usuarioRegistroPlanta')
+    estadoReg = models.CharField(max_length=1, choices=STATUS_CHOICES,default='A', editable=False)
+
+
+    def __integer__(self):
+        return self.dependencia
+
+
+
+Consultorios
+
+class Consultorios(models.Model):
+    STATUS_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'),
+        ],
+    ESTADO_CONSULTORIO = [
+        ('D', 'Disponible'),
+        ('N', 'No Disponible'),
+        ('M', 'Mantenimiento'),
+        ],
+    DURACION_CITA = [
+        ('Veinte', '20 Minutos'),
+        ('Quince', '15 Minutos'),
+        ]
+    id = models.AutoField(primary_key=True)
+    sedesClinica = models.ForeignKey('sitios.SedesClinica',   blank=True,null= True, on_delete=models.PROTECT ,related_name ='sedesClinica301')
+    dependencia  = models.ForeignKey('sitios.Dependencias',   blank=True,null= True, on_delete=models.PROTECT ,related_name ='dependencia109')
+    consultorio  =  models.ForeignKey('citasmedicas.Consultorios',   blank=True,null= True, on_delete=models.PROTECT ,related_name ='consul01')
+    nombre = models.CharField(max_length=30, default="" , null = False)
+    dia  = models.Date(default=now, editable=True)
+    duracion = models.CharField(max_length=1, choices=DURACION_CITA,default='A', editable=False)
+    fechaRegistro = models.DateTimeField(default=now, editable=False)
+    usuarioRegistro = models.ForeignKey('planta.Planta',  blank=True, null=True, editable=True, on_delete=models.PROTECT,related_name ='usuarioRegistroPlanta')
+    estadoReg = models.CharField(max_length=1, choices=STATUS_CHOICES,default='A', editable=False)
+
+
+    def __integer__(self):
+        return self.dependencia
+
+agendasMedicas:
+class AgendasMedicas(models.Model):
+    STATUS_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'),
+        ]
+    id = models.AutoField(primary_key=True)
+    sedesClinica = models.ForeignKey('sitios.SedesClinica',   blank=True,null= True, on_delete=models.PROTECT ,related_name ='sedesClinica301')
+    especialidad = models.ForeignKey('clinico.Especialidades', blank=True,null= True, on_delete=models.PROTECT, null=False)
+    especialidadesMedicos = models.ForeignKey('clinico.EspecialidadesMedicos',blank=True,null= True, on_delete=models.PROTECT, null=False)
+    atiendeDesde = models.DateTimeField(default=now, editable=False)
+    atiendeHasta = models.DateTimeField(default=now, editable=False)
+    fechaRegistro = models.DateTimeField(default=now, editable=False)
+    usuarioRegistro = models.ForeignKey('planta.Planta',  blank=True, null=True, editable=True, on_delete=models.PROTECT,related_name ='usuarioRegistroPlanta')
+    estadoReg = models.CharField(max_length=1, choices=STATUS_CHOICES,default='A', editable=False)
+
+
+    def __integer__(self):
+        return self.dependencia
+
+
+
+programacionCitasMedicas:
+
+class ProgramacionCitasMedicas(models.Model):
+    STATUS_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'),
+        ]
+    id = models.AutoField(primary_key=True)
+    sedesClinica = models.ForeignKey('sitios.SedesClinica',   blank=True,null= True, on_delete=models.PROTECT ,related_name ='sedesClinica301')
+    especialidad = models.ForeignKey('clinico.Especialidades',blank=True,null= True, on_delete=models.PROTECT, null=False)
+    consultorio =  models.ForeignKey('agendasmedicas.Consultorios',   blank=True,null= True, on_delete=models.PROTECT ,related_name ='consul102')
+    especialidadesMedicos = models.ForeignKey('clinico.EspecialidadesMedicos', blank=True,null= True, on_delete=models.PROTECT, null=False)
+    agendasMedicas = = models.ForeignKey('citasmedicas.AgendasMedicas',   blank=True,null= True, on_delete=models.PROTECT ,related_name ='agendas001')
+    desde = models.DateTimeField(default=now, editable=True)
+    hasta = models.DateTimeField(default=now, editable=True)
+    usuario = models.ForeignKey('usuarios.Usuarios',blank=True,null= True, on_delete=models.PROTECT, null=False)
+    convenio = models.ForeignKey('contratacion.Convenios',blank=True,null= True,  on_delete=models.PROTECT, null=False)
+    fechaRegistro = models.DateTimeField(default=now, editable=False)
+    usuarioRegistro = models.ForeignKey('planta.Planta',  blank=True, null=True, editable=True, on_delete=models.PROTECT,related_name ='usuarioRegistroPlanta')
+    estadoReg = models.CharField(max_length=1, choices=STATUS_CHOICES,default='A', editable=False)
+
+
+    def __integer__(self):
+        return self.dependencia
+
 
 --- FIN TIPS
 
+
+-- OPS REOJO. AL SACAR rips de procedimiento de pacientes clinico con autorizacion l campo consecutivoliquidcion no es adecuado porque no es posible hacerlos
+  onmordar conm el consecutivofacturab de una factura que le parece. Complicado RESOLVER

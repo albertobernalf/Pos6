@@ -1748,7 +1748,7 @@ function AFacturar()
 	           type: 'POST',
 	           dataType : 'json',
 	  		success: function (data) {
-				$('#imprimir').val(data.Factura);
+				alert("ya guarde la factura = " + JSON.stringify(data));
 
 
 			if (data.success == true)
