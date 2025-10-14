@@ -8,9 +8,9 @@ select * from clinico_historiamedicamentos;
 select * from rips_ripshospitalizacion;
 
 select * from clinico_historiamedicamentos order by id desc;
-
+select * from rips_ripsestados;
 select * from autorizaciones_autorizacionesdetalle;
-select * from cli
+select * from rips_ripsenvios;
 
 select "requiereAutorizacion", * from facturacion_suministros order by  "requiereAutorizacion" desc
 
@@ -24,11 +24,14 @@ select * from autorizaciones_autorizaciones
 select * from autorizaciones_autorizacionesdetalle
 
 select * from rips_ripstransaccion order by id desc
-select * from rips_ripsusuarios where "ripsTransaccion_id" = 270
+select * from rips_ripsusuarios where "ripsTransaccion_id" = 279
 select * from rips_ripshospitalizacion where "ripsTransaccion_id" = 270
 select * from rips_ripsurgenciasobservacion where "ripsTransaccion_id" = 270
 select * from rips_ripsprocedimientos where "ripsTransaccion_id" = 271
-select * from rips_ripsmedicamentos where "ripsTransaccion_id" = 270
+select * from rips_ripsmedicamentos where "ripsTransaccion_id" = 274
+select * from facturacion_facturacion order by id desc
+	select * from facturacion_facturaciondetalle where facturacion_id = 139
+select * from clinico_historiamedicamentos order by id desc	
 
 INSERT INTO rips_ripsprocedimientos ("codPrestador", "fechaInicioAtencion", "idMIPRES", "numAutorizacion","numDocumentoIdentificacion",
 	"vrServicio",	"valorPagoModerador", "numFEVPagoModerador", consecutivo, "fechaRegistro", "codComplicacion_id", 

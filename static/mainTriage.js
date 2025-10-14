@@ -165,7 +165,7 @@ autoWidth: false,
 		"render": function ( data, type, row ) {
                         var btn = '';
 
-             btn = btn + " <input type='radio'  name='triageId' class='miTriage form-check-input ' data-pk='"  + row.pk + "'>" + "</input>";
+             btn = btn + " <input type='radio'  name='triageId' style='width:15px;height:15px;accent-color: purple;border-color: purple;background-color: purple;' class='miTriage form-check-input ' data-pk='"  + row.pk + "'>" + "</input>";
 
                        return btn;
 		}
@@ -488,7 +488,16 @@ $('#tablaDatosTriage tbody').on('click', '.miEditaTriage', function() {
 
 $('#tablaDatosTriage tbody').on('click', '.miTriage', function() {
 
- 
+ 	var PermisoCrearTriage= document.getElementById("PermisoCrearTriage").value;
+	alert("PermisoCrearTriage = " + PermisoCrearTriage);
+
+	if (PermisoCrearTriage == "False")
+		{
+		alert("No tiene permiso para ejecutar opcion");
+		return;
+		}
+		
+
 	 var post_id = $(this).data('pk');
 	var row = $(this).closest('tr'); // Encuentra la fila
 	// alert("post_id=" + post_id);

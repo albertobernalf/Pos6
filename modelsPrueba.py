@@ -797,7 +797,29 @@ class ProgramacionCitasMedicas(models.Model):
 
 -- OPS REOJO. AL SACAR rips de procedimiento de pacientes clinico con autorizacion l campo consecutivoliquidcion no es adecuado porque no es posible hacerlos
   onmordar conm el consecutivofacturab de una factura que le parece. Complicado RESOLVER
+
  - ops tengo un erro como grave pero no mencontre donde es la cantiadaOrdenada y los diasdetratamiento estan iveritos en clinico_historiamediamentos,
    fe por un  proceso de autporizacion de mediamentos , en cambio el rips si estarria bien. Mirar el martes 14de oct
 
--- ojo radiccion  boton de nviar ripsen el mismo datatable implementar el martes 14 de octubrte
+-- martes 14 de octubre:
+--  LO MEJoR ES crear pestaña enviados y alli se deja la opcion de radicacion, tambien se cra modal para recepcionar la respuesta del envio
+    y creo eso es todo el proceso
+-- crear la pestaña -- Auditoria Rips vs facturacion items
+-- pruebas de rips con abonos
+-- pruebas de rips con recien nacidos
+-- armar el json de envio y que impriema a partir del jsonFacturas
+-- crear parametros de ruta para almacenar archivos json y toda la facturacion electronica
+-- como validar los JSON de rips
+-- seguir con cirugia
+
+-- TIPS BOLIVIA
+	-- Agrandar radio  de seleccion: <input type=radio name=radio style="width:50px;height:50px">
+	-- tamañpo de letra font mas grande en todo
+  	-- Solo admisiones admisiona No triage
+	-- los diagnosticos no estan al ingreso d ela admsion
+	--- el eror de paula de foreign key m,edioc invalido al dar salidad clinica que paso ??
+
+ 
+	
+--  FIN TIPS BOLIVIA
+

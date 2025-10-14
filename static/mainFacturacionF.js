@@ -98,7 +98,7 @@ function arrancaLiquidacion(valorTabla,valorData)
 
 		{ "render": function ( data, type, row ) {
                         var btn = '';
-                          btn = btn + " <input type='radio'  name='miLiquidacion' class='form-check-input editPostLiquidacion' data-pk='"  + row.pk + "'>" + "</input>";
+                          btn = btn + " <input type='radio'  name='miLiquidacion' style='width:15px;height:15px;accent-color: purple;border-color: purple;background-color: purple;' class='form-check-input editPostLiquidacion' data-pk='"  + row.pk + "'>" + "</input>";
                        return btn;
                     }
 		},
@@ -367,7 +367,7 @@ autoWidth: false,
 		{
 			"render": function ( data, type, row ) {
                         var btn = '';
-                          btn = btn + " <input type='radio' name='miFacturacion' class='form-check-input editPostFacturacion' data-pk='"  + row.pk + "'>" + "</input>";                       return btn;
+                          btn = btn + " <input type='radio' name='miFacturacion' style='width:15px;height:15px;accent-color: purple;border-color: purple;background-color: purple;' class='form-check-input editPostFacturacion' data-pk='"  + row.pk + "'>" + "</input>";                       return btn;
                         return btn;
 			}
 		},

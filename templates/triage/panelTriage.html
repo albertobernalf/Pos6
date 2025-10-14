@@ -23,8 +23,18 @@ th ,tr{
     <ul class="tabs">
         <li><a href="#Triage"><span class="fa-solid fa-user-doctor-message"></span> <span class="tab-text"> </span>
             Ingresos Triage </a></li>
-        <li><a href="#crearTriage"><span class="fa-solid fa-user-doctor-message"></span><span class="tab-text"> </span>
-            Creacion Triage</a></li>
+
+{{PermisoTriage}}
+
+	{% if PermisoTriage == "True" %}
+
+      		  <li><a href="#crearTriage"><span class="fa-solid fa-user-doctor-message"></span><span class="tab-text"> </span>
+	            Creacion Triage</a></li>
+
+	{% else %}
+		
+	{% endif %}
+	
 
     </ul>
 </div>
@@ -93,6 +103,7 @@ function RefrescarPantalla() {
                                    value="{{PermisosDetalle}}">
                             <input type="hidden" id="escogeModulo" name="escogeModulo" value="{{EscogeModulo}}">
 			<input type="button" id="btnRefrescar" name="btnRefrescar" value="Refrescar" onclick="RefrescarPantalla()">
+			<input type="text" id="PermisoCrearTriage" name="PermisoCrearTriage" value="{{PermisoCrearTriage}}" >
 
                         </form>
 
@@ -120,13 +131,21 @@ function RefrescarPantalla() {
 		                            <th>Solicita</th>
                 		            <th>Motivo</th>
 		                            <th>Triage</th>
+
+				{% if PermisoCrearTriage == "True" %}
+
 					   <th>Crear Admision</th>
+				{% else %}
+		
+				{% endif %}
+	
                 		            <th>Editar</th>
 		                         
 					</bold>                                  
                                             </tr>
                                             </thead>
                                             <tbody>
+
                                             </tbody>
                              
 

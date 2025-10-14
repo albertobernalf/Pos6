@@ -68,12 +68,13 @@ def validaAcceso(request):
 
     context = {}
     username = request.POST["username"].strip()
-    print("username=", username)
-    contrasena = request.POST["password"]
+    print("username = ", username)
+    contrase = request.POST["password"]
+    print("contrasena=", contrase)
     sede = request.POST["seleccion2"]
     Sede = sede
     print("Sede Mayuscula = ", Sede)
-    print(contrasena)
+    print(contrase)
     print("sede= ", sede)
     context = {}
     context['Documento'] = username
@@ -137,6 +138,7 @@ def validaAcceso(request):
     context['Profesional'] = profesional
     print ("Profesional = ", context['Profesional'] )
     miConexion0.close()
+    print("planta =", planta)
 
     if planta == []:
 
@@ -146,23 +148,34 @@ def validaAcceso(request):
 
     else:
 
-        #miConexion1 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres", password="123456")
-        #cur1 = miConexion1.cursor()
-        #comando = "select p.contrasena contrasena from planta_planta p where p.documento ='" + username + "'" + " AND contrasena = '" + contrasena +"'"
-        #cur1.execute(comando)
+        miConexion1 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres", password="123456")
+        cur1 = miConexion1.cursor()
+        comando = "select p.contrasena contrasenax from planta_planta p where p.documento ='" + username + "'" + " AND contrasena = '" + contrasena +"'"
+        cur1.execute(comando)
 
-        #plantaContrasena = []
+        plantaContrasena = []
 
-        #for contrasena in cur1.fetchall():
-        #    plantaContrasena.append({'contrasena': contrasena})
+        for contrasenax in cur1.fetchall():
+            plantaContrasena.append({'contrasenax': contrasenax})
 
-        if planta[0]['contrasena'] == []:
-	#if plantaContrasena == []:
+        print ("plantaContrasena[0]['contrasenax'] = ", plantaContrasena[0]['contrasenax'])
+        contrasenax = str(plantaContrasena[0]['contrasenax'])
+        contrasenax = contrasenax.replace("(", ' ')
+        contrasenax = contrasenax.replace(")", ' ')
+        contrasenax = contrasenax.replace("'", ' ')
+        contrasenax = contrasenax.replace(",", ' ')
+        contrasenax=contrasenax.strip()
+        print ("contrasenax = ", contrasenax)
+        print("contrase = ", contrase)
+
+        if (contrasenax != contrase.strip()):
+	        #if plantaContrasena == []:
             #miConexion1.close()
+            print("Entre contraseña invalida")
             context['Error'] = "Contraseña invalida ! "
             return render(request, "inicio/accesoPrincipal1.html", context)
         else:
-            print("OJOOO ya valide CONTRASENA")
+            print("OJOOO CONTRASENA ok")
             #Aqui ya se valido username y contraseña OK
 
             miConexion2 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres", password="123456")
@@ -2047,6 +2060,9 @@ def escogeAcceso(request, Sede, Username, Profesional, Documento, NombreSede, es
         miConexionx.close()
         print(triage1)
         context['Triage'] = triage1
+
+        context['PermisoTriage'] = 'True'
+        context['PermisoCrearTriage'] = 'False'
 
         ## FIN CONTEXTO
         return render(request, "triage/panelTriage.html", context)

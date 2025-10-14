@@ -102,7 +102,7 @@ def load_dataEnviosRips(request, data):
                                    password="123456")
     curx = miConexionx.cursor()
 
-    detalle = 'SELECT env.id,  env."fechaEnvio", env."fechaRespuesta", env."cantidadFacturas", env."cantidadPasaron", env."cantidadRechazadas",env."ripsEstados_id",  estrips.nombre estadoMinisterio, env."fechaRegistro", env."estadoReg", env."usuarioRegistro_id", env.empresa_id, env."sedesClinica_id" , sed.nombre nombreClinica, emp.nombre nombreEmpresa , pla.nombre nombreRegistra , tiposNotas.nombre tipoNota FROM public.rips_ripsenvios env, sitios_sedesclinica sed, facturacion_empresas emp, planta_planta pla , rips_ripstiposnotas tiposNotas , rips_ripsestados estrips where env."sedesClinica_id" = sed.id and env.empresa_id=emp.id AND pla.id = env."usuarioRegistro_id" AND env."ripsTiposNotas_id" = tiposNotas.id AND estrips.id = env."ripsEstados_id" AND env."sedesClinica_id" =' +  "'" + str(sede) + "' AND (estRips.nombre = " + "'" + str('PENDIENTE') + "' or estRips.nombre = '" + str('PENDIENTE CON JSON GENERADO') + "' or estRips.nombre = '" + str('RADICADO') + "')"
+    detalle = 'SELECT env.id,  env."fechaEnvio", env."fechaRespuesta", env."cantidadFacturas", env."cantidadPasaron", env."cantidadRechazadas",env."ripsEstados_id",  estrips.nombre estadoMinisterio, env."fechaRegistro", env."estadoReg", env."usuarioRegistro_id", env.empresa_id, env."sedesClinica_id" , sed.nombre nombreClinica, emp.nombre nombreEmpresa , pla.nombre nombreRegistra , tiposNotas.nombre tipoNota FROM public.rips_ripsenvios env, sitios_sedesclinica sed, facturacion_empresas emp, planta_planta pla , rips_ripstiposnotas tiposNotas , rips_ripsestados estrips where env."sedesClinica_id" = sed.id and env.empresa_id=emp.id AND pla.id = env."usuarioRegistro_id" AND env."ripsTiposNotas_id" = tiposNotas.id AND estrips.id = env."ripsEstados_id" AND env."sedesClinica_id" =' +  "'" + str(sede) + "' AND (estRips.nombre = " + "'" + str('PENDIENTE') + "' or estRips.nombre = '" + str('PENDIENTE CON JSON GENERADO') + "')"
 
     print(detalle)
 
@@ -1564,6 +1564,151 @@ def GuardarRadicacionRips(request):
         miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",  password="123456")
         cur3 = miConexion3.cursor()
         comando = 'UPDATE rips_ripsEnvios  SET "fechaRadicacion" = ' + "'" +str(fechaRadicacion) + "'," + '"usuarioRadicacion_id" = ' + "'" + str(usuarioRadicacion) + "'," + '"ripsEstados_id" = ' + "'" + str(ripsEstadosId.id) + "'" +  ' WHERE id =' + str(envioRipsId)
+        print(comando)
+        cur3.execute(comando)
+        miConexion3.commit()
+        miConexion3.close()
+
+        return JsonResponse({'success': True, 'Mensajes': 'Fecha de radicacion actualizada satisfactoriamente!'})
+
+    except psycopg2.DatabaseError as error:
+        print ("Entre por rollback" , error)
+        if miConexion3:
+            print("Entro ha hacer el Rollback")
+            miConexion3.rollback()
+
+        message_error= str(error)
+        return JsonResponse({'success': False, 'Mensajes': message_error})
+
+    finally:
+        if miConexion3:
+            cur3.close()
+            miConexion3.close()
+
+
+def load_dataRipsEnviados(request, data):
+    print("Entre load_data Rips Enviados")
+
+    print("llegue bien01")
+
+    context = {}
+    d = json.loads(data)
+
+    print("llegue bien02")
+
+    username = d['username']
+    sede = d['sede']
+    username_id = d['username_id']
+
+    nombreSede = d['nombreSede']
+    print("sede:", sede)
+    print("username:", username)
+    print("username_id:", username_id)
+
+    # Combo Indicadores
+
+    miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                   password="123456")
+    curt = miConexiont.cursor()
+
+    comando = 'SELECT ser.nombre, count(*) total FROM admisiones_ingresos i, usuarios_usuarios u, sitios_dependencias dep , clinico_servicios ser ,usuarios_tiposDocumento tp , sitios_dependenciastipo deptip  , clinico_Diagnosticos diag , sitios_serviciosSedes sd  WHERE sd."sedesClinica_id" = i."sedesClinica_id"  and sd.servicios_id  = ser.id and i."sedesClinica_id" = dep."sedesClinica_id" AND i."sedesClinica_id" = ' + "'" + str(
+        sede) + "'" + ' AND  deptip.id = dep."dependenciasTipo_id" and i."serviciosActual_id" = ser.id AND dep.disponibilidad = ' + "'" + str(
+        'O') + "'" + ' AND i."salidaDefinitiva" = ' + "'" + str(
+        'N') + "'" + ' and tp.id = u."tipoDoc_id" and  i."tipoDoc_id" = u."tipoDoc_id" and u.id = i."documento_id" and diag.id = i."dxActual_id" and i."fechaSalida" is null and dep."serviciosSedes_id" = sd.id and dep.id = i."dependenciasActual_id"  group by ser.nombre UNION SELECT ser.nombre, count(*) total FROM triage_triage t, usuarios_usuarios u, sitios_dependencias dep , usuarios_tiposDocumento tp , sitios_dependenciastipo deptip  , sitios_serviciosSedes sd, clinico_servicios ser WHERE sd."sedesClinica_id" = t."sedesClinica_id"  and t."sedesClinica_id" = dep."sedesClinica_id" AND  t."sedesClinica_id" =  ' + "'" + str(
+        sede) + "'" + ' AND dep."sedesClinica_id" =  sd."sedesClinica_id" AND dep.id = t.dependencias_id AND  t."serviciosSedes_id" = sd.id  AND deptip.id = dep."dependenciasTipo_id" and  tp.id = u."tipoDoc_id" and  t."tipoDoc_id" = u."tipoDoc_id" and u.id = t."documento_id"  and ser.id = sd.servicios_id and  dep."serviciosSedes_id" = sd.id and t."serviciosSedes_id" = sd.id and dep."tipoDoc_id" = t."tipoDoc_id" and  t."consecAdmision" = 0 and dep."documento_id" = t."documento_id" and ser.nombre = ' + "'" + str(
+        'TRIAGE') + "'" + ' group by ser.nombre'
+
+    curt.execute(comando)
+    print(comando)
+
+    indicadores = []
+
+    for id, nombre in curt.fetchall():
+        indicadores.append({'id': id, 'nombre': nombre})
+
+    miConexiont.close()
+    print(indicadores)
+
+    context['Indicadores'] = indicadores
+
+    # Fin combo Indicadores
+
+    ripsEnviados = []
+
+    miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                   password="123456")
+    curx = miConexionx.cursor()
+
+    detalle = 'SELECT env.id,  env."fechaEnvio", env."fechaRespuesta", env."cantidadFacturas", env."cantidadPasaron", env."cantidadRechazadas",env."ripsEstados_id",  estrips.nombre estadoMinisterio, env."fechaRegistro", env."estadoReg", env."usuarioRegistro_id", env.empresa_id, env."sedesClinica_id" , sed.nombre nombreClinica, emp.nombre nombreEmpresa , pla.nombre nombreRegistra , tiposNotas.nombre tipoNota FROM public.rips_ripsenvios env, sitios_sedesclinica sed, facturacion_empresas emp, planta_planta pla , rips_ripstiposnotas tiposNotas , rips_ripsestados estrips where env."sedesClinica_id" = sed.id and env.empresa_id=emp.id AND pla.id = env."usuarioRegistro_id" AND env."ripsTiposNotas_id" = tiposNotas.id AND estrips.id = env."ripsEstados_id" AND env."sedesClinica_id" =' +  "'" + str(sede) + "' AND (estRips.nombre = " + "'" + str('ENVIADA') + "' or estRips.nombre = '" + str('RADICADO') + "'  or estRips.nombre = '" + str('RECHAZADA') + "')"
+
+    print(detalle)
+
+    curx.execute(detalle)
+
+    for id,  fechaEnvio, fechaRespuesta, cantidadFacturas, cantidadPasaron, cantidadRechazadas, estadoPasoMinisterio, estadoMinisterio ,fechaRegistro, estadoReg, usuarioRegistro_id, empresa_id, sedesClinica_id, nombreClinica, nombreEmpresa, nombreRegistra, tipoNota in curx.fetchall():
+        ripsEnviados.append(
+            {"model": "rips.ripsEnvios", "pk": id, "fields":
+                {'id': id, 'fechaEnvio': fechaEnvio, 'fechaRespuesta': fechaRespuesta, 'cantidadFacturas': cantidadFacturas,
+                 'cantidadPasaron': cantidadPasaron, 'cantidadRechazadas': cantidadRechazadas,
+                 'estadoMinisterio': estadoMinisterio, 'estadoMinisterio':estadoMinisterio,  'fechaRegistro': fechaRegistro, 'estadoReg': estadoReg,'usuarioRegistro_id':usuarioRegistro_id, 'empresa_id':empresa_id, 'sedesClinica_id': sedesClinica_id, 'nombreClinica':nombreClinica, 'nombreEmpresa':nombreEmpresa,'nombreRegistra':nombreRegistra, 'tipoNota':tipoNota}})
+
+    miConexionx.close()
+    print("ripsEnviados"  , ripsEnviados)
+    context['RipsEnviados'] = ripsEnviados
+
+    serialized1 = json.dumps(ripsEnviados, default=serialize_datetime)
+
+    return HttpResponse(serialized1, content_type='application/json')
+
+
+def GuardarRespuestaRips(request):
+
+    print ("Entre GuardarRespuestaRips" )
+
+
+    envioRipsId = request.POST['envioRipsId']
+    print ("envioRipsId =", envioRipsId)
+
+    fechaRespuesta = request.POST['fechaRespuesta']
+    print ("fechaRespuesta =", fechaRespuesta)
+
+    respuesta = request.POST['respuesta']
+    print ("respuesta =", respuesta)
+
+    cantidadPasaron = request.POST['cantidadPasaron']
+    print ("cantidadPasaron =", cantidadPasaron)
+
+    cantidadRechazadas = request.POST['cantidadRechazadas']
+    print ("cantidadRechazadas =", cantidadRechazadas)
+
+
+    rutaRespuestaJson = request.POST['rutaRespuestaJson']
+    print ("rutaRespuestaJson =", rutaRespuestaJson)
+
+    fechaRegistro = timezone.now()
+    print("fechaRegistro = ", fechaRegistro)
+
+    if (fechaRespuesta == None):
+        print("Entre Fecha respuesta NONE")
+        fechaRespuesta=fechaRegistro
+
+    usuarioRadicacion= request.POST['username_id']
+    print ("usuarioRegistro_id =", usuarioRadicacion)
+    estadoReg = 'A'
+
+    fechaRegistro = datetime.datetime.now()
+
+
+    ripsEstadosId = RipsEstados.objects.get(nombre="CON RESPUESTA")
+    print ("El estado es = ", ripsEstadosId.id )
+
+
+    miConexion3 = None
+    try:
+
+        miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",  password="123456")
+        cur3 = miConexion3.cursor()
+        comando = 'UPDATE rips_ripsEnvios  SET "fechaRespuesta" = ' + "'" +str(fechaRespuesta) + "',respuesta = '" + str(respuesta) +"'," + '"cantidadPasaron" = ' + "'" + str(cantidadPasaron) + "'," + '"cantidadRechazadas" = ' + "'" + str(cantidadRechazadas) + "'," + '"usuarioRadicacion_id" = ' + "'" + str(usuarioRadicacion) + "'," + '"ripsEstados_id" = ' + "'" + str(ripsEstadosId.id) + "',"  + '"rutaRespuestaJson" = ' + "'" + str(rutaRespuestaJson) + "'" +  ' WHERE id =' + str(envioRipsId)
         print(comando)
         cur3.execute(comando)
         miConexion3.commit()

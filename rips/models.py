@@ -35,6 +35,8 @@ class RipsEnvios (models.Model):
     fechaRadicacion  =  models.DateTimeField(default=now, blank=True, null=True, editable=True)
     fechaGeneracionjson  =  models.DateTimeField(default=now, blank=True, null=True, editable=True)
     fechaRespuesta =  models.DateTimeField(default=now, blank=True, null=True, editable=True)
+    respuesta = models.CharField(max_length=50000, blank=True,null= True, editable=True)
+    rutaRespuestaJson = models.CharField(max_length=5000, blank=True,null= True, editable=True)
     cantidadFacturas = models.CharField(max_length=5, blank=True,null= True, editable=True)
     cantidadPasaron = models.CharField(max_length=5, blank=True,null= True, editable=True)
     cantidadRechazadas = models.CharField(max_length=5, blank=True,null= True, editable=True)

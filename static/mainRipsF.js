@@ -19,6 +19,7 @@ let dataTableRipsProcedimientosInitialized = false;
 let dataTableRipsHospitalizacionInitialized = false;
 let dataTableRipsMedicamentosInitialized = false;
 let dataTableRipsUrgenciasObsInitialized = false;
+let dataTableRipsEnviadosInitialized = false;
 
 
 $(document).ready(function() {
@@ -152,16 +153,7 @@ function arrancaEnviosRips(valorTabla,valorData)
                        return btn;
                     }
                    },
-	{
-	  "render": function ( data, type, row ) {
-                        var btn = '';
 
-	     btn = btn + " <button class='miRadicar btn-primary ' data-pk='" + row.pk + "'>" + '<i class="fa-duotone fa-regular fa-thumbs-up"></i>' + "</button>";
-
-                       return btn;
-                    },
-
-	},
                 { data: "fields.id"},
                 { data: "fields.sedesClinica_id"},
 		   { data: "fields.tipoNota"}, 
@@ -1018,7 +1010,114 @@ function arrancaEnviosRips(valorTabla,valorData)
 
 
 
+    if (valorTabla == 10)
+    {
+        let dataTableOptionsRipsEnviados  ={
+   dom: "<'row mb-1'<'col-sm-3'B><'col-sm-3'><'col-sm-6'f>>" + // B = Botones a la izquierda, f = filtro a la derecha
+             "<'row'<'col-sm-12'tr>>" +
+             "<'row mt-3'<'col-sm-5'i><'col-sm-7'p>>",
+  buttons: [
+    {
+      extend: 'excelHtml5',
+      text: '<i class="fas fa-file-excel"></i> ',
+      titleAttr: 'Exportar a Excel',
+      className: 'btn btn-success',
+    },
+    {
+      extend: 'pdfHtml5',
+      text: '<i class="fas fa-file-pdf"></i> ',
+      titleAttr: 'Exportar a PDF',
+      className: 'btn btn-danger',
+    },
+    {
+      extend: 'print',
+      text: '<i class="fa fa-print"></i> ',
+      titleAttr: 'Imprimir',
+      className: 'btn btn-info',
+    },
+  ],
+  lengthMenu: [2, 4, 15],
+           processing: true,
+            serverSide: false,
+            scrollY: '275px',
+	    scrollX: true,
+	    scrollCollapse: true,
+            paging:false,
+            columnDefs: [
+		{ className: 'centered', targets: [0, 1, 2, 3, 4, 5] },
+	    { width: '10%', targets: [2,3] },
+	    { width: '10%', targets: [9,10] },
+		{  
+                    "targets": 16
+               }
+            ],
+	 pageLength: 3,
+	  destroy: true,
+	  language: {
+		    processing: 'Procesando...',
+		    lengthMenu: 'Mostrar _MENU_ registros',
+		    zeroRecords: 'No se encontraron resultados',
+		    emptyTable: 'Ningún dato disponible en esta tabla',
+		    infoEmpty: 'Mostrando registros del 0 al 0 de un total de 0 registros',
+		    infoFiltered: '(filtrado de un total de _MAX_ registros)',
+		    search: 'Buscar:',
+		    infoThousands: ',',
+		    loadingRecords: 'Cargando...',
+		    paginate: {
+			      first: 'Primero',
+			      last: 'Último',
+			      next: 'Siguiente',
+			      previous: 'Anterior',
+		    }
+			},
 
+           ajax: {
+                 url:"/load_dataRipsEnviados/" +  data,
+                 type: "POST",
+                 dataSrc: ""
+            },
+            columns: [
+	{
+	  "render": function ( data, type, row ) {
+                        var btn = '';
+
+	     btn = btn + " <button class='miRadicar btn-primary ' data-pk='" + row.pk + "'>" + '<i class="fa-duotone fa-regular fa-thumbs-up"></i>' + "</button>";
+
+
+                       return btn;
+                    },
+
+	},
+
+	{
+	  "render": function ( data, type, row ) {
+                        var btn = '';
+
+	     btn = btn + " <button class='miRespuestaRips btn-primary ' data-pk='" + row.pk + "'>" + '<i class="fa-duotone fa-regular fa-thumbs-up"></i>' + "</button>";
+
+
+                       return btn;
+                    }
+                   },
+                { data: "fields.id"},
+                { data: "fields.sedesClinica_id"},
+		   { data: "fields.tipoNota"}, 
+                { data: "fields.empresa_id"},
+                { data: "fields.nombreEmpresa"},
+                { data: "fields.fechaEnvio"},
+                { data: "fields.fechaRespuesta"},
+                { data: "fields.cantidadFacturas"},
+                { data: "fields.cantidadPasaron"},
+		{ data: "fields.cantidadRechazadas"},
+                { data: "fields.estadoMinisterio"},
+		 { data: "fields.fechaRegistro"},
+		 { data: "fields.usuarioRegistro_id"},
+		 { data: "fields.nombreRegistra"},
+		  { data: "fields.nombreClinica"},
+                        ]
+            }
+	        dataTable = $('#tablaRipsEnviados').DataTable(dataTableOptionsRipsEnviados);
+  }
 }
 
 const initDataTableEnviosRips = async () => {
@@ -1108,6 +1207,9 @@ window.addEventListener('load', async () => {
 
 		 document.getElementById("tipoRips4").value = tipoRips;
 		 document.getElementById("envioRipsIdR").value = post_id;
+
+		 document.getElementById("tipoRips5").value = tipoRips;
+		 document.getElementById("envioRipsIdZ").value = post_id;
 
 
 		   arrancaEnviosRips(2,data);
@@ -1260,7 +1362,7 @@ $('#tablaEnviosRips tbody').on('click', '.miEnviar', function() {
       
   });
 
-$('#tablaEnviosRips tbody').on('click', '.miRadicar', function() {
+$('#tablaRipsEnviados tbody').on('click', '.miRadicar', function() {
 
 		alert("ENTRE Tadicar rips");
 
@@ -1279,12 +1381,23 @@ $('#tablaEnviosRips tbody').on('click', '.miRadicar', function() {
   });
 
 
+$('#tablaRipsEnviados tbody').on('click', '.miRespuestaRips', function() {
 
+		alert("ENTRE Respuesta rips");
 
+	     var post_id = $(this).data('pk');
+	var envioRipsId = document.getElementById("envioRipsId").value ;
+	var row = $(this).closest('tr'); // Encuentra la fila
 
+	tipoRips =   document.getElementById("tipoRips2").value ;
+	alert("tipoRips = " +  tipoRips);
+	alert("envioRipsId = " +  envioRipsId);
 
-
-
+            // $('#postFormRespuestaRips').trigger("reset");
+            $('#modelHeadingRespuestaRips').html("Respuesta Rips");
+            $('#crearModelRespuestaRips').modal('show');
+      
+  });
 
 
 // FIN DE LO NUEVO
@@ -1825,11 +1938,11 @@ function GuardarRadicacionRips()
                 success: function (data2) {
 			if (data2.success=true)
 			{
-		document.getElementById("mensajes").value =   data.Mensajes;
+		document.getElementById("mensajes").value =   data2.Mensajes;
 			}
 			else
 			{
-		document.getElementById("mensajesError").value =   data.Mensajes;
+		document.getElementById("mensajesError").value =   data2.Mensajes;
 		return;
 			}
 
@@ -1854,11 +1967,78 @@ function GuardarRadicacionRips()
 
                          },
             error: function (data) {	      
-			document.getElementById("mensajesErrorCrearModelRipsJson").value =   data.responseText;
+			document.getElementById("mensajesErrorcrearModelRadicacionRips").value =   data.responseText;
                 }
             });
 }
 
+
+function GuardarRespuestaRips()
+{
+
+	alert("Entre GuardarRespuestaRips");
+
+
+	var envioRipsId = document.getElementById("envioRipsIdZ").value ;
+	var tipoRips = document.getElementById("tipoRips5").value ;
+
+	var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
+        var username = document.getElementById("username").value;
+        var username_id = document.getElementById("username_id").value;
+        var nombreSede = document.getElementById("nombreSede").value;
+    	var sede = document.getElementById("sede").value;
+	var fechaRespuesta = document.getElementById("fechaRespuesta").value;
+	var respuesta = document.getElementById("respuesta").value;
+	var cantidadPasaron = document.getElementById("cantidadPasaron").value;
+	var cantidadRechazadas = document.getElementById("cantidadRechazadas").value;
+	var rutaRespuestaJson = document.getElementById("rutaRespuestaJson").value;
+
+
+        var username_id = document.getElementById("username_id").value;
+
+            $.ajax({
+
+	        url: "/guardarRespuestaRips/",
+		data: {'envioRipsId':envioRipsId, 'sede':sede, 'username_id':username_id,'fechaRespuesta':fechaRespuesta,'respuesta':respuesta,'rutaRespuestaJson':rutaRespuestaJson},
+                type: "POST",
+                dataType: 'json',
+                success: function (data2) {
+			if (data2.success=true)
+			{
+		document.getElementById("mensajes").value =   data2.Mensajes;
+			}
+			else
+			{
+		document.getElementById("mensajesError").value =   data2.Mensajes;
+		return;
+			}
+
+    	var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
+        var username = document.getElementById("username").value;
+        var nombreSede = document.getElementById("nombreSede").value;
+    	var sede = document.getElementById("sede").value;
+        var username_id = document.getElementById("username_id").value;
+         var data =  {}   ;
+        data['username'] = username;
+        data['sedeSeleccionada'] = sedeSeleccionada;
+        data['nombreSede'] = nombreSede;
+        data['sede'] = sede;
+        data['username_id'] = username_id;
+ 	    data = JSON.stringify(data);
+
+        arrancaEnviosRips(1,data);
+        dataTableEnviosRipsInitialized = true;
+	document.getElementById("mensajes").value = data2.Mensajes;
+
+                         },
+            error: function (data) {	      
+			document.getElementById("mensajesErrorcrearModelRespuestaRips").value =   data.responseText;
+                }
+            });
+}
+
+
+<!-- 
 
 function GuardarRadicacionRips()
 {
@@ -1920,3 +2100,4 @@ function GuardarRadicacionRips()
 }
 
 
+-->

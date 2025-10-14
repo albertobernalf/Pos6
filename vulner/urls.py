@@ -301,6 +301,7 @@ urlpatterns = [
     path('load_tablaRipsHospitalizacion/<str:data>', viewsRips.Load_tablaRipsHospitalizacion, name='load_tablaRipsHospitalizacion'),
     path('load_tablaRipsUrgenciasObs/<str:data>', viewsRips.Load_tablaRipsUrgenciasObs, name='load_tablaRipsUrgenciasObs'),
     path('load_tablaRipsMedicamentos/<str:data>', viewsRips.Load_tablaRipsMedicamentos,name='load_tablaRipsMedicamentos'),
+    path('load_dataRipsEnviados/<str:data>', viewsRips.load_dataRipsEnviados, name='load_dataRips_Enviados'),
 
 
     # Autorizaciones

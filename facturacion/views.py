@@ -1178,6 +1178,8 @@ def EditarGuardarLiquidacionDetalle(request):
     print ("liquidacionDetalleId  = ", liquidacionDetalleId )
     tipoRegistro = request.POST['ldtipoRegistro']
     print ("tipoRegistro  = ", tipoRegistro )
+    tipoRegistro='MANUAL'
+
     estadoReg='A'
 
     if cups == '':

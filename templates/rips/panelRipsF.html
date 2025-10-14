@@ -22,6 +22,7 @@
         <li><a href="#DetalleEnviosRips"><span class="fa-solid fa-user-doctor-message"></span> <span   class="tab-text"> </span> Detalle Rips Pendientes</a></li>
         <li><a href="#GenerarJsonRips"><span class="fa-solid fa-user-doctor-message"></span> <span  class="tab-text"> </span> Generar Json Rips </a></li>
         <li><a href="#RipsEnviados"><span class="fa-solid fa-user-doctor-message"></span> <span  class="tab-text"> </span>Rips Enviados </a></li>
+        <li><a href="#AuditoriaRips"><span class="fa-solid fa-user-doctor-message"></span> <span  class="tab-text"> </span>Auditoria Rips</a></li>
 
 
     </ul>
@@ -999,6 +1000,171 @@ Envio No: <input type="text" name="envioRipsId" id="envioRipsId" readonly>
 		 </div>
 		
 		 </div>
+</article>
+
+<article id="RipsEnviados">
+
+            <!-- INICIO TABLE DE  EL DATATABLE  -->
+		<div class="container my-2">
+             
+		<div align="right" height="15px" width="50px">
+               <input type="button" style="height:25px;margin-left: 0 ; margin-bottom: 0;border-top-right-radius: 0;"  size="30px" id="BtnEnviosRips"  name="BtnEnviosRips" value="Adicionar" onclick= "EnvioRips()" >				    
+		</div>
+
+   			   <div class="row">
+
+                                        <table  id= "tablaRipsEnviados" class=" display table table-striped table-sm fs-6 nowrap" style="width: 100%";>
+                                           <thead>
+                                            <tr id= "filasEnvios">    
+						<bold>                
+                                                <th>Editar</th>                   
+                                                <th>Sel</th>                   
+                                                <th>Enviar</th>  
+                                                <th>radicar</th>  
+                                                <th>id</th>
+                                                <th>Sede</th>  
+						  <th>TipoNota</th>                                     
+                                                 <th>Emp</th> 
+                                                <th>Empresa</th>                                    
+                                                <th>FechaEnvio</th>
+                                                <th>FechaRespuesta</th>
+                                                <th>Facturas</th>
+                                                <th>Pasaron</th>
+                                                <th>Rechazadas</th>
+                                                <th>AlMinisterio</th>
+						<th>FechaRegistro</th>
+						<th>UsuarioRegistro</th>
+						<th>Registra</th>
+					        <th>NombreClinica</th> 
+				              
+
+						</bold>                                  
+
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                     
+                                        </table>
+                                    </div>
+                                </div>
+
+<!-- Espacio para Modales  -->
+	<!-- Modal Radicar Rips  -->
+
+            <div class="modal fade" id="crearModelRadicarRips" tabindex="-1" role="dialog"  style="overflow-y:scroll;" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+		 <div class="modal-dialog modal-lg modal-dialog-scrollable  modal-dialog-center " role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="modelHeadingRadicarRips"></h4>
+                        </div>
+                        <div class="modal-body">
+                            <form id="postFormRadicarRips" name="postFormRadicarRips" class="form-horizontal"
+                                  novalidate>
+				EnvioId :     <input type="text" name="envioRipsIdR" id="envioRipsIdR" readonly>
+				Tipo:         <input type="text" name="tipoRips4" id="tipoRips4" readonly>
+
+
+				<div class="row row-cols-1" style="height=30px;">
+
+				<div class="col-4">
+				 FechaRadicacion:
+                                    
+					 <input type="datetime-local"  class="form-control form-control-sm" id="fechaRadicacion" name="fechaRadicacion" placeholder="fechaRadicacion"  readonly>
+                                </div>
+
+                                <div class="col-sm-offset-2 col-sm-10 mt-2">
+                                    <button type="button" class="btn btn-primary" id="guardarRadicacion" name="guardarRadicacion"  value="Guardar" onclick="GuardarRadicacionRips()">Guardar </button>
+                                </div>
+                                </div> <!-- CIERRA ROW 8 COLUMNAS  -->
+
+                            </form>
+                        </div> <!-- CIERRA BODY -->
+
+			   <div class="modal-footer">
+
+			<textarea id="mensajesErrorcrearModelRadicarRips" name="mensajesErrorcrearModelRadicarRips" style="background-color: lightred; color: navy;"  rows="1" cols="60" placeholder="Mensajes..."  wrap="hard"></textarea>
+
+			  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar   </button>
+
+                               </div>
+
+                        </div> <!-- CIERRA MODAL CONTENTE -->
+                    </div> <!-- CIERRA MODAL DIALOG -->
+                </div>  <!-- CIERRA MODAL FADE -->
+	<!-- FIN Modal Radicar Rips  -->
+
+
+	<!-- Modal Respuesta Rips  -->
+
+            <div class="modal fade" id="crearModelRespuestaRips" tabindex="-1" role="dialog"  style="overflow-y:scroll;" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+		 <div class="modal-dialog modal-lg modal-dialog-scrollable  modal-dialog-center " role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="modelHeadingRespuestaRips"></h4>
+                        </div>
+                        <div class="modal-body">
+                            <form id="postFormRespuestaRips" name="postFormRespuestaRips" class="form-horizontal"
+                                  novalidate>
+				EnvioId :     <input type="text" name="envioRipsIdZ" id="envioRipsIdZ" readonly>
+				Tipo:         <input type="text" name="tipoRips5" id="tipoRips5" readonly>
+
+
+				<div class="row row-cols-1" style="height=30px;">
+
+				<div class="col-4">
+				 FechaRespuesta:                                  
+					 <input type="datetime-local"  class="form-control form-control-sm" id="fechaRespuesta" name="fechaRespuesta" placeholder="fechaRespuesta"  readonly>
+                                </div>
+				<div class="col-4">
+				<label for="respuesta">Nota:</label>
+				<textarea id="respuestas" name="respuesta" rows="6" cols="120" placeholder="Respuesta..." required wrap="hard"></textarea>
+				</div>
+
+
+				<div class="col-4">
+				 RutaRespuestaJson:
+					 <input type="text"  class="form-control form-control-sm" id="rutaRespuestaJson" name="rutaRespuestaJson" placeholder="rutaRespuestaJson"  >
+                                </div>
+
+
+				<div class="col-4">
+				 Cantidad facturas Pasaron o Aprobadas:
+					 <input type="text"  class="form-control form-control-sm" id="cantidadPasaron" name="cantidadPasaron" placeholder="cantidadPasaron"  >
+                                </div>
+
+				<div class="col-4">
+				 Cantidad facturas Rechazadas:
+					 <input type="text"  class="form-control form-control-sm" id="cantidadRechazadas" name="cantidadRechazadas" placeholder="cantidadRechazadas"  >
+                                </div>
+
+
+                                <div class="col-sm-offset-2 col-sm-10 mt-2">
+                                    <button type="button" class="btn btn-primary" id="guardarRespuesta" name="guardarRespuesta"  value="Guardar" onclick="GuardarRespuestaRips()">Guardar </button>
+                                </div>
+                                </div> <!-- CIERRA ROW 8 COLUMNAS  -->
+
+                            </form>
+                        </div> <!-- CIERRA BODY -->
+
+			   <div class="modal-footer">
+
+			<textarea id="mensajesErrorcrearModelRespuestaRips" name="mensajesErrorcrearModelRespuestaRips" style="background-color: lightred; color: navy;"  rows="1" cols="60" placeholder="Mensajes..."  wrap="hard"></textarea>
+
+			  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar   </button>
+
+                               </div>
+
+                        </div> <!-- CIERRA MODAL CONTENTE -->
+                    </div> <!-- CIERRA MODAL DIALOG -->
+                </div>  <!-- CIERRA MODAL FADE -->
+	<!-- FIN Modal Respuesta Rips  -->
+
+
+
+
+<!-- Fin MODAles             -->
+
 </article>
 
 <article id="RadicacionRips">
