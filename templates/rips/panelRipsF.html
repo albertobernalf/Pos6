@@ -143,7 +143,6 @@ function RefrescarPantalla() {
                                                 <th>Editar</th>                   
                                                 <th>Sel</th>                   
                                                 <th>Enviar</th>  
-                                                <th>radicar</th>  
                                                 <th>id</th>
                                                 <th>Sede</th>  
 						  <th>TipoNota</th>                                     
@@ -389,51 +388,6 @@ function RefrescarPantalla() {
 	<!-- Fin otra Modal -->
 
 	<!-- Otra Modal -->
-
-            <div class="modal fade" id="crearModelRadicarRips" tabindex="-1" role="dialog"  style="overflow-y:scroll;" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
-		 <div class="modal-dialog modal-lg modal-dialog-scrollable  modal-dialog-center " role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title" id="modelHeadingRadicarRips"></h4>
-                        </div>
-                        <div class="modal-body">
-                            <form id="postFormRadicarRips" name="postFormRadicarRips" class="form-horizontal"
-                                  novalidate>
-				EnvioId :     <input type="text" name="envioRipsIdR" id="envioRipsIdR" readonly>
-				Tipo:         <input type="text" name="tipoRips4" id="tipoRips4" readonly>
-
-
-				<div class="row row-cols-1" style="height=30px;">
-
-				<div class="col-4">
-				 FechaRadicacion:
-                                    
-					 <input type="datetime-local"  class="form-control form-control-sm" id="fechaRadicacion" name="fechaRadicacion" placeholder="fechaRadicacion"  readonly>
-                                </div>
-
-                                <div class="col-sm-offset-2 col-sm-10 mt-2">
-                                    <button type="button" class="btn btn-primary" id="guardarRadicacion" name="guardarRadicacion"  value="Guardar" onclick="GuardarRadicacionRips()">Guardar </button>
-                                </div>
-                                </div> <!-- CIERRA ROW 8 COLUMNAS  -->
-
-                            </form>
-                        </div> <!-- CIERRA BODY -->
-
-			   <div class="modal-footer">
-
-			<textarea id="mensajesErrorcrearModelRadicarRips" name="mensajesErrorcrearModelRadicarRips" style="background-color: lightred; color: navy;"  rows="1" cols="60" placeholder="Mensajes..."  wrap="hard"></textarea>
-
-			  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar   </button>
-
-                               </div>
-
-
-
-
-                        </div> <!-- CIERRA MODAL CONTENTE -->
-                    </div> <!-- CIERRA MODAL DIALOG -->
-                </div>  <!-- CIERRA MODAL FADE -->
-
 	<!-- Fin otra Modal -->
 
 
@@ -1017,10 +971,8 @@ Envio No: <input type="text" name="envioRipsId" id="envioRipsId" readonly>
                                            <thead>
                                             <tr id= "filasEnvios">    
 						<bold>                
-                                                <th>Editar</th>                   
-                                                <th>Sel</th>                   
-                                                <th>Enviar</th>  
                                                 <th>radicar</th>  
+                                                <th>Respuesta</th>  
                                                 <th>id</th>
                                                 <th>Sede</th>  
 						  <th>TipoNota</th>                                     
@@ -1167,28 +1119,7 @@ Envio No: <input type="text" name="envioRipsId" id="envioRipsId" readonly>
 
 </article>
 
-<article id="RadicacionRips">
 
-		 
-		<div class="row row-cols-1" style="height=30px;">
-
-				<div class="col">
-
-				  <span id="EnvioRipsNo" name="EnvioRipsNo"> </span>
-
-				Fecha Radicacion:
-
-                                 <input type="datetime-local"  class="form-control form-control-sm" id="fechaRadicacion" name="fechaRadicacion" placeholder="fechaRadicacion" >
-                                 
-                                </div>
-
-                                <div class="col-sm-offset-2 col-sm-10 mt-2">
-                                    <button type="button" class="btn btn-primary" id="guardarRadicacion" name="guardarRadicacion"  value="Guardar" onclick="GuardarRadicacionRips()"></button>
-                                </div>
-                                </div> 
-
-
-</article>
 
      
     </div>

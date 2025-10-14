@@ -905,7 +905,7 @@ def GenerarJsonRips(request):
 
         if (tipoRips == 'Factura'):
 
-            detalle = 'SELECT generaFacturaJSON(' + str(envioRipsId) + "," + str(elemento) +  ',' + "'" + str('FACTURA') + "'" + ') dato'
+            detalle = 'SELECT generaFacturaJSON(' + "'" +  str(envioRipsId) + "','" + str(elemento) + "'"  +  ',' + "'" + str('FACTURA') + "'" + ') dato'
 
         if (tipoRips == 'Glosa'):
 
@@ -921,6 +921,7 @@ def GenerarJsonRips(request):
             funcionJson.append({'dato': dato})
 
         miConexiony.close()
+        print("funcionJson[0]", funcionJson[0])
 
         if (tipoRips == 'Factura'):
             print("Factura = ", elemento)
@@ -941,6 +942,7 @@ def GenerarJsonRips(request):
         try:
 
             file = open(nombreCarpeta, "w")
+            print("funcionJson[0]['dato']" , funcionJson[0]['dato'])
             file.writelines(funcionJson[0]['dato'])
             file.close()
 

@@ -106,7 +106,10 @@ select anulado,* from facturacion_facturaciondetalle where facturacion_id=131 an
 	
 select anulado,* from facturacion_facturaciondetalle where facturacion_id=131 and cums_id is not  null and (anulado = 'N' or anulado = 'R') --4
 
-	SELECT generaFacturaJSON(67,131,'FACTURA')
+	SELECT generaFacturaJSON(63,138,'FACTURA')
+	select generaFacturaJSON('63','128','FACTURA') valorJson
+
+	
 
 	SELECT generaenvioripsjson(67,'FACTURA')
 
@@ -155,16 +158,16 @@ select * from factutacion_detalle where facturacion_id =
 select * from clinico_tiposdiagnostico		
 
 	   
-	SELECT '{"codPrestador": '|| '"' || proc."codPrestador" || '",'  ||'"fechaInicioAtencion": '|| '"' || proc."fechaInicioAtencion" || '",'  
-	||'"idMIPRES": '|| '"' ||  CASE WHEN trim(proc."idMIPRES") is null THEN 'null' ELSE proc."idMIPRES"  END || '",'  	
-	 ||'"numAutorizacion": '|| '"' || CASE WHEN trim(proc."numAutorizacion") is null THEN 'null' ELSE proc."numAutorizacion"  END || '",'	
-	||'"codProcedimiento": '|| '"' || proc."codProcedimiento_id" || '",'	
+		SELECT '{"codPrestador": '|| '"' || proc."codPrestador" || '",'  ||'"fechaInicioAtencion": '|| '"' || proc."fechaInicioAtencion" || '",'  
+	||'"idMIPRES": '|| '"' ||  CASE WHEN trim(proc."idMIPRES") is null THEN 'null' ELSE proc."idMIPRES"  END || '"'  	
+	 ||',"numAutorizacion": '|| '"' || CASE WHEN trim(proc."numAutorizacion") is null THEN null ELSE proc."numAutorizacion"  END || '"'	
+	||',"codProcedimiento": '|| '"' || proc."codProcedimiento_id" || '",'	
 		||'"viaIngresoServicioSalud": '|| '"' ||proc."viaIngresoServicioSalud_id"  || '",'	
 		||'"modalidadGrupoServicioTecSal": '|| '"' || proc."modalidadGrupoServicioTecSal_id"  || '",'	
 		-- ||'"finalidadTecnologiaSalud": '|| '"' ||proc."finalidadTecnologiaSalud_id"  || '",'	
 		||'"finalidadTecnologiaSalud": '|| '"' ||CASE WHEN trim(cast(proc."finalidadTecnologiaSalud_id" as text)) is null THEN 0 ELSE proc."finalidadTecnologiaSalud_id"  END  || '",'			   
-	||'"tipoDocumentoIdentificacion": '|| '"' || proc."tipoDocumentoIdentificacion_id"  || '",'	
-	||'"numDocumentoIdentificacion": '|| '"' || CASE WHEN trim(proc."numDocumentoIdentificacion") is null THEN 'null' ELSE proc."numDocumentoIdentificacion"  END  || '",'	
+	||'"tipoDocumentoIdentificacion": '|| '"' || proc."tipoDocumentoIdentificacion_id"  || '"'	
+	||',"numDocumentoIdentificacion":  '|| '"' || CASE WHEN trim(proc."numDocumentoIdentificacion") is null THEN 'null' ELSE proc."numDocumentoIdentificacion"  END  || '",'	
 	||'"codDiagnosticoPrincipal": '|| '"' || CASE WHEN trim(cast(diag1.cie10 as text)) is null THEN 'null' ELSE diag1.cie10  END || '",'	
 	||'"codDiagnosticoRelacionado": '|| '"' ||  CASE WHEN trim(cast(diag2.cie10 as text)) is null THEN 'null' ELSE diag2.cie10  END    || '",'	
 	||'"codComplicacion": '|| '"' ||CASE WHEN trim(cast(diag3.cie10 as text)) is null THEN 'null' ELSE diag3.cie10 END   || '",'
@@ -173,16 +176,27 @@ select * from clinico_tiposdiagnostico
 	||'"tipoPagoModerador": '|| '"' || CASE WHEN trim(cast(proc."tipoPagoModerador_id" as text)) is null THEN 0 ELSE proc."tipoPagoModerador_id"  END  || '",'	
 	||'"valorPagoModerador": '|| '"' ||   CASE WHEN trim(cast(proc."valorPagoModerador" as text)) is null THEN 0 ELSE proc."valorPagoModerador"  END  || '",'	
 	||'"numFEVPagoModerador": '|| '"' || proc."numFEVPagoModerador" || '",'
-	||'"consecutivo": '|| '"' || proc."consecutivo" || '",'	
+	||'"consecutivo": '|| '"' || proc."consecutivo" || '"'	
 	||'	},'
+	--INTO valorProcedimientos
 	from rips_ripstransaccion ripstra
 	inner join rips_ripsprocedimientos proc on (proc."ripsTransaccion_id" = ripstra.id)
 	left join clinico_diagnosticos diag1 on (diag1.id=proc."codDiagnosticoPrincipal_id")   
 	left join clinico_diagnosticos diag2 on (diag2.id=proc."codDiagnosticoRelacionado_id")   
 	left join clinico_diagnosticos diag3 on (diag3.id=proc."codComplicacion_id")   
-    where  ripstra."ripsEnvio_id" = '67' AND  ripstra."numFactura" = cast('131' as text) AND (proc."valorGlosado" > 0 or proc."valorGlosado" is null)
+    where  ripstra."ripsEnvio_id" = 63 AND  ripstra."numFactura" = cast('138' as text) AND (proc."valorGlosado" > 0 or proc."valorGlosado" is null) and proc.consecutivo = 2;
+
+    where  ripstra."ripsEnvio_id" = '63' AND  ripstra."numFactura" = cast('138' as text) AND (proc."valorGlosado" > 0 or proc."valorGlosado" is null)
 		 
-		and proc.consecutivo = consecutivos[contador];
+		and proc.consecutivo = 2;
+
+	SELECT generaFacturaJSON('63','138','FACTURA') dato
+
+	select * from rips_ripsenvios;
+select * from rips_ripstransaccion where "ripsEnvio_id" = 63 -- 310
+select * from rips_ripsprocedimientos where "ripsTransaccion_id" = 310 -- 310
+
+	
 
 select documento_id,* from facturacion_facturacion where id in (109,122,124)
 select documento_id,* from admisiones_ingresos where documento_id in ('16','56')

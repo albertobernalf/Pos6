@@ -92,7 +92,7 @@ function arrancaEnviosRips(valorTabla,valorData)
 	    { width: '10%', targets: [2,3] },
 	    { width: '10%', targets: [9,10] },
 		{  
-                    "targets": 16
+                    "targets": 15
                }
             ],
 	 pageLength: 3,
@@ -137,7 +137,7 @@ function arrancaEnviosRips(valorTabla,valorData)
 			"render": function ( data, type, row ) {
                         var btn = '';
 
-             btn = btn + " <input type='radio' name='miAutorizacion' class='miSol form-check-input ' data-pk='"  + row.pk + "'>" + "</input>";
+             btn = btn + " <input type='radio' name='miSol' class='miSol form-check-input ' data-pk='"  + row.pk + "'>" + "</input>";
 
                        return btn;
 		}
@@ -1048,7 +1048,7 @@ function arrancaEnviosRips(valorTabla,valorData)
 	    { width: '10%', targets: [2,3] },
 	    { width: '10%', targets: [9,10] },
 		{  
-                    "targets": 16
+                    "targets": 15
                }
             ],
 	 pageLength: 3,
@@ -1142,6 +1142,10 @@ const initDataTableEnviosRips = async () => {
 
         arrancaEnviosRips(1,data);
 	    dataTableEnviosRipsInitialized = true;
+
+		   arrancaEnviosRips(10,data);
+ 			 dataTableRipsEnviadosInitialized= true;
+
 }
 
  // COMIENZA ONLOAD
@@ -1175,12 +1179,23 @@ window.addEventListener('load', async () => {
 		console.log(" fila selecciona de vuelta dato3 = ",  dato3);
 	        console.log ( "dato10 empresa = " , dato3.empresa_id); 
 
+	    	var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
+	        var username = document.getElementById("username").value;
+	        var nombreSede = document.getElementById("nombreSede").value;
+	    	var sede = document.getElementById("sede").value;
+	        var username_id = document.getElementById("username_id").value;
+
 		var id_empresa = dato3.empresa_id;  // jquery
 		var tipoRips = dato3.tipoNota;  // jquery
 
 		data['empresaId'] = id_empresa;
 		data['envioRipsId'] = post_id;
 		data['tipoRips'] = tipoRips;
+		data['username'] = username;
+		data['nombreSede'] = nombreSede;
+		data['sede'] = sede;
+		data['username_id'] = username_id;
+
 		// data['factura_id'] = dato3.factura_id;
 
 		alert("id_empresa = "  + id_empresa);
@@ -1203,7 +1218,7 @@ window.addEventListener('load', async () => {
 		document.getElementById("tipoRips3").value = tipoRips;
 
 		 document.getElementById("envioRipsIdJ").value = post_id;
-		 document.getElementById("EnvioRipsNo").value = post_id;
+		// document.getElementById("EnvioRipsNo").value = post_id;
 
 		 document.getElementById("tipoRips4").value = tipoRips;
 		 document.getElementById("envioRipsIdR").value = post_id;
@@ -1236,6 +1251,9 @@ window.addEventListener('load', async () => {
 
 		   arrancaEnviosRips(9,data);
  			 dataTableRipsUrgenciasObsInitialized= true;
+
+		   arrancaEnviosRips(10,data);
+ 			 dataTableRipsEnviadosInitialized= true;
 
 
   });
@@ -1374,7 +1392,7 @@ $('#tablaRipsEnviados tbody').on('click', '.miRadicar', function() {
 	alert("tipoRips = " +  tipoRips);
 	alert("envioRipsId = " +  envioRipsId);
 
-            // $('#postFormRadicarRips').trigger("reset");
+             $('#postFormRadicarRips').trigger("reset");
             $('#modelHeadingRadicarRips').html("Radicar Rips");
             $('#crearModelRadicarRips').modal('show');
       

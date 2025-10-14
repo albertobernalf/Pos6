@@ -813,7 +813,6 @@ class ProgramacionCitasMedicas(models.Model):
 -- seguir con cirugia
 
 -- TIPS BOLIVIA
-	-- Agrandar radio  de seleccion: <input type=radio name=radio style="width:50px;height:50px">
 	-- tamañpo de letra font mas grande en todo
   	-- Solo admisiones admisiona No triage
 	-- los diagnosticos no estan al ingreso d ela admsion
