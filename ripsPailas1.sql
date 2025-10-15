@@ -108,6 +108,7 @@ select anulado,* from facturacion_facturaciondetalle where facturacion_id=131 an
 
 	SELECT generaFacturaJSON(63,138,'FACTURA')
 	select generaFacturaJSON('63','128','FACTURA') valorJson
+		SELECT generaenvioRipsJson(63,'FACTURA')
 
 	
 
@@ -160,7 +161,7 @@ select * from clinico_tiposdiagnostico
 	   
 		SELECT '{"codPrestador": '|| '"' || proc."codPrestador" || '",'  ||'"fechaInicioAtencion": '|| '"' || proc."fechaInicioAtencion" || '",'  
 	||'"idMIPRES": '|| '"' ||  CASE WHEN trim(proc."idMIPRES") is null THEN 'null' ELSE proc."idMIPRES"  END || '"'  	
-	 ||',"numAutorizacion": '|| '"' || CASE WHEN trim(proc."numAutorizacion") is null THEN null ELSE proc."numAutorizacion"  END || '"'	
+	 ||',"numAutorizacion": '|| '"' || CASE WHEN trim(proc."numAutorizacion") is null THEN 'null' ELSE proc."numAutorizacion"  END || '"'	
 	||',"codProcedimiento": '|| '"' || proc."codProcedimiento_id" || '",'	
 		||'"viaIngresoServicioSalud": '|| '"' ||proc."viaIngresoServicioSalud_id"  || '",'	
 		||'"modalidadGrupoServicioTecSal": '|| '"' || proc."modalidadGrupoServicioTecSal_id"  || '",'	
@@ -185,16 +186,18 @@ select * from clinico_tiposdiagnostico
 	left join clinico_diagnosticos diag2 on (diag2.id=proc."codDiagnosticoRelacionado_id")   
 	left join clinico_diagnosticos diag3 on (diag3.id=proc."codComplicacion_id")   
     where  ripstra."ripsEnvio_id" = 63 AND  ripstra."numFactura" = cast('138' as text) AND (proc."valorGlosado" > 0 or proc."valorGlosado" is null) and proc.consecutivo = 2;
-
+ 
     where  ripstra."ripsEnvio_id" = '63' AND  ripstra."numFactura" = cast('138' as text) AND (proc."valorGlosado" > 0 or proc."valorGlosado" is null)
 		 
 		and proc.consecutivo = 2;
 
-	SELECT generaFacturaJSON('63','138','FACTURA') dato
+	SELECT generaFacturaJSON('69','141','FACTURA') dato
+			SELECT generaFacturaJSON('63','128','FACTURA') dato
 
 	select * from rips_ripsenvios;
-select * from rips_ripstransaccion where "ripsEnvio_id" = 63 -- 310
-select * from rips_ripsprocedimientos where "ripsTransaccion_id" = 310 -- 310
+select * from rips_ripstransaccion where "ripsEnvio_id" = 69 -- 310
+select * from rips_ripsprocedimientos where "ripsTransaccion_id" = 383 -- 310
+	select * from rips_ripsreciennacido where "ripsTransaccion_id" = 383 -- 310
 
 	
 
@@ -203,3 +206,131 @@ select documento_id,* from admisiones_ingresos where documento_id in ('16','56')
 
 select * from sitios_dependencias where id in ('21','32','31')
 -- estoy mirandop el envio 64
+select * from rips_ripstransaccion ripstra, rips_ripsreciennacido ripsnac 
+where ripstra."ripsEnvio_id" = 63 and ripstra."numFactura" =cast('138' as text ) and ripsnac."ripsTransaccion_id" = ripstra.id ;
+
+SELECT * FROM rips_ripsreciennacido where "ripsTransaccion_id" = 332;
+SELECT * FROM RIPS_RIPSTRANSACCION where "ripsEnvio_id" = 63
+
+select * from rips_ripsreciennacido where "ripsTransaccion_id"  >= 335
+select * from rips_ripstransaccion order by id desc
+select * from rips_ripstransaccion where "ripsEnvio_id" = 63 -- id : 335 --> fac 138, id--> 336 fac 128
+select * from rips_ripsprocedimientos where "ripsTransaccion_id" = 335
+select * from rips_ripsreciennacido where "ripsTransaccion_id" = 335
+                
+
+SELECT '"recienNacidos": [{"codPrestador": ' ||  '"' || nac."codPrestador"|| '",'  ||
+                    '"tipoDocumentoIdentificacion": ' || '"'  ||tipoDoc.codigo|| '",'  ||
+                         '"numDocumentoIdentificacion": ' || '"'  ||nac."numDocumentoIdentificacion"|| '",'   ||
+                        '"fechaNacimiento": ' || '"'  ||nac."fechaNacimiento"|| '"'  
+         ||',"edadGestacional": '|| '"' || CASE WHEN trim(nac."edadGestacional") is null THEN 'null' ELSE nac."edadGestacional"  END || '"'
+         ||',"numConsultasCPrenatal": '|| '"' || CASE WHEN trim(nac."numConsultasCPrenatal") is null THEN 'null' ELSE nac."numConsultasCPrenatal"  END || '"'
+         ||',"codSexoBiologico": '|| '"' || CASE WHEN trim(nac."codSexoBiologico") is null THEN 'null' ELSE nac."codSexoBiologico"  END || '"'
+         ||',"peso": '|| '"' || CASE WHEN trim(nac."peso") is null THEN 'null' ELSE nac."peso"  END || '"'
+                        '"codDiagnosticoPrincipal": ' || '"'  ||dxppal.cie10|| '",'   
+                 ||',"condicionDestino": '|| '"' || CASE WHEN trim(nac."condicionDestino") is null THEN 'null' ELSE nac."condicionDestino"  END || '"'
+                        '"codDiagnosticoCausaMuerte": ' || '"'  ||egreso.codigo|| '",'   ||
+                '"fechaEgreso": ' || '"'  ||nac."fechaEgreso"|| '",'   ||
+                '"consecutivo": ' || '"'  ||nac.consecutivo|| '",'   ||
+                '},]'
+                                 from rips_ripstransaccion
+        left join rips_ripsreciennacido nac on (nac."ripsTransaccion_id" = rips_ripstransaccion.id)
+        left join clinico_diagnosticos dxppal on (dxppal.id =nac."codDiagnosticoPrincipal_id")
+        left join clinico_diagnosticos dxMuerte on (dxMuerte.id =  nac."codDiagnosticoCausaMuerte_id")
+        left join rips_ripsDestinoEgreso egreso on (egreso.id = nac."condicionDestinoUsuarioEgreso_id" )
+        left join rips_ripstiposdocumento tipoDoc on (tipoDoc.id = nac."tipoDocumentoIdentificacion_id" )
+        where  rips_ripstransaccion."ripsEnvio_id" = 63 and   rips_ripstransaccion."numFactura" =cast('138' as text)
+
+select * from rips_ripsreciennacido
+
+
+select * from rips_ripstransaccion where "numFactura" = '128' -- 351
+select * from admisiones_ingresos where factura = '128'
+	select * from admisiones_ingresos where documento_id=41
+
+	select * from sitios_dependencias where id = 61
+	select count(*) from rips_ripstransaccion ripstra, rips_ripsprocedimientos proc
+	where ripstra."ripsEnvio_id" = 63 and ripstra."numFactura" =cast('128' as text ) and proc."ripsTransaccion_id" = ripstra.id 
+	and cast("numNota" as float)  = 0  AND (proc."valorGlosado" > 0 or proc."valorGlosado" is null) 
+	and ripstra."numFactura" = cast('128' as text)
+
+select anulado,* from facturacion_facturacion where id=129
+select * from facturacion_facturaciondetalle where facturacion_id=128
+
+select * from facturacion_liquidaciondetalle where cums_id is not null
+select * from facturacion_liquidacion where id in ('259','265')
+select * from usuarios_usuarios where id=40
+select * from admisiones_ingresos where documento_id=40
+
+select * from sitios_dependencias where id=63
+
+-- Medicamentos
+
+	
+	 SELECT	'"codPrestador": ' ||  '"' ||med."codPrestador"|| '",'   ||		
+	   	    '"numAutorizacion": ' || '"'  ||CASE WHEN trim(med."numAutorizacion") is null THEN 'null' ELSE med."numAutorizacion"  END|| '",'   || 	
+	 	  '"idMIPRES": ' || '"'   ||CASE WHEN trim(med."idMIPRES") is null THEN 'null' ELSE med."idMIPRES"  END|| '",'  || 	
+		  '"fechaDispensAdmon": ' || '"'  ||'null'|| '",'     || 	
+	  '"codDiagnosticoPrincipal": ' || '"'  ||CASE WHEN trim(diag1.cie10) is null THEN 'null' ELSE diag1.cie10  END|| '",'  || 	
+	'"codDiagnosticoRelacionado": ' || '"'  ||CASE WHEN trim(diag2.cie10) is null THEN 'null' ELSE diag2.cie10  END|| '",' 	  || 	
+	'"tipoMedicamento": ' || '"'  ||CASE WHEN trim(tipmed.codigo) is null THEN 'null' ELSE tipmed.codigo  END|| '",'   || 	
+	'"codTecnologiaSalud": ' || '"'  ||  CASE WHEN trim(ripscums.cum) is null THEN 'null' ELSE ripscums.cum  END           || '",'  || 	
+	'"nomTecnologiaSalud": ' || '"'  ||   CASE WHEN trim(med."nomTecnologiaSalud") is null THEN 'null' ELSE med."nomTecnologiaSalud"  END               || '",'  || 	
+	'"concentracionMedicamento": ' || '"'  || CASE WHEN trim(med."concentracionMedicamento") is null THEN 'null' ELSE med."concentracionMedicamento"  END  || '",'    || 		
+	'"unidadMedida": ' || '"'  ||CASE WHEN trim(ripsumm.codigo) is null THEN 'null' ELSE ripsumm.codigo  END           || '",'  || 	
+	'"formaFarmaceutica": ' || '"'  ||  CASE WHEN trim(ripsfarma.codigo) is null THEN 'null' ELSE ripsfarma.codigo  END  || '",'  || 	
+	'"unidadMinDispensa": ' || '"'  ||  CASE WHEN trim(ripsupr.codigo) is null THEN 'null' ELSE ripsupr.codigo  END           || '",'  || 	
+	'"cantidadMedicamento": ' || '"'  || CASE WHEN trim(cast( med."cantidadMedicamento"  as text)) is null THEN 0 ELSE  med."cantidadMedicamento"   END      || '",'   /* || 	
+	'"diasTratamiento": ' || '"'  ||   CASE WHEN trim(cast( med."diasTratamiento"  as text)) is null THEN 0 ELSE med."diasTratamiento"  END  || '",'  */ || 		
+	'"tipoDocumentoldentificacion": ' || '"'  || CASE WHEN trim(ripstipdoc.codigo) is null THEN 'null' ELSE ripstipdoc.codigo  END   || '",'  || 	
+	'"numDocumentoIdentificacion": ' || '"'  || CASE WHEN trim(med."numDocumentoIdentificacion") is null THEN 'null' ELSE med."numDocumentoIdentificacion"  END     || '",'  || 	
+		'"vrUnitMedicamento": ' || '"'  ||  med."vrUnitMedicamento" || '",'  || 	
+		'"vrServicio": ' || '"'  ||med."vrServicio"|| '",'  || 	
+		'"tipoPagoModerador": ' || '"'  ||  CASE WHEN trim( ripstipopago.codigo) is null THEN 'null' ELSE  ripstipopago.codigo  END || '",'  || 	
+	'"valorPagoModerador": ' || '"'  ||  CASE WHEN med."valorPagoModerador" is null THEN 'null' ELSE   cast(med."valorPagoModerador" as text) END || '",'  || 				
+	'"numFEVPagoModerador": ' || '"'  || CASE WHEN trim(med."numFEVPagoModerador") is null THEN 'null' ELSE  med."numFEVPagoModerador"  END|| '",'   || 	
+	'"consecutivo": ' || '"'  ||med.consecutivo|| '},', *
+	from rips_ripstransaccion
+	inner join rips_ripsenvios  env on (env."sedesClinica_id" = rips_ripstransaccion."sedesClinica_id" and env.id = rips_ripstransaccion."ripsEnvio_id" )
+	inner join rips_ripsmedicamentos med on (med."ripsTransaccion_id" = rips_ripstransaccion.id)
+	inner join sitios_sedesclinica sed on (sed.id = env."sedesClinica_id" )
+	inner join rips_ripsdetalle det on (det."ripsEnvios_id" = env.id and det."numeroFactura_id" = cast(rips_ripstransaccion."numFactura" as numeric))
+	inner join facturacion_facturacion fac on (fac.id = det."numeroFactura_id" )
+	inner join facturacion_facturaciondetalle facdet on (facdet."facturacion_id" = fac.id and facdet."cums_id" is not null )
+	inner join facturacion_suministros sum  on (sum.cums = med."nomTecnologiaSalud" and facdet."cums_id"= sum.id )
+	left join rips_ripstipomedicamento tipmed on (tipmed.id =sum."ripsTipoMedicamento_id" )
+	left join rips_ripscums ripscums on (ripscums.id = facdet."cums_id")	
+	left join rips_ripsumm ripsumm on (ripsumm.id = sum."ripsUnidadMedida_id")	
+	left join rips_RipsFormaFarmaceutica ripsfarma on (ripsfarma.id = sum."ripsFormaFarmaceutica_id")	
+	left join rips_ripsunidadupr ripsupr on (ripsupr.id = sum."ripsUnidadUpr_id")	
+	inner join  rips_RipsTiposDocumento ripstipdoc on (ripstipdoc.id = med."tipoDocumentoIdentificacion_id")
+	left join cartera_pagos pagos on (pagos."tipoDoc_id" =  fac."tipoDoc_id"  and pagos.documento_id = fac.documento_id and pagos.consec = fac."consecAdmision")	
+	left join cartera_formaspagos formaspagos on (formaspagos.id = pagos."formaPago_id")		
+	left join rips_ripstipospagomoderador ripstipopago on (cast(ripstipopago."codigoAplicativo" as numeric) = formaspagos.id and cast(ripstipopago."codigoAplicativo" as numeric) in ('3','4') )	
+	left join clinico_diagnosticos diag1 on (diag1.id = med."codDiagnosticoPrincipal_id")	
+	left join clinico_diagnosticos diag2 on (diag2.id = med."codDiagnosticoRelacionado_id")	
+	where rips_ripstransaccion."ripsEnvio_id" = 69 and rips_ripstransaccion."ripsEnvio_id" = env.id  and cast(rips_ripstransaccion."numFactura" as numeric) = fac.id	and rips_ripstransaccion."numFactura" =cast('141' as text ) ;
+
+select * from rips_ripsmedicamentos where "ripsTransaccion_id" = 382
+
+select * from facturacion_suministros ;
+select  * from rips_RipsTiposDocumento;
+
+-- reciennacido
+       		   
+ SELECT sed."codigoHabilitacion",	usu.documento,	usu."fechaNacio", i."ripsEdadGestacional", i."ripsNumConsultasCPrenatal" ,	usu.genero, 
+	 i."ripsPesoRecienNacido" ,cast(i."fechaSalida" as date), row_number() OVER(ORDER BY i.id) AS consecutivo ,now(), 
+	 (select diag1.id from clinico_diagnosticos diag1 where  diag1.id = i."dxSalida_id"),
+	 (select max(diag1.id) from clinico_historialdiagnosticos histdiag1, clinico_diagnosticos diag1 , clinico_historia his where histdiag1.historia_id = his.id and histdiag1."tiposDiagnostico_id" = '1' and histdiag1.diagnosticos_id = diag1.id and his."tipoDoc_id" = fac."tipoDoc_id" and his.documento_id = fac.documento_id AND his."consecAdmision" = fac."consecAdmision") ,
+	 dest.id, tipoDoc."tipoDocRips_id", '1' ,det.id,'7' , ripstra.id, 'S','1000' 
+	 FROM sitios_sedesclinica sed 
+	 inner join facturacion_facturacion fac ON (fac."sedesClinica_id" = sed.id) 
+	 inner join admisiones_ingresos i ON (i."sedesClinica_id" = sed.id and i."tipoDoc_id" =fac."tipoDoc_id" and i.documento_id = fac.documento_id AND i.consec =fac."consecAdmision") 
+	 inner join rips_ripsenvios env ON (env."sedesClinica_id" = sed.id) 
+	 inner join rips_ripsdetalle det ON ( det."ripsEnvios_id" = env.id and  det."ripsEnvios_id" = fac."ripsEnvio_id" and det."numeroFactura_id" = fac.id )  
+	 inner join rips_ripstransaccion ripstra ON ( ripstra."sedesClinica_id" = sed.id and ripstra."ripsEnvio_id" = env.id and ripstra."numFactura" = cast(fac.id as text))  
+	 left join rips_ripsdestinoegreso dest  on (dest.id = i."ripsCondicionDestinoUsuarioEgreso_id") 
+	 inner join usuarios_usuarios usu on (usu."tipoDoc_id" = i."tipoDoc_id" AND usu.id = i.documento_id)
+	 inner join usuarios_tiposdocumento tipoDoc on (tipoDoc.id = i."tipoDoc_id") 
+	 where sed.id = '1' AND env.id = '69' and fac.id = '141'
+

@@ -822,3 +822,8 @@ class ProgramacionCitasMedicas(models.Model):
 	
 --  FIN TIPS BOLIVIA
 
+-- RIPS
+  -- COMO se hace con los ambulatorios
+  -- se esta trabajando jsos indicidualk despues se pasan los script a la funcion de envioGRAL
+ -- noi se sta trabajando aun con glosas
+
