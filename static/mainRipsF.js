@@ -137,7 +137,7 @@ function arrancaEnviosRips(valorTabla,valorData)
 			"render": function ( data, type, row ) {
                         var btn = '';
 
-             btn = btn + " <input type='radio' name='miSol' class='miSol form-check-input ' data-pk='"  + row.pk + "'>" + "</input>";
+             btn = btn + " <input type='radio' name='miSol' style='width:15px;height:15px;accent-color: purple;border-color: purple;background-color: purple;' class='miSol form-check-input ' data-pk='"  + row.pk + "'>" + "</input>";
 
                        return btn;
 		}
@@ -217,7 +217,7 @@ function arrancaEnviosRips(valorTabla,valorData)
 		{ className: 'centered', targets: [0, 1, 2, 3, 4, 5] },
 		{     "render": function ( data, type, row ) {
                         var btn = '';
-                           btn = btn + " <input type='radio'  class='miFactura form-check-input ' data-pk='"  + row.pk + "'>" + "</input>";
+                           btn = btn + " <input type='radio'  style='width:15px;height:15px;accent-color: purple;border-color: purple;background-color: purple;' class='miFactura form-check-input ' data-pk='"  + row.pk + "'>" + "</input>";
                        return btn;
                     },
                     "targets": 7
@@ -661,7 +661,6 @@ function arrancaEnviosRips(valorTabla,valorData)
                 { data: "fields.codProcedimiento_id"},
                 { data: "fields.codServicio_id"},
                 { data: "fields.conceptoRecaudo_id"},
-
                 { data: "fields.finalidadTecnologiaSalud_id"},
                 { data: "fields.grupoServicios_id"},
                 { data: "fields.modalidadGrupoServicioTecSal_id"},
@@ -780,7 +779,7 @@ function arrancaEnviosRips(valorTabla,valorData)
                 { data: "fields.condicionDestinoUsuarioEgreso_id"},
                 { data: "fields.usuarioRegistro_id"},
                 { data: "fields.viaIngresoServicioSalud_id"},
-                { data: "fields.ripsDetalle_id_id"},
+                { data: "fields.ripsDetalle_id"},
                 { data: "fields.ripsTiposNotas_id"},
 
                      ]
@@ -992,7 +991,7 @@ function arrancaEnviosRips(valorTabla,valorData)
                 { data: "fields.codDiagnosticoRelacionadoE3_id"},
                 { data: "fields.condicionDestinoUsuarioEgreso_id"},
                 { data: "fields.usuarioRegistro_id"},
-                { data: "fields.ripsDetalle_id_id"},
+                { data: "fields.ripsDetalle_id"},
                 { data: "fields.ripsTipos_id"},
                      ]
             }
@@ -1138,7 +1137,7 @@ const initDataTableEnviosRips = async () => {
         data['username_id'] = username_id;
  	    data = JSON.stringify(data);
 
-	alert("sede = " + sede);
+	// alert("sede = " + sede);
 
         arrancaEnviosRips(1,data);
 	    dataTableEnviosRipsInitialized = true;
@@ -1198,9 +1197,9 @@ window.addEventListener('load', async () => {
 
 		// data['factura_id'] = dato3.factura_id;
 
-		alert("id_empresa = "  + id_empresa);
-		alert("tipoRips = "  + tipoRips);
-		alert("envioRipsId = "  +  post_id);
+		// alert("id_empresa = "  + id_empresa);
+		// alert("tipoRips = "  + tipoRips);
+		// alert("envioRipsId = "  +  post_id);
 		// alert("factura_id = "  +  dato3.factura_id);
 
 	        data = JSON.stringify(data);

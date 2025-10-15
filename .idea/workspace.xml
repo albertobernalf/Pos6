@@ -4,13 +4,20 @@
     <list default="true" id="d041c887-ab16-4071-a5e4-52a8295bbd5d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/JSONCLINICA/Env63.txt" beforeDir="false" afterPath="$PROJECT_DIR$/JSONCLINICA/Env63.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JSONCLINICA/Fac128.txt" beforeDir="false" afterPath="$PROJECT_DIR$/JSONCLINICA/Fac128.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JSONCLINICA/Env68.txt" beforeDir="false" afterPath="$PROJECT_DIR$/JSONCLINICA/Env68.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JSONCLINICA/Fac129.txt" beforeDir="false" afterPath="$PROJECT_DIR$/JSONCLINICA/Fac129.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/JSONCLINICA/Fac138.txt" beforeDir="false" afterPath="$PROJECT_DIR$/JSONCLINICA/Fac138.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JSONCLINICA/HistoriasClinicas/Factura_128.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/JSONCLINICA/HistoriasClinicas/Factura_128.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JSONCLINICA/HistoriasClinicas/Factura_138.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/JSONCLINICA/HistoriasClinicas/Factura_138.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modelsPrueba.py" beforeDir="false" afterPath="$PROJECT_DIR$/modelsPrueba.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JSONCLINICA/Fac141.txt" beforeDir="false" afterPath="$PROJECT_DIR$/JSONCLINICA/Fac141.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rips/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/rips/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ripsPailas1.sql" beforeDir="false" afterPath="$PROJECT_DIR$/ripsPailas1.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/mainApoyoTerapeutico.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/mainApoyoTerapeutico.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/mainConveniosF.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/mainConveniosF.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/mainEnfermeriaF.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/mainEnfermeriaF.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/mainFacturacionF.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/mainFacturacionF.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/mainFarmaciaF.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/mainFarmaciaF.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/mainGlosasFU.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/mainGlosasFU.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/mainRipsF.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/mainRipsF.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/mainTarifariosF.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/mainTarifariosF.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

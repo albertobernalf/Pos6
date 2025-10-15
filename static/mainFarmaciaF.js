@@ -166,7 +166,7 @@ function arrancaFarmacia(valorTabla,valorData)
 	  "render": function ( data, type, row ) {
                         var btn = '';
 
-		 btn = btn + " <input type='radio' name='miFarmacia' class='miSelFarmacia form-check-input ' data-pk='"  + row.pk + "'>" + "</input>";
+		 btn = btn + " <input type='radio' name='miFarmacia' style='width:15px;height:15px;accent-color: purple;border-color: purple;background-color: purple;' class='miSelFarmacia form-check-input ' data-pk='"  + row.pk + "'>" + "</input>";
 
 
                        return btn;

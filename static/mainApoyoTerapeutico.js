@@ -132,7 +132,7 @@ function arrancaApoyoTerapeutico(valorTabla,valorData)
 	  "render": function ( data, type, row ) {
                         var btn = '';
 
-                         btn = btn + " <input type='radio'  class='form-check-input editPostApoyoTerapeutico' data-pk='" + row.pk + "'>" + "</input>";
+                         btn = btn + " <input type='radio'  style='width:15px;height:15px;accent-color: purple;border-color: purple;background-color: purple;' class='form-check-input editPostApoyoTerapeutico' data-pk='" + row.pk + "'>" + "</input>";
 
                        return btn;
                     }

@@ -55,7 +55,7 @@ function arrancaTarifarios(valorTabla,valorData)
 	    { width: '10%', targets: [9,15] },
 		{     "render": function ( data, type, row ) {
                         var btn = '';
-             btn = btn + " <input type='radio' name='miProcedimientos' class='miProcedimientos form-check-input ' data-pk='"  + row.pk + "'>" + "</input>";
+             btn = btn + " <input type='radio' name='miProcedimientos' style='width:15px;height:15px;accent-color: purple;border-color: purple;background-color: purple;' class='miProcedimientos form-check-input ' data-pk='"  + row.pk + "'>" + "</input>";
 
                        return btn;
                     },
@@ -254,7 +254,7 @@ function arrancaTarifarios(valorTabla,valorData)
 	    { width: '10%', targets: [9,15] },
 		{     "render": function ( data, type, row ) {
                         var btn = '';
-             btn = btn + " <input type='radio' name='miHonorarios' class='miHonorarios form-check-input ' data-pk='"  + row.pk + "'>" + "</input>";
+             btn = btn + " <input type='radio' name='miHonorarios' style='width:15px;height:15px;accent-color: purple;border-color: purple;background-color: purple;' class='miHonorarios form-check-input ' data-pk='"  + row.pk + "'>" + "</input>";
 
 
                        return btn;
@@ -330,7 +330,7 @@ function arrancaTarifarios(valorTabla,valorData)
 		{ className: 'centered', targets: [0, 1, 2, 3, 4, 5] },
 		{     "render": function ( data, type, row ) {
                         var btn = '';
- 			 btn = btn + " <input type='radio' name='miDescripcionProcedimiento' class='miDescripcionProcedimiento form-check-input ' data-pk='"  + row.pk + "'>" + "</input>";
+ 			 btn = btn + " <input type='radio' name='miDescripcionProcedimiento' style='width:15px;height:15px;accent-color: purple;border-color: purple;background-color: purple;' class='miDescripcionProcedimiento form-check-input ' data-pk='"  + row.pk + "'>" + "</input>";
           		   btn = btn + " <button class='miAplicarProcedimientos btn-primary ' data-pk='" + row.pk + "'>" + '<i class="fa-duotone fa-regular fa-thumbs-up"></i>' + "</button>";
 
                        return btn;
@@ -424,7 +424,7 @@ function arrancaTarifarios(valorTabla,valorData)
 	    { width: '10%', targets: [9,15] },
 		{     "render": function ( data, type, row ) {
                         var btn = '';
-             btn = btn + " <input type='radio' name='miSuministros' class='miSuministros form-check-input ' data-pk='"  + row.pk + "'>" + "</input>";
+             btn = btn + " <input type='radio' name='miSuministros' class='miSuministros style='width:15px;height:15px;accent-color: purple;border-color: purple;background-color: purple;' form-check-input ' data-pk='"  + row.pk + "'>" + "</input>";
 
                        return btn;
                     },
@@ -498,7 +498,7 @@ function arrancaTarifarios(valorTabla,valorData)
 		{ className: 'centered', targets: [0, 1, 2, 3, 4, 5] },
 		{     "render": function ( data, type, row ) {
                         var btn = '';
- 			 btn = btn + " <input type='radio' name='miDescripcionSuministro' class='miDescripcionSuministro form-check-input ' data-pk='"  + row.pk + "'>" + "</input>";
+ 			 btn = btn + " <input type='radio' name='miDescripcionSuministro' style='width:15px;height:15px;accent-color: purple;border-color: purple;background-color: purple;' class='miDescripcionSuministro form-check-input ' data-pk='"  + row.pk + "'>" + "</input>";
           		   btn = btn + " <button class='miAplicarSuministro btn-primary ' data-pk='" + row.pk + "'>" + '<i class="fa-duotone fa-regular fa-thumbs-up"></i>' + "</button>";
 
                        return btn;

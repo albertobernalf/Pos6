@@ -201,7 +201,7 @@ function arrancaEnfermeria(valorTabla,valorData)
 	  "render": function ( data, type, row ) {
                         var btn = '';
 
-              btn = btn + " <input type='radio'  name='ingresoEnfermeriaId' class='miIngresoEnfermeriaId form-check-input ' data-pk='"  + row.pk + "'>" + "</input>";
+              btn = btn + " <input type='radio'  name='ingresoEnfermeriaId' style='width:15px;height:15px;accent-color: purple;border-color: purple;background-color: purple;' class='miIngresoEnfermeriaId form-check-input ' data-pk='"  + row.pk + "'>" + "</input>";
 
 
                        return btn;

@@ -149,19 +149,18 @@ function arrancaLiquidacion(valorTabla,valorData)
 
 		/* desde aqui nuevo campo */
                 /*  { data: "fields.salidaClinica"}, */
-
 		         {
 		         target : 9,
     			"sWidth": "1%",
         	           "render": function (data, type, row) {
-                console.log ('data = ', data);
-                console.log ('type = ', type);
-                console.log ('row = ', row);
+		                console.log ('data = ', data);
+		                console.log ('type = ', type);
+		                console.log ('row = ', row);
 
 
 				if ( row['fields']['salidaClinica'] === 'S')
-                {
-                    return '<i class="far fa-dot-circle" style="color:red" >Salida Clinica</i>';
+	                {
+        	            return '<i class="far fa-dot-circle" style="color:red" >Salida Clinica</i>';
 					/*  return 'SIN CONVENIO'; */
 					}
 
@@ -173,14 +172,7 @@ function arrancaLiquidacion(valorTabla,valorData)
 	                    }
 			},
 
-
-
-
 		/* hasta aqui nuevo campo */
-
-
-
-
 
     ]
   }

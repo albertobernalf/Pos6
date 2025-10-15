@@ -142,7 +142,7 @@ function arrancaConvenios(valorTabla,valorData)
 		{
 		 "render": function ( data, type, row ) {
                         var btn1 = '';
-             btn1 = btn1 + " <input type='radio' name='miConvenio' class='miConvenio2 form-check-input ' data-pk='"  + row.pk + "'>" + "</input>";
+             btn1 = btn1 + " <input type='radio' name='miConvenio'  style='width:15px;height:15px;accent-color: purple;border-color: purple;background-color: purple;' class='miConvenio2 form-check-input ' data-pk='"  + row.pk + "'>" + "</input>";
                        return btn1;
                     },
 
