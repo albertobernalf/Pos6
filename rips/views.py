@@ -708,6 +708,7 @@ def GenerarJsonRips(request):
 
 	# Busca cantidad de Medicamentos +  Suministros para proratear en ABONOS elemento= factura , elementoOtro=glosa
 
+
         try:
             with transaction.atomic():
 
@@ -715,22 +716,30 @@ def GenerarJsonRips(request):
 
                 categorias = ['N','R']
                 categoriasPagos = ['CUOTA MODERADORA', 'COPAGO']
+                print("tipoRipsA =" , tipoRips)
+
 
                 if (tipoRips == 'Factura'):
-                    pagosFactura = PagosFacturas.objects.filter(facturaAlicada_id=elemento,anulado = 'N').aggregate(totalAb=Sum('valorAplicado'))
+                    print("Entre FACTURA =", tipoRips)
+                    pagosFactura = PagosFacturas.objects.filter(facturaAplicada_id=elemento,anulado = 'N').aggregate(totalAb=Sum('valorAplicado'))
                     print("sumatoria de pagos =" ,pagosFactura['totalAb'])
 
                     datosFactura=Facturacion.objects.get(id=elemento)
-                    datosIngreso = ingresos.objects.get(tipoDoc_id = datosFactura.tipoDoc_id, documento_id=datosFactura.documento_id, consec=datosFactura.consecAdmision)
+                    datosIngreso = Ingresos.objects.get(tipoDoc_id = datosFactura.tipoDoc_id, documento_id=datosFactura.documento_id, consec=datosFactura.consecAdmision)
 
-                    totalParaclinicos = FacturacionDetalle.objects.filter(facturacion_id = elemento, anulado=categorias).count()
+                    totalParaclinicos = FacturacionDetalle.objects.filter(facturacion_id = elemento, anulado='N').count()
                     #totalAbonos = Pagos.objects.get(tipoDoc_id = datosFactura.tipoDoc_id, documento_id=datosFactura.documento_id, consec=datosFactura.consec, formasPago_id = codigoModeradora)
                     totalAbonos=pagosFactura['totalAb']
+                    print("totalAbonos = ", totalAbonos)
+                    print("totalParaclinicos = ", totalParaclinicos)
+
                     if (totalParaclinicos != None):
                         proRata = totalAbonos/totalParaclinicos
 
+
                 if (tipoRips == 'Glosa'):
-                    pagosFactura = PagosFacturas.objects.filter(facturaAlicada_id=elementoOtro,anulado = 'N').aggregate(totalAb=Sum('valorAplicado'))
+                    print("Entre GLOSA =", tipoRips)
+                    pagosFactura = PagosFacturas.objects.filter(facturaAplicada_id=elementoOtro,anulado = 'N').aggregate(totalAb=Sum('valorAplicado'))
                     datosGlosa  = Glosas.objects.get(id=elemento)
                     datosFactura = Facturacion.objects.get(id=datosGlosa.factura_id)
                     datosIngreso = ingresos.objects.get(tipoDoc_id=datosFactura.tipoDoc_id, documento_id=datosFactura.documento_id, consec=datosFactura.consecAdmision)

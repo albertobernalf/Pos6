@@ -213,8 +213,17 @@ window.addEventListener('load', async () => {
                 dataType: 'json',
                 success: function (info) {
 
+		if (info.success == true)
+			 {
+			  document.getElementById("mensajes").value = data.Mensajes;
+			 }
+			else
+			{
+			document.getElementById("mensajesError").value = data.Mensajes;
+			return;
+			}
 
-		   $("#mensajes").html(info.Mensaje);
+
 		$('#postFormCaja').trigger("reset");
 
 			// $('#fecha').val(info[0].fields.fecha);
@@ -242,13 +251,11 @@ window.addEventListener('load', async () => {
 	
 		 $('#crearModelCaja').modal('show');
                 },
-            error: function(data){
-		           alert("data = " + JSON.stringify(data)); // data
-		           alert(data.status); // the status code
-		   
-		           alert(data.JsonResponse['error']); // the message
-		document.getElementById("mensajesError").innerHTML =  data.JsonResponse.error
-			        },
+          error: function (data) {
+		
+	document.getElementById("mensajesError").value =  data.responseText;
+
+	   	    	}
             });
   });
 
@@ -272,6 +279,18 @@ function GuardarCaja()
                 dataType: 'json',
                 success: function (data2) {
 
+		if (data2.success == true)
+			 {
+			  document.getElementById("mensajes").value = data.Mensajes;
+			 }
+			else
+			{
+			document.getElementById("mensajesError").value = data.Mensajes;
+			return;
+			}
+
+
+
 		var data =  {}   ;
 	        data['username'] = username;
 		data['username_id'] = username_id;
@@ -288,8 +307,9 @@ function GuardarCaja()
 	         dataTableCajanitialized = true;
 	
                 },
-            error: function (request, status, error) {
-		document.getElementById("mensajesErrorModalCaja").innerHTML =  'Error' + ': ' + request.responseText;
+            error: function (data) {
+		
+	document.getElementById("mensajesError").value =  data.responseText;
 
 	   	    	}
             });
