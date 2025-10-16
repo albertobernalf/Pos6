@@ -1156,7 +1156,9 @@ $('#RvalorAPagarLetras').val(data.valorAPagarLetras);
 
   $('body').on('click', '.createAplicarAbono', function () {
              
+	alert("Entre");
     var abonoId = $(this).data('pk');	
+	alert("abono = " + abonoId);
       
 	  $.ajax({
                 data: {'abonoId': abonoId},
@@ -1167,15 +1169,15 @@ $('#RvalorAPagarLetras').val(data.valorAPagarLetras);
 		            $('#post_id').val('');
 		            //  $('#postFormModalApliqueParcial').trigger("reset");
 		         $('#modelHeadingAplique').html("Aplicar abono a Factura");
-			if (data.success == true)
-			 {
-			  document.getElementById("mensajes").value = data.Mensajes;
-			 }
-			else
-			{
-			document.getElementById("mensajesError").value = data.Mensajes;
-			return;
-			}
+			//if (data.success == true)
+			 //{
+			  //document.getElementById("mensajes").value = data.Mensajes;
+			 //}
+			//else
+			//{
+			// document.getElementById("mensajesError").value = data.Mensajes;
+			// return;
+			//}
 			
 			$('#aabonoId').val(data.id);
 			
@@ -1206,15 +1208,15 @@ $('#RvalorAPagarLetras').val(data.valorAPagarLetras);
 			$('#aformaPago').val(data.formaPago_id);
 
 
-			if ( data.estadoReg =='A')
-			{
+			// if ( data.estadoReg =='A')
+			// {
 			 $('#crearAplique').modal('show');
-			}
-			else
-			{
+			// }
+			// else
+			// {
 
-			$("#mensajes").html('Abono Anulado !');
-			}
+			// $("#mensajes").html('Abono Anulado !');
+			// }
 
                 },
                     error: function(data){
@@ -1315,7 +1317,8 @@ $('#RvalorAPagarLetras').val(data.valorAPagarLetras);
         $('#createNewPostAbonosFacturacion').click(function () {
 		var liquidacionId = document.getElementById("liquidacionId").value;
 		document.getElementById("liquidacionId1").value =liquidacionId;
-	
+		alert("esta es la ventana");
+
             $('#post_id').val('');
             $('#postFormCrearAbonosFacturacion').trigger("reset");
             $('#modelHeadingCrearAbonosFacturacion').html("Creacion Abonos en admision");
@@ -1329,7 +1332,7 @@ $('#RvalorAPagarLetras').val(data.valorAPagarLetras);
         --------------------------------------------*/
         $('#saveBtnCrearAbonosFacturacion').click(function (e) {
             e.preventDefault();
-       //		alert (" Entre a Grabar el abono");
+      		alert (" Entre a Grabar el abono");
 
         var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
         var username = document.getElementById("username").value;
@@ -1704,7 +1707,7 @@ $('#RvalorAPagarLetras').val(data.valorAPagarLetras);
 function AFacturar()
 {
 
-//	alert ("Entre a facturar ");
+	alert ("Entre a facturar ");
 
  	var liquidacionId = document.getElementById("liquidacionId").value;
  	var username_id = document.getElementById("username_id").value;
@@ -1713,13 +1716,13 @@ function AFacturar()
 	if (salidaDefinitiva=='R')
 		{
 			var tipoFactura= 'REFACTURA';
-			// alert(" ES REFACTURA : ");
+			 alert(" ES REFACTURA : ");
 		}
 
 	else
 		{
 			var tipoFactura= 'FACTURA';
-			// alert(" ES FACTURA : ");
+			 alert(" ES FACTURA : ");
 		}
 
 
@@ -1740,7 +1743,7 @@ function AFacturar()
 	           type: 'POST',
 	           dataType : 'json',
 	  		success: function (data) {
-				alert("ya guarde la factura = " + JSON.stringify(data));
+				  alert("ya guarde la factura = " + JSON.stringify(data));
 
 
 			if (data.success == true)

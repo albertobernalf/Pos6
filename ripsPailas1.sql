@@ -272,7 +272,7 @@ select * from admisiones_ingresos;
 		SELECT generaFacturaJSON('68','142','FACTURA') dato
 			SELECT generaFacturaJSON('63','138','FACTURA') dato
 SELECT generaenvioRipsJson(63,'FACTURA')
-		
+	 	
 		
 select * from rips_ripshospitalizacion
 select * from clinico_diagnosticos;

@@ -1551,7 +1551,7 @@ def FacturarCuenta(request):
 
         #AQUI ACTUALIZAMOS LOS PAGOS DEL PACIENTE
 
-        comando6 = 'INSERT INTO cartera_pagosFacturas ("valorAplicado", "fechaRegistro","estadoReg", "facturaAplicada_id",pago_id, "serviciosAdministrativos_id") SELECT "valorEnCurso", ' + "'" + str(fechaRegistro) + "','A'," + str(facturacionId) + ', id ,' + "'" + str(serviciosAdministrativos) + "'" + ' FROM cartera_pagos WHERE documento_id = ' + "'" + str(liquidacionDatos.documento_id) + "'" + ' AND "tipoDoc_id" = ' + "'" + str(liquidacionDatos.tipoDoc_id) + "'" + ' AND consec = ' + "'" + str(liquidacionDatos.consecAdmision) + "'"
+        comando6 = 'INSERT INTO cartera_pagosFacturas ("valorAplicado", "fechaRegistro","estadoReg", "facturaAplicada_id",pago_id, "serviciosAdministrativos_id",anulado) SELECT "valorEnCurso", ' + "'" + str(fechaRegistro) + "','A'," + str(facturacionId) + ', id ,' + "'" + str(serviciosAdministrativos) + "','N'" + ' FROM cartera_pagos WHERE documento_id = ' + "'" + str(liquidacionDatos.documento_id) + "'" + ' AND "tipoDoc_id" = ' + "'" + str(liquidacionDatos.tipoDoc_id) + "'" + ' AND consec = ' + "'" + str(liquidacionDatos.consecAdmision) + "' AND anulado != 'S' AND " + '"valorEnCurso" != 0'
 
         print(comando6)
         cur3.execute(comando6)
@@ -1609,7 +1609,7 @@ def FacturarCuenta(request):
 
             print("Voy a hacer el jsonresponde")
             message_error= str(error)
-            return JsonResponse({'success': True, 'Mensajes': message_error})
+            return JsonResponse({'success': False, 'Mensajes': message_error})
 
 
 
@@ -2002,21 +2002,21 @@ def GuardaApliqueAbonosFacturacion(request):
             if aformaPago == "1":
                 print("Entre 1")
 
-                sumatoriaAnticipos = Pagos.objects.filter(tipoDoc_id=registroId.tipoDoc_id, documento_id=registroId.documento_id, consec=registroId.consecAdmision,convenio_id=registroId.convenio_id, formaPago_id=aformaPago).exclude(estadoReg='N').aggregate(totalA=Coalesce(Sum('valorEnCurso'), 0))
+                sumatoriaAnticipos = Pagos.objects.filter(tipoDoc_id=registroId.tipoDoc_id, documento_id=registroId.documento_id, consec=registroId.consecAdmision,convenio_id=registroId.convenio_id, formaPago_id=aformaPago).exclude(estadoReg='I').exclude(anulado='S').aggregate(totalA=Coalesce(Sum('valorEnCurso'), 0))
                 sumatoriaAnticipos = (sumatoriaAnticipos['totalA']) + 0
                 print("sumatoriaAnticipos", sumatoriaAnticipos)
                 grabo2 = Liquidacion.objects.filter(id=liquidacionId).update(anticipos=sumatoriaAnticipos)
             if aformaPago == "2":
                 print("Entre 2")
 
-                sumatoriaAbonos = Pagos.objects.filter(tipoDoc_id=registroId.tipoDoc_id, documento_id=registroId.documento_id, consec=registroId.consecAdmision,convenio_id=registroId.convenio_id,formaPago_id=aformaPago).exclude(estadoReg='N').aggregate(totalAb=Coalesce(Sum('valorEnCurso'), 0))
+                sumatoriaAbonos = Pagos.objects.filter(tipoDoc_id=registroId.tipoDoc_id, documento_id=registroId.documento_id, consec=registroId.consecAdmision,convenio_id=registroId.convenio_id,formaPago_id=aformaPago).exclude(estadoReg='I').exclude(anulado='S').aggregate(totalAb=Coalesce(Sum('valorEnCurso'), 0))
                 sumatoriaAbonos = (sumatoriaAbonos['totalAb']) + 0
                 print("sumatoriaAbonos", sumatoriaAbonos)
                 grabo2 = Liquidacion.objects.filter(id=liquidacionId).update(totalAbonos=sumatoriaAbonos)
 
             if aformaPago == "3":
                 print("Entre 3")
-                sumatoriaCuotaModeradora = Pagos.objects.filter(tipoDoc_id=registroId.tipoDoc_id, documento_id=registroId.documento_id, consec=registroId.consecAdmision,convenio_id=registroId.convenio_id,formaPago_id=aformaPago).exclude(estadoReg='N').aggregate(totalM=Coalesce(Sum('valorEnCurso'), 0))
+                sumatoriaCuotaModeradora = Pagos.objects.filter(tipoDoc_id=registroId.tipoDoc_id, documento_id=registroId.documento_id, consec=registroId.consecAdmision,convenio_id=registroId.convenio_id,formaPago_id=aformaPago).exclude(estadoReg='I').exclude(anulado='S').aggregate(totalM=Coalesce(Sum('valorEnCurso'), 0))
                 sumatoriaCuotaModeradora = (sumatoriaCuotaModeradora['totalM']) + 0
                 print("sumatoriaCuotaModeradora", sumatoriaCuotaModeradora)
                 grabo2 = Liquidacion.objects.filter(id=liquidacionId).update(totalCuotaModeradora=sumatoriaCuotaModeradora)
@@ -2024,7 +2024,7 @@ def GuardaApliqueAbonosFacturacion(request):
             if aformaPago == "4":
                 print ("Entre 4")
 
-                sumatoriaCopagos = Pagos.objects.filter(tipoDoc_id=registroId.tipoDoc_id, documento_id=registroId.documento_id, consec=registroId.consecAdmision,convenio_id=registroId.convenio_id,formaPago_id=aformaPago).exclude(estadoReg='N').aggregate(totalC=Coalesce(Sum('valorEnCurso'), 0))
+                sumatoriaCopagos = Pagos.objects.filter(tipoDoc_id=registroId.tipoDoc_id, documento_id=registroId.documento_id, consec=registroId.consecAdmision,convenio_id=registroId.convenio_id,formaPago_id=aformaPago).exclude(estadoReg='S').exclude(anulado='S').aggregate(totalC=Coalesce(Sum('valorEnCurso'), 0))
                 sumatoriaCopagos = (sumatoriaCopagos['totalC']) + 0
                 print("sumatoriaCopagos", sumatoriaCopagos)
                 grabo2 = Liquidacion.objects.filter(id=liquidacionId).update(totalCopagos=sumatoriaCopagos)
@@ -2034,13 +2034,112 @@ def GuardaApliqueAbonosFacturacion(request):
 
             grabo4 = Liquidacion.objects.filter(id=liquidacionId).update(valorApagar  = F('totalProcedimientos') + F('totalSuministros') - F('totalRecibido'))
 
-            return JsonResponse({'success': True, 'Mensaje': 'Valor abono en curso guardado satisfactoriamente!'})
+            return JsonResponse({'success': True, 'Mensaje': 'Aplique abono en curso guardado satisfactoriamente!'})
 
     except Exception as e:
         # Aquí ya se hizo rollback automáticamente
         print("Se hizo rollback por:", e)
         message_error= str(e)
         return JsonResponse({'success': False, 'Mensajes': message_error})
+
+
+
+    miConexion3 = None
+    try:
+
+        miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",  password="123456")
+        cur3 = miConexion3.cursor()
+
+        # Falta la RUTINA que actualica los cabezotes de la liquidacion
+
+        totalSuministros = LiquidacionDetalle.objects.all().filter(liquidacion_id=liquidacionId).filter(examen_id = None).exclude(estadoRegistro='I').exclude(anulado='S').aggregate(totalS=Coalesce(Sum('valorTotal'), 0))
+        totalSuministros = (totalSuministros['totalS']) + 0
+
+        print("totalSuministros", totalSuministros)
+        totalProcedimientos = LiquidacionDetalle.objects.all().filter(liquidacion_id=liquidacionId).filter(cums_id = None).exclude(estadoRegistro='I').exclude(anulado='S').aggregate(totalP=Coalesce(Sum('valorTotal'), 0))
+        totalProcedimientos = (totalProcedimientos['totalP']) + 0
+
+        print("totalProcedimientos", totalProcedimientos)
+
+        # Si en otra pantalla estan actualizando abonos pues se veri reflejadop
+
+        registroPago = Liquidacion.objects.get(id=liquidacionId)
+        totalCopagos = registroPago.totalCopagos
+        totalCuotaModeradora = registroPago.totalCuotaModeradora
+        totalAnticipos = registroPago.anticipos
+        totalAbonos = registroPago.totalAbonos
+        #valorEnCurso = registroPago.valorEnCurso
+        totalRecibido = registroPago.totalRecibido
+        totalAnticipos = registroPago.anticipos
+        totalLiquidacion = 0.0
+
+
+        if (totalSuministros==None):
+            totalSuministros=0.0
+        if (totalProcedimientos==None):
+            totalProcedimientos=0.0
+
+        if (totalRecibido==None):
+            totalRecibido=0.0
+        if (totalLiquidacion==None):
+            totalLiquidacion=0.0
+        if (totalAnticipos == None):
+            totalAnticipos = 0.0
+
+        if (totalAbonos==None):
+            totalAbonos=0.0
+
+        if (totalCuotaModeradora==None):
+            totalCuotaModeradora=0.0
+
+        if (totalCopagos==None):
+            totalCopagos=0.0
+
+        totalSuministros = float(totalSuministros) + float(inicialSuministros)
+        totalProcedimientos = float(totalProcedimientos) + float(inicialCups)
+        totalLiquidacion = float(totalSuministros) + float(totalProcedimientos)
+        print("totalSuministros FINAL", totalSuministros)
+        print("totalProcedimientos FINAL", totalProcedimientos)
+        print("totalLiquidacion FINAL= ", totalLiquidacion)
+        print("totalRecibido FINAL= ", totalRecibido)
+
+
+        valorApagar = float(totalLiquidacion) -  float(totalRecibido)
+
+
+        # Rutina Guarda en cabezote los totales
+
+        print ("Voy a grabar el cabezote")
+
+        comando1 = 'UPDATE facturacion_liquidacion SET "totalSuministros" = ' +"'" +  + str(totalSuministros) + "'"  + ',"totalProcedimientos" = ' + "'" + + str(totalProcedimientos) + "'" + ', "totalCopagos" = ' + "'" + str(totalCopagos) + "'"  + ' , "totalCuotaModeradora" = ' + "'" + str(totalCuotaModeradora) + "'" + ', anticipos = ' + "'" +  str(totalAnticipos) + "'" + ' ,"totalAbonos" = ' + "'"  + str(totalAbonos) + "'"   + ', "totalLiquidacion" = ' + "'" + str(totalLiquidacion) + "'" + ', "valorApagar" = ' + "'" + str(valorApagar) + "'" +  ', "totalRecibido" = ' + "'" + str(totalRecibido) + + "'" +  ' WHERE id =' + str(liquidacionId)
+        cur3.execute(comando1)
+        miConexion3.commit()
+        cur3.close()
+        miConexion3.close()
+
+        return JsonResponse({'success': True, 'Mensajes': 'Registro guardado stisfactoriamente !'})
+
+
+    except psycopg2.DatabaseError as error:
+        print ("Entre por rollback" , error)
+        if miConexion3:
+            print("Entro ha hacer el Rollback")
+            miConexion3.rollback()
+
+        message_error= str(error)
+        return JsonResponse({'success': False, 'Mensajes': message_error})
+
+
+    finally:
+        if miConexion3:
+            cur3.close()
+            miConexion3.close()
+
+
+    ## Fin rutina actualiza cabezotes
+
+
+
 
 
 def TrasladarConvenio(request):

@@ -827,3 +827,6 @@ class ProgramacionCitasMedicas(models.Model):
   -- se esta trabajando jsos indicidualk despues se pasan los script a la funcion de envioGRAL
  -- noi se sta trabajando aun con glosas
 
+-- ojo hay que obligar en historia clinica coocar mandatori diastratamiento y demas
+-- cuando cree un aplique de abono debre refrescar la pantalla liquidaciondetalle
+-- ojo camellar el modulo de abonos

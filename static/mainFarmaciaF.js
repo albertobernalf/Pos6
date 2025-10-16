@@ -30,7 +30,7 @@ $('#tablaFormulacion tbody').on('click', 'tr', function () {
     confirm("Desea eliminar LA FILA: ");
        var tableL = $('#tablaFormulacion').DataTable();
       var fila = $(this).parents("tr")['prevObject']['0']['_DT_RowIndex'];
-          alert("Fila a borrar = " + fila);
+        //   alert("Fila a borrar = " + fila);
 		var rows = tableL
 			    .rows(fila)
 			    .remove()
@@ -865,7 +865,7 @@ const initDataTablePanelFarmacia = async () => {
         data['username_id'] = username_id;
  	    data = JSON.stringify(data);
 
-	alert("sede = " + sede);
+	//  alert("sede = " + sede);
 
         arrancaFarmacia(1,data);
 	    dataTablePanelFarmaciaInitialized = true;
@@ -902,11 +902,11 @@ window.addEventListener('load', async () => {
 
 $('#tablaPanelFarmacia tbody').on('click', '.miSelFarmacia', function() {
 
-		alert("ENTRE miSelFarmacia");
+		//  alert("ENTRE miSelFarmacia");
 
 	     var post_id = $(this).data('pk');
 	farmaciaId =   post_id;
-	alert("farmaciaId = " +  farmaciaId);
+	//  alert("farmaciaId = " +  farmaciaId);
 
 	document.getElementById("farmaciaId").value = farmaciaId;
 
@@ -972,10 +972,10 @@ $('#tablaPanelFarmacia tbody').on('click', '.miSelFarmacia', function() {
 
 $('#tablaDevolucionesFarmacia tbody').on('click', '.miConsultaDev', function() {
 
-	alert ("A tablaDevolucionesFarmaciaa");
+	//  alert ("A tablaDevolucionesFarmaciaa");
 
 	     var post_id = $(this).data('pk');
-	alert ("post_id = " + post_id);
+	//  alert ("post_id = " + post_id);
 	devolucionFarmaciaId = post_id;
 
     	var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
@@ -1003,10 +1003,10 @@ $('#tablaDevolucionesFarmacia tbody').on('click', '.miConsultaDev', function() {
 
 $('#tablaDevolucionesFarmacia tbody').on('click', '.RecibirDevolucion', function() {
 
-	alert ("A RecibirDevolucion Farmacia");
+	//  alert ("A RecibirDevolucion Farmacia");
 
 	     var post_id = $(this).data('pk');
-	alert ("post_id = " + post_id);
+	//  alert ("post_id = " + post_id);
 	devolucionFarmaciaId = post_id;
 	$('#postFormRecibirDevolucionFarmacia').trigger("reset");
 
@@ -1023,10 +1023,10 @@ $('#tablaDevolucionesFarmacia tbody').on('click', '.RecibirDevolucion', function
 
 $('#tablaDevolucionesDetalleFarmacia tbody').on('click', '.RecibirDevolucionDetalle', function() {
 
-	alert ("A RecibirDevolucion Detalle Farmacia");
+	//  alert ("A RecibirDevolucion Detalle Farmacia");
 
 	     var post_id = $(this).data('pk');
-	alert ("post_id = " + post_id);
+	//  alert ("post_id = " + post_id);
 	devolucionDetalleFarmaciaId = post_id;
 	$('#postFormRecibirDevolucionDetalleFarmacia').trigger("reset");
 	var row = $(this).closest('tr'); // Encuentra la fila
@@ -1060,7 +1060,7 @@ $('#tablaDevolucionesDetalleFarmacia tbody').on('click', '.RecibirDevolucionDeta
 
 $('#tablaFarmaciaDetalle tbody').on('click', '.miFarmaciaDetalle', function() {
 
-		alert("ENTRE tablaFarmaciaDetalle");
+		//  alert("ENTRE tablaFarmaciaDetalle");
 
 	     var post_id = $(this).data('pk');
 	farmaciaDetalleId =   post_id;
@@ -1094,11 +1094,11 @@ $('#tablaFarmaciaDetalle tbody').on('click', '.miFarmaciaDetalle', function() {
 
 $('#tablaPanelFarmacia tbody').on('click', '.miEditaFarmaciaEstadoDespacho', function() {
 
-		alert("ENTRE miEditaFarmaciaEstadoDespach");
+		//  alert("ENTRE miEditaFarmaciaEstadoDespach");
 
 	     var post_id = $(this).data('pk');
 	var farmaciaId =   post_id;
-	alert("farmaciaId = " +  farmaciaId);
+	//  alert("farmaciaId = " +  farmaciaId);
 
  $('#postFormModalEstadoFarmacia').trigger("reset");
 
@@ -1111,12 +1111,12 @@ $('#tablaPanelFarmacia tbody').on('click', '.miEditaFarmaciaEstadoDespacho', fun
 
 $('#tablaDespachosFarmacia tbody').on('click', '.miDespachoFarmacia2', function() {
 
-		alert("ENTRE tablaDespachosFarmacia VE");
+		//  alert("ENTRE tablaDespachosFarmacia VE");
 
    	        var post_id = $(this).data('pk');
 
 		var despachoId =   post_id;
-		alert("despacho = " +  despachoId);
+		//  alert("despacho = " +  despachoId);
 
 	var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
         var username = document.getElementById("username").value;
@@ -1154,9 +1154,9 @@ $('#tablaDespachosFarmacia tbody').on('click', '.miDespachoFarmacia2', function(
 function CambiaEstadoDespacho()
 {
 
-		alert("ENTRE miEditaFarmaciaEstadoDespach");
+		//  alert("ENTRE miEditaFarmaciaEstadoDespach");
 	farmaciaId = document.getElementById("farmaciaId").value ;
-	alert("farmaciaId = " +  farmaciaId);
+	//  alert("farmaciaId = " +  farmaciaId);
 
 	document.getElementById("farmaciaId").value = farmaciaId;
     	var estadoFarmaciaDespacho = document.getElementById("estadoFarmaciaDespacho").value;
@@ -1243,7 +1243,7 @@ function AdicionarDespachosDispensa()
 {
 
 	// Formulacion
-	alert("Entre a GRABAR despacho");
+	//  alert("Entre a GRABAR despacho");
 
      	var username = document.getElementById("username").value;
         var sede = document.getElementById("sede").value;
@@ -1254,7 +1254,7 @@ function AdicionarDespachosDispensa()
         var plantaEntrega = document.getElementById("plantaEntregaF").value;
         var plantaRecibe = document.getElementById("plantaRecibeF").value;
         var farmaciaId = document.getElementById("farmaciaId").value;
-	alert("plantaRecibe = " + plantaRecibe );
+	//  alert("plantaRecibe = " + plantaRecibe );
 
 
     const table10 = $('#tablaFormulacion').DataTable();
@@ -1278,7 +1278,7 @@ function AdicionarDespachosDispensa()
 
 	    formulacion  = JSON.stringify(formulacion);
 
-	    alert("Esto envio formulacion = " + formulacion)
+	    //  alert("Esto envio formulacion = " + formulacion)
     
  	// Fin Formulacion
 
@@ -1350,7 +1350,7 @@ plantaRecibe.selectedIndex = 0;
 function RecibirDevolucionFarmacia()
 {
 
-	alert("RecibirDevolucionFarmacia");
+	//  alert("RecibirDevolucionFarmacia");
     	var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
         var username = document.getElementById("username").value;
         var nombreSede = document.getElementById("nombreSede").value;
@@ -1359,7 +1359,7 @@ function RecibirDevolucionFarmacia()
         // var farmaciaId = document.getElementById("farmaciaId").value;
         // var farmaciaDetalleId = document.getElementById("farmaciaDetalle").value;
         var devolucionFarmaciaId = document.getElementById("devolucionNo").innerHTML;
-	alert("devolucionFarmaciaId = " + devolucionFarmaciaId);
+	//  alert("devolucionFarmaciaId = " + devolucionFarmaciaId);
 
 	var servicioRecibeId = document.getElementById("servicioRecibe").value;
 	var plantaRecibeId = document.getElementById("plantaRecibe").value;
@@ -1408,7 +1408,7 @@ function RecibirDevolucionFarmacia()
 function RecibirDevolucionDetalleFarmacia()
 {
 
-	alert("RecibirDevolucionDetalleFarmacia");
+	//  alert("RecibirDevolucionDetalleFarmacia");
     	var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
         var username = document.getElementById("username").value;
         var nombreSede = document.getElementById("nombreSede").value;
@@ -1418,7 +1418,7 @@ function RecibirDevolucionDetalleFarmacia()
         // var farmaciaId = document.getElementById("farmaciaId").value;
         // var farmaciaDetalleId = document.getElementById("farmaciaDetalle").value;
         var devolucionDetalleFarmaciaId = document.getElementById("devolucionDetalleNo").innerHTML;
-	alert("devolucionDetalleFarmaciaId = " + devolucionDetalleFarmaciaId);
+	//  alert("devolucionDetalleFarmaciaId = " + devolucionDetalleFarmaciaId);
 
 	var cantidadDevueltaRecibida = document.getElementById("cantidadDevueltaRecibidaY").value;
 

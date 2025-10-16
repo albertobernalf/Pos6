@@ -89,7 +89,7 @@ $(document).ready(function() {
         $('#BtnFormulacionDev').click(function (e) {
             e.preventDefault();
 
-		alert("entre devolver medicamentos");
+		// alert("entre devolver medicamentos");
 
    	   if (controlDev == 0)
    	   {
@@ -1421,7 +1421,7 @@ const initDataTablePanelEnfermeria = async () => {
         data['username_id'] = username_id;
  	    data = JSON.stringify(data);
 
-	alert("sede = " + sede);
+	// alert("sede = " + sede);
 
         arrancaEnfermeria(1,data);
 	    dataTablePanelEnfermeriaInitialized = true;
@@ -1447,7 +1447,7 @@ window.addEventListener('load', async () => {
 
 $('#tablaPanelEnfermeria tbody').on('click', '.miIngresoEnfermeriaId', function() {
 
-	alert ("Seleccione Enfermeria");
+	//  alert ("Seleccione Enfermeria");
 
         var post_id = $(this).data('pk');
 	ingresoId =   post_id;
@@ -1595,10 +1595,10 @@ $('#tablaPanelEnfermeria tbody').on('click', '.miIngresoEnfermeriaId', function(
 
 $('#tablaConsultaDevolucionesEnfermeria tbody').on('click', '.miConsultaDev', function() {
 
-	alert ("A tablaConsultaDevolucionesEnfermeria");
+	//  alert ("A tablaConsultaDevolucionesEnfermeria");
 
 	     var post_id = $(this).data('pk');
-	alert ("post_id = " + post_id);
+	//  alert ("post_id = " + post_id);
 	devolucionEnfermeriaId = post_id;
 
     	var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
@@ -1627,7 +1627,7 @@ $('#tablaConsultaDevolucionesEnfermeria tbody').on('click', '.miConsultaDev', fu
 
 $('#tablaPedidosEnfermeria tbody').on('click', '.miPedidosEnfermeria', function() {
 
-	alert ("Seleccione miPedidosEnfermeria");
+	//  alert ("Seleccione miPedidosEnfermeria");
 
 	     var post_id = $(this).data('pk');
 	enfermeriaId =   post_id;
@@ -1653,7 +1653,7 @@ $('#tablaPedidosEnfermeria tbody').on('click', '.miPedidosEnfermeria', function(
 
 function ModalPedidosEnfermeriaCabezote()
 {
-	alert("ENTRE cargar modal CreaPedidosEnfermeriaCabezote");
+	// alert("ENTRE cargar modal CreaPedidosEnfermeriaCabezote");
 
 	 $('#postFormModalCreaPedidosEnfermeria').trigger("reset");
 
@@ -1668,7 +1668,7 @@ function ModalPedidosEnfermeriaCabezote()
 function CreaPedidosEnfermeriaCabezote()
 {
 
-		alert("ENTRE CreaPedidosEnfermeriaCabezote");
+		// alert("ENTRE CreaPedidosEnfermeriaCabezote");
 	var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
         var username = document.getElementById("username").value;
         var nombreSede = document.getElementById("nombreSede").value;
@@ -1680,9 +1680,9 @@ function CreaPedidosEnfermeriaCabezote()
         var enfermeriaTipoMovimiento = document.getElementById("enfermeriaTipoMovimientox").value;
         var servicioEnfermeria = document.getElementById("servicioEnfermeria").value;
 
-	alert("username_id: " + username_id );
-	alert("enfermeriaTipoOrigen: " + enfermeriaTipoOrigen );
-	alert("enfermeriaTipoMovimiento : " + enfermeriaTipoMovimiento  );
+	//  alert("username_id: " + username_id );
+	// alert("enfermeriaTipoOrigen: " + enfermeriaTipoOrigen );
+	//  alert("enfermeriaTipoMovimiento : " + enfermeriaTipoMovimiento  );
 		
      $.ajax({
 
@@ -1730,10 +1730,10 @@ function CreaPedidosEnfermeriaCabezote()
 
 $('#tablaMedicamentosEnfermeria tbody').on('click', '.miMedicamentosId', function() {
 
-	alert ("Sleecion Meicamento");
+	//  alert ("Sleecion Meicamento");
 
 	     var post_id = $(this).data('pk');
-	alert ("post_id = " + post_id);
+	//  alert ("post_id = " + post_id);
 	var enfermeriaRecibeId = post_id;
 
 
@@ -1766,10 +1766,10 @@ $('#tablaMedicamentosEnfermeria tbody').on('click', '.miMedicamentosId', functio
 
 $('#tablaPlaneacionEnfermeria tbody').on('click', '.miAplicacionEnfermeria', function() {
 
-	alert ("A Aplicar Medicamentos");
+	//  alert ("A Aplicar Medicamentos");
 
 	     var post_id = $(this).data('pk');
-	alert ("post_id = " + post_id);
+	//  alert ("post_id = " + post_id);
 	var row = $(this).closest('tr'); // Encuentra la fila
 
 	
@@ -1797,7 +1797,7 @@ $('#tablaPlaneacionEnfermeria tbody').on('click', '.miAplicacionEnfermeria', fun
 		document.getElementById("cantidadA").value = dato3.cantidadPlaneada;
 		document.getElementById("suministroA").value = dato3.suministro;
 		document.getElementById("viaA").value = dato3.via;
-		alert("via = " + dato3.via);
+		//  alert("via = " + dato3.via);
 		document.getElementById("frecuenciaA").value = dato3.frecuencia;
 		document.getElementById("diasTratamientoA").value = dato3.dias;
 		document.getElementById("enfermeriaRecibeId").value = post_id;
@@ -1814,10 +1814,10 @@ $('#tablaPlaneacionEnfermeria tbody').on('click', '.miAplicacionEnfermeria', fun
 
 $('#tablaMedicamentosEnfermeria tbody').on('click', '.Planear', function() {
 
-	alert ("A planear Meidcamentos");
+	//  alert ("A planear Meidcamentos");
 
 	     var post_id = $(this).data('pk');
-	alert ("post_id = " + post_id);
+	//  alert ("post_id = " + post_id);
 	var row = $(this).closest('tr'); // Encuentra la fila
 
 
@@ -1844,7 +1844,7 @@ $('#tablaMedicamentosEnfermeria tbody').on('click', '.Planear', function() {
 		document.getElementById("cantidadP").value = dato3.cantidad;
 		document.getElementById("suministroP").value = dato3.medicamento;
 		document.getElementById("viaP").value = dato3.via;
-		alert("via = " + dato3.via);
+		//  alert("via = " + dato3.via);
 		document.getElementById("frecuenciaP").value = dato3.frecuencia;
 		document.getElementById("diasTratamientoP").value = dato3.diasTratamiento;
 		document.getElementById("numeroPlaneos").value = 0;
@@ -1860,10 +1860,10 @@ $('#tablaMedicamentosEnfermeria tbody').on('click', '.Planear', function() {
 
 $('#tablaDevolucionEnfermeria tbody').on('click', '.Devolver', function() {
 
-	alert ("A devolver Meidcamentos");
+	//  alert ("A devolver Meidcamentos");
 
 	     var post_id = $(this).data('pk');
-	alert ("post_id = " + post_id);
+	//  alert ("post_id = " + post_id);
 	var row = $(this).closest('tr'); // Encuentra la fila
 
 
@@ -1891,7 +1891,7 @@ $('#tablaDevolucionEnfermeria tbody').on('click', '.Devolver', function() {
 		document.getElementById("cantidadPura").value = dato3.cantidad;
 		document.getElementById("suministroDev").value = dato3.medicamento;
 		document.getElementById("viaDev").value = dato3.via;
-		alert("via = " + dato3.via);
+		//  alert("via = " + dato3.via);
 		document.getElementById("frecuenciaDev").value = dato3.frecuencia;
 		document.getElementById("diasTratamientoDev").value = dato3.diasTratamiento;
 		document.getElementById("numeroPlaneos").value = 0;
@@ -1909,7 +1909,7 @@ $('#tablaDevolucionEnfermeria tbody').on('click', '.Devolver', function() {
 
 function GuardarPlaneacion() 
 {
-	alert ("A Guardar planeacion medicamentos");
+	//  alert ("A Guardar planeacion medicamentos");
 
 	     var post_id = $(this).data('pk');
 	// alert ("post_id = " + post_id);
@@ -1924,7 +1924,7 @@ function GuardarPlaneacion()
 	var enfermeriaRecibeId  = document.getElementById("enfermeriaRecibeId").value;
 	var desdePlanea = document.getElementById("desdePlanea").value;
 
-	alert(" desdePlanea = " + desdePlanea );
+	//  alert(" desdePlanea = " + desdePlanea );
 
 
         var numeroPlaneos = document.getElementById("numeroPlaneos").value;
@@ -1992,7 +1992,7 @@ function GuardarPlaneacion()
 
 function GuardarAplicacion() 
 {
-	alert ("A Guardar Aplicacion medicamentos");
+	//  alert ("A Guardar Aplicacion medicamentos");
 
 	     var post_id = $(this).data('pk');
 	
@@ -2011,8 +2011,8 @@ function GuardarAplicacion()
 	var enfermeriaRecibeId  = document.getElementById("enfermeriaRecibeId").value;
 	var fechaAplica = document.getElementById("fechaAplica").value;
 
-	alert(" ingresoId= " + ingresoId);
-	alert("fechaAplica= " + fechaAplica);
+	//  alert(" ingresoId= " + ingresoId);
+	//  alert("fechaAplica= " + fechaAplica);
 
 
 	var enfermeriaRecibeId  = document.getElementById("enfermeriaRecibeId").value;
@@ -2131,7 +2131,7 @@ function GuardarPedido()
 {
 
 	// Formulacion
-	alert("Entre a GRABAR PedidosEnfermeria");
+	//  alert("Entre a GRABAR PedidosEnfermeria");
 
      	var username = document.getElementById("username").value;
         var sede = document.getElementById("sede").value;
@@ -2160,7 +2160,7 @@ function GuardarPedido()
 
 	    formulacionEnfermeria  = JSON.stringify(formulacionEnfermeria);
 
-	    alert("Esto envio formulacionEnfermeri = " + formulacionEnfermeria)
+	   //  alert("Esto envio formulacionEnfermeri = " + formulacionEnfermeria)
     
  	// Fin Formulacion
 
@@ -2232,7 +2232,7 @@ function GuardarPedido()
 
 function GuardarDietas() 
 {
-	alert ("A GuardarDietas");
+	// alert ("A GuardarDietas");
 
 	     var post_id = $(this).data('pk');
 	
@@ -2249,7 +2249,7 @@ function GuardarDietas()
 	 var observacionesD = document.getElementById("observacionesD").value;
 	 var serviciosAdministrativosD = document.getElementById("serviciosAdministrativosD").value;
 
-	alert(" ingresoId= " + ingresoId);
+	//  alert(" ingresoId= " + ingresoId);
 
 
          var data =  {}   ;
@@ -2312,7 +2312,7 @@ function GuardarDietas()
 
 function GuardarNotasEnfermeria() 
 {
-	alert ("A GuardarNotasEnfermeria");
+	//  alert ("A GuardarNotasEnfermeria");
 
 	     var post_id = $(this).data('pk');
 	
@@ -2329,7 +2329,7 @@ function GuardarNotasEnfermeria()
 	 var observacionesN = document.getElementById("observacionesN").value;
 	 var serviciosAdministrativosN = document.getElementById("serviciosAdministrativosN").value;
 
-	alert(" ingresoId= " + ingresoId);
+	//  alert(" ingresoId= " + ingresoId);
 
 
          var data =  {}   ;
@@ -2384,7 +2384,7 @@ function GuardarDevolucion()
 {
 
 	// Formulacion
-	alert("Entre a GRABAR GuardarDevolucion");
+	//  alert("Entre a GRABAR GuardarDevolucion");
 
      	var username = document.getElementById("username").value;
         var sede = document.getElementById("sede").value;
@@ -2416,7 +2416,7 @@ function GuardarDevolucion()
 
 	    formulacionDevolucion  = JSON.stringify(formulacionDevolucion);
 
-	    alert("Esto envio formulacionDevolucion = " + formulacionDevolucion);
+	   //   alert("Esto envio formulacionDevolucion = " + formulacionDevolucion);
     
  	// Fin Formulacion
 
@@ -2482,7 +2482,7 @@ function GuardarDevolucion()
 
 function GuardarSignoVitalEnfermeria() 
 {
-	alert ("A GuardarSignoVital");
+	//  alert ("A GuardarSignoVital");
 
 	  	
 	var ingresoId = document.getElementById("ingresoId").value ;
@@ -2511,7 +2511,7 @@ function GuardarSignoVitalEnfermeria()
         var observacion = document.getElementById("observacionSig").value;
         var serviciosAdministrativosSig = document.getElementById("serviciosAdministrativosSig").value;
 
-	alert(" ingresoId= " + ingresoId);
+	//  alert(" ingresoId= " + ingresoId);
 
 
          var data =  {}   ;
@@ -2536,7 +2536,7 @@ function GuardarSignoVitalEnfermeria()
                 dataType: 'json',
                 success: function (info) {
 
-		alert ("llegue listop");
+		//  alert ("llegue listop");
 document.getElementById("frecCardiaca").value = '';
 document.getElementById("frecRespiratoria").value= '';
 document.getElementById("tensionADiastolica").value= '';

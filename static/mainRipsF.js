@@ -1076,12 +1076,18 @@ function arrancaEnviosRips(valorTabla,valorData)
                  dataSrc: ""
             },
             columns: [
+	{     "render": function ( data, type, row ) {
+                        var btn = '';
+                          btn = btn + " <input type='radio' style='width:15px;height:15px;accent-color: purple;border-color: purple;background-color: purple;' class='miRipsEnviados form-check-input ' data-pk='"  + row.pk + "'>" + "</input>";
+
+                       return btn;
+                    },
+	},
 	{
 	  "render": function ( data, type, row ) {
                         var btn = '';
 
 	     btn = btn + " <button class='miRadicar btn-primary ' data-pk='" + row.pk + "'>" + '<i class="fa-duotone fa-regular fa-thumbs-up"></i>' + "</button>";
-
 
                        return btn;
                     },
@@ -1157,6 +1163,26 @@ window.addEventListener('load', async () => {
 
 
  /* FIN ONLOAD */
+
+ $('#tablaRipsEnviados tbody').on('click', '.miRipsEnviados', function() {
+
+        var post_id = $(this).data('pk');
+	var row = $(this).closest('tr'); // Encuentra la fila
+
+	// alert("Selecciono = " + post_id);
+
+	var table = $('#tablaRipsEnviados').DataTable();  // Inicializa el DataTable jquery 	      
+	var rowindex = table.row(row).data(); // Obtiene los datos de la fila
+        dato1 = Object.values(rowindex);
+	console.log(" fila seleccionad d evuelta dato1 = ",  dato1);
+        dato3 = dato1[2];
+	var tipoRips = dato3.tipoNota;
+
+	document.getElementById("envioRipsIdR").value = post_id;
+	document.getElementById("tipoRips4").value = tipoRips;	
+
+});
+
 
 
  $('#tablaEnviosRips tbody').on('click', '.miSol', function() {
@@ -1273,8 +1299,8 @@ $('#tablaEnviosRips tbody').on('click', '.miEnvioMinisterio', function() {
 
 
 	tipoRips =   document.getElementById("tipoRips2").value ;
-	alert("tipoRips = " +  tipoRips);
-	alert("envioRipsId = " +  envioRipsId);
+	// alert("tipoRips = " +  tipoRips);
+	// alert("envioRipsId = " +  envioRipsId);
 
 
 
@@ -1333,8 +1359,8 @@ $('#tablaEnviosRips tbody').on('click', '.miEnviar', function() {
 	tipoRips =   document.getElementById("tipoRips2").value ;
 	sede =   document.getElementById("sede").value ;
 	username_id =   document.getElementById("username_id").value ;
-	alert("tipoRips = " +  tipoRips);
-	alert("envioRipsId = " +  envioRipsId);
+	// alert("tipoRips = " +  tipoRips);
+	// alert("envioRipsId = " +  envioRipsId);
 
      
 	$.ajax({
@@ -1381,17 +1407,15 @@ $('#tablaEnviosRips tbody').on('click', '.miEnviar', function() {
 
 $('#tablaRipsEnviados tbody').on('click', '.miRadicar', function() {
 
-		alert("ENTRE Tadicar rips");
+		// alert("ENTRE Tadicar rips");
 
 	     var post_id = $(this).data('pk');
-	var envioRipsId = document.getElementById("envioRipsId").value ;
+
 	var row = $(this).closest('tr'); // Encuentra la fila
 
-	tipoRips =   document.getElementById("tipoRips2").value ;
-	alert("tipoRips = " +  tipoRips);
-	alert("envioRipsId = " +  envioRipsId);
 
-             $('#postFormRadicarRips').trigger("reset");
+           //  $('#postFormRadicarRips').trigger("reset");
+
             $('#modelHeadingRadicarRips').html("Radicar Rips");
             $('#crearModelRadicarRips').modal('show');
       
@@ -1400,15 +1424,25 @@ $('#tablaRipsEnviados tbody').on('click', '.miRadicar', function() {
 
 $('#tablaRipsEnviados tbody').on('click', '.miRespuestaRips', function() {
 
-		alert("ENTRE Respuesta rips");
+		// alert("ENTRE Respuesta rips");
 
 	     var post_id = $(this).data('pk');
-	var envioRipsId = document.getElementById("envioRipsId").value ;
 	var row = $(this).closest('tr'); // Encuentra la fila
 
-	tipoRips =   document.getElementById("tipoRips2").value ;
+	alert("Selecciono = " + post_id);
+
+	var table = $('#tablaRipsEnviados').DataTable();  // Inicializa el DataTable jquery
+	var rowindex = table.row(row).data(); // Obtiene los datos de la fila
+    dato1 = Object.values(rowindex);
+	console.log(" fila seleccionad d evuelta dato1 = ",  dato1);
+    dato3 = dato1[2];
+	var tipoRips = dato3.tipoNota;
+
+	document.getElementById("envioRipsIdZ").value = post_id;
+	document.getElementById("tipoRips5").value = tipoRips;
+
 	alert("tipoRips = " +  tipoRips);
-	alert("envioRipsId = " +  envioRipsId);
+	alert("envioRipsId = " +  post_id);
 
             // $('#postFormRespuestaRips').trigger("reset");
             $('#modelHeadingRespuestaRips').html("Respuesta Rips");
@@ -1609,7 +1643,7 @@ tipoRips2
 
 $('#tablaDetalleRips tbody').on('click', '.miMinisterio', function() {
 
-		alert("Entre Factura Rips ");
+		// alert("Entre Factura Rips ");
 
 	     var post_id = $(this).data('pk');
 	var envioRipsId = document.getElementById("envioRipsId").value ;
@@ -1633,10 +1667,10 @@ $('#tablaDetalleRips tbody').on('click', '.miMinisterio', function() {
         var glosaId = dato3.glosaId;
 
 		tipoRips =   document.getElementById("tipoRips2").value ;
-	alert("tipoRips = " +  tipoRips);
-	alert("facturaId = " +  facturaId);
-	alert("envioRipsId = " + envioRipsId);
-	alert("glosaId = " + glosaId);
+	// alert("tipoRips = " +  tipoRips);
+	// alert("facturaId = " +  facturaId);
+	// alert("envioRipsId = " + envioRipsId);
+	// alert("glosaId = " + glosaId);
 
      
 	$.ajax({
@@ -1931,7 +1965,7 @@ function CerrarModalEnvioJson()
 function GuardarRadicacionRips()
 {
 
-	alert("Entre GuardarRadicacionRips");
+	// alert("Entre GuardarRadicacionRips");
 
 
 	var envioRipsId = document.getElementById("EnvioRipsNo").value ;
@@ -1977,11 +2011,12 @@ function GuardarRadicacionRips()
  	    data = JSON.stringify(data);
 
 
-        arrancaEnviosRips(1,data);
-	    dataTableEnviosRipsInitialized = true;
+        arrancaEnviosRips(10,data);
+	    dataTableRipsEnviadosInitialized = true;
 
 		document.getElementById("mensajes").value = data2.Mensajes;
 
+    $('#crearModelRadicarRips').modal('hide');
                          },
             error: function (data) {	      
 			document.getElementById("mensajesErrorcrearModelRadicacionRips").value =   data.responseText;
@@ -1993,7 +2028,7 @@ function GuardarRadicacionRips()
 function GuardarRespuestaRips()
 {
 
-	alert("Entre GuardarRespuestaRips");
+	// alert("Entre GuardarRespuestaRips");
 
 
 	var envioRipsId = document.getElementById("envioRipsIdZ").value ;
@@ -2004,10 +2039,10 @@ function GuardarRespuestaRips()
         var username_id = document.getElementById("username_id").value;
         var nombreSede = document.getElementById("nombreSede").value;
     	var sede = document.getElementById("sede").value;
-	var fechaRespuesta = document.getElementById("fechaRespuesta").value;
+	var fechaRespuesta = document.getElementById("fechaRespuestaR").value;
 	var respuesta = document.getElementById("respuesta").value;
-	var cantidadPasaron = document.getElementById("cantidadPasaron").value;
-	var cantidadRechazadas = document.getElementById("cantidadRechazadas").value;
+	var cantidadPasaron = document.getElementById("cantidadPasaronR").value;
+	var cantidadRechazadas = document.getElementById("cantidadRechazadasR").value;
 	var rutaRespuestaJson = document.getElementById("rutaRespuestaJson").value;
 
 
@@ -2016,7 +2051,7 @@ function GuardarRespuestaRips()
             $.ajax({
 
 	        url: "/guardarRespuestaRips/",
-		data: {'envioRipsId':envioRipsId, 'sede':sede, 'username_id':username_id,'fechaRespuesta':fechaRespuesta,'respuesta':respuesta,'rutaRespuestaJson':rutaRespuestaJson},
+		data: {'envioRipsId':envioRipsId, 'sede':sede, 'username_id':username_id,'fechaRespuesta':fechaRespuesta,'respuesta':respuesta,'rutaRespuestaJson':rutaRespuestaJson,'cantidadPasaron':cantidadPasaron,'cantidadRechazadas':cantidadRechazadas},
                 type: "POST",
                 dataType: 'json',
                 success: function (data2) {
@@ -2043,10 +2078,10 @@ function GuardarRespuestaRips()
         data['username_id'] = username_id;
  	    data = JSON.stringify(data);
 
-        arrancaEnviosRips(1,data);
-        dataTableEnviosRipsInitialized = true;
-	document.getElementById("mensajes").value = data2.Mensajes;
+        arrancaEnviosRips(10,data);
+        dataTableRipsEnviadosInitialized = true;
 
+            $('#crearModelRespuestaRips').modal('hide');
                          },
             error: function (data) {	      
 			document.getElementById("mensajesErrorcrearModelRespuestaRips").value =   data.responseText;
@@ -2060,7 +2095,7 @@ function GuardarRespuestaRips()
 function GuardarRadicacionRips()
 {
 
-	alert("Entre GuardarRadicacionRips");
+	// alert("Entre GuardarRadicacionRips");
 
 
 	var envioRipsId = document.getElementById("envioRipsIdR").value ;
