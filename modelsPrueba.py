@@ -834,3 +834,7 @@ class ProgramacionCitasMedicas(models.Model):
 -- ojoi en JSON DE RIPS MINSTYRERI´
    -- quedo quemado el miuniciiop en ripsusuarios ?
   -- la incapacidad es mejor agregra vcampoen admisiones_ingresos denote incapacidad =SI", "NO"
+-- ojo veriicar en ripsprocedimientos, el recaudo_id, el prorrateo de los pagos,los campos "null", null
+-- no se porque ripshispitalizacion no ingresa la factura 142 hospitalziados
+-- revizar de nuevo ripsreciennacidos
+-- hacer ripmedicamentos , hay mucho null por cua

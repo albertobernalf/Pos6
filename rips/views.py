@@ -782,6 +782,18 @@ def GenerarJsonRips(request):
             curx.execute(detalle1)
             miConexionx.commit()
 
+            detalle2 ='UPDATE rips_ripsprocedimientos set "valorPagoModerador" = 0 WHERE "ripsTransaccion_id" = ' + "'" + str(transaccionId) + "'"
+            curx.execute(detalle2)
+            miConexionx.commit()
+
+            if (totalAbonos==None):
+                totalAbonos=0
+
+            detalle3 ='UPDATE rips_ripsprocedimientos set "valorPagoModerador" = ' + "'" + str(totalAbonos) + "'" + ' WHERE "ripsTransaccion_id" = ' + "'" + str(transaccionId) + "'" + ' AND consecutivo = 1'
+            curx.execute(detalle3)
+            miConexionx.commit()
+
+
         else:
 
             detalle = 'INSERT INTO rips_ripsprocedimientos("codPrestador", "fechaInicioAtencion", "idMIPRES", "numAutorizacion","numDocumentoIdentificacion", "vrServicio","valorPagoModerador", "numFEVPagoModerador", consecutivo, "fechaRegistro", "codComplicacion_id", "codDiagnosticoPrincipal_id","codDiagnosticoRelacionado_id", "codProcedimiento_id", "codServicio_id", "conceptoRecaudo_id", "finalidadTecnologiaSalud_id",	"grupoServicios_id", "modalidadGrupoServicioTecSal_id","tipoDocumentoIdentificacion_id","usuarioRegistro_id", "viaIngresoServicioSalud_id", "ripsDetalle_id", "itemFactura", "ripsTipos_id", "tipoPagoModerador_id", "ripsTransaccion_id", glosa_id) SELECT 	"codPrestador", "fechaInicioAtencion", "idMIPRES", "numAutorizacion","numDocumentoIdentificacion", "notasCreditoGlosa","valorPagoModerador", "numFEVPagoModerador", row_number() OVER(ORDER BY rips_ripsProcedimientos.id) AS consecutivo , "fechaRegistro", "codComplicacion_id", "codDiagnosticoPrincipal_id","codDiagnosticoRelacionado_id", "codProcedimiento_id", "codServicio_id", "conceptoRecaudo_id", "finalidadTecnologiaSalud_id",	"grupoServicios_id", "modalidadGrupoServicioTecSal_id","tipoDocumentoIdentificacion_id","usuarioRegistro_id", "viaIngresoServicioSalud_id",' + "'" + str(elementox['id']) + "'" + ', "itemFactura", "ripsTipos_id", 	"tipoPagoModerador_id",' + "'" +  str(transaccionId) + "',"  + "'" + str(elemento) + "'" + ' FROM rips_ripsProcedimientos where glosa_id = ' + "'" + str(elemento) + "'"
@@ -835,7 +847,7 @@ def GenerarJsonRips(request):
         curx.execute(detalle)
         miConexionx.commit()
         miConexionx.close()
-
+        
 	    # HASTA AQUI RIPS URGENCIAS
         #
 

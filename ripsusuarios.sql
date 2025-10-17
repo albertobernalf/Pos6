@@ -53,24 +53,28 @@ select * from usuarios_usuarios;
 select * from rips_ripszonaterritorial
 
 
-- query para glosas
+SELECT * FROM RIPS_RIPSTRANSACCION order by id desc
+	select * from rips_ripsusuarios where "ripsTransaccion_id" =440
 
- SELECT tipdoc."tipoDocRips_id", tipousu.codigo, cast(u."fechaNacio" as date) , u.genero,u."ripsZonaTerritorial_id", 
-	 case when incap.id is null then 'NO' else 'SI' END	 
-, row_number() OVER(ORDER BY det.id) AS consecutivo, now(), muni.id, 
-	 case when pais.id is null then '1' else pais.id end, case when pais.id is null then '1' else pais.id end, '1', 
-	 u.documento, det.id, '1001', 'A','ingreso'
-	 from rips_ripsenvios e	
-	 inner join rips_ripsdetalle det on (det."ripsEnvios_id"  = e.id) 
-	 inner join  facturacion_facturacion fac on (fac.id = det."numeroFactura_id" ) 
-	 inner join admisiones_ingresos i on (i."tipoDoc_id" = fac."tipoDoc_id"  and i.documento_id = fac.documento_id  and i.consec = fac."consecAdmision"  )
-	 inner join usuarios_tiposdocumento tipdoc on ( tipdoc.id=i."tipoDoc_id" ) 
-	 inner join usuarios_usuarios u on (u."tipoDoc_id"=i."tipoDoc_id" and u.id = i.documento_id) 
-	 left join sitios_paises  pais on (pais.id= u.pais_id) 
- 	 left join sitios_municipios muni on ( muni.id = u.municipio_id)
-	 left join rips_ripstipousuario tipousu on (tipousu.id = i."ripsTipoUsuario_id") 
-	 left join clinico_historia historia on (historia."tipoDoc_id" = i."tipoDoc_id" and historia.documento_id=i.documento_id and historia."consecAdmision" = i.consec)
-	 left join clinico_historialincapacidades incap on (incap.historia_id = historia.id)
-	 where  e.id= '68' AND det."numeroFactura_id"  = '148'
+select generafacturajson(68,148,'FACTURA')
+	select generafacturajson(68,142,'FACTURA')
+select * from rips_ripsprocedimientos;	
+select * from rips_RipsGrupoServicios;
+select * from rips_ripsviasingresosalud
+	select * from rips_ripsservicios
+select * from rips_ripsfinalidadconsulta
+	select * from rips_RipsConceptoRecaudo
 
+	select * from cartera_formaspagos;
+select "codigoCups",* from clinico_examenes order by "codigoCups" -- where "codigoCups" = '010100'	
 
+select * from rips_ripsusuarios order by id desc	
+select * from rips_ripsusuarios where "ripsTransaccion_id" = 446 order by id desc	
+select * from rips_ripstransaccion order by id desc	
+	select * from rips_ripsdetalle where "ripsEnvios_id" =68
+	select * from facturacion_facturacion where id=142
+
+select * from rips_ripsmunicipios;
+SELECT * FROM RIPS_RIPSPROCEDIMIENTOS;
+
+	
