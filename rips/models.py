@@ -159,11 +159,11 @@ class RipsUsuarios (models.Model):
     tipoDocumentoIdentificacion =   models.CharField(max_length=9, blank=True,null= True, editable=True)
     numDocumentoIdentificacion = models.CharField(max_length=20, blank=True,null= True, editable=True)
     tipoUsuario  =  models.CharField(max_length=20, blank=True,null= True, editable=True)
-    fechaNacimiento   =   models.DateTimeField(default=now, blank=True, null=True, editable=True)
+    fechaNacimiento   = models.DateField(blank=True, null=True, editable=True)
     codSexo =  models.CharField(max_length=13, default='A', editable=False ,choices = GENERO_CHOICES)
     codPaisResidencia = models.ForeignKey('rips.RipsPaises', blank=True, null=True, editable=True, on_delete=models.PROTECT , related_name='Paises01')
     codMunicipioResidencia = models.ForeignKey('sitios.Municipios', blank=True, null=True, editable=True, on_delete=models.PROTECT , related_name='MunicipioRes01')
-    codZonaTerritorialResidencia = models.CharField(max_length=6, default='A', editable=False ,choices = ZONAS_CHOICES)
+    codZonaTerritorialResidencia = models.CharField(max_length=6, blank=True, null=True, editable=True)
     incapacidad = models.CharField(max_length=2, default='A', editable=False ,choices = INCAPACIDAD_CHOICES)
     consecutivo = models.CharField(max_length=10, blank=True,null= True, editable=True)
     ripsTransaccion =  models.ForeignKey('rips.RipsTransaccion', blank=True, null=True, editable=True, on_delete=models.PROTECT , related_name='RpipsTransaccion12')
@@ -693,6 +693,25 @@ class RipsTiposPagoModerador (models.Model):
    codigo = models.CharField(max_length=2, blank=True,null= True, editable=True)
    nombre =   models.CharField(max_length=80, blank=True,null= True, editable=True)
    codigoAplicativo = models.CharField(max_length=10, blank=True,null= True, editable=True)
+
+   def __str__(self):
+        return self.nombre
+
+
+class RipsZonaTerritorial (models.Model):
+
+   id = models.AutoField(primary_key=True)
+   codigo = models.CharField(max_length=2, blank=True,null= True, editable=True)
+   nombre =   models.CharField(max_length=80, blank=True,null= True, editable=True)
+
+   def __str__(self):
+        return self.nombre
+
+class RipsMunicipios (models.Model):
+
+   id = models.AutoField(primary_key=True)
+   codigo = models.CharField(max_length=5, blank=True,null= True, editable=True)
+   nombre =   models.CharField(max_length=80, blank=True,null= True, editable=True)
 
    def __str__(self):
         return self.nombre

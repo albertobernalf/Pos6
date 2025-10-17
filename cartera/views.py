@@ -557,39 +557,39 @@ def GuardarGlosasDetalle(request):
         print ("Entre 1")
         print("valorGlosado=", valorGlosado)
         print("vrServicioGloDet=", vrServicioGloDet)
-        return JsonResponse({'success': False, 'Error' :'Si', 'message': 'Valor Glosa mayor que el valor del servicio!'})
+        return JsonResponse({'success': False, 'Error' :'Si', 'Mensajes': 'Valor Glosa mayor que el valor del servicio!'})
 
     if ( float(valorSoportado) > float(vrServicioGloDet) ):
         print ("Entre 4")
-        return JsonResponse({'success': False, 'Error' :'Si','message': 'Valor Soportado mayor que el valor del servicio!'})
+        return JsonResponse({'success': False, 'Error' :'Si','Mensajes': 'Valor Soportado mayor que el valor del servicio!'})
 
     if ( float(vAceptado) > float(vrServicioGloDet) ):
         print ("Entre 5")
-        return JsonResponse({'success': False, 'Error' :'Si','message': 'Valor aceptado mayor que el valor del servicio!'})
+        return JsonResponse({'success': False, 'Error' :'Si','Mensajes': 'Valor aceptado mayor que el valor del servicio!'})
 
     if ( float(cantidadAceptada) > float(cantidadGlosada) ):
         print ("Entre 2")
-        return JsonResponse({'success': False, 'Error' :'Si','message': 'Cantidad aceptada mayor que el valor del glosado!'})
+        return JsonResponse({'success': False, 'Error' :'Si','Mensajes': 'Cantidad aceptada mayor que el valor del glosado!'})
 
     if ( float(cantidadSoportado) > float(cantidadGlosada) ):
         print ("Entre 3")
-        return JsonResponse({'success': False, 'Error' :'Si','message': 'Cantidad soportada mayor que el valor del glosado!'})
+        return JsonResponse({'success': False, 'Error' :'Si','Mensajes': 'Cantidad soportada mayor que el valor del glosado!'})
 
     if (float(notasCreditoGlosa) > float(vAceptado)):
         print("Entre 3")
         return JsonResponse(
-            {'success': False, 'Error': 'Si', 'message': 'La nota credito no puede ser mayor que el valor soportado!'})
+            {'success': False, 'Error': 'Si', 'Mensajes': 'La nota credito no puede ser mayor que el valor soportado!'})
 
     if (float(notasCreditoGlosa) > float(valorGlosado)):
         print("Entre 3")
         return JsonResponse(
-            {'success': False, 'Error': 'Si', 'message': 'La nota credito no puede ser mayor que el valor glosado!'})
+            {'success': False, 'Error': 'Si', 'Mensajes': 'La nota credito no puede ser mayor que el valor glosado!'})
 
 
 
     if ( float((float(vAceptado) + float(valorSoportado))) > float(vrServicioGloDet) ):
         print ("Entre 3")
-        return JsonResponse({'success': False, 'Error' :'Si','message': 'Valor soportado mas valor aceptado mayor que el valor del servicio!'})
+        return JsonResponse({'success': False, 'Error' :'Si','Mensajes': 'Valor soportado mas valor aceptado mayor que el valor del servicio!'})
 
 
 

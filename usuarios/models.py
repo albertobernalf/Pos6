@@ -63,7 +63,7 @@ class Usuarios(models.Model):
     departamentos = models.ForeignKey('sitios.Departamentos', blank=True,null= True, editable=True,  on_delete=models.PROTECT)
     municipio = models.ForeignKey('sitios.Municipios', blank=True, null=True, editable=True,  on_delete=models.PROTECT)
     localidad = models.ForeignKey('sitios.Localidades', blank=True, null=True, editable=True, on_delete=models.PROTECT)
-
+    ripsZonaTerritorial = models.ForeignKey('rips.ripsZonaTerritorial', blank=True, null=True, editable=True, on_delete=models.PROTECT)
     ciudades = ChainedForeignKey(Ciudades, chained_field='departamentos', chained_model_field='departamentos',  show_all=False)
 
     direccion = models.CharField(max_length=50)

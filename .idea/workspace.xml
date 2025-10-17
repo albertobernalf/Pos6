@@ -7,7 +7,13 @@
       <change beforePath="$PROJECT_DIR$/JSONCLINICA/Fac142.txt" beforeDir="false" afterPath="$PROJECT_DIR$/JSONCLINICA/Fac142.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/JSONCLINICA/Fac148.txt" beforeDir="false" afterPath="$PROJECT_DIR$/JSONCLINICA/Fac148.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cartera/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/cartera/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rips/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/rips/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rips/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/rips/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rips/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/rips/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ripsmedicamentos.sql" beforeDir="false" afterPath="$PROJECT_DIR$/ripsmedicamentos.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sitios/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/sitios/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sitios/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/sitios/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/usuarios/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/usuarios/models.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

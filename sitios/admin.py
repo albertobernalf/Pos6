@@ -104,10 +104,10 @@ class historialDependenciasAdmin(admin.ModelAdmin):
 class municipiosAdmin(admin.ModelAdmin):
 
 
-    list_display = ("id", "nombre", "municipioCodigoDian","departamento", "fechaRegistro")
-    search_fields = ("id", "nombre", "municipioCodigoDian","departamento", "fechaRegistro")
+    list_display = ("id", "nombre", "ripsMunicipios","municipioCodigoDian","departamento", "fechaRegistro")
+    search_fields = ("id", "nombre", "ripsMunicipios__nombre","departamento", "fechaRegistro")
     # Filtrar
-    list_filter = ("id", "nombre", "municipioCodigoDian","departamento", "fechaRegistro")
+    list_filter = ("id", "nombre","ripsMunicipios", "municipioCodigoDian","departamento", "fechaRegistro")
 
 
 @admin.register(Paises)

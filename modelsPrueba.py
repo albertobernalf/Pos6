@@ -830,3 +830,7 @@ class ProgramacionCitasMedicas(models.Model):
 -- ojo hay que obligar en historia clinica coocar mandatori diastratamiento y demas
 -- cuando cree un aplique de abono debre refrescar la pantalla liquidaciondetalle
 -- ojo camellar el modulo de abonos
+
+-- ojoi en JSON DE RIPS MINSTYRERI´
+   -- quedo quemado el miuniciiop en ripsusuarios ?
+  -- la incapacidad es mejor agregra vcampoen admisiones_ingresos denote incapacidad =SI", "NO"

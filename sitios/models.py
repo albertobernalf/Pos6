@@ -226,6 +226,7 @@ class Municipios(models.Model):
     nombre = models.CharField(max_length=50)
     municipioCodigoDian = models.CharField(max_length=15 , default ='')
     departamento = models.ForeignKey('sitios.Departamentos', blank=True,null= True, editable=True, on_delete=models.PROTECT)
+    ripsMunicipios = models.ForeignKey('rips.RipsMunicipios', blank=True,null= True, editable=True, on_delete=models.PROTECT)
     fechaRegistro = models.DateTimeField(default=now, editable=False)
     estadoReg = models.CharField(max_length=1,choices=ESTADOREG_CHOICES, default='A', editable=False)
 
