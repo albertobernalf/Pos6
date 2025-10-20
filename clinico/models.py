@@ -911,6 +911,7 @@ class ViasAdministracion(models.Model):
     codigoMipres = models.DecimalField(max_digits=5, decimal_places=0 , blank=True, null=True, editable=True)
     nombre = models.CharField(max_length=30, blank=True, null=True, editable=True)
     habilitadoMipres = models.CharField(max_length=1, blank=True, null=True, editable=True)
+    ripsViasAdministracion = models.ForeignKey('rips.RipsViasAdministracion', blank=True, null=True, editable=True, on_delete=models.PROTECT)
     fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)
     estadoReg = models.CharField(max_length=1, choices=ESTADOREG_CHOICES,default='A', editable=False)
 

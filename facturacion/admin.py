@@ -60,7 +60,7 @@ class tiposSuministroAdmin(admin.ModelAdmin):
 class suministroAdmin(admin.ModelAdmin):
 
    list_display = ("id", "nombre","tipoSuministro","nombreGenerico","descripcionComercial","ripsFormaFarmaceutica")
-   search_fields =("id", "nombre","tipoSuministro","nombreGenerico","descripcionComercial","ripsFormaFarmaceutica")
+   search_fields =("id", "nombre","tipoSuministro__nombre","cums","nombreGenerico","descripcionComercial","ripsFormaFarmaceutica__nombre")
    # Filtrar
    list_filter = ("id", "nombre","tipoSuministro","nombreGenerico","descripcionComercial","ripsFormaFarmaceutica")
 

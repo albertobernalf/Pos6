@@ -837,4 +837,4 @@ class ProgramacionCitasMedicas(models.Model):
 -- ojo veriicar en ripsprocedimientos, el recaudo_id, el prorrateo de los pagos,los campos "null", null
 -- no se porque ripshispitalizacion no ingresa la factura 142 hospitalziados
 -- revizar de nuevo ripsreciennacidos
--- hacer ripmedicamentos , hay mucho null por cua
+-- hacer ripmedicamentos , hay mucho null por cua. (En el suministro debe estar parametrizado todos los datos de acuerdo  a toidas las tablas rips

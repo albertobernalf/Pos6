@@ -58,12 +58,15 @@ SELECT * FROM RIPS_RIPSTRANSACCION order by id desc
 
 select generafacturajson(68,148,'FACTURA')
 	select generafacturajson(68,142,'FACTURA')
+
+	
 select * from rips_ripsprocedimientos;	
 select * from rips_RipsGrupoServicios;
 select * from rips_ripsviasingresosalud
 	select * from rips_ripsservicios
 select * from rips_ripsfinalidadconsulta
 	select * from rips_RipsConceptoRecaudo
+	
 
 	select * from cartera_formaspagos;
 select "codigoCups",* from clinico_examenes order by "codigoCups" -- where "codigoCups" = '010100'	
@@ -76,5 +79,40 @@ select * from rips_ripstransaccion order by id desc
 
 select * from rips_ripsmunicipios;
 SELECT * FROM RIPS_RIPSPROCEDIMIENTOS;
-
+select * from rips_ripsurgenciasobservacion
+select * from admisiones_ingresos where factura in (138)
+select * from sitios_dependencias where id in (37)
+select * from facturacion_facturaciondetalle where facturacion_id = 138
 	
+	
+	select * from rips_ripshospitalizacion where "ripsTransaccion_id" = 488
+	select * from rips_ripshospitalizacion where "ripsTransaccion_id" = 487
+	
+
+SELECT * FROM cartera_tiposnotas;
+select * from rips_ripstransaccion order by id desc
+select * from rips_ripsdetalle where "ripsEnvios_id"= 63
+	SELECT * FROM RIPS_RIPSENVIOS WHERE ID = 63
+SELECT * FROM rips_ripsurgenciasobservacion
+
+
+	SELECT sed."codigoHabilitacion", cast(i."fechaIngreso" as date) ,cast(i."fechaSalida" as date),
+	row_number() OVER(ORDER BY i.id) AS consecutivo  ,now() ,i."ripsCausaMotivoAtencion_id", 
+	(select diag1.id from clinico_diagnosticos diag1 where  diag1.id = i."dxComplicacion_id"), 
+	(select diag1.id from clinico_diagnosticos diag1 where  diag1.id = i."dxIngreso_id"), 
+	(select diag1.id from clinico_diagnosticos diag1 where  diag1.id = i."dxSalida_id"), 
+	(select max(diag1.id)  from clinico_historialdiagnosticos histdiag1, clinico_diagnosticos diag1 , clinico_historia his where histdiag1.historia_id = his.id and histdiag1."tiposDiagnostico_id" = '2' and histdiag1.diagnosticos_id = diag1.id and his."tipoDoc_id" = fac."tipoDoc_id" and his.documento_id = fac.documento_id AND his."consecAdmision" = fac."consecAdmision") , 
+	(select max(diag1.id)  from clinico_historialdiagnosticos histdiag1, clinico_diagnosticos diag1, clinico_historia his  where histdiag1.historia_id = his.id and histdiag1."tiposDiagnostico_id" = '3'  and histdiag1.diagnosticos_id = diag1.id  and his."tipoDoc_id" = fac."tipoDoc_id" and his.documento_id = fac.documento_id AND his."consecAdmision" =fac."consecAdmision"),
+	(select max(diag1.id) from clinico_historialdiagnosticos histdiag1, clinico_diagnosticos diag1, clinico_historia his where histdiag1.historia_id = his.id and histdiag1."tiposDiagnostico_id" = '4' and histdiag1.diagnosticos_id = diag1.id  and his."tipoDoc_id" = fac."tipoDoc_id" and his.documento_id = fac.documento_id AND his."consecAdmision" =fac."consecAdmision" )
+	,i."ripsCondicionDestinoUsuarioEgreso_id", '1' ,det.id,env."ripsEstados_id", 
+	ripstra.id, 'A', '1002'
+	FROM sitios_sedesclinica sed 
+	inner join facturacion_facturacion fac ON (fac."sedesClinica_id" = sed.id)
+	inner join admisiones_ingresos i ON (i."sedesClinica_id" = sed.id and i."tipoDoc_id" =fac."tipoDoc_id" and i.documento_id = fac.documento_id AND i.consec =fac."consecAdmision")
+	inner join rips_ripsenvios env ON (env."sedesClinica_id" = sed.id) inner join rips_ripsdetalle det ON ( det."ripsEnvios_id" = env.id and  det."ripsEnvios_id" = fac."ripsEnvio_id" and det."numeroFactura_id" = fac.id )
+	inner join rips_ripstransaccion ripstra ON ( ripstra."sedesClinica_id" = sed.id and ripstra."ripsEnvio_id" = env.id and ripstra."numFactura" = cast(fac.id as text)) 
+	left join autorizaciones_autorizaciones aut  on (aut.id = i.autorizaciones_id)  
+	inner join 	clinico_servicios serv on (serv.nombre = 'URGENCIAS')
+	inner join 	sitios_dependencias dep on (dep.id = i."dependenciasSalida_id" ) 
+	inner join 	sitios_serviciossedes servsedes on (servsedes.id = dep."serviciosSedes_id" and servsedes.servicios_id= serv.id) 
+	where sed.id = '1' AND env.id = '63' and fac.id = 138
