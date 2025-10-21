@@ -838,3 +838,17 @@ class ProgramacionCitasMedicas(models.Model):
 -- no se porque ripshispitalizacion no ingresa la factura 142 hospitalziados
 -- revizar de nuevo ripsreciennacidos
 -- hacer ripmedicamentos , hay mucho null por cua. (En el suministro debe estar parametrizado todos los datos de acuerdo  a toidas las tablas rips
+
+
+-- CIRUGIA QUERY TENTATIVO DISPONIBILIDAD
+
+SELECT prog.numero,prog."fechaProgramacionFin",prog."horaProgramacionFin" + 1, (SELECT cast(prog1."fechaProgramacionInicia", prog1."horaProgramacionInicia" + 1 
+										FROM cirugia_programacioncirugia prog1 
+										WHERE prog1.id = (SELECT min(prog2.id )  
+										  		  FROM cirugia_programacioncirugia prog2
+												  WHERE prog2.id > prog.id))
+FROM cirugia_programacioncirugia prog
+WHERE prog.id = id
+
+
+-- OPS OJO CUANDO HICO EL MEDIAMENTO D EMARIA PAULA NO COLOCO EL NHUMERO DE HISTORIAMEDIAMENTO, SUPONGO FARMACIA AL DISPENSAR OPSREOPS

@@ -49,9 +49,9 @@ select * from rips_ripsmedicamentos where "ripsTransaccion_id">=407
 	'"codTecnologiaSalud": ' || '"'  ||  CASE WHEN trim(ripscums.cum) is null THEN 'null' ELSE ripscums.cum  END           || '",'  || 	
 	'"nomTecnologiaSalud": ' || '"'  ||   CASE WHEN trim(med."nomTecnologiaSalud") is null THEN 'null' ELSE med."nomTecnologiaSalud"  END               || '",'  || 	
 	'"concentracionMedicamento": ' || '"'  || CASE WHEN trim(med."concentracionMedicamento") is null THEN 'null' ELSE med."concentracionMedicamento"  END  || '",'    || 		
-	'"unidadMedida": ' || '"'  ||  CASE WHEN ripsumm.codigo = null THEN 'null' WHEN ripsumm.codigo = 'null' THEN 'null' ELSE ripsumm.codigo  END  || '",'  || 		
+	'"unidadMedida": ' || '"'  ||  CASE WHEN ripsumm.codigo is null THEN 'null' WHEN ripsumm.codigo = 'null' THEN 'null' ELSE ripsumm.codigo  END  || '",'  || 		
 	'"formaFarmaceutica": ' || '"'  ||  CASE WHEN trim(ripsfarma.codigo) is null THEN 'null' ELSE ripsfarma.codigo  END  || '",'  || 	
---	'"unidadMinDispensa": ' || '"'  ||  CASE WHEN trim(ripsupr.codigo) = null THEN 'null' WHEN trim(ripsupr.codigo) = 'null' THEN 'null' ELSE ripsupr.codigo  END  || '",'  || 	
+	'"unidadMinDispensa": ' || '"'  ||  CASE WHEN trim(ripsupr.codigo) is null THEN 'null' WHEN trim(ripsupr.codigo) = 'null' THEN 'null' ELSE ripsupr.codigo  END  || '",'  || 	
 	'"cantidadMedicamento": ' || med."cantidadMedicamento"  || ','    || 	
 	'"diasTratamiento": ' ||    med."diasTratamiento"   || ','   || 		
 	'"tipoDocumentoldentificacion": ' || '"'  || CASE WHEN trim(ripstipdoc.codigo) is null THEN 'null' ELSE ripstipdoc.codigo  END   || '",'  || 	

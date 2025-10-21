@@ -67,6 +67,7 @@ class Ingresos(models.Model):
     ActaDefuncion =  models.CharField(max_length=30, blank=True,null= True, editable=True)
     medicoDefuncion = models.ForeignKey('clinico.Medicos', blank=True,null= True, editable=True, on_delete=models.PROTECT)
     autorizaciones = models.ForeignKey('autorizaciones.autorizaciones', blank=True,null= True, editable=True, on_delete=models.PROTECT)
+    incapacidad = models.CharField(max_length=1,choices=FLAG_CHOICES, default='N', editable=False)
     ripsServiciosIng = models.ForeignKey('rips.RipsServicios', blank=True,null= True, editable=True,  on_delete=models.PROTECT,   related_name='ripssServicios01')
     ripsServiciosActual = models.ForeignKey('rips.RipsServicios', blank=True,null= True, editable=True,  on_delete=models.PROTECT,   related_name='ripssServicios02')
     ripsServiciosSalida = models.ForeignKey('rips.RipsServicios', blank=True,null= True, editable=True,  on_delete=models.PROTECT,   related_name='ripssServicios03')

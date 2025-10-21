@@ -1269,13 +1269,13 @@
                                                     </div>
                                                     <div class="col-sm-1">
 					                                		Dosis:
-                                                        <input type="text" id="dosis" name="dosis" value="" size="2">
+                                                        <input type="text" id="dosis" name="dosis" value="" size="2" required>
                                                     </div>
 
                                                     <div class="col-sm-1">
  							                    Unidad Medida
                                                         <select class="select-css" id="uMedidaDosis"
-                                                                name="uMedidaDosis">
+                                                                name="uMedidaDosis" required>
                                                             {% for uMedidaDosis in UMedidaDosis %}
                                                             <option value="{{uMedidaDosis.id}}">
                                                                 {{uMedidaDosis.nombre}}
@@ -1286,7 +1286,7 @@
                                                     <div class="col-sm-2">
 							                    Forma Farma:
                                                         <select class="select-css" id="formaFarma"
-                                                                name="formaFarma">
+                                                                name="formaFarma" required>
                                                             {% for formaFarma in FormaFarma %}
                                                             <option value="{{formaFarma.id}}">
                                                                 {{formaFarma.nombre}}
@@ -1297,7 +1297,7 @@
                                                     <div class="col-sm-1">
 							                        Frecuencia
                                                         <select class="select-css" id="frecuencia"
-                                                                name="frecuencia">
+                                                                name="frecuencia" required>
                                                             {% for frecuencia in Frecuencia %}
                                                             <option value="{{frecuencia.id}}">
                                                                 {{frecuencia.nombre}}
@@ -1309,7 +1309,7 @@
 						                <div class="col-sm-1">
 							                        Vias Adm
                                                         <select class="select-css" id="vias"
-                                                                name="vias">
+                                                                name="vias" required>
                                                             {% for viasAdministracion in ViasAdministracion %}
                                                             <option value="{{viasAdministracion.id}}">
                                                                 {{viasAdministracion.nombre}}
@@ -1321,11 +1321,11 @@
 
 						                            <div class="col-sm-1">
 							                        Cantidad:
-                                                        <input type="text" id="cantidadMedicamento" name="cantidadMedicamento" value="" size="1">
+                                                        <input type="text" id="cantidadMedicamento" name="cantidadMedicamento" value="" size="1" required>
                                                     </div>
 						                            <div class="col-sm-1">
 							                            DiasTratamiento:
-                                                        <input type="text" id="diasTratamiento" name="diasTratamiento" value="" size="1">
+                                                        <input type="text" id="diasTratamiento" name="diasTratamiento" value="" size="1" required>
                                                     </div>
 
 						  <div class="col-sm-1">

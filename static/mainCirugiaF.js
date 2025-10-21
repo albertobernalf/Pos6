@@ -1575,8 +1575,9 @@ $('#tablaProgramacionCirugia tbody').on('click', '.miEditaProgramacionCirugia', 
 
 		// document.getElementById("mensajesExitoModalProgramacion").innerHTML = 'Programacion actualizada Satisfactoriamente !';
 				                },
-                 error: function (request, status, error) {
-			document.getElementById("mensajesErrorProgramacion").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
+                  error: function (data) {
+	   			    	document.getElementById("mensajesErrorProgramacion").value =   data.responseText;
+
 	   	    	}
             });
       
@@ -1609,8 +1610,9 @@ $('#tablaProgramacionCirugia tbody').on('click', '.miEditaEstadoProgramacionCiru
             $('#crearModelEstadoProgramacionCirugia').modal('show');      
 
 			                },
-                 error: function (request, status, error) {
-			document.getElementById("mensajesErrorProgramacion").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
+                   error: function (data) {
+	   			    	document.getElementById("mensajesErrorProgramacion").value =   data.responseText;
+
 	   	    	}
             });
 
@@ -1665,16 +1667,17 @@ function GuardarEstadoProgramacionCirugia()
 
 			if (info.success == 'False')
 			{
-			document.getElementById("mensajesError").innerHTML = info.message;
+			document.getElementById("mensajesError").value = info.Mensajes;
 			}
 			else
 			{
-			document.getElementById("mensajes").innerHTML = info.message;
+			document.getElementById("mensajes").value = info.Mensajes;
 			}
 
 				                },
-                 error: function (request, status, error) {
-			document.getElementById("mensajesErrorProgramacion").innerHTML = 'Error Contacte a su Administrador : '  + error
+      			 error: function (data) {
+	   			    	document.getElementById("mensajesError").value =   data.responseText;
+
 	   	    	}
             });
 
@@ -1711,8 +1714,9 @@ $('#tablaProgramacionCirugia tbody').on('click', '.miEditaEstadoCirugia', functi
 
 	
 				                },
-                 error: function (request, status, error) {
-			document.getElementById("mensajesErrorProgramacion").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
+      		   error: function (data) {
+	   			    	document.getElementById("mensajesErrorProgramacion").value =   data.responseText;
+
 	   	    	}
             });
 
@@ -1759,8 +1763,9 @@ function GuardarEstadoCirugia()
 	       arrancaCirugia(2,data);
 		    dataTableProgramacionCirugiaInitialized = true;
 				                },
-                 error: function (request, status, error) {
-			document.getElementById("mensajesErrorProgramacion").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
+           error: function (data) {
+	   			    	document.getElementById("mensajesErrorProgramacion").value =   data.responseText;
+
 	   	    	}
             });
 
@@ -1978,8 +1983,9 @@ $('#tablaProgramacionCirugia tbody').on('click', '.miProgramacionCirugia2', func
 	dataTableHojaDeGastoCirugiaInitialized= true;
 		  	
                 },
-            error: function (request, status, error) {
-		document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
+         error: function (data) {
+	   			    	document.getElementById("mensajesError").value =   data.responseText;
+
 	   	    	}
             });
 	
@@ -2033,8 +2039,9 @@ $('#tablaProcedimientosInformeCirugia tbody').on('click', '.deleteProcedimientos
 	dataTableProcedimientosInformeCirugiaInitialized= true;
 
                 },
-            error: function (request, status, error) {
-		document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
+          error: function (data) {
+	   			    	document.getElementById("mensajesError").value =   data.responseText;
+
 	   	    	}
             });
 
@@ -2095,8 +2102,9 @@ $('#tablaParticipantesInformeCirugia tbody').on('click', '.deleteParticipanteInf
 	dataTableParticipantesInformeCirugiaInitialized= true;
 
                 },
-            error: function (request, status, error) {
-		document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
+    error: function (data) {
+	   			    	document.getElementById("mensajesError").value =   data.responseText;
+
 	   	    	}
             });
 
@@ -2156,8 +2164,9 @@ $('#tablaMaterialInformeCirugia tbody').on('click', '.deleteMaterialInformeCirug
 	dataTableMaterialesInformeCirugiaInitialized= true;
 
                 },
-            error: function (request, status, error) {
-		document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
+  error: function (data) {
+	   			    	document.getElementById("mensajesError").value =   data.responseText;
+
 	   	    	}
             });
 
@@ -2215,8 +2224,9 @@ $('#tablaHojaDeGastoCirugia tbody').on('click', '.deleteHojaDeGastoCirugia', fun
 	dataTableHojaDeGastoCirugiaInitialized= true;
 
                 },
-            error: function (request, status, error) {
-		document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
+  error: function (data) {
+	   			    	document.getElementById("mensajesError").value =   data.responseText;
+
 	   	    	}
             });
 
@@ -2348,8 +2358,9 @@ function CrearProgramacionCirugia()
 
 
                 },
-            error: function (request, status, error) {
-		document.getElementById("mensajesErrorModalProgramacion").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
+       error: function (data) {
+	   			    	document.getElementById("mensajesErrorModalProgramacion").value =   data.responseText;
+
 	   	    	}
             });
 
@@ -2402,8 +2413,9 @@ function CrearSolicitudCirugia()
 		 $("#mensajes").html(data2.message);
 
                 },
-            error: function (request, status, error) {
-		document.getElementById("mensajesErrorModalSolicitud").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
+      error: function (data) {
+	   			    	document.getElementById("mensajesErrorModalSolicitud").value =   data.responseText;
+
 	   	    	}
             });
 
@@ -2457,8 +2469,9 @@ function CrearProcedimientosCirugia()
 		 $("#mensajesModalProcedimientosCirugia").html(data2.message);
 
                 },
-            error: function (request, status, error) {
-		document.getElementById("mensajesErrorModalProcedimientosCirugia").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
+       error: function (data) {
+	   			    	document.getElementById("mensajesErrorModalProcedimientosCirugia").value =   data.responseText;
+
 	   	    	}
             });
 
@@ -2506,8 +2519,9 @@ function CrearParticipantesCirugia()
 		 $("#mensajesModalParticipantesCirugia").html(data2.message);
 
                 },
-            error: function (request, status, error) {
-		document.getElementById("mensajesErrorModalParticipantesCirugia").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
+        error: function (data) {
+	   			    	document.getElementById("mensajesErrorModalParticipantesCirugia").value =   data.responseText;
+
 	   	    	}
             });
 
@@ -2579,8 +2593,9 @@ function CrearParticipantesInformeCirugia()
 		 $("#mensajesModalParticipantesInformeCirugia").html(data2.message);
 
                 },
-            error: function (request, status, error) {
-		document.getElementById("mensajesErrorModalParticipantesInformeCirugia").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
+        error: function (data) {
+	   			    	document.getElementById("mensajesErrorModalParticipantesInformeCirugia").value =   data.responseText;
+
 	   	    	}
             });
 
@@ -2615,13 +2630,13 @@ document.getElementById("cirugiaIdModalParticipantesInforme").value =	document.g
 
 		if (data2[0].EstadoNombreCirugia == 'REALIZADA')
 				{
-				document.getElementById("mensajesError").innerHTML = 'No se pueden agregar mas participantes a Cirugia Realizada !'
+				document.getElementById("mensajesError").value = 'No se pueden agregar mas participantes a Cirugia Realizada !'
 				return;
 				}
 
 			if (data2[0].EstadoNombreCirugia == 'FACTURADA')
 				{
-				document.getElementById("mensajesError").innerHTML = 'No se pueden agregar mas participantes a Cirugia Facturada !'
+				document.getElementById("mensajesError").value = 'No se pueden agregar mas participantes a Cirugia Facturada !'
 				return;
 				}
 
@@ -2667,8 +2682,9 @@ document.getElementById("cirugiaIdModalParticipantesInforme").value =	document.g
  		 $('#crearModelParticipantesInformeCirugia').modal('show');
 
                 },
-            error: function (request, status, error) {
-		document.getElementById("mensajesErrorModalParticipantesInformeCirugia").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
+         error: function (data) {
+	   			    	document.getElementById("mensajesErrorModalParticipantesInformeCirugia").value =   data.responseText;
+
 	   	    	}
             });
 
@@ -2718,8 +2734,9 @@ function CrearMaterialCirugia()
 		 $("#mensajesModalMaterialCirugia").html(data2.message);
 
                 },
-            error: function (request, status, error) {
-		document.getElementById("mensajesErrorModalMaterialCirugia").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
+         error: function (data) {
+	   			    	document.getElementById("mensajesErrorModalMaterialCirugia").value =   data.responseText;
+
 	   	    	}
             });
 
@@ -2748,13 +2765,13 @@ function AdicionarProcedimientosInformeCirugia() {
 
 			if (data2[0]['estadoCirugia'] == 'REALIZADA')
 				{
-				document.getElementById("mensajesError").innerHTML = 'No se pueden agregar mas procedimientos a Cirugia Realizada !'
+				document.getElementById("mensajesError").value = 'No se pueden agregar mas procedimientos a Cirugia Realizada !'
 				return;
 				}
 
 			if (data2[0]['estadoCirugia'] == 'FACTURADA')
 				{
-				document.getElementById("mensajesError").innerHTML = 'No se pueden agregar mas procedimientos a Cirugia Facturada !'
+				document.getElementById("mensajesError").value = 'No se pueden agregar mas procedimientos a Cirugia Facturada !'
 				return;
 				}
 
@@ -2797,8 +2814,9 @@ function AdicionarProcedimientosInformeCirugia() {
           
 
                 },
-            error: function (request, status, error) {
-		document.getElementById("mensajesErrorModalProcedimientosInformeCirugia").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
+          error: function (data) {
+	   			    	document.getElementById("mensajesErrorModalProcedimientosInformeCirugia").value =   data.responseText;
+
 	   	    	}
             });
     
@@ -2854,8 +2872,9 @@ function CrearProcedimientosInformeCirugia()
 		 $("#mensajesModalProcedimientosInformeCirugia").html(data2.message);
 
                 },
-            error: function (request, status, error) {
-		document.getElementById("mensajesErrorModalProcedimientosInformeCirugia").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
+        error: function (data) {
+	   			    	document.getElementById("mensajesErrorModalProcedimientosInformeCirugia").value =   data.responseText;
+
 	   	    	}
             });
 
@@ -2909,8 +2928,9 @@ function AdicionarQx() {
             $('#crearModelAdicionarQx').modal('show');
 
                 },
-            error: function (request, status, error) {
-		document.getElementById("mensajesErrorModalAdicionarQx").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
+       error: function (data) {
+	   			    	document.getElementById("mensajesErrorModalAdicionarQx").value =   data.responseText;
+
 	   	    	}
             });
 
@@ -2959,8 +2979,9 @@ function CrearAdicionQx() {
 		 $("#mensajesModalAdicionarQx").html(data2.message);
 
                 },
-            error: function (request, status, error) {
-		document.getElementById("mensajesErrorModalAdicionarQx").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
+        error: function (data) {
+	   			    	document.getElementById("mensajesErrorModalAdicionarQx").value =   data.responseText;
+
 	   	    	}
             });
 
@@ -3014,8 +3035,9 @@ function CrearMaterialInformeCirugia()
 		 $("#mensajesModalMaterialInformeCirugia").html(data2.message);
 
                 },
-            error: function (request, status, error) {
-		document.getElementById("mensajesErrorModalMaterialCirugia").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
+            error: function (data) {
+	   			    	document.getElementById("mensajesErrorModalMaterialCirugia").value =   data.responseText;
+
 	   	    	}
             });
 
@@ -3118,8 +3140,9 @@ function CrearHojaDeGastoCirugia()
 		 $("#mensajesModalHojaDeGastoCirugia").html(data2.message);
 
                 },
-            error: function (request, status, error) {
-		document.getElementById("mensajesErrorModalHojaDeGastoCirugia").innerHTML = 'Error Contacte a su Administrador' + ': ' + error
+        error: function (data) {
+	   			    	document.getElementById("mensajesErrorModalHojaDeGastoCirugia").value =   data.responseText;
+
 	   	    	}
             });
 
@@ -3145,11 +3168,11 @@ function GenerarLiquidacionCirugia()
 
 		if (data2.sucess == 'False')
 		{
-		 $("#mensajesError").html(data2.message);
+		 $("#mensajesError").html(data2.Mensajes);
 		}
 		else
 		{
-		 $("#mensajes").html(data2.message);
+		 $("#mensajes").html(data2.Mensajes);
 
 		}
 
@@ -3158,8 +3181,9 @@ function GenerarLiquidacionCirugia()
 
 
                 },
-            error: function (request, status, error) {
-		document.getElementById("mensajesError").innerHTML = 'Error Contacte a su Administrador' + ': ' + error + ' ' + data2.message
+     error: function (data) {
+	   			    	document.getElementById("mensajesError").value =   data.responseText;
+
 	   	    	}
             });
 

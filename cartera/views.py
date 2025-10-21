@@ -933,7 +933,7 @@ def GuardarGlosasDetalle(request):
             print(comando6)
             cur3.execute(comando6)
 
-            return JsonResponse({'success': False, 'Mensajes': 'Glosa Detalle actualizada !'})
+            return JsonResponse({'success': True, 'Mensajes': 'Glosa Detalle actualizada !'})
 
             ## AQUI FALTA EL INSERT A LA TABLA GLOSASDETALLE
 
@@ -1196,7 +1196,7 @@ def GuardarCaja(request):
         cur3.close()
         miConexion3.close()
 
-        return JsonResponse({'success': False, 'Mensajes': 'Caja actualizada satisfactoriamente!'})
+        return JsonResponse({'success': True, 'Mensajes': 'Caja actualizada satisfactoriamente!'})
 
     except psycopg2.DatabaseError as error:
         print ("Entre por rollback" , error)

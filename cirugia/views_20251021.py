@@ -184,7 +184,7 @@ def CrearProgramacionCirugia(request):
     estadoCirugia = EstadosCirugias.objects.get(nombre='PENDIENTE')
     estadoSala = EstadosSalas.objects.get(nombre='OCUPADA')
     estadoReg = 'A'
-    fechaRegistro = timezone.now()
+    fechaRegistro = datetime.datetime.now()
 
     # Aqui validar si las feca-hora de la sala a solicitar estan ocupadas si si enviar excepcion
 
@@ -573,9 +573,8 @@ def CrearSolicitudCirugia(request):
     estadoProgramacion = EstadosProgramacion.objects.get(nombre='Solicitud')
     #estadoSala = EstadosSalas.objetcs.get(nombre='OCUPADA')
     estadoReg = 'A'
-    fechaRegistro = timezone.now()
-    fechaSolicita = fechaRegistro
-
+    fechaRegistro = datetime.datetime.now()  ## esta e la fecha que funcionap copiar a demas programas a ver que pasa
+    fechaSolicita = datetime.datetime.now()
 
     ingresoId = request.POST["ingresoId2"]
     print("ingresoId =", ingresoId)
@@ -1008,8 +1007,7 @@ def CrearProcedimientosCirugia(request):
 
 
     estadoReg = 'A'
-
-    fechaRegistro = timezone.now()
+    fechaRegistro = datetime.datetime.now()
 
 
     miConexion3 = None
@@ -1075,8 +1073,7 @@ def CrearProcedimientosInformeCirugia(request):
 
 
     estadoReg = 'A'
-    fechaRegistro = timezone.now()
-
+    fechaRegistro = datetime.datetime.now()
 
 
     miConexion3 = None
@@ -1138,8 +1135,7 @@ def CrearParticipantesInformeCirugia(request):
         cupsParticipantesInforme = "null"
 
     estadoReg = 'A'
-    fechaRegistro = timezone.now()
-
+    fechaRegistro = datetime.datetime.now()
 
 
     miConexion3 = None
@@ -1195,8 +1191,7 @@ def CrearParticipantesCirugia(request):
     print("tipoHonorarios =", tipoHonorarios)
 
     estadoReg = 'A'
-    fechaRegistro = timezone.now()
-
+    fechaRegistro = datetime.datetime.now()
 
 
     miConexion3 = None
@@ -1316,8 +1311,7 @@ def CrearMaterialCirugia(request):
 
 
     estadoReg = 'A'
-    fechaRegistro = timezone.now()
-
+    fechaRegistro = datetime.datetime.now()
 
 
     miConexion3 = None
@@ -1374,8 +1368,7 @@ def CrearMaterialInformeCirugia(request):
 
 
     estadoReg = 'A'
-    fechaRegistro = timezone.now()
-
+    fechaRegistro = datetime.datetime.now()
 
 
     miConexion3 = None
@@ -1750,8 +1743,7 @@ def CrearHojaDeGastoCirugia(request):
 
 
     estadoReg = 'A'
-    fechaRegistro = timezone.now()
-
+    fechaRegistro = datetime.datetime.now()
 
 
     miConexion3 = None
@@ -2003,8 +1995,7 @@ def GenerarLiquidacionCirugia(request):
     print("sede =", sede)
 
     estadoReg='A'
-    fechaRegistro = timezone.now()
-
+    fechaRegistro = datetime.datetime.now()
 
     # Busco Tipos de honorarios,
     registroHonorarioCirujano = TiposHonorarios.objects.get(nombre='CIRUJANO')
