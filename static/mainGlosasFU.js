@@ -1123,10 +1123,9 @@ window.addEventListener('load', async () => {
 
 		 $('#crearModelGlosasDetalle').modal('show');
                 },
-            error: function (request, status, error) {
-		document.getElementById("mensajesErrorModalGlosasDetalle").innerHTML =  'Error' + ': ' + request.responseText;
-
-	   	    	}
+              error: function (data) {	      
+			document.getElementById("mensajesErrorModalGlosasDetalle").value =   data.responseText;
+                }
             });
 
   });
@@ -1168,37 +1167,37 @@ function GuardarGlosasDetalle()
                 success: function (data2) {
 
 
-			if (data2['Error'] == 'Si' )
+			if (data2.success == false )
 				{
 		
-				document.getElementById("mensajesGloDet").innerHTML = data2['message']
+				document.getElementById("mensajesErrorDetalleModal").value = data2.Mensajes
 
 					return ;
 				}
 	
-				if (data2['Error'] == 'No' )
+				if (data2.success  == true )
 				{
 
 
 				 $('#postFormGlosasDetalle').trigger("reset");
 
 
-			filtrodata = JSON.stringify(data2['Data']);
+			// filtrodata = JSON.stringify(data2['Data']);
 	
 
-			filtrodata = filtrodata.replace ('[','');
-			filtrodata = filtrodata.replace (']','');
-			filtro = JSON.parse(filtrodata);
+			// filtrodata = filtrodata.replace ('[','');
+			// filtrodata = filtrodata.replace (']','');
+			// filtro = JSON.parse(filtrodata);
 
 
 
-		document.getElementById("valorGlosaGlo").innerHTML = filtro.fields.valorGlosa;
-		document.getElementById("totalSoportadoGlo").innerHTML = filtro.fields.totalSoportado;
-		document.getElementById("totalAceptadoGlo").innerHTML = filtro.fields.totalAceptado;
-		document.getElementById("saldoFacturaGlo").innerHTML = filtro.fields.saldoFactura;
-		document.getElementById("tipoGlosa_idGlo").value = filtro.fields.tipoGlosa_id;
-		document.getElementById("estadoRadicacion_idGlo").value = filtro.fields.estadoRadicacion_id;
-		document.getElementById("estadoRecepcion_idGlo").value = filtro.fields.estadoRecepcion_id;
+		// document.getElementById("valorGlosaGlo").innerHTML = filtro.fields.valorGlosa;
+		// document.getElementById("totalSoportadoGlo").innerHTML = filtro.fields.totalSoportado;
+		// document.getElementById("totalAceptadoGlo").innerHTML = filtro.fields.totalAceptado;
+		// document.getElementById("saldoFacturaGlo").innerHTML = filtro.fields.saldoFactura;
+		// document.getElementById("tipoGlosa_idGlo").value = filtro.fields.tipoGlosa_id;
+		// document.getElementById("estadoRadicacion_idGlo").value = filtro.fields.estadoRadicacion_id;
+		// document.getElementById("estadoRecepcion_idGlo").value = filtro.fields.estadoRecepcion_id;
 
 		var data =  {}   ;
 	        data['username'] = username;
@@ -1212,12 +1211,6 @@ function GuardarGlosasDetalle()
 		data['facturaId'] = document.getElementById("factura_idGlo").innerHTML;
 
 	        data = JSON.stringify(data);
-	
-  		 if  (dataTableGlosasInitialized)  {
-
-		            dataTableC = $("#tablaGlosas").dataTable().fnDestroy();
-
-                    }
 
 			 arrancaGlosas(1,data);
 			    dataTableGlosasInitialized = true;
@@ -1235,10 +1228,9 @@ function GuardarGlosasDetalle()
 				}	// Cierra el if		
 
                 },
-            error: function (request, status, error) {
-		document.getElementById("mensajesErrorModalGlosasDetalle").innerHTML =  'Error' + ': ' + request.responseText;
-
-	   	    	}
+              error: function (data) {	      
+			document.getElementById("mensajesErrorModalGlosasDetalle").value =   data.responseText;
+                }
             });
 
 
@@ -1299,12 +1291,11 @@ function GuardaGlosasEstados()
 
 
 
-		document.getElementById("mensajesError").innerHTML = data2.message;
+		document.getElementById("mensajesError").value = data2.Mensajes;
                 },
-            error: function (request, status, error) {
-		document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + request.responseText;
-
-	   	    	}
+            error: function (data) {	      
+			document.getElementById("mensajesError").value =   data.responseText;
+                }
             });
 
 
@@ -1420,14 +1411,13 @@ function CrearGlosas()
 			    dataTableGlosasMedicamentosInitialized = true;
 		            $('#crearModelGlosas').modal('hide');
 
-		document.getElementById("mensajesError").innerHTML =  'Error' + ': ' + data2.message;
-		document.getElementById("mensajesError").innerHTML = data2.message;
+
+		document.getElementById("mensajesError").value = data2.Mensajes;
 
                 },
-            error: function (request, status, error) {
-		document.getElementById("mensajesErrorModalGlosas").innerHTML =  'Error' + ': ' + request.responseText;
-
-	   	    	}
+              error: function (data) {	      
+			document.getElementById("mensajesErrorModalGlosas").value =   data.responseText;
+                }
             });
 
 

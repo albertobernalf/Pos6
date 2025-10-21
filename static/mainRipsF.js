@@ -1968,7 +1968,8 @@ function GuardarRadicacionRips()
 	// alert("Entre GuardarRadicacionRips");
 
 
-	var envioRipsId = document.getElementById("EnvioRipsNo").value ;
+	var envioRipsId = document.getElementById("envioRipsIdR").value ;
+	var tipoRips = document.getElementById("tipoRips4").value ;
 
 	var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
         var username = document.getElementById("username").value;
@@ -1983,19 +1984,10 @@ function GuardarRadicacionRips()
             $.ajax({
 
 	        url: "/guardarRadicacionRips/",
-		data: {'envioRipsId':envioRipsId, 'sede':sede, 'username_id':username_id,'fechaRadicacion':fechaRadicacion},
+		data: {'envioRipsId':envioRipsId, 'sede':sede, 'username_id':username_id,'fechaRadicacion':fechaRadicacion,'tipoRips':tipoRips},
                 type: "POST",
                 dataType: 'json',
                 success: function (data2) {
-			if (data2.success=true)
-			{
-		document.getElementById("mensajes").value =   data2.Mensajes;
-			}
-			else
-			{
-		document.getElementById("mensajesError").value =   data2.Mensajes;
-		return;
-			}
 
     	var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
         var username = document.getElementById("username").value;
@@ -2016,7 +2008,7 @@ function GuardarRadicacionRips()
 
 		document.getElementById("mensajes").value = data2.Mensajes;
 
-    $('#crearModelRadicarRips').modal('hide');
+   		 $('#crearModelRadicarRips').modal('hide');
                          },
             error: function (data) {	      
 			document.getElementById("mensajesErrorcrearModelRadicacionRips").value =   data.responseText;
@@ -2090,66 +2082,3 @@ function GuardarRespuestaRips()
 }
 
 
-<!-- 
-
-function GuardarRadicacionRips()
-{
-
-	// alert("Entre GuardarRadicacionRips");
-
-
-	var envioRipsId = document.getElementById("envioRipsIdR").value ;
-	var envioRipsTipo = document.getElementById("tipoRips4").value ;
-
-	    var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
-        var username = document.getElementById("username").value;
-        var username_id = document.getElementById("username_id").value;
-        var nombreSede = document.getElementById("nombreSede").value;
-    	var sede = document.getElementById("sede").value;
-	    var fechaRadicacion = document.getElementById("fechaRadicacion").value;
-        var username_id = document.getElementById("username_id").value;
-
-            $.ajax({
-
-	        url: "/guardarRadicacionRips/",
-		    data: {'envioRipsId':envioRipsId, 'sede':sede, 'username_id':username_id,'fechaRadicacion':fechaRadicacion},
-                type: "POST",
-                dataType: 'json',
-                success: function (data2) {
-
-			if (data2.success=true)
-			{
-		document.getElementById("mensajes").value =   data2.Mensajes;
-			}
-			else
-			{
-		document.getElementById("mensajesErrorcrearModelRadicarRips").value =   data2.Mensajes;
-		return;
-			}
-
-    	var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
-        var username = document.getElementById("username").value;
-        var nombreSede = document.getElementById("nombreSede").value;
-    	var sede = document.getElementById("sede").value;
-        var username_id = document.getElementById("username_id").value;
-         var data =  {}   ;
-        data['username'] = username;
-        data['sedeSeleccionada'] = sedeSeleccionada;
-        data['nombreSede'] = nombreSede;
-        data['sede'] = sede;
-        data['username_id'] = username_id;
- 	    data = JSON.stringify(data);
-
-        arrancaEnviosRips(1,data);
-	    dataTableEnviosRipsInitialized = true;
-
-
-                         },
-            error: function (data) {
-			document.getElementById("mensajesErrorCrearModelRipsJson").value =   data.responseText;
-                }
-            });
-}
-
-
--->

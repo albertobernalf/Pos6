@@ -933,13 +933,15 @@ def GuardarGlosasDetalle(request):
             print(comando6)
             cur3.execute(comando6)
 
+            miConexion3.commit()
+            cur3.close()
+            miConexion3.close()
+
+
             return JsonResponse({'success': True, 'Mensajes': 'Glosa Detalle actualizada !'})
 
             ## AQUI FALTA EL INSERT A LA TABLA GLOSASDETALLE
 
-            miConexion3.commit()
-            cur3.close()
-            miConexion3.close()
 
     except psycopg2.DatabaseError as error:
         print ("Entre por rollback" , error)

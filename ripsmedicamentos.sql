@@ -1,6 +1,6 @@
 select * from rips_ripsmedicamentos
 select * from rips_ripsenvios;
-
+ 
 SELECT * FROM RIPS_RIPSESTADOS;
 select * from cartera_pagosfacturas;
 delete from cartera_pagosfacturas where id in (58,59,60,61,62);
@@ -8,7 +8,7 @@ select * from cartera_pagos;
 select * from cartera_caja;
 
 select generaenvioripsjson(64,'FACTURA')
-	select generafacturajson(64,122,'FACTURA')
+	select generafacturajson(64,137,'FACTURA')
 	select generafacturajson(64,136,'FACTURA')
 
 select "tipoDoc_id",* from usuarios_usuarios order by id desc;
@@ -37,50 +37,45 @@ select * from rips_ripsurgenciasobservacion where "ripsTransaccion_id"=404
 select * from rips_ripsmedicamentos where "ripsTransaccion_id">=407
 		select substring(cast("fechaDispensAdmon" as text),1,16) ,* from rips_ripsmedicamentos where "ripsTransaccion_id">=407
 
+select * from rips_ripstransaccion order by id desc
+select * from rips_ripsprocedimientos order by id desc
+select * from rips_ripsmedicamentos order by id desc
 
-		
-	 SELECT	'{"codPrestador": ' ||  '"' ||med."codPrestador"|| '",'   ||		
-	   	    '"numAutorizacion": ' || '"'  ||CASE WHEN trim(med."numAutorizacion") is null THEN 'null' ELSE med."numAutorizacion"  END|| '",'   || 	
-		  '"idMIPRES": ' || '"'   ||CASE WHEN trim(med."idMIPRES") is null THEN 'null' ELSE med."idMIPRES"  END|| '",'  || 	
-		  '"fechaDispensAdmon": ' || '"'  ||substring(cast(med."fechaDispensAdmon" as text),1,16) || '",'     || 	
-	  '"codDiagnosticoPrincipal": ' || '"'  ||CASE WHEN trim(diag1.cie10) is null THEN 'null' ELSE diag1.cie10  END|| '",'  || 	
-	'"codDiagnosticoRelacionado": ' || '"'  ||CASE WHEN trim(diag2.cie10) is null THEN 'null' ELSE diag2.cie10  END|| '",' 	  || 	
-	'"tipoMedicamento": ' || '"'  ||CASE WHEN trim(tipmed.codigo) is null THEN 'null' ELSE tipmed.codigo  END|| '",'   || 	
-	'"codTecnologiaSalud": ' || '"'  ||  CASE WHEN trim(ripscums.cum) is null THEN 'null' ELSE ripscums.cum  END           || '",'  || 	
-	'"nomTecnologiaSalud": ' || '"'  ||   CASE WHEN trim(med."nomTecnologiaSalud") is null THEN 'null' ELSE med."nomTecnologiaSalud"  END               || '",'  || 	
-	'"concentracionMedicamento": ' || '"'  || CASE WHEN trim(med."concentracionMedicamento") is null THEN 'null' ELSE med."concentracionMedicamento"  END  || '",'    || 		
-	'"unidadMedida": ' || '"'  ||  CASE WHEN ripsumm.codigo is null THEN 'null' WHEN ripsumm.codigo = 'null' THEN 'null' ELSE ripsumm.codigo  END  || '",'  || 		
-	'"formaFarmaceutica": ' || '"'  ||  CASE WHEN trim(ripsfarma.codigo) is null THEN 'null' ELSE ripsfarma.codigo  END  || '",'  || 	
-	'"unidadMinDispensa": ' || '"'  ||  CASE WHEN trim(ripsupr.codigo) is null THEN 'null' WHEN trim(ripsupr.codigo) = 'null' THEN 'null' ELSE ripsupr.codigo  END  || '",'  || 	
-	'"cantidadMedicamento": ' || med."cantidadMedicamento"  || ','    || 	
-	'"diasTratamiento": ' ||    med."diasTratamiento"   || ','   || 		
-	'"tipoDocumentoldentificacion": ' || '"'  || CASE WHEN trim(ripstipdoc.codigo) is null THEN 'null' ELSE ripstipdoc.codigo  END   || '",'  || 	
-	'"numDocumentoIdentificacion": ' || '"'  || CASE WHEN trim(med."numDocumentoIdentificacion") is null THEN 'null' ELSE med."numDocumentoIdentificacion"  END     || '",'  || 	
-		'"vrUnitMedicamento": ' || med."vrUnitMedicamento" || ','  || 	
-		'"vrServicio": ' || med."vrServicio"|| ','  || 	
-		'"conceptoRecaudo": ' || '"'  ||CASE WHEN trim(recaudo.codigo) is null THEN 'null' ELSE recaudo.codigo  END|| '",'  || 	
-		'"tipoPagoModerador": ' || '"'  ||  CASE WHEN trim( ripstipopago.codigo) is null THEN 'null' ELSE  ripstipopago.codigo  END || '",'  || 	
-	'"valorPagoModerador": ' || med."valorPagoModerador" || ','  || 				
-	'"numFEVPagoModerador": ' || '"'  || CASE WHEN trim(med."numFEVPagoModerador") is null THEN 'null' ELSE  med."numFEVPagoModerador"  END|| '",'   || 	
-	'"consecutivo": ' || med.consecutivo || '},'
-	from rips_ripstransaccion
-	inner join rips_ripsenvios  env on (env."sedesClinica_id" = rips_ripstransaccion."sedesClinica_id" and env.id = rips_ripstransaccion."ripsEnvio_id" )
-	inner join rips_ripsmedicamentos med on (med."ripsTransaccion_id" = rips_ripstransaccion.id)
-	inner join sitios_sedesclinica sed on (sed.id = env."sedesClinica_id" )
-	inner join rips_ripsdetalle det on (det."ripsEnvios_id" = env.id and det."numeroFactura_id" = cast(rips_ripstransaccion."numFactura" as numeric))
-	inner join facturacion_facturacion fac on (fac.id = det."numeroFactura_id" )
-	inner join facturacion_facturaciondetalle facdet on (facdet."facturacion_id" = fac.id and facdet."cums_id" is not null )
-	inner join facturacion_suministros sum  on (sum.id = facdet.cums_id )
-	left join rips_ripstipomedicamento tipmed on (tipmed.id =sum."ripsTipoMedicamento_id" )
-	left join rips_ripscums ripscums on (ripscums.id = med."codTecnologiaSalud_id")	
-	left join rips_ripsumm ripsumm on (ripsumm.id = sum."ripsUnidadMedida_id")	
-	left join rips_RipsFormaFarmaceutica ripsfarma on (ripsfarma.id = sum."ripsFormaFarmaceutica_id")	
-	left join rips_ripsunidadupr ripsupr on (ripsupr.id = cast(sum."ripsUnidadUpr_id" as integer))	
-    left join rips_ripsconceptorecaudo recaudo on (recaudo.id = med."conceptoRecaudo_id")		
-	inner join  rips_RipsTiposDocumento ripstipdoc on (ripstipdoc.id = med."tipoDocumentoIdentificacion_id")
-	left join cartera_pagos pagos on (pagos."tipoDoc_id" =  fac."tipoDoc_id"  and pagos.documento_id = fac.documento_id and pagos.consec = fac."consecAdmision")	
-	left join cartera_formaspagos formaspagos on (formaspagos.id = pagos."formaPago_id")		
-	left join rips_ripstipospagomoderador ripstipopago on (cast(ripstipopago."codigoAplicativo" as numeric) = formaspagos.id and cast(ripstipopago."codigoAplicativo" as numeric) in ('3','4') )	
-	left join clinico_diagnosticos diag1 on (diag1.id = med."codDiagnosticoPrincipal_id")	
-	left join clinico_diagnosticos diag2 on (diag2.id = med."codDiagnosticoRelacionado_id")	
-	where rips_ripstransaccion."ripsEnvio_id" = 64 and rips_ripstransaccion."ripsEnvio_id" = env.id  and cast(rips_ripstransaccion."numFactura" as numeric) = fac.id	and rips_ripstransaccion."numFactura" =cast('136' as text ) and med.consecutivo = 1;
+
+	 
+ SELECT tipdoc."tipoDocRips_id", tipousu.codigo, cast(u."fechaNacio" as date) , u.genero,u."ripsZonaTerritorial_id",   (select i.incapacidad from admisiones_ingresos i WHERE i."tipoDoc_id" = fac."tipoDoc_id" and i.documento_id=fac.documento_id and i.consec=fac."consecAdmision")      , row_number() OVER(ORDER BY det.id) AS consecutivo, now(), muni.id,  case when pais.id is null then '1' else pais.id end, case when pais.id is null then '1' else pais.id end, '1',u.documento, det.id, '615','A','50292'from rips_ripsenvios e       inner join rips_ripsdetalle det on (det."ripsEnvios_id"  = e.id)  inner join  facturacion_facturacion fac on (fac.id = det."numeroFactura_id" ) inner join admisiones_ingresos i on (i."tipoDoc_id" = fac."tipoDoc_id"  and i.documento_id = fac.documento_id  and i.consec = fac."consecAdmision") inner join usuarios_tiposdocumento tipdoc on ( tipdoc.id=i."tipoDoc_id" )  inner join usuarios_usuarios u on (u."tipoDoc_id"=i."tipoDoc_id" and u.id = i.documento_id) left join sitios_paises  pais on (pais.id= u.pais_id)  left join sitios_municipios muni on ( muni.id = u.municipio_id) left join rips_ripstipousuario tipousu on (tipousu.id = i."ripsTipoUsuario_id") where  e.id= '64' AND det."numeroFactura_id"  = '137'
+
+	SELECT sed."codigoHabilitacion", aut."numeroAutorizacion", historia.mipres, facdet.fecha , null, histmed."concentracionMedicamento",
+	histmed."cantidadOrdenada", histmed."diasTratamiento",planta.documento, facdet."valorUnitario", facdet."valorTotal", 0,  
+	fac.id, row_number() OVER(ORDER BY histmed.id), now(), diag1.id, diag2.id, ripscums.id, 
+	(select min(ripsRecaudo.id)
+	FROM cartera_pagos pagos 
+	INNER JOIN cartera_formaspagos carteraFormasPago ON (carteraFormasPago.id =pagos."formaPago_id" )
+	INNER JOIN rips_ripsconceptorecaudo ripsRecaudo ON (ripsRecaudo.id = cast(carteraFormasPago."codigoRips" as integer)) 
+	WHERE pagos.documento_id=fac.documento_id and pagos."tipoDoc_id" = fac."tipoDoc_id" and pagos.consec=fac."consecAdmision") recaudo,
+	ripsfarma.id, ripstipdoc.id, tipmed.id, ripsumm.id, ripsupr.id, '1' , det.id, facdet."consecutivoFactura",'8' ,
+	rips_ripstransaccion.id , 'A','50292'  
+	from rips_ripstransaccion 
+	inner join rips_ripsenvios env on(env."sedesClinica_id" = rips_ripstransaccion."sedesClinica_id" and env.id = rips_ripstransaccion."ripsEnvio_id" )
+	inner join sitios_sedesclinica sed on (sed.id = env."sedesClinica_id" ) 
+	inner join rips_ripsdetalle det on (det."ripsEnvios_id" = env.id and det."numeroFactura_id" = cast(rips_ripstransaccion."numFactura" as numeric)) 
+	inner join facturacion_facturacion fac on (fac.id = det."numeroFactura_id" ) 
+	inner join facturacion_facturaciondetalle facdet on (facdet."facturacion_id" = fac.id and facdet."cums_id" is not null and (facdet.anulado = 'N' or facdet.anulado = 'R')  AND facDet."tipoRegistro" = 'SISTEMA' )
+	inner join clinico_historiamedicamentos histmed on (histmed.id = facdet."historiaMedicamento_id")
+	left join autorizaciones_autorizacionesDetalle  aut on (aut.id = histmed.autorizacion_id) 
+	inner join facturacion_suministros sum on (sum.id = facdet.cums_id)
+	left join rips_ripstipomedicamento tipmed on (tipmed.id = sum."ripsTipoMedicamento_id" ) 
+	inner join rips_ripscums ripscums  on (ripscums.cum = sum."cums") 
+	left join rips_ripsumm ripsumm on (ripsumm.id = sum."ripsUnidadMedida_id")
+	left join rips_RipsFormaFarmaceutica ripsfarma on (ripsfarma.id = sum."ripsFormaFarmaceutica_id")  
+	left join rips_ripsunidadupr ripsupr on (ripsupr.id = sum."ripsUnidadUpr_id")
+	inner join clinico_historia historia on (historia.id = histmed.historia_id) 
+	inner join planta_planta planta on (planta.id = historia."usuarioRegistro_id") 
+	left join usuarios_tiposdocumento usutipdoc on (usutipdoc.id = planta."tipoDoc_id") 
+	left join rips_ripstiposdocumento ripstipdoc on (ripstipdoc.id = usutipdoc."tipoDocRips_id") 
+	left join clinico_historialdiagnosticos histdiag1 on (histdiag1.historia_id = historia.id and histdiag1."tiposDiagnostico_id" = '1') left join clinico_historialdiagnosticos histdiag2 on (histdiag2.historia_id = historia.id and histdiag2."tiposDiagnostico_id" = '2') left join clinico_diagnosticos diag1 on (diag1.id = histdiag1.diagnosticos_id) left join clinico_diagnosticos diag2 on (diag2.id = histdiag2.diagnosticos_id) 
+	where env.id =  '64' and rips_ripstransaccion."ripsEnvio_id" = env.id  and cast(rips_ripstransaccion."numFactura" as numeric) = fac.id  and fac.id = '137'
+
+	
+	SELECT * FROM rips_ripsusuarios;
+SELECT * FROM FACTURACION_FACTURACIONDETALLE WHERE FACTURACION_ID=137

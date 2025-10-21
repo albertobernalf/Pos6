@@ -1730,7 +1730,9 @@ def crearHistoriaClinica(request):
                                 print("comando = ", comando)
                                 resultado = cur3.execute(comando)
                                 g = cur3.fetchone()[0]
-
+                                comando1 = 'UPDATE admisiones_ingresos set incapacidad = ' + "'" + str('S') + "' WHERE documento_id = " + "'" + str(documentoId.id) + "'" + ' AND "tipoDoc_id" = ' + "'" + str(tipoDocId.id) + "' AND consec = " + "'" + str(ingresoPaciente) + "'"
+                                print("comando1 = ", comando1)
+                                resultado = cur3.execute(comando1)
 
                                 #g = HistorialIncapacidades(tiposIncapacidad_id=tiposIncapacidad, diagnosticosIncapacidad_id=diagnosticosIncapacidad,  descripcion=descripcion,desdeFecha=desdeFecha,  hastaFecha=hastaFecha, numDias=numDias,  historia_id=historiaId,estadoReg='A', fechaRegistro=fechaRegistro)
                                 #g.save()
