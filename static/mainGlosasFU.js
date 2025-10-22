@@ -858,7 +858,7 @@ function arrancaGlosas(valorTabla,valorData)
 
                        return btn;
                     },
-                    "targets": 17
+                    "targets": 16
                }
             ],
 	 pageLength: 3,
@@ -1096,9 +1096,12 @@ window.addEventListener('load', async () => {
                 type: "POST",
                 dataType: 'json',
                 success: function (info) {
-		   $("#mensajes").html(info.message);
 
 	$('#postFormGlosasDetalle').trigger("reset");
+
+	alert("info[0] = " + info[0] );
+
+
 
   	$('#post_idGloDet').val(info[0].fields.id);
 	document.getElementById("tipoGloDet").innerHTML = info[0].fields.tipo;

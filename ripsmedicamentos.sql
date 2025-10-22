@@ -75,7 +75,16 @@ select * from rips_ripsmedicamentos order by id desc
 	left join rips_ripstiposdocumento ripstipdoc on (ripstipdoc.id = usutipdoc."tipoDocRips_id") 
 	left join clinico_historialdiagnosticos histdiag1 on (histdiag1.historia_id = historia.id and histdiag1."tiposDiagnostico_id" = '1') left join clinico_historialdiagnosticos histdiag2 on (histdiag2.historia_id = historia.id and histdiag2."tiposDiagnostico_id" = '2') left join clinico_diagnosticos diag1 on (diag1.id = histdiag1.diagnosticos_id) left join clinico_diagnosticos diag2 on (diag2.id = histdiag2.diagnosticos_id) 
 	where env.id =  '64' and rips_ripstransaccion."ripsEnvio_id" = env.id  and cast(rips_ripstransaccion."numFactura" as numeric) = fac.id  and fac.id = '137'
-
+ 
 	
 	SELECT * FROM rips_ripsusuarios;
 SELECT * FROM FACTURACION_FACTURACIONDETALLE WHERE FACTURACION_ID=137
+
+select * from cartera_glosas where id = 26
+
+select * from facturacion_conveniospacienteingresos where factura_id=142
+
+select * from contratacion_convenios
+select generaFacturaJSON('70','26','GLOSA') valorJson
+
+select * from rips_ripstransaccion order by id desc
