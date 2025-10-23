@@ -1057,6 +1057,32 @@ def escogeAcceso(request, Sede, Username, Profesional, Documento, NombreSede, es
 
     # Fin combo ripstipousuario
 
+
+    # Combo ripsZonaTerritorial
+
+    miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                   password="123456")
+    curt = miConexiont.cursor()
+
+    comando = "SELECT c.id id,c.nombre nombre FROM rips_ripsZonaTerritorial c ORDER BY c.nombre"
+
+    curt.execute(comando)
+    print(comando)
+
+    ripsZonaTerritorial = []
+
+    for id, nombre in curt.fetchall():
+        ripsZonaTerritorial.append({'id': id, 'nombre': nombre})
+
+    miConexiont.close()
+    print(ripsZonaTerritorial)
+
+    context['RipsZonaTerritorial'] = ripsZonaTerritorial
+
+    # Fin combo RipsZonaTerritorial
+
+
+
     # Combo ripsFinalidadConsulta
 
     miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
@@ -6598,6 +6624,11 @@ def guardarUsuariosModal(request):
     localidad  = request.POST['localidades']
     estadoCivil  = request.POST['estadoCivil']
     ocupaciones  = request.POST['ocupaciones']
+    ripsZonaTerritorial  = request.POST['ripsZonaTerritorial']
+
+
+    if ripsZonaTerritorial == '':
+        ripsZonaTerritorial="null"
 
     if estadoCivil == '':
            estadoCivil="null"
@@ -6672,12 +6703,12 @@ def guardarUsuariosModal(request):
             if Usuarios == []:
 
                  print("Entre a crear")
-                 comando = 'insert into usuarios_usuarios (nombre, documento, genero, "fechaNacio", pais_id,  departamentos_id, ciudades_id, direccion, telefono, contacto, "centrosC_id", "tipoDoc_id", "tiposUsuario_id", municipio_id, localidad_id, "estadoCivil_id", ocupacion_id, correo ,"fechaRegistro", "estadoReg","primerNombre","segundoNombre","primerApellido", "segundoApellido") values (' + "'" + str(nombre) + "'" + ' , ' + "'" + str(documento) + "'" + ', ' + "'" + str(genero) + "'" + '  , ' + "'" + str(fechaNacio) + "'" +  ', ' + "'" + str(pais) + "'" + ', ' + "'" + str(departamento) + "'" +  '  , ' + "'" +  str(ciudad) + "'" + '  , ' + "'" +  str(direccion) + "'" + ', ' + "'" + str(telefono) + "'" + ', ' + "'" + str(contacto) + "'" + ', ' +  str(centrosc_id) +  ', ' + "'" + str(tipoDoc_id) + "'" + ', ' + str(tiposUsuario_id) + " , " + "'" + str(municipio) + "'" +   ', ' + "'" + str(localidad) + "'" + ", " + str(estadoCivil)  + ", " + str(ocupaciones) + ", " + "'" + str(correo) + "', " +  "'"  + str(fechaRegistro) + "'"  +  ", 'A'"  + ",'" + str(primerNombre) + "','" + str(segundoNombre)  +  "','" + str(primerApellido) + "','" + str(segundoApellido)   +  "')"
+                 comando = 'insert into usuarios_usuarios (nombre, documento, genero, "fechaNacio", pais_id,  departamentos_id, ciudades_id, direccion, telefono, contacto, "centrosC_id", "tipoDoc_id", "tiposUsuario_id", municipio_id, localidad_id, "estadoCivil_id", ocupacion_id, correo ,"fechaRegistro", "estadoReg","primerNombre","segundoNombre","primerApellido", "segundoApellido", "ripsZonaTerritorial_id") values (' + "'" + str(nombre) + "'" + ' , ' + "'" + str(documento) + "'" + ', ' + "'" + str(genero) + "'" + '  , ' + "'" + str(fechaNacio) + "'" +  ', ' + "'" + str(pais) + "'" + ', ' + "'" + str(departamento) + "'" +  '  , ' + "'" +  str(ciudad) + "'" + '  , ' + "'" +  str(direccion) + "'" + ', ' + "'" + str(telefono) + "'" + ', ' + "'" + str(contacto) + "'" + ', ' +  str(centrosc_id) +  ', ' + "'" + str(tipoDoc_id) + "'" + ', ' + str(tiposUsuario_id) + " , " + "'" + str(municipio) + "'" +   ', ' + "'" + str(localidad) + "'" + ", " + str(estadoCivil)  + ", " + str(ocupaciones) + ", " + "'" + str(correo) + "', " +  "'"  + str(fechaRegistro) + "'"  +  ", 'A'"  + ",'" + str(primerNombre) + "','" + str(segundoNombre)  +  "','" + str(primerApellido) + "','" + str(segundoApellido)  + "','" + str(ripsZonaTerritorial) + "')"
                  print(comando)
 
             else:
                 print("Entre a actualizar")
-                comando = 'update usuarios_usuarios set nombre = ' "'" + str(nombre) +  "'"  + ',ciudades_id = ' + "'" + str(ciudad) + "'"  +    ', direccion  = ' + "'" +  str(direccion) + "'"  + ', pais_id = ' + "'" + str(pais) + "'"     + ', departamentos_id = ' + "'" + str(departamento) + "'" + ', genero = ' + "'" + str(genero) + "'"  + ', "fechaNacio" = ' + "'" + str(fechaNacio) + "'"   + ', telefono= ' + "'" + str(telefono) + "'" +  ', contacto= ' + "'" +  str(contacto) + "'" +  ', "centrosC_id"= ' + str(centrosc_id)  + ', "tiposUsuario_id" = ' + str(tiposUsuario_id) + ","   + ' municipio_id = ' + "'" + str(municipio) + "'" +  ', localidad_id = ' + "'" + str(localidad) + "'" + ', "estadoCivil_id"= '  + str(estadoCivil)  + ', ocupacion_id = ' + str(ocupaciones)  + ', correo = ' + "'" + str(correo) + "'" + ', "primerNombre" = ' + "'" + str(primerNombre) + "'," + '"segundoNombre" = ' + "'" + str(segundoNombre) + "'," + '"primerApellido"= ' + "'" + str(primerApellido) + "'," + '"segundoApellido" = ' + "'" + str(segundoApellido) +  "'"  + ' WHERE "tipoDoc_id" = ' + str(tipoDoc_id) + ' AND documento = ' + "'" + str(documento) + "'"
+                comando = 'update usuarios_usuarios set nombre = ' "'" + str(nombre) +  "'"  + ',ciudades_id = ' + "'" + str(ciudad) + "'"  +    ', direccion  = ' + "'" +  str(direccion) + "'"  + ', pais_id = ' + "'" + str(pais) + "'"     + ', departamentos_id = ' + "'" + str(departamento) + "'" + ', genero = ' + "'" + str(genero) + "'"  + ', "fechaNacio" = ' + "'" + str(fechaNacio) + "'"   + ', telefono= ' + "'" + str(telefono) + "'" +  ', contacto= ' + "'" +  str(contacto) + "'" +  ', "centrosC_id"= ' + str(centrosc_id)  + ', "tiposUsuario_id" = ' + str(tiposUsuario_id) + ","   + ' municipio_id = ' + "'" + str(municipio) + "'" +  ', localidad_id = ' + "'" + str(localidad) + "'" + ', "estadoCivil_id"= '  + str(estadoCivil)  + ', ocupacion_id = ' + str(ocupaciones)  + ', correo = ' + "'" + str(correo) + "'" + ', "primerNombre" = ' + "'" + str(primerNombre) + "'," + '"segundoNombre" = ' + "'" + str(segundoNombre) + "'," + '"primerApellido"= ' + "'" + str(primerApellido) + "'," + '"segundoApellido" = ' + "'" + str(segundoApellido)  +"'," + '"ripsZonaTerritorial" = ' + "'" + str(ripsZonaTerritorial)  +  "'"  + ' WHERE "tipoDoc_id" = ' + str(tipoDoc_id) + ' AND documento = ' + "'" + str(documento) + "'"
                 print(comando)
 
             cur3.execute(comando)

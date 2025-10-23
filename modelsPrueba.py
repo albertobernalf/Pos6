@@ -852,3 +852,7 @@ WHERE prog.id = id
 
 
 -- OPS OJO CUANDO HICO EL MEDIAMENTO D EMARIA PAULA NO COLOCO EL NHUMERO DE HISTORIAMEDIAMENTO, SUPONGO FARMACIA AL DISPENSAR OPSREOPS
+-- ojo el ripsonaTerritorial_id de susuario_usuarios toca capturarlo en usuarios es para rips
+-- esta pendiente--> mas info para ripsmedicamentos
+-- verificar ripsreciennacidos de acuredo mingov.vo
+-- volver  a verificar ripsemvio masivo

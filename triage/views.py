@@ -2031,6 +2031,15 @@ def grabaUsuariosTriage(request):
     if localidades == '':
         localidades="null"
 
+
+    ripsZonaTerritorial  = request.POST['ripsZonaTerritorial']
+
+    if ripsZonaTerritorial == '':
+        ripsZonaTerritorial="null"
+
+
+
+
     estadoCivil  = request.POST['estadoCivil']
 
     if estadoCivil == '':
@@ -2079,11 +2088,12 @@ def grabaUsuariosTriage(request):
 
     miConexion11.close()
 
-    now = datetime.datetime.now()
-    dnow = now.strftime("%Y-%m-%d %H:%M:%S")
-    print("NOW  = ", dnow)
+    #now = datetime.datetime.now()
+    #dnow = now.strftime("%Y-%m-%d %H:%M:%S")
+    #print("NOW  = ", dnow)
 
-    fechaRegistro = dnow
+    #fechaRegistro = dnow
+    fechaRegistro = timezone.now()
 
     miConexion3 = None
     try:
@@ -2095,7 +2105,7 @@ def grabaUsuariosTriage(request):
                  #miConexion3 = MySQLdb.connect(host='CMKSISTEPC07', user='sa', passwd='75AAbb??', db='vulnerable')
                  miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres", password="123456")
                  cur3 = miConexion3.cursor()
-                 comando = 'insert into usuarios_usuarios (nombre, documento, genero, "fechaNacio",  departamentos_id, ciudades_id, direccion, telefono, contacto, "centrosC_id", "tipoDoc_id", "tiposUsuario_id", "estadoCivil_id","localidad_id", "municipio_id", "ocupacion_id",  "fechaRegistro", "estadoReg", "primerNombre", "segundoNombre", "primerApellido", "segundoApellido") values (' + "'" + str(nombre) + "'" + ' , ' + "'" + str(documento) + "'" + ', ' + "'" + str(genero) + "'" + '  , ' + "'" + str(fechaNacio) + "'" + ', ' + "'" + str(departamentos) + "'" + '  , ' + "'" + str(ciudades) + "'" + '  , ' + "'" + str(direccion) + "'" + ', ' + "'" + str(telefono) + "'" + ', ' + "'" + str(contacto) + "'" + ', ' +  str(centrosC)  + ', ' + "'" + str(tipoDoc) + "'" + ', ' + "'" + str(tiposUsuario) + "' , '" + str(estadoCivil) + "' , '" + str(localidades) + "' , '"+ str(municipios) + "' , "+ str(ocupaciones) +  " , '"+  str(fechaRegistro) + "'" + ", 'A'"  + ",'" + str(primerNombre) + "','" + str(segundoNombre)  +  "','" + str(primerApellido) + "','" + str(segundoApellido)   +  "')"
+                 comando = 'insert into usuarios_usuarios (nombre, documento, genero, "fechaNacio",  departamentos_id, ciudades_id, direccion, telefono, contacto, "centrosC_id", "tipoDoc_id", "tiposUsuario_id", "estadoCivil_id","localidad_id", "municipio_id", "ocupacion_id",  "fechaRegistro", "estadoReg", "primerNombre", "segundoNombre", "primerApellido", "segundoApellido","ripsZonaTerritorial_id") values (' + "'" + str(nombre) + "'" + ' , ' + "'" + str(documento) + "'" + ', ' + "'" + str(genero) + "'" + '  , ' + "'" + str(fechaNacio) + "'" + ', ' + "'" + str(departamentos) + "'" + '  , ' + "'" + str(ciudades) + "'" + '  , ' + "'" + str(direccion) + "'" + ', ' + "'" + str(telefono) + "'" + ', ' + "'" + str(contacto) + "'" + ', ' +  str(centrosC)  + ', ' + "'" + str(tipoDoc) + "'" + ', ' + "'" + str(tiposUsuario) + "' , '" + str(estadoCivil) + "' , '" + str(localidades) + "' , '"+ str(municipios) + "' , "+ str(ocupaciones) +  " , '"+  str(fechaRegistro) + "'" + ", 'A'"  + ",'" + str(primerNombre) + "','" + str(segundoNombre)  +  "','" + str(primerApellido) + "','" + str(segundoApellido)   + "','" + str(ripsZonaTerritorial)  +  "')"
                  print(comando)
                  cur3.execute(comando)
                  miConexion3.commit()
@@ -2107,7 +2117,7 @@ def grabaUsuariosTriage(request):
                 #miConexion3 =  MySQLdb.connect(host='CMKSISTEPC07', user='sa', passwd='75AAbb??', db='vulnerable')
                 miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres", password="123456")
                 cur3 = miConexion3.cursor()
-                comando = 'update usuarios_usuarios set nombre = ' "'" + str(nombre) +  "'"   + ', ciudades_id = ' + "'" + str(ciudades) + "'" +  ', direccion  = ' + "'" +  str(direccion) + "'" + ', genero = ' + "'" + str(genero) + "'"  + ', "fechaNacio" = ' + "'" +str(fechaNacio) + "'" +  ', telefono= ' + "'" + str(telefono) + "'" +  ', contacto= ' + "'" +  str(contacto) + "'" +  ', "centrosC_id"= ' + str(centrosC)  + ', "tiposUsuario_id" = ' + "'" + str(tiposUsuario) + "' , "   + ' municipio_id = ' + str(municipios) +   ', localidad_id = ' +  str(localidades) +  ', "estadoCivil_id"= ' +  str(estadoCivil) +  ', ocupacion_id = ' +  str(ocupaciones) +  ', correo = ' + "'" + str(correo) + "'" + ', "primerNombre" = ' + "'" + str(primerNombre) + "'," + '"segundoNombre" = ' + "'" + str(segundoNombre) + "'," + '"primerApellido"= ' + "'" + str(primerApellido) + "'," + '"segundoApellido" = ' + "'" + str(segundoApellido) +  "'"  +  ' WHERE "tipoDoc_id" = ' + str(tipoDoc) + ' AND documento = ' + "'" + str(documento) + "'"
+                comando = 'update usuarios_usuarios set nombre = ' "'" + str(nombre) +  "'"   + ', ciudades_id = ' + "'" + str(ciudades) + "'" +  ', direccion  = ' + "'" +  str(direccion) + "'" + ', genero = ' + "'" + str(genero) + "'"  + ', "fechaNacio" = ' + "'" +str(fechaNacio) + "'" +  ', telefono= ' + "'" + str(telefono) + "'" +  ', contacto= ' + "'" +  str(contacto) + "'" +  ', "centrosC_id"= ' + str(centrosC)  + ', "tiposUsuario_id" = ' + "'" + str(tiposUsuario) + "' , "   + ' municipio_id = ' + str(municipios) +   ', localidad_id = ' +  str(localidades) +  ', "estadoCivil_id"= ' +  str(estadoCivil) +  ', ocupacion_id = ' +  str(ocupaciones) +  ', correo = ' + "'" + str(correo) + "'" + ', "primerNombre" = ' + "'" + str(primerNombre) + "'," + '"segundoNombre" = ' + "'" + str(segundoNombre) + "'," + '"primerApellido"= ' + "'" + str(primerApellido) + "'," + '"segundoApellido" = ' + "'" + str(segundoApellido) +  "'," '"ripsZonaTerritorial_id" = ' + "'" + strt(ripsZonaTerritorial) + "'"  +  ' WHERE "tipoDoc_id" = ' + str(tipoDoc) + ' AND documento = ' + "'" + str(documento) + "'"
                 print(comando)
                 cur3.execute(comando)
                 miConexion3.commit()

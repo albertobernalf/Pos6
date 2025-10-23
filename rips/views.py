@@ -531,29 +531,18 @@ def GenerarJsonRips(request):
 
             # Primero Borra RIPS USUARIOS
 
-            if (tipoRips == 'Factura'):
 
-                detalle =  'DELETE from rips_ripsusuarios u where u."ripsTransaccion_id" in (select id from rips_ripstransaccion ripstra where ripstra."ripsEnvio_id" = ' + "'" + str(envioRipsId) +"');"
-                resultado = curx.execute(detalle)
-                print ("BORRO USUARIOS ", detalle)
-
-            else:
-                pass
-                #detalle =  'DELETE from rips_ripsusuarios u where u."ripsTransaccion_id" in (select id from rips_ripstransaccion ripstra where ripstra."ripsEnvio_id" = ' + "'" + str(envioRipsId) +"');"
-                #resultado = curx.execute(detalle)
-                #print ("BORRO USUARIOS ", detalle)
+            detalle =  'DELETE from rips_ripsusuarios u where u."ripsTransaccion_id" in (select id from rips_ripstransaccion ripstra where ripstra."ripsEnvio_id" = ' + "'" + str(envioRipsId) +"');"
+            resultado = curx.execute(detalle)
+            print ("BORRO USUARIOS ", detalle)
 
 
 
             # Primero Borra RIPS consultas
 
-            if (tipoRips == 'Factura'):
-
-                detalle1 = 'DELETE from rips_ripsconsultas u where u."ripsTransaccion_id" in (select id from rips_ripstransaccion ripstra where ripstra."ripsEnvio_id" = ' + "'" + str(envioRipsId) + "')"
-                resultado = curx.execute(detalle1)
-                print("BORRO consultas ", detalle1)
-            else:
-                pass
+            detalle1 = 'DELETE from rips_ripsconsultas u where u."ripsTransaccion_id" in (select id from rips_ripstransaccion ripstra where ripstra."ripsEnvio_id" = ' + "'" + str(envioRipsId) + "')"
+            resultado = curx.execute(detalle1)
+            print("BORRO consultas ", detalle1)
 
             # Primero Borra RIPS otros servicios
 
@@ -564,69 +553,47 @@ def GenerarJsonRips(request):
 
             # Primero Borra RIPS procedimientos
 
-            if (tipoRips == 'Factura'):
-
-                detalle1 = 'DELETE from rips_ripsprocedimientos u where u."ripsTransaccion_id" in (select id from rips_ripstransaccion ripstra where ripstra."ripsEnvio_id" = ' + "'" + str(envioRipsId) + "')"
-                resultado = curx.execute(detalle1)
-                print("BORRO procedimientos ", detalle1)
-            else:
-                pass
+            detalle1 = 'DELETE from rips_ripsprocedimientos u where u."ripsTransaccion_id" in (select id from rips_ripstransaccion ripstra where ripstra."ripsEnvio_id" = ' + "'" + str(envioRipsId) + "')"
+            resultado = curx.execute(detalle1)
+            print("BORRO procedimientos ", detalle1)
 
 
 
             # Primero Borra RIPS Medicamentos
 
-            if (tipoRips == 'Factura'):
-
-                detalle2 = 'DELETE from rips_ripsmedicamentos u where u."ripsTransaccion_id" in (select id from rips_ripstransaccion ripstra where ripstra."ripsEnvio_id" = ' + "'" + str(envioRipsId) + "')"
-                resultado = curx.execute(detalle2)
-                print("BORRO Medicamentos ", detalle2)
-
-            else:
-                pass
+            detalle2 = 'DELETE from rips_ripsmedicamentos u where u."ripsTransaccion_id" in (select id from rips_ripstransaccion ripstra where ripstra."ripsEnvio_id" = ' + "'" + str(envioRipsId) + "')"
+            resultado = curx.execute(detalle2)
+            print("BORRO Medicamentos ", detalle2)
             # Primero Borra RIPS HOSPITALIZACION
 
-            if (tipoRips == 'Factura'):
 
-                detalle3 = 'DELETE from rips_ripshospitalizacion u where u."ripsTransaccion_id" in (select id from rips_ripstransaccion ripstra where ripstra."ripsEnvio_id" = ' + "'" + str(
-                    envioRipsId) + "')"
-                resultado = curx.execute(detalle3)
-                print("BORRO HOSPITALIZACION ", detalle3)
 
-            else:
-                pass
+            detalle3 = 'DELETE from rips_ripshospitalizacion u where u."ripsTransaccion_id" in (select id from rips_ripstransaccion ripstra where ripstra."ripsEnvio_id" = ' + "'" + str(
+                envioRipsId) + "')"
+            resultado = curx.execute(detalle3)
+            print("BORRO HOSPITALIZACION ", detalle3)
+
             # Primero Borra RIPS URGENCIAS
 
-            if (tipoRips == 'Factura'):
 
-                detalle4 = 'DELETE from rips_ripsurgenciasobservacion u where u."ripsTransaccion_id" in (select id from rips_ripstransaccion ripstra where ripstra."ripsEnvio_id" = ' + "'" + str(
-                    envioRipsId) + "')"
-                resultado = curx.execute(detalle4)
-                print("BORRO URGENCIAS ", detalle4)
 
-            else:
-                pass
+            detalle4 = 'DELETE from rips_ripsurgenciasobservacion u where u."ripsTransaccion_id" in (select id from rips_ripstransaccion ripstra where ripstra."ripsEnvio_id" = ' + "'" + str(
+                envioRipsId) + "')"
+            resultado = curx.execute(detalle4)
+            print("BORRO URGENCIAS ", detalle4)
 
             # Primero Borra RIPS RECIEN NACIDO
 
-            if (tipoRips == 'Factura'):
+            detalle5 = 'DELETE from rips_ripsreciennacido u where u."ripsTransaccion_id" in (select id from rips_ripstransaccion ripstra where ripstra."ripsEnvio_id" = ' + "'" + str(
+                envioRipsId) + "')"
+            resultado = curx.execute(detalle5)
+            print("BORRO RECIEN NACIDO ", detalle5)
 
-                detalle5 = 'DELETE from rips_ripsreciennacido u where u."ripsTransaccion_id" in (select id from rips_ripstransaccion ripstra where ripstra."ripsEnvio_id" = ' + "'" + str(
-                    envioRipsId) + "')"
-                resultado = curx.execute(detalle5)
-                print("BORRO RECIEN NACIDO ", detalle5)
-
-            else:
-                pass
             # Primero Borra RIPS TRANSACCION
 
-            if (tipoRips == 'Factura'):
-
-                detalle6 = 'DELETE from rips_ripstransaccion u where u."ripsEnvio_id" = ' + "'" + str(envioRipsId) + "'"
-                resultado = curx.execute(detalle6)
-                print("BORRO tx ", detalle6)
-            else:
-                pass
+            detalle6 = 'DELETE from rips_ripstransaccion u where u."ripsEnvio_id" = ' + "'" + str(envioRipsId) + "'"
+            resultado = curx.execute(detalle6)
+            print("BORRO tx ", detalle6)
 
 
             miConexionx.commit()
@@ -736,12 +703,12 @@ def GenerarJsonRips(request):
 
                     #detalle = 'INSERT INTO rips_ripsusuarios ("tipoDocumentoIdentificacion", "tipoUsuario", "fechaNacimiento", "codSexo", "codZonaTerritorialResidencia", incapacidad, consecutivo, "fechaRegistro", "codMunicipioResidencia_id", "codPaisOrigen_id", "codPaisResidencia_id", "usuarioRegistro_id", "numDocumentoIdentificacion", "ripsDetalle_id", "ripsTransaccion_id","estadoReg", ingreso_id)  SELECT tipdoc.abreviatura, tipousu.codigo, u."fechaNacio" , u.genero, local.id, 	' + "'" + str('NO') + "'" + ' , row_number() OVER(ORDER BY det.id) AS consecutivo, now(), muni.id, pais.id, pais.id, ' + "'" + str(username_id) + "'" + ', u.documento, det.id, ' + "'" + str(transaccionId) + "','" + str('A') + "','" + str(ingresoId.id) + "'"  + ' from rips_ripsenvios e	inner join rips_ripsdetalle det on (det."ripsEnvios_id"  = e.id) inner join usuarios_tiposdocumento tipdoc on (1=1) inner join usuarios_usuarios u on (1 =1 ) left join sitios_paises  pais on (pais.id= u.pais_id) 	left join sitios_municipios muni on ( muni.id = u.municipio_id) left join  sitios_localidades local on (local.id = u.localidad_id) left join  facturacion_facturacion fac on (fac.id = det."numeroFactura_id" and fac."tipoDoc_id" = u."tipoDoc_id" and fac.documento_id = u.id and fac."tipoDoc_id" = tipdoc.id ) inner join admisiones_ingresos i on (i."tipoDoc_id" = u."tipoDoc_id" and i.documento_id = u.id and i.consec = fac."consecAdmision"  ) left join rips_ripstipousuario tipousu on (tipousu.id = i."ripsTipoUsuario_id") where  e.id= ' + "'" + str(envioRipsId) + "'" + ' AND det."numeroFactura_id"  = '  + "'" + str(elemento) + "'"
 
-                    detalle ='INSERT INTO rips_ripsusuarios ("tipoDocumentoIdentificacion", "tipoUsuario", "fechaNacimiento", "codSexo", "codZonaTerritorialResidencia", incapacidad, consecutivo, "fechaRegistro", "codMunicipioResidencia_id", "codPaisOrigen_id", "codPaisResidencia_id", "usuarioRegistro_id", "numDocumentoIdentificacion", "ripsDetalle_id", "ripsTransaccion_id","estadoReg", ingreso_id) SELECT tipdoc."tipoDocRips_id", tipousu.codigo, cast(u."fechaNacio" as date) , u.genero,u."ripsZonaTerritorial_id",   (select i.incapacidad from admisiones_ingresos i WHERE i."tipoDoc_id" = fac."tipoDoc_id" and i.documento_id=fac.documento_id and i.consec=fac."consecAdmision")      , row_number() OVER(ORDER BY det.id) AS consecutivo, now(), muni.id,  case when pais.id is null then ' + "'" + str('1') + "'" + ' else pais.id end, case when pais.id is null then ' + "'" + str('1') + "'" + ' else pais.id end, ' + "'" + str(username_id) + "'" + ',u.documento, det.id, ' + "'" + str(transaccionId) + "','A'," + "'" + str(ingresoId.id) + "'" + 'from rips_ripsenvios e	inner join rips_ripsdetalle det on (det."ripsEnvios_id"  = e.id)  inner join  facturacion_facturacion fac on (fac.id = det."numeroFactura_id" ) inner join admisiones_ingresos i on (i."tipoDoc_id" = fac."tipoDoc_id"  and i.documento_id = fac.documento_id  and i.consec = fac."consecAdmision") inner join usuarios_tiposdocumento tipdoc on ( tipdoc.id=i."tipoDoc_id" )  inner join usuarios_usuarios u on (u."tipoDoc_id"=i."tipoDoc_id" and u.id = i.documento_id) left join sitios_paises  pais on (pais.id= u.pais_id)  left join sitios_municipios muni on ( muni.id = u.municipio_id) left join rips_ripstipousuario tipousu on (tipousu.id = i."ripsTipoUsuario_id") where  e.id= ' + "'" + str(envioRipsId) + "'" + ' AND det."numeroFactura_id"  = ' + "'" + str(elemento) + "'"
+                    detalle ='INSERT INTO rips_ripsusuarios ("tipoDocumentoIdentificacion", "tipoUsuario", "fechaNacimiento", "codSexo", "codZonaTerritorialResidencia_id", incapacidad, consecutivo, "fechaRegistro", "codMunicipioResidencia_id", "codPaisOrigen_id", "codPaisResidencia_id", "usuarioRegistro_id", "numDocumentoIdentificacion", "ripsDetalle_id", "ripsTransaccion_id","estadoReg", ingreso_id) SELECT tipdoc."tipoDocRips_id", tipousu.codigo, cast(u."fechaNacio" as date) , u.genero,u."ripsZonaTerritorial_id",   (select i.incapacidad from admisiones_ingresos i WHERE i."tipoDoc_id" = fac."tipoDoc_id" and i.documento_id=fac.documento_id and i.consec=fac."consecAdmision")      , row_number() OVER(ORDER BY det.id) AS consecutivo, now(), muni.id,  case when pais.id is null then ' + "'" + str('1') + "'" + ' else pais.id end, case when pais.id is null then ' + "'" + str('1') + "'" + ' else pais.id end, ' + "'" + str(username_id) + "'" + ',u.documento, det.id, ' + "'" + str(transaccionId) + "','A'," + "'" + str(ingresoId.id) + "'" + 'from rips_ripsenvios e	inner join rips_ripsdetalle det on (det."ripsEnvios_id"  = e.id)  inner join  facturacion_facturacion fac on (fac.id = det."numeroFactura_id" ) inner join admisiones_ingresos i on (i."tipoDoc_id" = fac."tipoDoc_id"  and i.documento_id = fac.documento_id  and i.consec = fac."consecAdmision") inner join usuarios_tiposdocumento tipdoc on ( tipdoc.id=i."tipoDoc_id" )  inner join usuarios_usuarios u on (u."tipoDoc_id"=i."tipoDoc_id" and u.id = i.documento_id) left join sitios_paises  pais on (pais.id= u.pais_id)  left join sitios_municipios muni on ( muni.id = u.municipio_id) left join rips_ripstipousuario tipousu on (tipousu.id = i."ripsTipoUsuario_id") where  e.id= ' + "'" + str(envioRipsId) + "'" + ' AND det."numeroFactura_id"  = ' + "'" + str(elemento) + "'"
 
                 if (tipoRips == 'Glosa'):
 
                     #detalle = 'INSERT INTO rips_ripsusuarios ("tipoDocumentoIdentificacion", "tipoUsuario", "fechaNacimiento", "codSexo", "codZonaTerritorialResidencia", incapacidad,consecutivo, "fechaRegistro", "codMunicipioResidencia_id", "codPaisOrigen_id", "codPaisResidencia_id", "usuarioRegistro_id", "numDocumentoIdentificacion","ripsDetalle_id", "ripsTransaccion_id") SELECT tipdoc.abreviatura, tipousu.codigo, u."fechaNacio" , u.genero, local.id, (select i.incapacidad from admisiones_ingresos i WHERE i."tipoDoc_id" = fac."tipoDoc_id" and i.documento_id=fac.documento_id and i.consec=fac."consecAdmision") , row_number() OVER(ORDER BY det.id) AS consecutivo, now(),muni.id, pais.id, pais.id, ' + "'" + str(username_id) + "'" + ', u.documento, det.id,' + "'" + str(transaccionId) + "','" + str(ingresoId.id) + "'"  + ' from rips_ripsenvios e	inner join rips_ripsdetalle det on (det."ripsEnvios_id"=e.id) inner join usuarios_tiposdocumento tipdoc on (1=1)	inner join usuarios_usuarios u on (1 =1 ) left join sitios_paises  pais on (pais.id= u.pais_id) left join sitios_municipios muni on ( muni.id = u.municipio_id) left join  sitios_localidades local on (local.id = u.localidad_id) inner join cartera_glosas glo on (glo.id = cast(det.glosa_id as float)) left join  facturacion_facturacion fac on (fac.id = glo.factura_id  and fac."tipoDoc_id" = u."tipoDoc_id" and fac.documento_id = u.id and fac."tipoDoc_id" = tipdoc.id ) inner join admisiones_ingresos i on (i.factura = fac.id) left join rips_ripstipousuario tipousu on (tipousu.id = i."ripsTipoUsuario_id") 	where  e.id= ' + "'" + str(envioRipsId) + "' AND det.glosa_id = " + "'" + str(elemento) + "'"
-                    detalle  = 'INSERT INTO rips_ripsusuarios ("tipoDocumentoIdentificacion", "tipoUsuario", "fechaNacimiento", "codSexo", "codZonaTerritorialResidencia", incapacidad, consecutivo, "fechaRegistro", "codMunicipioResidencia_id", "codPaisOrigen_id", "codPaisResidencia_id", "usuarioRegistro_id", "numDocumentoIdentificacion", "ripsDetalle_id", "ripsTransaccion_id","estadoReg", ingreso_id) SELECT tipdoc."tipoDocRips_id", tipousu.codigo, cast(u."fechaNacio" as date) , u.genero,u."ripsZonaTerritorial_id",   (select i.incapacidad from admisiones_ingresos i WHERE i."tipoDoc_id" = fac."tipoDoc_id" and i.documento_id=fac.documento_id and i.consec=fac."consecAdmision")      , row_number() OVER(ORDER BY det.id) AS consecutivo, now(), muni.id,  case when pais.id is null then ' + "'" + str('1') + "'" + ' else pais.id end, case when pais.id is null then ' + "'" + str('1') + "'" + ' else pais.id end, ' + "'" + str(username_id) + "'" + ',u.documento, det.id, ' + "'" + str(transaccionId) + "','A'," + "'" + str(ingresoId.id) + "'" + 'from rips_ripsenvios e	inner join rips_ripsdetalle det on (det."ripsEnvios_id"  = e.id)  inner join  facturacion_facturacion fac on (fac.id = det."numeroFactura_id" ) inner join admisiones_ingresos i on (i."tipoDoc_id" = fac."tipoDoc_id"  and i.documento_id = fac.documento_id  and i.consec = fac."consecAdmision") inner join usuarios_tiposdocumento tipdoc on ( tipdoc.id=i."tipoDoc_id" )  inner join usuarios_usuarios u on (u."tipoDoc_id"=i."tipoDoc_id" and u.id = i.documento_id) left join sitios_paises  pais on (pais.id= u.pais_id)  left join sitios_municipios muni on ( muni.id = u.municipio_id) left join rips_ripstipousuario tipousu on (tipousu.id = i."ripsTipoUsuario_id") where  e.id= ' + "'" + str(envioRipsId) + "'" + ' AND det.glosa_id = ' + "'" + str(elemento) + "'"
+                    detalle  = 'INSERT INTO rips_ripsusuarios ("tipoDocumentoIdentificacion", "tipoUsuario", "fechaNacimiento", "codSexo", "codZonaTerritorialResidencia_id", incapacidad, consecutivo, "fechaRegistro", "codMunicipioResidencia_id", "codPaisOrigen_id", "codPaisResidencia_id", "usuarioRegistro_id", "numDocumentoIdentificacion", "ripsDetalle_id", "ripsTransaccion_id","estadoReg", ingreso_id) SELECT tipdoc."tipoDocRips_id", tipousu.codigo, cast(u."fechaNacio" as date) , u.genero,u."ripsZonaTerritorial_id",   (select i.incapacidad from admisiones_ingresos i WHERE i."tipoDoc_id" = fac."tipoDoc_id" and i.documento_id=fac.documento_id and i.consec=fac."consecAdmision")      , row_number() OVER(ORDER BY det.id) AS consecutivo, now(), muni.id,  case when pais.id is null then ' + "'" + str('1') + "'" + ' else pais.id end, case when pais.id is null then ' + "'" + str('1') + "'" + ' else pais.id end, ' + "'" + str(username_id) + "'" + ',u.documento, det.id, ' + "'" + str(transaccionId) + "','A'," + "'" + str(ingresoId.id) + "'" + 'from rips_ripsenvios e	inner join rips_ripsdetalle det on (det."ripsEnvios_id"  = e.id)  inner join  facturacion_facturacion fac on (fac.id = det."numeroFactura_id" ) inner join admisiones_ingresos i on (i."tipoDoc_id" = fac."tipoDoc_id"  and i.documento_id = fac.documento_id  and i.consec = fac."consecAdmision") inner join usuarios_tiposdocumento tipdoc on ( tipdoc.id=i."tipoDoc_id" )  inner join usuarios_usuarios u on (u."tipoDoc_id"=i."tipoDoc_id" and u.id = i.documento_id) left join sitios_paises  pais on (pais.id= u.pais_id)  left join sitios_municipios muni on ( muni.id = u.municipio_id) left join rips_ripstipousuario tipousu on (tipousu.id = i."ripsTipoUsuario_id") where  e.id= ' + "'" + str(envioRipsId) + "'" + ' AND det.glosa_id = ' + "'" + str(elemento) + "'"
 
                 print ("detalle = ", detalle)
                 curx.execute(detalle)
@@ -962,11 +929,12 @@ def GenerarJsonRips(request):
 
                 # Aqui generamos los JSON de la Factura
                 #
+                print("voy a generar el json con transaccionId =" ,  transaccionId)
                 funcionJson = []
 
                 if (tipoRips == 'Factura'):
 
-                    detalle = 'SELECT generaFacturaJSON(' + "'" +  str(envioRipsId) + "','" + str(elemento) + "'"  +  ',' + "'" + str('FACTURA') + "'" + ') dato'
+                    detalle = 'SELECT generaFacturaJSONBAK(' + "'" +  str(envioRipsId) + "','" + str(elemento) + "'"  +  ',' + "'" + str('FACTURA') + "'" + ',0) dato'
 
                 if (tipoRips == 'Glosa'):
 
@@ -974,7 +942,7 @@ def GenerarJsonRips(request):
 
                 curx.execute(detalle)
 
-                print ('detalle generaJSONFactura= ', detalle)
+                print ('detalle a generaJSONFactura= ', detalle)
 
                 for dato in curx.fetchall():
 
@@ -1409,7 +1377,6 @@ def TraerJsonRips(request):
     print("tipoRips =", tipoRips)
 
 
-
     context = {}
 
     jsonRips = []
@@ -1420,11 +1387,12 @@ def TraerJsonRips(request):
 
     if (tipoRips == 'Factura'):
 
-        detalle = 'select generaFacturaJSON('  + "'" + str(envioRipsId) + "','" + str(facturaId)  + "'," + "'" + str('FACTURA') + "'" + ') valorJson'
+        detalle = 'select generaFacturaJSONBAK('  + "'" + str(envioRipsId) + "','" + str(facturaId)  + "'," + "'" + str('FACTURA') + "',0" + ') valorJson'
 
     if (tipoRips == 'Glosa'):
-        transaccionId = RipsTransaccion.objects.get(ripsEnvio_id=envioRipsId , id=755)
-        transaccion=transaccionId.id
+        transaccionId = RipsTransaccion.objects.filter(ripsEnvio_id=envioRipsId).aggregate(Max('id'))
+        transaccion=transaccionId['id__max']
+        print("transaccion = " ,transaccion )
 
         detalle = 'select generaFacturaJSONBAK('  + "'" + str(envioRipsId) + "','" + str(glosaId)  + "'," + "'" + str('GLOSA') + "'," + str(transaccion)   + ') valorJson'
 

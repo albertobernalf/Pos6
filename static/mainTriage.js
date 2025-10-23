@@ -270,6 +270,7 @@ function AUsuarioTriage()
 	   var segundoNombre = document.getElementById("segundoNombre").value;
 	   var primerApellido = document.getElementById("primerApellido").value;
 	   var segundoApellido = document.getElementById("segundoApellido").value;
+	   var ripsZonaTerritorial = document.getElementById("ripsZonaTerritorial").value;
 
 
 
@@ -342,7 +343,8 @@ if (tiposUsuario =='')
 		       'localidades':localidades,
 		       'estadoCivil':estadoCivil, 
 		       'ocupaciones':ocupaciones, 
-		       'correo':correo},
+		       'correo':correo,
+			'ripsZonaTerritorial':ripsZonaTerritorial},
 		success: function (respuesta) {
 
               

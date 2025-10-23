@@ -163,7 +163,7 @@ class RipsUsuarios (models.Model):
     codSexo =  models.CharField(max_length=13, default='A', editable=False ,choices = GENERO_CHOICES)
     codPaisResidencia = models.ForeignKey('rips.RipsPaises', blank=True, null=True, editable=True, on_delete=models.PROTECT , related_name='Paises01')
     codMunicipioResidencia = models.ForeignKey('sitios.Municipios', blank=True, null=True, editable=True, on_delete=models.PROTECT , related_name='MunicipioRes01')
-    codZonaTerritorialResidencia = models.CharField(max_length=6, blank=True, null=True, editable=True)
+    codZonaTerritorialResidencia = models.ForeignKey('rips.RipsZonaTerritorial', blank=True, null=True, editable=True, on_delete=models.PROTECT , related_name='SonaRes01')
     incapacidad = models.CharField(max_length=2, default='A', editable=False ,choices = INCAPACIDAD_CHOICES)
     consecutivo = models.CharField(max_length=10, blank=True,null= True, editable=True)
     ripsTransaccion =  models.ForeignKey('rips.RipsTransaccion', blank=True, null=True, editable=True, on_delete=models.PROTECT , related_name='RpipsTransaccion12')
