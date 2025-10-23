@@ -856,3 +856,11 @@ WHERE prog.id = id
 -- esta pendiente--> mas info para ripsmedicamentos
 -- verificar ripsreciennacidos de acuredo mingov.vo
 -- volver  a verificar ripsemvio masivo
+
+-- cuando actualizo una glosa le cambio valores o le agrego mas no me actualzia el valor total de la glos
+ -- ops cuando seleccionmo los datos de la glosa27 no me myestra lops valolres de glosaods de la 27 sino los d ela 28
+-- ojko el query de glosas detalle,debe leer los valores soportados , glosados de la tabla ripsprocedikientos o ripsmeicamentos pero de la ultima transaccionrips ejecutado
+  o sino del rip como tal
+-- ojo hay que copiar el tema closa de genrarjsonbax() functios a enviogenerarjsongloabl
+
+-- ojo hay que hacer un conciertazo , orquestado de todo el proceso glosa rips, enviado,con json , respyuesta etc que no quede mal

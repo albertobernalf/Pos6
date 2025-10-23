@@ -683,7 +683,7 @@ def GenerarJsonRips(request):
 
                     ingresoId = Ingresos.objects.get(tipoDoc_id=facturaId.tipoDoc_id, documento_id=facturaId.documento_id,consec=facturaId.consecAdmision)
 
-                    detalle = 'INSERT into rips_ripstransaccion ("numDocumentoIdObligado",  "numNota","fechaRegistro", "tipoNota_id","usuarioRegistro_id" ,"ripsEnvio_id","sedesClinica_id" ,"numFactura" ,"estadoReg") select substring(sed.nit,1,9) ,  glo.id, now(), tipnot.id, ' + "'" + str(username_id) + "'" + ', e.id, sed.id , glo.factura_id , ' + "'" + str('A') + "'" + ' from sitios_sedesclinica sed, cartera_glosas glo, rips_ripsEnvios e  , rips_ripsdetalle det ,rips_ripstiposnotas tipnot where e.id = ' + "'" + str(envioRipsId) + "'" + ' and e."sedesClinica_id" = sed.id and glo."ripsEnvio_id" = e.id and det."ripsEnvios_id" = e.id and e."ripsTiposNotas_id" = tipnot.id and tipnot.nombre=' + "'" + str('Glosa') + "' AND glo.id = " + "'" + str(elemento) + "' RETURNING id ;"
+                    detalle = 'INSERT into rips_ripstransaccion ("numDocumentoIdObligado",  "numNota","fechaRegistro", "tipoNota_id","usuarioRegistro_id" ,"ripsEnvio_id","sedesClinica_id" ,"numFactura" ,"estadoReg") select substring(sed.nit,1,9) ,  glo.id, now(), tipnot.id, ' + "'" + str(username_id) + "'" + ', e.id, sed.id , glo.factura_id , ' + "'" + str('A') + "'" + ' from sitios_sedesclinica sed, cartera_glosas glo, rips_ripsEnvios e  , rips_ripsdetalle det ,rips_ripstiposnotas tipnot where e.id = ' + "'" + str(envioRipsId) + "'" + ' and e."sedesClinica_id" = sed.id and glo."ripsEnvio_id" = e.id and det."ripsEnvios_id" = e.id and e."ripsTiposNotas_id" = tipnot.id and tipnot.nombre=' + "'" + str('Glosa') + "' AND glo.id = " + "'" + str(elemento) + "' and glo.id = det.glosa_id  RETURNING id ;"
                     print ("detalle = ", detalle)
                     resultado = curx.execute(detalle)
                     transaccionId = curx.fetchone()[0]
@@ -1390,8 +1390,8 @@ def TraerJsonRips(request):
         detalle = 'select generaFacturaJSONBAK('  + "'" + str(envioRipsId) + "','" + str(facturaId)  + "'," + "'" + str('FACTURA') + "',0" + ') valorJson'
 
     if (tipoRips == 'Glosa'):
-        transaccionId = RipsTransaccion.objects.filter(ripsEnvio_id=envioRipsId).aggregate(Max('id'))
-        transaccion=transaccionId['id__max']
+        transaccionId = RipsTransaccion.objects.get(ripsEnvio_id=envioRipsId, numFactura=facturaId, numNota=glosaId)
+        transaccion=transaccionId.id
         print("transaccion = " ,transaccion )
 
         detalle = 'select generaFacturaJSONBAK('  + "'" + str(envioRipsId) + "','" + str(glosaId)  + "'," + "'" + str('GLOSA') + "'," + str(transaccion)   + ') valorJson'
