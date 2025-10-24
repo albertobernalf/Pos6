@@ -864,3 +864,9 @@ WHERE prog.id = id
 -- ojo hay que copiar el tema closa de genrarjsonbax() functios a enviogenerarjsongloabl
 -- falto mirar el detalle de los rips medicamentos, unidades, formasfarmaceuticas, etc
 -- ojo hay que hacer un conciertazo , orquestado de todo el proceso glosa rips, enviado,con json , respyuesta etc que no quede mal
+
+-- ojo el lunes 27 de octubre
+  -- arrncar de ceros con las gloas delete a cartera_glosas, cartera_glosasdetalle
+--  crear nuevos rips de maria paula para el ejemplo CREO FACTURA 136
+  -- hayque  arreglar rips de glosas:rips_ripsmediamnto y demas ? creo ya le hice algo
+  -- al editar el detalle de la glosa  tiene que cargar la ventana con los datos del detalle y que puedan ser cambiadaos por el usuario

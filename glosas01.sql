@@ -128,7 +128,7 @@ select 'MEDICAMENTOS' tipo,med.id, med.consecutivo consec, med."itemFactura",cum
 	inner join clinico_examenes exa on ( exa.id =proc."codProcedimiento_id" ) 
 	inner join facturacion_facturaciondetalle det on (det.facturacion_id=cast(ripstra."numFactura" as float) and det."consecutivoFactura" = proc."itemFactura") 
 	left join cartera_motivosglosas mot on (mot.id = proc."motivoGlosa_id") 
-	left join cartera_glosasdetalle detGlo on (detGlo."ripsMedicamentos_id" = proc.id)
+	left join cartera_glosasdetalle detGlo on (detGlo."ripsProcedimientos_id" = proc.id)
 	where cast(ripstra."numFactura" as float) = '136' and ripstra."numNota"= '0'
 	UNION
 	select 'CONSULTAS' tipo, cons.id, cons.consecutivo consec, cons."itemFactura", exa."codigoCups" codigo,
@@ -161,6 +161,7 @@ detalle = 'select ' + "'" + str('MEDICAMENTOS') + "'" + ' tipo,med.id, med.conse
 --
 	select * from rips_ripsmedicamentos where id = 540
 	select * from cartera_glosasdetalle
+	select * from cartera_glosas
 		select * from cartera_motivosglosas
 
 SELECT 'MEDICAMENTOS' tipo, med.id,"itemFactura", "nomTecnologiaSalud" codigo, cums.nombre nombre, "vrServicio",	consecutivo,  
@@ -179,3 +180,7 @@ SELECT 'MEDICAMENTOS' tipo, med.id,med."itemFactura", med."nomTecnologiaSalud" c
 	left join cartera_glosasdetalle detGlo on (detGlo."ripsProcedimientos_id" =med.id)
 	left join cartera_motivosglosas mot on (mot.id = detGlo."motivoGlosa_id" )
 	where med.id= '540' 
+
+
+detalle ='SELECT ' + "'" + str('MEDICAMENTOS') + "'" + ' tipo, med.id,med."itemFactura", med."nomTecnologiaSalud" codigo, cums.nombre nombre, med."vrServicio",	med.consecutivo,  detGlo."valorGlosa",detGlo."valorAceptado",detGlo."valorSoportado",mot.nombre,	detGlo."valorNotasCredito" 	FROM public.rips_ripsmedicamentos med inner join public.rips_ripscums cums  on (cums.id =med."codTecnologiaSalud_id") left join cartera_glosasdetalle detGlo on (detGlo."ripsProcedimientos_id" =med.id) left join cartera_motivosglosas mot on (mot.id = detGlo."motivoGlosa_id" ) where med.id= ' + "'" + str(id) + "'"
+	

@@ -200,7 +200,7 @@ function arrancaGlosas(valorTabla,valorData)
             columnDefs: [
 		{ className: 'centered', targets: [0, 1, 2, 3, 4, 5] },
 		{     
-                    "targets": 16
+                    "targets": 12
                }
             ],
 	 pageLength: 3,
@@ -245,10 +245,6 @@ function arrancaGlosas(valorTabla,valorData)
                 { data: "fields.nombre"},
                 { data: "fields.glosaNombre"},
 	      { data: "fields.vrServicio"},
-                { data: "fields.valorGlosado"},
-                { data: "fields.vAceptado"},
-                { data: "fields.valorSoportado"},
-                { data: "fields.notasCreditoGlosa"},
                 { data: "fields.valorGlosa"},
                 { data: "fields.valorSoportado2"},
                 { data: "fields.valorAceptado"},
@@ -1014,9 +1010,11 @@ window.addEventListener('load', async () => {
 	        console.log ( "dato10 factura_id = " , dato3.factura_id); 
 
 		var facturaId = dato3.factura_id;  // jquery
-
+		var glosaId = dato3.id;
 
 		data['facturaId'] = facturaId
+		data['glosaId'] = glosaId;
+
 
 	        data = JSON.stringify(data);
 
@@ -1207,6 +1205,8 @@ function GuardarGlosasDetalle()
 
 		var facturaId = dato3.factura_id;  // jquery
 		data['facturaId'] = document.getElementById("factura_idGlo").innerHTML;
+		data['glosaId'] = post_idGlo;
+
 
 	        data = JSON.stringify(data);
 
