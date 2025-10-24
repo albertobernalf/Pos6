@@ -862,5 +862,5 @@ WHERE prog.id = id
 -- ojko el query de glosas detalle,debe leer los valores soportados , glosados de la tabla ripsprocedikientos o ripsmeicamentos pero de la ultima transaccionrips ejecutado
   o sino del rip como tal
 -- ojo hay que copiar el tema closa de genrarjsonbax() functios a enviogenerarjsongloabl
-
+-- falto mirar el detalle de los rips medicamentos, unidades, formasfarmaceuticas, etc
 -- ojo hay que hacer un conciertazo , orquestado de todo el proceso glosa rips, enviado,con json , respyuesta etc que no quede mal

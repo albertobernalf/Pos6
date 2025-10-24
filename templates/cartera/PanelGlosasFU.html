@@ -341,16 +341,18 @@ table.dataTable tbody tr {
 
                                
 			</div>
+			</div> <!- Cierro la fila -->
 
-				<div class="col-2">
+
+			 <div class="row">
+                     				   <div class="col-sm-2">
 					ValorGlosa
-
                                		<span class="miTexto" name="valorGlosaGlo" id="valorGlosaGlo"></span>
-					
-                              
+	                              
 
 				</div>
-				<div class="col-2">
+
+				   <div class="col-sm-2">
 					AcuGlosa
 
                                		<span class="miTexto" name="totalGlosaGlo" id="totalGlosaGlo"></span>
@@ -358,86 +360,94 @@ table.dataTable tbody tr {
 				</div>
 
 
-				<div class="col-2">
+
+				   <div class="col-sm-2">
 					Soportado:
                                		<span class="miTexto" name="totalSoportadoGlo" id="totalSoportadoGlo"></span>
 
                                 </div>
 
 
-				<div class="col-2">
+				   <div class="col-sm-2">
 					Aceptado:
                                    	
                                	<span class="miTexto" name="totalAceptadoGlo" id="totalAceptadoGlo"></span>
 					<!--  <input type="text" class="form-control form-control-sm" id="totalAceptadoGlo" name="totalAceptadoGlo"  readonly > -->
                                 </div>
-				<div class="col-2">
+				   <div class="col-sm-2">
 					NCredito
 
                                		<span class="miTexto" name="totalNotasCreditoGlo" id="totalNotasCreditoGlo"></span>
                             
 				</div>
 
-				<div class="col-3">
+				   <div class="col-sm-2">
 					SaldoFactura:
                                	<span class="miTexto" name="saldoFacturaGlo" id="saldoFacturaGlo"></span>
 					<!--  <input type="text" class="form-control form-control-sm" id="saldoFacturaGlo" name="saldoFacturaGlo"  readonly > -->
                                 </div>
-				<div class="col-1">
+
+			</div> <!- Cierro la fila -->
+
+
+			 <div class="row">
+                     				      <div class="col-sm-1">
+
 					Observaciones:
                               	<span class="miTexto" name="observacionesGlo" id="observacionesGlo"></span>
 					<!-- <input type="text" class="form-control form-control-sm" id="observacionesGlo" name="observacionesGlo" preadonly > -->
                                 </div>
+	
 
-			
-
-
-			<div class="col-3">
+			   <div class="col-sm-1">
 					fechaRegistro:
 
                                <span class="miTexto" name="fechaRegistroGlo" id="fechaRegistroGlo"></span>
 					<!--  <input type="text" class="form-control form-control-sm" id="fechaRegistroGlo" name="fechaRegistroGlo"  readonly > -->
                                 </div>
 
-				<div class="col-1">
+				   <div class="col-sm-1">
 					usuarioReg:
                                    	 <label class="visually-hidden" for="usuarioRegistro_idGlo">UsuarioReg:</label>
                                <span class="miTexto" name="usuarioRegistro_idGlo" id="usuarioRegistro_idGlo"></span>
 					<!-- <input type="text" class="form-control form-control-sm" id="usuarioRegistro_idGlo" name="usuarioRegistro_idGlo"  readonly > -->
                                 </div>
-				<div class="col-1">
+				   <div class="col-sm-1">
 					fechaRespuesta:
                                    	 <label class="visually-hidden" for="fechaRespuestaGlo">FecRta:</label>
                                <span class="miTexto" name="fechaRespuestaGlo" id="fechaRespuestaGlo"></span>
 					<!--  <input type="text" class="form-control form-control-sm" id="fechaRespuestaGlo" name="fechaRespuestaGlo"  readonly > -->
                                 </div>
 
-	
-
-
-			<div class="col-1">
+			   <div class="col-sm-1">
 					usuarioRecepcion:
                                    	 <label class="visually-hidden" for="usuarioRecepcion_idGlo">UsuarioRecep:</label>
                                   <span class="miTexto" name="usuarioRecepcion_idGlo" id="usuarioRecepcion_idGlo"></span>
 					<!--  <input type="text" class="form-control form-control-sm" id="usuarioRecepcion_idGlo" name="usuarioRecepcion_idGlo"  readonly > -->
                                 </div>
 
-		<div class="col-1">
+		   <div class="col-sm-1">
 					usuarioResp:
                                    	 <label class="visually-hidden" for="usuarioRespuesta_idGlo">UsuarioRta:</label>
                                   <span class="miTexto" name="usuarioRespuesta_idGlo" id="usuarioRespuesta_idGlo"></span>
 					<!--  <input type="text" class="form-control form-control-sm" id="usuarioRespuesta_idGlo" name="usuarioRespuesta_idGlo"  readonly > -->
                                 </div>
 
-			<div class="col-1">
+			   <div class="col-sm-1">
 					EstadoReg:
                                    	 <label class="visually-hidden" for="estadoRegGlo">EstadoReg:</label>
                                 <span class="miTexto" name="estadoRegGlo" id="estadoRegGlo"></span>
 					<!--  <input type="text" class="form-control form-control-sm" id="estadoRegGlo" name="estadoRegGlo" readonly > -->
                            </div>
 
+			</div> <!- Cierro la fila -->
 
-				<div class="col-1">
+			 <div class="row">
+
+                     				   <div class="col-sm-3">
+
+
+
                                     EstadoRadica:
 				<select class="select-css"  id="estadoRadicacion_idGlo"  name="estadoRadicacion_idGlo">
                                                            {% for estadosRadicacion in EstadosRadicacion %}
@@ -514,16 +524,17 @@ table.dataTable tbody tr {
 				<th>itemFactura</th>
 				<th>codigo</th>
 				<th>nombre</th>
-				<th>vrServicio</th>
 				<th>glosaNombre</th>
-				<th>cantidadGlosada</th>
-				<th>cantidadAceptada</th>	
-				<th>cantidadSoportado</th>
+				<th>vrServicio</th>
 				<th>valorGlosado</th>
 				<th>vAceptado</th>
 				<th>valorSoportado</th>
 				<th>notasCreditoGlosa</th>	
-			
+				<th>valorGlosa</th>
+				<th>valorAceptado</th>
+				<th>valorSoportado2</th>
+				<th>valorNotasCredito</th>	
+
 						</bold>                                  
 
                                             </tr>
@@ -635,29 +646,7 @@ table.dataTable tbody tr {
 				 <label  for="consecutivoGloDet">consecutivoRips:</label>
                                     <input type="text" class="form-control form-control-sm" id="consecutivoGloDet" name="consecutivoGloDet" value="0" readonly></input>
                                 </div>
-
-
-		                            		
-		
-			<div class="col-4">
-                                    		
-				 <label  for="cantidadGlosadaGloDet">cantidadGlosada:</label>
-                                    <input type="text" class="form-control form-control-sm" id="cantidadGlosadaGloDet" name="cantidadGlosadaGloDet" value="0"  ></input>
-                                </div>
-
-				<div class="col-4">
-                                    		
-				 <label  for="cantidadAceptadaGloDet">cantidadAceptada:</label>
-                                    <input type="text" class="form-control form-control-sm" id="cantidadAceptadaGloDet" name="cantidadAceptadaGloDet" value="0"  ></input>
-                                </div>
-
-				<div class="col-4">
-                                    		
-				 <label  for="cantidadSoportadoGloDet">cantidadSoportado:</label>
-                                    <input type="text" class="form-control form-control-sm" id="cantidadSoportadoGloDet" name="cantidadSoportadoGloDet" value="0"  ></input>
-                                </div>
-
-
+                          				
 
 				<div class="col-4">
                                     		
@@ -697,17 +686,20 @@ table.dataTable tbody tr {
                                     <input type="text" class="form-control form-control-sm" id="notasCreditoGlosaGloDet" name="notasCreditoGlosaGloDet" value="0"  ></input>
                                 </div>
 
+				<div class="col-4">
+                                    		
+				 <label  for="observacionesGloDet">Observaciones:</label>
+                                    <input type="text" class="form-control form-control-sm" id="observacionesGloDet" name="observacionesGloDet" value=""  ></input>
+                                </div>
 
-		
+
 			
 			<div class="col-4">
                                     		
 				 <label  for="mensajesGloDet">Mensajes:</label>
-                                    <span id="mensajesGloDet" name="mensajesGloDet" style="color:red";> </span>
+				<textarea id="mensajesGloDet" name="mensajesGloDet" style="background-color: lightred; color: navy;"  rows="1" cols="180" placeholder="Mensajes..."  wrap="hard"></textarea>
+
                                 </div>
-
-
-
 
 
                                 </div> <!-- CIERRA ROW 8 COLUMNAS  -->

@@ -200,7 +200,7 @@ function arrancaGlosas(valorTabla,valorData)
             columnDefs: [
 		{ className: 'centered', targets: [0, 1, 2, 3, 4, 5] },
 		{     
-                    "targets": 15
+                    "targets": 16
                }
             ],
 	 pageLength: 3,
@@ -243,15 +243,19 @@ function arrancaGlosas(valorTabla,valorData)
                 { data: "fields.itemFactura"},
                 { data: "fields.codigo"},
                 { data: "fields.nombre"},
-                { data: "fields.vrServicio"},
                 { data: "fields.glosaNombre"},
-                { data: "fields.cantidadGlosada"},
-                { data: "fields.cantidadAceptada"},
-                { data: "fields.cantidadSoportado"},
+	      { data: "fields.vrServicio"},
                 { data: "fields.valorGlosado"},
                 { data: "fields.vAceptado"},
                 { data: "fields.valorSoportado"},
                 { data: "fields.notasCreditoGlosa"},
+                { data: "fields.valorGlosa"},
+                { data: "fields.valorSoportado2"},
+                { data: "fields.valorAceptado"},
+                { data: "fields.valorNotasCredito"},
+
+
+
                      ]
             }
 
@@ -1102,27 +1106,19 @@ window.addEventListener('load', async () => {
 	alert("info[0] = " + info[0] );
 
 
-
   	$('#post_idGloDet').val(info[0].fields.id);
-	document.getElementById("tipoGloDet").innerHTML = info[0].fields.tipo;
-
-  
+	document.getElementById("tipoGloDet").innerHTML = info[0].fields.tipo; 
 	document.getElementById("glosaGloDet").innerHTML = document.getElementById("post_idGloDet").value;
-
 	document.getElementById("itemFacturaGloDet").innerHTML = info[0].fields.itemFactura;
   	document.getElementById("codigoGloDet").innerHTML = info[0].fields.codigo;
 	document.getElementById("nombreGloDet").innerHTML = info[0].fields.nombre;
 	document.getElementById("vrServicioGloDet").innerHTML = info[0].fields.vrServicio;
-
   	$('#consecutivoGloDet').val(info[0].fields.consecutivo);
-  	$('#cantidadGlosadaGloDet').val(info[0].fields.cantidadGlosada);
-  	$('#cantidadAceptadaGloDet').val(info[0].fields.cantidadAceptada);
-  	$('#cantidadSoportadoGloDet').val(info[0].fields.cantidadSoportado);
-  	$('#valorGlosadoGloDet').val(info[0].fields.valorGlosado);
-  	$('#vAceptadoGloDet').val(info[0].fields.vAceptado);
+  	$('#valorGlosadoGloDet').val(info[0].fields.valorGlosa);
+  	$('#vAceptadoGloDet').val(info[0].fields.valorAceptado);
   	$('#valorSoportadoGloDet').val(info[0].fields.valorSoportado);
   	$('#motivoGlosa_idGloDet').val(info[0].fields.motivoGlosa_id);
-  	$('#notasCreditoGlosaGloDet').val(info[0].fields.notasCreditoGlosa);
+  	$('#notasCreditoGlosaGloDet').val(info[0].fields.valorNotasCredito);
 
 		 $('#crearModelGlosasDetalle').modal('show');
                 },
@@ -1140,6 +1136,7 @@ function GuardarGlosasDetalle()
 	
 		var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
 	        var username = document.getElementById("username").value;
+	        var username_id = document.getElementById("username_id").value;
 	        var nombreSede = document.getElementById("nombreSede").value;
 	    	var sede = document.getElementById("sede").value;
 
@@ -1149,12 +1146,10 @@ function GuardarGlosasDetalle()
 	        var glosaGloDet = document.getElementById("glosaGloDet").innerHTML;
 	        var post_idGloDet = document.getElementById("post_idGloDet").innerHTML;
 	        var motivoGlosa_idGloDet = document.getElementById("motivoGlosa_idGloDet").value;
-	        var cantidadGlosadaGloDet = document.getElementById("cantidadGlosadaGloDet").value;
-	        var cantidadAceptadaGloDet = document.getElementById("cantidadAceptadaGloDet").value;
-	        var cantidadSoportadoGloDet = document.getElementById("cantidadSoportadoGloDet").value;
 	        var valorGlosadoGloDet = document.getElementById("valorGlosadoGloDet").value;
+		var itemFacturaGloDet = document.getElementById("itemFacturaGloDet").innerHTML;
 
-
+	        var observacionesGloDet = document.getElementById("observacionesGloDet").value;
 	        var vAceptadoGloDet = document.getElementById("vAceptadoGloDet").value;
 	        var valorGlosadoGloDet = document.getElementById("valorGlosadoGloDet").value;
 	        var valorSoportadoGloDet = document.getElementById("valorSoportadoGloDet").value;
@@ -1163,7 +1158,7 @@ function GuardarGlosasDetalle()
 
 
             $.ajax({
-                data: {'post_idGlo':post_idGlo, 'tipoGloDet':tipoGloDet,'glosaGloDet':glosaGloDet,'post_idGloDet':post_idGloDet, 'motivoGlosa_idGloDet':motivoGlosa_idGloDet, 'cantidadGlosadaGloDet':cantidadGlosadaGloDet,'cantidadAceptadaGloDet':cantidadAceptadaGloDet,'cantidadSoportadoGloDet':cantidadSoportadoGloDet,'valorGlosadoGloDet':valorGlosadoGloDet,'vAceptadoGloDet':vAceptadoGloDet, 'valorGlosadoGloDet':valorGlosadoGloDet, 'valorSoportadoGloDet':valorSoportadoGloDet, 'notasCreditoGlosaGloDet':notasCreditoGlosaGloDet,   'vrServicioGloDet':vrServicioGloDet  },
+                data: {'post_idGlo':post_idGlo, 'tipoGloDet':tipoGloDet,'glosaGloDet':glosaGloDet,'post_idGloDet':post_idGloDet, 'motivoGlosa_idGloDet':motivoGlosa_idGloDet, 'valorGlosadoGloDet':valorGlosadoGloDet,'vAceptadoGloDet':vAceptadoGloDet, 'valorGlosadoGloDet':valorGlosadoGloDet, 'valorSoportadoGloDet':valorSoportadoGloDet, 'notasCreditoGlosaGloDet':notasCreditoGlosaGloDet,   'vrServicioGloDet':vrServicioGloDet,'username_id':username_id ,'itemFacturaGloDet':itemFacturaGloDet,'observacionesGloDet':observacionesGloDet },
 	        url: "/guardarGlosasDetalle/",
                 type: "POST",
                 dataType: 'json',
