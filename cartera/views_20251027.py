@@ -98,21 +98,20 @@ def load_dataGlosas(request, data):
                                    password="123456")
     curx = miConexionx.cursor()
 
-    #detalle = 'SELECT glo.id, "fechaRecepcion", "saldoFactura", "totalSoportado", "totalAceptado", "totalGlosa",  "totalNotasCredito", observaciones, glo."fechaRegistro", glo."estadoReg", convenio_id,  conv.nombre nombreConvenio,glo."usuarioRegistro_id", factura_id, "fechaRespuesta", "tipoGlosa_id", tipglo.nombre nombreTipoGlosa,  "usuarioRecepcion_id", "usuarioRespuesta_id", "valorGlosa", "estadoRadicacion_id", "estadoRecepcion_id", estGlosa.nombre estadoGlosaRecepcion, glo."sedesClinica_id", "ripsEnvio_id" FROM public.cartera_glosas glo, cartera_estadosglosas estGlosa , contratacion_convenios conv, cartera_tiposglosas tipglo WHERE glo."sedesClinica_id" = ' + "'" + str(sede) + "'" + 'AND tipglo.id = glo."tipoGlosa_id"   AND  conv.id = glo.convenio_id AND estGlosa.id =  glo."estadoRecepcion_id" AND estGlosa.tipo = ' + "'" + str('RECEPCION') + "'"
-    detalle = 'SELECT glo.id, "fechaRecepcion", "saldoFactura", "totalSoportado", "totalAceptado", "totalGlosa",  "totalNotasCredito", observaciones, glo."fechaRegistro", glo."estadoReg", convenio_id,  conv.nombre nombreConvenio,glo."usuarioRegistro_id", factura_id, "fechaRespuesta", "tipoGlosa_id", tipglo.nombre nombreTipoGlosa,  "usuarioRecepcion_id", "usuarioRespuesta_id", "estadoRadicacion_id", "estadoRecepcion_id", estGlosa.nombre estadoGlosaRecepcion, glo."sedesClinica_id", "ripsEnvio_id" FROM public.cartera_glosas glo, cartera_estadosglosas estGlosa , contratacion_convenios conv, cartera_tiposglosas tipglo WHERE glo."sedesClinica_id" = ' + "'" + str(sede) + "'" + 'AND tipglo.id = glo."tipoGlosa_id"   AND  conv.id = glo.convenio_id AND estGlosa.id =  glo."estadoRecepcion_id" AND estGlosa.tipo = ' + "'" + str('RECEPCION') + "' AND glo.id in (SELECT min(glo2.id) FROM cartera_glosas glo2 WHERE glo2.factura_id=glo.factura_id )"
+    detalle = 'SELECT glo.id, "fechaRecepcion", "saldoFactura", "totalSoportado", "totalAceptado", "totalGlosa",  "totalNotasCredito", observaciones, glo."fechaRegistro", glo."estadoReg", convenio_id,  conv.nombre nombreConvenio,glo."usuarioRegistro_id", factura_id, "fechaRespuesta", "tipoGlosa_id", tipglo.nombre nombreTipoGlosa,  "usuarioRecepcion_id", "usuarioRespuesta_id", "valorGlosa", "estadoRadicacion_id", "estadoRecepcion_id", estGlosa.nombre estadoGlosaRecepcion, glo."sedesClinica_id", "ripsEnvio_id" FROM public.cartera_glosas glo, cartera_estadosglosas estGlosa , contratacion_convenios conv, cartera_tiposglosas tipglo WHERE glo."sedesClinica_id" = ' + "'" + str(sede) + "'" + 'AND tipglo.id = glo."tipoGlosa_id"   AND  conv.id = glo.convenio_id AND estGlosa.id =  glo."estadoRecepcion_id" AND estGlosa.tipo = ' + "'" + str('RECEPCION') + "'"
 
     print(detalle)
 
     curx.execute(detalle)
 
-    for id,  fechaRecepcion, saldoFactura, totalSoportado, totalAceptado,totalGlosa, totalNotasCredito, observaciones, fechaRegistro, estadoReg, convenio_id, nombreConvenio, usuarioRegistro_id, factura_id,  fechaRespuesta, tipoGlosa_id,nombreTipoGlosa, usuarioRecepcion_id, usuarioRespuesta_id,   estadoRadicacion_id , estadoRecepcion_id, estadoGlosaRecepcion,  sedesClinica_id, ripsEnvio_id in curx.fetchall():
+    for id,  fechaRecepcion, saldoFactura, totalSoportado, totalAceptado,totalGlosa, totalNotasCredito, observaciones, fechaRegistro, estadoReg, convenio_id, nombreConvenio, usuarioRegistro_id, factura_id,  fechaRespuesta, tipoGlosa_id,nombreTipoGlosa, usuarioRecepcion_id, usuarioRespuesta_id,  valorGlosa, estadoRadicacion_id , estadoRecepcion_id, estadoGlosaRecepcion,  sedesClinica_id, ripsEnvio_id in curx.fetchall():
         glosas.append(
             {"model": "cartera.glosas", "pk": id, "fields":
                 {'id': id, 'fechaRecepcion': fechaRecepcion, 'saldoFactura': saldoFactura, 'totalSoportado': totalSoportado,'totalAceptado':totalAceptado,
                  'totalGlosa':totalGlosa,  'totalNotasCredito':totalNotasCredito, 'observaciones': observaciones, 'fechaRegistro': fechaRegistro,'estadoReg': estadoReg, 'convenio_id': convenio_id,'nombreConvenio':nombreConvenio, 'usuarioRegistro_id': usuarioRegistro_id, 'factura_id' : factura_id,
                  'factura_id': factura_id, 'fechaRespuesta': fechaRespuesta,
                  'tipoGlosa_id': tipoGlosa_id,'nombreTipoGlosa' :nombreTipoGlosa, 'usuarioRecepcion_id': usuarioRecepcion_id,'estadoGlosaRecepcion':estadoGlosaRecepcion, 'usuarioRespuesta_id': usuarioRespuesta_id,
-                 'estadoRadicacion_id': estadoRadicacion_id, 'estadoRecepcion_id': estadoRecepcion_id,
+                 'valorGlosa': valorGlosa, 'estadoRadicacion_id': estadoRadicacion_id, 'estadoRecepcion_id': estadoRecepcion_id,
                  'sedesClinica_id': sedesClinica_id,'ripsEnvio_id':ripsEnvio_id}})
 
     miConexionx.close()
@@ -120,77 +119,6 @@ def load_dataGlosas(request, data):
     context['Glosas'] = glosas
 
     serialized1 = json.dumps(glosas,  default=str)
-
-    return HttpResponse(serialized1, content_type='application/json')
-
-def load_dataGlosasAdicionar(request, data):
-    print("Entre load_data GlosasAdicionar")
-
-    context = {}
-    d = json.loads(data)
-
-    username = d['username']
-    sede = d['sede']
-    username_id = d['username_id']
-
-    nombreSede = d['nombreSede']
-    facturaId = d['facturaId']
-    print("sede:", sede)
-    print("username:", username)
-    print("username_id:", username_id)
-
-    # Combo Indicadores
-
-    miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
-                                   password="123456")
-    curt = miConexiont.cursor()
-
-    comando = 'SELECT ser.nombre, count(*) total FROM admisiones_ingresos i, usuarios_usuarios u, sitios_dependencias dep , clinico_servicios ser ,usuarios_tiposDocumento tp , sitios_dependenciastipo deptip  , clinico_Diagnosticos diag , sitios_serviciosSedes sd  WHERE sd."sedesClinica_id" = i."sedesClinica_id"  and sd.servicios_id  = ser.id and i."sedesClinica_id" = dep."sedesClinica_id" AND i."sedesClinica_id" = ' + "'" + str(
-        sede) + "'" + ' AND  deptip.id = dep."dependenciasTipo_id" and i."serviciosActual_id" = ser.id AND dep.disponibilidad = ' + "'" + str(
-        'O') + "'" + ' AND i."salidaDefinitiva" = ' + "'" + str('N') + "'" + ' and tp.id = u."tipoDoc_id" and  i."tipoDoc_id" = u."tipoDoc_id" and u.id = i."documento_id" and diag.id = i."dxActual_id" and i."fechaSalida" is null and dep."serviciosSedes_id" = sd.id and dep.id = i."dependenciasActual_id"  group by ser.nombre UNION SELECT ser.nombre, count(*) total FROM triage_triage t, usuarios_usuarios u, sitios_dependencias dep , usuarios_tiposDocumento tp , sitios_dependenciastipo deptip  , sitios_serviciosSedes sd, clinico_servicios ser WHERE sd."sedesClinica_id" = t."sedesClinica_id"  and t."sedesClinica_id" = dep."sedesClinica_id" AND  t."sedesClinica_id" =  ' + "'" + str(sede) + "'" + ' AND dep."sedesClinica_id" =  sd."sedesClinica_id" AND dep.id = t.dependencias_id AND  t."serviciosSedes_id" = sd.id  AND deptip.id = dep."dependenciasTipo_id" and  tp.id = u."tipoDoc_id" and  t."tipoDoc_id" = u."tipoDoc_id" and u.id = t."documento_id"  and ser.id = sd.servicios_id and  dep."serviciosSedes_id" = sd.id and t."serviciosSedes_id" = sd.id and dep."tipoDoc_id" = t."tipoDoc_id" and  t."consecAdmision" = 0 and dep."documento_id" = t."documento_id" and ser.nombre = ' + "'" + str(
-        'TRIAGE') + "'" + ' group by ser.nombre'
-
-    print("comando = ", comando)
-
-    curt.execute(comando)
-    print(comando)
-
-    indicadores = []
-
-    for id, nombre in curt.fetchall():
-        indicadores.append({'id': id, 'nombre': nombre})
-
-    miConexiont.close()
-    print(indicadores)
-
-    context['Indicadores'] = indicadores
-
-    # Fin combo Indicadores
-
-    glosasAdicionar = []
-
-    miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
-                                   password="123456")
-    curx = miConexionx.cursor()
-
-    detalle = 'SELECT glo.id,  glo.factura_id,  "totalGlosa",  "fechaRecepcion", "saldoFactura", "totalSoportado", "totalAceptado",   "totalNotasCredito", conv.nombre nombreConvenio, "fechaRespuesta", "tipoGlosa_id", tipglo.nombre nombreTipoGlosa, "estadoRadicacion_id", "tipoGlosa_id" , "estadoRecepcion_id", convenio_id  FROM public.cartera_glosas glo, cartera_estadosglosas estGlosa , contratacion_convenios conv, cartera_tiposglosas tipglo WHERE glo."sedesClinica_id" = ' + "'" + str(sede) + "'" + 'AND tipglo.id = glo."tipoGlosa_id"   AND  conv.id = glo.convenio_id AND estGlosa.id =  glo."estadoRecepcion_id" AND estGlosa.tipo = ' + "'" + str('RECEPCION') + "' AND glo.factura_id = '" + str(facturaId) + "' ORDER BY glo.id"
-
-    print(detalle)
-
-    curx.execute(detalle)
-
-    for id, factura_id,  totalGlosa,   fechaRecepcion, saldoFactura, totalSoportado, totalAceptado, totalNotasCredito, nombreConvenio,  fechaRespuesta, tipoGlosa_id,nombreTipoGlosa , estadoRadicacion_id, tipoGlosa_id , estadoRecepcion_id, convenio_id  in curx.fetchall():
-        glosasAdicionar.append(
-            {"model": "cartera.glosas", "pk": id, "fields":
-                {'id': id, 'factura_id' : factura_id, 'totalGlosa':totalGlosa, 'fechaRecepcion': fechaRecepcion,'saldoFactura': saldoFactura,   'totalSoportado': totalSoportado,'totalAceptado':totalAceptado,
-                   'totalNotasCredito':totalNotasCredito, 'nombreConvenio':nombreConvenio,  'fechaRespuesta': fechaRespuesta,
-                 'tipoGlosa_id': tipoGlosa_id,'nombreTipoGlosa' :nombreTipoGlosa, 'estadoRadicacion_id':estadoRadicacion_id, 'tipoGlosa_id':tipoGlosa_id,'estadoRecepcion_id':estadoRecepcion_id, 'convenio_id ':convenio_id }})
-
-    miConexionx.close()
-    print("glosasAdicionar "  , glosasAdicionar)
-    context['GlosasAdicionar'] = glosasAdicionar
-
-    serialized1 = json.dumps(glosasAdicionar,  default=str)
 
     return HttpResponse(serialized1, content_type='application/json')
 
@@ -223,8 +151,8 @@ def GuardaGlosas(request):
     tipoGlosa_id = request.POST["tipoGlosa_id"]
     print ("tipoGlosa_id =", tipoGlosa_id)
 
-    totalGlosa = request.POST['totalGlosa']
-    print ("totalGlosa =", totalGlosa)
+    valorGlosa = request.POST['valorGlosa']
+    print ("valorGlosa =", valorGlosa)
 
     estadoRecepcion_id = request.POST['estadoRecepcion_id']
     print ("estadoRecepcion_id =", estadoRecepcion_id)
@@ -246,83 +174,7 @@ def GuardaGlosas(request):
     cur3 = miConexion3.cursor()
 
     try:
-        comando = 'INSERT INTO cartera_glosas ("fechaRecepcion", "saldoFactura", "totalNotasCredito", "totalGlosa" , "totalSoportado", "totalAceptado", observaciones, "fechaRegistro", "estadoReg", convenio_id, "usuarioRegistro_id", factura_id,  "tipoGlosa_id", "usuarioRecepcion_id",   "estadoRadicacion_id", "estadoRecepcion_id","sedesClinica_id", "ripsEnvio_id" ,"serviciosAdministrativos_id", anulado) VALUES (' + "'" + str(fechaRecepcion) + "'" + ', 0,0, ' +  str(totalGlosa) +  ',0,0,' + "'" + str(observaciones) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(convenio_id) + "','"  + str(usuarioRegistro_id) + "', '" + str(factura_id) + "', '" + str(tipoGlosa_id) + "', '" + str(usuarioRegistro_id) +  "', null, '" + str(estadoRecepcion_id) + "', '" + str(sedesClinica_id)  + "',null,'" + str(serviciosAdministrativos_id) + "','N'" +  ')'
-
-        print(comando)
-        cur3.execute(comando)
-        miConexion3.commit()
-        cur3.close()
-        miConexion3.close()
-
-        return JsonResponse({'success': True, 'Mensajes': 'Glosa creada satisfactoriamente!'})
-
-    except psycopg2.DatabaseError as error:
-        print ("Entre por rollback" , error)
-        if miConexion3:
-            print("Entro ha hacer el Rollback")
-            miConexion3.rollback()
-
-        message_error= str(error)
-        return JsonResponse({'success': False, 'Mensajes': message_error})
-
-
-    finally:
-        if miConexion3:
-            cur3.close()
-            miConexion3.close()
-
-
-def GuardaGlosasAdicionar(request):
-
-    print ("Entre Guarda Glosas Adicionar" )
-
-    convenio_id = request.POST['convenio_id']
-    print("convenio_id =", convenio_id)
-
-    sedesClinica_id = request.POST['sedesClinica_id']
-    print("sedesClinica_id =", sedesClinica_id)
-
-    fechaRecepcion = request.POST["fechaRecepcion"]
-    print("fechaRecepcion =", fechaRecepcion)
-
-
-    observaciones = request.POST["observaciones"]
-    print("observaciones =", observaciones)
-
-
-    factura_id = request.POST['factura_id']
-    print ("factura_id =", factura_id)
-
-    fechaRespuesta = request.POST["fechaRespuesta"]
-    print("fechaRespuesta =", fechaRespuesta)
-
-    tipoGlosa_id = request.POST["tipoGlosa_id"]
-    print ("tipoGlosa_id =", tipoGlosa_id)
-
-    totalGlosa = request.POST['totalGlosa']
-    print ("totalGlosa =", totalGlosa)
-
-    estadoRecepcion_id = request.POST['estadoRecepcion_id']
-    print ("estadoRecepcion_id =", estadoRecepcion_id)
-
-    serviciosAdministrativos_id = request.POST['serviciosAdministrativos_id']
-    print ("serviciosAdministrativos_id =", serviciosAdministrativos_id)
-
-
-    usuarioRegistro_id = request.POST['usuarioRegistro_id']
-    print ("usuarioRegistro_id =", usuarioRegistro_id)
-
-    estadoReg = 'A'
-
-    fechaRegistro = timezone.now()
-
-
-    miConexion3 = None
-    miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",  password="123456")
-    cur3 = miConexion3.cursor()
-
-    try:
-        comando = 'INSERT INTO cartera_glosas ("fechaRecepcion", "saldoFactura", "totalNotasCredito", "totalGlosa" , "totalSoportado", "totalAceptado", observaciones, "fechaRegistro", "estadoReg", convenio_id, "usuarioRegistro_id", factura_id,  "tipoGlosa_id", "usuarioRecepcion_id",  "totalGlosa", "estadoRadicacion_id", "estadoRecepcion_id","sedesClinica_id", "ripsEnvio_id" ,"serviciosAdministrativos_id", anulado) VALUES (' + "'" + str(fechaRecepcion) + "'" + ', 0,0,0,0,0,' + "'" + str(observaciones) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(convenio_id) + "','"  + str(usuarioRegistro_id) + "', '" + str(factura_id) + "', '" + str(tipoGlosa_id) + "', '" + str(usuarioRegistro_id) + "','" + str(totalGlosa) + "', null, '" + str(estadoRecepcion_id) + "', '" + str(sedesClinica_id)  + "',null,'" + str(serviciosAdministrativos_id) + "','N'" +  ')'
+        comando = 'INSERT INTO cartera_glosas ("fechaRecepcion", "saldoFactura", "totalNotasCredito", "totalGlosa" , "totalSoportado", "totalAceptado", observaciones, "fechaRegistro", "estadoReg", convenio_id, "usuarioRegistro_id", factura_id,  "tipoGlosa_id", "usuarioRecepcion_id",  "valorGlosa", "estadoRadicacion_id", "estadoRecepcion_id","sedesClinica_id", "ripsEnvio_id" ,"serviciosAdministrativos_id", anulado) VALUES (' + "'" + str(fechaRecepcion) + "'" + ', 0,0,0,0,0,' + "'" + str(observaciones) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(convenio_id) + "','"  + str(usuarioRegistro_id) + "', '" + str(factura_id) + "', '" + str(tipoGlosa_id) + "', '" + str(usuarioRegistro_id) + "','" + str(valorGlosa) + "', null, '" + str(estadoRecepcion_id) + "', '" + str(sedesClinica_id)  + "',null,'" + str(serviciosAdministrativos_id) + "','A'" +  ')'
 
         print(comando)
         cur3.execute(comando)
@@ -904,7 +756,7 @@ def GuardarGlosasDetalle(request):
                                    password="123456")
     curx = miConexionx.cursor()
 
-    detalle = 'SELECT id, "totalGlosa", "totalSoportado", "totalAceptado", "saldoFactura", "tipoGlosa_id", "estadoRadicacion_id" , "estadoRecepcion_id"  FROM public.cartera_glosas where id= ' + "'" + str(glosaId) + "'"
+    detalle = 'SELECT id, "valorGlosa", "totalSoportado", "totalAceptado", "saldoFactura", "tipoGlosa_id", "estadoRadicacion_id" , "estadoRecepcion_id"  FROM public.cartera_glosas where id= ' + "'" + str(glosaId) + "'"
 
     print(detalle)
 

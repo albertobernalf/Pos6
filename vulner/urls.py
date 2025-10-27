@@ -331,6 +331,9 @@ urlpatterns = [
 
     path('editarCaja/', viewsCartera.EditarCaja, name='Editar_Caja'),
     path('guardarCaja/', viewsCartera.GuardarCaja, name='Guardar_Caja'),
+    path('load_dataGlosasAdicionar/<str:data>', viewsCartera.load_dataGlosasAdicionar, name='loaddataGlosas_Adicionar'),
+    path('guardaGlosasAdicionar/', viewsCartera.GuardaGlosasAdicionar, name='GuardaGlosasAdicionar'),
+
 
     # Tarifas
 	

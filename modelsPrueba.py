@@ -867,6 +867,6 @@ WHERE prog.id = id
 
 -- ojo el lunes 27 de octubre
   -- arrncar de ceros con las gloas delete a cartera_glosas, cartera_glosasdetalle
---  crear nuevos rips de maria paula para el ejemplo CREO FACTURA 136
+--  crear nuevos rips de maria paula para el ejemplo CREO FACTURA 136, es la que me sircve
   -- hayque  arreglar rips de glosas:rips_ripsmediamnto y demas ? creo ya le hice algo
   -- al editar el detalle de la glosa  tiene que cargar la ventana con los datos del detalle y que puedan ser cambiadaos por el usuario

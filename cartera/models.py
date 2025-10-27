@@ -199,7 +199,7 @@ class Glosas(models.Model):
     tipoGlosa = models.ForeignKey('cartera.TiposGlosas',blank=True,null= True, editable=True, on_delete=models.PROTECT ,  related_name='estadoGlosa01')
     factura = models.ForeignKey('facturacion.Facturacion',blank=True,null= True, editable=True, on_delete=models.PROTECT ,  related_name='facturacion102')
     saldoFactura =  models.DecimalField( max_digits=15, decimal_places=2)
-    valorGlosa =  models.DecimalField( max_digits=15, decimal_places=2, default=0)
+    #valorGlosa =  models.DecimalField( max_digits=15, decimal_places=2, default=0)
     totalGlosa =  models.DecimalField( max_digits=15, decimal_places=2, default=0)
     totalSoportado =  models.DecimalField( max_digits=15, decimal_places=2)
     totalAceptado =  models.DecimalField( max_digits=15, decimal_places=2)

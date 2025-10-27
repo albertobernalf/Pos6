@@ -117,7 +117,7 @@ select 'MEDICAMENTOS' tipo,med.id, med.consecutivo consec, med."itemFactura",cum
 	inner join  rips_ripscums cums on (cums.id =med."codTecnologiaSalud_id" ) 
 	inner join facturacion_facturaciondetalle det on (det.facturacion_id =cast(ripstra."numFactura" as float) and  det."consecutivoFactura" = med."itemFactura" ) 
 	left join cartera_motivosglosas mot on (mot.id = med."motivoGlosa_id")   
-	left join cartera_glosasdetalle detGlo on (detGlo."ripsMedicamentos_id" = med.id)
+	left join cartera_glosasdetalle detGlo on (detGlo.glosa_id = 28 and detGlo."ripsMedicamentos_id" = med.id)
 	where  cast(ripstra."numFactura" as float) = '136' and ripstra."numNota"= '0'
 	UNION
 	select 'PROCEDIMIENTOS' tipo, proc.id, proc.consecutivo consec, proc."itemFactura", exa."codigoCups" codigo,
@@ -184,3 +184,46 @@ SELECT 'MEDICAMENTOS' tipo, med.id,med."itemFactura", med."nomTecnologiaSalud" c
 
 detalle ='SELECT ' + "'" + str('MEDICAMENTOS') + "'" + ' tipo, med.id,med."itemFactura", med."nomTecnologiaSalud" codigo, cums.nombre nombre, med."vrServicio",	med.consecutivo,  detGlo."valorGlosa",detGlo."valorAceptado",detGlo."valorSoportado",mot.nombre,	detGlo."valorNotasCredito" 	FROM public.rips_ripsmedicamentos med inner join public.rips_ripscums cums  on (cums.id =med."codTecnologiaSalud_id") left join cartera_glosasdetalle detGlo on (detGlo."ripsProcedimientos_id" =med.id) left join cartera_motivosglosas mot on (mot.id = detGlo."motivoGlosa_id" ) where med.id= ' + "'" + str(id) + "'"
 	
+
+
+INSERT INTO rips_ripsprocedimientos("codPrestador", "fechaInicioAtencion", "idMIPRES", "numAutorizacion","numDocumentoIdentificacion",
+	"vrServicio","valorPagoModerador", "numFEVPagoModerador", consecutivo, "fechaRegistro", "codComplicacion_id", "codDiagnosticoPrincipal_id",
+	"codDiagnosticoRelacionado_id", "codProcedimiento_id", "codServicio_id", "conceptoRecaudo_id", "finalidadTecnologiaSalud_id",
+	"grupoServicios_id", "modalidadGrupoServicioTecSal_id","tipoDocumentoIdentificacion_id","usuarioRegistro_id", "viaIngresoServicioSalud_id",
+	"ripsDetalle_id", "itemFactura", "ripsTipos_id", "tipoPagoModerador_id", "ripsTransaccion_id", glosa_id, "estadoReg", ingreso_id ,
+	"cantidadAceptada", "cantidadGlosada", "cantidadSoportado", "motivoGlosa_id", "notasCreditoGlosa", "notasCreditoOtras","notasDebito",
+	"vAceptado","valorGlosado","valorSoportado") 
+
+SELECT id,	"codPrestador", "fechaInicioAtencion", "idMIPRES", "numAutorizacion","numDocumentoIdentificacion", "notasCreditoGlosa","valorPagoModerador",
+	"numFEVPagoModerador", row_number() OVER(ORDER BY rips_ripsProcedimientos.id) AS consecutivo , "fechaRegistro", "codComplicacion_id", 
+	"codDiagnosticoPrincipal_id","codDiagnosticoRelacionado_id", "codProcedimiento_id", "codServicio_id", "conceptoRecaudo_id", 
+	"finalidadTecnologiaSalud_id",	"grupoServicios_id", "modalidadGrupoServicioTecSal_id","tipoDocumentoIdentificacion_id","usuarioRegistro_id", 
+	"viaIngresoServicioSalud_id",'136', "itemFactura", "ripsTipos_id", 
+	"tipoPagoModerador_id",'yy',null,'A','mmm' ,	"cantidadAceptada", "cantidadGlosada", "cantidadSoportado", "motivoGlosa_id", "notasCreditoGlosa", "notasCreditoOtras",
+	"notasDebito","vAceptado","valorGlosado","valorSoportado" 
+	FROM rips_ripsProcedimientos
+	where glosa_id = '28'
+
+select glosa_id,* from rips_ripsProcedimientos where "numFEVPagoModerador" = '136'
+
+	select * from cartera_glosasdetalle;
+select * from cartera_glosas;
+select glosa_id,* from rips_ripsProcedimientos  where id in (3228,3229)
+
+SELECT 	glosa.id,"codPrestador", "fechaInicioAtencion", "idMIPRES", "numAutorizacion","numDocumentoIdentificacion", "notasCreditoGlosa","valorPagoModerador",
+	"numFEVPagoModerador", row_number() OVER(ORDER BY proc.id) AS consecutivo , proc."fechaRegistro", "codComplicacion_id", 
+	"codDiagnosticoPrincipal_id","codDiagnosticoRelacionado_id", "codProcedimiento_id", "codServicio_id", "conceptoRecaudo_id", 
+	"finalidadTecnologiaSalud_id",	"grupoServicios_id", "modalidadGrupoServicioTecSal_id","tipoDocumentoIdentificacion_id",proc."usuarioRegistro_id", 
+	"viaIngresoServicioSalud_id",'136', proc."itemFactura", proc."ripsTipos_id", 
+	"tipoPagoModerador_id",'yy',null,'A','mmm' ,	"cantidadAceptada", "cantidadGlosada", "cantidadSoportado", proc."motivoGlosa_id",
+	--"notasCreditoGlosa",
+	"valorNotasCredito",
+	"notasDebito","vAceptado","valorGlosado",proc."valorSoportado" 
+	FROM rips_ripsProcedimientos proc
+	inner join cartera_glosasdetalle gloDet on (gloDet."ripsProcedimientos_id" = proc.id)
+	inner join cartera_glosas glosa on (glosa.id = gloDet.glosa_id)
+	where proc."numFEVPagoModerador" = '136'
+
+
+	FROM rips_ripsMedicamentos med inner join cartera_glosasdetalle gloDet on (gloDet."ripsMedicamentos_id" = med.id) inner join cartera_glosas glosa on (glosa.id = gloDet.glosa_id) where med."numFEVPagoModerador" = '136'
+   
