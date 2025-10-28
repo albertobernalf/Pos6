@@ -320,6 +320,8 @@ class Salas(models.Model):
     serviciosAdministrativos = models.ForeignKey('sitios.Serviciosadministrativos', blank=True,null= True, editable=True, on_delete=models.PROTECT)
     estadoSala = models.ForeignKey('cirugia.EstadosSalas', blank=True, null=True, editable=True,   on_delete=models.PROTECT) 
     fechaRegistro = models.DateTimeField(default=now, editable=False)
+    iniciaServicio =  models.CharField(max_length=5,blank=True, null=True, )
+    finServicio =  models.CharField(max_length=5,blank=True, null=True, )
     estadoReg = models.CharField(max_length=1, choices=ESTADOREG_CHOICES,default='A', editable=False)
 
     def __str__(self):

@@ -11,6 +11,7 @@ let dataTableH;
 
 let dataTableGlosasInitialized = false;
 let dataTableGlosasDetalleInitialized = false;
+let dataTableGlosasTotalesDetalleInitialized = false;
 let dataTableGlosasTransaccionInitialized = false;
 let dataTableGlosasUsuariosInitialized = false;
 let dataTableGlosasProcedimientosInitialized = false;
@@ -128,7 +129,7 @@ function arrancaGlosas(valorTabla,valorData)
                     },
 
 		},
-
+		 { data: "fields.factura_id"},
                 { data: "fields.id"},
                 { data: "fields.fechaRecepcion"},
                 { data: "fields.saldoFactura"},
@@ -143,7 +144,7 @@ function arrancaGlosas(valorTabla,valorData)
 		{ data: "fields.convenio_id"},
 		{ data: "fields.nombreConvenio"},
                 { data: "fields.usuarioRegistro_id"},
-		 { data: "fields.factura_id"},
+	
 		 { data: "fields.fechaRespuesta"},
 		 { data: "fields.tipoGlosa_id"},
 		 { data: "fields.nombreTipoGlosa"},
@@ -1017,6 +1018,108 @@ function arrancaGlosas(valorTabla,valorData)
   }
 
 
+    if (valorTabla == 11)
+    {
+        let dataTableOptionsGlosasTotalesDetalle  ={
+   dom: "<'row mb-1'<'col-sm-3'B><'col-sm-3'><'col-sm-6'f>>" + // B = Botones a la izquierda, f = filtro a la derecha
+             "<'row'<'col-sm-12'tr>>" +
+             "<'row mt-3'<'col-sm-5'i><'col-sm-7'p>>",
+  buttons: [
+    {
+      extend: 'excelHtml5',
+      text: '<i class="fas fa-file-excel"></i> ',
+      titleAttr: 'Exportar a Excel',
+      className: 'btn btn-success',
+    },
+    {
+      extend: 'pdfHtml5',
+      text: '<i class="fas fa-file-pdf"></i> ',
+      titleAttr: 'Exportar a PDF',
+      className: 'btn btn-danger',
+    },
+    {
+      extend: 'print',
+      text: '<i class="fa fa-print"></i> ',
+      titleAttr: 'Imprimir',
+      className: 'btn btn-info',
+    },
+  ],
+  lengthMenu: [2, 4, 15],
+           processing: true,
+            serverSide: false,
+            scrollY: '230px',
+	    scrollX: true,
+	    scrollCollapse: true,
+            paging:false,
+            columnDefs: [
+		{ className: 'centered', targets: [0, 1, 2, 3, 4, 5] },
+		{     
+                    "targets": 12
+               }
+            ],
+	 pageLength: 3,
+	  destroy: true,
+	  language: {
+		    processing: 'Procesando...',
+		    lengthMenu: 'Mostrar _MENU_ registros',
+		    zeroRecords: 'No se encontraron resultados',
+		    emptyTable: 'Ningún dato disponible en esta tabla',
+		    infoEmpty: 'Mostrando registros del 0 al 0 de un total de 0 registros',
+		    infoFiltered: '(filtrado de un total de _MAX_ registros)',
+		    search: 'Buscar:',
+		    infoThousands: ',',
+		    loadingRecords: 'Cargando...',
+		    paginate: {
+			      first: 'Primero',
+			      last: 'Último',
+			      next: 'Siguiente',
+			      previous: 'Anterior',
+		    }
+			},
+           ajax: {
+                 url:"/load_tablaGlosasTotalesDetalle/" +  data,
+                 type: "POST",
+                 dataSrc: ""
+            },
+            columns: [
+		{
+"render": function ( data, type, row ) {
+                        var btn = '';
+                          btn = btn + " <input type='radio' name='glosaTotalDetalle' style='width:15px;height:15px;accent-color: purple;border-color: purple;background-color: purple;' class='miGlosaTotalDetalle form-check-input ' data-pk='"  + row.pk + "'>" + "</input>";
+
+                       return btn;
+                    },
+		},
+		{ data: "fields.tipo"},
+		{ data: "fields.id"},
+             	{ data: "fields.consec"},
+                { data: "fields.itemFactura"},
+                { data: "fields.codigo"},
+                { data: "fields.nombre"},
+                { data: "fields.glosaNombre"},
+	        { data: "fields.vrServicio"},
+                { data: "fields.valorGlosa"},
+                { data: "fields.valorAceptado"},
+                { data: "fields.valorNotasCredito"},
+                { data: "fields.valorSoportado2"},
+
+                     ]
+            }
+
+            if  (dataTableGlosasTotalesDetalleInitialized)  {
+
+		            dataTableH = $("#tablaGlosasTotalesDetalle").dataTable().fnDestroy();
+
+                    }
+
+                dataTableD = $('#tablaGlosasTotalesDetalle').DataTable(dataTableOptionsGlosasTotalesDetalle);
+
+	            dataTableGlosasTotalesDetalleInitialized  = true;
+
+
+
+
+      }
 
 
 
@@ -1047,6 +1150,10 @@ const initDataTableGlosas = async () => {
 
          arrancaGlosas(1,data);
 	 dataTableGlosasInitialized = true;
+         arrancaGlosas(11,data);
+	 dataTableGlosasTotalesInitialized = true;
+
+
      //    arrancaGlosas(4,data);
 //         dataTableGlosasTransaccionInitialized = true;
 //	 arrancaGlosas(5,data);
@@ -1125,6 +1232,10 @@ window.addEventListener('load', async () => {
 
 	        arrancaGlosas(2,data);
 	    dataTableGlosasDetalleInitialized = true;
+
+         arrancaGlosas(11,data);
+	 dataTableGlosasTotalesInitialized = true;
+
 
 
 //	        arrancaGlosas(4,data);

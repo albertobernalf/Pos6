@@ -252,7 +252,7 @@ function arrancaCirugia(valorTabla,valorData)
 	  "render": function ( data, type, row ) {
                         var btn = '';
 
-	     btn = btn + " <button class='miEditaProgramacionCirugia btn-primary ' data-pk='" + row.pk + "'>" + '<i class="fa-duotone fa-regular fa-thumbs-up"></i>' + "</button>";
+	     btn = btn + " <button class='miEditaProgramacionCirugia btn-primary ' style='width:15px;height:15px;accent-color: purple;border-color: purple;background-color: green;'  data-pk='" + row.pk + "'>" + '<i class="fa-duotone fa-regular fa-thumbs-up"></i>' + "</button>";
 
 
                        return btn;
@@ -386,7 +386,7 @@ function arrancaCirugia(valorTabla,valorData)
 	  "render": function ( data, type, row ) {
                         var btn = '';
 
-	    btn = btn + " <input type='radio' name='miSolicitudCirugia' class='miSolicitudCirugia2 form-check-input ' data-pk='"  + row.pk + "'>" + "</input>";
+	    btn = btn + " <input type='radio' name='miSolicitudCirugia' style='width:15px;height:15px;accent-color: purple;border-color: purple;background-color: purple;' class='miSolicitudCirugia2 form-check-input ' data-pk='"  + row.pk + "'>" + "</input>";
 
 
                        return btn;

@@ -333,7 +333,7 @@ urlpatterns = [
     path('guardarCaja/', viewsCartera.GuardarCaja, name='Guardar_Caja'),
     path('load_dataGlosasAdicionar/<str:data>', viewsCartera.load_dataGlosasAdicionar, name='loaddataGlosas_Adicionar'),
     path('guardaGlosasAdicionar/', viewsCartera.GuardaGlosasAdicionar, name='GuardaGlosasAdicionar'),
-
+    path('load_tablaGlosasTotalesDetalle/<str:data>', viewsCartera.Load_tablaGlosasTotalesDetalle,name='load_tablaGlosasTotales_Detalle'),
 
     # Tarifas
 	

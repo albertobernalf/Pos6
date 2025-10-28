@@ -19,7 +19,7 @@ class Cirugias(models.Model):
     documento = models.ForeignKey('usuarios.Usuarios', blank=True, null=True, editable=True, on_delete=models.PROTECT,    related_name='DocumentoHistoria54')
     consecAdmision = models.IntegerField(default=0)
     serviciosAdministrativos = models.ForeignKey('sitios.ServiciosAdministrativos', blank=True,null= True, editable=True,  on_delete=models.PROTECT,   related_name='seradm126')
-    especialidad = models.ForeignKey('clinico.EspecialidadesMedicos', blank=True, null=True, editable=True,    on_delete=models.PROTECT)
+    especialidad = models.ForeignKey('clinico.Especialidades', blank=True, null=True, editable=True,    on_delete=models.PROTECT)
     urgente = models.CharField(max_length=1, blank=True, null=True, editable=True)
     tipoQx = models.CharField(max_length=20, blank=True, null=True, editable=True)
     anestesia = models.ForeignKey('cirugia.TiposAnestesia', blank=True, null=True, editable=True,  on_delete=models.PROTECT)
