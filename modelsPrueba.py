@@ -825,17 +825,15 @@ class ProgramacionCitasMedicas(models.Model):
 -- RIPS
   -- COMO se hace con los ambulatorios
   -- se esta trabajando jsos indicidualk despues se pasan los script a la funcion de envioGRAL
- -- noi se sta trabajando aun con glosas
 
--- ojo hay que obligar en historia clinica coocar mandatori diastratamiento y demas
+
 -- cuando cree un aplique de abono debre refrescar la pantalla liquidaciondetalle
 -- ojo camellar el modulo de abonos
 
--- ojoi en JSON DE RIPS MINSTYRERI´
    -- quedo quemado el miuniciiop en ripsusuarios ?
-  -- la incapacidad es mejor agregra vcampoen admisiones_ingresos denote incapacidad =SI", "NO"
+
 -- ojo veriicar en ripsprocedimientos, el recaudo_id, el prorrateo de los pagos,los campos "null", null
--- no se porque ripshispitalizacion no ingresa la factura 142 hospitalziados
+-- no se porque ripshOspitalizacion no ingresa la factura 142 hospitalziados
 -- revizar de nuevo ripsreciennacidos
 -- hacer ripmedicamentos , hay mucho null por cua. (En el suministro debe estar parametrizado todos los datos de acuerdo  a toidas las tablas rips
 
@@ -857,16 +855,10 @@ WHERE prog.id = id
 -- verificar ripsreciennacidos de acuredo mingov.vo
 -- volver  a verificar ripsemvio masivo
 
--- cuando actualizo una glosa le cambio valores o le agrego mas no me actualzia el valor total de la glos
- -- ops cuando seleccionmo los datos de la glosa27 no me myestra lops valolres de glosaods de la 27 sino los d ela 28
--- ojko el query de glosas detalle,debe leer los valores soportados , glosados de la tabla ripsprocedikientos o ripsmeicamentos pero de la ultima transaccionrips ejecutado
-  o sino del rip como tal
--- ojo hay que copiar el tema closa de genrarjsonbax() functios a enviogenerarjsongloabl
 -- falto mirar el detalle de los rips medicamentos, unidades, formasfarmaceuticas, etc
 -- ojo hay que hacer un conciertazo , orquestado de todo el proceso glosa rips, enviado,con json , respyuesta etc que no quede mal
 
--- ojo el lunes 27 de octubre
-  -- arrncar de ceros con las gloas delete a cartera_glosas, cartera_glosasdetalle
---  crear nuevos rips de maria paula para el ejemplo CREO FACTURA 136, es la que me sircve
-  -- hayque  arreglar rips de glosas:rips_ripsmediamnto y demas ? creo ya le hice algo
-  -- al editar el detalle de la glosa  tiene que cargar la ventana con los datos del detalle y que puedan ser cambiadaos por el usuario
+
+
+
+

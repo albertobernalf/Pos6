@@ -344,7 +344,7 @@ def load_dataDetalleRipsAdicionar(request, data):
 
     if (tipoRips == 'Glosa'):
 
-        detalle = 'SELECT g.id,  g.factura_id factura,g.id glosaId, g."fechaRecepcion" fechaFactura, u.nombre paciente , g."valorGlosa" totalFactura, g."estadoRecepcion_id" estado  FROM public.cartera_glosas g, facturacion_facturacion f , admisiones_ingresos i, usuarios_usuarios u  , contratacion_convenios c WHERE  g.factura_id  =  f.id and i."tipoDoc_id" = f."tipoDoc_id" AND i.documento_id = f.documento_id AND f.convenio_id =  c.id AND   c.empresa_id = ' + "'" + str(empresaId) + "'" + ' AND g."ripsEnvio_id" IS NULL AND i."tipoDoc_id" = u."tipoDoc_id" AND i.documento_id = u.id AND i.consec = f."consecAdmision" and g."valorGlosa" >0'
+        detalle = 'SELECT g.id,  g.factura_id factura,g.id glosaId, g."fechaRecepcion" fechaFactura, u.nombre paciente , g."totalGlosa" totalFactura, g."estadoRecepcion_id" estado  FROM public.cartera_glosas g, facturacion_facturacion f , admisiones_ingresos i, usuarios_usuarios u  , contratacion_convenios c WHERE  g.factura_id  =  f.id and i."tipoDoc_id" = f."tipoDoc_id" AND i.documento_id = f.documento_id AND f.convenio_id =  c.id AND   c.empresa_id = ' + "'" + str(empresaId) + "'" + ' AND g."ripsEnvio_id" IS NULL AND i."tipoDoc_id" = u."tipoDoc_id" AND i.documento_id = u.id AND i.consec = f."consecAdmision" and g."totalGlosa" >0'
 
 
     print("DETALLE DE RIPSADICIONAR = ", detalle)
@@ -516,12 +516,22 @@ def GenerarJsonRips(request):
     # Verificar si esta enviada con lo cual no generaria nuevos rips
 
     enviadoRips = RipsEnvios.objects.get(id=envioRipsId)
-    print ("enviadoRips = ", enviadoRips.ripsEstados)	
+    print ("enviadoRips = ", enviadoRips.ripsEstados)
+
+    if (tipoRips == 'Factura'):
+
+
+        detalleRips= RipsDetalle.objects.filter(ripsEnvios_id =envioRipsId  , glosa_id__isnull=False).count()
+
+        print("detalleRips = ", detalleRips)
+        if (detalleRips >= 1):
+
+            return JsonResponse({'success': True, 'Mensajes': 'No es posible generar RIPS con glosas Activas. Favor cancelar las glosas!'})
 
 
     if (enviadoRips.ripsEstados =='1'):
 
-	    return JsonResponse({'success': True, 'message': 'No es posible generar RIPS enviados!'})
+	    return JsonResponse({'success': True, 'Mensajes': 'No es posible generar RIPS enviados!'})
 
     miConexionx = None
     try:
@@ -823,7 +833,7 @@ def GenerarJsonRips(request):
 
                 else:
 
-                    detalle = 'INSERT INTO rips_ripsprocedimientos(glosa_id,"codPrestador", "fechaInicioAtencion", "idMIPRES", "numAutorizacion","numDocumentoIdentificacion", "vrServicio","valorPagoModerador", "numFEVPagoModerador", consecutivo, "fechaRegistro", "codComplicacion_id", "codDiagnosticoPrincipal_id","codDiagnosticoRelacionado_id", "codProcedimiento_id", "codServicio_id", "conceptoRecaudo_id", "finalidadTecnologiaSalud_id",	"grupoServicios_id", "modalidadGrupoServicioTecSal_id","tipoDocumentoIdentificacion_id","usuarioRegistro_id", "viaIngresoServicioSalud_id", "ripsDetalle_id", "itemFactura", "ripsTipos_id", "tipoPagoModerador_id", "ripsTransaccion_id", glosa_id, "estadoReg", ingreso_id ,"cantidadAceptada", "cantidadGlosada", "cantidadSoportado", "motivoGlosa_id", "notasCreditoGlosa", "notasCreditoOtras","notasDebito","vAceptado","valorGlosado","valorSoportado") SELECT glosa.id, 	"codPrestador", "fechaInicioAtencion", "idMIPRES", "numAutorizacion","numDocumentoIdentificacion", "notasCreditoGlosa","valorPagoModerador", "numFEVPagoModerador", row_number() OVER(ORDER BY rips_ripsProcedimientos.id) AS consecutivo , "fechaRegistro", "codComplicacion_id", "codDiagnosticoPrincipal_id","codDiagnosticoRelacionado_id", "codProcedimiento_id", "codServicio_id", "conceptoRecaudo_id", "finalidadTecnologiaSalud_id",	"grupoServicios_id", "modalidadGrupoServicioTecSal_id","tipoDocumentoIdentificacion_id","usuarioRegistro_id", "viaIngresoServicioSalud_id",' + "'" + str(elementox['id']) + "'" + ', "itemFactura", "ripsTipos_id", 	"tipoPagoModerador_id",' + "'" +  str(transaccionId) + "',null" + ",'A'," + "'" + str(ingresoId.id) + "'" + ' ,"cantidadAceptada", "cantidadGlosada", "cantidadSoportado", "motivoGlosa_id", "valorNotasCredito", "notasCreditoOtras","notasDebito","vAceptado","valorGlosado","valorSoportado"  FROM rips_ripsProcedimientos proc inner join cartera_glosasdetalle gloDet on (gloDet."ripsProcedimientos_id" = proc.id) inner join cartera_glosas glosa on (glosa.id = gloDet.glosa_id) where proc."numFEVPagoModerador" = ' + "'" + str(elementoOtro) + "'"
+                    detalle = 'INSERT INTO rips_ripsprocedimientos(glosa_id,"codPrestador", "fechaInicioAtencion", "idMIPRES", "numAutorizacion","numDocumentoIdentificacion", "vrServicio","valorPagoModerador", "numFEVPagoModerador", consecutivo, "fechaRegistro", "codComplicacion_id", "codDiagnosticoPrincipal_id","codDiagnosticoRelacionado_id", "codProcedimiento_id", "codServicio_id", "conceptoRecaudo_id", "finalidadTecnologiaSalud_id",	"grupoServicios_id", "modalidadGrupoServicioTecSal_id","tipoDocumentoIdentificacion_id","usuarioRegistro_id", "viaIngresoServicioSalud_id", "ripsDetalle_id", "itemFactura", "ripsTipos_id", "tipoPagoModerador_id", "ripsTransaccion_id", "estadoReg", ingreso_id , "motivoGlosa_id", "notasCreditoGlosa", "notasCreditoOtras","notasDebito","vAceptado","valorGlosado","valorSoportado") SELECT glosa.id, 	"codPrestador", "fechaInicioAtencion", "idMIPRES", "numAutorizacion","numDocumentoIdentificacion", "notasCreditoGlosa","valorPagoModerador", "numFEVPagoModerador", row_number() OVER(ORDER BY proc.id) AS consecutivo , ' + "'" + str(fechaRegistro) + "'" + ' , "codComplicacion_id", "codDiagnosticoPrincipal_id","codDiagnosticoRelacionado_id", "codProcedimiento_id", "codServicio_id", "conceptoRecaudo_id", "finalidadTecnologiaSalud_id",	"grupoServicios_id", "modalidadGrupoServicioTecSal_id","tipoDocumentoIdentificacion_id", ' + "'" + str(username_id) + "'" + ' , "viaIngresoServicioSalud_id",' + "'" + str(elementox['id']) + "'" + ', proc."itemFactura", proc."ripsTipos_id", 	proc."tipoPagoModerador_id",' + "'" +  str(transaccionId) + "'," + "'A'," + "'" + str(ingresoId.id) + "'" + ' , gloDet."motivoGlosa_id", gloDet."valorNotasCredito", gloDet."valorNotasCreditoOtras",gloDet."valorNotasDebito",gloDet."valorAceptado",gloDet."valorGlosa",gloDet."valorSoportado"  FROM rips_ripsProcedimientos proc inner join cartera_glosasdetalle gloDet on (gloDet."ripsProcedimientos_id" = proc.id) inner join cartera_glosas glosa on (glosa.id = gloDet.glosa_id and glosa.factura_id = cast(proc."numFEVPagoModerador"  as integer)) inner join rips_ripsdetalle det on (det."numeroFactura_id" =  cast(proc."numFEVPagoModerador"  as integer) and  det.glosa_id=glosa.id and det.glosa_id= ' + "'" + str(elemento) + "'" + ') where proc."numFEVPagoModerador" = ' + "'" + str(elementoOtro) + "'"
                     print("detalle PROPCEDIEMITNOS= ", detalle)
                     curx.execute(detalle)
 
@@ -914,7 +924,7 @@ def GenerarJsonRips(request):
 
                 if (tipoRips == 'Glosa'):
 
-                    detalle = 'INSERT INTO rips_ripsmedicamentos (glosa_id,"codPrestador", "numAutorizacion", "idMIPRES", "fechaDispensAdmon", "nomTecnologiaSalud", "concentracionMedicamento", "cantidadMedicamento", "diasTratamiento",	"numDocumentoIdentificacion", "vrUnitMedicamento", "vrServicio", "valorPagoModerador", "numFEVPagoModerador",consecutivo, "fechaRegistro", "codDiagnosticoPrincipal_id", "codDiagnosticoRelacionado_id", "codTecnologiaSalud_id", "conceptoRecaudo_id", "formaFarmaceutica_id", "tipoDocumentoIdentificacion_id","tipoMedicamento_id", "unidadMedida_id", "unidadMinDispensa_id", "usuarioRegistro_id", "ripsDetalle_id", "itemFactura","ripsTipos_id", "ripsTransaccion_id", ingreso_id, "estadoReg" ,"cantidadAceptada", "cantidadGlosada", "cantidadSoportado", "motivoGlosa_id", "notasCreditoGlosa", "notasCreditoOtras","notasDebito","vAceptado","valorGlosado","valorSoportado") SELECT glosa.id, "codPrestador", "numAutorizacion", "idMIPRES", "fechaDispensAdmon", "nomTecnologiaSalud", "concentracionMedicamento", "cantidadMedicamento", "diasTratamiento",	"numDocumentoIdentificacion", "vrUnitMedicamento", "vrServicio", "valorPagoModerador", "numFEVPagoModerador",row_number() OVER(ORDER BY med.id) AS consecutivo , med."fechaRegistro", "codDiagnosticoPrincipal_id", "codDiagnosticoRelacionado_id", "codTecnologiaSalud_id", "conceptoRecaudo_id", "formaFarmaceutica_id", "tipoDocumentoIdentificacion_id","tipoMedicamento_id", "unidadMedida_id", "unidadMinDispensa_id", med."usuarioRegistro_id", ' + "'" + str(elementox['id']) + "'" + ' , med."itemFactura",med."ripsTipos_id", ' + "'" + str(transaccionId) + "','"  + str(ingresoId.id) + "','A'"  + ' ,"cantidadAceptada", "cantidadGlosada", "cantidadSoportado", med."motivoGlosa_id", "valorNotasCredito", "notasCreditoOtras","notasDebito","vAceptado","valorGlosado","valorSoportado"  FROM rips_ripsMedicamentos med inner join cartera_glosasdetalle gloDet on (gloDet."ripsMedicamentos_id" = med.id) inner join cartera_glosas glosa on (glosa.id = gloDet.glosa_id) where med."numFEVPagoModerador" = ' + "'" + str(elementoOtro) + "'"
+                    detalle = 'INSERT INTO rips_ripsmedicamentos (glosa_id,"codPrestador", "numAutorizacion", "idMIPRES", "fechaDispensAdmon", "nomTecnologiaSalud", "concentracionMedicamento", "cantidadMedicamento", "diasTratamiento",	"numDocumentoIdentificacion", "vrUnitMedicamento", "vrServicio", "valorPagoModerador", "numFEVPagoModerador",consecutivo, "fechaRegistro", "codDiagnosticoPrincipal_id", "codDiagnosticoRelacionado_id", "codTecnologiaSalud_id", "conceptoRecaudo_id", "formaFarmaceutica_id", "tipoDocumentoIdentificacion_id","tipoMedicamento_id", "unidadMedida_id", "unidadMinDispensa_id", "usuarioRegistro_id", "ripsDetalle_id", "itemFactura","ripsTipos_id", "ripsTransaccion_id", ingreso_id, "estadoReg" , "motivoGlosa_id", "notasCreditoGlosa", "notasCreditoOtras","notasDebito","vAceptado","valorGlosado","valorSoportado") SELECT glosa.id, "codPrestador", "numAutorizacion", "idMIPRES", "fechaDispensAdmon", "nomTecnologiaSalud", "concentracionMedicamento", "cantidadMedicamento", "diasTratamiento",	"numDocumentoIdentificacion", "vrUnitMedicamento", "vrServicio", "valorPagoModerador", "numFEVPagoModerador",row_number() OVER(ORDER BY med.id) AS consecutivo , med."fechaRegistro", "codDiagnosticoPrincipal_id", "codDiagnosticoRelacionado_id", "codTecnologiaSalud_id", "conceptoRecaudo_id", "formaFarmaceutica_id", "tipoDocumentoIdentificacion_id","tipoMedicamento_id", "unidadMedida_id", "unidadMinDispensa_id", med."usuarioRegistro_id", ' + "'" + str(elementox['id']) + "'" + ' , med."itemFactura",med."ripsTipos_id", ' + "'" + str(transaccionId) + "','"  + str(ingresoId.id) + "','A'"  + ' , gloDet."motivoGlosa_id", gloDet."valorNotasCredito", gloDet."valorNotasCreditoOtras",gloDet."valorNotasDebito",gloDet."valorAceptado",gloDet."valorGlosa",gloDet."valorSoportado"  FROM rips_ripsMedicamentos med inner join cartera_glosasdetalle gloDet on (gloDet."ripsMedicamentos_id" = med.id) inner join cartera_glosas glosa on (glosa.id = gloDet.glosa_id and glosa.factura_id = cast(med."numFEVPagoModerador"  as integer)) inner join rips_ripsdetalle det on (det."numeroFactura_id" =  cast(med."numFEVPagoModerador"  as integer) and  det.glosa_id=glosa.id and det.glosa_id=' + "'" + str(elemento) + "'" + ')  where med."numFEVPagoModerador" = ' + "'" + str(elementoOtro) + "'"
                     print("detalle = ", detalle)
                     curx.execute(detalle)
 
@@ -1042,15 +1052,15 @@ def GenerarJsonRips(request):
             archivo = 'Env' + str(envioRipsId) + '.txt'
             nombreCarpeta = 'C:\\EntornosPython\\Pos6\\JSONCLINICA\\' + str(archivo)
 
-            #for y in funcionGlobalJson[0]['dato']:
+            for y in funcionGlobalJson[0]['dato']:
 
-            #    print("tesxto funcionJson = ", y)
+                print("tesxto funcionJson = ", y)
 
                 # Aqui crea el archivo
                 #
-            #    file = open(nombreCarpeta, "w")
-            #    file.writelines(y)
-            #    file.close()
+                file = open(nombreCarpeta, "w")
+                file.writelines(y)
+                file.close()
 
             totalItems = RipsDetalle.objects.filter(ripsEnvios_id=envioRipsId).count()
 

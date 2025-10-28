@@ -24,12 +24,12 @@ import datetime
 from decimal import Decimal
 from admisiones.models import Ingresos
 from facturacion.models import ConveniosPacienteIngresos, Liquidacion, LiquidacionDetalle, Facturacion, FacturacionDetalle
-from cartera.models import TiposPagos, FormasPagos, Pagos, PagosFacturas
+from cartera.models import TiposPagos, FormasPagos, Pagos, PagosFacturas, GlosasDetalle
 from triage.models import Triage
 from clinico.models import Servicios
 from rips.models  import RipsMedicamentos, RipsConsultas, RipsProcedimientos, RipsOtrosServicios
 import pickle
-
+from django.db import transaction, IntegrityError
 
 # Function to convert dictionary keys and values
 def convert_keys_and_values(d):
@@ -322,7 +322,7 @@ def GuardaGlosasAdicionar(request):
     cur3 = miConexion3.cursor()
 
     try:
-        comando = 'INSERT INTO cartera_glosas ("fechaRecepcion", "saldoFactura", "totalNotasCredito", "totalGlosa" , "totalSoportado", "totalAceptado", observaciones, "fechaRegistro", "estadoReg", convenio_id, "usuarioRegistro_id", factura_id,  "tipoGlosa_id", "usuarioRecepcion_id",  "totalGlosa", "estadoRadicacion_id", "estadoRecepcion_id","sedesClinica_id", "ripsEnvio_id" ,"serviciosAdministrativos_id", anulado) VALUES (' + "'" + str(fechaRecepcion) + "'" + ', 0,0,0,0,0,' + "'" + str(observaciones) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(convenio_id) + "','"  + str(usuarioRegistro_id) + "', '" + str(factura_id) + "', '" + str(tipoGlosa_id) + "', '" + str(usuarioRegistro_id) + "','" + str(totalGlosa) + "', null, '" + str(estadoRecepcion_id) + "', '" + str(sedesClinica_id)  + "',null,'" + str(serviciosAdministrativos_id) + "','N'" +  ')'
+        comando = 'INSERT INTO cartera_glosas ("fechaRecepcion", "saldoFactura", "totalNotasCredito", "totalGlosa" , "totalSoportado", "totalAceptado", observaciones, "fechaRegistro", "estadoReg", convenio_id, "usuarioRegistro_id", factura_id,  "tipoGlosa_id", "usuarioRecepcion_id",  "estadoRadicacion_id", "estadoRecepcion_id","sedesClinica_id", "ripsEnvio_id" ,"serviciosAdministrativos_id", anulado) VALUES (' + "'" + str(fechaRecepcion) + "'" + ', 0,0,' + "'" + str(totalGlosa) + "'" + ',0,0,' + "'" + str(observaciones) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(convenio_id) + "','"  + str(usuarioRegistro_id) + "', '" + str(factura_id) + "', '" + str(tipoGlosa_id) + "', '" + str(usuarioRegistro_id) + "',null,'" + str(estadoRecepcion_id) + "', '" + str(sedesClinica_id)  + "',null,'" + str(serviciosAdministrativos_id) + "','N'" +  ')'
 
         print(comando)
         cur3.execute(comando)
@@ -605,7 +605,7 @@ def ConsultaGlosasDetalle(request):
     if (tipo == 'MEDICAMENTOS'):
 
         #detalle = 'SELECT ' + "'" + str('MEDICAMENTOS') + "'" + ' tipo, med.id,"itemFactura", "nomTecnologiaSalud" codigo, cums.nombre nombre, "vrServicio",	consecutivo,  "cantidadGlosada", "cantidadAceptada", "cantidadSoportado", "valorGlosado","vAceptado","valorSoportado","motivoGlosa_id", "notasCreditoGlosa" FROM public.rips_ripsmedicamentos med, public.rips_ripscums cums where med.id= ' + "'" + str(id) + "'" + ' and cums.id ="codTecnologiaSalud_id"'
-        detalle = 'SELECT ' + "'" + str('MEDICAMENTOS') + "'" + ' tipo, med.id,med."itemFactura", med."nomTecnologiaSalud" codigo, cums.nombre nombre, med."vrServicio",	med.consecutivo,  detGlo."valorGlosa",detGlo."valorAceptado",detGlo."valorSoportado",  detGlo."motivoGlosa_id",   mot.nombre motivo,	detGlo."valorNotasCredito" 	FROM public.rips_ripsmedicamentos med inner join public.rips_ripscums cums  on (cums.id =med."codTecnologiaSalud_id") left join cartera_glosasdetalle detGlo on (detGlo."ripsProcedimientos_id" =med.id) left join cartera_motivosglosas mot on (mot.id = detGlo."motivoGlosa_id" ) where med.id= ' + "'" + str(id) + "'"
+        detalle = 'SELECT ' + "'" + str('MEDICAMENTOS') + "'" + ' tipo, med.id,med."itemFactura", med."nomTecnologiaSalud" codigo, cums.nombre nombre, med."vrServicio",	med.consecutivo,  detGlo."valorGlosa",detGlo."valorAceptado",detGlo."valorSoportado",  detGlo."motivoGlosa_id",   mot.nombre motivo,	detGlo."valorNotasCredito" 	FROM public.rips_ripsmedicamentos med inner join public.rips_ripscums cums  on (cums.id =med."codTecnologiaSalud_id") left join cartera_glosasdetalle detGlo on (detGlo."ripsMedicamentos_id" =med.id) left join cartera_motivosglosas mot on (mot.id = detGlo."motivoGlosa_id" ) where med.id= ' + "'" + str(id) + "'"
 
     if (tipo == 'PROCEDIMIENTOS'):
 
@@ -614,12 +614,12 @@ def ConsultaGlosasDetalle(request):
 
     if (tipo == 'CONSULTAS'):
 
-        detalle = 'SELECT ' + "'" + str('CONSULTAS') + "'" + ' tipo, med.id,med."itemFactura", med."nomTecnologiaSalud" codigo, cums.nombre nombre, med."vrServicio",	med.consecutivo,  detGlo."valorGlosa",detGlo."valorAceptado",detGlo."valorSoportado",  detGlo."motivoGlosa_id",   mot.nombre motivo,	detGlo."valorNotasCredito" 	FROM public.rips_ripsconsultas med inner join public.rips_ripscums cums  on (cums.id =med."codTecnologiaSalud_id") left join cartera_glosasdetalle detGlo on (detGlo."ripsProcedimientos_id" =med.id) left join cartera_motivosglosas mot on (mot.id = detGlo."motivoGlosa_id" ) where med.id= ' + "'" + str(id) + "'"
+        detalle = 'SELECT ' + "'" + str('CONSULTAS') + "'" + ' tipo, med.id,med."itemFactura", med."nomTecnologiaSalud" codigo, cums.nombre nombre, med."vrServicio",	med.consecutivo,  detGlo."valorGlosa",detGlo."valorAceptado",detGlo."valorSoportado",  detGlo."motivoGlosa_id",   mot.nombre motivo,	detGlo."valorNotasCredito" 	FROM public.rips_ripsconsultas med inner join public.rips_ripscums cums  on (cums.id =med."codTecnologiaSalud_id") left join cartera_glosasdetalle detGlo on (detGlo."ripsConsultas_id" =med.id) left join cartera_motivosglosas mot on (mot.id = detGlo."motivoGlosa_id" ) where med.id= ' + "'" + str(id) + "'"
 
     if (tipo == 'OTROS SERVICIOS'):
 
 
-        detalle = 'SELECT ' + "'" + str('OTROS SERVICIOS') + "'" + ' tipo, med.id,med."itemFactura", med."nomTecnologiaSalud" codigo, cums.nombre nombre, med."vrServicio",	med.consecutivo,  detGlo."valorGlosa",detGlo."valorAceptado",detGlo."valorSoportado",  detGlo."motivoGlosa_id",   mot.nombre motivo,	detGlo."valorNotasCredito" 	FROM public.rips_ripsotrosservicios med inner join public.rips_ripscums cums  on (cums.id =med."codTecnologiaSalud_id") left join cartera_glosasdetalle detGlo on (detGlo."ripsProcedimientos_id" =med.id) left join cartera_motivosglosas mot on (mot.id = detGlo."motivoGlosa_id" ) where med.id= ' + "'" + str(id) + "'"
+        detalle = 'SELECT ' + "'" + str('OTROS SERVICIOS') + "'" + ' tipo, med.id,med."itemFactura", med."nomTecnologiaSalud" codigo, cums.nombre nombre, med."vrServicio",	med.consecutivo,  detGlo."valorGlosa",detGlo."valorAceptado",detGlo."valorSoportado",  detGlo."motivoGlosa_id",   mot.nombre motivo,	detGlo."valorNotasCredito" 	FROM public.rips_ripsotrosservicios med inner join public.rips_ripscums cums  on (cums.id =med."codTecnologiaSalud_id") left join cartera_glosasdetalle detGlo on (detGlo."ripsOtrosServicios_id" =med.id) left join cartera_motivosglosas mot on (mot.id = detGlo."motivoGlosa_id" ) where med.id= ' + "'" + str(id) + "'"
 
 
     print(detalle)
@@ -747,22 +747,69 @@ def GuardarGlosasDetalle(request):
             miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",  password="123456")
             cur3 = miConexion3.cursor()
 
+            hayRegistro = 0
+
+            try:
+                with transaction.atomic():
+
+                    existeRegistro = GlosasDetalle.objects.get(glosa_id=glosaId, itemFactura=itemFacturaGloDet)
+                    hayRegistro = existeRegistro.id
+
+            except Exception as e:
+                    # Aquí ya se hizo rollback automáticamente
+                    print("Se hizo rollback por PRONO SE HACE NADA:", e)
+                    hayRegistro=0
+
+            finally:
+                    print("No haga nada")
+
+
             if tipoGloDet == 'MEDICAMENTOS' :
 
-                comando = 'INSERT INTO cartera_glosasdetalle ( "itemFactura", "valorServicio", "valorGlosa", "valorSoportado", "valorAceptado","valorNotasCredito", observaciones, "estadoReg", glosa_id, "motivoGlosa_id", "usuarioRegistro_id", "fechaRegistro", "ripsId",  anulado, "ripsMedicamentos_id"	) VALUES ( ' +  "'" + str(itemFacturaGloDet) + "','" + str(vrServicioGloDet) + "','" + str(valorGlosado)  + "','" + str(valorSoportado) + "','" + str(vAceptado) + "','" + str(notasCreditoGlosa) + "','" + str(observacionesGloDet) + "','A','" + str(glosaId) + "','" + str(motivoGlosa_id) + "','" + str(username_id) + "','" + str(fechaRegistro) + "','" + str(ripsId) + "','N','" + str(ripsId) + "')"
+                if (hayRegistro == 0):
+
+	                comando = 'INSERT INTO cartera_glosasdetalle ( "itemFactura", "valorServicio", "valorGlosa", "valorSoportado", "valorAceptado","valorNotasCredito", observaciones, "estadoReg", glosa_id, "motivoGlosa_id", "usuarioRegistro_id", "fechaRegistro", "ripsId",  anulado, "ripsMedicamentos_id"	) VALUES ( ' +  "'" + str(itemFacturaGloDet) + "','" + str(vrServicioGloDet) + "','" + str(valorGlosado)  + "','" + str(valorSoportado) + "','" + str(vAceptado) + "','" + str(notasCreditoGlosa) + "','" + str(observacionesGloDet) + "','A','" + str(glosaId) + "','" + str(motivoGlosa_id) + "','" + str(username_id) + "','" + str(fechaRegistro) + "','" + str(ripsId) + "','N','" + str(ripsId) + "')"
+
+                else:
+
+                    comando = 'UPDATE cartera_glosasdetalle SET "itemFactura" = ' +  "'" + str(itemFacturaGloDet) + "'," + ' "valorServicio"  = ' + "'"  + str(vrServicioGloDet) + "'," + ' "valorGlosa" = ' + "'" + str(valorGlosado) + "'," + ' "valorSoportado" = ' + "'" + str(valorSoportado) + "'," + ' "valorAceptado" = ' + "'" + str(vAceptado) + "', " + ' "valorNotasCredito" = ' + "'" + str(notasCreditoGlosa) + "'," + ' observaciones = ' + "'" + str(observacionesGloDet) + "'," + '"estadoReg" = ' + "'A'," + ' "motivoGlosa_id" = ' + "'" + str(motivoGlosa_id) + "'," + ' "usuarioRegistro_id" = ' + "'" + str(username_id) + "'," + ' "fechaRegistro" = ' + "'" + str(fechaRegistro) + "'," + '"ripsId" = ' + "'" + str(ripsId) + "'," + ' anulado = ' + "'N'," + ' "ripsMedicamentos_id" = ' + "'" + str(ripsId) + "' WHERE glosa_id = " + "'" + str(glosaId) + "'" + ' AND "itemFactura" = ' + "'" + str(itemFacturaGloDet) + "'"
+
 
             if tipoGloDet == 'PROCEDIMIENTOS' :
 
-                comando = 'INSERT INTO cartera_glosasdetalle ( "itemFactura", "valorServicio", "valorGlosa", "valorSoportado", "valorAceptado","valorNotasCredito", observaciones, "estadoReg", glosa_id, "motivoGlosa_id", "usuarioRegistro_id", "fechaRegistro", "ripsId",  anulado, "ripsProcedimientos_id"	) VALUES ( ' +  "'" + str(itemFacturaGloDet) + "','" + str(vrServicioGloDet) + "','" + str(valorGlosado)  + "','" + str(valorSoportado) + "','" + str(vAceptado) + "','" + str(notasCreditoGlosa) + "','" + str(observacionesGloDet) + "','A','" + str(glosaId) + "','" + str(motivoGlosa_id) + "','" + str(username_id) + "','" + str(fechaRegistro) + "','" + str(ripsId) + "','N','" + str(ripsId) + "')"
+                if (hayRegistro == 0):
 
+                    comando = 'INSERT INTO cartera_glosasdetalle ( "itemFactura", "valorServicio", "valorGlosa", "valorSoportado", "valorAceptado","valorNotasCredito", observaciones, "estadoReg", glosa_id, "motivoGlosa_id", "usuarioRegistro_id", "fechaRegistro", "ripsId",  anulado, "ripsProcedimientos_id"	) VALUES ( ' +  "'" + str(itemFacturaGloDet) + "','" + str(vrServicioGloDet) + "','" + str(valorGlosado)  + "','" + str(valorSoportado) + "','" + str(vAceptado) + "','" + str(notasCreditoGlosa) + "','" + str(observacionesGloDet) + "','A','" + str(glosaId) + "','" + str(motivoGlosa_id) + "','" + str(username_id) + "','" + str(fechaRegistro) + "','" + str(ripsId) + "','N','" + str(ripsId) + "')"
+
+                else:
+
+                    comando = 'UPDATE cartera_glosasdetalle SET "itemFactura" = ' +  "'" + str(itemFacturaGloDet) + "'," + ' "valorServicio"  = ' + "'"  + str(vrServicioGloDet) + "'," + ' "valorGlosa" = ' + "'" + str(valorGlosado) + "'," + ' "valorSoportado" = ' + "'" + str(valorSoportado) + "'," + ' "valorAceptado" = ' + "'" + str(vAceptado) + "', " + ' "valorNotasCredito" = ' + "'" + str(notasCreditoGlosa) + "'," + ' observaciones = ' + "'" + str(observacionesGloDet) + "'," + '"estadoReg" = ' + "'A'," + ' "motivoGlosa_id" = ' + "'" + str(motivoGlosa_id) + "'," + ' "usuarioRegistro_id" = ' + "'" + str(username_id) + "'," + ' "fechaRegistro" = ' + "'" + str(fechaRegistro) + "'," + '"ripsId" = ' + "'" + str(ripsId) + "'," + ' anulado = ' + "'N'," + ' "ripsProcedimientos_id" = ' + "'" + str(ripsId) + "' WHERE glosa_id = " + "'" + str(glosaId) + "'" + ' AND "itemFactura" = ' + "'" + str(itemFacturaGloDet) + "'"
+
+	
             if tipoGloDet == 'CONSULTAS' :
 
-                comando = 'INSERT INTO cartera_glosasdetalle ( "itemFactura", "valorServicio", "valorGlosa", "valorSoportado", "valorAceptado","valorNotasCredito", observaciones, "estadoReg", glosa_id, "motivoGlosa_id", "usuarioRegistro_id", "fechaRegistro", "ripsId",  anulado, "ripsConsultas_id"	) VALUES ( ' +  "'" + str(itemFacturaGloDet) + "','" + str(vrServicioGloDet) + "','" + str(valorGlosado)  + "','" + str(valorSoportado) + "','" + str(vAceptado) + "','" + str(notasCreditoGlosa) + "','" + str(observacionesGloDet) + "','A','" + str(glosaId) + "','" + str(motivoGlosa_id) + "','" + str(username_id) + "','" + str(fechaRegistro) + "','" + str(ripsId) + "','N','" + str(ripsId) + "')"
+                if (hayRegistro == 0):
+
+
+	                comando = 'INSERT INTO cartera_glosasdetalle ( "itemFactura", "valorServicio", "valorGlosa", "valorSoportado", "valorAceptado","valorNotasCredito", observaciones, "estadoReg", glosa_id, "motivoGlosa_id", "usuarioRegistro_id", "fechaRegistro", "ripsId",  anulado, "ripsConsultas_id"	) VALUES ( ' +  "'" + str(itemFacturaGloDet) + "','" + str(vrServicioGloDet) + "','" + str(valorGlosado)  + "','" + str(valorSoportado) + "','" + str(vAceptado) + "','" + str(notasCreditoGlosa) + "','" + str(observacionesGloDet) + "','A','" + str(glosaId) + "','" + str(motivoGlosa_id) + "','" + str(username_id) + "','" + str(fechaRegistro) + "','" + str(ripsId) + "','N','" + str(ripsId) + "')"
+
+                else:
+
+                    comando = 'UPDATE cartera_glosasdetalle SET "itemFactura" = ' +  "'" + str(itemFacturaGloDet) + "'," + ' "valorServicio"  = ' + "'"  + str(vrServicioGloDet) + "'," + ' "valorGlosa" = ' + "'" + str(valorGlosado) + "'," + ' "valorSoportado" = ' + "'" + str(valorSoportado) + "'," + ' "valorAceptado" = ' + "'" + str(vAceptado) + "', " + ' "valorNotasCredito" = ' + "'" + str(notasCreditoGlosa) + "'," + ' observaciones = ' + "'" + str(observacionesGloDet) + "'," + '"estadoReg" = ' + "'A'," + ' "motivoGlosa_id" = ' + "'" + str(motivoGlosa_id) + "'," + ' "usuarioRegistro_id" = ' + "'" + str(username_id) + "'," + ' "fechaRegistro" = ' + "'" + str(fechaRegistro) + "'," + '"ripsId" = ' + "'" + str(ripsId) + "'," + ' anulado = ' + "'N'," + ' "ripsConsultas_id" = ' + "'" + str(ripsId) + "' WHERE glosa_id = " + "'" + str(glosaId) + "'" + ' AND "itemFactura" = ' + "'" + str(itemFacturaGloDet) + "'"
+
 
 
             if tipoGloDet == 'OTOS SERVICIOS' :
 
-                comando = 'INSERT INTO cartera_glosasdetalle ( "itemFactura", "valorServicio", "valorGlosa", "valorSoportado", "valorAceptado","valorNotasCredito", observaciones, "estadoReg", glosa_id, "motivoGlosa_id", "usuarioRegistro_id", "fechaRegistro", "ripsId",  anulado, "ripsOtrosServicios_id"	) VALUES ( ' +  "'" + str(itemFacturaGloDet) + "','" + str(vrServicioGloDet) + "','" + str(valorGlosado)  + "','" + str(valorSoportado) + "','" + str(vAceptado) + "','" + str(notasCreditoGlosa) + "','" + str(observacionesGloDet) + "','A','" + str(glosaId) + "','" + str(motivoGlosa_id) + "','" + str(username_id) + "','" + str(fechaRegistro) + "','" + str(ripsId) + "','N','" + str(ripsId) + "')"
+                if (hayRegistro == 0):
+
+	                comando = 'INSERT INTO cartera_glosasdetalle ( "itemFactura", "valorServicio", "valorGlosa", "valorSoportado", "valorAceptado","valorNotasCredito", observaciones, "estadoReg", glosa_id, "motivoGlosa_id", "usuarioRegistro_id", "fechaRegistro", "ripsId",  anulado, "ripsOtrosServicios_id"	) VALUES ( ' +  "'" + str(itemFacturaGloDet) + "','" + str(vrServicioGloDet) + "','" + str(valorGlosado)  + "','" + str(valorSoportado) + "','" + str(vAceptado) + "','" + str(notasCreditoGlosa) + "','" + str(observacionesGloDet) + "','A','" + str(glosaId) + "','" + str(motivoGlosa_id) + "','" + str(username_id) + "','" + str(fechaRegistro) + "','" + str(ripsId) + "','N','" + str(ripsId) + "')"
+
+                else:
+
+                    comando = 'UPDATE cartera_glosasdetalle SET "itemFactura" = ' +  "'" + str(itemFacturaGloDet) + "'," + ' "valorServicio"  = ' + "'"  + str(vrServicioGloDet) + "'," + ' "valorGlosa" = ' + "'" + str(valorGlosado) + "'," + ' "valorSoportado" = ' + "'" + str(valorSoportado) + "'," + ' "valorAceptado" = ' + "'" + str(vAceptado) + "', " + ' "valorNotasCredito" = ' + "'" + str(notasCreditoGlosa) + "'," + ' observaciones = ' + "'" + str(observacionesGloDet) + "'," + '"estadoReg" = ' + "'A'," + ' "motivoGlosa_id" = ' + "'" + str(motivoGlosa_id) + "'," + ' "usuarioRegistro_id" = ' + "'" + str(username_id) + "'," + ' "fechaRegistro" = ' + "'" + str(fechaRegistro) + "'," + '"ripsId" = ' + "'" + str(ripsId) + "'," + ' anulado = ' + "'N'," + ' "ripsOtrosServicios_id" = ' + "'" + str(ripsId) + "' WHERE glosa_id = " + "'" + str(glosaId) + "'" + ' AND "itemFactura" = ' + "'" + str(itemFacturaGloDet) + "'"
+
+
 
             print(comando)
             cur3.execute(comando)

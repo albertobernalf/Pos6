@@ -90,7 +90,7 @@ function arrancaGlosas(valorTabla,valorData)
 	    { width: '10%', targets: [2,3] },
 
 		{   
-                    "targets": 25
+                    "targets": 24
                }
             ],
 	 pageLength: 3,
@@ -149,7 +149,7 @@ function arrancaGlosas(valorTabla,valorData)
 		 { data: "fields.nombreTipoGlosa"},
 		  { data: "fields.usuarioRecepcion_id"},
                 { data: "fields.usuarioRespuesta_id"},    
-                { data: "fields.valorGlosa"},    
+          
                 { data: "fields.estadoRadicacion_id"},    
                 { data: "fields.estadoRecepcion_id"},    
                 { data: "fields.estadoGlosaRecepcion"},    
@@ -232,26 +232,23 @@ function arrancaGlosas(valorTabla,valorData)
 		{
 "render": function ( data, type, row ) {
                         var btn = '';
-                          btn = btn + " <input type='radio' name='glosaDetalle' class='miGlosaDetalle form-check-input ' data-pk='"  + row.pk + "'>" + "</input>";
+                          btn = btn + " <input type='radio' name='glosaDetalle' style='width:15px;height:15px;accent-color: purple;border-color: purple;background-color: purple;' class='miGlosaDetalle form-check-input ' data-pk='"  + row.pk + "'>" + "</input>";
 
                        return btn;
                     },
 		},
-
-		 { data: "fields.tipo"},
-		 { data: "fields.id"},
-             	 { data: "fields.consec"},
+		{ data: "fields.tipo"},
+		{ data: "fields.id"},
+             	{ data: "fields.consec"},
                 { data: "fields.itemFactura"},
                 { data: "fields.codigo"},
                 { data: "fields.nombre"},
                 { data: "fields.glosaNombre"},
-	      { data: "fields.vrServicio"},
+	        { data: "fields.vrServicio"},
                 { data: "fields.valorGlosa"},
-                { data: "fields.valorSoportado2"},
                 { data: "fields.valorAceptado"},
                 { data: "fields.valorNotasCredito"},
-
-
+                { data: "fields.valorSoportado2"},
 
                      ]
             }
@@ -999,12 +996,13 @@ function arrancaGlosas(valorTabla,valorData)
 
 
                 { data: "fields.id"},
-                { data: "fields.totalGlosa"},
+              
                 { data: "fields.fechaRecepcion"},
                 { data: "fields.saldoFactura"},
-                { data: "fields.totalSoportado"},
+		  { data: "fields.totalGlosa"},
                 { data: "fields.totalAceptado"},
                 { data: "fields.totalNotasCredito"},
+                { data: "fields.totalSoportado"},
 		{ data: "fields.nombreConvenio"},
 		 { data: "fields.fechaRespuesta"},
 		 { data: "fields.tipoGlosa_id"},
@@ -1049,18 +1047,18 @@ const initDataTableGlosas = async () => {
 
          arrancaGlosas(1,data);
 	 dataTableGlosasInitialized = true;
-         arrancaGlosas(4,data);
-         dataTableGlosasTransaccionInitialized = true;
-	 arrancaGlosas(5,data);
-	 dataTableGlosasUsuariosInitialized = true;
-         arrancaGlosas(6,data);
-	 dataTableGlosasProcedimientosInitialized = true;
-         arrancaGlosas(7,data);
-	 dataTableGlosasHospitalizacionInitialized = true;
-         arrancaGlosas(8,data);
-	 dataTableGlosasMedicamentosInitialized = true;
-         arrancaGlosas(9,data);
-	 dataTableGlosasUrgenciasInitialized = true;
+     //    arrancaGlosas(4,data);
+//         dataTableGlosasTransaccionInitialized = true;
+//	 arrancaGlosas(5,data);
+//	 dataTableGlosasUsuariosInitialized = true;
+  //       arrancaGlosas(6,data);
+	// dataTableGlosasProcedimientosInitialized = true;
+//         arrancaGlosas(7,data);
+//	 dataTableGlosasHospitalizacionInitialized = true;
+//         arrancaGlosas(8,data);
+//	 dataTableGlosasMedicamentosInitialized = true;
+//         arrancaGlosas(9,data);
+//	 dataTableGlosasUrgenciasInitialized = true;
 
 
 }
@@ -1129,22 +1127,22 @@ window.addEventListener('load', async () => {
 	    dataTableGlosasDetalleInitialized = true;
 
 
-	        arrancaGlosas(4,data);
-	    dataTableGlosasInitialized = true;
+//	        arrancaGlosas(4,data);
+//	    dataTableGlosasInitialized = true;
 
-	        arrancaGlosas(5,data);
-	    dataTableGlosasUsuariosInitialized = true;
+//	        arrancaGlosas(5,data);
+//	    dataTableGlosasUsuariosInitialized = true;
 
-        	arrancaGlosas(7,data);
-	    dataTableGlosasHospitalizacion = true;
+//        	arrancaGlosas(7,data);
+//	    dataTableGlosasHospitalizacion = true;
 
-        	arrancaGlosas(8,data);
-	    dataTableGlosasMedicamentos = true;
+//        	arrancaGlosas(8,data);
+//	    dataTableGlosasMedicamentos = true;
 
 	// AQUI tengo que colocar los datosde la Glosa en el Formulario de General y demas
 
 	document.getElementById("post_idGlo").innerHTML =post_id;
-	document.getElementById("factura_idGlo").value = dato3.factura_id;
+	document.getElementById("factura_idGlo").innerHTML = dato3.factura_id;
 	document.getElementById("facturaAdicionar_id").value = dato3.factura_id;
 	//document.getElementById("fechaRecepcionGlo").innerHTML = dato3.fechaRecepcion;
 	//document.getElementById("valorGlosaGlo").innerHTML = dato3.valorGlosa;
@@ -1173,8 +1171,8 @@ window.addEventListener('load', async () => {
 	document.getElementById("estadoRecepcion_idGlo").value = dato3.estadoRecepcion_id;
 
 
-        	arrancaGlosas(6,data);
-	    dataTableGlosasProcedimientosInitialized = true;
+//        	arrancaGlosas(6,data);
+//	    dataTableGlosasProcedimientosInitialized = true;
 
         	arrancaGlosas(10,data);
 	    dataTableGlosasAdicionarInitialized = true;
@@ -1263,20 +1261,20 @@ window.addEventListener('load', async () => {
 	        arrancaGlosas(2,data);
 	    dataTableGlosasDetalleInitialized = true;
 
-	        arrancaGlosas(4,data);
-	    dataTableGlosasInitialized = true;
+//	        arrancaGlosas(4,data);
+//	    dataTableGlosasInitialized = true;
 
-	        arrancaGlosas(5,data);
-	    dataTableGlosasUsuariosInitialized = true;
+//	        arrancaGlosas(5,data);
+//	    dataTableGlosasUsuariosInitialized = true;
 
-        	arrancaGlosas(7,data);
-	    dataTableGlosasHospitalizacion = true;
+//        	arrancaGlosas(7,data);
+//	    dataTableGlosasHospitalizacion = true;
 
-        	arrancaGlosas(8,data);
-	    dataTableGlosasMedicamentos = true;
+//        	arrancaGlosas(8,data);
+//	    dataTableGlosasMedicamentos = true;
 
-        	arrancaGlosas(6,data);
-	    dataTableGlosasProcedimientos = true;
+//        	arrancaGlosas(6,data);
+//	    dataTableGlosasProcedimientos = true;
 
   });
 
@@ -1306,7 +1304,7 @@ window.addEventListener('load', async () => {
 
 	$('#postFormGlosasDetalle').trigger("reset");
 
-	alert("info[0] = " + info[0] );
+	alert("info[0] = " + JSON.stringify(info[0]) );
 
 
   	$('#post_idGloDet').val(info[0].fields.id);
@@ -1367,7 +1365,6 @@ function GuardarGlosasDetalle()
                 dataType: 'json',
                 success: function (data2) {
 
-
 			if (data2.success == false )
 				{
 		
@@ -1409,7 +1406,8 @@ function GuardarGlosasDetalle()
 	        data['sedesClinica_id'] = sede;
 
 		var facturaId = dato3.factura_id;  // jquery
-		data['facturaId'] = document.getElementById("factura_idGlo").innerHTML;
+		var facturaId =	document.getElementById("factura_idGlo").innerHTML;
+		data['facturaId'] = facturaId;
 		data['glosaId'] = post_idGlo;
 
 
@@ -1419,11 +1417,15 @@ function GuardarGlosasDetalle()
 			    dataTableGlosasInitialized = true;
 
 
-        	arrancaGlosas(7,data);
-	    dataTableGlosasHospitalizacion = true;
+//        	arrancaGlosas(7,data);
+//	    dataTableGlosasHospitalizacion = true;
 
 			 arrancaGlosas(2,data);
 			    dataTableGlosasDetalleInitialized = true;
+
+			 arrancaGlosas(10,data);
+			    dataTableGlosasAdicionarInitialized = true;
+
 
  		 $('#crearModelGlosasDetalle').modal('hide');
 
@@ -1484,10 +1486,10 @@ function GuardaGlosasEstados()
 			 arrancaGlosas(1,data);
 			    dataTableGlosasInitialized = true;
 
-        	arrancaGlosas(7,data);
-	    dataTableGlosasHospitalizacion = true;
-			 arrancaGlosas(8,data);
-			    dataTableGlosasMedicamentosInitialized = true;
+        //	arrancaGlosas(7,data);
+	 //    dataTableGlosasHospitalizacion = true;
+	 //		 arrancaGlosas(8,data);
+	 //		    dataTableGlosasMedicamentosInitialized = true;
 
 
 
@@ -1603,7 +1605,7 @@ function CrearGlosas()
 	        data['sede'] = sede;
 	        data['sedesClinica_id'] = sede;
 
-		var facturaId = document.getElementById("factura_idGlo").value;
+		var facturaId = document.getElementById("factura_idGlo").innerHTML;
 		data['facturaId'] = document.getElementById("factura_idGlo").value;
 
 	        data = JSON.stringify(data);
@@ -1612,11 +1614,11 @@ function CrearGlosas()
 			 arrancaGlosas(1,data);
 			    dataTableGlosasInitialized = true;
 
-        	arrancaGlosas(7,data);
-	    dataTableGlosasHospitalizacion = true;
+//        	arrancaGlosas(7,data);
+//	    dataTableGlosasHospitalizacion = true;
 
-			 arrancaGlosas(8,data);
-			    dataTableGlosasMedicamentosInitialized = true;
+//			 arrancaGlosas(8,data);
+//			    dataTableGlosasMedicamentosInitialized = true;
 		            $('#crearModelGlosas').modal('hide');
 
 
