@@ -399,7 +399,7 @@ function arrancaCirugia(valorTabla,valorData)
 	  "render": function ( data, type, row ) {
                         var btn = '';
 
-	     btn = btn + " <button class='miAdicionarProcedimientos btn-primary ' data-pk='" + row.pk + "'>" + '<i class="fa-duotone fa-regular fa-thumbs-up"></i>' + "</button>";
+	     btn = btn + " <button class='miAdicionarProcedimientos btn-primary ' style='width:15px;height:15px;accent-color: purple;border-color: purple;background-color: green;' data-pk='" + row.pk + "'>" + '<i class="fa-duotone fa-regular fa-thumbs-up"></i>' + "</button>";
 
                        return btn;
                     },
@@ -410,7 +410,7 @@ function arrancaCirugia(valorTabla,valorData)
 	  "render": function ( data, type, row ) {
                         var btn = '';
 
-	     btn = btn + " <button class='miAdicionarParticipantes btn-primary ' data-pk='" + row.pk + "'>" + '<i class="fa-duotone fa-regular fa-thumbs-up"></i>' + "</button>";
+	     btn = btn + " <button class='miAdicionarParticipantes btn-primary ' style='width:15px;height:15px;accent-color: purple;border-color: purple;background-color: green;' data-pk='" + row.pk + "'>" + '<i class="fa-duotone fa-regular fa-thumbs-up"></i>' + "</button>";
 
 
                        return btn;
@@ -421,7 +421,7 @@ function arrancaCirugia(valorTabla,valorData)
 	  "render": function ( data, type, row ) {
                         var btn = '';
 
-	     btn = btn + " <button class='miAdicionarMaterial btn-primary ' data-pk='" + row.pk + "'>" + '<i class="fa-duotone fa-regular fa-thumbs-up"></i>' + "</button>";
+	     btn = btn + " <button class='miAdicionarMaterial btn-primary ' style='width:15px;height:15px;accent-color: purple;border-color: purple;background-color: green;'  data-pk='" + row.pk + "'>" + '<i class="fa-duotone fa-regular fa-thumbs-up"></i>' + "</button>";
 
 
                        return btn;
@@ -792,6 +792,7 @@ function arrancaCirugia(valorTabla,valorData)
 	},
 
 
+		/* { data: "fields.prog"}, */
 		{ data: "fields.id"},
                 { data: "fields.sala"},
                 { data: "fields.nombre"},
@@ -799,7 +800,46 @@ function arrancaCirugia(valorTabla,valorData)
                 { data: "fields.fechaProgramacionFin"},
                 { data: "fields.horaProgramacionInicia"},
                 { data: "fields.horaProgramacionFin"},
-                { data: "fields.estado"},
+            /*    { data: "fields.estado"},  */
+
+
+
+     {
+		         target : 8,
+			"sWidth": "1%",
+        	           "render": function (data, type, row) {
+                console.log ('data = ', data);
+                console.log ('type = ', type);
+                console.log ('row = ', row);
+
+
+				if ( row['fields']['estado'] === 'OCUPADO')
+                {
+                    return '<i class="far fa-dot-circle" style="color:red; " >Ocupado</i>';
+					/*  return 'SIN CONVENIO'; */
+					}
+
+			    if ( row['fields']['estado'] ==  'LIBRE')
+				{
+		 return '<i class="far fa-dot-circle" style="color:green" >Libre</i>';
+/*
+                     return  row['fields']['estado'];
+                    return data;
+*/
+                    }
+
+
+	                    }
+			},
+
+
+
+
+
+
+
+
+
                         ]
             }
 
@@ -2331,6 +2371,23 @@ function CrearProgramacionCirugia()
                 type: "POST",
                 dataType: 'json',
                 success: function (data2) {
+		
+
+
+		if (data2.success == true)
+			 {
+			  document.getElementById("mensajes").value = data2.Mensajes;
+			 }
+			else
+			{
+			alert("data2 ERROR = " + JSON.stringify(data2));
+
+			document.getElementById("mensajesErrorModalProgramacion").value = data2.Mensajes;
+			return;
+			}
+
+
+
 		  
               //    $('#postFormProgramacionCirugia').trigger("reset");
 		var data =  {}   ;
@@ -2347,13 +2404,15 @@ function CrearProgramacionCirugia()
 	     arrancaCirugia(1,data);
 	    dataTableSalasCirugiaInitialized = true;
 
- 		//$('#crearModelProgramacionCirugia').modal('hide');
-		 $("#mensajesExitoModalProgramacion").html(data2.message);
+ 		$('#crearModelProgramacionCirugia').modal('hide');
 
-	
+	document.getElementById("mensajesExitoModalProgramacion").value = data2.Mensajes;
 	  
 	     arrancaCirugia(7,data);
 	    dataTableDisponibilidadSalaInitialized = true;
+
+   arrancaCirugia(3,data);
+	    dataTableSolicitudCirugiaInitialized = true;
 
 
 
@@ -2462,11 +2521,11 @@ function CrearProcedimientosCirugia()
 	     arrancaCirugia(5,data);
 	    dataTableProcedimientosCirugiaInitialized = true;
 
-	  
-
-
+  
  		// $('#crearModelProcedimientosCirugia').modal('hide');
-		 $("#mensajesModalProcedimientosCirugia").html(data2.message);
+				
+		document.getElementById("mensajesModalProcedimientosCirugia").value = data2.Mensajes;
+
 
                 },
        error: function (data) {
@@ -2516,7 +2575,8 @@ function CrearParticipantesCirugia()
 
 
  		 // $('#crearModelParticipantesCirugia').modal('hide');
-		 $("#mensajesModalParticipantesCirugia").html(data2.message);
+
+	document.getElementById("mensajesModalParticipantesCirugia").value = data2.Mensajes;
 
                 },
         error: function (data) {
@@ -2590,7 +2650,10 @@ function CrearParticipantesInformeCirugia()
 
 
  		 // $('#crearModelParticipantesCirugia').modal('hide');
-		 $("#mensajesModalParticipantesInformeCirugia").html(data2.message);
+
+		document.getElementById("mensajesModalParticipantesInformeCirugia").value = data2.Mensajes;
+
+
 
                 },
         error: function (data) {
@@ -2702,7 +2765,13 @@ function CrearMaterialCirugia()
 	document.getElementById("sedesClinica_id").value =  sede;
 	cirugiaIdModalMaterial  = document.getElementById("cirugiaIdModalMaterial").value ;
 	var user  = document.getElementById("usernameMaterialCirugia_id").value ;
+        var cantidad = document.getElementById("cantidad").value ;
 
+		if (cantidad =='')
+		{
+		alert("Suministre Cantidad de material");
+		return;
+		}
 
             $.ajax({
                 data: $('#postFormMaterialCirugia').serialize(),
@@ -2731,7 +2800,9 @@ function CrearMaterialCirugia()
 	  
 
  		// $('#crearModelProcedimientosCirugia').modal('hide');
-		 $("#mensajesModalMaterialCirugia").html(data2.message);
+			 document.getElementById("mensajesModalMaterialCirugia").value = data2.Mensajes;
+
+
 
                 },
          error: function (data) {
@@ -2869,7 +2940,8 @@ function CrearProcedimientosInformeCirugia()
 
 
  		// $('#crearModelProcedimientosCirugia').modal('hide');
-		 $("#mensajesModalProcedimientosInformeCirugia").html(data2.message);
+
+	document.getElementById("mensajesModalProcedimientosInformeCirugia").value = data2.Mensajes;
 
                 },
         error: function (data) {
@@ -2994,6 +3066,13 @@ function CrearMaterialInformeCirugia()
 
 	// alert("CrearMaterialInformeCirugia");
 
+	if (cantidad =='')
+		{
+		alert("Suministre Cantidad de material");
+		return;
+		}
+
+
 	var sede = document.getElementById("sede").value;
 	document.getElementById("sedesClinicaModalMaterialInforme_id").value =  sede;
 	var cirugiaIdModalMaterialInforme  = document.getElementById("cirugiaIdModalMaterialInforme").value ;
@@ -3032,7 +3111,9 @@ function CrearMaterialInformeCirugia()
 	    dataTableMaterialInformeCirugiaInitialized = true;
 	  
  		// $('#crearModelMaterialInformeCirugia').modal('hide');
-		 $("#mensajesModalMaterialInformeCirugia").html(data2.message);
+
+    	document.getElementById("mensajesModalMaterialInformeCirugia").value = data2.Mensajes;
+
 
                 },
             error: function (data) {
@@ -3047,6 +3128,9 @@ function CrearMaterialInformeCirugia()
 function AdicionarHojaDeGastoCirugia() {
 
    	   //  alert("ENTRE AdicionarHojaDeGastoCirugia");
+
+
+
 
             $('#postFormHojaDeGastoCirugia').trigger("reset");
 	    document.getElementById("cirugiaIdModalHojaDeGastoCirugia").value = document.getElementById("cirugiaIdModalHojaDeGastoCirugia").value ;

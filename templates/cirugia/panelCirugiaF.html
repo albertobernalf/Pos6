@@ -579,10 +579,10 @@ function RefrescarPantalla() {
 			<div class="modal-footer">
 					
 					<textarea id="mensajesErrorModalProcedimientosCirugia" name="mensajesErrorModalProcedimientosCirugia" style="background-color: lightred; color: navy;"  rows="1" cols="60" placeholder="Mensajes..."  wrap="hard"></textarea>				
+				<textarea id="mensajesModalProcedimientosCirugia" name="mensajesModalProcedimientosCirugia" style="background-color: lightred; color: navy;"  rows="1" cols="60" placeholder="Mensajes..."  wrap="hard"></textarea>				
 
 					  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar   </button>
-                                   
-                                       	<button type="button" class="btn btn-primary" id="saveBtnCrearProcedimientosCirugia" onclick="CrearProcedimientosCirugia()">Grabar!</button> 
+                                 
                                     </div>
 
 						
@@ -621,10 +621,10 @@ function RefrescarPantalla() {
                       <div class="row row-cols-lg-auto g-3 align-items-center mb-3">
 
 				  <div class="col-3">
-                                        <label for="medico" class="col-sm-1 control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Medico:</label>
+                                        <label for="medico" class="col-sm-1 control-label">Medico:</label>
                                         <div class="col-sm-8">
                                             <select class="select-css h-40 w-20"  id="medico"  tabindex= "0"  name="medico" required>
-                                                {% for especialidadesMedicos in EspecialidadesMedicos %}
+                                                {% for especialidadesMedicos in EspecialidadesMedicosCirugia %}
                                                 <option value="{{especialidadesMedicos.id}}"> {{especialidadesMedicos.nombre}}</option>
                                                 {% endfor %}
                                             </select>
@@ -706,10 +706,11 @@ function RefrescarPantalla() {
 	
 
 					<textarea id="mensajesErrorModalParticipantesCirugia" name="mensajesErrorModalParticipantesCirugia" style="background-color: lightred; color: navy;"  rows="1" cols="60" placeholder="Mensajes..."  wrap="hard"></textarea>				
+					<textarea id="mensajesModalParticipantesCirugia" name="mensajesModalParticipantesCirugia" style="background-color: lightred; color: navy;"  rows="1" cols="60" placeholder="Mensajes..."  wrap="hard"></textarea>				
 					
 					  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar   </button>
                                    
-                                       	<button type="button" class="btn btn-primary" id="saveBtnCrearParticipantesCirugia" onclick="CrearParticipantesCirugia()">Grabar!</button> 
+                                       <!-- 	<button type="button" class="btn btn-primary" id="saveBtnCrearParticipantesCirugia" onclick="CrearParticipantesCirugia()">Grabar!</button>   -->
                                     </div>
 
 						
@@ -764,7 +765,8 @@ function RefrescarPantalla() {
                          </div>
 			
 			  <div class="col-2">
-			 <input type="text" class="form-control" id="cantidad" name="cantidad"  ></input>  
+			 Cantidad:
+			 <input type="text" class="form-control" id="cantidad" name="cantidad"  required  ></input>  
                          </div>
 
 
@@ -816,6 +818,7 @@ function RefrescarPantalla() {
 	
 
 					<textarea id="mensajesErrorModalMaterialCirugia" name="mensajesErrorModalMaterialCirugia" style="background-color: lightred; color: navy;"  rows="1" cols="60" placeholder="Mensajes..."  wrap="hard"></textarea>					
+				<textarea id="mensajesModalMaterialCirugia" name="mensajesModalMaterialCirugia" style="background-color: lightred; color: navy;"  rows="1" cols="60" placeholder="Mensajes..."  wrap="hard"></textarea>					
 					  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar   </button>
                                    
 
@@ -1168,7 +1171,8 @@ function RefrescarPantalla() {
 			
 			<div class="modal-footer">
 
-					  <span id="mensajesErrorModalProgramacion" name="mensajesErrorModalProgramacion" style= "color:red; font-size:15px; line-height:35px; font-family: Times Neww Roman;" > </span>
+					
+					<textarea id="mensajesErrorModalProgramacion" name="mensajesErrorModalProgramacion" style="background-color: lightred; color: navy;"  rows="1" cols="60" placeholder="Mensajes..."  wrap="hard"></textarea>					
 
 					<textarea id="mensajesExitoModalProgramacion" name="mensajesExitoModalProgramacion" style="background-color: lightred; color: navy;"  rows="1" cols="60" placeholder="Mensajes..."  wrap="hard"></textarea>					
 	
@@ -1448,8 +1452,9 @@ function RefrescarPantalla() {
                         </div> <!-- CIERRA BODY -->
 			<div class="modal-footer">
 	
-
 					<textarea id="mensajesErrorModalProcedimientosInformeCirugia" name="mensajesErrorModalProcedimientosInformeCirugia" style="background-color: lightred; color: navy;"  rows="1" cols="60" placeholder="Mensajes..."  wrap="hard"></textarea>										
+					<textarea id="mensajesModalProcedimientosInformeCirugia" name="mensajesModalProcedimientosInformeCirugia" style="background-color: lightred; color: navy;"  rows="1" cols="60" placeholder="Mensajes..."  wrap="hard"></textarea>										
+
 					  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar   </button>                                  
 
                                     </div>
@@ -1494,7 +1499,7 @@ function RefrescarPantalla() {
                                         <label for="medicoInforme" class="col-sm-1 control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Medico:</label>
                                         <div class="col-sm-8">
                                             <select class="select-css h-40 w-20"  id="medicoInforme"  tabindex= "0"  name="medicoInforme" required>
-                                                {% for especialidadesMedicos in EspecialidadesMedicos %}
+                                                {% for especialidadesMedicos in EspecialidadesMedicosCirugia %}
                                                 <option value="{{especialidadesMedicos.id}}"> {{especialidadesMedicos.nombre}}</option>
                                                 {% endfor %}
                                             </select>
@@ -1586,10 +1591,13 @@ function RefrescarPantalla() {
 			<div class="modal-footer">
 	
 
-					<textarea id="mensajesErrorModalParticipantesInformeCirugia" name="mensajesErrorModalParticipantesInformeCirugia" style="background-color: lightred; color: navy;"  rows="1" cols="60" placeholder="Mensajes..."  wrap="hard"></textarea>											
+				<textarea id="mensajesErrorModalParticipantesInformeCirugia" name="mensajesErrorModalParticipantesInformeCirugia" style="background-color: lightred; color: navy;"  rows="1" cols="60" placeholder="Mensajes..."  wrap="hard"></textarea>											
+				<textarea id="mensajesModalParticipantesInformeCirugia" name="mensajesModalParticipantesInformeCirugia" style="background-color: lightred; color: navy;"  rows="1" cols="60" placeholder="Mensajes..."  wrap="hard"></textarea>											
+
+
 					  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar   </button>
                                    
-                                       	<button type="button" class="btn btn-primary" id="saveBtnCrearParticipantesInformeCirugia" onclick="CrearParticipantesInformeCirugia()">Grabar!</button> 
+
                                     </div>
 
 						
@@ -1648,6 +1656,7 @@ function RefrescarPantalla() {
                          </div>
 			
 			  <div class="col-2">
+			  Cantidad:
 			 <input type="text" class="form-control" id="cantidadInforme" name="cantidadInforme"  ></input>  
                          </div>
 
@@ -1706,6 +1715,8 @@ function RefrescarPantalla() {
 	
 	
 					<textarea id="mensajesErrorModalMaterialInformeCirugia" name="mensajesErrorModalMaterialInformeCirugia" style="background-color: lightred; color: navy;"  rows="1" cols="60" placeholder="Mensajes..."  wrap="hard"></textarea>																
+					<textarea id="mensajesModalMaterialInformeCirugia" name="mensajesModalMaterialInformeCirugia" style="background-color: lightred; color: navy;"  rows="1" cols="60" placeholder="Mensajes..."  wrap="hard"></textarea>																
+
 					  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar   </button>
                                    
 

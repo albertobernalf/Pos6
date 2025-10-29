@@ -860,5 +860,6 @@ WHERE prog.id = id
 
 
 
-
+-- ojo en facturaciuon-- traslados debe actualizar a cero el valor de os procedimikentos en la tarifa desde y actulizar totales a la nueva cuneta
+-- ojo al luqidar una cirugia no pasa los materiales de cirugia y tampoco los derechos de sala
 

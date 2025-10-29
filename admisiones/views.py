@@ -2424,6 +2424,31 @@ def escogeAcceso(request, Sede, Username, Profesional, Documento, NombreSede, es
 
         # Fin combo EspecialidadesMedicos
 
+	# Combo EspecialidadesMedicosCirugia
+
+
+        miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                   password="123456")
+        curt = miConexiont.cursor()
+        comando = 'SELECT em.id ,pl.nombre||'+ "'" + str(' ') + "'" +  '||e.nombre FROM clinico_Especialidades e, clinico_EspecialidadesMedicos em,planta_planta pl  where em."especialidades_id" = e.id and em."planta_id" = pl.id  AND em."sedesClinica_id" = ' + "'" + str(sede) + "'"
+        curt.execute(comando)
+        print(comando)
+
+        especialidadesMedicosCirugia = []
+        especialidadesMedicosCirugia.append({'id': '', 'nombre': ''})
+
+        for id, nombre in curt.fetchall():
+          especialidadesMedicosCirugia.append({'id': id, 'nombre': nombre})
+
+        miConexiont.close()
+        print(especialidadesMedicosCirugia)
+
+        context['EspecialidadesMedicosCirugia'] = especialidadesMedicosCirugia
+
+        # Fin combo especialidadesMedicosCirugia
+
+
+
         # Combo suministrosCirugia
 
         miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",

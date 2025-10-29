@@ -20,6 +20,8 @@ import pyodbc
 import psycopg2
 import json
 #import datetime
+import datetime
+import time
 from datetime import date, timedelta
 import time
 from decimal import Decimal
@@ -199,7 +201,7 @@ def CrearProgramacionCirugia(request):
         cur3 = miConexion3.cursor()
 
         horarioSala = []
-        comando0 = 'SELECT count(*) id FROM cirugia_programacioncirugias cir where sala_id =  ' + "'" + str(sala) + "'" + ' AND ' + "'" + str(fechaProgramacionInicia) + "'" + ' BETWEEN "fechaProgramacionInicia" AND "fechaProgramacionFin" AND ' + "'" + str(horaProgramacionInicia) + "'" + ' BETWEEN  "horaProgramacionInicia" and "horaProgramacionFin" '
+        comando0 = 'SELECT count(*) id FROM cirugia_programacioncirugias cir where cir.id != ' + "'" + str(programacionId) + "'" +  ' AND sala_id =  ' + "'" + str(sala) + "'" + ' AND cir."fechaProgramacionInicia" =  date(' + "'" + str(fechaProgramacionInicia) + "')" + ' AND (cir."horaProgramacionInicia"  BETWEEN  ' + "'" + str(horaProgramacionInicia) + "'" + ' and ' + "'" + str(horaProgramacionFin) + "'" + ' OR cir."horaProgramacionFin"  BETWEEN ' + "'" + str(horaProgramacionInicia) + "' AND " + "'" + str(horaProgramacionFin) + "')"
 
         print(comando0)
         cur3.execute(comando0)
@@ -222,7 +224,7 @@ def CrearProgramacionCirugia(request):
 
             miConexion3.rollback()
 
-            return JsonResponse({'success': False, 'message': 'sala de Cirugia con horario ocupado!'})
+            return JsonResponse({'success': False, 'Mensajes': 'sala de Cirugia con horario ocupado!'})
 
 
         comando = 'UPDATE cirugia_programacioncirugias SET "horaProgramacionFin" = ' + "'" + str(horaProgramacionFin) + "'," +   '"fechaRegistro" = ' + "'" + str(fechaRegistro) + "'," + '"estadoReg" = ' + "'" + str(estadoReg) + "'," + '"sedesClinica_id" = ' + "'" + str(sedesClinica_id) + "'," + '"usuarioRegistro_id" = ' + "'" + str(username_id) + "'," + '"fechaProgramacionFin" = ' + "'" + str(fechaProgramacionFin)  + "'," + '"fechaProgramacionInicia" = ' + "'" + str(fechaProgramacionInicia)  + "'," + '"horaProgramacionInicia" = ' + "'" + str(horaProgramacionInicia) + "', sala_id = '" + str(sala) + "'," + '"estadoProgramacion_id" = ' + "'" + str(estadosProgramacionY) + "'," + '"serviciosAdministrativos_id" = ' + "'" + str(serviciosAdministrativos) + "'" + ' WHERE id = '  + "'"  + str(programacionId) + "'"
@@ -379,74 +381,20 @@ def Load_dataDisponibilidadSala(request, data):
                                    password="123456")
     curx = miConexionx.cursor()
 
-    detalle = 'SELECT salas.id id,salas.numero numero , salas.nombre nombre,prog."fechaProgramacionInicia", prog."fechaProgramacionFin" ,cast(prog."horaProgramacionInicia" as time), cast(prog."horaProgramacionFin" as time) , ' + "'" + str('OCUPADO') + "'" + ' estado FROM cirugia_programacioncirugias prog LEFT JOIN sitios_salas salas ON (salas.id = prog.sala_id ) WHERE salas."sedesClinica_id" = ' + "'" + str(sede) + "'" + ' ORDER BY salas.numero,prog."fechaProgramacionInicia",cast(prog."horaProgramacionInicia" as time)'
+    #detalle = 'SELECT salas.id id,salas.numero numero , salas.nombre nombre,prog."fechaProgramacionInicia", prog."fechaProgramacionFin" ,cast(prog."horaProgramacionInicia" as time), cast(prog."horaProgramacionFin" as time) , ' + "'" + str('OCUPADO') + "'" + ' estado FROM cirugia_programacioncirugias prog LEFT JOIN sitios_salas salas ON (salas.id = prog.sala_id ) WHERE salas."sedesClinica_id" = ' + "'" + str(sede) + "'" + ' ORDER BY salas.numero,prog."fechaProgramacionInicia",cast(prog."horaProgramacionInicia" as time)'
+    #detalle = 'SELECT prog.id prog, salas.id id,salas.numero numero , salas.nombre nombre,prog."fechaProgramacionInicia", prog."fechaProgramacionFin" ,	cast(prog."horaProgramacionInicia" as time), cast(prog."horaProgramacionFin" as time) , ' + "'" + str('OCUPADO') + "'" + ' estado FROM cirugia_programacioncirugias prog LEFT JOIN sitios_salas salas ON (salas.id = prog.sala_id and salas."sedesClinica_id" = prog."sedesClinica_id" ) WHERE salas."sedesClinica_id" = ' + "'" + str(sede) + "'" + ' union SELECT prog.id prog, salas.id id,salas.numero numero , salas.nombre nombre,prog."fechaProgramacionFin", prog2."fechaProgramacionInicia" ,cast(prog."horaProgramacionFin" as time) + interval ' + "'" + str('1 minute') + "'" + ' , cast(prog2."horaProgramacionInicia" as time) - interval ' + "'" + str('1 minute') + "'" + ', ' + "'" + str('LIBRE') + "'" + ' estado FROM cirugia_programacioncirugias prog , sitios_salas salas, cirugia_programacioncirugias prog2 where salas.id = prog.sala_id  and salas."sedesClinica_id" = prog."sedesClinica_id" and prog2."sedesClinica_id" = prog."sedesClinica_id" and	salas."sedesClinica_id" =  ' + "'" + str(sede) + "'" + ' and  prog2.id = (select min(prog3.id) from cirugia_programacioncirugias prog3 where prog3.id > prog.id) UNION SELECT prog.id prog, salas.id id,salas.numero numero , salas.nombre nombre,prog."fechaProgramacionFin", prog2."fechaProgramacionInicia" ,cast(prog2."horaProgramacionFin" as time) + interval ' + "'" + str('1 minute') + "'" + ' , cast(salas."finServicio" as time)  , ' + "'" + str('LIBRE') + "'" + ' estado FROM cirugia_programacioncirugias prog , sitios_salas salas, cirugia_programacioncirugias prog2 where salas.id = prog.sala_id  and salas."sedesClinica_id" = prog."sedesClinica_id" and prog2."sedesClinica_id" = prog."sedesClinica_id" and	salas."sedesClinica_id" = ' + "'" + str(sede) + "'" + ' and  prog2.id = (select min(prog3.id) from cirugia_programacioncirugias prog3 where prog3.id > prog.id ) order by 3,5,7'
+    detalle = 'SELECT prog.id prog, salas.id id,salas.numero numero , salas.nombre nombre,prog."fechaProgramacionInicia", prog."fechaProgramacionFin" ,	cast(prog."horaProgramacionInicia" as time), cast(prog."horaProgramacionFin" as time) , ' + "'" + str('OCUPADO') + "'" + ' estado FROM cirugia_programacioncirugias prog LEFT JOIN sitios_salas salas ON (salas.id = prog.sala_id and salas."sedesClinica_id" = prog."sedesClinica_id" ) WHERE salas."sedesClinica_id" = ' + "'" + str(sede) + "'" + ' union SELECT prog.id prog, salas.id id,salas.numero numero , salas.nombre nombre,prog."fechaProgramacionInicia", prog."fechaProgramacionFin" ,cast(prog."horaProgramacionFin" as time) + interval ' + "'" + str('1 minute') + "'" + ' , CASE when cast(salas."finServicio" as time) >= cast(prog."horaProgramacionFin" as time) then cast(salas."finServicio" as time)   ELSE cast(prog."horaProgramacionFin" as time)  END ' + ', ' + "'" + str('LIBRE') + "'" + ' estado FROM cirugia_programacioncirugias prog LEFT JOIN sitios_salas salas ON (salas.id = prog.sala_id ) where salas."sedesClinica_id" =  ' + "'" + str(sede) + "'" + ' order by 3,5,7'
     print(detalle)
 
     curx.execute(detalle)
 
     contador = 0
 
-    for  id,numero, nombre,  fechaProgramacionInicia, fechaProgramacionFin,  horaProgramacionInicia, horaProgramacionFin , estado  in curx.fetchall():
-
-        contador=contador+1
-
-        if (contador == 1 ):
-            numeroAnt=numero
-            fechaProgramacionFinAnt =fechaProgramacionFin
-            horaProgramacionFinAnt=horaProgramacionFin
-            fechaProgramacionIniciaAnt =fechaProgramacionInicia
-            horaProgramacionIniciaAnt=horaProgramacionInicia
-
+    for  prog,id,numero, nombre,  fechaProgramacionInicia, fechaProgramacionFin,  horaProgramacionInicia, horaProgramacionFin , estado  in curx.fetchall():
             disponibilidadCirugia.append(
         	    {"model": "admisiones.ingresos", "pk": id, "fields":
-                	{'id': id,  'numero': numero, 'nombre': nombre, 'fechaProgramacionInicia': fechaProgramacionInicia, 'fechaProgramacionFin': fechaProgramacionFin, 'horaProgramacionInicia': horaProgramacionInicia,
+                	{'prog':prog,'id': id,  'numero': numero, 'nombre': nombre, 'fechaProgramacionInicia': fechaProgramacionInicia, 'fechaProgramacionFin': fechaProgramacionFin, 'horaProgramacionInicia': horaProgramacionInicia,
 	                 'horaProgramacionFin': horaProgramacionFin,'estado':estado }})
-        else:
-
-            if (numero != numeroAnt):
-                print("habitacion = ")
-
-            else:
-                if (numero == numeroAnt and fechaProgramacionInicia !=  fechaProgramacionIniciaAnt):
-
-                    # Number of days to add
-                    days_to_add = 1
-                    # Create a timedelta object
-                    delta = timedelta(days=days_to_add)
-                    #horas_to_add = 1
-                    #time_obj = datetime.time(horaProgramacionFin)
-                    #delta1 = timedelta(hours=horas_to_add)
-
-                    fechaProgramacionIniciaInvisible = fechaProgramacionIniciaAnt + delta
-                    horaProgramacionIniciaInvisible = horaProgramacionFin
-                    horaProgramacionFinalInvisible  = horaProgramacionInicia
-                    fechaProgramacionFinInvisible   = fechaProgramacionInicia
-
-                    id1= 9999+contador
-
-                    disponibilidadCirugia.append(
-        	        	    {"model": "admisiones.ingresos", "pk": id, "fields":
-        		                {'id': id1,  'numero': numeroAnt, 'nombre': nombre, 'fechaProgramacionInicia': fechaProgramacionIniciaInvisible, 'fechaProgramacionFin': fechaProgramacionFinInvisible, 'horaProgramacionInicia': horaProgramacionIniciaInvisible,
-        		                 'horaProgramacionFin': horaProgramacionFinalInvisible,'estado':'LIBRE' }})
-
-                else:
-                    if (numero == numeroAnt and fechaProgramacionInicia ==  fechaProgramacionIniciaAnt and  horaProgramacionFinAnt != horaProgramacionInicia):
-
-                        horaProgramacionIniciaInvisible = horaProgramacionFin
-                        horaProgramacionFinalInvisible  = horaProgramacionInicia
-                        fechaProgramacionFinInvisible   = fechaProgramacionInicia
-
-                        id1= 9999+contador
-
-                        disponibilidadCirugia.append(
-        	        	    {"model": "admisiones.ingresos", "pk": id, "fields":
-		                        {'id': id1,  'numero': numeroAnt, 'nombre': nombre, 'fechaProgramacionInicia': fechaProgramacionIniciaAnt, 'fechaProgramacionFin': fechaProgramacionFinInvisible, 'horaProgramacionInicia': horaProgramacionIniciaInvisible,
-		                         'horaProgramacionFin': horaProgramacionFinalInvisible,'estado':'LIBRE' }})
-
-            disponibilidadCirugia.append({"model": "admisiones.ingresos", "pk": id, "fields":
-				{'id': id,  'numero': numero, 'nombre': nombre, 'fechaProgramacionInicia': fechaProgramacionInicia, 'fechaProgramacionFin': fechaProgramacionFin, 'horaProgramacionInicia': horaProgramacionInicia,
-		        	       'horaProgramacionFin': horaProgramacionFin,'estado':estado }})
-
 
     miConexionx.close()
     print(disponibilidadCirugia)
@@ -767,7 +715,7 @@ def Load_dataTraerParticipantesCirugia(request, data):
                                    password="123456")
     cur3 = miConexion3.cursor()
 
-    comando = 'select cirpart.id id, cirpart.cirugia_id cirugiaId, hon.nombre honNombre, med.nombre medicoNombre, esp.nombre especialidadNombre , exa.nombre cupsNombre FROM cirugia_cirugiasparticipantes cirpart, tarifarios_tiposhonorarios hon, clinico_especialidadesmedicos med, clinico_especialidades esp, clinico_examenes exa  WHERE cirpart.cirugia_id = ' + "'" + str(cirugiaId) + "'" + ' and cirpart."tipoHonorarios_id" = hon.id  and cirpart.medico_id = med.id and med.especialidades_id = esp.id and exa.id = cirpart.cups_id '
+    comando = 'select cirpart.id id, cirpart.cirugia_id cirugiaId, hon.nombre honNombre, med.nombre medicoNombre, esp.nombre especialidadNombre , exa.nombre cupsNombre FROM cirugia_cirugiasparticipantes cirpart inner join tarifarios_tiposhonorarios hon ON (hon.id = cirpart."tipoHonorarios_id") inner join clinico_especialidadesmedicos med ON ( med.id = cirpart.medico_id ) inner join clinico_especialidades esp ON (esp.id =med.especialidades_id  ) left join clinico_examenes exa ON (exa.id = cirpart.cups_id) WHERE cirpart.cirugia_id = ' + "'" + str(cirugiaId) + "'"
 
     print(comando)
     cur3.execute(comando)
@@ -803,7 +751,8 @@ def Load_dataTraerParticipantesInformeCirugia(request, data):
                                    password="123456")
     cur3 = miConexion3.cursor()
 
-    comando = 'select cirpart.id id, cirpart.cirugia_id cirugiaId, hon.nombre honNombre, med.nombre medicoNombre, esp.nombre especialidadNombre, exa.nombre cupsNombre FROM cirugia_cirugiasparticipantes cirpart, tarifarios_tiposhonorarios hon, clinico_especialidadesmedicos med, clinico_especialidades esp , clinico_examenes exa  WHERE cirpart.cirugia_id = ' + "'" + str(cirugiaId) + "'" + ' and cirpart."tipoHonorarios_id" = hon.id  and cirpart.medico_id = med.id and med.especialidades_id = esp.id AND exa.id=cirpart.cups_id'
+    #comando = 'select cirpart.id id, cirpart.cirugia_id cirugiaId, hon.nombre honNombre, med.nombre medicoNombre, esp.nombre especialidadNombre, exa.nombre cupsNombre FROM cirugia_cirugiasparticipantes cirpart, tarifarios_tiposhonorarios hon, clinico_especialidadesmedicos med, clinico_especialidades esp , clinico_examenes exa  WHERE cirpart.cirugia_id = ' + "'" + str(cirugiaId) + "'" + ' and cirpart."tipoHonorarios_id" = hon.id  and cirpart.medico_id = med.id and med.especialidades_id = esp.id AND exa.id=cirpart.cups_id'
+    comando = 'select cirpart.id id, cirpart.cirugia_id cirugiaId, hon.nombre honNombre, med.nombre medicoNombre, esp.nombre especialidadNombre , exa.nombre cupsNombre FROM cirugia_cirugiasparticipantes cirpart inner join tarifarios_tiposhonorarios hon ON (hon.id = cirpart."tipoHonorarios_id") inner join clinico_especialidadesmedicos med ON ( med.id = cirpart.medico_id ) inner join clinico_especialidades esp ON (esp.id =med.especialidades_id  ) left join clinico_examenes exa ON (exa.id = cirpart.cups_id) WHERE cirpart.cirugia_id = ' + "'" + str(cirugiaId) + "'"
 
     print(comando)
     cur3.execute(comando)
@@ -1594,6 +1543,29 @@ def CrearAdicionQx(request):
     dxPostOperatorio = request.POST.get('dxPostOperatorio')
     impresionDx = request.POST.get('impresionDx')
     complicacionesDx = request.POST.get('complicacionesDx')
+
+    print("antes complicacionesDx =" , complicacionesDx)
+    print("ANTES dxPreOperatorio =", dxPreOperatorio)
+    print("ANTES dxPostOperatorio =", dxPostOperatorio)
+
+    if impresionDx == None:
+
+           impresionDx='null'
+
+    if complicacionesDx == None:
+
+           complicacionesDx='null'
+
+    if dxPreOperatorio == None:
+           dxPreOperatorio='null'
+
+    if dxPostOperatorio == None:
+           dxPostOperatorio='null'
+
+    print("complicacionesDx =" , complicacionesDx)
+    print("dxPreOperatorio =", dxPreOperatorio)
+    print("dxPostOperatorio =", dxPostOperatorio)
+
     formaRealizacion = request.POST.get('formaRealizacion')
     tejidoPatologia = request.POST.get('tejidoPatologia')
     tipoFractura = request.POST.get('tipoFractura')
@@ -1618,7 +1590,7 @@ def CrearAdicionQx(request):
             cur3 = miConexion3.cursor()
 
 
-            detalle = 'UPDATE cirugia_Cirugias SET "ingresoQuirofano" =  ' + "'" + str(ingresoQuirofano) + "'," + '"horaIngresoQuirofano" = ' + "'" + str(horaIngresoQuirofano) + "'," + '  "salidaQuirofano" =  ' + "'" + str(salidaQuirofano) + "'," + '"horaSalidaQuirofano" = ' + "'" + str(horaSalidaQuirofano)  + "'," + '"fechaIniAnestesia" = ' + "'" + str(fechaIniAnestesia) + "'," + '"HoraIniAnestesia" = ' + "'" + str(horaIniAnestesia) + "',"  + '"fechaQxInicial" = ' + "'" + str(fechaQxIni) + "'," + '"horaQxInicial" = ' + "'" + str(horaQxIni) + "'," + '"fechaQxFinal" = ' + "'" + str(fechaQxFin) + "'," + '"horaQxFinal" = ' + "'" + str(horaQxFin) + "'," + '"fechaFinAnestesia" = ' + "'" + str(fechaFinAnestesia) + "'," + '"horaFinAnestesia" = ' + "'" + str(horaFinAnestesia) + "'," + '"ingresoRecuperacion" = ' + "'" + str(ingresoRecuperacion) + "'," + '"horaIngresoRecuperacion" = ' + "'" + str(horaIngresoRecuperacion) + "'," + '"salidaRecuperacion" = ' + "'" + str(salidaRecuperacion) + "'," + '"horaSalidaRecuperacion" = ' + "'" + str(horaSalidaRecuperacion) + "'," + '"dxPreQx_id" = ' + "'" + str(dxPreOperatorio) + "',"   + '"dxPostQx_id" = ' + "'" + str(dxPostOperatorio) + "',"  + '"impresionDx_id" = ' + "'" + str(impresionDx) + "'," + '"dxComplicacion_id" = ' + "'" + str(complicacionesDx) + "'," + '"formaRealiza" = ' + "'" + str(formaRealizacion) + "'," + '"patologia" = ' + "'" + str(tejidoPatologia) + "'," + '"tipofractura" = ' + "'" + str(tipoFractura) + "'," + '"intensificador" = ' + "'" + str(intensificador) + "'," + '"descripcionQx" = ' + "'" + str(descripcionQx) + "'," + '"hallazgos" = ' + "'" + str(hallazgos) + "'," + '"analisis" = ' + "'" + str(analisis) + "'," + '"planx" = ' + "'" + str(planx) + "'," + '"estadoCirugia_id" = ' + "'" + str(estadoCirugiaId.id) + "'" + ' Where id = ' + "'" + str(cirugiaId) + "'"
+            detalle = 'UPDATE cirugia_Cirugias SET "ingresoQuirofano" =  ' + "'" + str(ingresoQuirofano) + "'," + '"horaIngresoQuirofano" = ' + "'" + str(horaIngresoQuirofano) + "'," + '  "salidaQuirofano" =  ' + "'" + str(salidaQuirofano) + "'," + '"horaSalidaQuirofano" = ' + "'" + str(horaSalidaQuirofano)  + "'," + '"fechaIniAnestesia" = ' + "'" + str(fechaIniAnestesia) + "'," + '"HoraIniAnestesia" = ' + "'" + str(horaIniAnestesia) + "',"  + '"fechaQxInicial" = ' + "'" + str(fechaQxIni) + "'," + '"horaQxInicial" = ' + "'" + str(horaQxIni) + "'," + '"fechaQxFinal" = ' + "'" + str(fechaQxFin) + "'," + '"horaQxFinal" = ' + "'" + str(horaQxFin) + "'," + '"fechaFinAnestesia" = ' + "'" + str(fechaFinAnestesia) + "'," + '"horaFinAnestesia" = ' + "'" + str(horaFinAnestesia) + "'," + '"ingresoRecuperacion" = ' + "'" + str(ingresoRecuperacion) + "'," + '"horaIngresoRecuperacion" = ' + "'" + str(horaIngresoRecuperacion) + "'," + '"salidaRecuperacion" = ' + "'" + str(salidaRecuperacion) + "'," + '"horaSalidaRecuperacion" = ' + "'" + str(horaSalidaRecuperacion) + "'," + '"dxPreQx_id" = ' + str(dxPreOperatorio) + ","   + '"dxPostQx_id" = ' +  str(dxPostOperatorio) + ","  + '"impresionDx_id" = ' + str(impresionDx) + "," + '"dxComplicacion_id" = ' + str(complicacionesDx) + "," + '"formaRealiza" = ' + "'" + str(formaRealizacion) + "'," + '"patologia" = ' + "'" + str(tejidoPatologia) + "'," + '"tipofractura" = ' + "'" + str(tipoFractura) + "'," + '"intensificador" = ' + "'" + str(intensificador) + "'," + '"descripcionQx" = ' + "'" + str(descripcionQx) + "'," + '"hallazgos" = ' + "'" + str(hallazgos) + "'," + '"analisis" = ' + "'" + str(analisis) + "'," + '"planx" = ' + "'" + str(planx) + "'," + '"estadoCirugia_id" = ' + "'" + str(estadoCirugiaId.id) + "'" + ' Where id = ' + "'" + str(cirugiaId) + "'"
 
             print(detalle)
             cur3.execute(detalle)
@@ -2194,7 +2166,7 @@ def GenerarLiquidacionCirugia(request):
                 valorLiquidacionMat = valorLiquidacionMat.replace(",", ' ')
 
                 consecLiquidacion= int(consecLiquidacion) + 1
-                comando = 'INSERT INTO facturacion_liquidaciondetalle (consecutivo,fecha, cantidad, "valorUnitario", "valorTotal", "estadoRegistro", "fechaCrea", "fechaRegistro",  "cums_id",  "usuarioRegistro_id", liquidacion_id, "tipoRegistro", "tipoHonorario_id", cirugia_id) VALUES (' + "'" + str(consecLiquidacion) + "','" + str(fechaRegistro) + "','" + str('1') + "','" + str(valorLiquidacionMat) + "','" + str(valorLiquidacionMat) + "','" + str('A') + "','" + str(fechaRegistro) + "','" + str(fechaRegistro)  + "','" + str(suministro) + "','" + str(username_id) + "'," + liquidacionId + ",'SISTEMA'," + "'" + str(registroMateriales.id) + "'," +  "'" + str(cirugiaId) + "')"
+                comando = 'INSERT INTO facturacion_liquidaciondetalle (consecutivo,fecha, cantidad, "valorUnitario", "valorTotal", "estadoRegistro", "fechaCrea", "fechaRegistro",  "cums_id",  "usuarioRegistro_id", liquidacion_id, "tipoRegistro", "tipoHonorario_id", cirugia_id, anulado) VALUES (' + "'" + str(consecLiquidacion) + "','" + str(fechaRegistro) + "','" + str('1') + "','" + str(valorLiquidacionMat) + "','" + str(valorLiquidacionMat) + "','" + str('A') + "','" + str(fechaRegistro) + "','" + str(fechaRegistro)  + "','" + str(suministro) + "','" + str(username_id) + "'," + liquidacionId + ",'SISTEMA'," + "'" + str(registroMateriales.id) + "'," +  "'" + str(cirugiaId) + "','N')"
                 print ("comando ", comando)
                 cur3.execute(comando)
 
@@ -2203,7 +2175,7 @@ def GenerarLiquidacionCirugia(request):
 
             pasada=0
 
-
+            print("paso_Procedikientos")
             for procedimiento1 in cupsLiquidacion:
 
                 pasada = pasada +1
@@ -2330,19 +2302,20 @@ def GenerarLiquidacionCirugia(request):
 
                 # Fin RUTINA busca consecutivo de liquidacion
                 # Cirujano
-                comando = 'INSERT INTO facturacion_liquidaciondetalle (consecutivo,fecha, cantidad, "valorUnitario", "valorTotal","estadoRegistro", "fechaCrea", "fechaRegistro",  "examen_id",  "usuarioRegistro_id", liquidacion_id, "tipoRegistro", "tipoHonorario_id", cirugia_id ) VALUES (' + "'" + str(consecLiquidacion) + "','" + str(fechaRegistro) + "','" + str('1') + "','" + str(liquidaCirujano) + "','" + str(liquidaCirujano) + "','" + str('A') + "','" + str(fechaRegistro) + "','" + str(fechaRegistro) + "','" + str(procedimiento) + "','" + str(username_id) + "'," + liquidacionId + ",'SISTEMA'," + "'" + str(registroHonorarioCirujano.id)  + "'," +  "'" + str(cirugiaId) + "')"
+                print("paso_1")
+                comando = 'INSERT INTO facturacion_liquidaciondetalle (consecutivo,fecha, cantidad, "valorUnitario", "valorTotal","estadoRegistro", "fechaCrea", "fechaRegistro",  "examen_id",  "usuarioRegistro_id", liquidacion_id, "tipoRegistro", "tipoHonorario_id", cirugia_id , anulado) VALUES (' + "'" + str(consecLiquidacion) + "','" + str(fechaRegistro) + "','" + str('1') + "','" + str(liquidaCirujano) + "','" + str(liquidaCirujano) + "','" + str('A') + "','" + str(fechaRegistro) + "','" + str(fechaRegistro) + "','" + str(procedimiento) + "','" + str(username_id) + "'," + liquidacionId + ",'SISTEMA'," + "'" + str(registroHonorarioCirujano.id)  + "'," +  "'" + str(cirugiaId) + "','N')"
                 print("comando ", comando)
                 cur3.execute(comando)
                 # Anestesiologo
                 consecLiquidacion= int(consecLiquidacion) + 1
-                comando = 'INSERT INTO facturacion_liquidaciondetalle (consecutivo,fecha, cantidad, "valorUnitario", "valorTotal", "estadoRegistro","fechaCrea", "fechaRegistro", "examen_id",  "usuarioRegistro_id", liquidacion_id, "tipoRegistro", "tipoHonorario_id", cirugia_id) VALUES (' + "'" + str(consecLiquidacion) + "','" + str(fechaRegistro) + "','" + str('1') + "','" + str(liquidaAnestesiologo) + "','" + str(liquidaAnestesiologo) + "','" + str('A') + "','" + str(fechaRegistro) + "','" + str(fechaRegistro) + "','" + str(procedimiento) + "','" + str(username_id) + "'," + liquidacionId + ",'SISTEMA'," + "'" + str(registroHonorarioAnestesiologo.id) + "'," +  "'" + str(cirugiaId) + "')"
+                comando = 'INSERT INTO facturacion_liquidaciondetalle (consecutivo,fecha, cantidad, "valorUnitario", "valorTotal", "estadoRegistro","fechaCrea", "fechaRegistro", "examen_id",  "usuarioRegistro_id", liquidacion_id, "tipoRegistro", "tipoHonorario_id", cirugia_id, anulado) VALUES (' + "'" + str(consecLiquidacion) + "','" + str(fechaRegistro) + "','" + str('1') + "','" + str(liquidaAnestesiologo) + "','" + str(liquidaAnestesiologo) + "','" + str('A') + "','" + str(fechaRegistro) + "','" + str(fechaRegistro) + "','" + str(procedimiento) + "','" + str(username_id) + "'," + liquidacionId + ",'SISTEMA'," + "'" + str(registroHonorarioAnestesiologo.id) + "'," +  "'" + str(cirugiaId) + "','N')"
                 print("comando ", comando)
                 cur3.execute(comando)
 
                 # Ayudante
                 consecLiquidacion= int(consecLiquidacion) + 1
-
-                comando = 'INSERT INTO facturacion_liquidaciondetalle (consecutivo,fecha, cantidad, "valorUnitario", "valorTotal",  "estadoRegistro", "fechaCrea", "fechaRegistro", "examen_id",  "usuarioRegistro_id", liquidacion_id, "tipoRegistro", "tipoHonorario_id", cirugia_id) VALUES (' + "'" + str(consecLiquidacion) + "','" + str(fechaRegistro) + "','" + str('1') + "','" + str(liquidaAyudante) + "','" + str(liquidaAyudante) + "','" + str('A') + "','" + str(fechaRegistro) + "','" + str(fechaRegistro) +  "','" + str(procedimiento) + "','" + str(username_id) + "'," + liquidacionId + ",'SISTEMA'," + "'" + str(registroHonorarioAyudante.id) + "'," +  "'" + str(cirugiaId) + "')"
+                print("paso_2")
+                comando = 'INSERT INTO facturacion_liquidaciondetalle (consecutivo,fecha, cantidad, "valorUnitario", "valorTotal",  "estadoRegistro", "fechaCrea", "fechaRegistro", "examen_id",  "usuarioRegistro_id", liquidacion_id, "tipoRegistro", "tipoHonorario_id", cirugia_id, anulado) VALUES (' + "'" + str(consecLiquidacion) + "','" + str(fechaRegistro) + "','" + str('1') + "','" + str(liquidaAyudante) + "','" + str(liquidaAyudante) + "','" + str('A') + "','" + str(fechaRegistro) + "','" + str(fechaRegistro) +  "','" + str(procedimiento) + "','" + str(username_id) + "'," + liquidacionId + ",'SISTEMA'," + "'" + str(registroHonorarioAyudante.id) + "'," +  "'" + str(cirugiaId) + "','N')"
                 print("comando ", comando)
                 cur3.execute(comando)
 
@@ -2381,7 +2354,7 @@ def GenerarLiquidacionCirugia(request):
                     # Salas
                     #
                     consecLiquidacion= int(consecLiquidacion) + 1
-                    comando = 'INSERT INTO facturacion_liquidaciondetalle (consecutivo,fecha, cantidad, "valorUnitario", "valorTotal", "estadoRegistro", "fechaCrea", "fechaRegistro",  "examen_id",  "usuarioRegistro_id", liquidacion_id, "tipoRegistro", "tipoHonorario_id", cirugia_id) VALUES (' + "'" + str(consecLiquidacion) + "','" + str(fechaRegistro) + "','" + str('1') + "','" + str(liquidaValorSala) + "','" + str(liquidaValorSala) + "','" + str('A') + "','" + str(fechaRegistro) + "','" + str(fechaRegistro)  + "','" + str(procedimiento)  + "','" + str(username_id) + "'," + liquidacionId + ",'SISTEMA'," + "'" + str(registroDerechosSala.id)+ "'," +  "'" + str(cirugiaId) + "')"
+                    comando = 'INSERT INTO facturacion_liquidaciondetalle (consecutivo,fecha, cantidad, "valorUnitario", "valorTotal", "estadoRegistro", "fechaCrea", "fechaRegistro",  "examen_id",  "usuarioRegistro_id", liquidacion_id, "tipoRegistro", "tipoHonorario_id", cirugia_id, anulado) VALUES (' + "'" + str(consecLiquidacion) + "','" + str(fechaRegistro) + "','" + str('1') + "','" + str(liquidaValorSala) + "','" + str(liquidaValorSala) + "','" + str('A') + "','" + str(fechaRegistro) + "','" + str(fechaRegistro)  + "','" + str(procedimiento)  + "','" + str(username_id) + "'," + liquidacionId + ",'SISTEMA'," + "'" + str(registroDerechosSala.id)+ "'," +  "'" + str(cirugiaId) + "','N')"
                     print("comando", comando)
                     cur3.execute(comando)
 
@@ -2722,19 +2695,19 @@ def GenerarLiquidacionCirugia(request):
 
                 # Fin RUTINA busca consecutivo de liquidacion
                 # Cirujano
-                comando = 'INSERT INTO facturacion_liquidaciondetalle (consecutivo,fecha, cantidad, "valorUnitario", "valorTotal","estadoRegistro", "fechaCrea", "fechaRegistro",  "examen_id",  "usuarioRegistro_id", liquidacion_id, "tipoRegistro", "tipoHonorario_id", cirugia_id ) VALUES (' + "'" + str(consecLiquidacion) + "','" + str(fechaRegistro) + "','" + str('1') + "','" + str(liquidaCirujano) + "','" + str(liquidaCirujano) + "','" + str('A') + "','" + str(fechaRegistro) + "','" + str(fechaRegistro) + "','" + str(procedimiento) + "','" + str(username_id) + "'," + liquidacionId + ",'SISTEMA'," + "'" + str(registroHonorarioCirujano.id)  + "'," +  "'" + str(cirugiaId) + "')"
+                comando = 'INSERT INTO facturacion_liquidaciondetalle (consecutivo,fecha, cantidad, "valorUnitario", "valorTotal","estadoRegistro", "fechaCrea", "fechaRegistro",  "examen_id",  "usuarioRegistro_id", liquidacion_id, "tipoRegistro", "tipoHonorario_id", cirugia_id , anulado) VALUES (' + "'" + str(consecLiquidacion) + "','" + str(fechaRegistro) + "','" + str('1') + "','" + str(liquidaCirujano) + "','" + str(liquidaCirujano) + "','" + str('A') + "','" + str(fechaRegistro) + "','" + str(fechaRegistro) + "','" + str(procedimiento) + "','" + str(username_id) + "'," + liquidacionId + ",'SISTEMA'," + "'" + str(registroHonorarioCirujano.id)  + "'," +  "'" + str(cirugiaId) + "','A')"
                 print("comando ", comando)
                 cur3.execute(comando)
                 # Anestesiologo
                 consecLiquidacion= int(consecLiquidacion) + 1
-                comando = 'INSERT INTO facturacion_liquidaciondetalle (consecutivo,fecha, cantidad, "valorUnitario", "valorTotal", "estadoRegistro","fechaCrea", "fechaRegistro", "examen_id",  "usuarioRegistro_id", liquidacion_id, "tipoRegistro", "tipoHonorario_id", cirugia_id) VALUES (' + "'" + str(consecLiquidacion) + "','" + str(fechaRegistro) + "','" + str('1') + "','" + str(liquidaAnestesiologo) + "','" + str(liquidaAnestesiologo) + "','" + str('A') + "','" + str(fechaRegistro) + "','" + str(fechaRegistro) + "','" + str(procedimiento) + "','" + str(username_id) + "'," + liquidacionId + ",'SISTEMA'," + "'" + str(registroHonorarioAnestesiologo.id) + "'," +  "'" + str(cirugiaId) + "')"
+                comando = 'INSERT INTO facturacion_liquidaciondetalle (consecutivo,fecha, cantidad, "valorUnitario", "valorTotal", "estadoRegistro","fechaCrea", "fechaRegistro", "examen_id",  "usuarioRegistro_id", liquidacion_id, "tipoRegistro", "tipoHonorario_id", cirugia_id, anulado) VALUES (' + "'" + str(consecLiquidacion) + "','" + str(fechaRegistro) + "','" + str('1') + "','" + str(liquidaAnestesiologo) + "','" + str(liquidaAnestesiologo) + "','" + str('A') + "','" + str(fechaRegistro) + "','" + str(fechaRegistro) + "','" + str(procedimiento) + "','" + str(username_id) + "'," + liquidacionId + ",'SISTEMA'," + "'" + str(registroHonorarioAnestesiologo.id) + "'," +  "'" + str(cirugiaId) + "','N')"
                 print("comando ", comando)
                 cur3.execute(comando)
 
                 # Ayudante
                 consecLiquidacion= int(consecLiquidacion) + 1
 
-                comando = 'INSERT INTO facturacion_liquidaciondetalle (consecutivo,fecha, cantidad, "valorUnitario", "valorTotal",  "estadoRegistro", "fechaCrea", "fechaRegistro", "examen_id",  "usuarioRegistro_id", liquidacion_id, "tipoRegistro", "tipoHonorario_id", cirugia_id) VALUES (' + "'" + str(consecLiquidacion) + "','" + str(fechaRegistro) + "','" + str('1') + "','" + str(liquidaAyudante) + "','" + str(liquidaAyudante) + "','" + str('A') + "','" + str(fechaRegistro) + "','" + str(fechaRegistro) +  "','" + str(procedimiento) + "','" + str(username_id) + "'," + liquidacionId + ",'SISTEMA'," + "'" + str(registroHonorarioAyudante.id) + "'," +  "'" + str(cirugiaId) + "')"
+                comando = 'INSERT INTO facturacion_liquidaciondetalle (consecutivo,fecha, cantidad, "valorUnitario", "valorTotal",  "estadoRegistro", "fechaCrea", "fechaRegistro", "examen_id",  "usuarioRegistro_id", liquidacion_id, "tipoRegistro", "tipoHonorario_id", cirugia_id, anulado) VALUES (' + "'" + str(consecLiquidacion) + "','" + str(fechaRegistro) + "','" + str('1') + "','" + str(liquidaAyudante) + "','" + str(liquidaAyudante) + "','" + str('A') + "','" + str(fechaRegistro) + "','" + str(fechaRegistro) +  "','" + str(procedimiento) + "','" + str(username_id) + "'," + liquidacionId + ",'SISTEMA'," + "'" + str(registroHonorarioAyudante.id) + "'," +  "'" + str(cirugiaId) + "','N')"
                 print("comando ", comando)
                 cur3.execute(comando)
 
@@ -2782,7 +2755,7 @@ def GenerarLiquidacionCirugia(request):
                     # Salas
                     #
                     consecLiquidacion= int(consecLiquidacion) + 1
-                    comando = 'INSERT INTO facturacion_liquidaciondetalle (consecutivo,fecha, cantidad, "valorUnitario", "valorTotal", "estadoRegistro", "fechaCrea", "fechaRegistro",  "examen_id",  "usuarioRegistro_id", liquidacion_id, "tipoRegistro", "tipoHonorario_id", cirugia_id) VALUES (' + "'" + str(consecLiquidacion) + "','" + str(fechaRegistro) + "','" + str('1') + "','" + str(liquidaValorSala) + "','" + str(liquidaValorSala) + "','" + str('A') + "','" + str(fechaRegistro) + "','" + str(fechaRegistro)  + "','" + str(procedimiento)  + "','" + str(username_id) + "'," + liquidacionId + ",'SISTEMA'," + "'" + str(registroDerechosSala.id)+ "'," +  "'" + str(cirugiaId) + "')"
+                    comando = 'INSERT INTO facturacion_liquidaciondetalle (consecutivo,fecha, cantidad, "valorUnitario", "valorTotal", "estadoRegistro", "fechaCrea", "fechaRegistro",  "examen_id",  "usuarioRegistro_id", liquidacion_id, "tipoRegistro", "tipoHonorario_id", cirugia_id, anulado) VALUES (' + "'" + str(consecLiquidacion) + "','" + str(fechaRegistro) + "','" + str('1') + "','" + str(liquidaValorSala) + "','" + str(liquidaValorSala) + "','" + str('A') + "','" + str(fechaRegistro) + "','" + str(fechaRegistro)  + "','" + str(procedimiento)  + "','" + str(username_id) + "'," + liquidacionId + ",'SISTEMA'," + "'" + str(registroDerechosSala.id)+ "'," +  "'" + str(cirugiaId) + "','N')"
                     print("comando", comando)
                     cur3.execute(comando)
 
@@ -2828,16 +2801,16 @@ def GenerarLiquidacionCirugia(request):
 
             # Fin RUTINA busca consecutivo de liquidacion
             # Cirujano
-            comando = 'INSERT INTO facturacion_liquidaciondetalle (consecutivo,fecha, cantidad, "valorUnitario", "valorTotal",cirugia,"fechaCrea", "fechaRegistro", "estadoRegistro", "examen_id",  "usuarioRegistro_id", liquidacion_id, "tipoRegistro", "tipoHonorario_id", cirugia_id) VALUES (' + "'" + str(consecLiquidacion) + "','" + str(fechaRegistro) + "','" + str('1') + "','" + str('0') + "','" + str('0') + "','" + str('A') + "','" + str(fechaRegistro) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(procedimiento) + "','" + str(username_id) + "'," + liquidacionId + ",'SISTEMA'," + "'" + str(registroHonorarioCirujano.id) + "'," +  "'" + str(cirugiaId) + "')"
+            comando = 'INSERT INTO facturacion_liquidaciondetalle (consecutivo,fecha, cantidad, "valorUnitario", "valorTotal",cirugia,"fechaCrea", "fechaRegistro", "estadoRegistro", "examen_id",  "usuarioRegistro_id", liquidacion_id, "tipoRegistro", "tipoHonorario_id", cirugia_id, anulado) VALUES (' + "'" + str(consecLiquidacion) + "','" + str(fechaRegistro) + "','" + str('1') + "','" + str('0') + "','" + str('0') + "','" + str('A') + "','" + str(fechaRegistro) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(procedimiento) + "','" + str(username_id) + "'," + liquidacionId + ",'SISTEMA'," + "'" + str(registroHonorarioCirujano.id) + "'," +  "'" + str(cirugiaId) + "','N')"
             cur3.execute(comando)
             # Anestesiologo
             consecLiquidacion = consecLiquidacion + 1
-            comando = 'INSERT INTO facturacion_liquidaciondetalle (consecutivo,fecha, cantidad, "valorUnitario", "valorTotal",cirugia,"fechaCrea", "fechaRegistro", "estadoRegistro", "examen_id",  "usuarioRegistro_id", liquidacion_id, "tipoRegistro", "tipoHonorario_id", cirugia_id) VALUES (' + "'" + str(consecLiquidacion) + "','" + str(fechaRegistro) + "','" + str('1') + "','" + str('0') + "','" + str('0') + "','" + str('A') + "','" + str(fechaRegistro) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(procedimiento) + "','" + str(username_id) + "'," + liquidacionId + ",'SISTEMA'," + "'" + str(registroHonorarioAnestesiologo.id) + "'," +  "'" + str(cirugiaId) + "')"
+            comando = 'INSERT INTO facturacion_liquidaciondetalle (consecutivo,fecha, cantidad, "valorUnitario", "valorTotal",cirugia,"fechaCrea", "fechaRegistro", "estadoRegistro", "examen_id",  "usuarioRegistro_id", liquidacion_id, "tipoRegistro", "tipoHonorario_id", cirugia_id, anulado) VALUES (' + "'" + str(consecLiquidacion) + "','" + str(fechaRegistro) + "','" + str('1') + "','" + str('0') + "','" + str('0') + "','" + str('A') + "','" + str(fechaRegistro) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(procedimiento) + "','" + str(username_id) + "'," + liquidacionId + ",'SISTEMA'," + "'" + str(registroHonorarioAnestesiologo.id) + "'," +  "'" + str(cirugiaId) + "','N')"
             cur3.execute(comando)
 
             # Ayudante
             consecLiquidacion = consecLiquidacion + 1
-            comando = 'INSERT INTO facturacion_liquidaciondetalle (consecutivo,fecha, cantidad, "valorUnitario", "valorTotal",cirugia,"fechaCrea", "fechaRegistro", "estadoRegistro", "examen_id",  "usuarioRegistro_id", liquidacion_id, "tipoRegistro", "tipoHonorario_id", cirugia_id) VALUES (' + "'" + str(consecLiquidacion) + "','" + str(fechaRegistro) + "','" + str('1') + "','" + str('0') + "','" + str('0') + "','" + str('A') + "','" + str(fechaRegistro) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(procedimiento) + "','" + str(username_id) + "'," + liquidacionId + ",'SISTEMA'," + "'" + str(registroHonorarioAyudante.id) + "'," +  "'" + str(cirugiaId) + "')"
+            comando = 'INSERT INTO facturacion_liquidaciondetalle (consecutivo,fecha, cantidad, "valorUnitario", "valorTotal",cirugia,"fechaCrea", "fechaRegistro", "estadoRegistro", "examen_id",  "usuarioRegistro_id", liquidacion_id, "tipoRegistro", "tipoHonorario_id", cirugia_id, anulado) VALUES (' + "'" + str(consecLiquidacion) + "','" + str(fechaRegistro) + "','" + str('1') + "','" + str('0') + "','" + str('0') + "','" + str('A') + "','" + str(fechaRegistro) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(procedimiento) + "','" + str(username_id) + "'," + liquidacionId + ",'SISTEMA'," + "'" + str(registroHonorarioAyudante.id) + "'," +  "'" + str(cirugiaId) + "','N')"
             cur3.execute(comando)
 
             # Salas

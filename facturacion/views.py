@@ -2276,7 +2276,7 @@ def TrasladarConvenio(request):
 
         # Ops fata Anular todo el detalle de la cuenta donde estaba
 
-        comando5 = 'UPDATE facturacion_liquidaciondetalle set anulado=' + "'" + str('S') + "'" + '"fechaRegistro" = ' + "'" + str(fechaRegistro) + "' WHERE liquidacion_id = " + "'" + str(liquidacionIdDesde.id) + "'"
+        comando5 = 'UPDATE facturacion_liquidaciondetalle set anulado=' + "'" + str('S') + "'," + '"fechaRegistro" = ' + "'" + str(fechaRegistro) + "' WHERE liquidacion_id = " + "'" + str(liquidacionIdDesde.id) + "'"
         print("comando = ", comando5)
         curt.execute(comando5)
 
@@ -2357,7 +2357,7 @@ def TrasladarConvenio(request):
             totalRecibido) + "'"  + ' WHERE id =' + str(liquidacionIdHasta.id)
         curt.execute(comando)
 
-        comando = 'UPDATE facturacion_liquidacion SET "totalSuministros" = 0,"totalProcedimientos" =0 , "totalCopagos" = 0, "totalCuotaModeradora" = 0 anticipos = 0, "totalAbonos" = 0, "totalLiquidacion" = 0, "valorApagar" = 0 , "totalRecibido" = 0 WHERE id =' + str(liquidacionIdDesde.id)
+        comando = 'UPDATE facturacion_liquidacion SET "totalSuministros" = 0,"totalProcedimientos" =0 , "totalCopagos" = 0, "totalCuotaModeradora" = 0 ,anticipos = 0, "totalAbonos" = 0, "totalLiquidacion" = 0, "valorApagar" = 0 , "totalRecibido" = 0 WHERE id =' + str(liquidacionIdDesde.id)
 
         curt.execute(comando)
         miConexiont.commit()
