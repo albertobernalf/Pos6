@@ -237,6 +237,18 @@ function RefrescarPantalla() {
                                         </div>
                                     </div>
 	
+			 <div class="col-4">
+                                        <label for="convenioProc" class="col-sm-1 control-label">Convenio:</label>
+                                        <div class="col-sm-8">
+                                            <select class="select-css h-40 w-20" id="convenioProc"  tabindex= "0"  name="convenioProc"  required>
+                                                {% for conveniosCirugia in ConveniosCirugia %}
+                                                <option value="{{conveniosCirugia.id}}"> {{conveniosCirugia.nombre}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                         </div>
+
+
 				  <div class="col-4">
                                         <label for="anestesia" class="col-sm-1 control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SeviciosAdmon:</label>
                                         <div class="col-sm-8">
@@ -1103,6 +1115,8 @@ function RefrescarPantalla() {
                                             </select>
                                         </div>
                                     </div>
+
+
 
 				<div class="col-4">
                                     Sala:

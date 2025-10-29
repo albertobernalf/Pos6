@@ -38,8 +38,10 @@ from cirugia.models import EstadosCirugias, EstadosSalas, EstadosProgramacion, P
 from contratacion.models import Convenios
 from django.db.models import Min, Max, Avg
 from django.db.models import F
-
+from django.db import transaction, IntegrityError
 from django.utils import timezone
+from contratacion.models import  ConveniosLiquidacionTarifasHonorarios
+from tarifarios.models import TarifariosDescripcion
 
 # Create your views here.
 
@@ -514,6 +516,11 @@ def CrearSolicitudCirugia(request):
     if dxRel2 == '':
         dxRel2 = "null"
 
+
+    convenioProc = request.POST["convenioProc"]
+    print ("convenioProc =", convenioProc)
+
+
     #especialidadId = EspecialidadesMedicos.objects.get(planta_id=username)
 
     estadoCirugia = EstadosCirugias.objects.get(nombre='SIN ASIGNAR')
@@ -536,7 +543,7 @@ def CrearSolicitudCirugia(request):
         cur3 = miConexion3.cursor()
 
 
-        comando = 'INSERT INTO cirugia_cirugias ("consecAdmision", "fechaSolicita", "solicitaHospitalizacion", "solicitaAyudante", "solicitaTiempoQx",  "solicitaAnestesia", "solicitaSangre", "describeSangre", "cantidadSangre", "solicitaCamaUci", "solicitaMicroscopio", "solicitaRx", "solicitaAutoSutura", "solicitaOsteosintesis",  "solicitaBiopsia", "solicitaMalla", "solicitaOtros", "describeOtros", "tiempoMaxQx", "fechaRegistro", "estadoReg", anestesia_id, documento_id,  "dxPreQx_id", "dxPrinc_id", "dxRel1_id", especialidad_id, "sedesClinica_id", "tipoDoc_id", "usuarioRegistro_id", "usuarioSolicita_id", "serviciosAdministrativos_id", "estadoProgramacion_id", "tiposCirugia_id","estadoCirugia_id", anulado) VALUES (' + "'" + str(registroIngreso.consec) + "','" + str(fechaSolicita) + "','" + str(solicitaHospitalizacion) + "','" + str(solicitaAyudante) + "','" + str(solicitaTiempoQx) + "','"  + str(solicitaAnestesia) + "','" + str(solicitaSangre) + "','" + str(describeSangre) + "','" + str(cantidadSangre) + "','" + str(solicitaCamaUci) + "','" + str(solicitaMicroscopio) + "','" + str(solicitaRx) + "','" + str(solicitaAutoSutura) + "','" + str(solicitaOsteosintesis) + "','"  + str(solicitaBiopsia) + "','" + str(solicitaMalla) + "','" + str(solicitaOtros) + "','" + str(describeOtros) + "','" + str(tiempoMaxQx) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(anestesia) + "','" + str(registroIngreso.documento_id) + "','" + str(dxPreQx) + "','" + str(dxPrinc) + "','" + str(dxRel1) + "','" + str(especialidadX) + "','" + str(sedesClinica_id) + "','" + str(registroIngreso.tipoDoc_id) + "','" + str(username) + "','" + str(username) + "','" + str(serviciosAdministrativos) + "','" + str(estadoProgramacion.id) + "','" + str(tiposCirugia) + "','" + str(estadoCirugia.id) + "','N')"
+        comando = 'INSERT INTO cirugia_cirugias ("consecAdmision", "fechaSolicita", "solicitaHospitalizacion", "solicitaAyudante", "solicitaTiempoQx",  "solicitaAnestesia", "solicitaSangre", "describeSangre", "cantidadSangre", "solicitaCamaUci", "solicitaMicroscopio", "solicitaRx", "solicitaAutoSutura", "solicitaOsteosintesis",  "solicitaBiopsia", "solicitaMalla", "solicitaOtros", "describeOtros", "tiempoMaxQx", "fechaRegistro", "estadoReg", anestesia_id, documento_id,  "dxPreQx_id", "dxPrinc_id", "dxRel1_id", especialidad_id, "sedesClinica_id", "tipoDoc_id", "usuarioRegistro_id", "usuarioSolicita_id", "serviciosAdministrativos_id", "estadoProgramacion_id", "tiposCirugia_id","estadoCirugia_id", anulado, convenio_id) VALUES (' + "'" + str(registroIngreso.consec) + "','" + str(fechaSolicita) + "','" + str(solicitaHospitalizacion) + "','" + str(solicitaAyudante) + "','" + str(solicitaTiempoQx) + "','"  + str(solicitaAnestesia) + "','" + str(solicitaSangre) + "','" + str(describeSangre) + "','" + str(cantidadSangre) + "','" + str(solicitaCamaUci) + "','" + str(solicitaMicroscopio) + "','" + str(solicitaRx) + "','" + str(solicitaAutoSutura) + "','" + str(solicitaOsteosintesis) + "','"  + str(solicitaBiopsia) + "','" + str(solicitaMalla) + "','" + str(solicitaOtros) + "','" + str(describeOtros) + "','" + str(tiempoMaxQx) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(anestesia) + "','" + str(registroIngreso.documento_id) + "','" + str(dxPreQx) + "','" + str(dxPrinc) + "','" + str(dxRel1) + "','" + str(especialidadX) + "','" + str(sedesClinica_id) + "','" + str(registroIngreso.tipoDoc_id) + "','" + str(username) + "','" + str(username) + "','" + str(serviciosAdministrativos) + "','" + str(estadoProgramacion.id) + "','" + str(tiposCirugia) + "','" + str(estadoCirugia.id) + "','N','" + str(convenioProc) + "'" + ')'
 
 
         print(comando)
@@ -1987,35 +1994,36 @@ def GenerarLiquidacionCirugia(request):
 
     # Busco datos de la cirugia relacionado,
     registroCirugia = Cirugias.objects.get(id=cirugiaId)
-
+    registroConvenio = registroCirugia.convenio_id
+    print("registroConvenio =", registroConvenio)
     # Busco convenio del paciente
 
-    miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
-                                   password="123456")
-    cur3 = miConexion3.cursor()
+    #miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+    #                               password="123456")
+    #cur3 = miConexion3.cursor()
 
-    detalle = 'SELECT min(convenio_id) convenioId FROM facturacion_ConveniosPacienteIngresos WHERE "tipoDoc_id" = ' + "'" + str(registroCirugia.tipoDoc_id) + "' AND documento_id = '"  +  str(registroCirugia.documento_id) + "' AND " + '"consecAdmision" = ' + "'" + str(registroCirugia.consecAdmision) + "'"
+    #detalle = 'SELECT min(convenio_id) convenioId FROM facturacion_ConveniosPacienteIngresos WHERE "tipoDoc_id" = ' + "'" + str(registroCirugia.tipoDoc_id) + "' AND documento_id = '"  +  str(registroCirugia.documento_id) + "' AND " + '"consecAdmision" = ' + "'" + str(registroCirugia.consecAdmision) + "'"
 
-    print(detalle)
+    #print(detalle)
 
-    registroConvenio = []
+    #registroConvenio = []
 
-    cur3.execute(detalle)
+    #cur3.execute(detalle)
 
-    for convenioId in cur3.fetchall():
-        registroConvenio.append({'convenioId': convenioId})
-
-
-    print("registroConvenio =" , registroConvenio[0])
-    print("registroConvenio =" , registroConvenio[0]['convenioId'])
+    #for convenioId in cur3.fetchall():
+    #    registroConvenio.append({'convenioId': convenioId})
 
 
-    cur3.close()
+    #print("registroConvenio =" , registroConvenio[0])
+    #print("registroConvenio =" , registroConvenio[0]['convenioId'])
 
-    registroConvenio = str(registroConvenio[0]['convenioId'])
-    registroConvenio = registroConvenio.replace("(", ' ')
-    registroConvenio = registroConvenio.replace(")", ' ')
-    registroConvenio = registroConvenio.replace(",", ' ')
+
+    #cur3.close()
+
+    #registroConvenio = str(registroConvenio[0]['convenioId'])
+    #registroConvenio = registroConvenio.replace("(", ' ')
+    #registroConvenio = registroConvenio.replace(")", ' ')
+    #registroConvenio = registroConvenio.replace(",", ' ')
 
     #registroConvenio = ConveniosPacienteIngresos.objects.annotate(convenioMinimo=Min('convenio_id')).filter(tipoDoc_id=registroCirugia.tipoDoc_id, documento_id=registroCirugia.documento_id,consecAdmision=registroCirugia.consecAdmision,convenio_id=F('convenioMinimo'))
     #registroConvenio = ConveniosPacienteIngresos.objects.filter(tipoDoc_id=registroCirugia.tipoDoc_id, documento_id=registroCirugia.documento_id,consecAdmision=registroCirugia.consecAdmision).annotate(convenioMinimo=Min('convenio_id')).filter(convenio_id=F('convenioMinimo'))
@@ -2138,7 +2146,7 @@ def GenerarLiquidacionCirugia(request):
 
             # Aqui liquidacion de Materiales Quirugicos van a la cuenta
 
-            detalle = 'select matqx.suministro_id suministro, sum.nombre nomSuministro , tipos.nombre tipo ,matqx."valorLiquidacion" valorLiquidacionMat from cirugia_cirugiasmaterialqx matqx, facturacion_suministros sum, facturacion_tipossuministro tipos where matqx.cirugia_id= ' + "'" + str(cirugiaId) + "'" + ' and matqx.suministro_id = sum.id and sum."tipoSuministro_id" = tipos.id and tipos.nombre = ' + "'" + str('MATERIAL QX') + "'"
+            detalle = 'select matqx.suministro_id suministro, sum.nombre nomSuministro , tipos.nombre tipo ,matqx."valorLiquidacion" valorLiquidacionMat from cirugia_cirugiasmaterialqx matqx, facturacion_suministros sum, facturacion_tipossuministro tipos where matqx.cirugia_id= ' + "'" + str(cirugiaId) + "'" + ' and matqx.suministro_id = sum.id and sum."tipoSuministro_id" = tipos.id and tipos.nombre = ' + "'" + str('MEDICAMENTOS') + "'"
 
             materialesQx = []
 
@@ -2187,7 +2195,105 @@ def GenerarLiquidacionCirugia(request):
                 print("procedimiento por el FORSEGUNDO = " ,procedimiento)
                 procedimiento =procedimiento.strip()
 
-                # consigue La cantidad de uvr del procedimiento
+                ## Aqui rutina para subir la tarifa del procedimiento como tal a Liquidaciondetalle
+                # RUTINA encuentra columna de dondel LEER la tarifa.
+                #
+                try:
+                    with transaction.atomic():
+
+                        contratacion = Convenios.objects.get(id=registroConvenio)
+
+                        print("OJOO contratacion.tarifariosDescripcionProc_id = ", contratacion.tarifariosDescripcionProc_id)
+
+                        columnaALeer = TarifariosDescripcion.objects.get(id=contratacion.tarifariosDescripcionProc_id)
+                        columnaALeerPropia = columnaALeer.columna
+
+                except Exception as e:
+                    # Aquí ya se hizo rollback automáticamente
+                    print("Se hizo rollback de Convenio TarifarioDescripcion por:", e)
+                    error_data = {
+                        'type': type(e).__name__,
+                        'message': str(e),
+                        'traceback': traceback.format_exc()
+                    }
+                    columnaALeerPropia = ''
+
+                finally:
+                    print("Finally")
+
+                print("Columna a leer = ", columnaALeerPropia)
+               # FIN RUTINA encuentra columna de dondel LEER la tarifa.
+
+                ## Desde Aqui rutina de Facturacion Para Procedimientos
+                #
+
+                if (columnaALeerPropia != ''):
+
+                    miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432",
+                                                   user="postgres", password="123456")
+
+                    curt = miConexiont.cursor()
+
+                    comando = 'SELECT conv.convenio_id id ,proc."codigoCups_id" cups, proc."' + str(columnaALeer.columna) + '"' + ' tarifaValor FROM facturacion_conveniospacienteingresos conv, tarifarios_tarifariosdescripcion des, tarifarios_tarifariosprocedimientos proc, clinico_examenes exa, contratacion_convenios conv1 , tarifarios_tipostarifa tiptar WHERE conv."tipoDoc_id" = ' + "'" + str(registroCirugia.tipoDoc_id) + "'" + ' AND conv.documento_id = ' + "'" + str(registroCirugia.documento_id) + "'" + ' AND conv."consecAdmision" = ' + "'" + str(registroCirugia.consecAdmision) + "'" + ' AND conv.convenio_id = conv1.id AND des.id = conv1."tarifariosDescripcionSum_id" AND proc."codigoCups_id" = exa.id  And proc.id = ' + "'" + str(procedimiento) + "'" + ' AND des."tiposTarifa_id" = tiptar.id and proc."tiposTarifa_id" = tiptar.id AND conv.convenio_id = ' + "'" + str(registroConvenio) + "'"
+
+                    print("comando = ", comando)
+                    curt.execute(comando)
+
+                    convenioValor = []
+
+                    for id, cups, tarifaValor in curt.fetchall():
+                        convenioValor.append({'id': id, 'cups': cups, 'valor': tarifaValor})
+
+                    miConexiont.close()
+
+                else:
+                    convenioValor = []
+
+                print("columnaALeer.columna", columnaALeerPropia)
+                print("convenioValor = ", convenioValor)
+                #print("convenioValor[0].sum = ", convenioValor[0].sum)
+
+
+                if (convenioValor != []):
+
+                    print("Sum = ", convenioValor[0]['sum'])
+                    tarifaValor = convenioValor[0]['valor']
+                    tarifaValor = str(tarifaValor)
+                    print("tarifaValor = ", tarifaValor)
+                    tarifaValor = tarifaValor.replace("None", ' ')
+                    tarifaValor = tarifaValor.replace("(", ' ')
+                    tarifaValor = tarifaValor.replace(")", ' ')
+                    tarifaValor = tarifaValor.replace(",", ' ')
+                    tarifaValor = tarifaValor.replace(" ", '')
+                    print("tarifaValor = ", tarifaValor)
+
+                else:
+                    tarifaValor = 0
+
+                if tarifaValor == '':
+                    print("Entre cambiar tarufa Valor", tarifaValor)
+                    tarifaValor = 0
+
+                cantidadProcedimiento  = 1
+                TotalTarifa = float(tarifaValor) * float(cantidadProcedimiento)
+                print("consecLiquidacion LISTO= ", consecLiquidacion)
+
+                # Aqui Rutina FACTURACION crea en liquidaciondetalle el registro con la tarifa, con campo cups y convenio
+                #
+                consecLiquidacion = int(consecLiquidacion) + 1
+
+                comando = 'INSERT INTO facturacion_liquidaciondetalle (consecutivo,fecha, cantidad, "valorUnitario", "valorTotal",cirugia_id,"fechaCrea", "fechaRegistro", "estadoRegistro", "examen_id",  "usuarioRegistro_id", liquidacion_id, "tipoRegistro",anulado) VALUES (' + "'" + str(consecLiquidacion) + "','" + str(fechaRegistro) + "','" + str(cantidadProcedimiento) + "','" + str(tarifaValor) + "','" + str(TotalTarifa) + "',null,'" + str(fechaRegistro) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(procedimiento) + "','" + str(username_id) + "'," + liquidacionId + ",'SISTEMA','N')"
+                print("comando ", comando)
+                cur3.execute(comando)
+
+
+               # Fin rutina Facturacion Procedimientos detalle
+
+
+
+            ## Fin rutina para subir la tarifa del procedimiento como tal a Liquidaciondetalle
+
+                    # consigue La cantidad de uvr del procedimiento
 
                 detalle = 'SELECT "cantidadUvr" cantidadUvr FROM clinico_examenes WHERE id = ' + "'" + str(procedimiento) + "'"
 
@@ -2977,5 +3083,37 @@ def TraerEstadoProgramacionCirugia(request):
     #registroCirugia = Cirugias.objects.get(tipoDoc_id=registroProgramacion.tipoDoc_id, documento_id=registroProgramacion.documento_id, consecAdmision = registroProgramacion.consecAdmision)
 
     serialized1 = json.dumps(registroProgramacionCirugia, default=str)
+
+    return HttpResponse(serialized1, content_type='application/json')
+
+
+def BuscarConveniosCirugiaPaciente(request):
+    print("Entre buscarConveniosCirugiaPaciente")
+
+    ingresoId = request.POST.get('ingresoId')
+    print("ingresoId =", ingresoId)
+
+    registroIngreso = Ingresos.objects.get(id=ingresoId)
+
+    miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                   password="123456")
+    cur3 = miConexion3.cursor()
+
+    detalle = 'SELECT c.id id, c.nombre nombre FROM  contratacion_convenios c ,facturacion_conveniospacienteingresos p	where p."tipoDoc_id" = ' + "'" + str(registroIngreso.tipoDoc_id) + "'" + ' AND p.documento_id = ' + "'" + str(registroIngreso.documento_id)  + "'" + ' AND p."consecAdmision" =  ' + "'" + str(registroIngreso.consec)  + "'" + ' AND  c.id=p.convenio_id'
+
+    conveniosPacienteCirugia = []
+
+    print(detalle)
+
+    cur3.execute(detalle)
+
+    for id, nombre in cur3.fetchall():
+        conveniosPacienteCirugia.append(
+            {'id': id, 'nombre':nombre})
+
+    miConexion3.close()
+    print(conveniosPacienteCirugia)
+
+    serialized1 = json.dumps(conveniosPacienteCirugia, default=str)
 
     return HttpResponse(serialized1, content_type='application/json')

@@ -273,7 +273,7 @@ autoWidth: false,
                 { data: "fields.tipoHonorario"},
                 { data: "fields.observaciones"},
                 { data: "fields.tipoRegistro"},
-		{ data: "fields.estadoReg"},
+		{ data: "fields.anulado"},
                      ]
             }
 

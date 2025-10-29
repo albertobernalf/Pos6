@@ -606,7 +606,7 @@ def load_dataLiquidacionDetalle(request, data):
                                    password="123456")
     cur = miConexionx.cursor()
 
-    comando = 'select liq.id id,consecutivo ,  cast(date(fecha)||\' \'||to_char(fecha, \'HH:MI:SS\') as text) fecha  ,  liq.cantidad ,  "valorUnitario" ,  "valorTotal" , hono.nombre tipoHonorario, cirugia_id ,  cast(date("fechaCrea")||\' \'||to_char("fechaCrea", \'HH:MI:SS\') as text)  fechaCrea , liq.observaciones ,  "estadoRegistro" ,  "examen_id" ,  cums_id , exa.nombre  nombreExamen  ,  liquidacion_id ,  liq."tipoHonorario_id" ,  "tipoRegistro" , liq."estadoRegistro" estadoReg FROM facturacion_liquidaciondetalle liq LEFT JOIN tarifarios_tiposhonorarios hono ON (hono.id = liq."tipoHonorario_id") inner join clinico_examenes exa on (exa.id = liq."examen_id")  where liquidacion_id= ' + "'" +  str(liquidacionId) + "'" +  ' UNION select liq.id id,consecutivo , cast(date(fecha)||\' \'||to_char(fecha, \'HH:MI:SS\') as text) fecha  ,  liq.cantidad ,  "valorUnitario" ,  "valorTotal" , hono.nombre tipoHonorario,  cirugia_id ,  cast(date("fechaCrea")||\' \'||to_char("fechaCrea", \'HH:MI:SS\') as text)  fechaCrea , liq.observaciones ,  "estadoRegistro" ,  "examen_id" ,  cums_id , sum.nombre  nombreExamen  ,  liquidacion_id ,  liq."tipoHonorario_id" ,  "tipoRegistro" , liq."estadoRegistro" estadoReg FROM facturacion_liquidaciondetalle liq LEFT JOIN tarifarios_tiposhonorarios hono ON (hono.id = liq."tipoHonorario_id")  inner join facturacion_suministros sum on (sum.id = liq.cums_id)  where liquidacion_id= '  + "'" +  str(liquidacionId) + "'" + ' AND "estadoRegistro"= ' +"'" + str('A') + "'" + ' ORDER BY consecutivo'
+    comando = 'select liq.id id,consecutivo ,  cast(date(fecha)||\' \'||to_char(fecha, \'HH:MI:SS\') as text) fecha  ,  liq.cantidad ,  "valorUnitario" ,  "valorTotal" , hono.nombre tipoHonorario, cirugia_id ,  cast(date("fechaCrea")||\' \'||to_char("fechaCrea", \'HH:MI:SS\') as text)  fechaCrea , liq.observaciones ,  "estadoRegistro" ,  "examen_id" ,  cums_id , exa.nombre  nombreExamen  ,  liquidacion_id ,  liq."tipoHonorario_id" ,  "tipoRegistro" , liq."estadoRegistro" estadoReg, liq.anulado anulado   FROM facturacion_liquidaciondetalle liq LEFT JOIN tarifarios_tiposhonorarios hono ON (hono.id = liq."tipoHonorario_id") inner join clinico_examenes exa on (exa.id = liq."examen_id")  where liquidacion_id= ' + "'" +  str(liquidacionId) + "'" +  ' UNION select liq.id id,consecutivo , cast(date(fecha)||\' \'||to_char(fecha, \'HH:MI:SS\') as text) fecha  ,  liq.cantidad ,  "valorUnitario" ,  "valorTotal" , hono.nombre tipoHonorario,  cirugia_id ,  cast(date("fechaCrea")||\' \'||to_char("fechaCrea", \'HH:MI:SS\') as text)  fechaCrea , liq.observaciones ,  "estadoRegistro" ,  "examen_id" ,  cums_id , sum.nombre  nombreExamen  ,  liquidacion_id ,  liq."tipoHonorario_id" ,  "tipoRegistro" , liq."estadoRegistro" estadoReg , liq.anulado anulado FROM facturacion_liquidaciondetalle liq LEFT JOIN tarifarios_tiposhonorarios hono ON (hono.id = liq."tipoHonorario_id")  inner join facturacion_suministros sum on (sum.id = liq.cums_id)  where liquidacion_id= '  + "'" +  str(liquidacionId) + "'" + ' AND "estadoRegistro"= ' +"'" + str('A') + "'" + ' ORDER BY consecutivo'
 
     print(comando)
 
@@ -614,7 +614,7 @@ def load_dataLiquidacionDetalle(request, data):
 
     liquidacionDetalle = []
 
-    for id, consecutivo, fecha, cantidad, valorUnitario, valorTotal, tipoHonorario, cirugia, fechaCrea, observaciones, estadoRegistro, examen_id, cums_id, nombreExamen, liquidacion_id, tipoHonorario_id, tipoRegistro, estadoReg in cur.fetchall():
+    for id, consecutivo, fecha, cantidad, valorUnitario, valorTotal, tipoHonorario, cirugia, fechaCrea, observaciones, estadoRegistro, examen_id, cums_id, nombreExamen, liquidacion_id, tipoHonorario_id, tipoRegistro, estadoReg, anulado in cur.fetchall():
         liquidacionDetalle.append(
             {"model": "liquidacionDetalle.liquidacionDetalle", "pk": id, "fields":
                 {"id": id, "consecutivo": consecutivo,
@@ -627,7 +627,7 @@ def load_dataLiquidacionDetalle(request, data):
                  "estadoRegistro": estadoRegistro, "examen_id": examen_id,
                  "cums_id": cums_id, "nombreExamen": nombreExamen,
                  "liquidacion_id": liquidacion_id, "tipoHonorario_id": tipoHonorario_id,
-                 "tipoRegistro": tipoRegistro, "estadoReg":estadoReg}})
+                 "tipoRegistro": tipoRegistro, "estadoReg":estadoReg,'anulado':anulado}})
 
     miConexionx.close()
     print("Envio esto : " , liquidacionDetalle)

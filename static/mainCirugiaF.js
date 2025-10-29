@@ -2287,8 +2287,64 @@ $('#tablaIngresosCirugia tbody').on('click', '.miSolicitudCirugia2', function() 
 		username_id = document.getElementById("username_id").value;
 
 		document.getElementById("username3_id").value  = username_id;
+		var ingresoId = post_id;
+
+// aqui va el ajax que trae los convenios de paciente a ser seleccionado
+
+            $.ajax({
+	        url: "/buscarConveniosCirugiaPaciente/",
+		data: {'ingresoId':ingresoId},
+                type: "POST",
+                dataType: 'json',
+                success: function (data2) {
+		// if (data2.success == true)
+		// 	 {
+		// 	  document.getElementById("mensajes").value = data2.Mensajes;
+		// 	 }
+		// 	else
+		// 	{
+			alert("data2  = " + JSON.stringify(data2));
+// 
+// 			document.getElementById("mensajesErrorModalProgramacion").value = data2.Mensajes;
+// 			return;
+// 			}
+
+	  		   var options = '<option value="=================="></option>';
+
+	  		//  var dato = JSON.parse(data2);
+				var dato = data2;
 
 
+                     const $id2 = document.querySelector("#convenioProc");
+
+
+ 	      		     $("#convenioProc").empty();
+
+				   alert("ya blanquue los convenioProc");
+
+
+
+	                 $.each(dato, function(key,value) {
+                                    options +='<option value="' + value.id + '">' + value.nombre + '</option>';
+                                    option = document.createElement("option");
+                                    option.value = value.id;
+                                    option.text = value.nombre;
+                                    $id2.appendChild(option);
+ 	      		      });
+
+
+
+                },
+       error: function (data) {
+	   			    	document.getElementById("mensajesErrorModalProgramacion").value =   data.responseText;
+
+	   	    	}
+            });
+
+
+
+
+// FIN AJAX
 		
 })
 
