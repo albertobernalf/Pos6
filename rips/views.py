@@ -846,7 +846,7 @@ def GenerarJsonRips(request):
 
                 if (tipoRips == 'Factura'):
 
-                    detalle = 'INSERT INTO rips_ripshospitalizacion ("codPrestador","viaIngresoServicioSalud_id","fechaInicioAtencion", "numAutorizacion","causaMotivoAtencion_id","codComplicacion_id", "codDiagnosticoPrincipal_id", "codDiagnosticoPrincipalE_id",  "codDiagnosticoRelacionadoE1_id", "codDiagnosticoRelacionadoE2_id", "codDiagnosticoRelacionadoE3_id","condicionDestinoUsuarioEgreso_id", "codDiagnosticoCausaMuerte_id","fechaEgreso",  consecutivo, "usuarioRegistro_id", "ripsDetalle_id", "ripsTipos_id", "ripsTransaccion_id",  "fechaRegistro", ingreso_id, "estadoReg")  SELECT sed."codigoHabilitacion",i."ripsViaIngresoServicioSalud_id",cast(i."fechaIngreso" as date), aut."numeroAutorizacion" , i."ripsCausaMotivoAtencion_id", (select diag1.id from clinico_diagnosticos diag1 where  diag1.id = i."dxComplicacion_id"),(select diag1.id from clinico_diagnosticos diag1 where  diag1.id = i."dxIngreso_id"), (select diag1.id from clinico_diagnosticos diag1 where  diag1.id = i."dxSalida_id"),     (select max(diag1.id)  from clinico_historialdiagnosticos histdiag1, clinico_diagnosticos diag1 , clinico_historia his where histdiag1.historia_id = his.id and histdiag1."tiposDiagnostico_id" = ' + "'" + str('1') + "'" + ' and histdiag1.diagnosticos_id = diag1.id and his."tipoDoc_id" = fac."tipoDoc_id" and his.documento_id = fac.documento_id AND his."consecAdmision" = fac."consecAdmision") ,   (select max(diag1.id)  from clinico_historialdiagnosticos histdiag1, clinico_diagnosticos diag1, clinico_historia his  where histdiag1.historia_id = his.id and histdiag1."tiposDiagnostico_id" = ' + "'" + str('2') + "'" + ' and histdiag1.diagnosticos_id = diag1.id  and his."tipoDoc_id" = fac."tipoDoc_id" and his.documento_id = fac.documento_id AND his."consecAdmision" =fac."consecAdmision"),  (select max(diag1.id) from clinico_historialdiagnosticos histdiag1, clinico_diagnosticos diag1, clinico_historia his where histdiag1.historia_id = his.id and histdiag1."tiposDiagnostico_id" = ' + "'" + str('3') + "'" + ' and histdiag1.diagnosticos_id = diag1.id  and his."tipoDoc_id" = fac."tipoDoc_id" and his.documento_id = fac.documento_id AND his."consecAdmision" =fac."consecAdmision" ), i."ripsCondicionDestinoUsuarioEgreso_id", null,  cast(i."fechaSalida" as date), row_number() OVER(ORDER BY i.id) AS consecutivo ,' + "'" + str(username_id) + "'" + ' ,det.id,env."ripsEstados_id",  ripstra.id,now() ' + ",'" + str(ingresoId.id) + "','A'"  + ' FROM sitios_sedesclinica sed inner join facturacion_facturacion fac ON (fac."sedesClinica_id" = sed.id) inner join admisiones_ingresos i ON (i."sedesClinica_id" = sed.id and i."tipoDoc_id" =fac."tipoDoc_id" and i.documento_id = fac.documento_id AND i.consec =fac."consecAdmision") inner join rips_ripsenvios env ON (env."sedesClinica_id" = sed.id) inner join rips_ripsdetalle det ON ( det."ripsEnvios_id" = env.id and  det."ripsEnvios_id" = fac."ripsEnvio_id" and cast(det."numeroFactura_id" as float) = fac.id )  inner join rips_ripstransaccion ripstra ON ( ripstra."sedesClinica_id" = sed.id and ripstra."ripsEnvio_id" = env.id and ripstra."numFactura" = cast(fac.id as text))  left join autorizaciones_autorizaciones aut  on (aut.id = i.autorizaciones_id) inner join 	clinico_servicios serv on (serv.nombre = ' + "'" + str('HOSPITALIZACION') +"')" + ' inner join 	sitios_dependencias dep on (dep.id = i."dependenciasSalida_id" ) inner join 	sitios_serviciossedes servsedes on (servsedes.id = dep."serviciosSedes_id" and servsedes.servicios_id= serv.id)    where sed.id = ' + "'" + str(sede) + "'" + ' AND env.id = ' + "'" + str(envioRipsId) + "'" + ' and fac.id = ' + "'" + str(elemento) + "'"
+                    detalle = 'INSERT INTO rips_ripshospitalizacion ("codPrestador","viaIngresoServicioSalud_id","fechaInicioAtencion", "numAutorizacion","causaMotivoAtencion_id","codComplicacion_id", "codDiagnosticoPrincipal_id", "codDiagnosticoPrincipalE_id",  "codDiagnosticoRelacionadoE1_id", "codDiagnosticoRelacionadoE2_id", "codDiagnosticoRelacionadoE3_id","condicionDestinoUsuarioEgreso_id", "codDiagnosticoCausaMuerte_id","fechaEgreso",  consecutivo, "usuarioRegistro_id", "ripsDetalle_id", "ripsTipos_id", "ripsTransaccion_id",  "fechaRegistro", ingreso_id, "estadoReg")  SELECT sed."codigoHabilitacion",i."ripsViaIngresoServicioSalud_id",cast(i."fechaIngreso" as date), aut."numeroAutorizacion" , i."ripsCausaMotivoAtencion_id", (select diag1.id from clinico_diagnosticos diag1 where  diag1.id = i."dxComplicacion_id"),(select diag1.id from clinico_diagnosticos diag1 where  diag1.id = i."dxIngreso_id"), (select diag1.id from clinico_diagnosticos diag1 where  diag1.id = i."dxSalida_id"),     (select max(diag1.id)  from clinico_historialdiagnosticos histdiag1, clinico_diagnosticos diag1 , clinico_historia his where histdiag1.historia_id = his.id and histdiag1."tiposDiagnostico_id" = ' + "'" + str('1') + "'" + ' and histdiag1.diagnosticos_id = diag1.id and his."tipoDoc_id" = fac."tipoDoc_id" and his.documento_id = fac.documento_id AND his."consecAdmision" = fac."consecAdmision") ,   (select max(diag1.id)  from clinico_historialdiagnosticos histdiag1, clinico_diagnosticos diag1, clinico_historia his  where histdiag1.historia_id = his.id and histdiag1."tiposDiagnostico_id" = ' + "'" + str('2') + "'" + ' and histdiag1.diagnosticos_id = diag1.id  and his."tipoDoc_id" = fac."tipoDoc_id" and his.documento_id = fac.documento_id AND his."consecAdmision" =fac."consecAdmision"),  (select max(diag1.id) from clinico_historialdiagnosticos histdiag1, clinico_diagnosticos diag1, clinico_historia his where histdiag1.historia_id = his.id and histdiag1."tiposDiagnostico_id" = ' + "'" + str('3') + "'" + ' and histdiag1.diagnosticos_id = diag1.id  and his."tipoDoc_id" = fac."tipoDoc_id" and his.documento_id = fac.documento_id AND his."consecAdmision" =fac."consecAdmision" ), i."ripsCondicionDestinoUsuarioEgreso_id", null,  cast(i."fechaSalida" as date), row_number() OVER(ORDER BY i.id) AS consecutivo ,' + "'" + str(username_id) + "'" + ' ,det.id,env."ripsEstados_id",  ripstra.id,now() ' + ",'" + str(ingresoId.id) + "','A'"  + ' FROM sitios_sedesclinica sed inner join facturacion_facturacion fac ON (fac."sedesClinica_id" = sed.id) inner join admisiones_ingresos i ON (i."sedesClinica_id" = sed.id and i."tipoDoc_id" =fac."tipoDoc_id" and i.documento_id = fac.documento_id AND i.consec =fac."consecAdmision") inner join rips_ripsenvios env ON (env."sedesClinica_id" = sed.id) inner join rips_ripsdetalle det ON ( det."ripsEnvios_id" = env.id and  det."ripsEnvios_id" = fac."ripsEnvio_id" and cast(det."numeroFactura_id" as float) = fac.id )  inner join rips_ripstransaccion ripstra ON ( ripstra."sedesClinica_id" = sed.id and ripstra."ripsEnvio_id" = env.id and ripstra."numFactura" = cast(fac.id as text))  left join autorizaciones_autorizaciones aut  on (aut.id = i.autorizaciones_id) left join 	clinico_servicios serv on (serv.nombre = ' + "'" + str('HOSPITALIZACION') +"')" + ' left join 	sitios_dependencias dep on (dep.id = i."dependenciasSalida_id" ) left join 	sitios_serviciossedes servsedes on (servsedes.id = dep."serviciosSedes_id" and servsedes.servicios_id= serv.id)    where sed.id = ' + "'" + str(sede) + "'" + ' AND env.id = ' + "'" + str(envioRipsId) + "'" + ' and fac.id = ' + "'" + str(elemento) + "'"
 
                 if (tipoRips == 'Glosa'):
 
@@ -907,12 +907,9 @@ def GenerarJsonRips(request):
 
                     print("traigoConsecutivoId", traigoConsecutivo)
 
-
-
                     detalle1 = 'INSERT INTO rips_ripsmedicamentos ("codPrestador", "numAutorizacion", "idMIPRES", "fechaDispensAdmon", "nomTecnologiaSalud", "concentracionMedicamento", "cantidadMedicamento", 	"diasTratamiento",	"numDocumentoIdentificacion", "vrUnitMedicamento", "vrServicio","valorPagoModerador", "numFEVPagoModerador",consecutivo, "fechaRegistro", "codDiagnosticoPrincipal_id", "codDiagnosticoRelacionado_id","codTecnologiaSalud_id", "conceptoRecaudo_id", "formaFarmaceutica_id", "tipoDocumentoIdentificacion_id", "tipoMedicamento_id", "unidadMedida_id","unidadMinDispensa_id", "usuarioRegistro_id", "ripsDetalle_id", "itemFactura","ripsTipos_id", "ripsTransaccion_id", "estadoReg", ingreso_id ) SELECT sed."codigoHabilitacion", null, null, facdet.fecha,null,null ,null ,null ,planta.documento, facdet."valorUnitario",	facdet."valorTotal", 0,  fac.id, row_number() OVER(ORDER BY facdet.id)  + ' + str(traigoConsecutivo) + ' , now(),diag1.id , diag2.id, ripscums.id, (select min(ripsRecaudo.id)  FROM cartera_pagos pagos INNER JOIN cartera_formaspagos carteraFormasPago ON (carteraFormasPago.id =pagos."formaPago_id" ) INNER JOIN rips_ripsconceptorecaudo ripsRecaudo ON (ripsRecaudo.id = cast(carteraFormasPago."codigoRips" as integer)) 	WHERE pagos.documento_id=fac.documento_id and pagos."tipoDoc_id" = fac."tipoDoc_id" and pagos.consec=fac."consecAdmision") recaudo, ripsfarma.id, ripstipdoc.id, tipmed.id, ripsumm.id, ripsupr.id, ' + "'" + str(username_id) + "'" + ' , det.id, facdet."consecutivoFactura", ' + "'" + str('8') + "'" + ' , rips_ripstransaccion.id , ' + "'" + str('A') + "','" + str(ingresoId.id) + "'"  + ' from rips_ripstransaccion inner join rips_ripsenvios env on(env."sedesClinica_id" = rips_ripstransaccion."sedesClinica_id" and env.id = rips_ripstransaccion."ripsEnvio_id" ) inner join sitios_sedesclinica sed on (sed.id = env."sedesClinica_id") inner join rips_ripsdetalle det on (det."ripsEnvios_id" = env.id and det."numeroFactura_id" = cast(rips_ripstransaccion."numFactura" as numeric)) inner join facturacion_facturacion fac on (fac.id = det."numeroFactura_id") inner join facturacion_facturaciondetalle facdet on (facdet."facturacion_id" = fac.id and facdet."cums_id" is not null and (facdet.anulado = ' + "'" + str('N') + "'" + ' or facdet.anulado = ' + "'" + str('R') + "')" + ' AND facDet."tipoRegistro" = ' + "'" + str('MANUAL') + "')" + ' inner join facturacion_suministros sum on (sum.id = facdet.cums_id) left join rips_ripstipomedicamento tipmed on (tipmed.id = sum."ripsTipoMedicamento_id" ) inner join rips_ripscums ripscums  on (ripscums.cum = sum."cums") left join rips_ripsumm ripsumm on (ripsumm.id = sum."ripsUnidadMedida_id") left join rips_RipsFormaFarmaceutica ripsfarma on (ripsfarma.id = sum."ripsFormaFarmaceutica_id") left join rips_ripsunidadupr ripsupr on (ripsupr.id = sum."ripsUnidadUpr_id") inner join admisiones_ingresos adm on (adm."tipoDoc_id" = fac."tipoDoc_id" and adm.documento_id=fac.documento_id and adm.consec=fac."consecAdmision") left join 	clinico_medicos medico on (medico.id =adm."medicoActual_id") inner join planta_planta planta on (planta.id = medico.planta_id) left join usuarios_tiposdocumento usutipdoc on (usutipdoc.id = planta."tipoDoc_id") left join rips_ripstiposdocumento ripstipdoc on (ripstipdoc.id = usutipdoc."tipoDocRips_id")   left join clinico_diagnosticos diag1 on (diag1.id=adm."dxActual_id") left join clinico_diagnosticos diag2 on (diag2.id=adm."dxIngreso_id") where env.id =  ' + "'" + str(envioRipsId) + "'" + ' and rips_ripstransaccion."ripsEnvio_id" = env.id  and cast(rips_ripstransaccion."numFactura" as numeric) = fac.id  and fac.id = ' + "'" + str(elemento) + "' AND facdet.cums_id is not null"
                     curx.execute(detalle1)
                     print("detalle =", detalle1)
-
 
                     if (aplicoAbono == 'NO'):
 
@@ -964,6 +961,49 @@ def GenerarJsonRips(request):
 
                 # Aqui generamos los JSON de la Factura
                 #
+                traza = []
+                comando='SELECT id from rips_ripstransaccion where id =' + "'" + str(transaccionId) +  "'"
+
+                curx.execute(comando)
+
+                for id in curx.fetchall():
+                    traza.append({'id': id})
+
+                print ("traza1 tx = ", traza)
+                traza = []
+
+                comando = 'SELECT id from rips_ripshospitalizacion where "ripsTransaccion_id" =' + "'" + str(transaccionId) + "'"
+
+                curx.execute(comando)
+
+                for id in curx.fetchall():
+                    traza.append({'id': id})
+
+                print("traza2 hospit = ", traza)
+
+                traza = []
+
+                comando = 'SELECT id from rips_ripsprocedimientos where "ripsTransaccion_id" =' + "'" + str(transaccionId) + "'"
+
+                curx.execute(comando)
+
+                for id in curx.fetchall():
+                    traza.append({'id': id})
+
+                print("traza3  procedimientos = ", traza)
+
+                traza = []
+
+                comando = 'SELECT id from rips_ripsmedicamentos where "ripsTransaccion_id" =' + "'" + str(transaccionId) + "'"
+
+                curx.execute(comando)
+
+                for id in curx.fetchall():
+                    traza.append({'id': id})
+
+                print("traza4 Mediamentos = ", traza)
+
+
                 print("voy a generar el json con transaccionId =" ,  transaccionId)
                 funcionJson = []
 

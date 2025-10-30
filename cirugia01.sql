@@ -214,7 +214,7 @@ SELECT c.id id, c.nombre nombre FROM  contratacion_convenios c ,facturacion_conv
 
 	select * from cirugia_programacioncirugias
 	select * from usuarios_usuarios;
-
+ 
 	select * from tarifarios_tarifariosprocedimientos
 	SELECT tarifa.valor valor FROM cirugia_cirugias cir, sitios_tipossalas tipsal, tarifarios_tablaSalasdecirugiaiss tarifa, sitios_salas sala WHERE cir.id = '28' AND cir.sala_id = sala.id and sala."tipoSala_id" = tipsal.id and tarifa."tiposSala_id" = tipsal.id and '31' between tarifa."desdeUvr" AND tarifa."hastaUvr"
 	ORDER BY nombre
@@ -222,7 +222,111 @@ SELECT c.id id, c.nombre nombre FROM  contratacion_convenios c ,facturacion_conv
 -- ojo mañana esteq euqry tuene problemas
 -- no trae nada porcua ??
 -- por ello hace todo el rollback;	
-SELECT tarifa.valor valor
-FROM cirugia_cirugias cir, sitios_tipossalas tipsal, tarifarios_tablaSalasdecirugiaiss tarifa, sitios_salas sala 
-WHERE cir.id = '28' AND cir.sala_id = sala.id and sala."tipoSala_id" = tipsal.id and tarifa."tiposSala_id" = tipsal.id 
+
+	select "tiposSala_id",* from tarifarios_tablaSalasdecirugiaiss;
+	select * from sitios_tipossalas;
+	select * from sitios_salas;
+	select sala_id,* from cirugia_cirugias;
+	
+
+SELECT tarifa.valor valor 
+FROM cirugia_cirugias cir, sitios_tipossalas tipsal, tarifarios_tablaSalasdecirugiaiss tarifa, sitios_salas sala
+WHERE cir.id = '28' AND cir.sala_id = sala.id and sala."tipoSala_id" = tipsal.id and tarifa."tiposSala_id" = tipsal.id and '30' between tarifa."desdeUvr" AND tarifa."hastaUvr"
+
+	select * from cirugia_cirugiasprocedimientos where cirugia_id=28;	
+	
 	and '31' between tarifa."desdeUvr" AND tarifa."hastaUvr"
+
+select "grupoQx_id","cantidadUvr",* from clinico_examenes where id in (4021,2365,2708,3178)
+select "tiposSala_id",* from tarifarios_tablaSalasdecirugiaiss;
+	select * from sitios_tipossalas;
+select sala_id, * from cirugia_cirugias where id='28'
+select "tipoSala_id",* from sitios_salas where id='2'	
+	
+SELECT tarifa.valor valor 
+FROM cirugia_cirugias cir, sitios_tipossalas tipsal, tarifarios_tablaSalasdecirugiaiss tarifa, sitios_salas sala 
+WHERE cir.id = '28' AND cir.sala_id = sala.id and sala."tipoSala_id" = tipsal.id and tarifa."tiposSala_id" = tipsal.id and '31' 
+	between tarifa."desdeUvr" AND tarifa."hastaUvr"
+
+select * from contratacion_convenios;
+SELECT * FROM USUARIOS_USUARIOS;
+select anulado,convenio_id,* from facturacion_liquidacion where documento_id = '24' -- 251
+select * from facturacion_liquidaciondetalle where liquidacion_id = 263
+
+select sum("valorTotal") from facturacion_liquidaciondetalle where liquidacion_id = 263 and cums_id is not null and  anulado='N';
+	-- 30500
+select sum("valorTotal") from facturacion_liquidaciondetalle where liquidacion_id = 263 and examen_id is not null and  anulado='N';
+-- 5073535
+ 
+update facturacion_liquidacion set anulado='N' where id=263
+
+select anulado,convenio_id,* from facturacion_facturacion where documento_id = '24'
+select glosa_id,* from rips_ripsprocedimientos where id = 3433
+select * from cartera_glosasdetalle where "ripsProcedimientos_id" = 3433
+	select * from cartera_glosasdetalle where ID=19
+--
+update cartera_glosasdetalle set "ripsProcedimientos_id" = null where id=19 -- estaba 3433
+update cartera_glosasdetalle set "ripsProcedimientos_id" = 3531 where id=19 
+	
+select * from cartera_glosas where factura_id=142
+select * from cartera_glosasdetalle where glosa_id=39
+
+		SELECT * FROM rips_ripstransaccion order by id desc
+
+select * from rips_ripsprocedimientos where "ripsTransaccion_id" >= 938 and "numFEVPagoModerador" = '142'
+	
+
+select * from rips_ripstransaccion order by id desc
+	
+update facturacion_facturaciondetalle set  "tipoRegistro"= 'MANUAL' where id in (420,421)
+update facturacion_facturaciondetalle set  "tipoRegistro"= 'SISTEMA' where id in (420,421)
+SELECT * FROM rips_ripstransaccion where "numFactura" = '149'
+
+
+ SELECT generaFacturaJSONBAK('68','149','FACTURA',0)
+
+SELECT * FROM rips_ripstransaccion WHERE "ripsEnvio_id"= '68'
+	SELECT * FROM rips_ripstransaccion order by id desc
+
+select * from rips_ripsprocedimientos where "ripsTransaccion_id" >= 938 and "numFEVPagoModerador" = '142'
+select * from rips_ripshospitalizacion where "ripsTransaccion_id" = 935
+select * from rips_ripsmedicamentos where "ripsTransaccion_id" = 935
+select * from rips_ripsusuarios where "ripsTransaccion_id" = 935
+
+SELECT * FROM rips_ripstiposdocumento
+	SELECT * FROM usuarios_tiposDocumento
+	SELECT "tipoDoc_id",* FROM USUARIOS_USUARIOS WHERE ID=24;
+	SELECT "tipoDoc_id",* FROM admisiones_ingresos WHERE documento_id=24;
+	
+
+SELECT '[{"codPrestador": ' ||'"'  ||   hosp."codPrestador"|| '",'  ||
+	   '"viaIngresoServicioSalud": ' || '"'  ||hosp."viaIngresoServicioSalud_id"|| '",'  ||
+	    '"fechaInicioAtencion": ' || '"'  ||substring(CAST( hosp."fechaInicioAtencion"  as text),1,16) || '",'  || 
+		 '"numAutorizacion": ' || '"'  ||CASE WHEN trim(cast(hosp."numAutorizacion" as text)) is null THEN 'null' WHEN trim(cast(hosp."numAutorizacion" as text)) = '' THEN 'null' ELSE hosp."numAutorizacion"  END|| '",'   || 
+	 '"causaMotivoAtencion": ' || '"'  ||cauext.codigo|| '",'   || 
+
+	'"codDiagnosticoPrincipal": ' || '"'  ||dxppal.cie10|| '",'   || 
+		  '"codDiagnosticoPrincipalE": ' || '"'  ||dxppale.cie10|| '",'    ||
+   '"codDiagnosticoRelacionadoE1": ' || '"'  ||CASE WHEN trim(cast(dxrel1.cie10 as text)) is null THEN 'null' WHEN trim(cast(dxrel1.cie10 as text)) = '' THEN 'null' ELSE dxrel1.cie10  END|| '",'   || 	
+   '"codDiagnosticoRelacionadoE2": ' || '"'  ||CASE WHEN trim(cast(dxrel2.cie10  as text)) is null THEN 'null' WHEN trim(cast(dxrel2.cie10 as text)) = '' THEN 'null' ELSE dxrel2.cie10  END|| '",'   || 	
+   '"codDiagnosticoRelacionadoE3": ' || '"'  ||CASE WHEN trim(cast(dxrel3.cie10  as text)) is null THEN 'null' WHEN trim(cast(dxrel3.cie10 as text)) = '' THEN 'null' ELSE dxrel3.cie10  END|| '",'   || 	
+	'"codComplicacion": ' || '"'  ||'null'|| '",'  ||
+
+	'"condicionDestinoUsuarioEgreso": ' || '"'  ||cauext.codigo|| '",'   || 
+		'"codDiagnosticoMuerte": ' || '"'  ||'null'|| '",'  ||
+
+	'"fechaEgreso": ' || '"'  ||case when hosp."fechaEgreso" is null then 'null' else substring(cast(hosp."fechaEgreso" as text),1,16) end|| '",'   || 
+
+	'"consecutivo": ' || hosp.consecutivo|| '}]'
+from rips_ripstransaccion
+	left join rips_ripshospitalizacion hosp on (hosp."ripsTransaccion_id" = rips_ripstransaccion.id)
+	left join rips_ripscausaexterna cauext on (cauext.id =hosp."causaMotivoAtencion_id" )
+	left join clinico_diagnosticos dxppal on (dxppal.id =hosp."codDiagnosticoPrincipal_id")
+	left join clinico_diagnosticos dxppale on (dxppale.id =hosp."codDiagnosticoPrincipalE_id")
+	left join clinico_diagnosticos dxrel1 on (dxrel1.id = hosp."codDiagnosticoRelacionadoE1_id")
+	left join clinico_diagnosticos dxrel2 on (dxrel2.id =  hosp."codDiagnosticoRelacionadoE2_id")
+	left join clinico_diagnosticos dxrel3 on (dxrel3.id =  hosp."codDiagnosticoRelacionadoE3_id")
+	left join rips_ripsDestinoEgreso egreso on (egreso.id = hosp."condicionDestinoUsuarioEgreso_id" )
+where  rips_ripstransaccion."ripsEnvio_id" = 68 and   rips_ripstransaccion."numFactura" =cast('149' as text) ;
+
+select * from admisiones_ingresos where documento_id='24'

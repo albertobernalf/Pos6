@@ -251,6 +251,16 @@ function arrancaGlosas(valorTabla,valorData)
                 { data: "fields.valorNotasCredito"},
                 { data: "fields.valorSoportado2"},
 
+		{
+		"render": function ( data, type, row ) {
+                        var btn = '';
+		 btn = btn + " <button class='miBorrarGlosadetalle btn-primary ' style='width:15px;height:15px;accent-color: purple;border-color: purple;background-color: red;'  data-pk='" + row.pk + "'>" + '<i class="fa-duotone fa-regular fa-thumbs-up"></i>' + "</button>";
+
+                       return btn;
+                    },
+		},
+
+
                      ]
             }
 
@@ -1440,6 +1450,65 @@ window.addEventListener('load', async () => {
             });
 
   });
+
+
+
+ $('#tablaGlosasDetalle tbody').on('click', '.miBorrarGlosaDetalle', function() {
+
+        var post_id = $(this).data('pk');
+	var row = $(this).closest('tr'); // Encuentra la fila
+
+
+	var table = $('#tablaGlosasDetalle').DataTable();  // Inicializa el DataTable jquery 	      
+	var rowindex = table.row(row).data(); // Obtiene los datos de la fila
+	dato1 = Object.values(rowindex);
+	dato3 = dato1[2];
+        console.log("dato3 de glosasdetalle = ", dato3);
+	var glosaId = dato3.id;
+
+
+     $.ajax({
+		   data: {'glosaId':glosaId, 'detGloId':dato3.detGloId},
+	        url: "/borraGlosasDetalle/",
+                type: "POST",
+                dataType: 'json',
+                success: function (info) {
+
+
+        var username = document.getElementById("username").value;
+        var nombreSede = document.getElementById("nombreSede").value;
+    	var sede = document.getElementById("sede").value;
+        var username_id = document.getElementById("username_id").value;
+
+	var facturaId = dato3.factura_id;
+
+	var data =  {}   ;
+
+        data['username'] = username;
+        data['nombreSede'] = nombreSede;
+        data['sede'] = sede;
+        data['username_id'] = username_id;
+	data['sedesClinica_id'] = sede;
+	data['facturaId'] = facturaId
+	data['glosaId'] = glosaId;
+        data = JSON.stringify(data);
+
+	    arrancaGlosas(10,data);
+	    dataTableGlosasAdicionarInitialized  = true;
+
+	        arrancaGlosas(2,data);
+	    dataTableGlosasDetalleInitialized = true;
+
+
+
+                },
+              error: function (data) {	      
+			document.getElementById("mensajesErrorModalGlosasDetalle").value =   data.responseText;
+                }
+            });
+
+  });
+
 
 
 

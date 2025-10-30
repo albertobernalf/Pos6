@@ -559,7 +559,7 @@ def Load_tablaGlosasDetalle(request, data):
 
     #detalle = 'select ' + "'" + str('MEDICAMENTOS') + "'" + ' tipo,med.id, med.consecutivo consec, med."itemFactura",cums.cum codigo,cums.nombre nombre,substring(mot.nombre,1,10) glosaNombre,med."vrServicio",  med."valorGlosado",	med."vAceptado", med."valorSoportado",med."notasCreditoGlosa",	detGlo."valorGlosa",    detGlo."valorSoportado" valosSoportado2,   detGlo."valorAceptado" ,    detGlo."valorNotasCredito"	FROM rips_ripstransaccion ripstra 	inner join rips_ripsmedicamentos med on (med."ripsTransaccion_id" = ripstra.id) 	inner join  rips_ripscums cums on (cums.id =med."codTecnologiaSalud_id" ) inner join facturacion_facturaciondetalle det on (det.facturacion_id =cast(ripstra."numFactura" as float) and  det."consecutivoFactura" = med."itemFactura" ) left join cartera_motivosglosas mot on (mot.id = med."motivoGlosa_id")  left join cartera_glosasdetalle detGlo on (detGlo.glosa_id = ' + "'" + str(glosaId) + "' AND " + '  detGlo."ripsMedicamentos_id" = med.id)	where  cast(ripstra."numFactura" as float) = ' + "'" + str(facturaId) + "'" + ' and ripstra."numNota"= ' + "'" + str('0') + "'" + ' UNION select ' + "'" + str('PROCEDIMIENTOS') + "'" + ' tipo, proc.id, proc.consecutivo consec, proc."itemFactura", exa."codigoCups" codigo,	exa.nombre nombre,  substring(mot.nombre,1,10)  glosaNombre,proc."vrServicio",proc."valorGlosado", proc."vAceptado", proc."valorSoportado", proc."notasCreditoGlosa" ,detGlo."valorGlosa",    detGlo."valorSoportado" valosSoportado2,   detGlo."valorAceptado" ,    detGlo."valorNotasCredito" FROM  rips_ripstransaccion ripstra inner join  rips_ripsprocedimientos proc on (proc."ripsTransaccion_id" = ripstra.id) inner join clinico_examenes exa on ( exa.id =proc."codProcedimiento_id" ) inner join facturacion_facturaciondetalle det on (det.facturacion_id=cast(ripstra."numFactura" as float) and det."consecutivoFactura" = proc."itemFactura") left join cartera_motivosglosas mot on (mot.id = proc."motivoGlosa_id") left join cartera_glosasdetalle detGlo on (detGlo.glosa_id = ' + "'" + str(glosaId) + "' AND " + 'detGlo."ripsProcedimientos_id" = proc.id) where cast(ripstra."numFactura" as float) = ' + "'" + str(facturaId) + "'" + ' and ripstra."numNota"= ' + "'" + str('0') + "'" + ' UNION select ' + "'" + str('CONSULTAS') + "'" + ' tipo, cons.id, cons.consecutivo consec, cons."itemFactura", exa."codigoCups" codigo,	exa.nombre nombre, substring(mot.nombre,1,10)  glosaNombre,cons."vrServicio",cons."valorGlosado", cons."vAceptado", cons."valorSoportado", cons."notasCreditoGlosa" ,	detGlo."valorGlosa",    detGlo."valorSoportado" valosSoportado2,   detGlo."valorAceptado" ,    detGlo."valorNotasCredito"	FROM rips_ripstransaccion  ripstra inner join  rips_ripsconsultas cons on (cons."ripsTransaccion_id" = ripstra.id) inner join clinico_examenes exa on ( exa.id =cons."codConsulta_id" ) inner join facturacion_facturaciondetalle det on (det.facturacion_id=cast(ripstra."numFactura" as float) and det."consecutivoFactura" = cons."itemFactura") left join cartera_motivosglosas mot on (mot.id = cons."motivoGlosa_id") left join cartera_glosasdetalle detGlo on (detGlo.glosa_id = ' + "'" + str(glosaId) + "' AND " + ' detGlo."ripsConsultas_id" = cons.id)	 where cast(ripstra."numFactura" as float) = ' + "'" + str(facturaId) + "'" + ' and ripstra."numNota"= ' + "'" + str('0') + "'" + ' UNION	select ' + "'" + str('OTROS SERVICIOS') + "'" + ' tipo, serv.id, serv.consecutivo consec, serv."itemFactura", serv."nomTecnologiaSalud" codigo, exa.nombre nombre, substring(mot.nombre,1,10)  glosaNombre, serv."vrServicio", serv."valorGlosado", serv."vAceptado", serv."valorSoportado", serv."notasCreditoGlosa" ,	detGlo."valorGlosa",    detGlo."valorSoportado" valosSoportado2,   detGlo."valorAceptado" ,    detGlo."valorNotasCredito"	FROM rips_ripstransaccion  ripstra inner join  rips_ripsotrosservicios serv on (serv."ripsTransaccion_id" = ripstra.id) inner join clinico_examenes exa on ( exa.id =serv."codTecnologiaSalud_id" ) inner join facturacion_facturaciondetalle det on (det.facturacion_id=cast(ripstra."numFactura" as float) and det."consecutivoFactura" = serv."itemFactura") left join cartera_motivosglosas mot on (mot.id = serv."motivoGlosa_id") left join cartera_glosasdetalle detGlo on (detGlo.glosa_id = ' + "'" + str(glosaId) + "' AND " + ' detGlo."ripsOtrosServicios_id" = serv.id)	where cast(ripstra."numFactura" as float) = ' + "'" + str(facturaId) + "'" + ' and ripstra."numNota"= ' + "'" + str('0') + "'" + ' order by 1,4'
 
-    detalle = 'select ' + "'" + str('MEDICAMENTOS') + "'" + ' tipo,med.id, med.consecutivo consec, med."itemFactura",cums.cum codigo,cums.nombre nombre,substring(mot.nombre,1,10) glosaNombre,med."vrServicio",  detGlo."valorGlosa",    detGlo."valorSoportado" valosSoportado2,   detGlo."valorAceptado" ,    detGlo."valorNotasCredito"	FROM rips_ripstransaccion ripstra 	inner join rips_ripsmedicamentos med on (med."ripsTransaccion_id" = ripstra.id) 	inner join  rips_ripscums cums on (cums.id =med."codTecnologiaSalud_id" ) inner join facturacion_facturaciondetalle det on (det.facturacion_id =cast(ripstra."numFactura" as float) and  det."consecutivoFactura" = med."itemFactura" ) left join cartera_motivosglosas mot on (mot.id = med."motivoGlosa_id")  left join cartera_glosasdetalle detGlo on (detGlo.glosa_id = ' + "'" + str(glosaId) + "' AND " + '  detGlo."ripsMedicamentos_id" = med.id)	where  cast(ripstra."numFactura" as float) = ' + "'" + str(facturaId) + "'" + ' and ripstra."numNota"= ' + "'" + str('0') + "'" + ' UNION select ' + "'" + str('PROCEDIMIENTOS') + "'" + ' tipo, proc.id, proc.consecutivo consec, proc."itemFactura", exa."codigoCups" codigo,	exa.nombre nombre,  substring(mot.nombre,1,10)  glosaNombre,proc."vrServicio",detGlo."valorGlosa",    detGlo."valorSoportado" valosSoportado2,   detGlo."valorAceptado" ,    detGlo."valorNotasCredito" FROM  rips_ripstransaccion ripstra inner join  rips_ripsprocedimientos proc on (proc."ripsTransaccion_id" = ripstra.id) inner join clinico_examenes exa on ( exa.id =proc."codProcedimiento_id" ) inner join facturacion_facturaciondetalle det on (det.facturacion_id=cast(ripstra."numFactura" as float) and det."consecutivoFactura" = proc."itemFactura") left join cartera_motivosglosas mot on (mot.id = proc."motivoGlosa_id") left join cartera_glosasdetalle detGlo on (detGlo.glosa_id = ' + "'" + str(glosaId) + "' AND " + 'detGlo."ripsProcedimientos_id" = proc.id) where cast(ripstra."numFactura" as float) = ' + "'" + str(facturaId) + "'" + ' and ripstra."numNota"= ' + "'" + str('0') + "'" + ' UNION select ' + "'" + str('CONSULTAS') + "'" + ' tipo, cons.id, cons.consecutivo consec, cons."itemFactura", exa."codigoCups" codigo,	exa.nombre nombre, substring(mot.nombre,1,10)  glosaNombre,cons."vrServicio",	detGlo."valorGlosa",    detGlo."valorSoportado" valosSoportado2,   detGlo."valorAceptado" ,    detGlo."valorNotasCredito"	FROM rips_ripstransaccion  ripstra inner join  rips_ripsconsultas cons on (cons."ripsTransaccion_id" = ripstra.id) inner join clinico_examenes exa on ( exa.id =cons."codConsulta_id" ) inner join facturacion_facturaciondetalle det on (det.facturacion_id=cast(ripstra."numFactura" as float) and det."consecutivoFactura" = cons."itemFactura") left join cartera_motivosglosas mot on (mot.id = cons."motivoGlosa_id") left join cartera_glosasdetalle detGlo on (detGlo.glosa_id = ' + "'" + str(glosaId) + "' AND " + ' detGlo."ripsConsultas_id" = cons.id)	 where cast(ripstra."numFactura" as float) = ' + "'" + str(facturaId) + "'" + ' and ripstra."numNota"= ' + "'" + str('0') + "'" + ' UNION	select ' + "'" + str('OTROS SERVICIOS') + "'" + ' tipo, serv.id, serv.consecutivo consec, serv."itemFactura", serv."nomTecnologiaSalud" codigo, exa.nombre nombre, substring(mot.nombre,1,10)  glosaNombre, serv."vrServicio",	detGlo."valorGlosa",    detGlo."valorSoportado" valosSoportado2,   detGlo."valorAceptado" ,    detGlo."valorNotasCredito"	FROM rips_ripstransaccion  ripstra inner join  rips_ripsotrosservicios serv on (serv."ripsTransaccion_id" = ripstra.id) inner join clinico_examenes exa on ( exa.id =serv."codTecnologiaSalud_id" ) inner join facturacion_facturaciondetalle det on (det.facturacion_id=cast(ripstra."numFactura" as float) and det."consecutivoFactura" = serv."itemFactura") left join cartera_motivosglosas mot on (mot.id = serv."motivoGlosa_id") left join cartera_glosasdetalle detGlo on (detGlo.glosa_id = ' + "'" + str(glosaId) + "' AND " + ' detGlo."ripsOtrosServicios_id" = serv.id)	where cast(ripstra."numFactura" as float) = ' + "'" + str(facturaId) + "'" + ' and ripstra."numNota"= ' + "'" + str('0') + "'" + ' order by 1,4'
+    detalle = 'select ' + "'" + str('MEDICAMENTOS') + "'" + ' tipo,med.id, med.consecutivo consec, med."itemFactura",cums.cum codigo,cums.nombre nombre,substring(mot.nombre,1,10) glosaNombre,med."vrServicio",  detGlo."valorGlosa",    detGlo."valorSoportado" valosSoportado2,   detGlo."valorAceptado" ,    detGlo."valorNotasCredito" , detGlo.id detGloId	FROM rips_ripstransaccion ripstra inner join rips_ripsmedicamentos med on (med."ripsTransaccion_id" = ripstra.id) 	inner join  rips_ripscums cums on (cums.id =med."codTecnologiaSalud_id" ) inner join facturacion_facturaciondetalle det on (det.facturacion_id =cast(ripstra."numFactura" as float) and  det."consecutivoFactura" = med."itemFactura" ) left join cartera_motivosglosas mot on (mot.id = med."motivoGlosa_id")  left join cartera_glosasdetalle detGlo on (detGlo.glosa_id = ' + "'" + str(glosaId) + "' AND " + '  detGlo."ripsMedicamentos_id" = med.id)	where  cast(ripstra."numFactura" as float) = ' + "'" + str(facturaId) + "'" + ' and ripstra."numNota"= ' + "'" + str('0') + "'" + ' UNION select ' + "'" + str('PROCEDIMIENTOS') + "'" + ' tipo, proc.id, proc.consecutivo consec, proc."itemFactura", exa."codigoCups" codigo,	exa.nombre nombre,  substring(mot.nombre,1,10)  glosaNombre,proc."vrServicio",detGlo."valorGlosa",    detGlo."valorSoportado" valosSoportado2,   detGlo."valorAceptado" ,    detGlo."valorNotasCredito" , detGlo.id detGloId FROM  rips_ripstransaccion ripstra inner join  rips_ripsprocedimientos proc on (proc."ripsTransaccion_id" = ripstra.id) inner join clinico_examenes exa on ( exa.id =proc."codProcedimiento_id" ) inner join facturacion_facturaciondetalle det on (det.facturacion_id=cast(ripstra."numFactura" as float) and det."consecutivoFactura" = proc."itemFactura") left join cartera_motivosglosas mot on (mot.id = proc."motivoGlosa_id") left join cartera_glosasdetalle detGlo on (detGlo.glosa_id = ' + "'" + str(glosaId) + "' AND " + 'detGlo."ripsProcedimientos_id" = proc.id) where cast(ripstra."numFactura" as float) = ' + "'" + str(facturaId) + "'" + ' and ripstra."numNota"= ' + "'" + str('0') + "'" + ' UNION select ' + "'" + str('CONSULTAS') + "'" + ' tipo, cons.id, cons.consecutivo consec, cons."itemFactura", exa."codigoCups" codigo,	exa.nombre nombre, substring(mot.nombre,1,10)  glosaNombre,cons."vrServicio",	detGlo."valorGlosa",    detGlo."valorSoportado" valosSoportado2,   detGlo."valorAceptado" ,    detGlo."valorNotasCredito", detGlo.id detGloId	FROM rips_ripstransaccion  ripstra inner join  rips_ripsconsultas cons on (cons."ripsTransaccion_id" = ripstra.id) inner join clinico_examenes exa on ( exa.id =cons."codConsulta_id" ) inner join facturacion_facturaciondetalle det on (det.facturacion_id=cast(ripstra."numFactura" as float) and det."consecutivoFactura" = cons."itemFactura") left join cartera_motivosglosas mot on (mot.id = cons."motivoGlosa_id") left join cartera_glosasdetalle detGlo on (detGlo.glosa_id = ' + "'" + str(glosaId) + "' AND " + ' detGlo."ripsConsultas_id" = cons.id)	 where cast(ripstra."numFactura" as float) = ' + "'" + str(facturaId) + "'" + ' and ripstra."numNota"= ' + "'" + str('0') + "'" + ' UNION	select ' + "'" + str('OTROS SERVICIOS') + "'" + ' tipo, serv.id, serv.consecutivo consec, serv."itemFactura", serv."nomTecnologiaSalud" codigo, exa.nombre nombre, substring(mot.nombre,1,10)  glosaNombre, serv."vrServicio",	detGlo."valorGlosa",    detGlo."valorSoportado" valosSoportado2,   detGlo."valorAceptado" ,    detGlo."valorNotasCredito", detGlo.id detGloId FROM rips_ripstransaccion  ripstra inner join  rips_ripsotrosservicios serv on (serv."ripsTransaccion_id" = ripstra.id) inner join clinico_examenes exa on ( exa.id =serv."codTecnologiaSalud_id" ) inner join facturacion_facturaciondetalle det on (det.facturacion_id=cast(ripstra."numFactura" as float) and det."consecutivoFactura" = serv."itemFactura") left join cartera_motivosglosas mot on (mot.id = serv."motivoGlosa_id") left join cartera_glosasdetalle detGlo on (detGlo.glosa_id = ' + "'" + str(glosaId) + "' AND " + ' detGlo."ripsOtrosServicios_id" = serv.id)	where cast(ripstra."numFactura" as float) = ' + "'" + str(facturaId) + "'" + ' and ripstra."numNota"= ' + "'" + str('0') + "'" + ' order by 1,4'
 
 
     print(detalle)
@@ -567,12 +567,12 @@ def Load_tablaGlosasDetalle(request, data):
     curx.execute(detalle)
 
     #for  tipo, id, consec, itemFactura, codigo, nombre,   glosaNombre,vrServicio,  valorGlosado,vAceptado, valorSoportado , notasCreditoGlosa , valorGlosa, valorSoportado2 , valorAceptado, valorNotasCredito in curx.fetchall():
-    for tipo, id, consec, itemFactura, codigo, nombre, glosaNombre, vrServicio, valorGlosa, valorSoportado2, valorAceptado, valorNotasCredito in curx.fetchall():
+    for tipo, id, consec, itemFactura, codigo, nombre, glosaNombre, vrServicio, valorGlosa, valorSoportado2, valorAceptado, valorNotasCredito , detGloId  in curx.fetchall():
         glosasDetalle.append(
             {"model": "rips.GlosasDetalle", "pk": id, "fields":
                 {'tipo':tipo, 'id': id, 'consec':consec,  'itemFactura': itemFactura ,'codigo': codigo, 'nombre': nombre,'glosaNombre':glosaNombre,'vrServicio':vrServicio,
                  'valorGlosa': valorGlosa, 'valorSoportado2': valorSoportado2,   'valorAceptado': valorAceptado,
-                 'valorNotasCredito': valorNotasCredito }})
+                 'valorNotasCredito': valorNotasCredito,'detGloId':detGloId }})
 
     miConexionx.close()
 
@@ -1323,4 +1323,142 @@ def Load_tablaGlosasTotalesDetalle(request, data):
     print("glosasTotalesDetalle = ", serialized1)
 
     return HttpResponse(serialized1, content_type='application/json')
+
+
+def BorraGlosasDetalle(request):
+    
+    print("Entre BorraGlosasDetalle")
+
+    detGloId  = request.POST['detGloId']
+    print("detGloId  =", detGloId)
+
+    glosaId= request.POST['glosaId']
+    print("glosaId  =", glosaId)
+
+    miConexion3 = None
+    try:
+
+        miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                       password="123456")
+        curx = miConexionx.cursor()
+
+        detalle = 'DELETE FROM cartera_glosasdetalle where id = ' + "'" + str(detGloId) + "'"
+
+        print(detalle)
+        curx.execute(detalle)
+
+        comando2 = 'SELECT sum("valorAceptado")  vAceptado, sum("valorSoportado") valorSoportado, sum("valorGlosa") valorGlosado , sum("valorGlosa") totalGlosa , sum("valorNotasCredito") totalNotasCredito  FROM cartera_glosasdetalle WHERE glosa_id = ' + "'" + str(glosaId) + "'"
+        print(comando2)
+        cur3.execute(comando2)
+
+        traeSum = []
+
+        for vAceptado, valorSoportado, valorGlosado, totalGlosa, totalNotasCredito  in cur3.fetchall():
+            traeSum.append({'vAceptado':vAceptado,'valorSoportado':valorSoportado,'valorGlosado':valorGlosado,'totalGlosa':totalGlosa,'totalNotasCredito':totalNotasCredito})
+
+        totalAceptadoMed = traeSum[0]['vAceptado']
+        totalAceptadoMed = str(totalAceptadoMed)
+        totalAceptadoMed = totalAceptadoMed.replace("(", ' ')
+        totalAceptadoMed = totalAceptadoMed.replace(")", ' ')
+        totalAceptadoMed = totalAceptadoMed.replace(",", ' ')
+        totalAceptadoMed = totalAceptadoMed.replace("'", ' ')
+        totalAceptadoMed = totalAceptadoMed.replace("Decimal", ' ')
+
+        totalSoportadoMed = traeSum[0]['valorSoportado']
+        totalSoportadoMed = str(totalSoportadoMed)
+        totalSoportadoMed = totalSoportadoMed.replace("(", ' ')
+        totalSoportadoMed = totalSoportadoMed.replace(")", ' ')
+        totalSoportadoMed = totalSoportadoMed.replace(",", ' ')
+        totalSoportadoMed = totalSoportadoMed.replace("'", ' ')
+        totalSoportadoMed = totalSoportadoMed.replace("Decimal", ' ')
+
+        totalGlosadoMed = traeSum[0]['valorGlosado']
+        totalGlosadoMed = str(totalGlosadoMed)
+        totalGlosadoMed = totalGlosadoMed.replace("(", ' ')
+        totalGlosadoMed = totalGlosadoMed.replace(")", ' ')
+        totalGlosadoMed = totalGlosadoMed.replace(",", ' ')
+        totalGlosadoMed = totalGlosadoMed.replace("'", ' ')
+        totalGlosadoMed = totalGlosadoMed.replace("Decimal", ' ')
+
+        totalGlosaMed = traeSum[0]['totalGlosa']
+        totalGlosaMed = str(totalGlosaMed)
+        totalGlosaMed = totalGlosaMed.replace("(", ' ')
+        totalGlosaMed = totalGlosaMed.replace(")", ' ')
+        totalGlosaMed = totalGlosaMed.replace(",", ' ')
+        totalGlosaMed = totalGlosaMed.replace("'", ' ')
+        totalGlosaMed = totalGlosaMed.replace("Decimal", ' ')
+
+        totalNotasCreditoMed = traeSum[0]['totalNotasCredito']
+        totalNotasCreditoMed = str(totalNotasCreditoMed)
+        totalNotasCreditoMed = totalNotasCreditoMed.replace("(", ' ')
+        totalNotasCreditoMed = totalNotasCreditoMed.replace(")", ' ')
+        totalNotasCreditoMed = totalNotasCreditoMed.replace(",", ' ')
+        totalNotasCreditoMed = totalNotasCreditoMed.replace("'", ' ')
+        totalNotasCreditoMed = totalNotasCreditoMed.replace("Decimal", ' ')
+
+        print("totalAceptadoMed = ", totalAceptadoMed)
+        print("totalSoportadoMed = ", totalSoportadoMed)
+        print("totalGlosadoMed = ", totalGlosadoMed)
+        print("totalNotasCreditoMed = ", totalNotasCreditoMed)
+
+
+        if (totalAceptadoMed == '' or totalAceptadoMed=='None'):
+            totalAceptadoMed = 0.0
+
+        if (totalSoportadoMed == '' or totalSoportadoMed=='None'):
+            totalSoportadoMed = 0.0
+
+        if (totalGlosadoMed == '' or totalGlosadoMed=='None'):
+            totalGlosadoMed = 0.0
+
+        if (totalGlosaMed == '' or totalGlosaMed=='None'):
+            totalGlosaMed = 0.0
+
+        if (totalNotasCreditoMed == '' or totalNotasCreditoMed == 'None'):
+            totalNotasCreditoMed = 0.0
+
+        totalAceptado = float(totalAceptadoMed)
+        totalSoportado = float(totalSoportadoMed)
+        totalGlosado = float(totalGlosadoMed)
+        totalGlosa = float(totalGlosaMed)
+        totalNotasCredito = float(totalNotasCreditoMed)
+
+        print ("totalAceptado = ",totalAceptado)
+        print("totalSoportado = ", totalSoportado)
+        print("totalGlosado = ", totalGlosado)
+
+        saldoFactura = 0
+        # AQUI FALTA ACTUALIZAR EL SALDO DE LA FACTURA
+
+        # TIENE QUE ACTUALIZAR CARTERA_GLOSAS LOS TOTALES / PENDIENTE SALDO FACTURA
+
+        comando6 = 'UPDATE cartera_glosas SET "totalSoportado"= ' +"'" + str(totalSoportado) + "'," + '"totalGlosa" = ' + "'" + str(totalGlosado) + "'," + ' "totalAceptado" = ' + "'" +str(totalAceptado) + "'," + '"saldoFactura" = ' + "'" + str(saldoFactura) + "'," +  '"totalNotasCredito" = ' + "'" + str(totalNotasCredito) + "'"   +  ' WHERE id = ' + str(glosaId)
+
+        print(comando6)
+        cur3.execute(comando6)
+
+        miConexion3.commit()
+        cur3.close()
+        miConexion3.close()
+
+        return JsonResponse({'success': True, 'Mensajes': 'Glosa Detalle eliminada !'})
+
+    except psycopg2.DatabaseError as error:
+        print ("Entre por rollback" , error)
+        if miConexion3:
+            print("Entro ha hacer el Rollback")
+            #miConexion3.rollback()
+
+        message_error= str(error)
+        return JsonResponse({'success': False, 'Mensajes': message_error})
+
+    finally:
+        if miConexion3:
+            cur3.close()
+            miConexion3.close()
+
+
+
+
+    
 

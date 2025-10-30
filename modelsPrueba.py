@@ -858,8 +858,16 @@ WHERE prog.id = id
 -- falto mirar el detalle de los rips medicamentos, unidades, formasfarmaceuticas, etc
 -- ojo hay que hacer un conciertazo , orquestado de todo el proceso glosa rips, enviado,con json , respyuesta etc que no quede mal
 
+-- OPS ALTA DEPURACION PUESTA A PUNTO CIRUGIAS - RIPS - GLOSAS
 
+-- ojo en facturacion-- traslados debe actualizar a cero el valor de os procedimikentos en la tarifa desde y actulizar totales a la nueva cuneta
+-- OJo ver en sesion aparte la liquidacion puntual ISS y SOAT en detalle
+-- ops los totales (OJOOOOOOOOO) el facturacion_liquidacion con error, y en algun lado me metio un registro de mas OJOOOOOOOOO PENDIENTE ELIMINARLO
+-- revisar traslados - los items anulados
+-- donde rayos coloco 'A' en columna anulkado de facturacion_liquidacion
 
--- ojo en facturaciuon-- traslados debe actualizar a cero el valor de os procedimikentos en la tarifa desde y actulizar totales a la nueva cuneta
--- ojo al luqidar una cirugia no pasa los materiales de cirugia y tampoco los derechos de sala
+-- ops la impresion de una factua de cirugia ta mal hay que colocar honorario
 
+-- al borrar una factura con glosa de 1 envio no me deja :("Cannot delete some instances of model 'RipsProcedimientos' because they are referenced through a protected foreign key: 'GlosasDetalle.ripsProcedimientos'", <QuerySet [<GlosasDetalle: GlosasDetalle object (19)>]>)
+-- hay que crear el delete dr glosasdetalle
+-- OJO DESDE CIRUGIA LOS MEDICAMNETOS SON MANUALES OPS Y LOS PROCEDIMIENTOS TAMBIEN NOP CREO NO ES NECESARIO PROBAR
