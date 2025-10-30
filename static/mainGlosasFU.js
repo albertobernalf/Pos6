@@ -254,7 +254,7 @@ function arrancaGlosas(valorTabla,valorData)
 		{
 		"render": function ( data, type, row ) {
                         var btn = '';
-		 btn = btn + " <button class='miBorrarGlosadetalle btn-primary ' style='width:15px;height:15px;accent-color: purple;border-color: purple;background-color: red;'  data-pk='" + row.pk + "'>" + '<i class="fa-duotone fa-regular fa-thumbs-up"></i>' + "</button>";
+		 btn = btn + " <button class='miBorrarGlosaDetalle btn-primary ' style='width:15px;height:15px;accent-color: purple;border-color: purple;background-color: red;'  data-pk='" + row.pk + "'>" + '<i class="fa-duotone fa-regular fa-thumbs-up"></i>' + "</button>";
 
                        return btn;
                     },
@@ -1457,6 +1457,8 @@ window.addEventListener('load', async () => {
 
         var post_id = $(this).data('pk');
 	var row = $(this).closest('tr'); // Encuentra la fila
+	alert("entre a borrar" + post_id);
+
 
 
 	var table = $('#tablaGlosasDetalle').DataTable();  // Inicializa el DataTable jquery 	      
@@ -1464,11 +1466,14 @@ window.addEventListener('load', async () => {
 	dato1 = Object.values(rowindex);
 	dato3 = dato1[2];
         console.log("dato3 de glosasdetalle = ", dato3);
-	var glosaId = dato3.id;
-
+	var ripsId = dato3.id;
+	var glosaId = dato3.glosaId;
+	alert("ripsId = " + ripsId);
+	alert("glosaId = " + glosaId);
+	facturaId = document.getElementById("factura_idGlo").innerHTML;
 
      $.ajax({
-		   data: {'glosaId':glosaId, 'detGloId':dato3.detGloId},
+		   data: {'ripsId':ripsId, 'detGloId':dato3.detGloId,'glosaId':glosaId},
 	        url: "/borraGlosasDetalle/",
                 type: "POST",
                 dataType: 'json',
@@ -1499,11 +1504,9 @@ window.addEventListener('load', async () => {
 	        arrancaGlosas(2,data);
 	    dataTableGlosasDetalleInitialized = true;
 
-
-
                 },
               error: function (data) {	      
-			document.getElementById("mensajesErrorModalGlosasDetalle").value =   data.responseText;
+			document.getElementById("mensajesError").value =   data.responseText;
                 }
             });
 

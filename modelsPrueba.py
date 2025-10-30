@@ -871,3 +871,8 @@ WHERE prog.id = id
 -- al borrar una factura con glosa de 1 envio no me deja :("Cannot delete some instances of model 'RipsProcedimientos' because they are referenced through a protected foreign key: 'GlosasDetalle.ripsProcedimientos'", <QuerySet [<GlosasDetalle: GlosasDetalle object (19)>]>)
 -- hay que crear el delete dr glosasdetalle
 -- OJO DESDE CIRUGIA LOS MEDICAMNETOS SON MANUALES OPS Y LOS PROCEDIMIENTOS TAMBIEN NOP CREO NO ES NECESARIO PROBAR
+
+-- ojop en el modulo de cirugia CREAR INSUMOS MEDICOS Y VAN A LA FACTURA--> van a la liquidacion
+-- ojop el total del proced son la suma de los honoratios
+-- y materialñes algunos matyeriales
+-- al facturar una cirugia toca dejar relizada la cirugia y no poder volver a cargas mas cosas en el modulo de ciorugia ni poder liquidacr de nuevo NO LE PARECVE

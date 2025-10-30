@@ -192,6 +192,7 @@ class CirugiasMaterialQx(models.Model):
         ('I', 'Inactivo'), ]
     id = models.AutoField(primary_key=True)
     cirugia = models.ForeignKey('cirugia.Cirugias', blank=True, null=True, editable=True,   on_delete=models.PROTECT)
+    cirugiaProcedimiento = models.ForeignKey('cirugia.CirugiasProcedimientos', blank=True, null=True, editable=True,   on_delete=models.PROTECT) 	
     suministro = models.ForeignKey('facturacion.Suministros', blank=True, null=True, editable=True,  on_delete=models.PROTECT)
     cantidad = models.DecimalField(max_digits=10, decimal_places=3)
     valorLiquidacion = models.DecimalField(max_digits=15, decimal_places=2,blank=True, null=True, editable=True)

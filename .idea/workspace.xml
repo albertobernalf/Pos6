@@ -3,23 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="d041c887-ab16-4071-a5e4-52a8295bbd5d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JSONCLINICA/Env68.txt" beforeDir="false" afterPath="$PROJECT_DIR$/JSONCLINICA/Env68.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JSONCLINICA/Env71.txt" beforeDir="false" afterPath="$PROJECT_DIR$/JSONCLINICA/Env71.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JSONCLINICA/Fac106.txt" beforeDir="false" afterPath="$PROJECT_DIR$/JSONCLINICA/Fac106.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JSONCLINICA/Fac107.txt" beforeDir="false" afterPath="$PROJECT_DIR$/JSONCLINICA/Fac107.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JSONCLINICA/Fac108.txt" beforeDir="false" afterPath="$PROJECT_DIR$/JSONCLINICA/Fac108.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JSONCLINICA/Fac109.txt" beforeDir="false" afterPath="$PROJECT_DIR$/JSONCLINICA/Fac109.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JSONCLINICA/Fac122.txt" beforeDir="false" afterPath="$PROJECT_DIR$/JSONCLINICA/Fac122.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JSONCLINICA/Fac124.txt" beforeDir="false" afterPath="$PROJECT_DIR$/JSONCLINICA/Fac124.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JSONCLINICA/Fac139.txt" beforeDir="false" afterPath="$PROJECT_DIR$/JSONCLINICA/Fac139.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cartera/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/cartera/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cirugia/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/cirugia/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cirugia01.sql" beforeDir="false" afterPath="$PROJECT_DIR$/cirugia01.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modelsPrueba.py" beforeDir="false" afterPath="$PROJECT_DIR$/modelsPrueba.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rips/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/rips/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/static/mainGlosasFU.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/mainGlosasFU.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/cartera/PanelGlosasFU.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/cartera/PanelGlosasFU.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vulner/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/vulner/urls.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
