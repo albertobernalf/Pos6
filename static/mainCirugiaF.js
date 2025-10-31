@@ -1963,16 +1963,6 @@ alert("ENTRE miAdicionarParticipantes" + cirugiaId);
                                     $id4.appendChild(option);
  	      		      });
 
-
-                },
-         error: function (data) {
-	   			    	document.getElementById("mensajesErrorModalParticipantesInformeCirugia").value =   data.responseText;
-
-	   	    	}
-            });
-
-// FIN AJAX NUEVO
-
             $('#modelHeadingParticipantesCirugia').html("Detalle Participantes Cirugia");
             $('#crearModelParticipantesCirugia').modal('show');
 
@@ -2004,6 +1994,18 @@ alert("ENTRE miAdicionarParticipantes" + cirugiaId);
 		     	dataTableParticipantesCirugiaInitialized = true;
 
 
+
+
+
+                },
+         error: function (data) {
+	   			    	document.getElementById("mensajesErrorModalParticipantesInformeCirugia").value =   data.responseText;
+
+	   	    	}
+            });
+
+// FIN AJAX NUEVO
+
   });
 
 
@@ -2014,8 +2016,35 @@ $('#tablaSolicitudCirugia tbody').on('click', '.miAdicionarMaterial', function()
 	     var post_id = $(this).data('pk');
 	   var cirugiaIdModalMaterial =   post_id;
 	// alert("cirugiaIdModalMaterial = " +  cirugiaIdModalMaterial);
+		var cirugiaId = post_id;
 
             $('#postFormMaterialCirugia').trigger("reset");
+
+
+
+// aquip AJAX ESTO ES NUEVO
+          $.ajax({
+                data: {'cirugiaId':cirugiaId},
+	        url: "/buscarProcedimientosMaterialesDeCirugia/",
+                type: "POST",
+                dataType: 'json',
+                success: function (data2) {
+
+	  	    var options = '<option value="=================="></option>';
+
+	alert("llegue con estop = " + JSON.stringify(data2));
+	alert("llegue con estop = " + JSON.stringify(data2[0]));
+
+	            const $id5 = document.querySelector("#procedMateriales");
+ 	      	$("#procedMaterialess").empty();
+
+	                 $.each(data2, function(key,value) {
+                                    options +='<option value="' + value.id + '">' + value.nombre + '</option>';
+                                    option = document.createElement("option");
+                                    option.value = value.id;
+                                    option.text = value.nombre;
+                                    $id5.appendChild(option);
+ 	      		      });
 
             $('#modelHeadingMaterialCirugia').html("Detalle Material Qx");
             $('#crearModelMaterialCirugia').modal('show');
@@ -2041,6 +2070,20 @@ $('#tablaSolicitudCirugia tbody').on('click', '.miAdicionarMaterial', function()
 		     arrancaCirugia(8,data);
 		     	dataTableMaterialCirugiaInitialized = true;
 	
+
+
+
+
+                },
+         error: function (data) {
+	   			    	document.getElementById("mensajesErrorModalParticipantesInformeCirugia").value =   data.responseText;
+
+	   	    	}
+            });
+
+// FIN AJAX NUEVO
+
+
       
   });
 
@@ -2975,7 +3018,7 @@ function CrearMaterialCirugia()
 	    dataTableMaterialCirugiaInitialized = true;
 	  
 
- 		// $('#crearModelProcedimientosCirugia').modal('hide');
+ 		// $('#crearModelMaterialCirugia').modal('hide');
 			 document.getElementById("mensajesModalMaterialCirugia").value = data2.Mensajes;
 
 

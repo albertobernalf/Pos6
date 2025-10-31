@@ -397,7 +397,8 @@ select cirmaterial.id id, cirmaterial.cirugia_id cirugia_id, cirmaterial.suminis
 	tipo.nombre tipoSuministro , cirmaterial.unitario unitario, cirmaterial.cantidad cantidad ,
 	cirmaterial."valorLiquidacion" valorLiquidacion ,exa.nombre cupsNombre 
 	FROM cirugia_cirugiasMaterialQx cirmaterial
+	INNER JOIN cirugia_cirugiasprocedimientos cirProc ON ( cirProc.id = cirmaterial."cirugiaProcedimiento_id") 
 	INNER JOIN facturacion_suministros suministros ON ( suministros.id = cirmaterial.suministro_id) 
 	INNER JOIN facturacion_tipossuministro tipo ON (tipo.id = suministros."tipoSuministro_id") 
-	INNER JOIN clinico_examenes exa ON ( exa.id = cirmaterial."cirugiaProcedimiento_id") 
+	INNER JOIN clinico_examenes exa ON ( exa.id = cirProc.cups_id) 
 	WHERE cirmaterial.cirugia_id = '28'
