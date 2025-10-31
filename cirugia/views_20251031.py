@@ -722,8 +722,7 @@ def Load_dataTraerParticipantesCirugia(request, data):
                                    password="123456")
     cur3 = miConexion3.cursor()
 
-    #comando = 'select cirpart.id id, cirpart.cirugia_id cirugiaId, hon.nombre honNombre, med.nombre medicoNombre, esp.nombre especialidadNombre , exa.nombre cupsNombre FROM cirugia_cirugiasparticipantes cirpart inner join tarifarios_tiposhonorarios hon ON (hon.id = cirpart."tipoHonorarios_id") inner join clinico_especialidadesmedicos med ON ( med.id = cirpart.medico_id ) inner join clinico_especialidades esp ON (esp.id =med.especialidades_id  ) left join clinico_examenes exa ON (exa.id = cirpart."cirugiaProcedimiento_id") WHERE cirpart.cirugia_id = ' + "'" + str(cirugiaId) + "'"
-    comando = 'select cirpart.id id, cirpart.cirugia_id cirugiaId, hon.nombre honNombre, med.nombre medicoNombre, esp.nombre especialidadNombre , exa.nombre cupsNombre FROM cirugia_cirugiasparticipantes cirpart inner join tarifarios_tiposhonorarios hon ON (hon.id = cirpart."tipoHonorarios_id") inner join clinico_especialidadesmedicos med ON ( med.id = cirpart.medico_id ) inner join clinico_especialidades esp ON (esp.id =med.especialidades_id  ) inner join cirugia_cirugiasprocedimientos cirProc ON (cirProc.id =  cirpart."cirugiaProcedimiento_id" )   left join clinico_examenes exa ON (exa.id = cirProc.cups_id)  WHERE cirpart.cirugia_id = ' + "'" + str(cirugiaId) + "'"
+    comando = 'select cirpart.id id, cirpart.cirugia_id cirugiaId, hon.nombre honNombre, med.nombre medicoNombre, esp.nombre especialidadNombre , exa.nombre cupsNombre FROM cirugia_cirugiasparticipantes cirpart inner join tarifarios_tiposhonorarios hon ON (hon.id = cirpart."tipoHonorarios_id") inner join clinico_especialidadesmedicos med ON ( med.id = cirpart.medico_id ) inner join clinico_especialidades esp ON (esp.id =med.especialidades_id  ) left join clinico_examenes exa ON (exa.id = cirpart.cups_id) WHERE cirpart.cirugia_id = ' + "'" + str(cirugiaId) + "'"
 
     print(comando)
     cur3.execute(comando)
@@ -759,8 +758,8 @@ def Load_dataTraerParticipantesInformeCirugia(request, data):
                                    password="123456")
     cur3 = miConexion3.cursor()
 
-
-    comando = 'select cirpart.id id, cirpart.cirugia_id cirugiaId, hon.nombre honNombre, med.nombre medicoNombre, esp.nombre especialidadNombre , exa.nombre cupsNombre FROM cirugia_cirugiasparticipantes cirpart inner join tarifarios_tiposhonorarios hon ON (hon.id = cirpart."tipoHonorarios_id") inner join clinico_especialidadesmedicos med ON ( med.id = cirpart.medico_id ) inner join clinico_especialidades esp ON (esp.id =med.especialidades_id  ) inner join cirugia_cirugiasprocedimientos cirProc ON (cirProc.id =  cirpart."cirugiaProcedimiento_id" )   left join clinico_examenes exa ON (exa.id = cirProc.cups_id)  WHERE cirpart.cirugia_id = ' + "'" + str(cirugiaId) + "'"
+    #comando = 'select cirpart.id id, cirpart.cirugia_id cirugiaId, hon.nombre honNombre, med.nombre medicoNombre, esp.nombre especialidadNombre, exa.nombre cupsNombre FROM cirugia_cirugiasparticipantes cirpart, tarifarios_tiposhonorarios hon, clinico_especialidadesmedicos med, clinico_especialidades esp , clinico_examenes exa  WHERE cirpart.cirugia_id = ' + "'" + str(cirugiaId) + "'" + ' and cirpart."tipoHonorarios_id" = hon.id  and cirpart.medico_id = med.id and med.especialidades_id = esp.id AND exa.id=cirpart.cups_id'
+    comando = 'select cirpart.id id, cirpart.cirugia_id cirugiaId, hon.nombre honNombre, med.nombre medicoNombre, esp.nombre especialidadNombre , exa.nombre cupsNombre FROM cirugia_cirugiasparticipantes cirpart inner join tarifarios_tiposhonorarios hon ON (hon.id = cirpart."tipoHonorarios_id") inner join clinico_especialidadesmedicos med ON ( med.id = cirpart.medico_id ) inner join clinico_especialidades esp ON (esp.id =med.especialidades_id  ) left join clinico_examenes exa ON (exa.id = cirpart.cups_id) WHERE cirpart.cirugia_id = ' + "'" + str(cirugiaId) + "'"
 
     print(comando)
     cur3.execute(comando)
@@ -797,7 +796,7 @@ def Load_dataTraerParticipantesInformeXXCirugia(request, data):
                                    password="123456")
     cur3 = miConexion3.cursor()
 
-    comando = 'select cirpart.id id, cirpart.cirugia_id cirugiaId, hon.nombre honNombre, med.nombre medicoNombre, esp.nombre especialidadNombre , exa.nombre cupsNombre FROM cirugia_cirugiasparticipantes cirpart, tarifarios_tiposhonorarios hon, clinico_especialidadesmedicos med, clinico_especialidades esp , clinico_examenes exa ,	cirugia_cirugiasprocedimientos cirProc WHERE cirpart.cirugia_id = ' + "'" + str(cirugiaId) + "'" + ' and cirpart."tipoHonorarios_id" = hon.id  and cirpart.medico_id = med.id and med.especialidades_id = esp.id AND cirpart."cirugiaProcedimiento_id" = cirProc.id AND cirProc.cups_id = exa.id'
+    comando = 'select cirpart.id id, cirpart.cirugia_id cirugiaId, hon.nombre honNombre, med.nombre medicoNombre, esp.nombre especialidadNombre , exa.nombre cupsNombre FROM cirugia_cirugiasparticipantes cirpart, tarifarios_tiposhonorarios hon, clinico_especialidadesmedicos med, clinico_especialidades esp , clinico_examenes exa WHERE cirpart.cirugia_id = ' + "'" + str(cirugiaId) + "'" + ' and cirpart."tipoHonorarios_id" = hon.id  and cirpart.medico_id = med.id and med.especialidades_id = esp.id AND exa.id = cirpart.cups_id'
 
     print(comando)
     cur3.execute(comando)
@@ -840,15 +839,15 @@ def Load_dataMaterialCirugia(request, data):
     cur3 = miConexion3.cursor()
 
 
-    comando = 'select cirmaterial.id id, cirmaterial.suministro_id suministro_id, suministros.nombre suministro , tipo.nombre tipoSuministro , cirmaterial.unitario unitario , cirmaterial.cantidad cantidad , cirmaterial."valorLiquidacion" valorLiquidacion, exa.nombre cupsNombre FROM cirugia_cirugiasMaterialQx cirmaterial INNER JOIN cirugia_cirugiasprocedimientos cirProc ON ( cirProc.id = cirmaterial."cirugiaProcedimiento_id") INNER JOIN facturacion_suministros suministros ON ( suministros.id = cirmaterial.suministro_id) INNER JOIN facturacion_tipossuministro tipo ON (tipo.id = suministros."tipoSuministro_id") INNER JOIN clinico_examenes exa ON ( exa.id = cirProc.cups_id)  WHERE cirmaterial.cirugia_id = ' + "'" + str(cirugiaId) + "'"
+    comando = 'select cirmaterial.id id, cirmaterial.suministro_id suministro_id, suministros.nombre suministro , tipo.nombre tipoSuministro , cirmaterial.cantidad cantidad , cirmaterial."valorLiquidacion" valorLiquidacion FROM cirugia_cirugiasMaterialQx cirmaterial INNER JOIN facturacion_suministros suministros ON ( suministros.id = cirmaterial.suministro_id) INNER JOIN facturacion_tipossuministro tipo ON (tipo.id = suministros."tipoSuministro_id") WHERE cirmaterial.cirugia_id = ' + "'" + str(cirugiaId) + "'"
 
     print(comando)
     cur3.execute(comando)
 
-    for id,  suministro_id, suministro , tipoSuministro, unitario,cantidad , valorLiquidacion, cupsNombre in cur3.fetchall():
+    for id,  suministro_id, suministro , tipoSuministro, cantidad , valorLiquidacion in cur3.fetchall():
         materialCirugia.append(
             {"model": "cirugia.cirugiasMaterialQx", "pk": id, "fields":
-                {'id': id,  'suministro_id': suministro_id, 'suministro': suministro, 'tipoSuministro': tipoSuministro , 'unitario':unitario ,'cantidad':cantidad  ,'valorLiquidacion':valorLiquidacion  ,'cupsNombre':cupsNombre }})
+                {'id': id,  'suministro_id': suministro_id, 'suministro': suministro, 'tipoSuministro': tipoSuministro ,'cantidad':cantidad  ,'valorLiquidacion':valorLiquidacion   }})
 
     miConexion3.close()
     print(materialCirugia)
@@ -883,15 +882,15 @@ def Load_dataMaterialInformeCirugia(request, data):
     cur3 = miConexion3.cursor()
 
 
-    comando = 'select cirmaterial.id id, cirmaterial.cirugia_id cirugia_id, cirmaterial.suministro_id suministro_id, suministros.nombre suministro , tipo.nombre tipoSuministro ,cirmaterial.unitario unitario , cirmaterial.cantidad cantidad , cirmaterial."valorLiquidacion" , exa.nombre cupsNombre FROM cirugia_cirugiasMaterialQx cirmaterial INNER JOIN cirugia_cirugiasprocedimientos cirProc ON ( cirProc.id = cirmaterial."cirugiaProcedimiento_id")  INNER JOIN facturacion_suministros suministros ON ( suministros.id = cirmaterial.suministro_id) INNER JOIN facturacion_tipossuministro tipo ON (tipo.id = suministros."tipoSuministro_id") INNER JOIN clinico_examenes exa ON ( exa.id = cirProc.cups_id) WHERE cirmaterial.cirugia_id = ' + "'" + str(cirugiaId) + "'"
+    comando = 'select cirmaterial.id id, cirmaterial.cirugia_id cirugia_id, cirmaterial.suministro_id suministro_id, suministros.nombre suministro , tipo.nombre tipoSuministro , cirmaterial.cantidad cantidad , cirmaterial."valorLiquidacion" d FROM cirugia_cirugiasMaterialQx cirmaterial INNER JOIN facturacion_suministros suministros ON ( suministros.id = cirmaterial.suministro_id) INNER JOIN facturacion_tipossuministro tipo ON (tipo.id = suministros."tipoSuministro_id") WHERE cirmaterial.cirugia_id = ' + "'" + str(cirugiaId) + "'"
 
     print(comando)
     cur3.execute(comando)
 
-    for id,  cirugia_id, suministro_id, suministro , tipoSuministro, unitario,cantidad , valorLiquidacion, cupsNombre in cur3.fetchall():
+    for id,  cirugia_id, suministro_id, suministro , tipoSuministro, cantidad , valorLiquidacion in cur3.fetchall():
         materialCirugia.append(
             {"model": "cirugia.cirugiasMaterialQx", "pk": id, "fields":
-                {'id': id, 'cirugia_id':cirugia_id ,  'suministro_id': suministro_id, 'suministro': suministro, 'tipoSuministro': tipoSuministro, 'unitario':unitario ,'cantidad':cantidad ,'valorLiquidacion':valorLiquidacion ,'cupsNombre':cupsNombre   }})
+                {'id': id, 'cirugia_id':cirugia_id ,  'suministro_id': suministro_id, 'suministro': suministro, 'tipoSuministro': tipoSuministro ,'cantidad':cantidad ,'valorLiquidacion':valorLiquidacion    }})
 
     miConexion3.close()
     print(materialCirugia)
@@ -926,15 +925,15 @@ def Load_dataMaterialInformeXXCirugia(request, data):
     cur3 = miConexion3.cursor()
 
 
-    comando = 'select cirmaterial.id id, cirmaterial.cirugia_id cirugia_id, cirmaterial.suministro_id suministro_id, suministros.nombre suministro , tipo.nombre tipoSuministro , cirmaterial.unitario unitario, cirmaterial.cantidad cantidad , cirmaterial."valorLiquidacion" valorLiquidacion ,exa.nombre cupsNombre FROM cirugia_cirugiasMaterialQx cirmaterial INNER JOIN cirugia_cirugiasprocedimientos cirProc ON ( cirProc.id = cirmaterial."cirugiaProcedimiento_id") INNER JOIN facturacion_suministros suministros ON ( suministros.id = cirmaterial.suministro_id) INNER JOIN facturacion_tipossuministro tipo ON (tipo.id = suministros."tipoSuministro_id") INNER JOIN clinico_examenes exa ON ( exa.id = cirProc.cups_id) WHERE cirmaterial.cirugia_id = ' + "'" + str(cirugiaId) + "'"
+    comando = 'select cirmaterial.id id, cirmaterial.cirugia_id cirugia_id, cirmaterial.suministro_id suministro_id, suministros.nombre suministro , tipo.nombre tipoSuministro , cirmaterial.cantidad cantidad , cirmaterial."valorLiquidacion" valorLiquidacion FROM cirugia_cirugiasMaterialQx cirmaterial INNER JOIN facturacion_suministros suministros ON ( suministros.id = cirmaterial.suministro_id) INNER JOIN facturacion_tipossuministro tipo ON (tipo.id = suministros."tipoSuministro_id") WHERE cirmaterial.cirugia_id = ' + "'" + str(cirugiaId) + "'"
 
     print(comando)
     cur3.execute(comando)
 
-    for id,  cirugia_id, suministro_id, suministro , tipoSuministro, unitario, cantidad, valorLiquidacion, cupsNombre  in cur3.fetchall():
+    for id,  cirugia_id, suministro_id, suministro , tipoSuministro, cantidad, valorLiquidacion  in cur3.fetchall():
         materialCirugia.append(
             {"model": "cirugia.cirugiasMaterialQx", "pk": id, "fields":
-                {'id': id, 'cirugia_id':cirugia_id ,  'suministro_id': suministro_id, 'suministro': suministro, 'tipoSuministro': tipoSuministro, 'unitario':unitario ,'cantidad':cantidad, 'valorLiquidacion':valorLiquidacion ,'cupsNombre':cupsNombre    }})
+                {'id': id, 'cirugia_id':cirugia_id ,  'suministro_id': suministro_id, 'suministro': suministro, 'tipoSuministro': tipoSuministro ,'cantidad':cantidad, 'valorLiquidacion':valorLiquidacion     }})
 
     miConexion3.close()
     print(materialCirugia)
@@ -1081,19 +1080,17 @@ def CrearParticipantesInformeCirugia(request):
     medico = request.POST["medicoInforme"]
     print ("medico =", medico)
 
-    procedParticipantesInforme = request.POST["procedParticipantesInforme"]
-    print ("procedParticipantesInforme =", procedParticipantesInforme)
-
-    if procedParticipantesInforme == '':
-        procedParticipantesInforme = "null"
-
-
     username_id = request.POST["usernameParticipantesInformeCirugia_id"]
     print("username_id =", username_id)
 
     tipoHonorarios = request.POST["tipoHonorariosInforme"]
     print("tipoHonorarios =", tipoHonorarios)
 
+    cupsParticipantesInforme = request.POST["cupsParticipantesInforme"]
+    print("cupsParticipantesInforme =", cupsParticipantesInforme)
+
+    if cupsParticipantesInforme == '':
+        cupsParticipantesInforme = "null"
 
     estadoReg = 'A'
     fechaRegistro = timezone.now()
@@ -1106,7 +1103,7 @@ def CrearParticipantesInformeCirugia(request):
         miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",  password="123456")
         cur3 = miConexion3.cursor()
 
-        comando = 'INSERT INTO cirugia_cirugiasparticipantes (finalidad_id, "fechaRegistro", "estadoReg", cirugia_id, "tipoHonorarios_id", "usuarioRegistro_id", medico_id,"cirugiaProcedimiento_id") VALUES (' + "'" + str(finalidadId) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(cirugiaId) + "','"  + str(tipoHonorarios) + "','" + str(username_id) + "','" + str(medico) +  "','" + str(procedParticipantesInforme) + "')"
+        comando = 'INSERT INTO cirugia_cirugiasparticipantes (finalidad_id, "fechaRegistro", "estadoReg", cirugia_id, "tipoHonorarios_id", "usuarioRegistro_id", medico_id,cups_id) VALUES (' + "'" + str(finalidadId) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(cirugiaId) + "','"  + str(tipoHonorarios) + "','" + str(username_id) + "','" + str(medico) +  "'," + str(cupsParticipantesInforme) + ")"
 
         print(comando)
         cur3.execute(comando)
@@ -1146,10 +1143,6 @@ def CrearParticipantesCirugia(request):
     medico = request.POST["medico"]
     print ("medico =", medico)
 
-    procedParticipantes = request.POST["procedParticipantes"]
-    print ("procedParticipantes =", procedParticipantes)
-
-
     username_id = request.POST["usernameParticipantesCirugia_id"]
     print("username_id =", username_id)
 
@@ -1167,7 +1160,7 @@ def CrearParticipantesCirugia(request):
         miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",  password="123456")
         cur3 = miConexion3.cursor()
 
-        comando = 'INSERT INTO cirugia_cirugiasparticipantes (finalidad_id, "fechaRegistro", "estadoReg", cirugia_id, "tipoHonorarios_id", "usuarioRegistro_id", medico_id, "cirugiaProcedimiento_id") VALUES (' + "'" + str(finalidadId) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(cirugiaId) + "','"  + str(tipoHonorarios) + "','" + str(username_id) + "','" + str(medico) + "','" + str(procedParticipantes) + "')"
+        comando = 'INSERT INTO cirugia_cirugiasparticipantes (finalidad_id, "fechaRegistro", "estadoReg", cirugia_id, "tipoHonorarios_id", "usuarioRegistro_id", medico_id) VALUES (' + "'" + str(finalidadId) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(cirugiaId) + "','"  + str(tipoHonorarios) + "','" + str(username_id) + "','" + str(medico) +  "')"
 
         print(comando)
         cur3.execute(comando)
@@ -1200,9 +1193,6 @@ def BuscaProgramacionCirugia(request):
     programacionId = request.POST.get('programacionId')
     print("programacionId =", programacionId)
 
-    programacionId2 = ProgramacionCirugias.objects.get(id=programacionId)
-    cirugiaId = programacionId2.cirugia_id
-
     sede = request.POST.get('sede')
     print("sede =", sede)
 
@@ -1227,54 +1217,6 @@ def BuscaProgramacionCirugia(request):
 
 
     # Fin combo estadosProgramacion
-
-    # Combo procedParticipantes
-
-    miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
-                                   password="123456")
-    curt = miConexiont.cursor()
-
-    comando = '"SELECT p."cirugiaProcedimiento_id" id,exa.nombre nombre FROM cirugia_cirugiasparticipantes p INNER JOIN cirugia_cirugiasprocedimientos cirProc ON (cirProc.id=p."cirugiaProcedimiento_id") INNER JOIN clinico_examenes exa on (exa.id= cirProc.cups_id) where p.cirugia_id = ' + "'" + str(cirugiaId) + "'"
-
-    curt.execute(comando)
-    print(comando)
-
-    procedParticipantes = []
-
-    for id, nombre in curt.fetchall():
-        procedParticipantes.append({'id': id, 'nombre': nombre})
-
-    miConexiont.close()
-    print("procedParticipantes", procedParticipantes)
-
-
-    # Fin combo procedParticipantes
-
-
-    # Fin combo estadosProgramacion
-
-    # Combo procedMateriales
-
-    miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
-                                   password="123456")
-    curt = miConexiont.cursor()
-
-    comando = '"SELECT p."cirugiaProcedimiento_id" id,exa.nombre nombre FROM cirugia_cirugiasMaterialesqx p INNER JOIN cirugia_cirugiasprocedimientos cirMat ON (cirMat.id=p."cirugiaProcedimiento_id") INNER JOIN facturacion_suministros sum on (sum.id= cirMat.suministro_id) where p.cirugia_id = ' + "'" + str(cirugiaId) + "'"
-
-    curt.execute(comando)
-    print(comando)
-
-    procedMateriales = []
-
-    for id, nombre in curt.fetchall():
-        procedMateriales.append({'id': id, 'nombre': nombre})
-
-    miConexiont.close()
-    print("procedMateriales", procedMateriales)
-
-
-    # Fin combo procedParticipantes
-
 
 
     programacionCirugia = []
@@ -1303,8 +1245,6 @@ def BuscaProgramacionCirugia(request):
     print(programacionCirugia)
 
     programacionCirugia[0]['estadosProgramacion'] = estadosProgramacion
-    programacionCirugia[0]['ProcedParticipantes'] = procedParticipantes
-    programacionCirugia[0]['ProcedMateriales'] = procedMateriales
 
 
     serialized1 = json.dumps(programacionCirugia, default=str)
@@ -1322,16 +1262,8 @@ def CrearMaterialCirugia(request):
     suministro = request.POST["suministro"]
     print ("suministro =", suministro)
 
-    procedMateriales = request.POST["procedMateriales"]
-    print ("procedMateriales =", procedMateriales)
-
-
     username_id = request.POST["usernameMaterialCirugia_id"]
     print ("username_id =", username_id)
-
-    unitario = request.POST["unitarioLiquidacion"]
-    print ("unitario =", unitario)
-
 
     cantidad = request.POST["cantidad"]
     print ("cantidad =", cantidad)
@@ -1349,7 +1281,7 @@ def CrearMaterialCirugia(request):
         miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",  password="123456")
         cur3 = miConexion3.cursor()
 
-        comando = 'INSERT INTO cirugia_cirugiasmaterialQx (cantidad, "fechaRegistro", "estadoReg", cirugia_id, suministro_id, "usuarioRegistro_id","cirugiaProcedimiento_id", unitario) VALUES (' + "'" + str(cantidad) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(cirugiaId) + "','"  + str(suministro) + "','" + str(username_id)  + "','" + str(procedMateriales) + "'" + str(unitario) + "')"
+        comando = 'INSERT INTO cirugia_cirugiasmaterialQx (cantidad, "fechaRegistro", "estadoReg", cirugia_id, suministro_id, "usuarioRegistro_id") VALUES (' + "'" + str(cantidad) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(cirugiaId) + "','"  + str(suministro) + "','" + str(username_id) + "')"
 
         print(comando)
         cur3.execute(comando)
@@ -1392,15 +1324,8 @@ def CrearMaterialInformeCirugia(request):
     cantidad = request.POST["cantidadInforme"]
     print ("cantidad =", cantidad)
 
-    unitario = request.POST["unitarioLiquidacionInforme"]
-    print ("unitario =", unitario)
-
     valorLiquidacion = request.POST["valorLiquidacion"]
     print ("valorLiquidacion =", valorLiquidacion)
-
-    procedMaterialesInforme = request.POST["procedMaterialesInforme"]
-    print ("procedMaterialesInforme =", procedMaterialesInforme)
-
 
 
     estadoReg = 'A'
@@ -1414,7 +1339,7 @@ def CrearMaterialInformeCirugia(request):
         miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",  password="123456")
         cur3 = miConexion3.cursor()
 
-        comando = 'INSERT INTO cirugia_cirugiasmaterialQx (cantidad, "fechaRegistro", "estadoReg", cirugia_id, suministro_id, "usuarioRegistro_id", "valorLiquidacion", "cirugiaProcedimiento_id", unitario) VALUES (' + "'" + str(cantidad) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(cirugiaId) + "','"  + str(suministro) + "','" + str(username_id) + "','" +  str(valorLiquidacion) + "','" + str(procedMaterialesInforme) + "','" + str(unitario) +  "')" 
+        comando = 'INSERT INTO cirugia_cirugiasmaterialQx (cantidad, "fechaRegistro", "estadoReg", cirugia_id, suministro_id, "usuarioRegistro_id", "valorLiquidacion") VALUES (' + "'" + str(cantidad) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(cirugiaId) + "','"  + str(suministro) + "','" + str(username_id) + "','" +  str(valorLiquidacion) + "')"
 
         print(comando)
         cur3.execute(comando)
@@ -3042,31 +2967,6 @@ def BuscarProcedimientosDeCirugia(request):
     cupsParticipantesInforme = []
     cupsParticipantesInforme.append({'id': '', 'nombre': ''})
 
-
-    # Combo procedParticipantes
-
-    miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
-                                   password="123456")
-    curt = miConexiont.cursor()
-
-    comando = 'SELECT p."cirugiaProcedimiento_id" id,exa.nombre nombre FROM cirugia_cirugiasparticipantes p INNER JOIN cirugia_cirugiasprocedimientos cirProc ON (cirProc.id=p."cirugiaProcedimiento_id") INNER JOIN clinico_examenes exa on (exa.id= cirProc.cups_id) where p.cirugia_id = ' + "'" + str(cirugiaId) + "'"
-    print(comando)
-    curt.execute(comando)
-
-
-    procedParticipantesInforme = []
-
-    for id, nombre in curt.fetchall():
-        procedParticipantesInforme.append({'id': id, 'nombre': nombre})
-
-    miConexiont.close()
-    print("procedParticipantesInforme", procedParticipantesInforme)
-
-
-    # Fin combo procedParticipantes
-
-
-
     miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
                                    password="123456")
     cur3 = miConexion3.cursor()
@@ -3091,78 +2991,10 @@ def BuscarProcedimientosDeCirugia(request):
     print ("estadoNombreCirugia = " , estadoNombreCirugia.nombre )
 
     cupsParticipantesInforme[0]['EstadoNombreCirugia'] = estadoNombreCirugia.nombre
-    cupsParticipantesInforme[0]['ProcedParticipantesInforme'] = procedParticipantesInforme
 
     serialized1 = json.dumps(cupsParticipantesInforme, default=str)
 
     return HttpResponse(serialized1, content_type='application/json')
-
-
-def BuscarProcedimientosParticipantesDeCirugia(request):
-    print("Entre BuscarProcedimientosParticipantesDeCirugia")
-
-    cirugiaId = request.POST.get('cirugiaId')
-    print("cirugiaId =", cirugiaId)
-
-
-    # Combo procedParticipantes
-
-    miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
-                                   password="123456")
-    curt = miConexiont.cursor()
-
-    #comando = 'SELECT p."cirugiaProcedimiento_id" id,exa.nombre nombre FROM cirugia_cirugiasparticipantes p INNER JOIN cirugia_cirugiasprocedimientos cirProc ON (cirProc.id=p."cirugiaProcedimiento_id") INNER JOIN clinico_examenes exa on (exa.id= cirProc.cups_id) where p.cirugia_id = ' + "'" + str(cirugiaId) + "'"
-    comando = 'SELECT cirProc.id id,exa.nombre nombre FROM  cirugia_cirugiasprocedimientos cirProc LEFT JOIN cirugia_cirugiasparticipantes cirPart ON (cirPart.cirugia_id = cirProc.cirugia_id AND cirPart."cirugiaProcedimiento_id" = cirProc.id) LEFT JOIN clinico_examenes exa on (exa.id= cirProc.cups_id) where cirProc.cirugia_id = ' + "'" + str(cirugiaId) + "'"
-    print(comando)
-    curt.execute(comando)
-
-
-    procedParticipantes = []
-
-    for id, nombre in curt.fetchall():
-        procedParticipantes.append({'id': id, 'nombre': nombre})
-
-    miConexiont.close()
-    print("procedParticipantes", procedParticipantes)
-
-
-    serialized1 = json.dumps(procedParticipantes, default=str)
-
-    return HttpResponse(serialized1, content_type='application/json')
-
-
-def BuscarProcedimientosMaterialesDeCirugia(request):
-    print("Entre BuscarProcedimientosMaterialesDeCirugia")
-
-    cirugiaId = request.POST.get('cirugiaId')
-    print("cirugiaId =", cirugiaId)
-
-    # Combo procedParticipantes
-
-    miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
-                                   password="123456")
-    curt = miConexiont.cursor()
-
-    comando = 'SELECT cirProc.id id,exa.nombre nombre FROM  cirugia_cirugiasprocedimientos cirProc LEFT JOIN clinico_examenes exa on (exa.id= cirProc.cups_id) where cirProc.cirugia_id = ' + "'" + str(cirugiaId) + "'"
-    print(comando)
-    curt.execute(comando)
-
-
-    procedMaterialesInforme = []
-
-    for id, nombre in curt.fetchall():
-        procedMaterialesInforme.append({'id': id, 'nombre': nombre})
-
-    miConexiont.close()
-    print("procedMaterialesInforme", procedMaterialesInforme)
-
-
-    serialized1 = json.dumps(procedMaterialesInforme, default=str)
-
-    return HttpResponse(serialized1, content_type='application/json')
-
-
-
 
 def TraerInformacionDeCirugia(request):
     print("Entre TraerInformacionDeCirugia")

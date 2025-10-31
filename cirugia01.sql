@@ -269,7 +269,7 @@ update cartera_glosasdetalle set "ripsProcedimientos_id" = null where id=19 -- e
 update cartera_glosasdetalle set "ripsProcedimientos_id" = 3531 where id=19 
 	
 select * from cartera_glosas where factura_id=142
-select * from cartera_glosasdetalle where glosa_id=39
+select * from cartera_glosasdetalle where glosa_id=39 -- vams a borrar la 19
 
 		SELECT * FROM rips_ripstransaccion order by id desc
 
@@ -281,7 +281,7 @@ select * from rips_ripstransaccion order by id desc
 update facturacion_facturaciondetalle set  "tipoRegistro"= 'MANUAL' where id in (420,421)
 update facturacion_facturaciondetalle set  "tipoRegistro"= 'SISTEMA' where id in (420,421)
 SELECT * FROM rips_ripstransaccion where "numFactura" = '149'
-
+ 
 
  SELECT generaFacturaJSONBAK('68','149','FACTURA',0)
 
@@ -330,3 +330,74 @@ from rips_ripstransaccion
 where  rips_ripstransaccion."ripsEnvio_id" = 68 and   rips_ripstransaccion."numFactura" =cast('149' as text) ;
 
 select * from admisiones_ingresos where documento_id='24'
+
+SELECT sum("valorAceptado")  vAceptado, sum("valorSoportado") valorSoportado, sum("valorGlosa") valorGlosado , sum("valorGlosa") totalGlosa , sum("valorNotasCredito") totalNotasCredito  
+	FROM cartera_glosasdetalle 
+	WHERE glosa_id = 39
+
+select * from cirugia_cirugiasmaterialqx
+SELECT * FROM facturacion_tipossuministro;
+select * from facturacion_suministros where nombre like ('%VENDA%')
+	select * from facturacion_suministros where nombre like ('%EQUIPO%')
+	select * from facturacion_suministros where nombre like ('%JERINGA%')
+	select * from facturacion_suministros where nombre like ('%SONDA%')
+	select "tipoSuministro_id",* from facturacion_suministros where nombre like ('%GASAS%')
+select * from facturacion_suministros where "tipoSuministro_id"=2
+
+select documento_id,convenio_id,* from cirugia_cirugias;
+select * from facturacion_conveniospacienteingresos where documento_id=24;
+update cirugia_cirugias set convenio_id=1 where id=28
+select * from facturacion_tipossuministro
+	select * from cirugia_cirugiasmaterialqx;
+
+select matqx.suministro_id suministro, sum.nombre nomSuministro , tipos.nombre tipo ,matqx."valorLiquidacion" valorLiquidacionMat 
+	from cirugia_cirugiasmaterialqx matqx, facturacion_suministros sum, facturacion_tipossuministro tipos 
+	where matqx.cirugia_id= '28' and matqx.suministro_id = sum.id and sum."tipoSuministro_id" = tipos.id 
+
+	select * from tarifarios_tiposhonorarios;
+select * from cirugia_programacioncirugias;	
+select * from cirugia_cirugiasparticipantes
+	update cirugia_cirugiasparticipantes set "cirugiaProcedimiento_id" = 33 where id=39
+	update cirugia_cirugiasparticipantes set "cirugiaProcedimiento_id" = 34 where id=40
+	select * from clinico_examenes
+	select * from cirugia_cirugiasprocedimientos -- 4021 ,2365 // 33,34
+
+	select * from cirugia_cirugiasprocedimientos where cirugia_id='28'
+	select * from cirugia_cirugiasparticipantes where cirugia_id='28'
+
+
+
+select cirpart.id id, cirpart.cirugia_id cirugiaId, hon.nombre honNombre, med.nombre medicoNombre, esp.nombre especialidadNombre ,
+	exa.nombre cupsNombre 
+	FROM cirugia_cirugiasparticipantes cirpart 
+	inner join tarifarios_tiposhonorarios hon ON (hon.id = cirpart."tipoHonorarios_id") 
+	inner join clinico_especialidadesmedicos med ON ( med.id = cirpart.medico_id ) 
+	inner join clinico_especialidades esp ON (esp.id =med.especialidades_id  ) 
+	inner join cirugia_cirugiasprocedimientos cirProc ON ( cirProc.id = cirpart."cirugiaProcedimiento_id")  
+	left join clinico_examenes exa ON (exa.id = cirProc.cups_id)
+	WHERE cirpart.cirugia_id = '28'
+
+	
+	SELECT cirProc.id id,exa.nombre nombre FROM  cirugia_cirugiasprocedimientos cirProc LEFT JOIN cirugia_cirugiasparticipantes cirPart ON (cirPart.cirugia_id = cirProc.cirugia_id AND cirPart."cirugiaProcedimiento_id" = cirProc.id) LEFT JOIN clinico_examenes exa on (exa.id= cirProc.cups_id) where cirProc.cirugia_id = '36'
+
+	select * from cirugia_cirugiasprocedimientos where cirugia_id=36
+		select * from cirugia_cirugiasparticipantes where cirugia_id=36
+
+	select * from clinico_especialidadesmedicos where id in (15,3,7)
+	select * from clinico_especialidades where id in (2,3,7)
+
+	SELECT cirProc.id id,exa.nombre nombre FROM  cirugia_cirugiasprocedimientos cirProc 
+	LEFT JOIN cirugia_cirugiasmaterialqx cirMat ON (cirMat.cirugia_id = cirProc.cirugia_id AND cirMaT."cirugiaProcedimiento_id" = cirProc.id)
+	LEFT JOIN clinico_examenes exa on (exa.id= cirProc.cups_id) where cirProc.cirugia_id = '28'
+	
+select * from cirugia_cirugiasmaterialqx where cirugia_id=28
+update cirugia_cirugiasmaterialqx set "cirugiaProcedimiento_id" = 33 where cirugia_id=28
+
+select cirmaterial.id id, cirmaterial.cirugia_id cirugia_id, cirmaterial.suministro_id suministro_id, suministros.nombre suministro , 
+	tipo.nombre tipoSuministro , cirmaterial.unitario unitario, cirmaterial.cantidad cantidad ,
+	cirmaterial."valorLiquidacion" valorLiquidacion ,exa.nombre cupsNombre 
+	FROM cirugia_cirugiasMaterialQx cirmaterial
+	INNER JOIN facturacion_suministros suministros ON ( suministros.id = cirmaterial.suministro_id) 
+	INNER JOIN facturacion_tipossuministro tipo ON (tipo.id = suministros."tipoSuministro_id") 
+	INNER JOIN clinico_examenes exa ON ( exa.id = cirmaterial."cirugiaProcedimiento_id") 
+	WHERE cirmaterial.cirugia_id = '28'

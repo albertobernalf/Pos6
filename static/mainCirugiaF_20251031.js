@@ -1586,88 +1586,20 @@ $('#tablaProgramacionCirugia tbody').on('click', '.miEditaProgramacionCirugia', 
             $('#modelHeadingProgramacionCirugia').html("Creacion Programacion de Cirugia");
             $('#crearModelProgramacionCirugia').modal('show');      
 
+		//var now = new Date();
+
+		   // var day = ("0" + now.getDate()).slice(-2);
+		   // var month = ("0" + (now.getMonth() + 1)).slice(-2);
+		   // var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
 
 	
 	username_id = document.getElementById("username_id").value   ;
-
+		// alert("username_id = " + username_id );
 	
 	document.getElementById("usernameProgramacionCirugia_id").value = username_id;
 
             $('#estadosProgramacionY').val(info[0].fields.estado_id);
             $('#serviciosAdministrativos').val(info[0].fields.serviciosAdministrativos_id);
-
-
-		// AQUI EL LLENADO DE LOS COMBOS PARTICIPA Y MATERIALES
-
-		// Participantes solicitud e informe
-
-	  		   var options = '<option value="=================="></option>';
-
-	  		  var dato = JSON.parse(info);
-                     const $id2 = document.querySelector("#procedParticipantes");
-
- 	      		     $("#procedParticipantes").empty();
-				   alert("ya blanquue los medicos");
-
-	                 $.each(dato[procedParticipantes], function(key,value) {
-                                    options +='<option value="' + value.id + '">' + value.nombre + '</option>';
-                                    option = document.createElement("option");
-                                    option.value = value.id;
-                                    option.text = value.nombre;
-                                    $id2.appendChild(option);
- 	      		      });
-
-
-                     const $id3 = document.querySelector("#procedMateriales");
-
- 	      		     $("#procedMateriales").empty();
-				   alert("ya blanquue los procedMateriales");
-
-	                 $.each(dato[procedMateriales], function(key,value) {
-                                    options +='<option value="' + value.id + '">' + value.nombre + '</option>';
-                                    option = document.createElement("option");
-                                    option.value = value.id;
-                                    option.text = value.nombre;
-                                    $id3.appendChild(option);
- 	      		      });
-
-
-		// fin combo solicitud participa y maeria
-
-		// combos Informe participa y merial
-
-	  var dato = JSON.parse(info);
-                     const $id4 = document.querySelector("#procedParticipantesInforme");
-
- 	      		     $("#procedParticipantesInforme").empty();
-				   alert("ya blanquue los procedParticipantesInforme");
-
-	                 $.each(dato[procedParticipantes], function(key,value) {
-                                    options +='<option value="' + value.id + '">' + value.nombre + '</option>';
-                                    option = document.createElement("option");
-                                    option.value = value.id;
-                                    option.text = value.nombre;
-                                    $id4.appendChild(option);
- 	      		      });
-
-
-                     const $id5 = document.querySelector("#procedMaterialesInforme");
-
- 	      		     $("#procedMaterialesInforme").empty();
-				   alert("ya blanquue los procedMaterialesInforme");
-
-	                 $.each(dato[procedMateriales], function(key,value) {
-                                    options +='<option value="' + value.id + '">' + value.nombre + '</option>';
-                                    option = document.createElement("option");
-                                    option.value = value.id;
-                                    option.text = value.nombre;
-                                    $id5.appendChild(option);
- 	      		      });
-
-		// fin combos informe
-
-
-
 
 
 		var data =  {}   ;
@@ -1929,49 +1861,14 @@ $('#tablaSolicitudCirugia tbody').on('click', '.miAdicionarProcedimientos', func
 
 $('#tablaSolicitudCirugia tbody').on('click', '.miAdicionarParticipantes', function() {
 
-		 
+		// alert("ENTRE miAdicionarParticipantes");
 
 	         var post_id = $(this).data('pk');
 		 var  cirugiaIdModalParticipantes =   post_id;
-		var cirugiaId = post_id;
+	// alert("ModalParticipantes = " +  cirugiaIdModalParticipantes);
 
-alert("ENTRE miAdicionarParticipantes" + cirugiaId);
   
             $('#postFormParticipantesCirugia').trigger("reset");		
-
-// aquip AJAX ESTO ES NUEVO
-          $.ajax({
-                data: {'cirugiaId':cirugiaId},
-	        url: "/buscarProcedimientosParticipantesDeCirugia/",
-                type: "POST",
-                dataType: 'json',
-                success: function (data2) {
-
-	  	    var options = '<option value="=================="></option>';
-
-	alert("llegue con estop = " + JSON.stringify(data2));
-	alert("llegue con estop = " + JSON.stringify(data2[0]));
-
-	            const $id4 = document.querySelector("#procedParticipantes");
- 	      	$("#procedParticipantes").empty();
-
-	                 $.each(data2, function(key,value) {
-                                    options +='<option value="' + value.id + '">' + value.nombre + '</option>';
-                                    option = document.createElement("option");
-                                    option.value = value.id;
-                                    option.text = value.nombre;
-                                    $id4.appendChild(option);
- 	      		      });
-
-
-                },
-         error: function (data) {
-	   			    	document.getElementById("mensajesErrorModalParticipantesInformeCirugia").value =   data.responseText;
-
-	   	    	}
-            });
-
-// FIN AJAX NUEVO
 
             $('#modelHeadingParticipantesCirugia').html("Detalle Participantes Cirugia");
             $('#crearModelParticipantesCirugia').modal('show');
@@ -1981,7 +1878,6 @@ alert("ENTRE miAdicionarParticipantes" + cirugiaId);
 
 		// alert("username_id = " + username_id );
 		document.getElementById("usernameParticipantesCirugia_id").value = username_id ;      
-
 
   	var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
         var username = document.getElementById("username").value;
@@ -2848,6 +2744,8 @@ document.getElementById("cirugiaIdModalParticipantesInforme").value =	document.g
                 dataType: 'json',
                 success: function (data2) {
 		
+		// alert("llegue con estop = " + data2);
+
 		// alert(" estado nombre cirugia3 = " + data2[0].EstadoNombreCirugia);
 
 		if (data2[0].EstadoNombreCirugia == 'REALIZADA')
@@ -2870,34 +2768,17 @@ document.getElementById("cirugiaIdModalParticipantesInforme").value =	document.g
 
 	  	    var options = '<option value="=================="></option>';
 
-		
+	            const $id2 = document.querySelector("#cupsParticipantesInforme");
 
-	  //          const $id2 = document.querySelector("#cupsParticipantesInforme");
- 	  //    	$("#cupsParticipantesInforme").empty();
+ 	      	$("#cupsParticipantesInforme").empty();
 
-//	                 $.each(data2, function(key,value) {
-  //                                  options +='<option value="' + value.id + '">' + value.nombre + '</option>';
-    //                                option = document.createElement("option");
-      //                              option.value = value.id;
-        //                            option.text = value.nombre;
-          //                          $id2.appendChild(option);
- 	    //  		      });
-
-alert("llegue con estop = " + JSON.stringify(data2));
-alert("llegue con estop = " + JSON.stringify(data2[0]));
-
-
-	            const $id3 = document.querySelector("#procedParticipantesInforme");
- 	      	$("#procedParticipantesInforme").empty();
-
-	                 $.each(data2[0]['ProcedParticipantesInforme'], function(key,value) {
+	                 $.each(data2, function(key,value) {
                                     options +='<option value="' + value.id + '">' + value.nombre + '</option>';
                                     option = document.createElement("option");
                                     option.value = value.id;
                                     option.text = value.nombre;
-                                    $id3.appendChild(option);
+                                    $id2.appendChild(option);
  	      		      });
-
 
 		  
 	var data =  {}   ;
@@ -3323,7 +3204,7 @@ function AdicionarHojaDeGastoCirugia() {
 
 function AdicionarMaterialInformeCirugia() {
 
-   	     alert("ENTRE AdicionarMaterialInformeCirugia");
+   	    // alert("ENTRE AdicionarMaterialInformeCirugia");
 
             $('#postFormMaterialInformeCirugia').trigger("reset");
 	    document.getElementById("cirugiaIdModalMaterialInforme").value = document.getElementById("cirugiaIdModalProcedimientos").value ;
@@ -3331,36 +3212,6 @@ function AdicionarMaterialInformeCirugia() {
 
 	    document.getElementById("usernameMaterialInformeCirugia_id").value = user;
 	
-	    cirugiaId = document.getElementById("cirugiaIdModalProcedimientos").value ;
-
-// aqui NUEVO AJAX
-
-	
-
-
-          $.ajax({
-                data: {'cirugiaId':cirugiaId},
-	        url: "/buscarProcedimientosMaterialesDeCirugia/",
-                type: "POST",
-                dataType: 'json',
-                success: function (data2) {
-
-	  	    var options = '<option value="=================="></option>';
-
-
-
-	            const $id7 = document.querySelector("#procedMaterialesInforme");
- 	      	$("#procedMaterialesInforme").empty();
-
-	                 $.each(data2, function(key,value) {
-                                    options +='<option value="' + value.id + '">' + value.nombre + '</option>';
-                                    option = document.createElement("option");
-                                    option.value = value.id;
-                                    option.text = value.nombre;
-                                    $id7.appendChild(option);
- 	      		      });
-
-
             $('#modelHeadingMaterialInformeCirugia').html("Adicion de materiales a Cirugia");
             $('#crearModelMaterialInformeCirugia').modal('show');
 
@@ -3373,18 +3224,11 @@ function AdicionarMaterialInformeCirugia() {
 			
 		data['cirugiaId'] =document.getElementById("cirugiaIdModalProcedimientos").value ;
 	        data = JSON.stringify(data);
-	  
+	
+  
 	    arrancaCirugia(13,data);
-	    dataTableMaterialInformeXXCirugiaInitialized = true; 
-
-                },
-         error: function (data) {
-	   			    	document.getElementById("mensajesError").value =   data.responseText;
-
-	   	    	}
-            });
-
-// FIN AJAX 	
+	    dataTableMaterialInformeXXCirugiaInitialized = true;
+    	
       
   };
 

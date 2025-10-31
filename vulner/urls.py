@@ -439,6 +439,11 @@ urlpatterns = [
     path('traerEstadoCirugia/', viewsCirugia.TraerEstadoCirugia, name='TraerEstado_Cirugia'),
     path('traerEstadoProgramacionCirugia/', viewsCirugia.TraerEstadoProgramacionCirugia, name='TraerEstadoProgramacion_Cirugia'),
     path('buscarConveniosCirugiaPaciente/', viewsCirugia.BuscarConveniosCirugiaPaciente, name='BuscarConveniosCirugia_Paciente'),
+    path('buscarProcedimientosParticipantesDeCirugia/', viewsCirugia.BuscarProcedimientosParticipantesDeCirugia, name='buscarProcedimientosParticipantesDe_Cirugia'),
+    path('buscarProcedimientosMaterialesDeCirugia/', viewsCirugia.BuscarProcedimientosMaterialesDeCirugia,  name='buscarProcedimientosMaterialesDe_Cirugia'),
+
+
+
 
     # Farmacia
 
