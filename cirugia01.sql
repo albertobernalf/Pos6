@@ -402,3 +402,21 @@ select cirmaterial.id id, cirmaterial.cirugia_id cirugia_id, cirmaterial.suminis
 	INNER JOIN facturacion_tipossuministro tipo ON (tipo.id = suministros."tipoSuministro_id") 
 	INNER JOIN clinico_examenes exa ON ( exa.id = cirProc.cups_id) 
 	WHERE cirmaterial.cirugia_id = '28'
+
+
+SELECT * FROM FACTURACION_TIPOSSUMINISTRO
+
+	select * from facturacion_suministros  where "tipoSuministro_id" = 10;
+	select * from cirugia_cirugiasprocedimientos where cirugia_id=28
+
+SELECT * FROM cirugia_cirugiasMaterialQx;
+SELECT * FROM FACTURACION_FACTURACIONDETALLE;
+
+select sum(matqx."valorLiquidacion") valorLiquidacionMat 
+from cirugia_cirugiasmaterialqx matqx, facturacion_suministros sum, facturacion_tipossuministro tipos , cirugia_cirugiasprocedimientos cirProc
+where matqx.cirugia_id= '28' and matqx.suministro_id = sum.id and sum."tipoSuministro_id" = tipos.id  AND tipos.id = 10 
+	and cirProc.id = matqx."cirugiaProcedimiento_id" and cirProc.cups_id=4021
+
+	select cums_id, examen_id,"tipoHonorario_id",* from facturacion_liquidaciondetalle where liquidacion_id=293 
+delete from facturacion_liquidaciondetalle where liquidacion_id=293  and cirugia_id is null
+	

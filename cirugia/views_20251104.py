@@ -2656,15 +2656,10 @@ def GenerarLiquidacionCirugia(request):
                 print("consecLiquidacion = ", consecLiquidacion)
                 consecLiquidacion = 0
 
-            suministroMaterial = TiposSuministro.objects.get(nombre='MATERIAL QX')
-            suministroMaterialQx=suministroMaterial.id
-            honorarioMaterial = TiposHonorarios.objects.get(nombre='MATERIAL QX')
-            honorarioMaterialqX = honorarioMaterial.id
 
+            # Aqui liquidacion de Materiales Quirugicos van a la cuenta
 
-            # Aqui liquidacion de Materiales INSUMOS MEDICOS NO MATERIAL QX 
-
-            detalle = 'select matqx.suministro_id suministro, sum.nombre nomSuministro , tipos.nombre tipo ,matqx.cantidad cantidad, matqx."valorLiquidacion" valorLiquidacionMat from cirugia_cirugiasmaterialqx matqx, facturacion_suministros sum, facturacion_tipossuministro tipos where matqx.cirugia_id= ' + "'" + str(cirugiaId) + "'" + ' and matqx.suministro_id = sum.id and sum."tipoSuministro_id" = tipos.id AND tipos.id != ' + "'" + str(suministroMaterialQx) + "'"
+            detalle = 'select matqx.suministro_id suministro, sum.nombre nomSuministro , tipos.nombre tipo ,matqx.cantidad cantidad, matqx."valorLiquidacion" valorLiquidacionMat from cirugia_cirugiasmaterialqx matqx, facturacion_suministros sum, facturacion_tipossuministro tipos where matqx.cirugia_id= ' + "'" + str(cirugiaId) + "'" + ' and matqx.suministro_id = sum.id and sum."tipoSuministro_id" = tipos.id and tipos.nombre = ' + "'" + str('MATERIAL QX') + "'"
 
             materialesQx = []
 
@@ -2712,52 +2707,6 @@ def GenerarLiquidacionCirugia(request):
                 procedimiento = procedimiento.replace(",", ' ')
                 print("procedimiento por el FORSEGUNDO = " ,procedimiento)
                 procedimiento =procedimiento.strip()
-
-            # AQUI RUTINA SUBE HONORARIO MATERIALES DE CIRUGIA POR PROCEDIMIENTO
-
-                detalle = 'select sum(matqx."valorLiquidacion") valorLiquidacionMat  from cirugia_cirugiasmaterialqx matqx, facturacion_suministros sum, facturacion_tipossuministro tipos  , cirugia_cirugiasprocedimientos cirProc where matqx.cirugia_id= ' + "'" + str(cirugiaId) + "'" + ' and matqx.suministro_id = sum.id and sum."tipoSuministro_id" = tipos.id  AND tipos.id = ' + "'" + str(suministroMaterialQx) + "'" + 'and cirProc.id = matqx."cirugiaProcedimiento_id" and cirProc.cups_id= ' + "'" + str(procedimiento) + "'"
-
-                materialesQx = []
-
-                print(detalle)
-                cur3.execute(detalle)
-
-                for valorLiquidacionMat in cur3.fetchall():
-                    materialesQx.append({'valorLiquidacionMat': valorLiquidacionMat})
-
-                print("materialesQx = ", materialesQx)
-
-                # Materialde sutura y conexion
-
-                for matQx in materialesQx:
-
-                    valorLiquidacionMat = str(matQx['valorLiquidacionMat'])
-                    valorLiquidacionMat = valorLiquidacionMat.replace("(", ' ')
-                    valorLiquidacionMat = valorLiquidacionMat.replace(")", ' ')
-                    valorLiquidacionMat = valorLiquidacionMat.replace(",", ' ')
-                    valorLiquidacionMat = valorLiquidacionMat.replace("Decimal", ' ')
-                    valorLiquidacionMat = valorLiquidacionMat.replace("'", ' ')
-                    valorLiquidacionMat = valorLiquidacionMat.replace(" ", ' ')
-                    print ("valorLiquidacionMat =", valorLiquidacionMat)
-
-                    if (valorLiquidacionMat.strip()=='None'):
-                        print ("Entre None")
-                        valorLiquidacionMat=0
-
-                    print("valorLiquidacionMat FINAL =", valorLiquidacionMat)
-
-                    consecLiquidacion = int(consecLiquidacion) + 1
-
-                    comando = 'INSERT INTO facturacion_liquidaciondetalle (consecutivo,fecha, cantidad, "valorUnitario", "valorTotal", "estadoRegistro", "fechaCrea", "fechaRegistro",  "usuarioRegistro_id", liquidacion_id, "tipoRegistro", "tipoHonorario_id", cirugia_id, anulado,examen_id) VALUES (' + "'" + str(
-                        consecLiquidacion) + "','" + str(fechaRegistro) + "','" + str('1') + "','" + str(
-                        valorLiquidacionMat) + "','" + str(valorLiquidacionMat) + "','" + str('A') + "','" + str(
-                        fechaRegistro) + "','" + str(fechaRegistro) + "','" + str(username_id) + "'," + liquidacionId + ",'MANUAL','"+  str(honorarioMaterial.id) + "','"  + str(cirugiaId) + "','N'," + "'" + str(procedimiento)  + "')"
-                    print("comando ", comando)
-                    cur3.execute(comando)
-
-                # En teoria hasta aqui Materiales de sutura  ISS de acuerdo al procedimiento
-                # fin rutina sube HONORARIO MATERIAL QX
-
 
                 # consigue año de programacion de cirugia
                 #
@@ -2932,53 +2881,55 @@ def GenerarLiquidacionCirugia(request):
 
                 print("ANTES DE pasada = ", pasada)
 
-                # Aqui liquidacion de Salas de CIRUGIA
+                if (pasada==1):
 
-                print ("Entre pasada = ", pasada)
+                    # Aqui liquidacion de Salas de CIRUGIA
 
-                ## Luego ir a tabla tarifarios_tablaSalasdecirugiaiss para sacar el valor
-                #
-                #
-                detalle = 'SELECT tarifa.smldv * ' + "'" + str(minimo/30) + "'" + ' valor FROM cirugia_cirugias cir,  tarifarios_tablaSalasdecirugia tarifa WHERE cir.id = ' + "'" + str(cirugiaId) + "'" + ' AND  "grupoQx_id" =  ' + "'" + str(grupoQx) + "'"
+                    print ("Entre pasada = ", pasada)
 
-                valorSala = []
-                print(detalle)
-                cur3.execute(detalle)
+                    ## Luego ir a tabla tarifarios_tablaSalasdecirugiaiss para sacar el valor
+                    #
+                    #
+                    detalle = 'SELECT tarifa.smldv * ' + "'" + str(minimo/30) + "'" + ' valor FROM cirugia_cirugias cir,  tarifarios_tablaSalasdecirugia tarifa WHERE cir.id = ' + "'" + str(cirugiaId) + "'" + ' AND  "grupoQx_id" =  ' + "'" + str(grupoQx) + "'"
 
-                for valor in cur3.fetchall():
-                    valorSala.append({'valor': valor})
+                    valorSala = []
+                    print(detalle)
+                    cur3.execute(detalle)
 
-                if valorSala == []:
-                    print("No se encontraron resultados para HONORARIOS SOAT valorSala Procedimeinto : ",
-                          procedimiento)
-                    # raise  TypeError( "No se encontraron resultados para HONORARIOS SOAT Cirugano Procedimeinto : ")
-                    return JsonResponse({'success': False,  'message': 'Favor registrar en convenio paciente SALA Procedimeinto ! ' + procedimiento})
+                    for valor in cur3.fetchall():
+                        valorSala.append({'valor': valor})
 
-                else:
-                    print("valor sala = ", valorSala[0])
+                    if valorSala == []:
+                        print("No se encontraron resultados para HONORARIOS SOAT valorSala Procedimeinto : ",
+                              procedimiento)
+                        # raise  TypeError( "No se encontraron resultados para HONORARIOS SOAT Cirugano Procedimeinto : ")
+                        return JsonResponse({'success': False,  'message': 'Favor registrar en convenio paciente SALA Procedimeinto ! ' + procedimiento})
 
-                for valorSala in valorSala[0]['valor']:
+                    else:
+                        print("valor sala = ", valorSala[0])
 
-                    #valorSala = valorSala[0]
-                    print("valor sala = ", valorSala)
+                    for valorSala in valorSala[0]['valor']:
 
-                    valorSala = str(valorSala)
-                    valorSala = valorSala.replace("(", ' ')
-                    valorSala = valorSala.replace(")", ' ')
-                    valorSala = valorSala.replace(",", ' ')
-                    print("valor sala = ", valorSala)
-                    liquidaValorSala = valorSala
+                        #valorSala = valorSala[0]
+                        print("valor sala = ", valorSala)
 
-                # Salas
-                #
-                consecLiquidacion= int(consecLiquidacion) + 1
-                comando = 'INSERT INTO facturacion_liquidaciondetalle (consecutivo,fecha, cantidad, "valorUnitario", "valorTotal", "estadoRegistro", "fechaCrea", "fechaRegistro",  "examen_id",  "usuarioRegistro_id", liquidacion_id, "tipoRegistro", "tipoHonorario_id", cirugia_id, anulado) VALUES (' + "'" + str(consecLiquidacion) + "','" + str(fechaRegistro) + "','" + str('1') + "','" + str(liquidaValorSala) + "','" + str(liquidaValorSala) + "','" + str('A') + "','" + str(fechaRegistro) + "','" + str(fechaRegistro)  + "','" + str(procedimiento)  + "','" + str(username_id) + "'," + liquidacionId + ",'SISTEMA'," + "'" + str(registroDerechosSala.id)+ "'," +  "'" + str(cirugiaId) + "','N')"
-                print("comando", comando)
-                cur3.execute(comando)
+                        valorSala = str(valorSala)
+                        valorSala = valorSala.replace("(", ' ')
+                        valorSala = valorSala.replace(")", ' ')
+                        valorSala = valorSala.replace(",", ' ')
+                        print("valor sala = ", valorSala)
+                        liquidaValorSala = valorSala
 
-                # En teoria hasta aqui Salas de CIRUGIA  SOAT de acuerdo al procedimiento
+                    # Salas
+                    #
+                    consecLiquidacion= int(consecLiquidacion) + 1
+                    comando = 'INSERT INTO facturacion_liquidaciondetalle (consecutivo,fecha, cantidad, "valorUnitario", "valorTotal", "estadoRegistro", "fechaCrea", "fechaRegistro",  "examen_id",  "usuarioRegistro_id", liquidacion_id, "tipoRegistro", "tipoHonorario_id", cirugia_id, anulado) VALUES (' + "'" + str(consecLiquidacion) + "','" + str(fechaRegistro) + "','" + str('1') + "','" + str(liquidaValorSala) + "','" + str(liquidaValorSala) + "','" + str('A') + "','" + str(fechaRegistro) + "','" + str(fechaRegistro)  + "','" + str(procedimiento)  + "','" + str(username_id) + "'," + liquidacionId + ",'SISTEMA'," + "'" + str(registroDerechosSala.id)+ "'," +  "'" + str(cirugiaId) + "','N')"
+                    print("comando", comando)
+                    cur3.execute(comando)
 
-            # Fin INSERT liquidaciones
+                    # En teoria hasta aqui Salas de CIRUGIA  SOAT de acuerdo al procedimiento
+
+                # Fin INSERT liquidaciones
 
 
             miConexion3.commit()

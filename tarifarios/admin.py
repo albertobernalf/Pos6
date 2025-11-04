@@ -49,7 +49,7 @@ class TarifariosDescripcionHonorariosAdmin(admin.ModelAdmin):
 class tarifariosProcedimientosAdmin(admin.ModelAdmin):
 
    list_display = ("id","tiposTarifa", "codigoCups",  "codigoHomologado", "colValorBase", "colValor1", "colValor2", "colValor3","colValor1", "fechaRegistro")
-   search_fields = ("id","tiposTarifa__nombre", "codigoCups",  "codigoHomologado", "colValorBase", "colValor1", "colValor2", "colValor3","colValor1", "fechaRegistro")
+   search_fields = ("id","tiposTarifa__nombre", "codigoCups__nombre",  "codigoHomologado", "colValorBase", "colValor1", "colValor2", "colValor3","colValor1", "fechaRegistro")
    # Filtrar
    list_filter = ("id","tiposTarifa", "codigoCups",  "codigoHomologado", "colValorBase", "colValor1", "colValor2", "colValor3","colValor1", "fechaRegistro")
 

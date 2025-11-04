@@ -307,6 +307,7 @@ def ImprimirFactura(request):
     linea = 7
 
     conceptoMedicamentos= Conceptos.objects.get(nombre='MEDICAMENTOS')
+    conceptoProcedimientosQx= Conceptos.objects.get(nombre='PROCEDIMIENTOS QX')
 
 
     miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
@@ -314,7 +315,7 @@ def ImprimirFactura(request):
     curt = miConexiont.cursor()
 
     #comando = 'SELECT id, nombre nombreConcepto from facturacion_conceptos '
-    comando = 'SELECT distinct con.id, con.nombre nombreConcepto from facturacion_conceptos con INNER JOIN 	 clinico_examenes exa ON (exa.concepto_id = con.id) where exa.id in (select facdet.examen_id from facturacion_facturaciondetalle facdet where facdet.facturacion_id = ' + "'" + str(factura) + "')" + ' union SELECT distinct con.id, con.nombre nombreConcepto from facturacion_conceptos con INNER JOIN facturacion_suministros sum ON (sum.concepto_id = con.id) where sum.id in (select facdet.cums_id from facturacion_facturaciondetalle facdet where facdet.facturacion_id = ' + "'" + str(factura) + "')" + ' order by 1 desc '
+    comando = 'SELECT distinct con.id, con.nombre nombreConcepto from facturacion_conceptos con INNER JOIN clinico_examenes exa ON (exa.concepto_id = con.id) where exa.id in (select facdet.examen_id from facturacion_facturaciondetalle facdet where facdet.facturacion_id = ' + "'" + str(factura) + "')" + ' union SELECT distinct con.id, con.nombre nombreConcepto from facturacion_conceptos con INNER JOIN facturacion_suministros sum ON (sum.concepto_id = con.id) where sum.id in (select facdet.cums_id from facturacion_facturaciondetalle facdet where facdet.facturacion_id = ' + "'" + str(factura) + "')" + ' order by 1 desc '
 
     curt.execute(comando)
 
@@ -323,6 +324,21 @@ def ImprimirFactura(request):
     conceptos = []
     subTotal=0;
     lineaDetalle=1
+
+    contratacionConvenio = Contratacion.objects.get(id=facturaPaciente.convenio_id)
+    tarifariosHonorarios = TarifariosDescripcionHonorarios.objects.get(id=contratacionConvenio.tarifariosDescripcionHono_id)
+
+    liquidaHonorarios=''
+
+    if (tarifariosHonorarios=='ISS 2001'):
+        liquidaHonorarios='ISS'
+
+    if (tarifariosHonorarios == 'SOAT 2004'):
+        liquidaHonorarios = 'SOAT'
+
+    if (tarifariosHonorarios == 'PARTICULAR'):
+        liquidaHonorarios = 'PARTICULAR'
+
 
     for id, nombreConcepto in curt.fetchall():
         conceptos.append(
@@ -346,13 +362,18 @@ def ImprimirFactura(request):
         print("Voy en concepto =", id)
         print("concepto medicamentos =" ,conceptoMedicamentos.id)
 
-        if (id != conceptoMedicamentos.id):
+        if (id == conceptoProcedimientosQx.id):
+            print ("Procedimiento qx")
+            comando = 'select exa."codigoCups" cups,tarProc."codigoHomologado" homologado, exa.nombre  descripcion, detFac.cantidad cantidad, detFac."valorUnitario" valorUnitario, detFac."valorTotal" valorTotal FROM facturacion_facturaciondetalle detFac INNER JOIN facturacion_facturacion fac ON (fac.id=detFac.facturacion_id) INNER JOIN clinico_examenes exa on (exa.id=detFac.examen_id) INNER JOIN contratacion_convenios conv ON (conv.id=fac.convenio_id) LEFT JOIN tarifarios_tarifariosdescripcion tarDesc ON (tarDesc.id=conv."tarifariosDescripcionProc_id") LEFT JOIN tarifarios_tarifariosprocedimientos tarProc ON (tarProc."tiposTarifa_id"=tarDesc."tiposTarifa_id" AND tarProc."codigoCups_id" = detFac.examen_id ) where detfac.facturacion_id= ' + "'" + str(factura) + "'" +  ' AND (detfac.anulado =' + "'" + str('N') + "'" + ' or detfac.anulado=' + "'" + str('R') + "')" + " AND exa.concepto_id = " +"'" + str(id) + "'" + ' ORDER BY exa."codigoCups"'
 
-            comando = 'select exa."codigoCups" cups,tarProc."codigoHomologado" homologado, exa.nombre  descripcion, detFac.cantidad cantidad, detFac."valorUnitario" valorUnitario, detFac."valorTotal" valorTotal FROM facturacion_facturaciondetalle detFac INNER JOIN facturacion_facturacion fac ON (fac.id=detFac.facturacion_id) INNER JOIN clinico_examenes exa on (exa.id=detFac.examen_id) INNER JOIN contratacion_convenios conv ON (conv.id=fac.convenio_id) LEFT JOIN tarifarios_tarifariosdescripcion tarDesc ON (tarDesc.id=conv."tarifariosDescripcionProc_id") LEFT JOIN tarifarios_tarifariosprocedimientos tarProc ON (tarProc."tiposTarifa_id"=tarDesc."tiposTarifa_id" AND tarProc."codigoCups_id" = detFac.examen_id ) where detfac.facturacion_id= ' + "'" + str(factura) + "'" +  ' AND (detfac.anulado =' + "'" + str('N') + "'" + ' or detfac.anulado=' + "'" + str('R') + "')" + " AND exa.concepto_id = " +"'" + str(id) + "'"
+        if (id == conceptoMedicamentos.id):
+
+            comando = 'select sum.cums cups,tarSum."codigoHomologado" homologado, sum.nombre  descripcion, detFac.cantidad cantidad, 	detFac."valorUnitario" valorUnitario, detFac."valorTotal" valorTotal FROM facturacion_facturaciondetalle detFac INNER JOIN facturacion_facturacion fac ON (fac.id=detFac.facturacion_id) INNER JOIN facturacion_suministros sum on (sum.id=detFac.cums_id) INNER JOIN contratacion_convenios conv ON (conv.id=fac.convenio_id)  LEFT JOIN tarifarios_tarifariosdescripcion tarDesc ON (tarDesc.id=conv."tarifariosDescripcionSum_id") LEFT JOIN tarifarios_tarifariossuministros tarSum ON (tarSum."tiposTarifa_id"=tarDesc."tiposTarifa_id" AND tarSum.id = detFac.cums_id ) where detfac.facturacion_id= ' + "'" + str(factura) + "'" + ' AND (detfac.anulado =' + "'" + str('N') + "'" + ' or detfac.anulado=' + "'" + str('R') + "')" +   ' AND sum.concepto_id = ' + "'" + str(id) + "'" + ' ORDER BY sum.cums'
             print("entre Medicamentos")
 
-        else:
-            comando = 'select sum.cums cups,tarSum."codigoHomologado" homologado, sum.nombre  descripcion, detFac.cantidad cantidad, 	detFac."valorUnitario" valorUnitario, detFac."valorTotal" valorTotal FROM facturacion_facturaciondetalle detFac INNER JOIN facturacion_facturacion fac ON (fac.id=detFac.facturacion_id) INNER JOIN facturacion_suministros sum on (sum.id=detFac.cums_id) INNER JOIN contratacion_convenios conv ON (conv.id=fac.convenio_id)  LEFT JOIN tarifarios_tarifariosdescripcion tarDesc ON (tarDesc.id=conv."tarifariosDescripcionSum_id") LEFT JOIN tarifarios_tarifariossuministros tarSum ON (tarSum."tiposTarifa_id"=tarDesc."tiposTarifa_id" AND tarSum.id = detFac.cums_id ) where detfac.facturacion_id= ' + "'" + str(factura) + "'" + ' AND (detfac.anulado =' + "'" + str('N') + "'" + ' or detfac.anulado=' + "'" + str('R') + "')" +   ' AND sum.concepto_id = ' + "'" + str(id) + "'"
+        if (id != conceptoMedicamentos.id):
+
+            comando = 'select exa."codigoCups" cups,tarProc."codigoHomologado" homologado, exa.nombre  descripcion, detFac.cantidad cantidad, detFac."valorUnitario" valorUnitario, detFac."valorTotal" valorTotal FROM facturacion_facturaciondetalle detFac INNER JOIN facturacion_facturacion fac ON (fac.id=detFac.facturacion_id) INNER JOIN clinico_examenes exa on (exa.id=detFac.examen_id) INNER JOIN contratacion_convenios conv ON (conv.id=fac.convenio_id) LEFT JOIN tarifarios_tarifariosdescripcion tarDesc ON (tarDesc.id=conv."tarifariosDescripcionProc_id") LEFT JOIN tarifarios_tarifariosprocedimientos tarProc ON (tarProc."tiposTarifa_id"=tarDesc."tiposTarifa_id" AND tarProc."codigoCups_id" = detFac.examen_id ) where detfac.facturacion_id= ' + "'" + str(factura) + "'" +  ' AND (detfac.anulado =' + "'" + str('N') + "'" + ' or detfac.anulado=' + "'" + str('R') + "')" + " AND exa.concepto_id = " +"'" + str(id) + "'" + ' ORDER BY exa."codigoCups"'
             print ("entre proced")
 
         print ("comando DE datos Facturacion Detalle", comando)
@@ -361,28 +382,47 @@ def ImprimirFactura(request):
         detalleFacturacion = []
         lineaDetalle = 1
 
-        for cups, homologado, descripcion, cantidad, valorUnitario, valorTotal in cury.fetchall():
-            detalleFacturacion.append(
-                {'cups': cups, 'homologado': homologado,'descripcion':descripcion, 'cantidad':cantidad,'valorUnitario':valorUnitario, 'valorTotal':valorTotal })
+        if (id != conceptoProcedimientosQx.id):
 
-            print ("voy a imprimir concepto =" , id)
-            pdf.cell(15, 26 + lineaConcepto + lineaDetalle, str(cups), 0, 0, 'L')
-            pdf.cell(15, 26 + lineaConcepto + lineaDetalle, str(homologado), 0, 0, 'L')
-            pdf.cell(85, 26 + lineaConcepto + lineaDetalle, str(descripcion), 0, 0, 'L')
-            #pdf.multi_cell(w=100, h=10, txt=str(descripcion),  align='J')
-            #pdf.multi_cell(w=85, h=3, txt=str(descripcion), align='L' )
+            for cups, homologado, descripcion, cantidad, valorUnitario, valorTotal in cury.fetchall():
+                detalleFacturacion.append(
+                    {'cups': cups, 'homologado': homologado,'descripcion':descripcion, 'cantidad':cantidad,'valorUnitario':valorUnitario, 'valorTotal':valorTotal })
 
-            pdf.cell(30, 26 + lineaConcepto + lineaDetalle, str(cantidad), 0, 0, 'L')
-            pdf.cell(30, 26 + lineaConcepto + lineaDetalle, str(valorUnitario), 0, 0, 'L')
-            pdf.cell(30, 26 + lineaConcepto + lineaDetalle, str(valorTotal), 0, 0, 'L')
+                print ("voy a imprimir concepto =" , id)
+                pdf.cell(15, 26 + lineaConcepto + lineaDetalle, str(cups), 0, 0, 'L')
+                pdf.cell(15, 26 + lineaConcepto + lineaDetalle, str(homologado), 0, 0, 'L')
+                pdf.cell(85, 26 + lineaConcepto + lineaDetalle, str(descripcion), 0, 0, 'L')
+                #pdf.multi_cell(w=100, h=10, txt=str(descripcion),  align='J')
+                #pdf.multi_cell(w=85, h=3, txt=str(descripcion), align='L' )
 
-            subTotal = subTotal + float(valorTotal)
+                pdf.cell(30, 26 + lineaConcepto + lineaDetalle, str(cantidad), 0, 0, 'L')
+                pdf.cell(30, 26 + lineaConcepto + lineaDetalle, str(valorUnitario), 0, 0, 'L')
+                pdf.cell(30, 26 + lineaConcepto + lineaDetalle, str(valorTotal), 0, 0, 'L')
 
-            #lineaDetalle=lineaDetalle +1
+                subTotal = subTotal + float(valorTotal)
 
-            pdf.ln(3)
-            lineaDetalle = lineaDetalle + 2
-            #pdf.rect(5.0, 26 + lineaConcepto + lineaDetalle, 200.0, 0)  # Coordenadas x, y, ancho, alto
+                #lineaDetalle=lineaDetalle +1
+
+                pdf.ln(3)
+                lineaDetalle = lineaDetalle + 2
+                #pdf.rect(5.0, 26 + lineaConcepto + lineaDetalle, 200.0, 0)  # Coordenadas x, y, ancho, alto
+
+        else:
+            pass
+	        ## Por aqui es un Procedimiento Qx
+            if (liquidaHonorarios=='ISS'):
+                pass
+
+            if (liquidaHonorarios == 'SOAT'):
+                pass
+
+            if (liquidaHonorarios == 'PARTICULAR'):
+                pass
+
+
+
+
+
 
         ## FIN CURSOR DETALLE FACTURA
 

@@ -865,14 +865,17 @@ WHERE prog.id = id
 -- ops los totales (OJOOOOOOOOO) el facturacion_liquidacion con error, y en algun lado me metio un registro de mas OJOOOOOOOOO PENDIENTE ELIMINARLO
 -- revisar traslados - los items anulados
 -- donde rayos coloco 'A' en columna anulkado de facturacion_liquidacion
-
 -- ops la impresion de una factua de cirugia ta mal hay que colocar honorario
-
--- al borrar una factura con glosa de 1 envio no me deja :("Cannot delete some instances of model 'RipsProcedimientos' because they are referenced through a protected foreign key: 'GlosasDetalle.ripsProcedimientos'", <QuerySet [<GlosasDetalle: GlosasDetalle object (19)>]>)
--- hay que crear el delete dr glosasdetalle
--- OJO DESDE CIRUGIA LOS MEDICAMNETOS SON MANUALES OPS Y LOS PROCEDIMIENTOS TAMBIEN NOP CREO NO ES NECESARIO PROBAR
-
--- ojop en el modulo de cirugia CREAR INSUMOS MEDICOS Y VAN A LA FACTURA--> van a la liquidacion
--- ojop el total del proced son la suma de los honoratios
--- y materialñes algunos matyeriales
 -- al facturar una cirugia toca dejar relizada la cirugia y no poder volver a cargas mas cosas en el modulo de ciorugia ni poder liquidacr de nuevo NO LE PARECVE
+
+-- El lunes 4 de Novielmre
+
+  -- Imprimir factura completa de cirugia
+  -- Crear Imprimir liquiacion de factura a partir de la Factura msima
+  -- Valiar los RPS de una cirugia - honorario AVERIGUAR MANUALES RIPS MINISTERIO SI HAY ALGO ESPECIAL
+  -- COMENZAR DESDE CEROS
+  -- Practicas PUESTA A PUNTA
+  -- Por ratos mejorar reportes y/o crear nuevos REPORTES
+  -- Ops medical*Report ACTUVARLO
+
+  -- INICIAR CONSULTA EXTERNA
