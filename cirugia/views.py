@@ -2316,7 +2316,7 @@ def GenerarLiquidacionCirugia(request):
 
                 #detalle = 'select sum(matqx."valorLiquidacion") valorLiquidacionMat  from cirugia_cirugiasmaterialqx matqx, facturacion_suministros sum, facturacion_tipossuministro tipos  , cirugia_cirugiasprocedimientos cirProc where matqx.cirugia_id= ' + "'" + str(cirugiaId) + "'" + ' and matqx.suministro_id = sum.id and sum."tipoSuministro_id" = tipos.id  AND tipos.id = ' + "'" + str(suministroMaterialQx) + "'" + 'and cirProc.id = matqx."cirugiaProcedimiento_id" and cirProc.cups_id= ' + "'" + str(procedimiento) + "'"
 
-                detalle = 'select matIss.homologado homologado1 , matIss.valorLiquidacionMat valorLiquidacionMat1 FROM clinico_examenes exa INNER JOIN tarifarios_tablamaterialsuturacuracioniss matIss on (matIss."desdeUvr" <= exa."cantidadUvr" AND matIss."hastaUvr" >= exa."cantidadUvr") INNER JOIN 	sitios_tipossalas tipsal ON (tipsal.id =matIss."tiposSala_id" and tipsal.id = ' + "'" + str(registroCirugia.sala_id) + "'" + ' ) WHERE exa.id = ' + "'" + str(procedimiento) + "'"
+                detalle = 'select matIss.homologado homologado1 , matIss.valor valorLiquidacionMat1 FROM clinico_examenes exa INNER JOIN tarifarios_tablamaterialsuturacuracioniss matIss on (matIss."desdeUvr" <= exa."cantidadUvr" AND matIss."hastaUvr" >= exa."cantidadUvr") INNER JOIN 	sitios_tipossalas tipsal ON (tipsal.id =matIss."tiposSala_id" and tipsal.id = ' + "'" + str(registroCirugia.sala_id) + "'" + ' ) WHERE exa.id = ' + "'" + str(procedimiento) + "'"
 
                 materialesQx = []
 
@@ -2505,29 +2505,12 @@ def GenerarLiquidacionCirugia(request):
                 for homologado, valor in cur3.fetchall():
                     valorSala.append({'homologado':homologado, 'valor': valor})
 
-                print("valor sala = " , valorSala[0])
-
-                for valorSala in valorSala[0]:
-
                     #valorSala = valorSala[0]
-                    valorsala = valorSala['valor']
-                    print("valor sala = ", valorSala)
 
-                    valorSala = str(valorSala)
-                    valorSala = valorSala.replace("(", ' ')
-                    valorSala = valorSala.replace(")", ' ')
-                    valorSala = valorSala.replace(",", ' ')
-                    print("valor sala = ", valorSala)
-                    liquidaValorSala = valorSala
-
-                    valorHomologado = valorSala['homologado']
-                    valorHomologado = str(valorHomologado)
-                    valorHomologado = valorHomologado.replace("(", ' ')
-                    valorHomologado = valorHomologado.replace(")", ' ')
-                    valorHomologado = valorHomologado.replace(",", ' ')
-                    print("valor valorHomologado = ", valorHomologado)
-                    liquidaValorHomologado = valorHomologado
-
+                    liquidaValorSala = valor
+                    liquidaValorHomologado = homologado
+                    print("liquidaValorSala = ", liquidaValorSala)
+                    print("liquidaValorHomologado = ", liquidaValorHomologado)
 
                 # Salas
                 #

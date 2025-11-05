@@ -96,10 +96,12 @@ ORDER BY 2,1
 comando = 'select exa."codigoCups" cups,tarProc."codigoHomologado" homologado, exa.nombre  descripcion, 1 cantidad,sum(detFac."valorUnitario") valorUnitario, sum(detFac."valorTotal") valorTotal FROM facturacion_facturaciondetalle detFac INNER JOIN facturacion_facturacion fac ON (fac.id=detFac.facturacion_id) INNER JOIN clinico_examenes exa on (exa.id=detFac.examen_id) INNER JOIN contratacion_convenios conv ON (conv.id=fac.convenio_id) LEFT JOIN tarifarios_tarifariosdescripcion tarDesc ON (tarDesc.id=conv."tarifariosDescripcionProc_id") LEFT JOIN tarifarios_tarifariosprocedimientos tarProc ON (tarProc."tiposTarifa_id"=tarDesc."tiposTarifa_id" AND tarProc."codigoCups_id" = detFac.examen_id ) where detfac.facturacion_id= '149' AND (detfac.anulado ='N' or detfac.anulado='R')  AND exa.concepto_id = '3' group by exa."codigoCups", tarProc."codigoHomologado",exa.nombre ORDER BY 2,1'
  
 -- HONORARIOS 
+	-- tocaria de a (2:4) o subselect, homologado y valor
 
-select detFac."tipoHonorario_id",tarIss."homologado" homologado, 
-	sum(detFac."valorTotal") valorTotal 
-	
+	select * from tarifarios_tiposhonorarios;
+
+select tipHono.id,
+(select 'Cod:'||' '||tarIss."homologado" ||' $ '||sum(detFac."valorTotal") 	
 	FROM facturacion_facturaciondetalle detFac
 	INNER JOIN facturacion_facturacion fac ON (fac.id=detFac.facturacion_id) 
 	INNER JOIN clinico_examenes exa on (exa.id=detFac.examen_id)
@@ -107,31 +109,73 @@ select detFac."tipoHonorario_id",tarIss."homologado" homologado,
 	INNER JOIN tarifarios_tablahonorariosiss tarIss ON (tarIss."tiposHonorarios_id" = detFac."tipoHonorario_id" )
 where detfac.facturacion_id= '149' AND (detfac.anulado ='N' or detfac.anulado='R')  AND exa.concepto_id = '3'
 	and detFac.examen_id= '4021' and tarIss."tiposHonorarios_id" = 1
-group by detFac."tipoHonorario_id", tarIss."homologado",exa.nombre
-
-	
-UNION
-select detFac."tipoHonorario_id",exa."codigoCups" cups,detFac."codigoHomologado" homologado, exa.nombre  descripcion, 1 cantidad,
-	sum(detFac."valorUnitario") valorUnitario, sum(detFac."valorTotal") valorTotal 
+group by tarIss."homologado",exa.nombre) CIRUJANO,
+(select 'Cod:'||' '||tarIss."homologado" ||' $ '||sum(detFac."valorTotal") 	
 	FROM facturacion_facturaciondetalle detFac
 	INNER JOIN facturacion_facturacion fac ON (fac.id=detFac.facturacion_id) 
 	INNER JOIN clinico_examenes exa on (exa.id=detFac.examen_id)
-	--INNER JOIN tarifarios_tablasalasdecirugiaiss tarSala ON (tarSala."desdeUvr"  <= exa."cantidadUvr" and tarSala."hastaUvr" >= exa."cantidadUvr"  AND tarSala."tipoHonorario_id" = detFac."tipoHonorario_id" )
 	INNER JOIN contratacion_convenios conv ON (conv.id=fac.convenio_id) 
-where detfac.facturacion_id= '149' And detFac."tipoHonorario_id" = 5 AND (detfac.anulado ='N' or detfac.anulado='R')  AND exa.concepto_id = '3'
-group by detFac."tipoHonorario_id",exa."codigoCups", detFac."codigoHomologado",exa.nombre
-UNION
-select detFac."tipoHonorario_id",exa."codigoCups" cups,tarMat."homologado" homologado, exa.nombre  descripcion, 1 cantidad,
-	sum(detFac."valorUnitario") valorUnitario, sum(detFac."valorTotal") valorTotal 
-	FROM facturacion_facturaciondetalle detFac
-	INNER JOIN facturacion_facturacion fac ON (fac.id=detFac.facturacion_id) 
-	INNER JOIN clinico_examenes exa on (exa.id=detFac.examen_id)
-	INNER JOIN tarifarios_tablamaterialsuturacuracioniss tarMat ON (tarMat."desdeUvr"  <= exa."cantidadUvr" and tarMat."hastaUvr" >= exa."cantidadUvr"  AND tarMat."tipoHonorario_id" = detFac."tipoHonorario_id" )
-	INNER JOIN contratacion_convenios conv ON (conv.id=fac.convenio_id) 
+	INNER JOIN tarifarios_tablahonorariosiss tarIss ON (tarIss."tiposHonorarios_id" = detFac."tipoHonorario_id" )
 where detfac.facturacion_id= '149' AND (detfac.anulado ='N' or detfac.anulado='R')  AND exa.concepto_id = '3'
-group by detFac."tipoHonorario_id",exa."codigoCups", tarMat."homologado",exa.nombre
-ORDER BY 2,1
- 
+	and detFac.examen_id= '4021' and tarIss."tiposHonorarios_id" = 2
+group by tarIss."homologado",exa.nombre) ANESTESIOLOGO,
+(select 'Cod:'||' '||tarIss."homologado" ||' $ '||sum(detFac."valorTotal") 	
+	FROM facturacion_facturaciondetalle detFac
+	INNER JOIN facturacion_facturacion fac ON (fac.id=detFac.facturacion_id) 
+	INNER JOIN clinico_examenes exa on (exa.id=detFac.examen_id)
+	INNER JOIN contratacion_convenios conv ON (conv.id=fac.convenio_id) 
+	INNER JOIN tarifarios_tablahonorariosiss tarIss ON (tarIss."tiposHonorarios_id" = detFac."tipoHonorario_id" )
+where detfac.facturacion_id= '149' AND (detfac.anulado ='N' or detfac.anulado='R')  AND exa.concepto_id = '3'
+	and detFac.examen_id= '4021' and tarIss."tiposHonorarios_id" = 3
+group by tarIss."homologado",exa.nombre) AYUDANTE,
+	(select 'Cod:'||' '||tarIss."homologado" ||' $ '||sum(detFac."valorTotal") 	
+	FROM facturacion_facturaciondetalle detFac
+	INNER JOIN facturacion_facturacion fac ON (fac.id=detFac.facturacion_id) 
+	INNER JOIN clinico_examenes exa on (exa.id=detFac.examen_id)
+	INNER JOIN contratacion_convenios conv ON (conv.id=fac.convenio_id) 
+	INNER JOIN tarifarios_tablahonorariosiss tarIss ON (tarIss."tiposHonorarios_id" = detFac."tipoHonorario_id" )
+where detfac.facturacion_id= '149' AND (detfac.anulado ='N' or detfac.anulado='R')  AND exa.concepto_id = '3'
+	and detFac.examen_id= '4021' and tarIss."tiposHonorarios_id" = 5
+group by tarIss."homologado",exa.nombre) SALAS
+FROM tarifarios_tiposhonorarios tipHono
+WHERE tipHono.nombre in ('CIRUJANO')
+ORDER BY tipHono.id
+
+tipoCirujano = TiposHonorarios.objects.get(nombre='CIRUJANO')
+tipoAnestesiologo = TiposHonorarios.objects.get(nombre='ANESTESIOLOGO')
+tipoAyudante =  TiposHonorarios.objects.get(nombre='AYUDANTE')
+tipoDerechosSala	=  TiposHonorarios.objects.get(nombre='DERECHOS DE SALA')
+	
+	
+comando =
+'select tipHono.id,(select ' + "'" + str('Cod:') + "'" + '||' + "' '||" + ' tarIss."homologado" ||' + "' $ '||" + 'sum(detFac."valorTotal") 	
+	FROM facturacion_facturaciondetalle detFac INNER JOIN facturacion_facturacion fac ON (fac.id=detFac.facturacion_id) 	INNER JOIN clinico_examenes exa on (exa.id=detFac.examen_id) INNER JOIN contratacion_convenios conv ON (conv.id=fac.convenio_id) 
+	 INNER JOIN tarifarios_tablahonorariosiss tarIss ON (tarIss."tiposHonorarios_id" = detFac."tipoHonorario_id" ) where detfac.facturacion_id= ' + "'" + str(factura) + "'" + ' AND (detfac.anulado =' + "'" + str('N') + "'" + ' or detfac.anulado=' + "'" + str('R') +"'" + '  AND exa.concepto_id = ' + "'" + str(concepto) + "'" +
+' and detFac.examen_id= ' + "'" + str(procedimiento) + "'" + ' and tarIss."tiposHonorarios_id" = tipoCirujano.id
+group by tarIss."homologado",exa.nombre) CIRUJANO, (select ' + "'" + str('Cod:' + "'||' '||" + 'tarIss."homologado" ||' + "'" + " $ '||" + ' sum(detFac."valorTotal") 	
+	FROM facturacion_facturaciondetalle detFac INNER JOIN facturacion_facturacion fac ON (fac.id=detFac.facturacion_id) 	INNER JOIN clinico_examenes exa on (exa.id=detFac.examen_id) INNER JOIN contratacion_convenios conv ON (conv.id=fac.convenio_id) 
+	INNER JOIN tarifarios_tablahonorariosiss tarIss ON (tarIss."tiposHonorarios_id" = detFac."tipoHonorario_id" )
+where detfac.facturacion_id= ' + str(factura) + "'" + ' AND (detfac.anulado =' + "'" + str('N') + "'" +' or detfac.anulado=' + "'" + str('R') + "'" + ' AND exa.concepto_id = ' + "'" + str(concepto) + "'" +
+	' and detFac.examen_id= ' + "'" + str(procedimiento) + "'" + ' and tarIss."tiposHonorarios_id" = tipoAnestesiologo.id group by tarIss."homologado",exa.nombre) ANESTESIOLOGO,
+(select ' + "'" + str('Cod:' + "'" + "||' '||" + 'tarIss."homologado" ||' + "' $ '||" + 'sum(detFac."valorTotal") 	
+	FROM facturacion_facturaciondetalle detFac INNER JOIN facturacion_facturacion fac ON (fac.id=detFac.facturacion_id)  INNER JOIN clinico_examenes exa on (exa.id=detFac.examen_id)
+	INNER JOIN contratacion_convenios conv ON (conv.id=fac.convenio_id) INNER JOIN tarifarios_tablahonorariosiss tarIss ON (tarIss."tiposHonorarios_id" = detFac."tipoHonorario_id" )
+where detfac.facturacion_id= ' + "'" + str(factura) + "'"  + ' AND (detfac.anulado =' + "'" + str('N') + "'" + ' or detfac.anulado=' + "'" + str('R') + "'" + ' AND exa.concepto_id = ' + "'" + str(concepto) + "'" +
+	' and detFac.examen_id= ' + "'" + str(procedimiento) + "'" + ' and tarIss."tiposHonorarios_id" = tipoAyudante.id
+group by tarIss."homologado",exa.nombre) AYUDANTE,	(select ' + "'" + str('Cod:' + "'" + "||' '||" + ' tarIss."homologado" ||' $ '||sum(detFac."valorTotal") 	
+	FROM facturacion_facturaciondetalle detFac
+	INNER JOIN facturacion_facturacion fac ON (fac.id=detFac.facturacion_id) 
+	INNER JOIN clinico_examenes exa on (exa.id=detFac.examen_id)
+	INNER JOIN contratacion_convenios conv ON (conv.id=fac.convenio_id) 
+	INNER JOIN tarifarios_tablahonorariosiss tarIss ON (tarIss."tiposHonorarios_id" = detFac."tipoHonorario_id" )
+where detfac.facturacion_id= '149' AND (detfac.anulado ='N' or detfac.anulado='R')  AND exa.concepto_id = '3'
+	and detFac.examen_id= '4021' and tarIss."tiposHonorarios_id" = tipoDerechosSala.id
+group by tarIss."homologado",exa.nombre) SALAS
+FROM tarifarios_tiposhonorarios tipHono
+WHERE tipHono.nombre in ('CIRUJANO')
+ORDER BY tipHono.id
+	
+	'
+	
 
 
-comando = 'select detFac."tipoHonorario_id", exa."codigoCups" cups,tarIss."homologado" homologado, exa.nombre  descripcion, 1 cantidad, sum(detFac."valorUnitario") valorUnitario, sum(detFac."valorTotal") valorTotal 	FROM facturacion_facturaciondetalle detFac INNER JOIN facturacion_facturacion fac ON (fac.id=detFac.facturacion_id) INNER JOIN clinico_examenes exa on (exa.id=detFac.examen_id) INNER JOIN contratacion_convenios conv ON (conv.id=fac.convenio_id) INNER JOIN tarifarios_tablahonorariosiss tarIss ON (tarIss."tiposHonorarios_id" = detFac."tipoHonorario_id" ) where detfac.facturacion_id= ' + "'" + str(factura) + "'" + ' AND (detfac.anulado =' + "'" + str('N') + "'"  + ' or detfac.anulado=' + "'2 + str('R') +"')" + '  AND exa.concepto_id = ' + "'2 + str(concepto) + ""'" + ' group by detFac."tipoHonorario_id",exa."codigoCups", tarIss."homologado",exa.nombre UNION select detFac."tipoHonorario_id",exa."codigoCups" cups,detFac."codigoHomologado" homologado, exa.nombre  descripcion, 1 cantidad, sum(detFac."valorUnitario") valorUnitario, sum(detFac."valorTotal") valorTotal FROM facturacion_facturaciondetalle detFac INNER JOIN facturacion_facturacion fac ON (fac.id=detFac.facturacion_id) INNER JOIN clinico_examenes exa on (exa.id=detFac.examen_id) INNER JOIN contratacion_convenios conv ON (conv.id=fac.convenio_id) where detfac.facturacion_id= ' + "'" + str(factura) + "'" + ' And detFac."tipoHonorario_id" = ' + "'" + str(honorarioSalas.id) + "'" + ' AND (detfac.anulado =' + "'" + str('N') + "'" + ' or detfac.anulado=' + "'" + str('R') + "')" + ' AND exa.concepto_id = ' + "'" + str(concepto) + "'" + ' group by detFac."tipoHonorario_id",exa."codigoCups", detFac."codigoHomologado",exa.nombre UNION select detFac."tipoHonorario_id",exa."codigoCups" cups,tarMat."homologado" homologado, exa.nombre  descripcion, 1 cantidad, sum(detFac."valorUnitario") valorUnitario, sum(detFac."valorTotal") valorTotal FROM facturacion_facturaciondetalle detFac INNER JOIN facturacion_facturacion fac ON (fac.id=detFac.facturacion_id) INNER JOIN clinico_examenes exa on (exa.id=detFac.examen_id) INNER JOIN tarifarios_tablamaterialsuturacuracioniss tarMat ON (tarMat."desdeUvr"  <= exa."cantidadUvr" and tarMat."hastaUvr" >= exa."cantidadUvr"  AND tarMat."tipoHonorario_id" = detFac."tipoHonorario_id" ) INNER JOIN contratacion_convenios conv ON (conv.id=fac.convenio_id) where detfac.facturacion_id= ' + "'" + str(factura) + "'" + ' AND (detfac.anulado =' + "'" + str('N') + "'" +' or detfac.anulado=' + "'" + str('R') + "')" + '  AND exa.concepto_id = ' + "'" + str(concepto) + "'" + ' group by detFac."tipoHonorario_id",exa."codigoCups", tarMat."homologado",exa.nombre ORDER BY 2,1'
