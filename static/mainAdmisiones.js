@@ -1261,8 +1261,10 @@ function AUsuario()
 	var centrosc = document.getElementById("centrosc").value;
 	var tiposUsuario = document.getElementById("tiposUsuario").value;
 	var centrosC_id = document.getElementById("centrosc").value;
+	var ripsZonaTerritorial = document.getElementById("ripsZonaTerritorial").value;
 
-//	alert("centroC_id = " +  centrosC_id);
+	alert("ripsZonaTerritorial = " + ripsZonaTerritorial);
+
 
 if (genero =='')
 		{
@@ -1372,7 +1374,8 @@ if (genero =='')
 		            'localidades':localidad,
 		            'estadoCivil':estadoCivil,
 		            'ocupaciones':ocupacion,
-		            'correo':correo},
+		            'correo':correo,
+			    'ripsZonaTerritorial':ripsZonaTerritorial},
 
 		success: function (respuesta) {
 

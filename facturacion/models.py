@@ -546,7 +546,7 @@ class LiquidacionDetalle(models.Model):
     cirugia = models.ForeignKey('cirugia.Cirugias', blank=True,null= True, editable=True, on_delete=models.PROTECT, related_name='Ciru0111')
     fechaCrea = models.DateTimeField(editable=True, null=True, blank=True)
     tipoRegistro = models.CharField(max_length=20,  blank=True, null=True, editable=True, choices = TIPOREGISTRO_CHOICES)
-    tipoHonorario =  models.ForeignKey('tarifas.TiposHonorarios', blank=True,null= True, editable=True, on_delete=models.PROTECT, related_name='TipoHonorario091')
+    tipoHonorario =  models.ForeignKey('tarifarios.TiposHonorarios', blank=True,null= True, editable=True, on_delete=models.PROTECT, related_name='TipoHonorario091')
     #usuarioCrea = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True, on_delete=models.PROTECT, related_name='Planta120') 
     fechaModifica = models.DateTimeField(editable=True, null=True, blank=True)
     usuarioModifica = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True, on_delete=models.PROTECT, related_name='Planat121') 

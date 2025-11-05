@@ -251,6 +251,7 @@ class TablaMaterialSuturaCuracion(models.Model):
     homologado = models.CharField(max_length=8,  blank=True, null=True, editable=True)
     grupoQx =  models.ForeignKey('tarifarios.GruposQx', blank=True, null=True, editable=True,   on_delete=models.PROTECT)
     smldv = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True, editable=True)
+    minimosLegales = models.ForeignKey('tarifarios.MinimosLegales', blank=True, null=True, editable=True,   on_delete=models.PROTECT)
     cruento = models.CharField(max_length=1, blank=True, null=True ,editable=False)
     fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)
     usuarioRegistro = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True,    on_delete=models.PROTECT)
