@@ -1330,12 +1330,11 @@ function guardaTriageModal()
 
 function guardarAdmisionTriage()
 {
-	alert("VOY A GUSRDAR ADMISION DESDE TRIAGE");
-
+	
 	var tiposDoc = document.getElementById("tiposDoc2").value;
-	alert("tiposDoc = " +  tiposDoc);
+	// alert("tiposDoc = " +  tiposDoc);
 	var documento = document.getElementById("busDocumentoSel2").value;
-	alert("documento = " +  documento);
+	// alert("documento = " +  documento);
   	var busServicio2 = document.getElementById("busServicio2").value;
   	var busSubServicio2 = document.getElementById("busSubServicio2").value;
   	var dependenciasIngreso = document.getElementById("dependenciasIngreso").value;
@@ -1362,7 +1361,7 @@ function guardarAdmisionTriage()
     var escogeModulo = document.getElementById("escogeModulo").value;
 
      var ripsServiciosIng = document.getElementById("ripsServiciosIng").value;
-     alert(" Envio ripsServiciosIng = " + ripsServiciosIng);
+//     alert(" Envio ripsServiciosIng = " + ripsServiciosIng);
     var ripsPesoRecienNacido = document.getElementById("ripsPesoRecienNacido").value;
      var ripsmodalidadGrupoServicioTecSal = document.getElementById("ripsmodalidadGrupoServicioTecSal").value;
     var ripsViaIngresoServicioSalud = document.getElementById("ripsViaIngresoServicioSalud").value;
@@ -1375,10 +1374,15 @@ function guardarAdmisionTriage()
     var ripsDestinoUsuarioEgresoRecienNacido = document.getElementById("ripsDestinoUsuarioEgresoRecienNacido").value;
 
 
-	alert("Voy a guardar crear adnmision TRIAGE con empresa = " + empresasT);
+	// alert("Voy a guardar crear adnmision TRIAGE con empresa = " + empresasT);
+        alert("ripsServiciosIng = " + ripsServiciosIng);
 
-
-
+      if (ripsServiciosIng='')
+	{
+	document.getElementById("mensajesErrorModalCreaAdmisionTriage").value = 'Campo RIPS servicio de Ingreso Obligatorio'
+       return;
+	}
+	
 
 	alert("Voy AJAX ");
 

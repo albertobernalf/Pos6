@@ -21,8 +21,6 @@ delete from farmacia_farmaciadespachos; --1
 delete from farmacia_farmacia; --62
 delete from autorizaciones_autorizacionesdetalle;   -- 5
 delete from autorizaciones_autorizaciones;   -- 5
-
-
 delete from clinico_historiamedicamentos;   -- 156
 delete from clinico_historiaoxigeno;   -- 0
 delete from clinico_historiarevisionsistemas;   -- 0
@@ -33,20 +31,19 @@ delete from enfermeria_notasenfermeria; -- 0
 delete from enfermeria_signosenfermeria; -- 0
 delete from enfermeria_turnosenfermeria; -- 3
 delete from enfermeria_enfermeria; -- 62
+delete from clinico_historialenfermedades;
+delete from cirugia_cirugiasmaterialqx; -- 20
+delete from cirugia_cirugiasparticipantes; --18
+delete from cirugia_cirugiasprocedimientos;--21
+delete from cirugia_programacioncirugias; -- 9
+delete from cirugia_cirugias;
 delete from clinico_historia;   -- 275
- 
 delete from sitios_historialdependencias;   -- 94
 update sitios_dependencias set "tipoDoc_id" = null, documento_id=null,consec = null,"fechaLiberacion"=null,"fechaOcupacion"=null,disponibilidad='L'  -- 44
 delete from cartera_pagosfacturas;    -- 5
 delete from cartera_pagos;   -- 8
 delete from admisiones_furips;   -- 0
-delete from admisiones_ingresos;   -- 86
-delete from triage_triage  -- 26
-delete from autorizaciones_autorizacionesdetalle; -- 0
-delete from autorizaciones_autorizacionescirugias; -- 0
-delete from autorizaciones_autorizaciones; -- 0
-delete from facturacion_conveniospacienteingresos;   -- 18
-
+delete from cartera_glosasdetalle;
 delete from rips_ripsprocedimientos;    -- 4
 delete from rips_ripshospitalizacion;  --1
 delete from rips_ripsmedicamentos;   --3
@@ -55,16 +52,20 @@ delete from rips_ripsreciennacido;   --4
 delete from rips_ripsurgenciasobservacion;   --3
 delete from rips_ripsusuarios;   --4
 delete from rips_ripsdetalle;   ---4
-delete from cartera_glosas;   --2
-delete from cartera_caja;   --2
-delete from facturacion_facturacion;  -- 4
 delete from rips_ripstransaccion;   -- 4
+delete from cartera_glosas;
+delete from cartera_caja;   --2
+delete from facturacion_conveniospacienteingresos;
+delete from facturacion_facturacion;  -- 4
 delete from rips_ripsenvios;  -- 9
+delete from admisiones_ingresos;   -- 86
+delete from triage_triage  -- 26
+delete from autorizaciones_autorizacionesdetalle; -- 0
+delete from autorizaciones_autorizacionescirugias; -- 0
+delete from autorizaciones_autorizaciones; -- 0
+delete from facturacion_conveniospacienteingresos;   -- 18
 delete from clinico_historialinterconsultas;   -- 0
-delete from cirugia_cirugiasmaterialqx; -- 20
-delete from cirugia_cirugiasparticipantes; --18
-delete from cirugia_cirugiasprocedimientos;--21
-delete from cirugia_programacioncirugias; -- 9
-  
+delete from admisiones_ingresos;
+delete from triage_triage;
 select * from sitios_dependencias;
   

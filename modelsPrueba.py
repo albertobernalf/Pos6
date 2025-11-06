@@ -802,31 +802,23 @@ class ProgramacionCitasMedicas(models.Model):
    fe por un  proceso de autporizacion de mediamentos , en cambio el rips si estarria bien. Mirar el martes 14de oct
 
 -- martes 14 de octubre:
---  LO MEJoR ES crear pestaña enviados y alli se deja la opcion de radicacion, tambien se cra modal para recepcionar la respuesta del envio
-    y creo eso es todo el proceso
+
 -- crear la pestaña -- Auditoria Rips vs facturacion items
 -- pruebas de rips con abonos
--- pruebas de rips con recien nacidos
 -- armar el json de envio y que impriema a partir del jsonFacturas
 -- crear parametros de ruta para almacenar archivos json y toda la facturacion electronica
--- como validar los JSON de rips
--- seguir con cirugia
 
 -- TIPS BOLIVIA
 	-- tamañpo de letra font mas grande en todo
   	-- Solo admisiones admisiona No triage
 	-- los diagnosticos no estan al ingreso d ela admsion
 	--- el eror de paula de foreign key m,edioc invalido al dar salidad clinica que paso ??
-
- 
 	
 --  FIN TIPS BOLIVIA
 
 -- RIPS
   -- COMO se hace con los ambulatorios
   -- se esta trabajando jsos indicidualk despues se pasan los script a la funcion de envioGRAL
-
-
 -- cuando cree un aplique de abono debre refrescar la pantalla liquidaciondetalle
 -- ojo camellar el modulo de abonos
 
@@ -838,22 +830,9 @@ class ProgramacionCitasMedicas(models.Model):
 -- hacer ripmedicamentos , hay mucho null por cua. (En el suministro debe estar parametrizado todos los datos de acuerdo  a toidas las tablas rips
 
 
--- CIRUGIA QUERY TENTATIVO DISPONIBILIDAD
-
-SELECT prog.numero,prog."fechaProgramacionFin",prog."horaProgramacionFin" + 1, (SELECT cast(prog1."fechaProgramacionInicia", prog1."horaProgramacionInicia" + 1 
-										FROM cirugia_programacioncirugia prog1 
-										WHERE prog1.id = (SELECT min(prog2.id )  
-										  		  FROM cirugia_programacioncirugia prog2
-												  WHERE prog2.id > prog.id))
-FROM cirugia_programacioncirugia prog
-WHERE prog.id = id
-
-
 -- OPS OJO CUANDO HICO EL MEDIAMENTO D EMARIA PAULA NO COLOCO EL NHUMERO DE HISTORIAMEDIAMENTO, SUPONGO FARMACIA AL DISPENSAR OPSREOPS
--- ojo el ripsonaTerritorial_id de susuario_usuarios toca capturarlo en usuarios es para rips
 -- esta pendiente--> mas info para ripsmedicamentos
 -- verificar ripsreciennacidos de acuredo mingov.vo
--- volver  a verificar ripsemvio masivo
 
 -- falto mirar el detalle de los rips medicamentos, unidades, formasfarmaceuticas, etc
 -- ojo hay que hacer un conciertazo , orquestado de todo el proceso glosa rips, enviado,con json , respyuesta etc que no quede mal
@@ -865,17 +844,27 @@ WHERE prog.id = id
 -- ops los totales (OJOOOOOOOOO) el facturacion_liquidacion con error, y en algun lado me metio un registro de mas OJOOOOOOOOO PENDIENTE ELIMINARLO
 -- revisar traslados - los items anulados
 -- donde rayos coloco 'A' en columna anulkado de facturacion_liquidacion
--- ops la impresion de una factua de cirugia ta mal hay que colocar honorario
 -- al facturar una cirugia toca dejar relizada la cirugia y no poder volver a cargas mas cosas en el modulo de ciorugia ni poder liquidacr de nuevo NO LE PARECVE
 
 -- El lunes 4 de Novielmre
 
-  -- Imprimir factura completa de cirugia
-  -- Crear Imprimir liquiacion de factura a partir de la Factura msima
   -- Valiar los RPS de una cirugia - honorario AVERIGUAR MANUALES RIPS MINISTERIO SI HAY ALGO ESPECIAL
-  -- COMENZAR DESDE CEROS
   -- Practicas PUESTA A PUNTA
   -- Por ratos mejorar reportes y/o crear nuevos REPORTES
   -- Ops medical*Report ACTUVARLO
+-- Falta los rips_otrosservcios, ripsconsulta
+
 
   -- INICIAR CONSULTA EXTERNA
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------
+ --------------------- INICIOS PUESTA A PUNTO SOFTWARE (Detalle y Complejidad) FASE INICIAL LA MAS DURA DEL PROYECTO ---------------------------
+-------- ES EL RESULTADO REAL DEL AÑO Y MEDIO DE PROYECTO.. Ojo las Facturas y Los rips Puros sin errores
+-------- ENFOQUES DE PUESTA A PUNTO: 1.- Acceder de cualquier forma 2.- Los datos correctos como debe ser . 3. Creo es una puesta apunta de facturtacion: abonos, totales , tot facturas CORREGIR
+------------------------------------------------------------------------------------------------------------------------------------------------
+
+  -- Los combos desde HC, domnde solicita cirugia para el paciente estan corn error str() + !! ??
+ -- Apenas aplico-grabo un abono no refresca saldo ( OJO SOLO EL refresh de las pantallas, liquidaciondetalle, porque si grabo bien los totales en liquidacion
+ -- Cuando uno refresca en liquidacindetalle la cuneta, no refresca la cabecera, por ejemplo si tengo cambio de cama no lo refresca, sinmo solo hasta que selecciono de nuevo la cuenta
+ -- hay que aregla la pantalla clinico, el datatable de interconsultas algo pasa allip - pailas

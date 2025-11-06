@@ -2264,7 +2264,7 @@ def crearHistoriaClinica(request):
                                     solicitaMalla) + "','" + str(solicitaOtros) + "','" + str(describeOtros) + "','" + str(
                                     tiempoMaxQx) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(
                                     anestesia) + "','" + str(registroIngreso.documento_id) + "','" + str(dxPreQx) + "','" + str(
-                                    dxPrinc) + "','" + str(dxRel1) + "','" + str(espMedico) + "','" + str(
+                                    dxPrinc) + "','" + str(dxRel1) + "','" + str(especialidadId.especialidades_id) + "','" + str(
                                     sedesClinica_id) + "','" + str(registroIngreso.tipoDoc_id) + "','" + str(
                                     username) + "','" + str(username) + "','" + str(serviciosAdministrativos) + "','" + str(
                                     estadoProgramacion.id) + "','" + str(tiposCirugia) + "','" + str(estadoCirugia.id) + "','" + str(historiaId) + "','N')"

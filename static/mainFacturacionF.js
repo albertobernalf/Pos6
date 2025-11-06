@@ -1142,6 +1142,8 @@ window.addEventListener('load', async () => {
 		document.getElementById("pdocumentoXml").innerHTML = data.documento;
 		document.getElementById("pacienteXml").innerHTML = data.paciente;
 		document.getElementById("consecAdmisionXml").innerHTML = data.consecAdmision;
+		document.getElementById("textoXml").value = data.Xml;
+
 
 		 $('#Rfactura').val(data.factura);
 		 $('#RfechaFactura').val(data.fechaFactura);
@@ -2463,9 +2465,11 @@ $(document).on('change', '#ldvalorUnitario', function(event) {
 function GenerarXml()
 {
 
-	 alert ("Entre GenerarXml ");
 
- 	var facturaId = document.getElementById("facturaXml").value;
+
+ 	var facturaId = document.getElementById("facturaXml").innerHTML;
+	
+
  	var textoXml = document.getElementById("textoXml").value;
 
 
@@ -2477,9 +2481,16 @@ function GenerarXml()
 	           dataType : 'json',
 	  		success: function (data) {
 
-		// $('#totalCopagos').val(data.totalCopagos);
+	if (data.success == true)
+			 {
+			  document.getElementById("mensajes").value = data.Mensajes;
+			 }
+			else
+			{
+			document.getElementById("mensajesError").valueL = data.Mensajes;
+			return;
+			}
 
-			document.getElementById("mensajesError").value = data.Mensajes;
                   },
 	   	                    error: function(data){
 		       		document.getElementById("mensajesError").value =  data.responseText
