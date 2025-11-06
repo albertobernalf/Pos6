@@ -17,6 +17,7 @@
         <li><a href="#Abonos"><span class="fa-solid fa-user-doctor-message"></span> <span  class="tab-text"> </span>Abonos</a></li>
         <li><a href="#Traslados"><span class="fa-solid fa-user-doctor-message"></span> <span  class="tab-text"> </span>Traslados</a></li>	
         <li><a href="#ReTomeFacturacion"><span class="fa-solid fa-user-doctor-message"></span> <span  class="tab-text"> </span>Refacturadas</a></li>
+  
 
 
     </ul>
@@ -1260,7 +1261,75 @@ div.dataTables_filter input {
 
 </article>
 
+<article id="GeneracionJsonXml">
 
+       <form id="postFormGenerarXml" name="postFormGenerarXml" class="form-horizontal"
+                                  novalidate>
+							
+				  <div class="row row-cols-10" style="height=30px;">
+						
+					<div class="col">		  		   
+						 Fecha:
+						<span id="fechaXml" name="fechaXml"></span>
+                                         	                          
+                                      </div>
+
+					<div class="col">		  		   
+						 Fecha:
+						<span id="facturaXml" name="facturaXml"></span>                                         	                          
+                                      </div>
+
+					<div class="col">
+						Doc:						
+							<span id="tipoDocXml" name="tipoDocXml"></span>
+          	                           
+                                      </div>
+					<div class="col">						
+							<span id="pdocumentoXml" name="pdocumentoXml"></span>
+          	                          
+                                      </div>
+
+					<div class="col">
+					 Nombre:				
+					<span id="pacienteXml" name="pacienteXml"></span>          	                           
+                                      </div>
+
+					<div class="col">
+						 Consec:						
+						<span id="consecAdmisionXml" name="consecAdmisionXml"></span>          	                           
+                                      </div>
+
+
+     		  </div> <!-- Cierra ro de 8 columnas -->
+
+	</br>
+	</br>
+	
+
+				<div class="row row-cols-1" style="height=70px;">
+
+				
+				<div style="display: flex;">
+			
+                                    JSON :
+					<textarea id="textoJson" name="textoJsonP"   cols="80" rows="28"></textarea>                                                       
+			
+                                    XML :
+					<textarea id="textoXml" name="textoXml"   cols="80" rows="28"></textarea>
+                                 
+                              	</div>
+ 				
+
+                                <div class="col-1">
+					<center>
+                                    <button type="button" class="btn btn-primary" id="GenerarBotXml" name="GenerarBotXml"  value="GenerarBotXml" onclick="GenerarXml()">Crear </button>
+					</center>
+                                </div>
+                                </div> <!-- CIERRA ROW 8 COLUMNAS  -->
+
+                            </form>
+
+</article>
 
 
 <article id="FacturacionDetalle">

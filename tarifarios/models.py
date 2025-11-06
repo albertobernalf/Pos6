@@ -288,6 +288,7 @@ class TablaSalasDeCirugia(models.Model):
     tiposTarifaProducto = models.ForeignKey('tarifarios.TiposTarifaProducto', blank=True, null=True, editable=True,   on_delete=models.PROTECT)
     homologado = models.CharField(max_length=8,  blank=True, null=True, editable=True)
     grupoQx =  models.ForeignKey('tarifarios.GruposQx', blank=True, null=True, editable=True,   on_delete=models.PROTECT)
+    tipoHonorario = models.ForeignKey('tarifarios.TiposHonorarios', blank=True,null= True, editable=True, on_delete=models.PROTECT , related_name='TipoHonorario14452')
     smldv = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True, editable=True)
     cruento = models.CharField(max_length=1, blank=True, null=True ,editable=False)
     fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)

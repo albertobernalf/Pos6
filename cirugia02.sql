@@ -66,14 +66,18 @@ select * from tarifarios_tablahonorariosiss;
 SELECT * FROM tarifarios_tablasalasdecirugiaiss
 select * from tarifarios_tiposhonorarios;
 select * from tarifarios_tablamaterialsuturacuracion;
+update tarifarios_tablamaterialsuturacuracion set "minimosLegales_id" =3
 select * from clinico_examenes; -- grupoQx_id
+select * from tarifarios_minimoslegales;
 
-select matSoat.homologado homologado1 , matSoat.smldv valorLiquidacionMat1 
+select matSoat.homologado homologado1 , matSoat.smldv * minLeg.valor/30    valorLiquidacionMat1 
 FROM clinico_examenes exa 
-INNER JOIN tarifarios_tablamaterialsuturacuracion matSoat on (matSoat."grupoQx_id" <= exa."cantidadUvr" AND matIss."hastaUvr" >= exa."cantidadUvr")
-INNER JOIN 	sitios_tipossalas tipsal ON (tipsal.id =matIss."tiposSala_id" and tipsal.id = ' + "'" + str(registroCirugia.sala_id) + "'" + ' ) 
+INNER JOIN tarifarios_tablamaterialsuturacuracion matSoat on (matSoat."grupoQx_id" = exa."grupoQx_id")
+INNER JOIN 	tarifarios_minimoslegales minLeg ON (minLeg.id =matSoat."minimosLegales_id") 
 WHERE exa.id = ' + "'" + str(procedimiento) + "'"
 
+	
+detalle ='select matSoat.homologado homologado1 , matSoat.smldv * minLeg.valor/30 valorLiquidacionMat1 FROM clinico_examenes exa INNER JOIN tarifarios_tablamaterialsuturacuracion matSoat on (matSoat."grupoQx_id" = exa."grupoQx_id") INNER JOIN 	tarifarios_minimoslegales minLeg ON (minLeg.id =matSoat."minimosLegales_id") WHERE exa.id = ' + "'" + str(procedimiento) + "'"	
 
 					
 select * from facturacion_conceptos;
@@ -215,3 +219,34 @@ FROM facturacion_facturaciondetalle detFac
 INNER JOIN facturacion_facturacion fac ON (fac.id=detFac.facturacion_id) 
 INNER JOIN clinico_examenes exa on (exa.id=detFac.examen_id) 
 	INNER JOIN contratacion_convenios conv ON (conv.id=fac.convenio_id) LEFT JOIN tarifarios_tarifariosdescripcion tarDesc ON (tarDesc.id=conv."tarifariosDescripcionProc_id") LEFT JOIN tarifarios_tarifariosprocedimientos tarProc ON (tarProc."tiposTarifa_id"=tarDesc."tiposTarifa_id" AND tarProc."codigoCups_id" = detFac.examen_id ) where detfac.facturacion_id= '150' AND (detfac.anulado ='N' or detfac.anulado='R') AND exa.concepto_id = '16' ORDER BY exa."codigoCups"	
+
+
+	select * from tarifarios_tablahonorariossoat
+	select "tipoDoc_id",* from usuarios_usuarios;
+
+	select * from cirugia_programacioncirugias;
+	update cirugia_programacioncirugias set cirugia_id = 37 where id=25
+
+	select * from cirugia_cirugias -- 37
+	select * from cirugia_cirugiasMaterialqx
+	
+	SELECT p."cirugiaProcedimiento_id" id,sum.nombre nombre 
+	FROM cirugia_cirugiasMaterialqx p
+	INNER JOIN cirugia_cirugiasprocedimientos cirMat ON (cirMat.id=p."cirugiaProcedimiento_id") 
+	INNER JOIN facturacion_suministros sum on (sum.id= p.suministro_id)
+	where p.cirugia_id = '37'
+
+	select * from facturacion_liquidaciondetalle
+	select * from cirugia_cirugiasprocedimientos
+	select "grupoQx_id", * from clinico_examenes where id in (4021,1551,2790,1909)
+
+	update clinico_examenes set "grupoQx_id" = 12 where id=2790
+	-- este insert fracas:
+
+	INSERT INTO facturacion_liquidaciondetalle (consecutivo,fecha, cantidad, "valorUnitario", "valorTotal", "estadoRegistro", "fechaCrea", "fechaRegistro",  "examen_id",  "usuarioRegistro_id", liquidacion_id, "tipoRegistro", "tipoHonorario_id", cirugia_id, anulado,  "codigoHomologado") VALUES ('28','2025-11-05 21:29:48.097517+00:00','1','495852.5000','495852.5000','A','2025-11-05 21:29:48.097517+00:00','2025-11-05 21:29:48.097517+00:00','1909','1', 296  ,'SISTEMA','5','37','N','39207')
+
+	select "tipoHonorario_id",* from facturacion_liquidaciondetalle order by id desc
+	delete from facturacion_liquidaciondetalle where id = 2583
+
+	select * from tarifarios_tiposhonorarios
+	select matqx.suministro_id suministro, sum.nombre nomSuministro , tipos.nombre tipo ,matqx.cantidad cantidad, matqx."valorLiquidacion" valorLiquidacionMat from cirugia_cirugiasmaterialqx matqx, facturacion_suministros sum, facturacion_tipossuministro tipos where matqx.cirugia_id= '37' and matqx.suministro_id = sum.id and sum."tipoSuministro_id" = tipos.id AND tipos.id != '10'

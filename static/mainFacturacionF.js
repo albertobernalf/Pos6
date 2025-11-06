@@ -106,7 +106,7 @@ function arrancaLiquidacion(valorTabla,valorData)
 		"render": function ( data, type, row ) {
                         var btn = '';
 
-	  btn = btn + " <button class='ImprimirCuenta btn-primary ' data-pk='" + row.pk + "'>" + '<i class=""fa-duotone fa-solid fa-print""></i>' + "</button>";
+	  btn = btn + " <button class='ImprimirCuenta btn-primary ' style='width:15px;height:15px;accent-color: purple;border-color: purple;background-color: purple;' data-pk='" + row.pk + "'>" + '<i class=""fa-duotone fa-solid fa-print""></i>' + "</button>";
 
                        return btn;
 		}
@@ -368,7 +368,7 @@ autoWidth: false,
 		"render": function ( data, type, row ) {
                         var btn = '';
 
-	  btn = btn + " <button class='ImprimirFactura btn-primary ' data-pk='" + row.pk + "'>" + '<i class=""fa-duotone fa-solid fa-print""></i>' + "</button>";
+	  btn = btn + " <button class='ImprimirFactura btn-primary ' style='width:15px;height:15px;accent-color: purple;border-color: purple;background-color: purple;'  data-pk='" + row.pk + "'>" + '<i class=""fa-duotone fa-solid fa-print""></i>' + "</button>";
 
                        return btn;
 		}
@@ -1054,6 +1054,53 @@ window.addEventListener('load', async () => {
 
 
 
+        $('body').on('click', '.ImprimirCuenta', function () {
+
+	          var post_id = $(this).data('pk');
+		var row = $(this).closest('tr'); // Encuentra la fila
+
+		// alert("ImprimirFactura entre pk = " + post_id);
+
+        var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
+        var username = document.getElementById("username").value;
+        var nombreSede = document.getElementById("nombreSede").value;
+    	var sede = document.getElementById("sede").value;
+        var username_id = document.getElementById("username_id").value;
+
+
+
+	var ingresoId = post_id;
+
+	$.ajax({
+	           url: '/imprimirLiquidacion/',
+	            data : {ingresoId:ingresoId},
+	           type: 'POST',
+	           dataType : 'json',
+	  		success: function (data) {
+
+			if (data.success == true)
+			 {
+			  document.getElementById("mensajes").value = data.Mensajes;
+			 }
+			else
+			{
+			document.getElementById("mensajesError").value = data.Mensajes;
+			return;
+			}
+
+			 $('#pk').val(data.pk);
+		       	     
+
+                  },
+	   	        error: function(data){
+		       		document.getElementById("mensajesError").value =  data.responseText
+			        },
+	     });
+
+        });
+
+
+
 
 	/*--------------------------------------------
         Click to Edit Button PostFacturacon
@@ -1089,7 +1136,12 @@ window.addEventListener('load', async () => {
 		$('#AestadoFactura').val(data.estadoReg);
 		$('#Aanulado').val(data.anulado);
 
-
+		document.getElementById("facturaXml").innerHTML = data.factura;
+		document.getElementById("fechaXml").innerHTML = data.fechaFactura;
+		document.getElementById("tipoDocXml").innerHTML = data.tipoDoc;
+		document.getElementById("pdocumentoXml").innerHTML = data.documento;
+		document.getElementById("pacienteXml").innerHTML = data.paciente;
+		document.getElementById("consecAdmisionXml").innerHTML = data.consecAdmision;
 
 		 $('#Rfactura').val(data.factura);
 		 $('#RfechaFactura').val(data.fechaFactura);
@@ -2407,4 +2459,32 @@ $(document).on('change', '#ldvalorUnitario', function(event) {
 });
 
 
+
+function GenerarXml()
+{
+
+	 alert ("Entre GenerarXml ");
+
+ 	var facturaId = document.getElementById("facturaXml").value;
+ 	var textoXml = document.getElementById("textoXml").value;
+
+
+		$.ajax({
+	           url: '/generarXml/',
+	            data :
+	            {'facturaId':facturaId,'textoXml':textoXml},
+	           type: 'POST',
+	           dataType : 'json',
+	  		success: function (data) {
+
+		// $('#totalCopagos').val(data.totalCopagos);
+
+			document.getElementById("mensajesError").value = data.Mensajes;
+                  },
+	   	                    error: function(data){
+		       		document.getElementById("mensajesError").value =  data.responseText
+			        },
+
+	     });
+}
 

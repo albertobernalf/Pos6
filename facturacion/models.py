@@ -368,6 +368,7 @@ class Facturacion(models.Model):
     cufeValor =   models.DecimalField( max_digits=15, decimal_places=2 , blank=True,null= True, editable=True)
     codigoQr = models.CharField(max_length=100, blank=True,null= True, editable=True,)
     rutaQr =  models.CharField(max_length=100, blank=True,null= True, editable=True,)
+    rutaJson = models.CharField(max_length=100, blank=True,null= True, editable=True,)
     rutaXml = models.CharField(max_length=100, blank=True,null= True, editable=True,)
     rutaAd =  models.CharField(max_length=1000, blank=True,null= True, editable=True,)
     rutaXmlFirmado =  models.CharField(max_length=1000, blank=True,null= True, editable=True,)

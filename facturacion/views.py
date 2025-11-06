@@ -1513,7 +1513,7 @@ def FacturarCuenta(request):
 
         # AHORA EL DETALLE
 
-        comando5 = 'INSERT INTO facturacion_facturaciondetalle ("consecutivoFactura", fecha, cantidad, "valorUnitario", "valorTotal",  cirugia_id , "fechaCrea", "fechaModifica", observaciones, "fechaRegistro", "estadoRegistro", "examen_id", cums_id, "usuarioModifica_id", "usuarioRegistro_id", facturacion_id, "tipoHonorario_id", "tipoRegistro", anulado, "historiaMedicamento_id","codigoHomologado") SELECT  consecutivo, fecha, cantidad, "valorUnitario", "valorTotal",  cirugia_id , "fechaCrea", "fechaModifica", observaciones, "fechaRegistro", "estadoRegistro", "examen_id", cums_id, "usuarioModifica_id", "usuarioRegistro_id", ' + str(facturacionId) + ', "tipoHonorario_id", "tipoRegistro", anulado , "historiaMedicamento_id" FROM facturacion_liquidaciondetalle WHERE liquidacion_id =  ' + liquidacionId + ' AND "estadoRegistro" != ' + "'" + str('N') + "'" + ', "codigoHomologado"'
+        comando5 = 'INSERT INTO facturacion_facturaciondetalle ("consecutivoFactura", fecha, cantidad, "valorUnitario", "valorTotal",  cirugia_id , "fechaCrea", "fechaModifica", observaciones, "fechaRegistro", "estadoRegistro", "examen_id", cums_id, "usuarioModifica_id", "usuarioRegistro_id", facturacion_id, "tipoHonorario_id", "tipoRegistro", anulado, "historiaMedicamento_id","codigoHomologado") SELECT  consecutivo, fecha, cantidad, "valorUnitario", "valorTotal",  cirugia_id , "fechaCrea", "fechaModifica", observaciones, "fechaRegistro", "estadoRegistro", "examen_id", cums_id, "usuarioModifica_id", "usuarioRegistro_id", ' + str(facturacionId) + ', "tipoHonorario_id", "tipoRegistro", anulado , "historiaMedicamento_id", "codigoHomologado"  FROM facturacion_liquidaciondetalle WHERE liquidacion_id =  ' + liquidacionId + ' AND anulado != ' + "'" + str('S') + "'"
         print(comando5)
         cur3.execute(comando5)
 
@@ -2613,4 +2613,49 @@ def load_dataReFacturacion(request, data):
     serialized1 = json.dumps(reFacturacion, default=serialize_datetime)
 
     return HttpResponse(serialized1, content_type='application/json')
+
+
+
+def GenerarXml(request):
+    print ("Entre a GenerarXml" )
+
+    facturaId = request.POST["facturaId"]
+    textoXml = request.POST["textoXml"]
+    print("facturaId = ", facturaId)
+
+    carpeta = 'C:\EntornosPython\Pos6\JSONCLINICA\Facturas/XML/'
+    print("carpeta = ", carpeta)
+
+    nombre_archivo = carpeta + '' + 'Factura_' + str(facturaId) + '.xml'
+    print("nombre_archivo =", nombre_archivo)
+
+
+    # Abro Conexion
+
+    miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",password="123456")
+    cur = miConexionx.cursor()
+
+    comando = 'UPDATE facturacion_facturacion SET "rutaXml" = ' + "'" + str(nombre_archivo) + "'" + ' WHERE id = ' + "'" + str(facturaId) + "'"
+
+    print(comando)
+
+    cur.execute(comando)
+    miConexionx.commit()
+
+    miConexionx.close()
+
+    try:
+        with open(nombre_archivo, 'w') as archivo:
+            # Escribir el texto en el archivo
+            archivo.write(textoXml)
+        print(f"El archivo '{nombre_archivo}' se ha guardado correctamente.")
+    except IOError as e:
+        print(f"Error al guardar el archivo: {e}")
+        datosMensaje = {'success': False, 'Mensaje': 'Cerrar Archivo cargado en browser'}
+        json_data = json.dumps(datosMensaje, default=str)
+        return HttpResponse(json_data, content_type='application/json')
+    except Exception as e:
+        print(f"Error al abrir el archivo: {e}")
+
+    return JsonResponse({'success': True, 'message': 'Factura XML generada !'})
 
