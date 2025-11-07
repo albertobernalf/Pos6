@@ -868,3 +868,30 @@ class ProgramacionCitasMedicas(models.Model):
  -- Apenas aplico-grabo un abono no refresca saldo ( OJO SOLO EL refresh de las pantallas, liquidaciondetalle, porque si grabo bien los totales en liquidacion
  -- Cuando uno refresca en liquidacindetalle la cuneta, no refresca la cabecera, por ejemplo si tengo cambio de cama no lo refresca, sinmo solo hasta que selecciono de nuevo la cuenta
  -- hay que aregla la pantalla clinico, el datatable de interconsultas algo pasa allip - pailas
+ -- ops en farmacia al hacer un despacho no actualiza la pantalla dispensacion general, toco salir y volbver a entrar para que actualizara
+ -- ops desde farmacia me actualio mal el valor d ela cupota moderadora en liquidacion . OJO CORREGIR YAP
+ -- ops cuando uno selecciona en farmaciafarmaciadetalle un mediamneto y lo señala y despacha por uno de ellos pasa que al seleccionar uno y no muetra despacho alguno, pero si seleciona el 
+   -- otro muestra amos. ALGO PASA ALLI VERIFICAR
+  -- ops colocar el codigo cups en la pantalla liquidaciondetalle para mejor entendimiento
+-- ops farmaciadetalle en despachos, despacho un medicamento que requeria utorizacion COMO CONTROLAR ESO ????
+-- alaplicar un meiamento la nefermera no refresca ell datatable o no cordina los datatable y no lo muestra aunque si guarda la a plicacion
+-- cuando uno autoriza un medicamento y sale de la pantalla autorizaciondetalle si no quedan mas autorizaciones pendientes se debe colocar en el cabezote de la autortiacioin=autoriado
+   -- para que desaparezca tambien de la pantalla
+-- ojo en todas las pantallas donde se calcle total copagos,moderadoras etc es con valorEnCurso no valor
+-- cuando uno selecione en farmacia en la primera pantalla actualziar la pantalla farmaciadetalle de acuerdo a selccion. oseas lo que no he podido seleccionar un radio de un datatable
+-- ojo la pantallade farmacia depachos debe mostrat si y solo si el codigo CUPS y adems no muestran cantidades IMPORTATIDIMO
+-- como hacer para que los comos muestre los empleados d cada area o depto (desarrollo loco)
+-- ops me creo seis registro dupliado al dispensar una sola vez ALGO PADO
+ -- ops en cirugia hay dos botones que se llaman miSolicitudCirugia2 ops hay como 4 botons iguales investigar . aps de pronto porque son en tablas datatvbles diferentes ARREGLAR
+ -- ojola pantalla en cirugia de adicionar materiale qx argal cantidad * unitario = total , readonly total y hacerla multiplicacion
+-- VEO MUY LENTO ELMODULO TARIFARIO PARA AGREAR CREAR TARIFAS
+-- OJO CONTROLES DE CIRUGIA SI NOESTA PROGRAMADA NO DEJAR LIQUIDAR CUENTA, SI NO ESTA REALUZAD TAMPO DEJAR LIQUIDA .tamñoco dejar liquidar si no esta hecha la descricxpionqx
+-- OPS PERSISTE EL ERROR DE QUE CUANDO CREA UNA CIRUGIA EN LA TBLA PROGRAMACION DE CIRUGIA NO CREA EL CIRUGIA_ID. // OJO ESTO NO SE HIZO DESDE LA HC VERIFICAR
+-- la disponinbilidd de sals de cirugia no funciona aun
+-- ops la cirugia aun no tiene el convenio . Para colocar un convenio de los que vienen poor HC habria que crear un boton que edite la cirugia y se pueda actualzar elconveio OJOOO
+-- ojo control de fechas  en las fechas de quirofanos cirugias
+-- ops al generar el totala pagar esta mal eror en generarliquidcaon dese cirugia-.. UUUYY NOO comoasi que totalproceimientos = 2200 re-maluco -- ops relocoo la pantalla no me muestra lo
+   que esta grabado en tablas como asi????? socorro ?? auxilio ERRROOR remaluco. son dos cosas uno lo que guarda elgeneralliquiacion de cirugia y otro el que selecciona lacuenta
+
+-- ojooo pendiente arreglar en facturacion la funcion : PostConsultaLiquidacion, en cuanto mlode convenio y que cea cabezotes PAILAS no debe crear nada 
+-- cuano genero la liquidacion desde ciruia se salto un consecutivo de liquidaciondetalle OJOO ARREGLAR

@@ -1014,10 +1014,14 @@ function CrearTarifarioProcedimientos()
 
 function GuardarEditarTarifarioProcedimientos()
 {
-	alert("Entre GuardarEditarTarifarioProcedimientos");
+
 
 
 	var post_id = document.getElementById("postEditar1_id").value;
+
+	// alert("Entre GuardarEditarTarifarioProcedimientos" +  post_id);
+
+
 	var username_id = document.getElementById("username_id").value;
 	var codigoHomologadoEditar = document.getElementById("codigoHomologadoEditar").value;
 	var colValorBaseEditar = document.getElementById("colValorBaseEditar").value;

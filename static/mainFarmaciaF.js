@@ -278,7 +278,7 @@ function arrancaFarmacia(valorTabla,valorData)
 	  "render": function ( data, type, row ) {
                         var btn = '';
 
-		 btn = btn + " <input type='radio' name='miFarmaciaDespachos' class='miFarmaciaDespachos form-check-input ' data-pk='"  + row.pk + "'>" + "</input>";
+		 btn = btn + " <input type='radio' name='miFarmaciaDespachos' style='width:15px;height:15px;accent-color: purple;border-color: purple;background-color: purple;' class='miFarmaciaDespachos form-check-input ' data-pk='"  + row.pk + "'>" + "</input>";
 
 
                        return btn;
@@ -348,7 +348,7 @@ function arrancaFarmacia(valorTabla,valorData)
 	  "render": function ( data, type, row ) {
                         var btn = '';
 
-		 btn = btn + " <input type='radio' name='miFarmaciaDetalle2' class='miFarmaciaDetalle form-check-input ' data-pk='"  + row.pk + "'>" + "</input>";
+		 btn = btn + " <input type='radio' name='miFarmaciaDetalle2' style='width:15px;height:15px;accent-color: purple;border-color: purple;background-color: purple;' class='miFarmaciaDetalle form-check-input ' data-pk='"  + row.pk + "'>" + "</input>";
 
 
                        return btn;
@@ -537,7 +537,7 @@ function arrancaFarmacia(valorTabla,valorData)
                         var btn = '';
 
 
-		 btn = btn + " <input type='radio' name='miDespachoFarmacia2' class='miDespachoFarmacia2 form-check-input ' data-pk='"  + row.pk + "'>" + "</input>";
+		 btn = btn + " <input type='radio' name='miDespachoFarmacia2' style='width:15px;height:15px;accent-color: purple;border-color: purple;background-color: purple;'  class='miDespachoFarmacia2 form-check-input ' data-pk='"  + row.pk + "'>" + "</input>";
 
 
                        return btn;

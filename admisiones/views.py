@@ -2334,7 +2334,7 @@ def escogeAcceso(request, Sede, Username, Profesional, Documento, NombreSede, es
                                        password="123456")
         curt = miConexiont.cursor()
 
-        comando = "SELECT p.id id, p.nombre nombre FROM  clinico_examenes  p ORDER BY nombre"
+        comando = 'SELECT p.id id, p.nombre||' + "' '||" + '"codigoCups" nombre FROM  clinico_examenes  p ORDER BY nombre'
 
         curt.execute(comando)
         print(comando)
@@ -2455,7 +2455,7 @@ def escogeAcceso(request, Sede, Username, Profesional, Documento, NombreSede, es
                                        password="123456")
         curt = miConexiont.cursor()
 
-        comando = "SELECT p.id id, p.nombre nombre FROM  facturacion_suministros  p ORDER BY nombre"
+        comando = 'SELECT p.id id, p.nombre||' + "' '||" + ' p.cums nombre FROM  facturacion_suministros  p ORDER BY nombre'
 
         curt.execute(comando)
         print(comando)
@@ -3379,7 +3379,7 @@ def escogeAcceso(request, Sede, Username, Profesional, Documento, NombreSede, es
                                        password="123456")
         curt = miConexiont.cursor()
 
-        comando = 'SELECT e.id id, e.nombre nombre  FROM facturacion_Suministros e, facturacion_tipossuministro t  where e."tipoSuministro_id" = t.id AND t.nombre = ' + "'" + str('MEDICAMENTOS') + "' ORDER BY e.nombre"
+        comando = 'SELECT e.id id, e.nombre||' + "' '||" + ' e.cums nombre  FROM facturacion_Suministros e, facturacion_tipossuministro t  where e."tipoSuministro_id" = t.id AND t.nombre = ' + "'" + str('MEDICAMENTOS') + "' ORDER BY e.nombre"
 
         curt.execute(comando)
         print(comando)

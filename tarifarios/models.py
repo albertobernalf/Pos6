@@ -250,6 +250,7 @@ class TablaMaterialSuturaCuracion(models.Model):
     tiposTarifaProducto = models.ForeignKey('tarifarios.TiposTarifaProducto', blank=True, null=True, editable=True,   on_delete=models.PROTECT)
     homologado = models.CharField(max_length=8,  blank=True, null=True, editable=True)
     grupoQx =  models.ForeignKey('tarifarios.GruposQx', blank=True, null=True, editable=True,   on_delete=models.PROTECT)
+    tipoHonorario = models.ForeignKey('tarifarios.TiposHonorarios', blank=True,null= True, editable=True, on_delete=models.PROTECT , related_name='TipoHonorario14754')
     smldv = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True, editable=True)
     minimosLegales = models.ForeignKey('tarifarios.MinimosLegales', blank=True, null=True, editable=True,   on_delete=models.PROTECT)
     cruento = models.CharField(max_length=1, blank=True, null=True ,editable=False)

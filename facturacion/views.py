@@ -233,7 +233,7 @@ def PostConsultaLiquidacion(request):
     curt = miConexiont.cursor()
 
     #comando = 'SELECT c.id id, c.nombre||' + "' '" +  '||c.cums nombre FROM facturacion_suministros c order by c.nombre'
-    comando = 'SELECT c.id id, c.nombre nombre FROM facturacion_suministros c order by c.nombre'
+    comando = 'SELECT c.id id, c.nombre||' + "' '||" + 'c.cums nombre FROM facturacion_suministros c order by c.nombre'
 
     curt.execute(comando)
     print(comando)
@@ -254,13 +254,7 @@ def PostConsultaLiquidacion(request):
     convenioId = convenioId.strip()
 
     print("Convenio despues de strip = ", convenioId)
-
-    #if (convenioId == '0'):
-    #    print("convenioId = ", convenioId)
-    #    convenioId = ""
-
     print("convenioId FINAL= ", convenioId)
-
 
     if llave[0] == 'INGRESO':
         ingresoId = Ingresos.objects.get(id=llave[1])
@@ -277,9 +271,8 @@ def PostConsultaLiquidacion(request):
 
 
     estadoReg= 'A'
-
     fechaRegistro = timezone.now()
-    usuarioRegistro = ''
+
 
     # Primero colocamos el convenio en la tabla facturacion_facturacionliquidacion
 
@@ -474,41 +467,77 @@ def PostConsultaLiquidacion(request):
 
         # Cierro Conexion
 
-        if llave[0] == 'INGRESO':	
+        if llave[0] == 'INGRESO':
 
-           totalSuministros = LiquidacionDetalle.objects.all().filter(liquidacion_id=liquidacionId).filter(examen_id = None).exclude(estadoRegistro='I').exclude(anulado='S').aggregate(totalS=Coalesce(Sum('valorTotal'), 0))
-           totalSuministros = (totalSuministros['totalS']) + 0
-           print("totalSuministros", totalSuministros)
-           totalProcedimientos = LiquidacionDetalle.objects.all().filter(liquidacion_id=liquidacionId).filter(cums_id = None).exclude(estadoRegistro='I').exclude(anulado='S').aggregate(totalP=Coalesce(Sum('valorTotal'), 0))
-           totalProcedimientos = (totalProcedimientos['totalP']) + 0
-           print("totalProcedimientos", totalProcedimientos)
-           registroPago = Liquidacion.objects.get(id=liquidacionId)
-           totalCopagos = registroPago.totalCopagos
-           totalCuotaModeradora = registroPago.totalCuotaModeradora
-           totalAnticipos = registroPago.anticipos
-           totalAbonos = registroPago.totalAbonos
-           totalRecibido = registroPago.totalRecibido
-           totalAnticipos = registroPago.anticipos
-           valorApagar = registroPago.valorApagar
-           totalLiquidacion = registroPago.totalLiquidacion
+
+            ## esto traigo de cirugia
+
+            totalSuministros = LiquidacionDetalle.objects.all().filter(liquidacion_id=liquidacionId).filter(examen_id=None).exclude(estadoRegistro='I').exclude(anulado='S').aggregate(totalS=Coalesce(Sum('valorTotal'), 0))
+            totalSuministros = (totalSuministros['totalS']) + 0
+            print("totalSuministros", totalSuministros)
+            totalProcedimientos = LiquidacionDetalle.objects.all().filter(liquidacion_id=liquidacionId).filter(cums_id=None).exclude(estadoRegistro='I').exclude(anulado='S').aggregate(totalP=Coalesce(Sum('valorTotal'), 0))
+            totalProcedimientos = (totalProcedimientos['totalP']) + 0
+            print("totalProcedimientos", totalProcedimientos)
+            registroPago = Liquidacion.objects.get(id=liquidacionId)
+            totalCopagos = Pagos.objects.all().filter(tipoDoc_id=ingresoId.tipoDoc_id).filter(documento_id=ingresoId.documento_id).filter(consec=ingresoId.consec).filter(formaPago_id=4).exclude(estadoReg='I').exclude(anulado='S').aggregate(totalC=Coalesce(Sum('valorEnCurso'), 0))
+            totalCopagos = (totalCopagos['totalC']) + 0
+            print("totalCopagos", totalCopagos)
+
+            totalCuotaModeradora = Pagos.objects.all().filter(tipoDoc_id=ingresoId.tipoDoc_id).filter(documento_id=ingresoId.documento_id).filter(consec=ingresoId.consec).filter(formaPago_id=3).exclude(estadoReg='I').exclude(anulado='S').aggregate(totalM=Coalesce(Sum('valorEnCurso'), 0))
+            totalCuotaModeradora = (totalCuotaModeradora['totalM']) + 0
+            print("totalCuotaModeradora", totalCuotaModeradora)
+            totalAnticipos = Pagos.objects.all().filter(tipoDoc_id=ingresoId.tipoDoc_id).filter(documento_id=ingresoId.documento_id).filter(consec=ingresoId.consec).filter(formaPago_id=1).exclude(estadoReg='I').exclude(anulado='S').aggregate(Anticipos=Coalesce(Sum('valorEnCurso'), 0))
+            totalAnticipos = (totalAnticipos['Anticipos']) + 0
+            print("totalAnticipos", totalAnticipos)
+            totalAbonos = Pagos.objects.all().filter(tipoDoc_id=ingresoId.tipoDoc_id).filter(documento_id=ingresoId.documento_id).filter(consec=ingresoId.consec).filter(formaPago_id=2).exclude(estadoReg='I').exclude(anulado='S').aggregate(totalAb=Coalesce(Sum('valorEnCurso'), 0))
+            totalAbonos = (totalAbonos['totalAb']) + 0
+            # totalAbonos = totalCopagos + totalAnticipos + totalCuotaModeradora
+            print("totalAbonos", totalAbonos)
+            totalRecibido = totalCopagos + totalCuotaModeradora + totalAnticipos + totalAbonos
+            totalApagar = totalSuministros + totalProcedimientos - totalRecibido
+            totalLiquidacion = totalSuministros + totalProcedimientos
+            print("totalLiquidacion", totalLiquidacion)
+            print("totalAPagar", totalApagar)
+
+            # Rutina Guarda en cabezote los totales
+
+            ## FIN esto traigo de cirugia
+
 
         else:
 
-           totalSuministros = LiquidacionDetalle.objects.all().filter(liquidacion_id=liquidacionId).filter(examen_id = None).exclude(estadoRegistro='I').exclude(anulado='S').aggregate(totalS=Coalesce(Sum('valorTotal'), 0))
-           totalSuministros = (totalSuministros['totalS']) + 0
-           print("totalSuministros", totalSuministros)
-           totalProcedimientos = LiquidacionDetalle.objects.all().filter(liquidacion_id=liquidacionId).filter(cums_id = None).exclude(estadoRegistro='I').exclude(anulado='S').aggregate(totalP=Coalesce(Sum('valorTotal'), 0))
-           totalProcedimientos = (totalProcedimientos['totalP']) + 0
-           registroPago = Liquidacion.objects.get(id=liquidacionId)
-           totalCopagos = registroPago.totalCopagos
-           totalCuotaModeradora = registroPago.totalCuotaModeradora
-           totalAnticipos = registroPago.anticipos
-           totalAbonos = registroPago.totalAbonos
-           totalRecibido = registroPago.totalRecibido
-           totalAnticipos = registroPago.anticipos
-           valorApagar = registroPago.valorApagar
-           totalLiquidacion = registroPago.totalLiquidacion
+            ## esto traigo de cirugia
 
+            totalSuministros = LiquidacionDetalle.objects.all().filter(liquidacion_id=liquidacionId).filter(examen_id=None).exclude(estadoRegistro='I').exclude(anulado='S').aggregate(totalS=Coalesce(Sum('valorTotal'), 0))
+            totalSuministros = (totalSuministros['totalS']) + 0
+            print("totalSuministros", totalSuministros)
+            totalProcedimientos = LiquidacionDetalle.objects.all().filter(liquidacion_id=liquidacionId).filter(cums_id=None).exclude(estadoRegistro='I').exclude(anulado='S').aggregate(totalP=Coalesce(Sum('valorTotal'), 0))
+            totalProcedimientos = (totalProcedimientos['totalP']) + 0
+            print("totalProcedimientos", totalProcedimientos)
+            registroPago = Liquidacion.objects.get(id=liquidacionId)
+            totalCopagos = Pagos.objects.all().filter(tipoDoc_id=triageId.tipoDoc_id).filter(documento_id=triageId.documento_id).filter(consec=triageId.consec).filter(formaPago_id=4).exclude(estadoReg='I').exclude(anulado='S').aggregate(totalC=Coalesce(Sum('valorEnCurso'), 0))
+            totalCopagos = (totalCopagos['totalC']) + 0
+            print("totalCopagos", totalCopagos)
+
+            totalCuotaModeradora = Pagos.objects.all().filter(tipoDoc_id=triageId.tipoDoc_id).filter(documento_id=triageId.documento_id).filter(consec=triageId.consec).filter(formaPago_id=3).exclude(estadoReg='I').exclude(anulado='S').aggregate(totalM=Coalesce(Sum('valorEnCurso'), 0))
+            totalCuotaModeradora = (totalCuotaModeradora['totalM']) + 0
+            print("totalCuotaModeradora", totalCuotaModeradora)
+            totalAnticipos = Pagos.objects.all().filter(tipoDoc_id=triageId.tipoDoc_id).filter(documento_id=triageId.documento_id).filter(consec=triageId.consec).filter(formaPago_id=1).exclude(estadoReg='I').exclude(anulado='S').aggregate(Anticipos=Coalesce(Sum('valorEnCurso'), 0))
+            totalAnticipos = (totalAnticipos['Anticipos']) + 0
+            print("totalAnticipos", totalAnticipos)
+            totalAbonos = Pagos.objects.all().filter(tipoDoc_id=triageId.tipoDoc_id).filter(documento_id=triageId.documento_id).filter(consec=triageId.consec).filter(formaPago_id=2).exclude(estadoReg='I').exclude(anulado='S').aggregate(totalAb=Coalesce(Sum('valorEnCurso'), 0))
+            totalAbonos = (totalAbonos['totalAb']) + 0
+            # totalAbonos = totalCopagos + totalAnticipos + totalCuotaModeradora
+            print("totalAbonos", totalAbonos)
+            totalRecibido = totalCopagos + totalCuotaModeradora + totalAnticipos + totalAbonos
+            totalApagar = totalSuministros + totalProcedimientos - totalRecibido
+            totalLiquidacion = totalSuministros + totalProcedimientos
+            print("totalLiquidacion", totalLiquidacion)
+            print("totalAPagar", totalApagar)
+
+            # Rutina Guarda en cabezote los totales
+
+            ## FIN esto traigo de cirugia
 
         if llave[0] == 'INGRESO':
 

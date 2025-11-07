@@ -536,9 +536,9 @@ def AdicionarDespachosDispensa(request):
 
                 contratacion = Convenios.objects.get(id=convenioId)
 
-                print("OJOO contratacion.tarifariosDescripcionProc_id = ", contratacion.tarifariosDescripcionProc_id)
+                print("OJOO contratacion.tarifariosDescripcionProc_id = ", contratacion.tarifariosDescripcionSum_id)
 
-                columnaALeer = TarifariosDescripcion.objects.get(id=contratacion.tarifariosDescripcionProc_id)
+                columnaALeer = TarifariosDescripcion.objects.get(id=contratacion.tarifariosDescripcionSum_id)
                 columnaALeerPropia = columnaALeer.columna
 
         except Exception as e:
@@ -718,16 +718,16 @@ def AdicionarDespachosDispensa(request):
 
         # Continua Aqui
 
-        totalCopagos = Pagos.objects.all().filter(tipoDoc_id=tipoDocId).filter(documento_id=documentoId).filter(consec=ingresoPaciente).filter(formaPago_id=4).exclude(estadoReg='N').aggregate(totalC=Coalesce(Sum('valor'), 0))
+        totalCopagos = Pagos.objects.all().filter(tipoDoc_id=tipoDocId).filter(documento_id=documentoId).filter(consec=ingresoPaciente).filter(formaPago_id=4).exclude(estadoReg='I').exclude(anulado='S').aggregate(totalC=Coalesce(Sum('valorEnCurso'), 0))
         totalCopagos = (totalCopagos['totalC']) + 0
         print("totalCopagos", totalCopagos)
-        totalCuotaModeradora = Pagos.objects.all().filter(tipoDoc_id=tipoDocId).filter(documento_id=documentoId).filter(consec=ingresoPaciente).filter(formaPago_id=3).exclude(estadoReg='N').aggregate(totalM=Coalesce(Sum('valor'), 0))
+        totalCuotaModeradora = Pagos.objects.all().filter(tipoDoc_id=tipoDocId).filter(documento_id=documentoId).filter(consec=ingresoPaciente).filter(formaPago_id=3).exclude(estadoReg='I').exclude(anulado='S').aggregate(totalM=Coalesce(Sum('valorEnCurso'), 0))
         totalCuotaModeradora = (totalCuotaModeradora['totalM']) + 0
         print("totalCuotaModeradora", totalCuotaModeradora)
-        totalAnticipos = Pagos.objects.all().filter(tipoDoc_id=tipoDocId).filter(documento_id=documentoId).filter(consec=ingresoPaciente).filter(formaPago_id=1).exclude(estadoReg='N').aggregate(Anticipos=Coalesce(Sum('valor'), 0))
+        totalAnticipos = Pagos.objects.all().filter(tipoDoc_id=tipoDocId).filter(documento_id=documentoId).filter(consec=ingresoPaciente).filter(formaPago_id=1).exclude(estadoReg='I').exclude(anulado='S').aggregate(Anticipos=Coalesce(Sum('valorEnCurso'), 0))
         totalAnticipos = (totalAnticipos['Anticipos']) + 0
         print("totalAnticipos", totalAnticipos)
-        totalAbonos = Pagos.objects.all().filter(tipoDoc_id=tipoDocId).filter(documento_id=documentoId).filter(consec=ingresoPaciente).filter(formaPago_id=2).exclude(estadoReg='N').aggregate(totalAb=Coalesce(Sum('valor'), 0))
+        totalAbonos = Pagos.objects.all().filter(tipoDoc_id=tipoDocId).filter(documento_id=documentoId).filter(consec=ingresoPaciente).filter(formaPago_id=2).exclude(estadoReg='I').exclude(anulado='S').aggregate(totalAb=Coalesce(Sum('valorEnCurso'), 0))
         totalAbonos = (totalAbonos['totalAb']) + 0
         # totalAbonos = totalCopagos + totalAnticipos + totalCuotaModeradora
         print("totalAbonos", totalAbonos)
@@ -749,9 +749,7 @@ def AdicionarDespachosDispensa(request):
         cur3.close()
         miConexion3.close()
 
-
         ## FIN rutina de Facturacion Para Medicamentos Total
-
 
         ## OJOOOO
         ## AQUI FALTA UN except

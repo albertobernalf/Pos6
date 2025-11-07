@@ -549,7 +549,7 @@ def GuardarEditarTarifarioProcedimientos(request):
         miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",  password="123456")
         cur3 = miConexion3.cursor()
 
-        comando = 'UPDATE tarifarios_tarifariosprocedimientos SET "codigoHomologado" =' + str(codigoHomologadoEditar ) +  ', "colValorBase" =' + str(colValorBaseEditar ) + ',"colValor1" =' + str(colValor1Editar ) + "," + '"colValor2" =' + str(colValor2Editar )  + ', "colValor3" ='  + str(colValor3Editar )  + ',"colValor4" =' + str(colValor4Editar )  + ',"colValor5" =' + str(colValor5Editar )  + ',"colValor6" =' + str(colValor6Editar ) + ',"colValor7" =' + str(colValor7Editar ) + ',"colValor8" =' + str(colValor8Editar )  + ',"colValor9" =' + str(colValor9Editar )  + ',"colValor10" =' + str(colValor10Editar )  + ',"usuarioRegistro_id" =' + "'" + str(username_id ) + "'" + '  WHERE id=  ' + "'" + str(post_id) + "'"
+        comando = 'UPDATE tarifarios_tarifariosprocedimientos SET "codigoHomologado" =' + "'" + str(codigoHomologadoEditar ) + "'" +  ', "colValorBase" =' + str(colValorBaseEditar ) + ',"colValor1" =' + str(colValor1Editar ) + "," + '"colValor2" =' + str(colValor2Editar )  + ', "colValor3" ='  + str(colValor3Editar )  + ',"colValor4" =' + str(colValor4Editar )  + ',"colValor5" =' + str(colValor5Editar )  + ',"colValor6" =' + str(colValor6Editar ) + ',"colValor7" =' + str(colValor7Editar ) + ',"colValor8" =' + str(colValor8Editar )  + ',"colValor9" =' + str(colValor9Editar )  + ',"colValor10" =' + str(colValor10Editar )  + ',"usuarioRegistro_id" =' + "'" + str(username_id ) + "'" + '  WHERE id=  ' + "'" + str(post_id) + "'"
 
         print(comando)
         cur3.execute(comando)
@@ -565,6 +565,7 @@ def GuardarEditarTarifarioProcedimientos(request):
             print("Entro ha hacer el Rollback")
             miConexion3.rollback()
         message_error= str(error)
+
         return JsonResponse({'success': False, 'Mensajes': message_error})
 
 
