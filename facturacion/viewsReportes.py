@@ -313,7 +313,7 @@ def ImprimirFactura(request):
     tipoAnestesiologo = TiposHonorarios.objects.get(nombre='ANESTESIOLOGO')
     tipoAyudante = TiposHonorarios.objects.get(nombre='AYUDANTE')
     tipoDerechosSala = TiposHonorarios.objects.get(nombre='DERECHOS DE SALA')
-
+    tipoMateriales = TiposHonorarios.objects.get(nombre='MATERIAL QX')
 
     miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
                                    password="123456")
@@ -502,20 +502,22 @@ def ImprimirFactura(request):
 
                     # Ahora barro un CURSOR CON EL DETALLE DE LOS HONORARIOS
 
-                    comando = 'select tipHono.id idHonorario,(select ' + "'" + str('Cod:') + "'" + '||' + "' '||" + ' tarIss."homologado" ||' + "' $ '||" + 'sum(detFac."valorTotal") FROM facturacion_facturaciondetalle detFac INNER JOIN facturacion_facturacion fac ON (fac.id=detFac.facturacion_id) INNER JOIN clinico_examenes exa on (exa.id=detFac.examen_id) INNER JOIN contratacion_convenios conv ON (conv.id=fac.convenio_id)  INNER JOIN tarifarios_tablahonorariosiss tarIss ON (tarIss."tiposHonorarios_id" = detFac."tipoHonorario_id" ) where detfac.facturacion_id= ' + "'" + str(factura) + "'" + ' AND (detfac.anulado =' + "'" + str('N') + "'" + ' or detfac.anulado=' + "'" + str('R') + "')" + '  AND exa.concepto_id = ' + "'" + str(salvoConcepto) + "'" + ' and detFac.examen_id= ' + "'" + str(idCups) + "'" + ' and tarIss."tiposHonorarios_id" = ' + "'" + str(tipoCirujano.id) + "'" + ' group by tarIss."homologado",exa.nombre) CIRUJANO, (select ' + "'" + str('Cod:') + "'||' '||" + 'tarIss."homologado" ||' + "'" + " $ '||" + ' sum(detFac."valorTotal") FROM facturacion_facturaciondetalle detFac INNER JOIN facturacion_facturacion fac ON (fac.id=detFac.facturacion_id) 	INNER JOIN clinico_examenes exa on (exa.id=detFac.examen_id) INNER JOIN contratacion_convenios conv ON (conv.id=fac.convenio_id) 	INNER JOIN tarifarios_tablahonorariosiss tarIss ON (tarIss."tiposHonorarios_id" = detFac."tipoHonorario_id" ) where detfac.facturacion_id= ' + "'" + str(factura) + "'" + ' AND (detfac.anulado =' + "'" + str('N') + "'" + ' or detfac.anulado=' + "'" + str('R') + "')" + ' AND exa.concepto_id = ' + "'" + str(salvoConcepto) + "'" + ' and detFac.examen_id= ' + "'" + str(idCups) + "'" + ' and tarIss."tiposHonorarios_id" = ' + "'" + str(tipoAnestesiologo.id) + "'" + ' group by tarIss."homologado",exa.nombre) ANESTESIOLOGO, (select ' + "'" + str('Cod:') + "'" + "||' '||" + 'tarIss."homologado" ||' + "' $ '||" + 'sum(detFac."valorTotal") FROM facturacion_facturaciondetalle detFac INNER JOIN facturacion_facturacion fac ON (fac.id=detFac.facturacion_id)  INNER JOIN clinico_examenes exa on (exa.id=detFac.examen_id) INNER JOIN contratacion_convenios conv ON (conv.id=fac.convenio_id) INNER JOIN tarifarios_tablahonorariosiss tarIss ON (tarIss."tiposHonorarios_id" = detFac."tipoHonorario_id" ) where detfac.facturacion_id= ' + "'" + str(factura) + "'" + ' AND (detfac.anulado =' + "'" + str('N') + "'" + ' or detfac.anulado=' + "'" + str('R') + "')" + ' AND exa.concepto_id = ' + "'" + str(salvoConcepto) + "'" + ' and detFac.examen_id= ' + "'" + str(idCups) + "'" + ' and tarIss."tiposHonorarios_id" = ' + "'" + str(tipoAyudante.id) + "'" + ' group by tarIss."homologado",exa.nombre) AYUDANTE,	(select ' + "'" + str('Cod:') + "'" + "||' '||" + ' detFac."codigoHomologado" ||' + "' $ '||" + ' sum(detFac."valorTotal") 	FROM facturacion_facturaciondetalle detFac INNER JOIN facturacion_facturacion fac ON (fac.id=detFac.facturacion_id) INNER JOIN clinico_examenes exa on (exa.id=detFac.examen_id) INNER JOIN contratacion_convenios conv ON (conv.id=fac.convenio_id) INNER JOIN tarifarios_tablasalasdecirugiaiss tarSala ON (tarSala."tipoHonorario_id" = detFac."tipoHonorario_id" ) where detfac.facturacion_id= ' + "'" + str(factura) + "'" + ' AND (detfac.anulado =' + "'" + str('N') + "'" + ' or detfac.anulado=' + "'" + str('R') + "')" + '  AND exa.concepto_id = ' + "'" + str(salvoConcepto) + "'" + ' and detFac.examen_id= ' + "'" + str(idCups) + "'" + ' and tarSala."tipoHonorario_id" = ' + "'" + str(tipoDerechosSala.id) + "'" + ' GROUP BY   detFac."codigoHomologado",exa.nombre) SALAS FROM tarifarios_tiposhonorarios tipHono WHERE tipHono.nombre in (' + "'" + str('CIRUJANO') + "')" + ' ORDER BY tipHono.id'
+                    comando = 'select tipHono.id idHonorario,(select ' + "'" + str('Cod:') + "'" + '||' + "' '||" + ' tarIss."homologado" ||' + "' $ '||" + 'sum(detFac."valorTotal") FROM facturacion_facturaciondetalle detFac INNER JOIN facturacion_facturacion fac ON (fac.id=detFac.facturacion_id) INNER JOIN clinico_examenes exa on (exa.id=detFac.examen_id) INNER JOIN contratacion_convenios conv ON (conv.id=fac.convenio_id)  INNER JOIN tarifarios_tablahonorariosiss tarIss ON (tarIss."tiposHonorarios_id" = detFac."tipoHonorario_id" ) where detfac.facturacion_id= ' + "'" + str(factura) + "'" + ' AND (detfac.anulado =' + "'" + str('N') + "'" + ' or detfac.anulado=' + "'" + str('R') + "')" + '  AND exa.concepto_id = ' + "'" + str(salvoConcepto) + "'" + ' and detFac.examen_id= ' + "'" + str(idCups) + "'" + ' and tarIss."tiposHonorarios_id" = ' + "'" + str(tipoCirujano.id) + "'" + ' group by tarIss."homologado",exa.nombre) CIRUJANO, (select ' + "'" + str('Cod:') + "'||' '||" + 'tarIss."homologado" ||' + "'" + " $ '||" + ' sum(detFac."valorTotal") FROM facturacion_facturaciondetalle detFac INNER JOIN facturacion_facturacion fac ON (fac.id=detFac.facturacion_id) 	INNER JOIN clinico_examenes exa on (exa.id=detFac.examen_id) INNER JOIN contratacion_convenios conv ON (conv.id=fac.convenio_id) 	INNER JOIN tarifarios_tablahonorariosiss tarIss ON (tarIss."tiposHonorarios_id" = detFac."tipoHonorario_id" ) where detfac.facturacion_id= ' + "'" + str(factura) + "'" + ' AND (detfac.anulado =' + "'" + str('N') + "'" + ' or detfac.anulado=' + "'" + str('R') + "')" + ' AND exa.concepto_id = ' + "'" + str(salvoConcepto) + "'" + ' and detFac.examen_id= ' + "'" + str(idCups) + "'" + ' and tarIss."tiposHonorarios_id" = ' + "'" + str(tipoAnestesiologo.id) + "'" + ' group by tarIss."homologado",exa.nombre) ANESTESIOLOGO, (select ' + "'" + str('Cod:') + "'" + "||' '||" + 'tarIss."homologado" ||' + "' $ '||" + 'sum(detFac."valorTotal") FROM facturacion_facturaciondetalle detFac INNER JOIN facturacion_facturacion fac ON (fac.id=detFac.facturacion_id)  INNER JOIN clinico_examenes exa on (exa.id=detFac.examen_id) INNER JOIN contratacion_convenios conv ON (conv.id=fac.convenio_id) INNER JOIN tarifarios_tablahonorariosiss tarIss ON (tarIss."tiposHonorarios_id" = detFac."tipoHonorario_id" ) where detfac.facturacion_id= ' + "'" + str(factura) + "'" + ' AND (detfac.anulado =' + "'" + str('N') + "'" + ' or detfac.anulado=' + "'" + str('R') + "')" + ' AND exa.concepto_id = ' + "'" + str(salvoConcepto) + "'" + ' and detFac.examen_id= ' + "'" + str(idCups) + "'" + ' and tarIss."tiposHonorarios_id" = ' + "'" + str(tipoAyudante.id) + "'" + ' group by tarIss."homologado",exa.nombre) AYUDANTE,	(select ' + "'" + str('Cod:') + "'" + "||' '||" + ' detFac."codigoHomologado" ||' + "' $ '||" + ' sum(detFac."valorTotal") 	FROM facturacion_facturaciondetalle detFac INNER JOIN facturacion_facturacion fac ON (fac.id=detFac.facturacion_id) INNER JOIN clinico_examenes exa on (exa.id=detFac.examen_id) INNER JOIN contratacion_convenios conv ON (conv.id=fac.convenio_id) INNER JOIN tarifarios_tablasalasdecirugiaiss tarSala ON (tarSala."tipoHonorario_id" = detFac."tipoHonorario_id" ) where detfac.facturacion_id= ' + "'" + str(factura) + "'" + ' AND (detfac.anulado =' + "'" + str('N') + "'" + ' or detfac.anulado=' + "'" + str('R') + "')" + '  AND exa.concepto_id = ' + "'" + str(salvoConcepto) + "'" + ' and detFac.examen_id= ' + "'" + str(idCups) + "'" + ' and tarSala."tipoHonorario_id" = ' + "'" + str(tipoDerechosSala.id) + "'" + ' GROUP BY   detFac."codigoHomologado",exa.nombre) SALAS  ,(select ' + "'" + str('Cod:') + "'||' '||" + ' detFac."codigoHomologado" ||' + "'" + str('$') + "'||" + ' sum(detFac."valorTotal") FROM facturacion_facturaciondetalle detFac INNER JOIN facturacion_facturacion fac ON (fac.id=detFac.facturacion_id) INNER JOIN clinico_examenes exa on (exa.id=detFac.examen_id) INNER JOIN contratacion_convenios conv ON (conv.id=fac.convenio_id) INNER JOIN tarifarios_tablamaterialsuturacuracion tarMat ON (tarMat."tipoHonorario_id" = detFac."tipoHonorario_id" and tarMat."grupoQx_id" = exa."grupoQx_id"  ) where detfac.facturacion_id= ' + "'" + str(factura) + "'" + ' AND (detfac.anulado =' + "'" + str('N') + "'" + ' or detfac.anulado=' + "'" + str('R') + "')" + '  AND exa.concepto_id = ' + "'" +  str(salvoConcepto) + "'" + ' and detFac.examen_id= ' + "'" + str(idCups) + "'" + ' and tarMat."tipoHonorario_id" = ' + "'" + str(tipoMateriales.id) + "'" + ' GROUP BY detFac."codigoHomologado",exa.nombre) MATERIALES  FROM tarifarios_tiposhonorarios tipHono WHERE tipHono.nombre in (' + "'" + str('CIRUJANO') + "')" + ' ORDER BY tipHono.id'
 
                     print ("COMANDO =" , comando)
                     cury.execute(comando)
 
-                    pdf.cell(50, 26 + lineaConcepto + lineaDetalle, 'HonorariosMedicos', 0, 0, 'L')
-                    pdf.cell(50, 26 + lineaConcepto + lineaDetalle, 'Anestesiologo', 0, 0, 'L')
-                    pdf.cell(50, 26 + lineaConcepto + lineaDetalle, 'Ayudantia', 0, 0, 'L')
-                    pdf.cell(50, 26 + lineaConcepto + lineaDetalle, 'Derechos de Sala', 0, 0, 'L')
+                    pdf.cell(40, 26 + lineaConcepto + lineaDetalle, 'HonorariosMedicos', 0, 0, 'L')
+                    pdf.cell(40, 26 + lineaConcepto + lineaDetalle, 'Anestesiologo', 0, 0, 'L')
+                    pdf.cell(40, 26 + lineaConcepto + lineaDetalle, 'Ayudantia', 0, 0, 'L')
+                    pdf.cell(40, 26 + lineaConcepto + lineaDetalle, 'Derechos de Sala', 0, 0, 'L')
+                    pdf.cell(40, 26 + lineaConcepto + lineaDetalle, 'Materiales', 0, 0, 'L')
+
                     pdf.ln(4)
 
                     print("voy a comenzar a imprimir LOS HONORARIOS DEPROCEDIMIENTO EN CUESTION")
 
-                    for id, CIRUJANO, ANESTESIOLOGO, AYUDANTE, SALAS in cury.fetchall():
+                    for id, CIRUJANO, ANESTESIOLOGO, AYUDANTE, SALAS, MATERIALES in cury.fetchall():
 
                         if (SALAS == None):
                             SALAS = 0
@@ -526,12 +528,15 @@ def ImprimirFactura(request):
                         if (CIRUJANO == None):
                             CIRUJANO = 0
 
+                        if (MATERIALES == None):
+                            MATERIALES = 0
 
 
-                        pdf.cell(50, 26 + lineaConcepto + lineaDetalle, str(CIRUJANO), 0, 0, 'L')
-                        pdf.cell(50, 26 + lineaConcepto + lineaDetalle, str(ANESTESIOLOGO), 0, 0, 'L')
-                        pdf.cell(50, 26 + lineaConcepto + lineaDetalle, str(AYUDANTE), 0, 0, 'L')
-                        pdf.cell(50, 26 + lineaConcepto + lineaDetalle, str(SALAS), 0, 0, 'L')
+                        pdf.cell(40, 26 + lineaConcepto + lineaDetalle, str(CIRUJANO), 0, 0, 'L')
+                        pdf.cell(40, 26 + lineaConcepto + lineaDetalle, str(ANESTESIOLOGO), 0, 0, 'L')
+                        pdf.cell(40, 26 + lineaConcepto + lineaDetalle, str(AYUDANTE), 0, 0, 'L')
+                        pdf.cell(40, 26 + lineaConcepto + lineaDetalle, str(SALAS), 0, 0, 'L')
+                        pdf.cell(40, 26 + lineaConcepto + lineaDetalle, str(MATERIALES), 0, 0, 'L')
 
                         pdf.ln(4)
 
@@ -562,20 +567,22 @@ def ImprimirFactura(request):
 
                     # Ahora barro un CURSOR CON EL DETALLE DE LOS HONORARIOS
 
-                    comando = 'select tipHono.id idHonorario,(select ' + "'" + str('Cod:') + "'" + '||' + "' '||" + ' tarSoat."homologado" ||' + "' $ '||" + 'sum(detFac."valorTotal") FROM facturacion_facturaciondetalle detFac INNER JOIN facturacion_facturacion fac ON (fac.id=detFac.facturacion_id) INNER JOIN clinico_examenes exa on (exa.id=detFac.examen_id) INNER JOIN contratacion_convenios conv ON (conv.id=fac.convenio_id)  INNER JOIN tarifarios_tablahonorariossoat tarSoat ON (tarSoat."tiposHonorarios_id" = detFac."tipoHonorario_id" and tarSoat."grupoQx_id" = exa."grupoQx_id"  ) where detfac.facturacion_id= ' + "'" + str(factura) + "'" + ' AND (detfac.anulado =' + "'" + str('N') + "'" + ' or detfac.anulado=' + "'" + str('R') + "')" + '  AND exa.concepto_id = ' + "'" + str(salvoConcepto) + "'" + ' and detFac.examen_id= ' + "'" + str(idCups) + "'" + ' and tarSoat."tiposHonorarios_id" = ' + "'" + str(tipoCirujano.id) + "'" + ' group by tarSoat."homologado",exa.nombre) CIRUJANO, (select ' + "'" + str('Cod:') + "'||' '||" + 'tarSoat."homologado" ||' + "'" + " $ '||" + ' sum(detFac."valorTotal") FROM facturacion_facturaciondetalle detFac INNER JOIN facturacion_facturacion fac ON (fac.id=detFac.facturacion_id) 	INNER JOIN clinico_examenes exa on (exa.id=detFac.examen_id) INNER JOIN contratacion_convenios conv ON (conv.id=fac.convenio_id) INNER JOIN tarifarios_tablahonorariossoat tarSoat ON (tarSoat."tiposHonorarios_id" = detFac."tipoHonorario_id" and tarSoat."grupoQx_id" = exa."grupoQx_id"  ) where detfac.facturacion_id= ' + "'" + str(factura) + "'" + ' AND (detfac.anulado =' + "'" + str('N') + "'" + ' or detfac.anulado=' + "'" + str('R') + "')" + ' AND exa.concepto_id = ' + "'" + str(salvoConcepto) + "'" + ' and detFac.examen_id= ' + "'" + str(idCups) + "'" + ' and tarSoat."tiposHonorarios_id" = ' + "'" + str(tipoAnestesiologo.id) + "'" + ' group by tarSoat."homologado",exa.nombre) ANESTESIOLOGO, (select ' + "'" + str('Cod:') + "'" + "||' '||" + 'tarSoat."homologado" ||' + "' $ '||" + 'sum(detFac."valorTotal") FROM facturacion_facturaciondetalle detFac INNER JOIN facturacion_facturacion fac ON (fac.id=detFac.facturacion_id)  INNER JOIN clinico_examenes exa on (exa.id=detFac.examen_id) INNER JOIN contratacion_convenios conv ON (conv.id=fac.convenio_id) INNER JOIN tarifarios_tablahonorariossoat tarSoat ON (tarSoat."tiposHonorarios_id" = detFac."tipoHonorario_id" and tarSoat."grupoQx_id" = exa."grupoQx_id"  ) where detfac.facturacion_id= ' + "'" + str(factura) + "'" + ' AND (detfac.anulado =' + "'" + str('N') + "'" + ' or detfac.anulado=' + "'" + str('R') + "')" + ' AND exa.concepto_id = ' + "'" + str(salvoConcepto) + "'" + ' and detFac.examen_id= ' + "'" + str(idCups) + "'" + ' and tarSoat."tiposHonorarios_id" = ' + "'" + str(tipoAyudante.id) + "'" + ' group by tarSoat."homologado",exa.nombre) AYUDANTE,	(select ' + "'" + str('Cod:') + "'" + "||' '||" + ' detFac."codigoHomologado" ||' + "' $ '||" + ' sum(detFac."valorTotal") 	FROM facturacion_facturaciondetalle detFac INNER JOIN facturacion_facturacion fac ON (fac.id=detFac.facturacion_id) INNER JOIN clinico_examenes exa on (exa.id=detFac.examen_id) INNER JOIN contratacion_convenios conv ON (conv.id=fac.convenio_id) INNER JOIN tarifarios_tablasalasdecirugia tarSala ON (tarSala."tipoHonorario_id" = detFac."tipoHonorario_id" and tarSala."grupoQx_id" = exa."grupoQx_id"  )    where detfac.facturacion_id= ' + "'" + str(factura) + "'" + ' AND (detfac.anulado =' + "'" + str('N') + "'" + ' or detfac.anulado=' + "'" + str('R') + "')" + '  AND exa.concepto_id = ' + "'" + str(salvoConcepto) + "'" + ' and detFac.examen_id= ' + "'" + str(idCups) + "'" + ' and tarSala."tipoHonorario_id" = ' + "'" + str(tipoDerechosSala.id) + "'" + ' GROUP BY   detFac."codigoHomologado",exa.nombre) SALAS FROM tarifarios_tiposhonorarios tipHono WHERE tipHono.nombre in (' + "'" + str('CIRUJANO') + "')" + ' ORDER BY tipHono.id'
+                    comando = 'select tipHono.id idHonorario,(select ' + "'" + str('Cod:') + "'" + '||' + "' '||" + ' tarSoat."homologado" ||' + "' $ '||" + 'sum(detFac."valorTotal") FROM facturacion_facturaciondetalle detFac INNER JOIN facturacion_facturacion fac ON (fac.id=detFac.facturacion_id) INNER JOIN clinico_examenes exa on (exa.id=detFac.examen_id) INNER JOIN contratacion_convenios conv ON (conv.id=fac.convenio_id)  INNER JOIN tarifarios_tablahonorariossoat tarSoat ON (tarSoat."tiposHonorarios_id" = detFac."tipoHonorario_id" and tarSoat."grupoQx_id" = exa."grupoQx_id"  ) where detfac.facturacion_id= ' + "'" + str(factura) + "'" + ' AND (detfac.anulado =' + "'" + str('N') + "'" + ' or detfac.anulado=' + "'" + str('R') + "')" + '  AND exa.concepto_id = ' + "'" + str(salvoConcepto) + "'" + ' and detFac.examen_id= ' + "'" + str(idCups) + "'" + ' and tarSoat."tiposHonorarios_id" = ' + "'" + str(tipoCirujano.id) + "'" + ' group by tarSoat."homologado",exa.nombre) CIRUJANO, (select ' + "'" + str('Cod:') + "'||' '||" + 'tarSoat."homologado" ||' + "'" + " $ '||" + ' sum(detFac."valorTotal") FROM facturacion_facturaciondetalle detFac INNER JOIN facturacion_facturacion fac ON (fac.id=detFac.facturacion_id) 	INNER JOIN clinico_examenes exa on (exa.id=detFac.examen_id) INNER JOIN contratacion_convenios conv ON (conv.id=fac.convenio_id) INNER JOIN tarifarios_tablahonorariossoat tarSoat ON (tarSoat."tiposHonorarios_id" = detFac."tipoHonorario_id" and tarSoat."grupoQx_id" = exa."grupoQx_id"  ) where detfac.facturacion_id= ' + "'" + str(factura) + "'" + ' AND (detfac.anulado =' + "'" + str('N') + "'" + ' or detfac.anulado=' + "'" + str('R') + "')" + ' AND exa.concepto_id = ' + "'" + str(salvoConcepto) + "'" + ' and detFac.examen_id= ' + "'" + str(idCups) + "'" + ' and tarSoat."tiposHonorarios_id" = ' + "'" + str(tipoAnestesiologo.id) + "'" + ' group by tarSoat."homologado",exa.nombre) ANESTESIOLOGO, (select ' + "'" + str('Cod:') + "'" + "||' '||" + 'tarSoat."homologado" ||' + "' $ '||" + 'sum(detFac."valorTotal") FROM facturacion_facturaciondetalle detFac INNER JOIN facturacion_facturacion fac ON (fac.id=detFac.facturacion_id)  INNER JOIN clinico_examenes exa on (exa.id=detFac.examen_id) INNER JOIN contratacion_convenios conv ON (conv.id=fac.convenio_id) INNER JOIN tarifarios_tablahonorariossoat tarSoat ON (tarSoat."tiposHonorarios_id" = detFac."tipoHonorario_id" and tarSoat."grupoQx_id" = exa."grupoQx_id"  ) where detfac.facturacion_id= ' + "'" + str(factura) + "'" + ' AND (detfac.anulado =' + "'" + str('N') + "'" + ' or detfac.anulado=' + "'" + str('R') + "')" + ' AND exa.concepto_id = ' + "'" + str(salvoConcepto) + "'" + ' and detFac.examen_id= ' + "'" + str(idCups) + "'" + ' and tarSoat."tiposHonorarios_id" = ' + "'" + str(tipoAyudante.id) + "'" + ' group by tarSoat."homologado",exa.nombre) AYUDANTE,	(select ' + "'" + str('Cod:') + "'" + "||' '||" + ' detFac."codigoHomologado" ||' + "' $ '||" + ' sum(detFac."valorTotal") 	FROM facturacion_facturaciondetalle detFac INNER JOIN facturacion_facturacion fac ON (fac.id=detFac.facturacion_id) INNER JOIN clinico_examenes exa on (exa.id=detFac.examen_id) INNER JOIN contratacion_convenios conv ON (conv.id=fac.convenio_id) INNER JOIN tarifarios_tablasalasdecirugia tarSala ON (tarSala."tipoHonorario_id" = detFac."tipoHonorario_id" and tarSala."grupoQx_id" = exa."grupoQx_id"  )    where detfac.facturacion_id= ' + "'" + str(factura) + "'" + ' AND (detfac.anulado =' + "'" + str('N') + "'" + ' or detfac.anulado=' + "'" + str('R') + "')" + '  AND exa.concepto_id = ' + "'" + str(salvoConcepto) + "'" + ' and detFac.examen_id= ' + "'" + str(idCups) + "'" + ' and tarSala."tipoHonorario_id" = ' + "'" + str(tipoDerechosSala.id) + "'" + ' GROUP BY   detFac."codigoHomologado",exa.nombre) SALAS   ,(select ' + "'" + str('Cod:') + "'||' '||" + ' detFac."codigoHomologado" ||' + "'" + str('$') + "'||" + ' sum(detFac."valorTotal") FROM facturacion_facturaciondetalle detFac INNER JOIN facturacion_facturacion fac ON (fac.id=detFac.facturacion_id) INNER JOIN clinico_examenes exa on (exa.id=detFac.examen_id) INNER JOIN contratacion_convenios conv ON (conv.id=fac.convenio_id) INNER JOIN tarifarios_tablamaterialsuturacuracion tarMat ON (tarMat."tipoHonorario_id" = detFac."tipoHonorario_id" and tarMat."grupoQx_id" = exa."grupoQx_id"  ) where detfac.facturacion_id= ' + "'" + str(factura) + "'" + ' AND (detfac.anulado =' + "'" + str('N') + "'" + ' or detfac.anulado=' + "'" + str('R') + "')" + '  AND exa.concepto_id = ' + "'" +  str(salvoConcepto) + "'" + ' and detFac.examen_id= ' + "'" + str(idCups) + "'" + ' and tarMat."tipoHonorario_id" = ' + "'" + str(tipoMateriales.id) + "'" + ' GROUP BY detFac."codigoHomologado",exa.nombre) MATERIALES FROM tarifarios_tiposhonorarios tipHono WHERE tipHono.nombre in (' + "'" + str('CIRUJANO') + "')" + ' ORDER BY tipHono.id'
 
                     print("COMANDO =", comando)
                     cury.execute(comando)
 
-                    pdf.cell(50, 26 + lineaConcepto + lineaDetalle, 'HonorariosMedicos', 0, 0, 'L')
-                    pdf.cell(50, 26 + lineaConcepto + lineaDetalle, 'Anestesiologo', 0, 0, 'L')
-                    pdf.cell(50, 26 + lineaConcepto + lineaDetalle, 'Ayudantia', 0, 0, 'L')
-                    pdf.cell(50, 26 + lineaConcepto + lineaDetalle, 'Derechos de Sala', 0, 0, 'L')
+                    pdf.cell(40, 26 + lineaConcepto + lineaDetalle, 'HonorariosMedicos', 0, 0, 'L')
+                    pdf.cell(40, 26 + lineaConcepto + lineaDetalle, 'Anestesiologo', 0, 0, 'L')
+                    pdf.cell(40, 26 + lineaConcepto + lineaDetalle, 'Ayudantia', 0, 0, 'L')
+                    pdf.cell(40, 26 + lineaConcepto + lineaDetalle, 'Derechos de Sala', 0, 0, 'L')
+                    pdf.cell(40, 26 + lineaConcepto + lineaDetalle, 'Materiales', 0, 0, 'L')
+
                     pdf.ln(4)
 
                     print("voy a comenzar a imprimir LOS HONORARIOS DEPROCEDIMIENTO EN CUESTION")
 
-                    for id, CIRUJANO, ANESTESIOLOGO, AYUDANTE, SALAS in cury.fetchall():
+                    for id, CIRUJANO, ANESTESIOLOGO, AYUDANTE, SALAS, MATERIALES  in cury.fetchall():
 
                         if (SALAS == None):
                             SALAS = 0
@@ -586,10 +593,15 @@ def ImprimirFactura(request):
                         if (CIRUJANO == None):
                             CIRUJANO = 0
 
-                        pdf.cell(50, 26 + lineaConcepto + lineaDetalle, str(CIRUJANO), 0, 0, 'L')
-                        pdf.cell(50, 26 + lineaConcepto + lineaDetalle, str(ANESTESIOLOGO), 0, 0, 'L')
-                        pdf.cell(50, 26 + lineaConcepto + lineaDetalle, str(AYUDANTE), 0, 0, 'L')
-                        pdf.cell(50, 26 + lineaConcepto + lineaDetalle, str(SALAS), 0, 0, 'L')
+                        if (MATERIALES == None):
+                            MATERIALES = 0
+
+
+                        pdf.cell(40, 26 + lineaConcepto + lineaDetalle, str(CIRUJANO), 0, 0, 'L')
+                        pdf.cell(40, 26 + lineaConcepto + lineaDetalle, str(ANESTESIOLOGO), 0, 0, 'L')
+                        pdf.cell(40, 26 + lineaConcepto + lineaDetalle, str(AYUDANTE), 0, 0, 'L')
+                        pdf.cell(40, 26 + lineaConcepto + lineaDetalle, str(SALAS), 0, 0, 'L')
+                        pdf.cell(40, 26 + lineaConcepto + lineaDetalle, str(MATERIALES), 0, 0, 'L')
 
                         pdf.ln(4)
 
@@ -940,15 +952,16 @@ def ImprimirLiquidacion(request):
                     print ("COMANDO =" , comando)
                     cury.execute(comando)
 
-                    pdf.cell(50, 26 + lineaConcepto + lineaDetalle, 'HonorariosMedicos', 0, 0, 'L')
-                    pdf.cell(50, 26 + lineaConcepto + lineaDetalle, 'Anestesiologo', 0, 0, 'L')
-                    pdf.cell(50, 26 + lineaConcepto + lineaDetalle, 'Ayudantia', 0, 0, 'L')
-                    pdf.cell(50, 26 + lineaConcepto + lineaDetalle, 'Derechos de Sala', 0, 0, 'L')
+                    pdf.cell(40, 26 + lineaConcepto + lineaDetalle, 'HonorariosMedicos', 0, 0, 'L')
+                    pdf.cell(40, 26 + lineaConcepto + lineaDetalle, 'Anestesiologo', 0, 0, 'L')
+                    pdf.cell(40, 26 + lineaConcepto + lineaDetalle, 'Ayudantia', 0, 0, 'L')
+                    pdf.cell(40, 26 + lineaConcepto + lineaDetalle, 'Derechos de Sala', 0, 0, 'L')
+                    pdf.cell(40, 26 + lineaConcepto + lineaDetalle, 'Materiales', 0, 0, 'L')
                     pdf.ln(4)
 
                     print("voy a comenzar a imprimir LOS HONORARIOS DEPROCEDIMIENTO EN CUESTION")
 
-                    for id, CIRUJANO, ANESTESIOLOGO, AYUDANTE, SALAS in cury.fetchall():
+                    for id, CIRUJANO, ANESTESIOLOGO, AYUDANTE, SALAS , MATERIALES in cury.fetchall():
 
                         if (SALAS == None):
                             SALAS = 0
@@ -959,12 +972,15 @@ def ImprimirLiquidacion(request):
                         if (CIRUJANO == None):
                             CIRUJANO = 0
 
+                        if (MATERIALES == None):
+                            MATERIALES = 0
 
+                        pdf.cell(40, 26 + lineaConcepto + lineaDetalle, str(CIRUJANO), 0, 0, 'L')
+                        pdf.cell(40, 26 + lineaConcepto + lineaDetalle, str(ANESTESIOLOGO), 0, 0, 'L')
+                        pdf.cell(40, 26 + lineaConcepto + lineaDetalle, str(AYUDANTE), 0, 0, 'L')
+                        pdf.cell(40, 26 + lineaConcepto + lineaDetalle, str(SALAS), 0, 0, 'L')
+                        pdf.cell(40, 26 + lineaConcepto + lineaDetalle, str(MATERIALES), 0, 0, 'L')
 
-                        pdf.cell(50, 26 + lineaConcepto + lineaDetalle, str(CIRUJANO), 0, 0, 'L')
-                        pdf.cell(50, 26 + lineaConcepto + lineaDetalle, str(ANESTESIOLOGO), 0, 0, 'L')
-                        pdf.cell(50, 26 + lineaConcepto + lineaDetalle, str(AYUDANTE), 0, 0, 'L')
-                        pdf.cell(50, 26 + lineaConcepto + lineaDetalle, str(SALAS), 0, 0, 'L')
 
                         pdf.ln(4)
 
@@ -1005,7 +1021,7 @@ def ImprimirLiquidacion(request):
                     pdf.cell(40, 26 + lineaConcepto + lineaDetalle, 'Anestesiologo', 0, 0, 'L')
                     pdf.cell(40, 26 + lineaConcepto + lineaDetalle, 'Ayudantia', 0, 0, 'L')
                     pdf.cell(40, 26 + lineaConcepto + lineaDetalle, 'Derechos de Sala', 0, 0, 'L')
-                    pdf.cell(40, 26 + lineaConcepto + lineaDetalle, 'Materailes', 0, 0, 'L')
+                    pdf.cell(40, 26 + lineaConcepto + lineaDetalle, 'Materiales', 0, 0, 'L')
                     pdf.ln(4)
 
                     print("voy a comenzar a imprimir LOS HONORARIOS DEPROCEDIMIENTO EN CUESTION")

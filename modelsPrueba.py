@@ -864,15 +864,19 @@ class ProgramacionCitasMedicas(models.Model):
 -------- ENFOQUES DE PUESTA A PUNTO: 1.- Acceder de cualquier forma 2.- Los datos correctos como debe ser . 3. Creo es una puesta apunta de facturtacion: abonos, totales , tot facturas CORREGIR
 ------------------------------------------------------------------------------------------------------------------------------------------------
 
-  -- Los combos desde HC, domnde solicita cirugia para el paciente estan corn error str() + !! ??
+-- BUENO YO CREO LLEGAR EL DIA LUNES 10 DE NOVIMBRE Y COMENZAR A SOLUCIONAR TODO ESTO ANTES DE CONTINUAR NO LE PARECE ??
+-- CONCLUSION DE LA PRIMERA PUESTA A PUNTO : Miercoles tien mucha cosa, complejo, debo terminar, mucho ork. aunque voy muy bien, ES COMO INFINITO
+  --  P A C I E N C I A
+
+  -- (.. ok validar)  Los combos desde HC, domnde solicita cirugia para el paciente estan corn error str() + !! ??
  -- Apenas aplico-grabo un abono no refresca saldo ( OJO SOLO EL refresh de las pantallas, liquidaciondetalle, porque si grabo bien los totales en liquidacion
  -- Cuando uno refresca en liquidacindetalle la cuneta, no refresca la cabecera, por ejemplo si tengo cambio de cama no lo refresca, sinmo solo hasta que selecciono de nuevo la cuenta
  -- hay que aregla la pantalla clinico, el datatable de interconsultas algo pasa allip - pailas
  -- ops en farmacia al hacer un despacho no actualiza la pantalla dispensacion general, toco salir y volbver a entrar para que actualizara
- -- ops desde farmacia me actualio mal el valor d ela cupota moderadora en liquidacion . OJO CORREGIR YAP
+ -- (..OK VALIDAR) ops desde farmacia me actualio mal el valor d ela cupota moderadora en liquidacion . OJO CORREGIR YAP
  -- ops cuando uno selecciona en farmaciafarmaciadetalle un mediamneto y lo señala y despacha por uno de ellos pasa que al seleccionar uno y no muetra despacho alguno, pero si seleciona el 
    -- otro muestra amos. ALGO PASA ALLI VERIFICAR
-  -- ops colocar el codigo cups en la pantalla liquidaciondetalle para mejor entendimiento
+  -- (.. ok validar) ops colocar el codigo cups en la pantalla liquidaciondetalle para mejor entendimiento
 -- ops farmaciadetalle en despachos, despacho un medicamento que requeria utorizacion COMO CONTROLAR ESO ????
 -- alaplicar un meiamento la nefermera no refresca ell datatable o no cordina los datatable y no lo muestra aunque si guarda la a plicacion
 -- cuando uno autoriza un medicamento y sale de la pantalla autorizaciondetalle si no quedan mas autorizaciones pendientes se debe colocar en el cabezote de la autortiacioin=autoriado
@@ -880,18 +884,27 @@ class ProgramacionCitasMedicas(models.Model):
 -- ojo en todas las pantallas donde se calcle total copagos,moderadoras etc es con valorEnCurso no valor
 -- cuando uno selecione en farmacia en la primera pantalla actualziar la pantalla farmaciadetalle de acuerdo a selccion. oseas lo que no he podido seleccionar un radio de un datatable
 -- ojo la pantallade farmacia depachos debe mostrat si y solo si el codigo CUPS y adems no muestran cantidades IMPORTATIDIMO
--- como hacer para que los comos muestre los empleados d cada area o depto (desarrollo loco)
+-- como hacer para que los combos muestre los empleados d cada area o depto (desarrollo loco) en farmacia despachosppor ejemplo. se me ocurre en el model de planta seleccionar creo el area o serv-admon
 -- ops me creo seis registro dupliado al dispensar una sola vez ALGO PADO
- -- ops en cirugia hay dos botones que se llaman miSolicitudCirugia2 ops hay como 4 botons iguales investigar . aps de pronto porque son en tablas datatvbles diferentes ARREGLAR
- -- ojola pantalla en cirugia de adicionar materiale qx argal cantidad * unitario = total , readonly total y hacerla multiplicacion
--- VEO MUY LENTO ELMODULO TARIFARIO PARA AGREAR CREAR TARIFAS
--- OJO CONTROLES DE CIRUGIA SI NOESTA PROGRAMADA NO DEJAR LIQUIDAR CUENTA, SI NO ESTA REALUZAD TAMPO DEJAR LIQUIDA .tamñoco dejar liquidar si no esta hecha la descricxpionqx
--- OPS PERSISTE EL ERROR DE QUE CUANDO CREA UNA CIRUGIA EN LA TBLA PROGRAMACION DE CIRUGIA NO CREA EL CIRUGIA_ID. // OJO ESTO NO SE HIZO DESDE LA HC VERIFICAR
--- la disponinbilidd de sals de cirugia no funciona aun
--- ops la cirugia aun no tiene el convenio . Para colocar un convenio de los que vienen poor HC habria que crear un boton que edite la cirugia y se pueda actualzar elconveio OJOOO
--- ojo control de fechas  en las fechas de quirofanos cirugias
--- ops al generar el totala pagar esta mal eror en generarliquidcaon dese cirugia-.. UUUYY NOO comoasi que totalproceimientos = 2200 re-maluco -- ops relocoo la pantalla no me muestra lo
-   que esta grabado en tablas como asi????? socorro ?? auxilio ERRROOR remaluco. son dos cosas uno lo que guarda elgeneralliquiacion de cirugia y otro el que selecciona lacuenta
 
+ -- ojola pantalla en cirugia de adicionar materiale qx argal cantidad * unitario = total , readonly total y hacerla multiplicacion
+-- ops en el modulo de cirugias en solicitud muestra elestado de  programacion mal debe ser el estado del la cirugia y lorelizado y facturado no debe salir
+-- ops arreglar que en lka programacion no salga la camacho con su estado de programacion
+-- ops tengo un entredo entre cirugias estados yprogramacion estados validar
+-- OJO CONTROLES DE CIRUGIA SI NOESTA PROGRAMADA NO DEJAR LIQUIDAR CUENTA, SI NO ESTA REALUZAD TAMPO DEJAR LIQUIDA .tamñoco dejar liquidar si no esta hecha la descricxpionqx
+
+
+-- VEO MUY LENTO ELMODULO TARIFARIO PARA AGREAR CREAR TARIFAS
+
+-- (.. ok validar) OPS PERSISTE EL ERROR DE QUE CUANDO CREA UNA CIRUGIA EN LA TBLA PROGRAMACION DE CIRUGIA NO CREA EL CIRUGIA_ID. // OJO ESTO NO SE HIZO DESDE LA HC VERIFICAR
+-- la disponinbilidd de sals de cirugia no funciona aun
+-- (ok.. validar) ops la cirugia aun no tiene el convenio . Para colocar un convenio de los que vienen poor HC habria que crear un boton que edite la cirugia y se pueda actualzar elconveio OJOOO
+-- ojo PONER control de fechas  en las fechas de quirofanos cirugias
+-- (ok.. validar)ops al generar el totala pagar esta mal eror en generarliquidcaon dese cirugia-.. UUUYY NOO comoasi que totalproceimientos = 2200 re-maluco -- ops relocoo la pantalla no me muestra lo
+   que esta grabado en tablas como asi????? socorro ?? auxilio ERRROOR remaluco. son dos cosas uno lo que guarda elgeneralliquiacion de cirugia y otro el que selecciona lacuenta
 -- ojooo pendiente arreglar en facturacion la funcion : PostConsultaLiquidacion, en cuanto mlode convenio y que cea cabezotes PAILAS no debe crear nada 
 -- cuano genero la liquidacion desde ciruia se salto un consecutivo de liquidaciondetalle OJOO ARREGLAR
+-- TODAVIA FALTA DEFINIR CUALES SON LOS MATERIALES TIPO HONORARIO Y CULAES SON MATERIALES QX . AHORA BIEN LA TARIFA DE LOS MATERIALES VIENE DE CIRUGIA O ES DEL TARIFARIO ??
+
+-- ops el saldo de la cuotamoderadora , totalrecibido lo paso en ceros ta mal debe colocar lo que estaba en liquidacion. Que paso papaberol donde puede ser el error OP -RE OPS - OPS QUe proceso blanqueo estos saldos ???
+   -- MAL TOTALAPAGAR, TOTALRECIBIDO, VALOR CUOTA MOPDERADORA OPS,, FUE PRODUCTO DE UN ROLLBACK YY QUE PASOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO

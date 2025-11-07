@@ -3137,7 +3137,7 @@ def crearHistoriaClinica(request):
                                        password="123456")
         curt = miConexiont.cursor()
 
-        comando = "SELECT p.id id, p.nombre ||' + "'" + str(' ') + "'" +  ' ||p.cie10 nombre FROM  clinico_diagnosticos  p ORDER BY p.nombre"
+        comando = 'SELECT p.id id, p.nombre ||' + "'" + str(' ') + "'" +  ' ||p.cie10 nombre FROM  clinico_diagnosticos  p ORDER BY p.nombre'
 
         curt.execute(comando)
         print(comando)
