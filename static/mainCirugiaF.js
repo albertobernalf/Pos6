@@ -3234,6 +3234,61 @@ function AdicionarQx() {
 function CrearAdicionQx() {
 
 		// alert("ENTRE CrearAdicionQx");
+		// Aqui validacion de fechas. Para Filtrar inconsistyencias
+
+		var ingresoQuirofano = document.getElementById("ingresoQuirofano").value ;
+		var fechaIniAnestesia2 = document.getElementById("fechaIniAnestesia2").value ;
+		var fechaQxIni = document.getElementById("fechaQxIni").value ;
+		var fechaQxIni = document.getElementById("fechaQxIni").value ;
+		var fechaQxFin = document.getElementById("fechaQxFin").value ;
+		var fechaFinAnestesia = document.getElementById("fechaFinAnestesia").value ;
+		var salidaQuirofano = document.getElementById("salidaQuirofano").value ;
+		var ingresoRecuperacion = document.getElementById("ingresoRecuperacion").value ;
+		var salidaRecuperacion = document.getElementById("salidaRecuperacion").value ;
+
+		if (fechaIniAnestesia2<ingresoQuirofano )
+			{
+			document.getElementById("cirugiaIdModalAdicionarQx").value = 'Fecha inicio de anestesia No puede ser menor que el ingreso al Quirofano !'
+			return;
+			}
+
+		if (fechaQxIni<fechaIniAnestesia2 )
+			{
+			document.getElementById("cirugiaIdModalAdicionarQx").value = 'Fecha inicio Quirurgico No puede ser menor que el inicio de la Anestesia !'
+			return;
+			}
+
+		if (fechaQxFin<fechaQxIni )
+			{
+			document.getElementById("cirugiaIdModalAdicionarQx").value = 'Fecha FIn Quirurgico No puede ser menor que la fecha de Inicio Quirurgico!'
+			return;
+			}
+
+		if (fechaFinAnestesia<fechaQxFin )
+			{
+			document.getElementById("cirugiaIdModalAdicionarQx").value = 'Fecha Fin de Anestesia No puede ser menor que la fecha de Fin Quirurgico!'
+			return;
+			}
+
+		if (salidaQuirofano<fechaFinAnestesia )
+			{
+			document.getElementById("cirugiaIdModalAdicionarQx").value = 'Fecha de salida Quirofano No puede ser menor que la fecha de Fin Anestesia !'
+			return;
+			}
+
+		if (ingresoRecuperacion<salidaQuirofano )
+			{
+			document.getElementById("cirugiaIdModalAdicionarQx").value = 'Fecha de Inicio Recuperacion No puede ser menor que la fecha de salida de quirofano !'
+			return;
+			}
+
+		if (salidaRecuperacion<ingresoRecuperacion )
+			{
+			document.getElementById("cirugiaIdModalAdicionarQx").value = 'Fecha de Salida de Recuperacion No puede ser menor que la fecha de ingreso a Recuperacion !'
+			return;
+			}
+	
+
 
 
        $.ajax({
@@ -3509,6 +3564,7 @@ function GenerarLiquidacionCirugia()
 		if (data2.sucess == 'False')
 		{
 		 $("#mensajesError").html(data2.Mensajes);
+		 return;
 		}
 		else
 		{
@@ -3529,3 +3585,28 @@ function GenerarLiquidacionCirugia()
 
 
 }
+
+$(document).on('change', '#unitarioLiquidacionInforme', function(event) {
+
+      
+
+
+       var cantidadInforme =   document.getElementById("cantidadInforme").value;
+       var unitarioLiquidacionInforme =   document.getElementById("unitarioLiquidacionInforme").value;
+	document.getElementById("valorLiquidacionSolicitud").value = cantidadInforme * unitarioLiquidacionInforme;
+
+});
+
+
+$(document).on('change', '#unitarioLiquidacionInforme', function(event) {
+
+      
+
+
+       var cantidad =   document.getElementById("cantidad").value;
+       var unitarioLiquidacion =   document.getElementById("unitarioLiquidacion").value;
+	document.getElementById("valorLiquidacionSolicitud").value = cantidad * unitarioLiquidacion;
+
+});
+
+

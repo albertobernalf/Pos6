@@ -534,7 +534,7 @@ def CrearSolicitudCirugia(request):
 
     #especialidadId = EspecialidadesMedicos.objects.get(planta_id=username)
 
-    estadoCirugia = EstadosCirugias.objects.get(nombre='SIN ASIGNAR')
+    estadoCirugia = EstadosCirugias.objects.get(nombre='PENDIENTE')
     estadoProgramacion = EstadosProgramacion.objects.get(nombre='Solicitud')
     #estadoSala = EstadosSalas.objetcs.get(nombre='OCUPADA')
     estadoReg = 'A'
@@ -2081,6 +2081,17 @@ def GenerarLiquidacionCirugia(request):
 
     # Busco datos de la cirugia relacionado,
     registroCirugia = Cirugias.objects.get(id=cirugiaId)
+
+    #AQui valido si es estado de la cirugia es apta para liquidar 
+
+    estadoConfirmada = EstadosCirugias.objects.get(nombre='CONFIRMADA')
+    estadoRealizada = EstadosCirugias.objects.get(nombre='REALIZADA')
+
+    if (registroCirugia.estadoCirugia_id != estadoRealizada.id):
+
+           return JsonResponse({'success': False, 'Mensajes': 'Cirugia de paciente No esta REALIZADA !'})
+
+
     registroConvenio = registroCirugia.convenio_id
     print("registroConvenio =", registroConvenio)
     # Busco convenio del paciente
@@ -2205,7 +2216,7 @@ def GenerarLiquidacionCirugia(request):
             # Aqui RUTINA busca consecutivo de liquidacion
 
 
-            comando = 'SELECT (max(p.consecutivo) + 1) cons FROM facturacion_liquidaciondetalle p WHERE liquidacion_id = ' + liquidacionId
+            comando = 'SELECT (max(p.consecutivo)) cons FROM facturacion_liquidaciondetalle p WHERE liquidacion_id = ' + liquidacionId
 
             cur3.execute(comando)
 

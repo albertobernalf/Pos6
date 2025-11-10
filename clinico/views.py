@@ -2233,7 +2233,7 @@ def crearHistoriaClinica(request):
 
                                 # especialidadId = EspecialidadesMedicos.objects.get(planta_id=username)
 
-                                estadoCirugia = EstadosCirugias.objects.get(nombre='SIN ASIGNAR')
+                                estadoCirugia = EstadosCirugias.objects.get(nombre='PENDIENTE')
                                 estadoProgramacion = EstadosProgramacion.objects.get(nombre='Solicitud')
                                 # estadoSala = EstadosSalas.objetcs.get(nombre='OCUPADA')
                                 estadoReg = 'A'

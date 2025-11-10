@@ -911,9 +911,12 @@ class ProgramacionCitasMedicas(models.Model):
    que esta grabado en tablas como asi????? socorro ?? auxilio ERRROOR remaluco. son dos cosas uno lo que guarda elgeneralliquiacion de cirugia y otro el que selecciona lacuenta
 -- ojooo pendiente arreglar en facturacion la funcion : PostConsultaLiquidacion, en cuanto mlode convenio y que cea cabezotes PAILAS no debe crear nada 
 -- cuano genero la liquidacion desde ciruia se salto un consecutivo de liquidaciondetalle OJOO ARREGLAR
+
 -- TODAVIA FALTA DEFINIR CUALES SON LOS MATERIALES TIPO HONORARIO Y CULAES SON MATERIALES QX . AHORA BIEN LA TARIFA DE LOS MATERIALES VIENE DE CIRUGIA O ES DEL TARIFARIO ??
 
 -- ops el saldo de la cuotamoderadora , totalrecibido lo paso en ceros ta mal debe colocar lo que estaba en liquidacion. Que paso papaberol donde puede ser el error OP -RE OPS - OPS QUe proceso blanqueo estos saldos ???
    -- MAL TOTALAPAGAR, TOTALRECIBIDO, VALOR CUOTA MOPDERADORA OPS,, FUE PRODUCTO DE UN ROLLBACK YY QUE PASOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
--- ops creo faltan 4 rips porque (11+5)= 16 y tengo 20 items en la factura VERIFICAR ...
+
+-- ops creo faltan 4 rips porque (11+5)= 16 y tengo 20 items en la factura VERIFICAR ... (OJO cuando es una cirugioa el vrservicio es la suma d elos honorarios)
+
 -- recuerda que hat que reportar las cirugias en rips como se hace y hacer ripsotrosingreso y consultas de una vez . hay que comenzar a cuadrar toto
