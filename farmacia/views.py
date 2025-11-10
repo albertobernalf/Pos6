@@ -229,7 +229,7 @@ def Load_dataFarmaciaDespachosDispensa(request, data):
                                    password="123456")
     curx = miConexionx.cursor()
 
-    detalle = 'select dispensa.id id, dispensa.despacho_id despacho , sum.nombre suministro, 	dispensa."dosisCantidad" dosis, dosis.descripcion unidadDosis,   vias.nombre via,	dispensa."cantidadOrdenada" cantidad FROM farmacia_farmaciadespachosdispensa dispensa INNER JOIN farmacia_farmaciaDetalle detalle ON (detalle.id = dispensa."farmaciaDetalle_id" ) INNER JOIN facturacion_suministros sum ON (sum.id= dispensa.suministro_id) INNER JOIN clinico_viasadministracion vias ON (vias.id= dispensa."viaAdministracion_id") INNER JOIN clinico_unidadesdemedidadosis dosis ON (dosis.id= dispensa."dosisUnidad_id") WHERE detalle.farmacia_id =' + "'" + str(farmaciaId) + "'" + ' AND detalle.id = ' + "'" + str(farmaciaDetalleId) + "'"
+    detalle = 'select dispensa.id id, dispensa.despacho_id despacho , sum.nombre||' + "' '||" + ' sum.cums suministro, 	dispensa."dosisCantidad" dosis, dosis.descripcion unidadDosis,   vias.nombre via,	dispensa."cantidadOrdenada" cantidad FROM farmacia_farmaciadespachosdispensa dispensa INNER JOIN farmacia_farmaciaDetalle detalle ON (detalle.id = dispensa."farmaciaDetalle_id" ) INNER JOIN facturacion_suministros sum ON (sum.id= dispensa.suministro_id) INNER JOIN clinico_viasadministracion vias ON (vias.id= dispensa."viaAdministracion_id") INNER JOIN clinico_unidadesdemedidadosis dosis ON (dosis.id= dispensa."dosisUnidad_id") WHERE detalle.farmacia_id =' + "'" + str(farmaciaId) + "'" + ' AND detalle.id = ' + "'" + str(farmaciaDetalleId) + "'"
 
     print(detalle)
 
@@ -563,6 +563,14 @@ def AdicionarDespachosDispensa(request):
         # Segundo creamos la dispensacion del despacho
         item = 0
 
+        ## Aqui crear RUTINA para validar si hay algun medicamento que van a despachar que requeira Autorizacion y devolver e indicar al usuario
+
+        ## Miercoles aqui deberia haber una rutina que lo envie a Autorizaciones No cree ?
+
+        flagNoRequiereAut = 'N'
+        autPendiente = EstadosAutorizacion.objects.get(bombre='PENDIENTE')
+
+
         for key in jsonFormulacion:
 
             if key["medicamentos"] != '':
@@ -591,6 +599,34 @@ def AdicionarDespachosDispensa(request):
                 #diasTratamiento = key["diasTratamiento"]
                 #print("diasTratamiento=", diasTratamiento)
 
+                #AQUI DEBO FILTRAR SI REQUIERE AUTORIZACION ENVIARLA A AUTORIZACIONES Y NO DESPACHAR
+
+                requiereAut = Suministros.objects.get(id=medicamentos)
+                print("requiereAut = " , requiereAut.requiereAutorizacion)
+
+                ##FIN RUTINA ENVIO A AUTORIZACIONES Y DEBE SEQUIR CON EL SIGTE ITEM
+
+
+                if (requiereAut.requiereAutorizacion== 'S'):
+
+                    if (flagNoRequiereAut=='N'):
+                        # Crea la Autorizacion
+                        comando = 'INSERT INTO autorizaciones_autorizaciones ("estadoAutorizacion_id","fechaModifica", "fechaRegistro", "estadoReg",empresa_id, "plantaOrdena_id", "sedesClinica_id", "usuarioRegistro_id", historia_id , convenio_id )  SELECT ' + "'" + str(autPendiente.id) + "'" + ', now(), now(), ' + "'" + str('A') + "'" + ', conv.empresa_id,  ' + "'" + str(username_id) + "','" + str(sede) + "','" + str(username_id) + "'," + "'" + str(historia.id) + "'" + ', conv.id FROM facturacion_conveniospacienteingresos convIngreso,  contratacion_convenios conv WHERE conv.id = ' + "'" + str(convenioId) + "'" + ' AND conv.id = convIngreso.convenio_id AND convIngreso."tipoDoc_id" = ' + "'" + str(tipoDocId) + "' AND convIngreso.documento_id = " + "'" + str(documentoId) + "'" + ' AND convIngreso."consecAdmision" = ' + "'" + str(ingresoPaciente) + "' AND conv.id = " + "'" + str(convenioId) + "'" + ' RETURNING id'
+
+                        cur3.execute(comando)
+                        autorizacionId = cur3.fetchone()[0]
+                        flagNoRequiereAut='S'
+
+                    else:
+                        #Crea la autorizacionDetalle
+                        comando = 'INSERT INTO autorizaciones_autorizacionesdetalle ("estadoAutorizacion_id", "cantidadSolicitada", "cantidadAutorizada", "fechaRegistro", "estadoReg", autorizaciones_id, "usuarioRegistro_id", "examenes_id", cums_id, "tiposExamen_id", "valorSolicitado")  VALUES (' + "'" + str(autPendiente.id) + "'," + "'" + str(cantidadMedicamento) + "'" + ' ,0, now(),' + "'" + str('A') + "','" + str(autorizacionId) + "','" + str(username_id) + "'," + "'" + str(medicamentos) + "',null, " + "null," + "'" + str('0') + "'" + ')'
+
+                        print("comando=", comando)
+                        cur3.execute(comando)
+
+                    # no lo carga al despacho
+                    continue
+
                 # Busco historialMediamentos
 
                 farmaciaDetalle = FarmaciaDetalle.objects.get(id=farmaciaDetalleId)
@@ -617,8 +653,6 @@ def AdicionarDespachosDispensa(request):
                 comando = 'INSERT INTO enfermeria_enfermeriarecibe ("dosisCantidad","cantidadDispensada","fechaRegistro", "estadoReg", "dosisUnidad_id", "enfermeriaDetalle_id", "suministro_id","usuarioRegistro_id", "viaAdministracion_id",despachos_id, "farmaciaDetalle_id", "farmaciaDespachosDispensa_id",anulado)  VALUES ( ' + "'" + str(dosis) + "','" + str(cantidadMedicamento) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(MedidaDosis.id) + "','" + str(enfermeriaDetalleId.id) + "','" + str(medicamentos) + "','" + str(username_id) + "','" + str(vias.id) + "','"  + str(despachoId) + "','"  + str(farmaciaDetalleId) + "','" + str(farmaciaDespachosDispensaId) +  "','N')"
                 print(comando)
                 cur3.execute(comando)
-
-
 
                 # Cuarto cargamos a la cuenta del paciente
 

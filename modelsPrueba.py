@@ -870,22 +870,29 @@ class ProgramacionCitasMedicas(models.Model):
 
   -- (.. ok validar)  Los combos desde HC, domnde solicita cirugia para el paciente estan corn error str() + !! ??
  -- Apenas aplico-grabo un abono no refresca saldo ( OJO SOLO EL refresh de las pantallas, liquidaciondetalle, porque si grabo bien los totales en liquidacion
- -- Cuando uno refresca en liquidacindetalle la cuneta, no refresca la cabecera, por ejemplo si tengo cambio de cama no lo refresca, sinmo solo hasta que selecciono de nuevo la cuenta
+	(LO UNICO ES QUE HAYA UN ERROR SE VE QUE REFRESCA)
+ -- Cuando uno refresca en liquidacindetalle la cuenta, no refresca la cabecera, por ejemplo si tengo cambio de cama no lo refresca, sinmo solo hasta que selecciono de nuevo la cuenta
+
  -- hay que aregla la pantalla clinico, el datatable de interconsultas algo pasa allip - pailas
- -- ops en farmacia al hacer un despacho no actualiza la pantalla dispensacion general, toco salir y volbver a entrar para que actualizara
+ -- (..ok. VALIDAR) ops en farmacia al hacer un despacho no actualiza la pantalla dispensacion general, toco salir y volbver a entrar para que actualizara
  -- (..OK VALIDAR) ops desde farmacia me actualio mal el valor d ela cupota moderadora en liquidacion . OJO CORREGIR YAP
- -- ops cuando uno selecciona en farmaciafarmaciadetalle un mediamneto y lo señala y despacha por uno de ellos pasa que al seleccionar uno y no muetra despacho alguno, pero si seleciona el 
-   -- otro muestra amos. ALGO PASA ALLI VERIFICAR
+ -- ops cuando uno selecciona en farmaciafarmaciadetalle un medicamento y lo señala y despacha por uno de ellos pasa que al seleccionar uno y no muetra despacho alguno, pero si seleciona el 
+   -- otro muestra amos. ALGO PASA ALLI VERIFICAR (OPS CREO ESTA BIEN )
   -- (.. ok validar) ops colocar el codigo cups en la pantalla liquidaciondetalle para mejor entendimiento
--- ops farmaciadetalle en despachos, despacho un medicamento que requeria utorizacion COMO CONTROLAR ESO ????
+-- ops farmaciadetalle en despachos, despacho un medicamento que requeria autorizacion COMO CONTROLAR ESO ????
 -- alaplicar un meiamento la nefermera no refresca ell datatable o no cordina los datatable y no lo muestra aunque si guarda la a plicacion
--- cuando uno autoriza un medicamento y sale de la pantalla autorizaciondetalle si no quedan mas autorizaciones pendientes se debe colocar en el cabezote de la autortiacioin=autoriado
-   -- para que desaparezca tambien de la pantalla
--- ojo en todas las pantallas donde se calcle total copagos,moderadoras etc es con valorEnCurso no valor
+
+-- cuando uno autoriza un medicamento y sale de la pantalla autorizaciondetalle si no quedan mas autorizaciones pendientes se debe colocar en el cabezote de la autortizacion=autorizado
+   --(..ok validar)  para que desaparezca tambien de la pantalla
+
+-- ojo en todas las pantallas donde se calcule total copagos,moderadoras etc es con valorEnCurso no valor
+
 -- cuando uno selecione en farmacia en la primera pantalla actualziar la pantalla farmaciadetalle de acuerdo a selccion. oseas lo que no he podido seleccionar un radio de un datatable
+
 -- ojo la pantallade farmacia depachos debe mostrat si y solo si el codigo CUPS y adems no muestran cantidades IMPORTATIDIMO
--- como hacer para que los combos muestre los empleados d cada area o depto (desarrollo loco) en farmacia despachosppor ejemplo. se me ocurre en el model de planta seleccionar creo el area o serv-admon
--- ops me creo seis registro dupliado al dispensar una sola vez ALGO PADO
+-- como hacer para que los combos muestre los empleados d cada area o depto (desarrollo loco) en farmacia despachosppor ejemplo. se me ocurre en el 
+	model de planta seleccionar creo el area o serv-admon
+-- ops me creo seis registro dupliado al dispensar una sola vez ALGO PASO
 
  -- ojola pantalla en cirugia de adicionar materiale qx argal cantidad * unitario = total , readonly total y hacerla multiplicacion
 -- ops en el modulo de cirugias en solicitud muestra elestado de  programacion mal debe ser el estado del la cirugia y lorelizado y facturado no debe salir
@@ -908,3 +915,5 @@ class ProgramacionCitasMedicas(models.Model):
 
 -- ops el saldo de la cuotamoderadora , totalrecibido lo paso en ceros ta mal debe colocar lo que estaba en liquidacion. Que paso papaberol donde puede ser el error OP -RE OPS - OPS QUe proceso blanqueo estos saldos ???
    -- MAL TOTALAPAGAR, TOTALRECIBIDO, VALOR CUOTA MOPDERADORA OPS,, FUE PRODUCTO DE UN ROLLBACK YY QUE PASOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+-- ops creo faltan 4 rips porque (11+5)= 16 y tengo 20 items en la factura VERIFICAR ...
+-- recuerda que hat que reportar las cirugias en rips como se hace y hacer ripsotrosingreso y consultas de una vez . hay que comenzar a cuadrar toto

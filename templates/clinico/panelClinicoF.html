@@ -14,7 +14,7 @@ tablaClinico td {
   padding: 1px;
   /* Alto de las celdas */
   height: 0.1 rem;
-  font-size:40%
+  font-size:40%;
   font-weight: bold;
 }
 
@@ -58,17 +58,17 @@ function RefrescarPantalla() {
     <ul class="tabs">
         <li><a href="#Clinica">	     <span class="fa-solid fa-user-doctor-message"></span> <span class="tab-text"> </span> Ingresos Clinicos </a></li>
 	<li><a href="#InterConsulta"><span class="fa-solid fa-user-doctor-message"></span> <span class="tab-text"> </span> Interconsultas</a></li>
-	<li><a href="#Impresionordenesmedicas"><span class="fa-solid fa-user-doctor-message"></span> <span class="tab-text"> </span> Impresion Ordenes Medica </a> </li>
-	<li><a href="#ConsultaFolios"><span class="fa-solid fa-user-doctor-message"></span> <span class="tab-text"> </span> Consulta Folios</a></li>
+	<li><a href="#ImpresionOrdenesMedicas"><span class="fa-solid fa-user-doctor-message"></span> <span class="tab-text"> </span> Impresion Ordenes Medica </a> </li>
+	<li><a href="#ConsultaFolios">         <span class="fa-solid fa-user-doctor-message"></span> <span class="tab-text"> </span> Consulta Folios</a></li>
     </ul>
 </div>
 
 <span style="padding-left:8px; padding-right:3px; padding-top: 3px; display:inline-block;">
-Alta Medica:  <span id="alta" name="alta" style='color:red'>{{altaMedica}} </span>
-Hospitalizados:  <span id="hosp" name="hosp" style='color:red'>{{Hospitalizados}}</span> <img class="manImg" src={% static 'img/iloveimg-converted/icons8-enfermera-48_X.JPG' %}></img>
-Urgencias:  <span id="urg" name="urg" style='color:red'>{{Urgencias}} </span> <img class="manImg" src={% static 'img/iloveimg-converted/icons8-enfermera-48_X.JPG' %}></img>
-Triage:  <span id="tria" name="tria" style='color:red'>{{Triage}} </span> <img class="manImg" src={% static 'img/iloveimg-converted/icons8-enfermera-48_X.JPG' %}></img>
-Ambulatorios:  <span id="amb" name="amb" style='color:red'>{{Ambulatorios}} </span> <img class="manImg" src={% static 'img/iloveimg-converted/icons8-enfermera-48_X.JPG' %}></img>
+Alta Medica:  <span id="alta" name="alta" style="color:red">{{altaMedica}} </span>
+Hospitalizados:  <span id="hosp" name="hosp" style="color:red">{{Hospitalizados}}</span> <img class="manImg" src={% static 'img/iloveimg-converted/icons8-enfermera-48_X.JPG' %}></img>
+Urgencias:  <span id="urg" name="urg" style="color:red">{{Urgencias}} </span> <img class="manImg" src={% static 'img/iloveimg-converted/icons8-enfermera-48_X.JPG' %}></img>
+Triage:  <span id="tria" name="tria" style="color:red">{{Triage}} </span> <img class="manImg" src={% static 'img/iloveimg-converted/icons8-enfermera-48_X.JPG' %}></img>
+Ambulatorios:  <span id="amb" name="amb" style="color:red">{{Ambulatorios}} </span> <img class="manImg" src={% static 'img/iloveimg-converted/icons8-enfermera-48_X.JPG' %}></img>
 </span>
 
 {% endblock %}
@@ -102,7 +102,7 @@ Ambulatorios:  <span id="amb" name="amb" style='color:red'>{{Ambulatorios}} </sp
 		<input type="hidden" id="consec" name="consec" value="">
 	        <input type="hidden" id="tipoIng" name="tipoIng" value="{{tipoIng}}">
 
-		 <table class="table " id="tablaClinicobottom"  style="height: 1px; background-color:LightGray; border: 1px solid black; border-radius: 10px;width:95%;">
+		 <table class="table" id="tablaClinicobottom"  style="height: 1px; background-color:LightGray; border: 1px solid black; border-radius: 10px;width:95%;">
                         <tr>
                             <td>
                                 <label for="espMedico" class="col-sm-3 control-label">Especialidad :</label>
@@ -163,7 +163,7 @@ Ambulatorios:  <span id="amb" name="amb" style='color:red'>{{Ambulatorios}} </sp
                     </div>        
   </article>
 
-<article id="Impresionordenesmedicas">
+<article id="ImpresionOrdenesMedicas">
 
 	impresion ordenes
 </article>

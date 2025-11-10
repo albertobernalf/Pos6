@@ -130,19 +130,29 @@ select * from cirugia_estadoscirugias;
 update FACTURACION_facturacion set "totalCuotaModeradora" = 1200, "totalRecibido" = 1200, "valorApagar" = 18758908 - 1200;
 
 select tipHono.id idHonorario,(select 'Cod:'||' '|| tarSoat."homologado" ||' $ '||sum(detFac."valorTotal") FROM facturacion_facturaciondetalle detFac INNER JOIN facturacion_facturacion fac ON (fac.id=detFac.facturacion_id) INNER JOIN clinico_examenes exa on (exa.id=detFac.examen_id) INNER JOIN contratacion_convenios conv ON (conv.id=fac.convenio_id)  INNER JOIN tarifarios_tablahonorariossoat tarSoat ON (tarSoat."tiposHonorarios_id" = detFac."tipoHonorario_id" and tarSoat."grupoQx_id" = exa."grupoQx_id"  ) where detfac.facturacion_id= '151' AND (detfac.anulado ='N' or detfac.anulado='R')  AND exa.concepto_id = '3' and detFac.examen_id= '4021' and tarSoat."tiposHonorarios_id" = '1' group by tarSoat."homologado",exa.nombre) CIRUJANO, (select 'Cod:'||' '||tarSoat."homologado" ||' $ '|| sum(detFac."valorTotal") FROM facturacion_facturaciondetalle detFac INNER JOIN facturacion_facturacion fac ON (fac.id=detFac.facturacion_id)   INNER JOIN clinico_examenes exa on (exa.id=detFac.examen_id) INNER JOIN contratacion_convenios conv ON (conv.id=fac.convenio_id) INNER JOIN tarifarios_tablahonorariossoat tarSoat ON (tarSoat."tiposHonorarios_id" = detFac."tipoHonorario_id" and tarSoat."grupoQx_id" = exa."grupoQx_id"  ) where detfac.facturacion_id= '151' AND (detfac.anulado ='N' or detfac.anulado='R') AND exa.concepto_id = '3' and detFac.examen_id= '4021' and tarSoat."tiposHonorarios_id" = '2' group by tarSoat."homologado",exa.nombre) ANESTESIOLOGO, (select 'Cod:'||' '||tarSoat."homologado" ||' $ '||sum(detFac."valorTotal") FROM facturacion_facturaciondetalle detFac INNER JOIN facturacion_facturacion fac ON (fac.id=detFac.facturacion_id)  INNER JOIN clinico_examenes exa on (exa.id=detFac.examen_id) INNER JOIN contratacion_convenios conv ON (conv.id=fac.convenio_id) INNER JOIN tarifarios_tablahonorariossoat tarSoat ON (tarSoat."tiposHonorarios_id" = detFac."tipoHonorario_id" and tarSoat."grupoQx_id" = exa."grupoQx_id"  ) where detfac.facturacion_id= '151' AND (detfac.anulado ='N' or detfac.anulado='R') AND exa.concepto_id = '3' and detFac.examen_id= '4021' and tarSoat."tiposHonorarios_id" = '3' group by tarSoat."homologado",exa.nombre) AYUDANTE,    (select 'Cod:'||' '|| detFac."codigoHomologado" ||' $ '|| sum(detFac."valorTotal")   FROM facturacion_facturaciondetalle detFac INNER JOIN facturacion_facturacion fac ON (fac.id=detFac.facturacion_id) INNER JOIN clinico_examenes exa on (exa.id=detFac.examen_id) INNER JOIN contratacion_convenios conv ON (conv.id=fac.convenio_id) INNER JOIN tarifarios_tablasalasdecirugia tarSala ON (tarSala."tipoHonorario_id" = detFac."tipoHonorario_id" and tarSala."grupoQx_id" = exa."grupoQx_id"  )    where detfac.facturacion_id= '151' AND (detfac.anulado ='N' or detfac.anulado='R')  AND exa.concepto_id = '3' and detFac.examen_id= '4021' and tarSala."tipoHonorario_id" = '5' GROUP BY   detFac."codigoHomologado",exa.nombre) SALAS   ,
-	
+
+	-- Ojo aquip no salen los materiales
+
+	select cirugia_id,examen_id,cums_id,"tipoHonorario_id",* from facturacion_facturaciondetalle where "tipoHonorario_id" = '7' 
+	 
 	(select 'Cod:'||' '|| detFac."codigoHomologado" ||'$'|| sum(detFac."valorTotal") 
-	FROM facturacion_liquidaciondetalle detFac 
-	INNER JOIN facturacion_liquidacion fac ON (fac.id=detFac.liquidacion_id) 
+	FROM facturacion_facturaciondetalle detFac 
+	INNER JOIN facturacion_facturacion fac ON (fac.id=detFac.facturacion_id) 
 	INNER JOIN clinico_examenes exa on (exa.id=detFac.examen_id)
 	INNER JOIN contratacion_convenios conv ON (conv.id=fac.convenio_id)
 	INNER JOIN tarifarios_tablamaterialsuturacuracion tarMat ON (tarMat."tipoHonorario_id" = detFac."tipoHonorario_id" and tarMat."grupoQx_id" = exa."grupoQx_id"  ) 
-	where detfac.liquidacion_id= '151' AND (detfac.anulado ='N' or detfac.anulado='R')  AND exa.concepto_id = '3' and 
+	where detfac.facturacion_id= '151' AND (detfac.anulado ='N' or detfac.anulado='R')  AND exa.concepto_id = '3' and 
 	detFac.examen_id= '4021' and tarMat."tipoHonorario_id" = '7' 
 	GROUP BY detFac."codigoHomologado",exa.nombre) MATERIALES 
 	FROM tarifarios_tiposhonorarios tipHono 
 	WHERE tipHono.nombre in ('CIRUJANO')
 	ORDER BY tipHono.id
+
+	select "codigoCups","grupoQx_id", * from clinico_examenes where id=4021
+	select * from tarifarios_tablamaterialsuturacuracion
+
+	SELECT * FROM CLINICO_EXAMENES
+	select * from facturacion_suministros
 update cirugia_cirugias set "estadoCirugia_id" =5
 
 select * from cirugia_estadoscirugias

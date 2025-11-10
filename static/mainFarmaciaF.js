@@ -1317,8 +1317,13 @@ function AdicionarDespachosDispensa()
         arrancaFarmacia(1,data);
 	    dataTableFarmaciaDespachosInitialized = true;
 
-        arrancaFarmacia(4,data);
+        //arrancaFarmacia(4,data);
+	//    dataTableFarmaciaDespachosDispensaInitialized = true;
+
+
+        arrancaFarmacia(5,data);
 	    dataTableFarmaciaDespachosDispensaInitialized = true;
+
 
         // aqui inicializar tablaFormulacion etc
 

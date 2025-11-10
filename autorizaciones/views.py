@@ -213,8 +213,11 @@ def ActualizarAutorizacionDetalle(request):
     estadoAutorizacion = request.POST['estadoAutorizacion']
     print("estadoAutorizacion =", estadoAutorizacion)
 
+    estadoAutorizacionAutorizado = EstadoAutorizacion.objects.get(nombre='AUTORIZADO')
+    print("estadoAutorizacion =", estadoAutorizacion)
+
     serviciosAdministrativos = request.POST['AserviciosAdministrativos']
-    print("serviciosAdministrativos =", serviciosAdministrativos)
+    print("estadoAutorizacionAutorizado =", estadoAutorizacionAutorizado)
 
     numeroAutorizacion = request.POST['numeroAutorizacion']
     print("numeroAutorizacion =", numeroAutorizacion)
@@ -346,9 +349,6 @@ def ActualizarAutorizacionDetalle(request):
                 print("comando = ", comando)
                 enfermeriaId = curt.fetchone()[0]
 
-
-
-
             # Aqui Guardar FARMACIA DETALLE
             comando = 'INSERT INTO farmacia_farmaciadetalle(farmacia_id, "historiaMedicamentos_id",suministro_id,"dosisCantidad", "dosisUnidad_id","viaAdministracion_id","cantidadOrdenada","fechaRegistro","usuarioRegistro_id", "estadoReg", "consecutivoMedicamento")  SELECT ' + "'" + str(
                 farmaciaId) + "', id," + ' suministro_id,"dosisCantidad" , "dosisUnidad_id" , "viaAdministracion_id" ,"cantidadSolicitada",' + "'"  + str(
@@ -377,31 +377,27 @@ def ActualizarAutorizacionDetalle(request):
         miConexiont.commit()
 
         totalSuministros = LiquidacionDetalle.objects.all().filter(liquidacion_id=liquidacionId).filter(
-            examen_id=None).exclude(estadoRegistro='N').aggregate(totalS=Coalesce(Sum('valorTotal'), 0))
+            examen_id=None).exclude(estadoRegistro='I').exclude(anulado='S').aggregate(totalS=Coalesce(Sum('valorTotal'), 0))
         totalSuministros = (totalSuministros['totalS']) + 0
         print("totalSuministros", totalSuministros)
         totalProcedimientos = LiquidacionDetalle.objects.all().filter(liquidacion_id=liquidacionId).filter(
-            cums_id=None).exclude(estadoRegistro='N').aggregate(totalP=Coalesce(Sum('valorTotal'), 0))
+            cums_id=None).exclude(estadoRegistro='I').exclude(anulado='S').aggregate(totalP=Coalesce(Sum('valorTotal'), 0))
         totalProcedimientos = (totalProcedimientos['totalP']) + 0
         print("totalProcedimientos", totalProcedimientos)
         registroPago = Liquidacion.objects.get(id=liquidacionId)
 
         # Continua Aqui
 
-        totalCopagos = Pagos.objects.all().filter(tipoDoc_id=datosHc.tipoDoc_id).filter(
-            documento_id=datosHc.documento_id).filter(consec=datosHc.consecAdmision).filter(formaPago_id=4).exclude(estadoReg='N').exclude(anulado='S').aggregate(totalC=Coalesce(Sum('valor'), 0))
+        totalCopagos = Pagos.objects.all().filter(tipoDoc_id=datosHc.tipoDoc_id).filter(documento_id=datosHc.documento_id).filter(consec=datosHc.consecAdmision).filter(formaPago_id=4).exclude(estadoReg='I').exclude(anulado='S').aggregate(totalC=Coalesce(Sum('valorEnCurso'), 0))
         totalCopagos = (totalCopagos['totalC']) + 0
         print("totalCopagos", totalCopagos)
-        totalCuotaModeradora = Pagos.objects.all().filter(tipoDoc_id=datosHc.tipoDoc_id).filter(
-            documento_id=datosHc.documento_id).filter(consec=datosHc.consecAdmision).filter(formaPago_id=3).exclude(estadoReg='N').exclude(anulado='S').aggregate(totalM=Coalesce(Sum('valor'), 0))
+        totalCuotaModeradora = Pagos.objects.all().filter(tipoDoc_id=datosHc.tipoDoc_id).filter(documento_id=datosHc.documento_id).filter(consec=datosHc.consecAdmision).filter(formaPago_id=3).exclude(estadoReg='I').exclude(anulado='S').aggregate(totalM=Coalesce(Sum('valorEnCurso'), 0))
         totalCuotaModeradora = (totalCuotaModeradora['totalM']) + 0
         print("totalCuotaModeradora", totalCuotaModeradora)
-        totalAnticipos = Pagos.objects.all().filter(tipoDoc_id=datosHc.tipoDoc_id).filter(
-            documento_id=datosHc.documento_id).filter(consec=datosHc.consecAdmision).filter(formaPago_id=1).exclude(estadoReg='N').exclude(anulado='S').aggregate(Anticipos=Coalesce(Sum('valor'), 0))
+        totalAnticipos = Pagos.objects.all().filter(tipoDoc_id=datosHc.tipoDoc_id).filter(documento_id=datosHc.documento_id).filter(consec=datosHc.consecAdmision).filter(formaPago_id=1).exclude(estadoReg='I').exclude(anulado='S').aggregate(Anticipos=Coalesce(Sum('valorEnCurso'), 0))
         totalAnticipos = (totalAnticipos['Anticipos']) + 0
         print("totalAnticipos", totalAnticipos)
-        totalAbonos = Pagos.objects.all().filter(tipoDoc_id=datosHc.tipoDoc_id).filter(
-            documento_id=datosHc.documento_id).filter(consec=datosHc.consecAdmision).filter(formaPago_id=2).exclude(estadoReg='N').exclude(anulado='S').aggregate(totalAb=Coalesce(Sum('valor'), 0))
+        totalAbonos = Pagos.objects.all().filter(tipoDoc_id=datosHc.tipoDoc_id).filter(documento_id=datosHc.documento_id).filter(consec=datosHc.consecAdmision).filter(formaPago_id=2).exclude(estadoReg='I').exclude(anulado='S').aggregate(totalAb=Coalesce(Sum('valorEnCurso'), 0))
         totalAbonos = (totalAbonos['totalAb']) + 0
         # totalAbonos = totalCopagos + totalAnticipos + totalCuotaModeradora
         print("totalAbonos", totalAbonos)
@@ -419,7 +415,6 @@ def ActualizarAutorizacionDetalle(request):
         detalle = 'UPDATE autorizaciones_autorizacionesdetalle SET  "estadoAutorizacion_id" =   ' + "'" + str(estadoAutorizacion) + "'," + ' "numeroAutorizacion" = '   + "'" + str(numeroAutorizacion) + "'," + ' "valorAutorizado" = ' + "'" + str(valorAutorizado) + "'," +   ' "fechaRegistro" = ' + "'" + str(fechaRegistro) + "',"  + ' "cantidadAutorizada" = ' + "'" + str(cantidadAutorizada) +  "'" +  ' WHERE id = ' + "'" + str(autorizacionDetalleId) + "'"
         print("detalle = ", detalle)
         curt.execute(detalle)
-
 
         miConexiont.commit()
         miConexiont.close()
@@ -441,6 +436,26 @@ def ActualizarAutorizacionDetalle(request):
         if miConexiont:
             curt.close()
             miConexiont.close()
+
+    ## Aqui rutina actualizar el cabezote de autorizaciones el estado AUTORIZADO si todos los hijos autorizacionesdetalle esta AUTORIZADOS
+
+    noAutorizados = AutorizacionesDetalle.objects.filter(autorizaciones_id = datosAut.id).exclude(EstadoAutorizacion_id=estadoAutorizacionAutorizado.id).count()
+
+
+
+    if (noAutorizados == 0):
+
+        miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                       password="123456")
+        curt = miConexiont.cursor()
+
+        comando12 = 'UPDATE autorizaciones_autorizaciones SET "estadoAutorizacion_id" = ' + "'" + str(estadoAutorizacionAutorizado.id) + "' WHERE id = " + "'" + str(datosAut) + "'"
+        print("COMANDO12 = " , comando12)
+        curt.execute(comando12)
+        miConexiont.commit()
+        miConexiont.close()
+
+
 
     ## si no existe hay que crear cabezote
     ## Aqui actualiza el numero de autorizacion para medicamentos
