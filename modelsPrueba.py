@@ -920,3 +920,14 @@ class ProgramacionCitasMedicas(models.Model):
 -- ops creo faltan 4 rips porque (11+5)= 16 y tengo 20 items en la factura VERIFICAR ... (OJO cuando es una cirugioa el vrservicio es la suma d elos honorarios)
 
 -- recuerda que hat que reportar las cirugias en rips como se hace y hacer ripsotrosingreso y consultas de una vez . hay que comenzar a cuadrar toto
+
+------------------------
+------sda puesta apunta
+----------------------
+ 
+-- Poner cie10 en diagnosticos
+-- cuando creo un triage e inmediatamente voy a crear la admision se pierden los default valores de rips
+-- al crear admision desde triage l combo de dx debe traer el cie10
+-- por cua al seleccionar la empresa de compensa r no tyrae conevnio, hay dque jugar opara que lo traiga
+-- por que al coloar el rips de recien nacido , se arregla el erroo de los ripsegreeo ???????????????
+

@@ -149,7 +149,7 @@ function RefrescarPantalla() {
 					<th>solicitaBiopsia</th>
 					<th>solicitaMalla</th>
 					<th>solicitaOtros</th>
-					<th>estadoCir </th>
+					<th>estadoProg </th>
 					<th>anestesia</th>
 				              
 					</bold>                                  
@@ -795,12 +795,24 @@ function RefrescarPantalla() {
                                         </div>
                          </div>
 
+			  <div class="col-2">
+                                        <label for="procedimientosCir" class="col-sm-1 control-label">Material:</label>
+                                        <div class="col-sm-8">
+                                            <select class="select-css h-40 w-20" id="procedimientosCir"  tabindex= "0"  name="procedimientosCir"  required>
+                                                {% for procedimientosCirugia in ProcedimientosCirugia %}
+                                                <option value="{{procedimientosCirugia.id}}"> {{procedimientosCirugia.nombre}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                         </div>
 
 			
 			  <div class="col-2">
 			 Cantidad:
 			 <input type="text" class="form-control" id="cantidad" name="cantidad"  required  ></input>  
                          </div>
+
+
 
 			  <div class="col-2">
 			  Valor Unitario:
@@ -812,12 +824,10 @@ function RefrescarPantalla() {
 			 <input type="text" class="form-control" id="valorLiquidacionSolicitud" name="valorLiquidacionSolicitud" readonly ></input>
                          </div>
 
-			  <div class="col-2">
-			 Hoja de Gasto:
-			 <input type="checkbox" id="hojaDeGasto" name="hojaDeGasto" ></input>
-                         </div>
 
 			 <input type="hidden" class="form-control" id="usernameMaterialCirugia_id" name="usernameMaterialCirugia_id"  ></input>  
+
+
 
 			 <div class="col-2">
 				<button type="button" class="btn btn-primary" id="saveBtnCrearMaterialCirugia" onclick="CrearMaterialCirugia()">Adicionar!</button> 
@@ -836,8 +846,6 @@ function RefrescarPantalla() {
 						<th>Procedimiento</th>  
                                            	<th>suministro_id</th>
 						<th>Suministro</th>
-						<th>Hoja de Gasto</th>
-
 						<th>tipo</th>  
 						<th>cantidad</th>  
 						<th>valorLiquidacion</th>  
@@ -1347,8 +1355,6 @@ function RefrescarPantalla() {
                                             	<th>Procedimiento</th>
 						<th>suministro_id</th>
 						<th>Suministro</th>
-						<th>Hoja De Gasto</th>
-
 						<th>tipo</th>  
 						<th>cantidad</th>  
 						<th>valorLiquidacion</th>  
@@ -1731,8 +1737,6 @@ function RefrescarPantalla() {
                                         </div>
                          </div>
 
-
-
 			  <div class="col-2">
 			  Valor Unitario:
 			 <input type="text" class="form-control" id="unitarioLiquidacionInforme" name="unitarioLiquidacionInforme"  ></input>  
@@ -1747,11 +1751,6 @@ function RefrescarPantalla() {
 			  <div class="col-2">
 			 Valor Liquidacion:
 			 <input type="text" class="form-control" id="valorLiquidacion" name="valorLiquidacion"  readonly ></input>
-                         </div>
-
-			  <div class="col-2">
-			 Hoja de Gasto:
-			 <input type="checkbox"  id="hojaDeGastoInforme" name="hojaDeGastoInforme"   ></input>
                          </div>
 
 
@@ -1778,7 +1777,6 @@ function RefrescarPantalla() {
                                                 <th>Procedimiento</th>
 						<th>suministro_id</th>
 						<th>Suministro</th>
-						<th>HojaGasto</th>
 						<th>tipo</th>  
 						<th>cantidad</th>  
 						<th>valorLiquidacion</th>  

@@ -514,7 +514,7 @@ function arrancaCirugia(valorTabla,valorData)
 
 		
 
-                { data: "fields.estadoCir"},
+                { data: "fields.estadoProg"},
                 { data: "fields.anestesia"},
 
                         ]
@@ -861,7 +861,7 @@ function arrancaCirugia(valorTabla,valorData)
 		{ className: 'centered', targets: [0, 1, 2, 3] },
 	    { width: '10%', targets: [2,3] },
 		{  
-                    "targets": 8
+                    "targets": 7
                }
             ],
 	 pageLength: 3,
@@ -905,7 +905,6 @@ function arrancaCirugia(valorTabla,valorData)
 		{ data: "fields.cupsNombre"},          
                 { data: "fields.suministro_id"},
                 { data: "fields.suministro"},
-                { data: "fields.hojaDeGasto"},
                 { data: "fields.tipoSuministro"},
                 { data: "fields.cantidad"},
                 { data: "fields.valorLiquidacion"},
@@ -1088,7 +1087,7 @@ function arrancaCirugia(valorTabla,valorData)
 		{ className: 'centered', targets: [0, 1, 2, 3] },
 	    { width: '10%', targets: [2,3] },
 		{  
-                    "targets": 10
+                    "targets": 9
                }
             ],
 	 pageLength: 3,
@@ -1134,7 +1133,6 @@ function arrancaCirugia(valorTabla,valorData)
 
                 { data: "fields.suministro_id"},
                 { data: "fields.suministro"},
-               { data: "fields.hojaDeGasto"},
                 { data: "fields.tipoSuministro"},
                { data: "fields.cantidad"},
                { data: "fields.valorLiquidacion"},
@@ -1228,7 +1226,7 @@ function arrancaCirugia(valorTabla,valorData)
 		{ className: 'centered', targets: [0, 1, 2, 3] },
 	    { width: '10%', targets: [2,3] },
 		{  
-                    "targets": 9
+                    "targets": 8
                }
             ],
 	 pageLength: 3,
@@ -1262,8 +1260,6 @@ function arrancaCirugia(valorTabla,valorData)
 		 { data: "fields.cupsNombre"},
                 { data: "fields.suministro_id"},
                 { data: "fields.suministro"},
-
-               { data: "fields.hojaDeGasto"},
                 { data: "fields.tipoSuministro"},
                { data: "fields.cantidad"},
                { data: "fields.valorLiquidacion"},
@@ -1636,7 +1632,7 @@ $('#tablaProgramacionCirugia tbody').on('click', '.miEditaProgramacionCirugia', 
  	      		      });
 
 
-		// fin combo solicitud participa y materia
+		// fin combo solicitud participa y maeria
 
 		// combos Informe participa y merial
 
@@ -3592,19 +3588,19 @@ function GenerarLiquidacionCirugia()
 
 $(document).on('change', '#unitarioLiquidacionInforme', function(event) {
 
-	alert("entre");
       
 
 
        var cantidadInforme =   document.getElementById("cantidadInforme").value;
        var unitarioLiquidacionInforme =   document.getElementById("unitarioLiquidacionInforme").value;
-	document.getElementById("valorLiquidacionSolicitudInforme").value = cantidadInforme * unitarioLiquidacionInforme;
+	document.getElementById("valorLiquidacionSolicitud").value = cantidadInforme * unitarioLiquidacionInforme;
 
 });
 
 
-$(document).on('change', '#unitarioLiquidacion', function(event) {
-  
+$(document).on('change', '#unitarioLiquidacionInforme', function(event) {
+
+      
 
 
        var cantidad =   document.getElementById("cantidad").value;

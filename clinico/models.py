@@ -258,6 +258,7 @@ class Examenes(models.Model):
     nombre = models.CharField(max_length=300 , null=True,  blank=True , unique=True)
     edadIni = models.IntegerField(blank=True, null=True, editable=True)
     edadFin = models.IntegerField( blank=True, null=True, editable=True)
+    tipoHonorario =  models.ForeignKey('tarifarios.TiposHonorarios', blank=True,null= True, editable=True, on_delete=models.PROTECT, related_name='TipoHonorario76091')
     solicitaEnfermeria = models.CharField(max_length=1, choices=FLAG_CHOICES, default='N', null=False, blank=True, )
     citaControl = models.CharField(max_length=1, choices=FLAG_CHOICES, default='N', blank=True, null=True, editable=True)
     concepto = models.ForeignKey('facturacion.Conceptos', blank=True, null=True, editable=True, on_delete=models.PROTECT)

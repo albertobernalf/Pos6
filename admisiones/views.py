@@ -37,6 +37,7 @@ from django.db.models import F
 from django.db.models import Q
 from django.db import transaction, IntegrityError
 from django.db.models import F
+from tarifarios.models import TiposHonorarios
 
 
 # Create your views here.
@@ -2470,7 +2471,36 @@ def escogeAcceso(request, Sede, Username, Profesional, Documento, NombreSede, es
 
         context['SuministrosCirugia'] = suministrosCirugia
 
-        # Fin combo tiposHonorarios
+        # Fin combo SUMINISTROS CIRUGIA
+
+        honorarioMaterialQx = TiposHonorarios.objects.get(nombre='MATERIAL QX')
+
+	# Combo ProcedimientosCirugia
+
+        miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                       password="123456")
+        curt = miConexiont.cursor()
+
+        comando = 'SELECT p.id id, p.nombre||' + "' '||" + '"codigoCups" nombre FROM  clinico_examenes  p WHERE p."tipoHonorario_id" = ' + "'" + str(honorarioMaterialQx.id) + "'" + ' ORDER BY nombre'
+
+        curt.execute(comando)
+        print(comando)
+
+        procedimientosCirugia = []
+
+
+        for id, nombre in curt.fetchall():
+            procedimientosCirugia.append({'id': id, 'nombre': nombre})
+
+        miConexiont.close()
+        print("procedimientosCirugia", procedimientosCirugia)
+
+        context['ProcedimientosCirugia'] = procedimientosCirugia
+
+        # Fin combo ProcedimientosCirugia
+
+
+
 
         # Combo estadosCirugia
 

@@ -191,13 +191,19 @@ class CirugiasMaterialQx(models.Model):
     ESTADOREG_CHOICES = [
         ('A', 'Activo'),
         ('I', 'Inactivo'), ]
+    HOJADEGASTO_CHOICES = [
+        ('S', 'Si'),
+        ('N', 'No'),
+        ]
     id = models.AutoField(primary_key=True)
     cirugia = models.ForeignKey('cirugia.Cirugias', blank=True, null=True, editable=True,   on_delete=models.PROTECT)
     cirugiaProcedimiento = models.ForeignKey('cirugia.CirugiasProcedimientos', blank=True, null=True, editable=True,   on_delete=models.PROTECT) 	
     suministro = models.ForeignKey('facturacion.Suministros', blank=True, null=True, editable=True,  on_delete=models.PROTECT)
+    #cups = models.ForeignKey('clinico.Examenes', blank=True, null=True, editable=True, on_delete=models.PROTECT,    related_name='Cups1544')
     cantidad = models.DecimalField(max_digits=10, decimal_places=3, blank=True, null=True)
     unitario = models.DecimalField(max_digits=10, decimal_places=3, blank=True, null=True)
     valorLiquidacion = models.DecimalField(max_digits=15, decimal_places=2,blank=True, null=True, editable=True)
+    hojaDeGasto = models.CharField(max_length=1, choices=HOJADEGASTO_CHOICES, default='N', blank=True,null= True, editable=True,)
     #facturable = models.CharField(max_length=1,blank=True, null=True , editable=False)
     fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)
     usuarioRegistro = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True,    on_delete=models.PROTECT)

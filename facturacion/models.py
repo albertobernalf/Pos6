@@ -418,6 +418,10 @@ class FacturacionDetalle(models.Model):
         ('S', 'Si'),
         ('N', 'No'),
         ]
+    HOJADEGASTO_CHOICES = [
+        ('S', 'Si'),
+        ('N', 'No'),
+        ]
     TIPOREGISTRO_CHOICES = [
         ('M', 'MANUAL'),
         ('S', 'SISTEMAS'), ]
@@ -429,6 +433,7 @@ class FacturacionDetalle(models.Model):
     historiaMedicamento = models.ForeignKey('clinico.HistoriaMedicamentos', blank=True, null=True, editable=True, on_delete=models.PROTECT , related_name='histmed01') 
     #mipres  = models.CharField(max_length=30,  blank=True, null=True, editable=True)
     codigoHomologado = models.CharField(max_length=10, blank=True, null=True, editable=True)
+    concepto = models.ForeignKey('facturacion.Conceptos', blank=True,null= True, editable=True, on_delete=models.PROTECT, related_name='Conceptos1115')
     examen = models.ForeignKey('clinico.Examenes', blank=True,null= True, editable=True, on_delete=models.PROTECT , related_name='TablaCups121')
     #cums = models.ForeignKey('rips.RipsCums', blank=True,null= True, editable=True, on_delete=models.PROTECT, related_name='Cums101')
     cums = models.ForeignKey('facturacion.Suministros', blank=True,null= True, editable=True, on_delete=models.PROTECT, related_name='Sum102')
@@ -437,8 +442,9 @@ class FacturacionDetalle(models.Model):
     valorTotal =  models.DecimalField( max_digits=15, decimal_places=0 , blank=True,null= True, editable=True)
     cirugia = models.ForeignKey('cirugia.Cirugias', blank=True,null= True, editable=True, on_delete=models.PROTECT, related_name='Ciru01112')
     fechaCrea = models.DateTimeField(editable=True, null=True, blank=True)
+    hojaDeGasto = models.CharField(max_length=1, choices=HOJADEGASTO_CHOICES, default='N', blank=True,null= True, editable=True,)
     tipoRegistro = models.CharField(max_length=20,  blank=True, null=True, editable=True, choices = TIPOREGISTRO_CHOICES)
-    tipoHonorario =  models.ForeignKey('tarifas.TiposHonorarios', blank=True,null= True, editable=True, on_delete=models.PROTECT, related_name='TipoHonorario099')
+    tipoHonorario =  models.ForeignKey('tarifarios.TiposHonorarios', blank=True,null= True, editable=True, on_delete=models.PROTECT, related_name='TipoHonorario099')
     usuarioCrea = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True, on_delete=models.PROTECT, related_name='Planta105') 
     fechaModifica = models.DateTimeField(editable=True, null=True, blank=True)
     usuarioModifica = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True, on_delete=models.PROTECT, related_name='Planta106') 
@@ -527,6 +533,10 @@ class LiquidacionDetalle(models.Model):
         ('S', 'Si'),
         ('N', 'No'),
         ]
+    HOJADEGASTO_CHOICES = [
+        ('S', 'Si'),
+        ('N', 'No'),
+        ]
     TIPOREGISTRO_CHOICES = [
         ('M', 'MANUAL'),
         ('S', 'SISTEMAS'), ]
@@ -538,6 +548,7 @@ class LiquidacionDetalle(models.Model):
     #autorizacion = models.ForeignKey('autorizaciones.Autorizaciones', blank=True, null=True, editable=True, on_delete=models.PROTECT , related_name='aut05') 
     historiaMedicamento = models.ForeignKey('clinico.HistoriaMedicamentos', blank=True, null=True, editable=True, on_delete=models.PROTECT , related_name='histmed02') 
     codigoHomologado = models.CharField(max_length=10, blank=True, null=True, editable=True)
+    concepto = models.ForeignKey('facturacion.Conceptos', blank=True,null= True, editable=True, on_delete=models.PROTECT, related_name='Conceptos0005')
     examen = models.ForeignKey('clinico.Examenes', blank=True,null= True, editable=True, on_delete=models.PROTECT, related_name='TablaCups101')
     #cums = models.ForeignKey('rips.RipsCums', blank=True,null= True, editable=True, on_delete=models.PROTECT, related_name='TablaCums101')
     cums = models.ForeignKey('facturacion.Suministros', blank=True,null= True, editable=True, on_delete=models.PROTECT, related_name='Suministros05')
@@ -546,6 +557,7 @@ class LiquidacionDetalle(models.Model):
     valorTotal = models.DecimalField( max_digits=15, decimal_places=0 , blank=True,null= True, editable=True)
     cirugia = models.ForeignKey('cirugia.Cirugias', blank=True,null= True, editable=True, on_delete=models.PROTECT, related_name='Ciru0111')
     fechaCrea = models.DateTimeField(editable=True, null=True, blank=True)
+    hojaDeGasto = models.CharField(max_length=1, choices=HOJADEGASTO_CHOICES, default='N', blank=True,null= True, editable=True,)
     tipoRegistro = models.CharField(max_length=20,  blank=True, null=True, editable=True, choices = TIPOREGISTRO_CHOICES)
     tipoHonorario =  models.ForeignKey('tarifarios.TiposHonorarios', blank=True,null= True, editable=True, on_delete=models.PROTECT, related_name='TipoHonorario091')
     #usuarioCrea = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True, on_delete=models.PROTECT, related_name='Planta120') 

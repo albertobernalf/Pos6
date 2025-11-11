@@ -26,7 +26,7 @@ from datetime import date, timedelta
 import time
 from decimal import Decimal
 from admisiones.models import Ingresos
-from facturacion.models import ConveniosPacienteIngresos, Liquidacion, LiquidacionDetalle, Facturacion, FacturacionDetalle, Conceptos, Suministros , TiposSuministro
+from facturacion.models import ConveniosPacienteIngresos, Liquidacion, LiquidacionDetalle, Facturacion, FacturacionDetalle, Conceptos, Suministros, TiposSuministro
 from cartera.models import TiposPagos, FormasPagos, Pagos, PagosFacturas, Glosas
 from triage.models import Triage
 from clinico.models import Servicios, EspecialidadesMedicos
@@ -41,7 +41,7 @@ from django.db.models import F
 from django.db import transaction, IntegrityError
 from django.utils import timezone
 from contratacion.models import  ConveniosLiquidacionTarifasHonorarios
-from tarifarios.models import TarifariosDescripcion , TiposHonorarios
+from tarifarios.models import TarifariosDescripcion
 
 # Create your views here.
 
@@ -62,7 +62,7 @@ def Load_dataProgramacionCirugia(request, data):
     print("username_id:", username_id)
 
     estadoProgramacion = EstadosProgramacion.objects.get(nombre='Solicitud')
-    #estadoCirugiaSinAsignar = EstadosCirugias.objects.get(nombre='SIN ASIGNAR')
+    estadoCirugiaSinAsignar = EstadosCirugias.objects.get(nombre='SIN ASIGNAR')
     estadoCirugiaPendiente = EstadosCirugias.objects.get(nombre='PENDIENTE')
     estadoCirugiaConfirmada = EstadosCirugias.objects.get(nombre='CONFIRMADA')
 
@@ -76,7 +76,7 @@ def Load_dataProgramacionCirugia(request, data):
 
 
     #detalle = 'SELECT prog.id id,  u."tipoDoc_id" tipoDoc_id ,tipdoc.abreviatura abrev, u.documento documento, i.consec consecutivo, u.nombre paciente,estprog.nombre estadoProg,sala.numero, sala.nombre sala, prog."fechaProgramacionInicia" inicia, prog."horaProgramacionInicia" horaInicia, prog."fechaProgramacionFin" Termina, prog."horaProgramacionFin" horaTermina ,(SELECT exa.nombre FROM cirugia_cirugias cir LEFT JOIN cirugia_cirugiasprocedimientos cirproc on (cirproc.cirugia_id = cir.id) INNER JOIN clinico_examenes exa on (exa.id = cirproc.cups_id) WHERE cir."tipoDoc_id" = prog."tipoDoc_id" and cir.documento_id = prog.documento_id  and cir."consecAdmision" = prog."consecAdmision" limit 1) cirugias , estcir.nombre estadoCirugia FROM cirugia_programacioncirugias prog INNER JOIN sitios_sedesclinica sed	on (sed.id = prog."sedesClinica_id") INNER JOIN admisiones_ingresos i ON (i."tipoDoc_id" =prog."tipoDoc_id" AND i.documento_id =  prog.documento_id AND i.consec= prog."consecAdmision" )  LEFT JOIN cirugia_cirugias cir ON (cir."tipoDoc_id" =prog."tipoDoc_id" AND cir.documento_id =  prog.documento_id AND cir."consecAdmision" = prog."consecAdmision" )  INNER JOIN cirugia_estadoscirugias estcir ON (estcir.id = cir."estadoCirugia_id")  INNER JOIN usuarios_usuarios u ON (u.id = i.documento_id ) INNER JOIN usuarios_tiposdocumento tipdoc ON (tipdoc.id =  u."tipoDoc_id") INNER JOIN cirugia_estadosprogramacion estprog ON (estprog.id = prog."estadoProgramacion_id" ) LEFT JOIN sitios_salas sala ON (sala.id =prog.sala_id )  WHERE sed.id = ' + "'" + str(sede) + "'" + 'AND "fechaProgramacionInicia">=  (now()  - INTERVAL' + "'" + str('365') + "'" + ' DAY) order by sala.numero, inicia'
-    detalle = 'SELECT prog.id id,  u."tipoDoc_id" tipoDoc_id ,tipdoc.abreviatura abrev, u.documento documento, i.consec consecutivo, u.nombre paciente,estprog.nombre estadoProg,sala.numero, sala.nombre sala, prog."fechaProgramacionInicia" inicia, prog."horaProgramacionInicia" horaInicia, prog."fechaProgramacionFin" Termina, prog."horaProgramacionFin" horaTermina ,(SELECT exa.nombre FROM cirugia_cirugias cir LEFT JOIN cirugia_cirugiasprocedimientos cirproc on (cirproc.cirugia_id = cir.id) INNER JOIN clinico_examenes exa on (exa.id = cirproc.cups_id) WHERE cir."tipoDoc_id" = prog."tipoDoc_id" and cir.documento_id = prog.documento_id  and cir."consecAdmision" = prog."consecAdmision" limit 1) cirugias , estcir.nombre estadoCirugia FROM cirugia_programacioncirugias prog INNER JOIN sitios_sedesclinica sed	on (sed.id = prog."sedesClinica_id") INNER JOIN admisiones_ingresos i ON (i."tipoDoc_id" =prog."tipoDoc_id" AND i.documento_id =  prog.documento_id AND i.consec= prog."consecAdmision" )  LEFT JOIN cirugia_cirugias cir ON (cir."tipoDoc_id" =prog."tipoDoc_id" AND cir.documento_id =  prog.documento_id AND cir."consecAdmision" = prog."consecAdmision" )  INNER JOIN cirugia_estadoscirugias estcir ON (estcir.id = cir."estadoCirugia_id")  INNER JOIN usuarios_usuarios u ON (u.id = i.documento_id ) INNER JOIN usuarios_tiposdocumento tipdoc ON (tipdoc.id =  u."tipoDoc_id") INNER JOIN cirugia_estadosprogramacion estprog ON (estprog.id = prog."estadoProgramacion_id" ) LEFT JOIN sitios_salas sala ON (sala.id =prog.sala_id )  WHERE sed.id = ' + "'" + str(sede) +  "' AND " + 'prog."estadoProgramacion_id" IN ( ' +  "'" + str(estadoCirugiaPendiente.id) + "','" + str(estadoCirugiaConfirmada.id) + "')" + ' order by sala.numero'
+    detalle = 'SELECT prog.id id,  u."tipoDoc_id" tipoDoc_id ,tipdoc.abreviatura abrev, u.documento documento, i.consec consecutivo, u.nombre paciente,estprog.nombre estadoProg,sala.numero, sala.nombre sala, prog."fechaProgramacionInicia" inicia, prog."horaProgramacionInicia" horaInicia, prog."fechaProgramacionFin" Termina, prog."horaProgramacionFin" horaTermina ,(SELECT exa.nombre FROM cirugia_cirugias cir LEFT JOIN cirugia_cirugiasprocedimientos cirproc on (cirproc.cirugia_id = cir.id) INNER JOIN clinico_examenes exa on (exa.id = cirproc.cups_id) WHERE cir."tipoDoc_id" = prog."tipoDoc_id" and cir.documento_id = prog.documento_id  and cir."consecAdmision" = prog."consecAdmision" limit 1) cirugias , estcir.nombre estadoCirugia FROM cirugia_programacioncirugias prog INNER JOIN sitios_sedesclinica sed	on (sed.id = prog."sedesClinica_id") INNER JOIN admisiones_ingresos i ON (i."tipoDoc_id" =prog."tipoDoc_id" AND i.documento_id =  prog.documento_id AND i.consec= prog."consecAdmision" )  LEFT JOIN cirugia_cirugias cir ON (cir."tipoDoc_id" =prog."tipoDoc_id" AND cir.documento_id =  prog.documento_id AND cir."consecAdmision" = prog."consecAdmision" )  INNER JOIN cirugia_estadoscirugias estcir ON (estcir.id = cir."estadoCirugia_id")  INNER JOIN usuarios_usuarios u ON (u.id = i.documento_id ) INNER JOIN usuarios_tiposdocumento tipdoc ON (tipdoc.id =  u."tipoDoc_id") INNER JOIN cirugia_estadosprogramacion estprog ON (estprog.id = prog."estadoProgramacion_id" ) LEFT JOIN sitios_salas sala ON (sala.id =prog.sala_id )  WHERE sed.id = ' + "'" + str(sede) +  "' AND " + '"estadoCirugia_id" IN ( ' + "'" + str(estadoCirugiaSinAsignar.id) +"','" + str(estadoCirugiaPendiente.id) + "','" + str(estadoCirugiaConfirmada.id) + "')" + ' order by sala.numero'
 
     print(detalle)
 
@@ -286,7 +286,7 @@ def Load_dataSolicitudCirugia(request, data):
     # print("data = ", request.GET('data'))
 
     estadoProgramacion = EstadosProgramacion.objects.get(nombre='Solicitud')
-    #estadoCirugiaSinAsignar = EstadosCirugias.objects.get(nombre='SIN ASIGNAR')
+    estadoCirugiaSinAsignar = EstadosCirugias.objects.get(nombre='SIN ASIGNAR')
     estadoCirugiaPendiente = EstadosCirugias.objects.get(nombre='PENDIENTE')
     estadoCirugiaConfirmada = EstadosCirugias.objects.get(nombre='CONFIRMADA')
 
@@ -298,13 +298,13 @@ def Load_dataSolicitudCirugia(request, data):
     curx = miConexionx.cursor()
 
 
-    detalle = 'SELECT cir.id id, i."sedesClinica_id" sede, u."tipoDoc_id" tipoDoc_id, u.documento documento, u.nombre paciente , i.consec consecutivo, u."fechaNacio" nacimiento,u.genero genero, (now() - u."fechaNacio" ) edad, i.id ingreso, cir."fechaSolicita" solicita, dep.nombre cama,	emp.nombre empresa	, u.telefono,cir."solicitaSangre", cir."describeSangre", "cantidadSangre","solicitaCamaUci",cir."solicitaMicroscopio","solicitaRx","solicitaAutoSutura","solicitaOsteosintesis",	"solicitaBiopsia", cir"solicitaMalla", cir"solicitaOtros", estcir.nombre estadoCir,tiposAnes.nombre anestesia FROM admisiones_ingresos i INNER JOIN  usuarios_usuarios u ON ( u."tipoDoc_id" = i."tipoDoc_id" and  u.id = i.documento_id ) INNER JOIN  cirugia_cirugias cir ON (cir."sedesClinica_id" = i."sedesClinica_id" and cir."tipoDoc_id"=i."tipoDoc_id" AND cir.documento_id = i.documento_id AND cir."consecAdmision"= i.consec) INNER JOIN sitios_dependencias dep ON (dep.id =  i."dependenciasActual_id") LEFT JOIN  facturacion_empresas emp ON (emp.id = i.empresa_id ) LEFT JOIN  sitios_serviciosadministrativos serv ON (serv.id = cir."serviciosAdministrativos_id" ) LEFT JOIN  cirugia_estadoscirugias estcir ON (estcir.id = cir."estadoCirugia_id" ) LEFT JOIN  cirugia_tiposanestesia tiposAnes ON (tiposAnes.id = cir.anestesia_id ) LEFT JOIN  cirugia_tiposcirugia tiposCiru ON (tiposCiru.id = cir."tiposCirugia_id") WHERE i."sedesClinica_id" = ' + "'" + str(sede) + "' AND " + 'cir."estadoCirugia_id" IN ( ' + "'" + str(estadoCirugiaPendiente.id) + "','" + str(estadoCirugiaConfirmada.id) + "')"
+    detalle = 'SELECT cir.id id, i."sedesClinica_id" sede, u."tipoDoc_id" tipoDoc_id, u.documento documento, u.nombre paciente , i.consec consecutivo, u."fechaNacio" nacimiento,u.genero genero, (now() - u."fechaNacio" ) edad, i.id ingreso, cir."fechaSolicita" solicita, dep.nombre cama,	emp.nombre empresa	, u.telefono,cir."solicitaSangre", cir."describeSangre", "cantidadSangre","solicitaCamaUci",cir."solicitaMicroscopio","solicitaRx","solicitaAutoSutura","solicitaOsteosintesis",	"solicitaBiopsia", cir"solicitaMalla", cir"solicitaOtros", estprog.nombre estadoProg,tiposAnes.nombre anestesia FROM admisiones_ingresos i INNER JOIN  usuarios_usuarios u ON ( u."tipoDoc_id" = i."tipoDoc_id" and  u.id = i.documento_id ) INNER JOIN  cirugia_cirugias cir ON (cir."sedesClinica_id" = i."sedesClinica_id" and cir."tipoDoc_id"=i."tipoDoc_id" AND cir.documento_id = i.documento_id AND cir."consecAdmision"= i.consec) INNER JOIN sitios_dependencias dep ON (dep.id =  i."dependenciasActual_id") LEFT JOIN  facturacion_empresas emp ON (emp.id = i.empresa_id ) LEFT JOIN  sitios_serviciosadministrativos serv ON (serv.id = cir."serviciosAdministrativos_id" ) LEFT JOIN  cirugia_estadosprogramacion estprog ON (estprog.id = cir."estadoProgramacion_id" ) LEFT JOIN  cirugia_tiposanestesia tiposAnes ON (tiposAnes.id = cir.anestesia_id ) LEFT JOIN  cirugia_tiposcirugia tiposCiru ON (tiposCiru.id = cir."tiposCirugia_id") WHERE i."sedesClinica_id" = ' + "'" + str(sede) + "' AND " + '"estadoCirugia_id" IN ( ' + "'" + str(estadoCirugiaSinAsignar.id) +"','" + str(estadoCirugiaPendiente.id) + "','" + str(estadoCirugiaConfirmada.id) + "')"
 
     print(detalle)
 
     curx.execute(detalle)
 
-    for id, sede, tipoDoc_id, documento,  paciente, consecutivo, nacimiento, genero, edad, ingreso, solicita, cama, empresa, telefono, solicitaSangre, describeSangre, cantidadSangre, solicitaCamaUci, solicitaMicroscopio,solicitaRx,solicitaAutoSutura, solicitaOsteosintesis, solicitaBiopsia, solicitaMalla,solicitaOtros, estadoCir, anestesia  in curx.fetchall():
+    for id, sede, tipoDoc_id, documento,  paciente, consecutivo, nacimiento, genero, edad, ingreso, solicita, cama, empresa, telefono, solicitaSangre, describeSangre, cantidadSangre, solicitaCamaUci, solicitaMicroscopio,solicitaRx,solicitaAutoSutura, solicitaOsteosintesis, solicitaBiopsia, solicitaMalla,solicitaOtros, estadoProg, anestesia  in curx.fetchall():
         solicitudCirugias.append(
             {"model": "cirugia.cirugia", "pk": id, "fields":
                 {'id': id, 'sede':sede, 'tipoDoc_id': tipoDoc_id, 'documento': documento,
@@ -313,7 +313,7 @@ def Load_dataSolicitudCirugia(request, data):
                  'empresa': empresa, 'telefono': telefono, 'solicitaSangre': solicitaSangre, 'describeSangre': describeSangre,
                  'cantidadSangre': cantidadSangre, 'solicitaCamaUci': solicitaCamaUci,'solicitaMicroscopio':solicitaMicroscopio,'solicitaRx':solicitaRx,
                  'solicitaAutoSutura':solicitaAutoSutura, 'solicitaOsteosintesis':solicitaOsteosintesis,'solicitaBiopsia':solicitaBiopsia,'solicitaMalla':solicitaMalla,
-                 'solicitaOtros':solicitaOtros  ,'estadoCir':estadoCir,'anestesia':anestesia
+                 'solicitaOtros':solicitaOtros  ,'estadoProg':estadoProg,'anestesia':anestesia
                  }})
 
     miConexionx.close()
@@ -853,15 +853,15 @@ def Load_dataMaterialCirugia(request, data):
     cur3 = miConexion3.cursor()
 
 
-    comando = 'select cirmaterial.id id, cirmaterial.suministro_id suministro_id, suministros.nombre suministro , cirmaterial."hojaDeGasto" hojaDeGasto , tipo.nombre tipoSuministro , cirmaterial.unitario unitario , cirmaterial.cantidad cantidad , cirmaterial."valorLiquidacion" valorLiquidacion, exa.nombre cupsNombre FROM cirugia_cirugiasMaterialQx cirmaterial INNER JOIN cirugia_cirugiasprocedimientos cirProc ON ( cirProc.id = cirmaterial."cirugiaProcedimiento_id") LEFT JOIN facturacion_suministros suministros ON ( suministros.id = cirmaterial.suministro_id) LEFT JOIN facturacion_tipossuministro tipo ON (tipo.id = suministros."tipoSuministro_id") LEFT JOIN clinico_examenes exa ON ( exa.id = cirProc.cups_id)  WHERE cirmaterial.cirugia_id = ' + "'" + str(cirugiaId) + "'"
+    comando = 'select cirmaterial.id id, cirmaterial.suministro_id suministro_id, suministros.nombre suministro , tipo.nombre tipoSuministro , cirmaterial.unitario unitario , cirmaterial.cantidad cantidad , cirmaterial."valorLiquidacion" valorLiquidacion, exa.nombre cupsNombre FROM cirugia_cirugiasMaterialQx cirmaterial INNER JOIN cirugia_cirugiasprocedimientos cirProc ON ( cirProc.id = cirmaterial."cirugiaProcedimiento_id") INNER JOIN facturacion_suministros suministros ON ( suministros.id = cirmaterial.suministro_id) INNER JOIN facturacion_tipossuministro tipo ON (tipo.id = suministros."tipoSuministro_id") INNER JOIN clinico_examenes exa ON ( exa.id = cirProc.cups_id)  WHERE cirmaterial.cirugia_id = ' + "'" + str(cirugiaId) + "'"
 
     print(comando)
     cur3.execute(comando)
 
-    for id,  suministro_id, suministro , hojaDeGasto, tipoSuministro, unitario,cantidad , valorLiquidacion, cupsNombre in cur3.fetchall():
+    for id,  suministro_id, suministro , tipoSuministro, unitario,cantidad , valorLiquidacion, cupsNombre in cur3.fetchall():
         materialCirugia.append(
             {"model": "cirugia.cirugiasMaterialQx", "pk": id, "fields":
-                {'id': id,  'suministro_id': suministro_id, 'suministro': suministro, 'hojaDeGasto':hojaDeGasto,'tipoSuministro': tipoSuministro , 'unitario':unitario ,'cantidad':cantidad  ,'valorLiquidacion':valorLiquidacion  ,'cupsNombre':cupsNombre }})
+                {'id': id,  'suministro_id': suministro_id, 'suministro': suministro, 'tipoSuministro': tipoSuministro , 'unitario':unitario ,'cantidad':cantidad  ,'valorLiquidacion':valorLiquidacion  ,'cupsNombre':cupsNombre }})
 
     miConexion3.close()
     print(materialCirugia)
@@ -896,15 +896,15 @@ def Load_dataMaterialInformeCirugia(request, data):
     cur3 = miConexion3.cursor()
 
 
-    comando = 'select cirmaterial.id id, cirmaterial.cirugia_id cirugia_id, cirmaterial.suministro_id suministro_id, suministros.nombre suministro ,cirmaterial."hojaDeGasto" hojaDeGasto , tipo.nombre tipoSuministro ,cirmaterial.unitario unitario , cirmaterial.cantidad cantidad , cirmaterial."valorLiquidacion" , exa.nombre cupsNombre FROM cirugia_cirugiasMaterialQx cirmaterial INNER JOIN cirugia_cirugiasprocedimientos cirProc ON ( cirProc.id = cirmaterial."cirugiaProcedimiento_id")  LEFT JOIN facturacion_suministros suministros ON ( suministros.id = cirmaterial.suministro_id) LEFT JOIN facturacion_tipossuministro tipo ON (tipo.id = suministros."tipoSuministro_id") LEFT JOIN clinico_examenes exa ON ( exa.id = cirProc.cups_id)  WHERE cirmaterial.cirugia_id = ' + "'" + str(cirugiaId) + "'"
+    comando = 'select cirmaterial.id id, cirmaterial.cirugia_id cirugia_id, cirmaterial.suministro_id suministro_id, suministros.nombre suministro , tipo.nombre tipoSuministro ,cirmaterial.unitario unitario , cirmaterial.cantidad cantidad , cirmaterial."valorLiquidacion" , exa.nombre cupsNombre FROM cirugia_cirugiasMaterialQx cirmaterial INNER JOIN cirugia_cirugiasprocedimientos cirProc ON ( cirProc.id = cirmaterial."cirugiaProcedimiento_id")  INNER JOIN facturacion_suministros suministros ON ( suministros.id = cirmaterial.suministro_id) INNER JOIN facturacion_tipossuministro tipo ON (tipo.id = suministros."tipoSuministro_id") INNER JOIN clinico_examenes exa ON ( exa.id = cirProc.cups_id) WHERE cirmaterial.cirugia_id = ' + "'" + str(cirugiaId) + "'"
 
     print(comando)
     cur3.execute(comando)
 
-    for id,  cirugia_id, suministro_id, suministro ,hojaDeGasto , tipoSuministro, unitario,cantidad , valorLiquidacion, cupsNombre in cur3.fetchall():
+    for id,  cirugia_id, suministro_id, suministro , tipoSuministro, unitario,cantidad , valorLiquidacion, cupsNombre in cur3.fetchall():
         materialCirugia.append(
             {"model": "cirugia.cirugiasMaterialQx", "pk": id, "fields":
-                {'id': id, 'cirugia_id':cirugia_id ,  'suministro_id': suministro_id, 'suministro': suministro, 'hojaDeGasto':hojaDeGasto, 'tipoSuministro': tipoSuministro, 'unitario':unitario ,'cantidad':cantidad ,'valorLiquidacion':valorLiquidacion ,'cupsNombre':cupsNombre   }})
+                {'id': id, 'cirugia_id':cirugia_id ,  'suministro_id': suministro_id, 'suministro': suministro, 'tipoSuministro': tipoSuministro, 'unitario':unitario ,'cantidad':cantidad ,'valorLiquidacion':valorLiquidacion ,'cupsNombre':cupsNombre   }})
 
     miConexion3.close()
     print(materialCirugia)
@@ -939,15 +939,15 @@ def Load_dataMaterialInformeXXCirugia(request, data):
     cur3 = miConexion3.cursor()
 
 
-    comando = 'select cirmaterial.id id, cirmaterial.cirugia_id cirugia_id, cirmaterial.suministro_id suministro_id, suministros.nombre suministro , cirmaterial."hojaDeGasto" hojaDeGasto , tipo.nombre tipoSuministro , cirmaterial.unitario unitario, cirmaterial.cantidad cantidad , cirmaterial."valorLiquidacion" valorLiquidacion ,exa.nombre cupsNombre FROM cirugia_cirugiasMaterialQx cirmaterial INNER JOIN cirugia_cirugiasprocedimientos cirProc ON ( cirProc.id = cirmaterial."cirugiaProcedimiento_id") LEFT JOIN facturacion_suministros suministros ON ( suministros.id = cirmaterial.suministro_id) INNER JOIN facturacion_tipossuministro tipo ON (tipo.id = suministros."tipoSuministro_id") LEFT JOIN clinico_examenes exa ON ( exa.id = cirProc.cups_id)  WHERE cirmaterial.cirugia_id = ' + "'" + str(cirugiaId) + "'"
+    comando = 'select cirmaterial.id id, cirmaterial.cirugia_id cirugia_id, cirmaterial.suministro_id suministro_id, suministros.nombre suministro , tipo.nombre tipoSuministro , cirmaterial.unitario unitario, cirmaterial.cantidad cantidad , cirmaterial."valorLiquidacion" valorLiquidacion ,exa.nombre cupsNombre FROM cirugia_cirugiasMaterialQx cirmaterial INNER JOIN cirugia_cirugiasprocedimientos cirProc ON ( cirProc.id = cirmaterial."cirugiaProcedimiento_id") INNER JOIN facturacion_suministros suministros ON ( suministros.id = cirmaterial.suministro_id) INNER JOIN facturacion_tipossuministro tipo ON (tipo.id = suministros."tipoSuministro_id") INNER JOIN clinico_examenes exa ON ( exa.id = cirProc.cups_id) WHERE cirmaterial.cirugia_id = ' + "'" + str(cirugiaId) + "'"
 
     print(comando)
     cur3.execute(comando)
 
-    for id,  cirugia_id, suministro_id, suministro , hojaDeGasto , tipoSuministro, unitario, cantidad, valorLiquidacion, cupsNombre  in cur3.fetchall():
+    for id,  cirugia_id, suministro_id, suministro , tipoSuministro, unitario, cantidad, valorLiquidacion, cupsNombre  in cur3.fetchall():
         materialCirugia.append(
             {"model": "cirugia.cirugiasMaterialQx", "pk": id, "fields":
-                {'id': id, 'cirugia_id':cirugia_id ,  'suministro_id': suministro_id, 'suministro': suministro, 'hojaDeGasto':hojaDeGasto,'tipoSuministro': tipoSuministro, 'unitario':unitario ,'cantidad':cantidad, 'valorLiquidacion':valorLiquidacion ,'cupsNombre':cupsNombre    }})
+                {'id': id, 'cirugia_id':cirugia_id ,  'suministro_id': suministro_id, 'suministro': suministro, 'tipoSuministro': tipoSuministro, 'unitario':unitario ,'cantidad':cantidad, 'valorLiquidacion':valorLiquidacion ,'cupsNombre':cupsNombre    }})
 
     miConexion3.close()
     print(materialCirugia)
@@ -1328,21 +1328,13 @@ def BuscaProgramacionCirugia(request):
 
 def CrearMaterialCirugia(request):
 
-    print ("Entre CrearMaterialCirugia", request )
+    print ("Entre CrearMaterialCirugia" )
 
     cirugiaId = request.POST.get('cirugiaIdModalMaterial')
     print ("cirugiaId =", cirugiaId)
 
     suministro = request.POST["suministro"]
     print ("suministro =", suministro)
-
-    hojaDeGasto = request.POST["hojaDeGasto"]
-    print ("hojaDeGasto =", hojaDeGasto)
-
-    if (hojaDeGasto == 'on'):
-        hojaDeGasto='S'
-    else:
-        hojaDeGasto = 'N'
 
     procedMateriales = request.POST["procedMateriales"]
     print ("procedMateriales =", procedMateriales)
@@ -1369,7 +1361,7 @@ def CrearMaterialCirugia(request):
         miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",  password="123456")
         cur3 = miConexion3.cursor()
 
-        comando = 'INSERT INTO cirugia_cirugiasmaterialQx (cantidad, "fechaRegistro", "estadoReg", cirugia_id, suministro_id, "usuarioRegistro_id","cirugiaProcedimiento_id", unitario,"valorLiquidacion", "hojaDeGasto") VALUES (' + "'" + str(cantidad) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(cirugiaId) + "','"  + str(suministro) + "','" + str(username_id)  + "','" + str(procedMateriales) + "','" + str(unitario) + "','" + str(valorLiquidacion) + "','" + str(hojaDeGasto) +  "')"
+        comando = 'INSERT INTO cirugia_cirugiasmaterialQx (cantidad, "fechaRegistro", "estadoReg", cirugia_id, suministro_id, "usuarioRegistro_id","cirugiaProcedimiento_id", unitario,"valorLiquidacion") VALUES (' + "'" + str(cantidad) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(cirugiaId) + "','"  + str(suministro) + "','" + str(username_id)  + "','" + str(procedMateriales) + "','" + str(unitario) + "','" + str(valorLiquidacion) + "')"
 
         print(comando)
         cur3.execute(comando)
@@ -1406,9 +1398,6 @@ def CrearMaterialInformeCirugia(request):
     suministro = request.POST["suministroInforme"]
     print ("suministro =", suministro)
 
-    hojaDeGasto = request.POST["hojaDeGastoInforme"]
-    print ("hojaDeGasto =", hojaDeGasto)
-
     username_id = request.POST["usernameMaterialInformeCirugia_id"]
     print ("username_id =", username_id)
 
@@ -1437,7 +1426,7 @@ def CrearMaterialInformeCirugia(request):
         miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",  password="123456")
         cur3 = miConexion3.cursor()
 
-        comando = 'INSERT INTO cirugia_cirugiasmaterialQx (cantidad, "fechaRegistro", "estadoReg", cirugia_id, suministro_id, "usuarioRegistro_id", "valorLiquidacion", "cirugiaProcedimiento_id", unitario, hojaDeGasto) VALUES (' + "'" + str(cantidad) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(cirugiaId) + "','"  + str(suministro) + "','" + str(username_id) + "','" +  str(valorLiquidacion) + "','" + str(procedMaterialesInforme) + "','" + str(unitario) +  + "','"  + str(hojaDeGasto) + "')" 
+        comando = 'INSERT INTO cirugia_cirugiasmaterialQx (cantidad, "fechaRegistro", "estadoReg", cirugia_id, suministro_id, "usuarioRegistro_id", "valorLiquidacion", "cirugiaProcedimiento_id", unitario) VALUES (' + "'" + str(cantidad) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(cirugiaId) + "','"  + str(suministro) + "','" + str(username_id) + "','" +  str(valorLiquidacion) + "','" + str(procedMaterialesInforme) + "','" + str(unitario) +  "')" 
 
         print(comando)
         cur3.execute(comando)
@@ -2155,7 +2144,7 @@ def GenerarLiquidacionCirugia(request):
 
     if (registroliquidacionHonorario.id == 1):   # ISS 2001
 
-        # Consigue procedimientos a facturar
+        # Consigue procedimeintos a facturar
 
         miConexion3 = None
         try:
@@ -2263,7 +2252,7 @@ def GenerarLiquidacionCirugia(request):
             honorarioMaterialqX = honorarioMaterial.id
 
 
-            detalle = 'select matqx.suministro_id suministro, sum.nombre nomSuministro , tipos.nombre tipo ,matqx."valorLiquidacion" valorLiquidacionMat from cirugia_cirugiasmaterialqx matqx, facturacion_suministros sum, facturacion_tipossuministro tipos where matqx.cirugia_id= ' + "'" + str(cirugiaId) + "'" + ' and matqx.suministro_id = sum.id and sum."tipoSuministro_id" = tipos.id  AND tipos.id != ' + "'" + str(suministroMaterialQx) + "' AND " + 'matqx."hojaDeGasto" = ' + "'" + str('N') + "'"
+            detalle = 'select matqx.suministro_id suministro, sum.nombre nomSuministro , tipos.nombre tipo ,matqx."valorLiquidacion" valorLiquidacionMat from cirugia_cirugiasmaterialqx matqx, facturacion_suministros sum, facturacion_tipossuministro tipos where matqx.cirugia_id= ' + "'" + str(cirugiaId) + "'" + ' and matqx.suministro_id = sum.id and sum."tipoSuministro_id" = tipos.id  AND tipos.id != ' + "'" + str(suministroMaterialQx) + "'"
 
 
             materialesQx = []
@@ -2426,10 +2415,9 @@ def GenerarLiquidacionCirugia(request):
                     valorUvrCirujanoProced.append({'homologado':homologado,'valorUvrCirujano': valorUvrCirujano })
 
                     print("valorUvrCirujanoProced =" , valorUvrCirujanoProced[0]['valorUvrCirujano'])
-                    valorUvrCirujanoProced = valorUvrCirujanoProced[0]['valorUvrCirujano']
+
                 #for valorUvrCirujanoProced in valorUvrCirujanoProced[0]['valorUvrCirujano']:
                     print("valorUvrCirujanoProced1" , valorUvrCirujanoProced)
-
                     liquidaCirujano= float(valorUvrCirujanoProced) * float(cantidadUvrProced)
                     print ("liquidaCirujano =",liquidaCirujano )
                     homologadoCirujano = homologado			
@@ -2453,7 +2441,6 @@ def GenerarLiquidacionCirugia(request):
 
                 #for valorUvrAnestesiologoProced in valorUvrAnestesiologoProced[0]['valorUvrAnestesiologo']:
                     print("valorUvrAnestesiologoProced = " ,valorUvrAnestesiologoProced)
-                    valorUvrAnestesiologoProced = valorUvrAnestesiologoProced[0]['valorUvrAnestesiologo']
                     liquidaAnestesiologo= float(valorUvrAnestesiologoProced) * float(cantidadUvrProced)
                     print("liquidaAnestesiologo =", liquidaAnestesiologo)
                     homologadoAnestesiologo = homologado			
@@ -2478,7 +2465,6 @@ def GenerarLiquidacionCirugia(request):
 
                 #for valorUvrAyudanteProced in valorUvrAyudanteProced[0]['valorUvrAyudante']:
                     print(valorUvrAyudanteProced)
-                    valorUvrAyudanteProced = valorUvrAyudanteProced[0]['valorUvrAyudante']
                     liquidaAyudante= float(valorUvrAyudanteProced) * float(cantidadUvrProced)
                     print("liquidaAyudante =", liquidaAyudante)
                     homologadoAyudante = homologado
@@ -2519,19 +2505,19 @@ def GenerarLiquidacionCirugia(request):
                 # Fin RUTINA busca consecutivo de liquidacion
                 # Cirujano
                 print("paso_1")
-                comando = 'INSERT INTO facturacion_liquidaciondetalle (consecutivo,fecha, cantidad, "valorUnitario", "valorTotal","estadoRegistro", "fechaCrea", "fechaRegistro",  "examen_id",  "usuarioRegistro_id", liquidacion_id, "tipoRegistro", "tipoHonorario_id", cirugia_id , anulado, "codigoHomologado") VALUES (' + "'" + str(consecLiquidacion) + "','" + str(fechaRegistro) + "','" + str('1') + "','" + str(liquidaCirujano) + "','" + str(liquidaCirujano) + "','" + str('A') + "','" + str(fechaRegistro) + "','" + str(fechaRegistro) + "','" + str(procedimiento) + "','" + str(username_id) + "'," + liquidacionId + ",'SISTEMA'," + "'" + str(registroHonorarioCirujano.id)  + "'," +  "'" + str(cirugiaId) + "','N','" + str(homologadoCirujano) + "')"
+                comando = 'INSERT INTO facturacion_liquidaciondetalle (consecutivo,fecha, cantidad, "valorUnitario", "valorTotal","estadoRegistro", "fechaCrea", "fechaRegistro",  "examen_id",  "usuarioRegistro_id", liquidacion_id, "tipoRegistro", "tipoHonorario_id", cirugia_id , anulado, homologado) VALUES (' + "'" + str(consecLiquidacion) + "','" + str(fechaRegistro) + "','" + str('1') + "','" + str(liquidaCirujano) + "','" + str(liquidaCirujano) + "','" + str('A') + "','" + str(fechaRegistro) + "','" + str(fechaRegistro) + "','" + str(procedimiento) + "','" + str(username_id) + "'," + liquidacionId + ",'SISTEMA'," + "'" + str(registroHonorarioCirujano.id)  + "'," +  "'" + str(cirugiaId) + "','N','" + str(homologadoCirujano) + "')"
                 print("comando ", comando)
                 cur3.execute(comando)
                 # Anestesiologo
                 consecLiquidacion= int(consecLiquidacion) + 1
-                comando = 'INSERT INTO facturacion_liquidaciondetalle (consecutivo,fecha, cantidad, "valorUnitario", "valorTotal", "estadoRegistro","fechaCrea", "fechaRegistro", "examen_id",  "usuarioRegistro_id", liquidacion_id, "tipoRegistro", "tipoHonorario_id", cirugia_id, anulado, "codigoHomologado") VALUES (' + "'" + str(consecLiquidacion) + "','" + str(fechaRegistro) + "','" + str('1') + "','" + str(liquidaAnestesiologo) + "','" + str(liquidaAnestesiologo) + "','" + str('A') + "','" + str(fechaRegistro) + "','" + str(fechaRegistro) + "','" + str(procedimiento) + "','" + str(username_id) + "'," + liquidacionId + ",'SISTEMA'," + "'" + str(registroHonorarioAnestesiologo.id) + "'," +  "'" + str(cirugiaId) + "','N','" + str(homologadoAnestesiologo) + "')"
+                comando = 'INSERT INTO facturacion_liquidaciondetalle (consecutivo,fecha, cantidad, "valorUnitario", "valorTotal", "estadoRegistro","fechaCrea", "fechaRegistro", "examen_id",  "usuarioRegistro_id", liquidacion_id, "tipoRegistro", "tipoHonorario_id", cirugia_id, anulado) VALUES (' + "'" + str(consecLiquidacion) + "','" + str(fechaRegistro) + "','" + str('1') + "','" + str(liquidaAnestesiologo) + "','" + str(liquidaAnestesiologo) + "','" + str('A') + "','" + str(fechaRegistro) + "','" + str(fechaRegistro) + "','" + str(procedimiento) + "','" + str(username_id) + "'," + liquidacionId + ",'SISTEMA'," + "'" + str(registroHonorarioAnestesiologo.id) + "'," +  "'" + str(cirugiaId) + "','N','" + str(homologadoAnestesiologo) + "')"
                 print("comando ", comando)
                 cur3.execute(comando)
 
                 # Ayudante
                 consecLiquidacion= int(consecLiquidacion) + 1
                 print("paso_2")
-                comando = 'INSERT INTO facturacion_liquidaciondetalle (consecutivo,fecha, cantidad, "valorUnitario", "valorTotal",  "estadoRegistro", "fechaCrea", "fechaRegistro", "examen_id",  "usuarioRegistro_id", liquidacion_id, "tipoRegistro", "tipoHonorario_id", cirugia_id, anulado, "codigoHomologado") VALUES (' + "'" + str(consecLiquidacion) + "','" + str(fechaRegistro) + "','" + str('1') + "','" + str(liquidaAyudante) + "','" + str(liquidaAyudante) + "','" + str('A') + "','" + str(fechaRegistro) + "','" + str(fechaRegistro) +  "','" + str(procedimiento) + "','" + str(username_id) + "'," + liquidacionId + ",'SISTEMA'," + "'" + str(registroHonorarioAyudante.id) + "'," +  "'" + str(cirugiaId) + "','N','" + str(homologadoAyudante) + "')"
+                comando = 'INSERT INTO facturacion_liquidaciondetalle (consecutivo,fecha, cantidad, "valorUnitario", "valorTotal",  "estadoRegistro", "fechaCrea", "fechaRegistro", "examen_id",  "usuarioRegistro_id", liquidacion_id, "tipoRegistro", "tipoHonorario_id", cirugia_id, anulado) VALUES (' + "'" + str(consecLiquidacion) + "','" + str(fechaRegistro) + "','" + str('1') + "','" + str(liquidaAyudante) + "','" + str(liquidaAyudante) + "','" + str('A') + "','" + str(fechaRegistro) + "','" + str(fechaRegistro) +  "','" + str(procedimiento) + "','" + str(username_id) + "'," + liquidacionId + ",'SISTEMA'," + "'" + str(registroHonorarioAyudante.id) + "'," +  "'" + str(cirugiaId) + "','N','" + str(homologadoAyudante) + "')"
                 print("comando ", comando)
                 cur3.execute(comando)
 
@@ -3001,7 +2987,7 @@ def GenerarLiquidacionCirugia(request):
             cur3.close()
             miConexion3.close()
 
-            #return JsonResponse({'success': True, 'Mensajes': 'Liquidacion Honorarios Soat cargada a cuenta Paciente Verificar valores !'})
+            return JsonResponse({'success': True, 'Mensajes': 'Liquidacion Honorarios Soat cargada a cuenta Paciente Verificar valores !'})
 
         except psycopg2.Error as e:
 
@@ -3073,73 +3059,67 @@ def GenerarLiquidacionCirugia(request):
                 cur3.close()
                 miConexion3.close()
 
-
-    páilanderpoaquinopasa
     ##Aqui RUTINA QUE ACTUALIZE TOTALES
         ## Vamops a actualizar los totales de la Liquidacion:
         #
-    totalSuministros = LiquidacionDetalle.objects.all().filter(liquidacion_id=liquidacionId).filter(examen_id=None).exclude(estadoRegistro='I').exclude(anulado='S').aggregate(totalS=Coalesce(Sum('valorTotal'), 0))
-    totalSuministros = (totalSuministros['totalS']) + 0
-    print("totalSuministros", totalSuministros)
-    totalProcedimientos = LiquidacionDetalle.objects.all().filter(liquidacion_id=liquidacionId).filter(cums_id=None).exclude(estadoRegistro='I').exclude(anulado='S').aggregate(totalP=Coalesce(Sum('valorTotal'), 0))
-    totalProcedimientos = (totalProcedimientos['totalP']) + 0
-    print("totalProcedimientos", totalProcedimientos)
-    registroPago = Liquidacion.objects.get(id=liquidacionId)
+        totalSuministros = LiquidacionDetalle.objects.all().filter(liquidacion_id=liquidacionId).filter(examen_id=None).exclude(estadoRegistro='I').exclude(anulado='S').aggregate(totalS=Coalesce(Sum('valorTotal'), 0))
+        totalSuministros = (totalSuministros['totalS']) + 0
+        print("totalSuministros", totalSuministros)
+        totalProcedimientos = LiquidacionDetalle.objects.all().filter(liquidacion_id=liquidacionId).filter(cums_id=None).exclude(estadoRegistro='I').exclude(anulado='S').aggregate(totalP=Coalesce(Sum('valorTotal'), 0))
+        totalProcedimientos = (totalProcedimientos['totalP']) + 0
+        print("totalProcedimientos", totalProcedimientos)
+        registroPago = Liquidacion.objects.get(id=liquidacionId)
 
-    # Continua Aqui
+        # Continua Aqui
 
-    totalCopagos = Pagos.objects.all().filter(tipoDoc_id=tipoDocId).filter(documento_id=documentoId).filter(consec=ingresoPaciente).filter(formaPago_id=4).exclude(estadoReg='I').exclude(anulado='S').aggregate(totalC=Coalesce(Sum('valorEnCurso'), 0))
-    totalCopagos = (totalCopagos['totalC']) + 0
-    print("totalCopagos", totalCopagos)
-    totalCuotaModeradora = Pagos.objects.all().filter(tipoDoc_id=tipoDocId).filter(documento_id=documentoId).filter(consec=ingresoPaciente).filter(formaPago_id=3).exclude(estadoReg='I').exclude(anulado='S').aggregate(totalM=Coalesce(Sum('valorEnCurso'), 0))
-    totalCuotaModeradora = (totalCuotaModeradora['totalM']) + 0
-    print("totalCuotaModeradora", totalCuotaModeradora)
-    totalAnticipos = Pagos.objects.all().filter(tipoDoc_id=tipoDocId).filter(documento_id=documentoId).filter(consec=ingresoPaciente).filter(formaPago_id=1).exclude(estadoReg='I').exclude(anulado='S').aggregate(Anticipos=Coalesce(Sum('valorEnCurso'), 0))
-    totalAnticipos = (totalAnticipos['Anticipos']) + 0
-    print("totalAnticipos", totalAnticipos)
-    totalAbonos = Pagos.objects.all().filter(tipoDoc_id=tipoDocId).filter(documento_id=documentoId).filter(consec=ingresoPaciente).filter(formaPago_id=2).exclude(estadoReg='I').exclude(anulado='S').aggregate(totalAb=Coalesce(Sum('valorEnCurso'), 0))
-    totalAbonos = (totalAbonos['totalAb']) + 0
-    # totalAbonos = totalCopagos + totalAnticipos + totalCuotaModeradora
-    print("totalAbonos", totalAbonos)
+        totalCopagos = Pagos.objects.all().filter(tipoDoc_id=tipoDocId).filter(documento_id=documentoId).filter(consec=ingresoPaciente).filter(formaPago_id=4).exclude(estadoReg='I').exclude(anulado='S').aggregate(totalC=Coalesce(Sum('valorEnCurso'), 0))
+        totalCopagos = (totalCopagos['totalC']) + 0
+        print("totalCopagos", totalCopagos)
+        totalCuotaModeradora = Pagos.objects.all().filter(tipoDoc_id=tipoDocId).filter(documento_id=documentoId).filter(consec=ingresoPaciente).filter(formaPago_id=3).exclude(estadoReg='I').exclude(anulado='S').aggregate(totalM=Coalesce(Sum('valorEnCurso'), 0))
+        totalCuotaModeradora = (totalCuotaModeradora['totalM']) + 0
+        print("totalCuotaModeradora", totalCuotaModeradora)
+        totalAnticipos = Pagos.objects.all().filter(tipoDoc_id=tipoDocId).filter(documento_id=documentoId).filter(consec=ingresoPaciente).filter(formaPago_id=1).exclude(estadoReg='I').exclude(anulado='S').aggregate(Anticipos=Coalesce(Sum('valorEnCurso'), 0))
+        totalAnticipos = (totalAnticipos['Anticipos']) + 0
+        print("totalAnticipos", totalAnticipos)
+        totalAbonos = Pagos.objects.all().filter(tipoDoc_id=tipoDocId).filter(documento_id=documentoId).filter(consec=ingresoPaciente).filter(formaPago_id=2).exclude(estadoReg='I').exclude(anulado='S').aggregate(totalAb=Coalesce(Sum('valorEnCurso'), 0))
+        totalAbonos = (totalAbonos['totalAb']) + 0
+        # totalAbonos = totalCopagos + totalAnticipos + totalCuotaModeradora
+        print("totalAbonos", totalAbonos)
 
-    totalRecibido = totalCopagos + totalCuotaModeradora + totalAnticipos + totalAbonos
-    totalApagar = float(totalSuministros) + float(totalProcedimientos) - float(totalRecibido)
-    totalLiquidacion = float(totalSuministros) + float(totalProcedimientos)
-    print("totalLiquidacion", totalLiquidacion)
-    print("totalAPagar", totalApagar)
+        totalRecibido = totalCopagos + totalCuotaModeradora + totalAnticipos + totalAbonos
+        totalApagar = totalSuministros + totalProcedimientos - totalRecibido
+        totalLiquidacion = totalSuministros + totalProcedimientos
+        print("totalLiquidacion", totalLiquidacion)
+        print("totalAPagar", totalApagar)
 
-    # Rutina Guarda en cabezote los totales
+        # Rutina Guarda en cabezote los totales
 
-    print("Voy a grabar el cabezote")
+        print("Voy a grabar el cabezote")
 
-    miConexion3 = None
-    try:
+        miConexion3 = None
+        try:
 
-        miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
-                                       password="123456")
-        cur3 = miConexion3.cursor()
+            comando = 'UPDATE facturacion_liquidacion SET "totalSuministros" = ' + "'" + str(totalSuministros) + "'" + ',"totalProcedimientos" = ' + "'" + str(totalProcedimientos) + "'"  + ', "totalCopagos" = ' + "'"  + str(totalCopagos) + "'" + ' , "totalCuotaModeradora" = ' + "'"  + str(totalCuotaModeradora) + "'"  + ', anticipos = ' + "'" + str(totalAnticipos) + "'" + ' ,"totalAbonos" = ' + "'" + str(totalAbonos) + "'"  + ', "totalLiquidacion" = ' + "'" + str(totalLiquidacion) + "'" + ', "valorApagar" = ' + "'"  + str(totalApagar) + "'" + ', "totalRecibido" = ' + "'" + str(totalRecibido) + "'" + ' WHERE id =' + str(liquidacionId)
+            cur3.execute(comando)
 
-        comando = 'UPDATE facturacion_liquidacion SET "totalSuministros" = ' + "'" + str(totalSuministros) + "'" + ',"totalProcedimientos" = ' + "'" + str(totalProcedimientos) + "'"  + ', "totalCopagos" = ' + "'"  + str(totalCopagos) + "'" + ' , "totalCuotaModeradora" = ' + "'"  + str(totalCuotaModeradora) + "'"  + ', anticipos = ' + "'" + str(totalAnticipos) + "'" + ' ,"totalAbonos" = ' + "'" + str(totalAbonos) + "'"  + ', "totalLiquidacion" = ' + "'" + str(totalLiquidacion) + "'" + ', "valorApagar" = ' + "'"  + str(totalApagar) + "'" + ', "totalRecibido" = ' + "'" + str(totalRecibido) + "'" + ' WHERE id =' + str(liquidacionId)
-        cur3.execute(comando)
-
-        miConexion3.commit()
-        cur3.close()
-        miConexion3.close()
-
-        return JsonResponse({'success': True, 'Mensajes': 'Cargos de honoracios trasladados a Factura Paciente!'})
-
-    except psycopg2.DatabaseError as error:
-        print("Entre por rollback", error)
-        if miConexion3:
-            print("Entro ha hacer el Rollback")
-            miConexion3.rollback()
-            message_error= str(error)
-            return JsonResponse({'success': False, 'Mensajes': message_error})
-
-    finally:
-        if miConexion3:
+            miConexion3.commit()
             cur3.close()
             miConexion3.close()
+
+            return JsonResponse({'success': True, 'Mensajes': 'Cargos de honoracios trasladados a Factura Paciente!'})
+
+        except psycopg2.DatabaseError as error:
+            print("Entre por rollback", error)
+            if miConexion3:
+                print("Entro ha hacer el Rollback")
+                miConexion3.rollback()
+                message_error= str(error)
+                return JsonResponse({'success': False, 'Mensajes': message_error})
+
+        finally:
+            if miConexion3:
+                cur3.close()
+                miConexion3.close()
 
 
         ## FIN rutina de Facturacion Para Medicamentos Total
