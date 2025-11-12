@@ -2574,7 +2574,7 @@ def GenerarLiquidacionCirugia(request):
             cur3.close()
             miConexion3.close()
 
-            return JsonResponse({'success': True, 'Mensajes': 'Liquidacion Honorarios Iss cargada a cuenta Paciente Verificar valores !'})
+            # return JsonResponse({'success': True, 'Mensajes': 'Liquidacion Honorarios Iss cargada a cuenta Paciente Verificar valores !'})
 
         except NotFoundError:
             # Code to handle the FileNotFoundError
@@ -3074,7 +3074,7 @@ def GenerarLiquidacionCirugia(request):
                 miConexion3.close()
 
 
-    páilanderpoaquinopasa
+
     ##Aqui RUTINA QUE ACTUALIZE TOTALES
         ## Vamops a actualizar los totales de la Liquidacion:
         #
@@ -3088,16 +3088,16 @@ def GenerarLiquidacionCirugia(request):
 
     # Continua Aqui
 
-    totalCopagos = Pagos.objects.all().filter(tipoDoc_id=tipoDocId).filter(documento_id=documentoId).filter(consec=ingresoPaciente).filter(formaPago_id=4).exclude(estadoReg='I').exclude(anulado='S').aggregate(totalC=Coalesce(Sum('valorEnCurso'), 0))
+    totalCopagos = Pagos.objects.all().filter(tipoDoc_id=registroCirugia.tipoDoc_id).filter(documento_id=registroCirugia.documento_id).filter(consec=registroCirugia.consecAdmision).filter(formaPago_id=4).exclude(estadoReg='I').exclude(anulado='S').aggregate(totalC=Coalesce(Sum('valorEnCurso'), 0))
     totalCopagos = (totalCopagos['totalC']) + 0
     print("totalCopagos", totalCopagos)
-    totalCuotaModeradora = Pagos.objects.all().filter(tipoDoc_id=tipoDocId).filter(documento_id=documentoId).filter(consec=ingresoPaciente).filter(formaPago_id=3).exclude(estadoReg='I').exclude(anulado='S').aggregate(totalM=Coalesce(Sum('valorEnCurso'), 0))
+    totalCuotaModeradora = Pagos.objects.all().filter(tipoDoc_id=registroCirugia.tipoDoc_id).filter(documento_id=registroCirugia.documento_id).filter(consec=registroCirugia.consecAdmision).filter(formaPago_id=3).exclude(estadoReg='I').exclude(anulado='S').aggregate(totalM=Coalesce(Sum('valorEnCurso'), 0))
     totalCuotaModeradora = (totalCuotaModeradora['totalM']) + 0
     print("totalCuotaModeradora", totalCuotaModeradora)
-    totalAnticipos = Pagos.objects.all().filter(tipoDoc_id=tipoDocId).filter(documento_id=documentoId).filter(consec=ingresoPaciente).filter(formaPago_id=1).exclude(estadoReg='I').exclude(anulado='S').aggregate(Anticipos=Coalesce(Sum('valorEnCurso'), 0))
+    totalAnticipos = Pagos.objects.all().filter(tipoDoc_id=registroCirugia.tipoDoc_id).filter(documento_id=registroCirugia.documento_id).filter(consec=registroCirugia.consecAdmision).filter(formaPago_id=1).exclude(estadoReg='I').exclude(anulado='S').aggregate(Anticipos=Coalesce(Sum('valorEnCurso'), 0))
     totalAnticipos = (totalAnticipos['Anticipos']) + 0
     print("totalAnticipos", totalAnticipos)
-    totalAbonos = Pagos.objects.all().filter(tipoDoc_id=tipoDocId).filter(documento_id=documentoId).filter(consec=ingresoPaciente).filter(formaPago_id=2).exclude(estadoReg='I').exclude(anulado='S').aggregate(totalAb=Coalesce(Sum('valorEnCurso'), 0))
+    totalAbonos = Pagos.objects.all().filter(tipoDoc_id=registroCirugia.tipoDoc_id).filter(documento_id=registroCirugia.documento_id).filter(consec=registroCirugia.consecAdmision).filter(formaPago_id=2).exclude(estadoReg='I').exclude(anulado='S').aggregate(totalAb=Coalesce(Sum('valorEnCurso'), 0))
     totalAbonos = (totalAbonos['totalAb']) + 0
     # totalAbonos = totalCopagos + totalAnticipos + totalCuotaModeradora
     print("totalAbonos", totalAbonos)
@@ -3126,7 +3126,7 @@ def GenerarLiquidacionCirugia(request):
         cur3.close()
         miConexion3.close()
 
-        return JsonResponse({'success': True, 'Mensajes': 'Cargos de honoracios trasladados a Factura Paciente!'})
+        return JsonResponse({'success': True, 'Mensajes': 'Cargos de honoracios trasladados a cuenta Paciente!'})
 
     except psycopg2.DatabaseError as error:
         print("Entre por rollback", error)

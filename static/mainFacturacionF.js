@@ -865,7 +865,7 @@ window.addEventListener('load', async () => {
 		$('#totalProcedimientos').val(data.totalProcedimientos);
 		$('#totalSuministros').val(data.totalSuministros);
 		$('#totalLiquidacion').val(data.totalLiquidacion);
-		$('#valorApagar').val(data.totalAPagar);
+		$('#valorApagar').val(data.valorApagar);
 		$('#anticipos').val(data.totalAnticipos);
 		$('#totalAbonos').val(data.totalAbonos);
 		$('#totalRecibido').val(data.totalRecibido);

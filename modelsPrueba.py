@@ -930,4 +930,8 @@ class ProgramacionCitasMedicas(models.Model):
 -- al crear admision desde triage l combo de dx debe traer el cie10
 -- por cua al seleccionar la empresa de compensa r no tyrae conevnio, hay dque jugar opara que lo traiga
 -- por que al coloar el rips de recien nacido , se arregla el erroo de los ripsegreeo ???????????????
-
+-- hay problemas con el checkbox de material de cirugia cuando off no graba sale error
+-- ojo creo que problemas en historiamedicamentos cuado se autoriza u med que tuee mas de un item en el folio o sea mas de un medicamento
+-- no aparece la cantidassolicitada en farmacia detalle creop
+-- OPS LOS paraclinicos en ENFERMERIA NO MUESTRA CIRUGIAS ??
+-- ojo no me actualzizo desde farmacia los totales d eliquidacion (validar de nuevo)

@@ -386,6 +386,10 @@ function ActualizarAut()
 	        data['username_id'] = username_id;
 		   data['autorizacionId'] = autorizacionId;	
        		data = JSON.stringify(data);
+	        arrancaAutorizaciones(1,data);
+	    dataTableAutorizacionesDetalleInitialized = true;
+
+
 	        arrancaAutorizaciones(2,data);
 	    dataTableAutorizacionesDetalleInitialized = true;
 	

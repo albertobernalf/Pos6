@@ -29,7 +29,7 @@ from datetime import date, timedelta
 import time
 from decimal import Decimal
 from admisiones.models import Ingresos
-from facturacion.models import ConveniosPacienteIngresos, Liquidacion, LiquidacionDetalle, Facturacion, FacturacionDetalle, Conceptos
+from facturacion.models import ConveniosPacienteIngresos, Liquidacion, LiquidacionDetalle, Facturacion, FacturacionDetalle, Conceptos, Suministros
 from tarifarios.models import TarifariosDescripcion
 from clinico.models import Servicios, EspecialidadesMedicos, Historia, HistoriaMedicamentos
 from farmacia.models import FarmaciaEstados, Farmacia, FarmaciaDetalle
@@ -43,7 +43,7 @@ from cartera.models import Pagos
 from django.db.models import Min, Max, Avg
 from django.db.models import F
 from django.db import transaction, IntegrityError
-
+from autorizaciones.models import EstadosAutorizacion
 # Create your views here.
 
 
@@ -568,7 +568,7 @@ def AdicionarDespachosDispensa(request):
         ## Miercoles aqui deberia haber una rutina que lo envie a Autorizaciones No cree ?
 
         flagNoRequiereAut = 'N'
-        autPendiente = EstadosAutorizacion.objects.get(bombre='PENDIENTE')
+        autPendiente = EstadosAutorizacion.objects.get(nombre='PENDIENTE')
 
 
         for key in jsonFormulacion:
@@ -600,32 +600,33 @@ def AdicionarDespachosDispensa(request):
                 #print("diasTratamiento=", diasTratamiento)
 
                 #AQUI DEBO FILTRAR SI REQUIERE AUTORIZACION ENVIARLA A AUTORIZACIONES Y NO DESPACHAR
+                ##Nop esta rutina PAILAS se queda enun loop indefinido de requiereautoriacion
+                #no va
 
                 requiereAut = Suministros.objects.get(id=medicamentos)
                 print("requiereAut = " , requiereAut.requiereAutorizacion)
 
                 ##FIN RUTINA ENVIO A AUTORIZACIONES Y DEBE SEQUIR CON EL SIGTE ITEM
 
+                #if (requiereAut.requiereAutorizacion== 'S'):
 
-                if (requiereAut.requiereAutorizacion== 'S'):
-
-                    if (flagNoRequiereAut=='N'):
+                #    if (flagNoRequiereAut=='N'):
                         # Crea la Autorizacion
-                        comando = 'INSERT INTO autorizaciones_autorizaciones ("estadoAutorizacion_id","fechaModifica", "fechaRegistro", "estadoReg",empresa_id, "plantaOrdena_id", "sedesClinica_id", "usuarioRegistro_id", historia_id , convenio_id )  SELECT ' + "'" + str(autPendiente.id) + "'" + ', now(), now(), ' + "'" + str('A') + "'" + ', conv.empresa_id,  ' + "'" + str(username_id) + "','" + str(sede) + "','" + str(username_id) + "'," + "'" + str(historia.id) + "'" + ', conv.id FROM facturacion_conveniospacienteingresos convIngreso,  contratacion_convenios conv WHERE conv.id = ' + "'" + str(convenioId) + "'" + ' AND conv.id = convIngreso.convenio_id AND convIngreso."tipoDoc_id" = ' + "'" + str(tipoDocId) + "' AND convIngreso.documento_id = " + "'" + str(documentoId) + "'" + ' AND convIngreso."consecAdmision" = ' + "'" + str(ingresoPaciente) + "' AND conv.id = " + "'" + str(convenioId) + "'" + ' RETURNING id'
+                #        comando = 'INSERT INTO autorizaciones_autorizaciones ("estadoAutorizacion_id","fechaModifica", "fechaRegistro", "estadoReg",empresa_id, "plantaOrdena_id", "sedesClinica_id", "usuarioRegistro_id", historia_id , convenio_id )  SELECT ' + "'" + str(autPendiente.id) + "'" + ', now(), now(), ' + "'" + str('A') + "'" + ', conv.empresa_id,  ' + "'" + str(username_id) + "','" + str(sede) + "','" + str(username_id) + "'," + "'" + str(historia.id) + "'" + ', conv.id FROM facturacion_conveniospacienteingresos convIngreso,  contratacion_convenios conv WHERE conv.id = ' + "'" + str(convenioId) + "'" + ' AND conv.id = convIngreso.convenio_id AND convIngreso."tipoDoc_id" = ' + "'" + str(tipoDocId) + "' AND convIngreso.documento_id = " + "'" + str(documentoId) + "'" + ' AND convIngreso."consecAdmision" = ' + "'" + str(ingresoPaciente) + "' AND conv.id = " + "'" + str(convenioId) + "'" + ' RETURNING id'
 
-                        cur3.execute(comando)
-                        autorizacionId = cur3.fetchone()[0]
-                        flagNoRequiereAut='S'
+                #        cur3.execute(comando)
+                #        autorizacionId = cur3.fetchone()[0]
+                #        flagNoRequiereAut='S'
 
-                    else:
+                #    else:
                         #Crea la autorizacionDetalle
-                        comando = 'INSERT INTO autorizaciones_autorizacionesdetalle ("estadoAutorizacion_id", "cantidadSolicitada", "cantidadAutorizada", "fechaRegistro", "estadoReg", autorizaciones_id, "usuarioRegistro_id", "examenes_id", cums_id, "tiposExamen_id", "valorSolicitado")  VALUES (' + "'" + str(autPendiente.id) + "'," + "'" + str(cantidadMedicamento) + "'" + ' ,0, now(),' + "'" + str('A') + "','" + str(autorizacionId) + "','" + str(username_id) + "'," + "'" + str(medicamentos) + "',null, " + "null," + "'" + str('0') + "'" + ')'
+                #        comando = 'INSERT INTO autorizaciones_autorizacionesdetalle ("estadoAutorizacion_id", "cantidadSolicitada", "cantidadAutorizada", "fechaRegistro", "estadoReg", autorizaciones_id, "usuarioRegistro_id", "examenes_id", cums_id, "tiposExamen_id", "valorSolicitado")  VALUES (' + "'" + str(autPendiente.id) + "'," + "'" + str(cantidadMedicamento) + "'" + ' ,0, now(),' + "'" + str('A') + "','" + str(autorizacionId) + "','" + str(username_id) + "'," + "'" + str(medicamentos) + "',null, " + "null," + "'" + str('0') + "'" + ')'
 
-                        print("comando=", comando)
-                        cur3.execute(comando)
+                #        print("comando=", comando)
+                #        cur3.execute(comando)
 
                     # no lo carga al despacho
-                    continue
+                 #   continue
 
                 # Busco historialMediamentos
 
@@ -735,51 +736,6 @@ def AdicionarDespachosDispensa(request):
 
 
         miConexion3.commit()
-        #cur3.close()
-        #miConexion3.close()
-
-            # Fin rutina Facturacion Medicamentos detalle
-
-        ## Vamops a actualizar los totales de la Liquidacion:
-        #
-        totalSuministros = LiquidacionDetalle.objects.all().filter(liquidacion_id=liquidacionId).filter(examen_id=None).exclude(estadoRegistro='I').exclude(anulado='S').aggregate(totalS=Coalesce(Sum('valorTotal'), 0))
-        totalSuministros = (totalSuministros['totalS']) + 0
-        print("totalSuministros", totalSuministros)
-        totalProcedimientos = LiquidacionDetalle.objects.all().filter(liquidacion_id=liquidacionId).filter(cums_id=None).exclude(estadoRegistro='I').exclude(anulado='S').aggregate(totalP=Coalesce(Sum('valorTotal'), 0))
-        totalProcedimientos = (totalProcedimientos['totalP']) + 0
-        print("totalProcedimientos", totalProcedimientos)
-        registroPago = Liquidacion.objects.get(id=liquidacionId)
-
-        # Continua Aqui
-
-        totalCopagos = Pagos.objects.all().filter(tipoDoc_id=tipoDocId).filter(documento_id=documentoId).filter(consec=ingresoPaciente).filter(formaPago_id=4).exclude(estadoReg='I').exclude(anulado='S').aggregate(totalC=Coalesce(Sum('valorEnCurso'), 0))
-        totalCopagos = (totalCopagos['totalC']) + 0
-        print("totalCopagos", totalCopagos)
-        totalCuotaModeradora = Pagos.objects.all().filter(tipoDoc_id=tipoDocId).filter(documento_id=documentoId).filter(consec=ingresoPaciente).filter(formaPago_id=3).exclude(estadoReg='I').exclude(anulado='S').aggregate(totalM=Coalesce(Sum('valorEnCurso'), 0))
-        totalCuotaModeradora = (totalCuotaModeradora['totalM']) + 0
-        print("totalCuotaModeradora", totalCuotaModeradora)
-        totalAnticipos = Pagos.objects.all().filter(tipoDoc_id=tipoDocId).filter(documento_id=documentoId).filter(consec=ingresoPaciente).filter(formaPago_id=1).exclude(estadoReg='I').exclude(anulado='S').aggregate(Anticipos=Coalesce(Sum('valorEnCurso'), 0))
-        totalAnticipos = (totalAnticipos['Anticipos']) + 0
-        print("totalAnticipos", totalAnticipos)
-        totalAbonos = Pagos.objects.all().filter(tipoDoc_id=tipoDocId).filter(documento_id=documentoId).filter(consec=ingresoPaciente).filter(formaPago_id=2).exclude(estadoReg='I').exclude(anulado='S').aggregate(totalAb=Coalesce(Sum('valorEnCurso'), 0))
-        totalAbonos = (totalAbonos['totalAb']) + 0
-        # totalAbonos = totalCopagos + totalAnticipos + totalCuotaModeradora
-        print("totalAbonos", totalAbonos)
-
-        totalRecibido = totalCopagos + totalCuotaModeradora + totalAnticipos + totalAbonos
-        totalApagar = totalSuministros + totalProcedimientos - totalRecibido
-        totalLiquidacion = totalSuministros + totalProcedimientos
-        print("totalLiquidacion", totalLiquidacion)
-        print("totalAPagar", totalApagar)
-
-        # Rutina Guarda en cabezote los totales
-
-        print("Voy a grabar el cabezote")
-
-        comando = 'UPDATE facturacion_liquidacion SET "totalSuministros" = ' + "'" + str(totalSuministros) + "'" + ',"totalProcedimientos" = ' + "'" + str(totalProcedimientos) + "'"  + ', "totalCopagos" = ' + "'"  + str(totalCopagos) + "'" + ' , "totalCuotaModeradora" = ' + "'"  + str(totalCuotaModeradora) + "'"  + ', anticipos = ' + "'" + str(totalAnticipos) + "'" + ' ,"totalAbonos" = ' + "'" + str(totalAbonos) + "'"  + ', "totalLiquidacion" = ' + "'" + str(totalLiquidacion) + "'" + ', "valorApagar" = ' + "'"  + str(totalApagar) + "'" + ', "totalRecibido" = ' + "'" + str(totalRecibido) + "'" + ' WHERE id =' + str(liquidacionId)
-        cur3.execute(comando)
-
-        miConexion3.commit()
         cur3.close()
         miConexion3.close()
 
@@ -788,7 +744,7 @@ def AdicionarDespachosDispensa(request):
         ## OJOOOO
         ## AQUI FALTA UN except
 
-        return JsonResponse({'success': True, 'Mensajes': 'Despacho creado satisfactoriamente!' })
+
 
 
     except psycopg2.DatabaseError as error:
@@ -804,6 +760,79 @@ def AdicionarDespachosDispensa(request):
         if miConexion3:
             cur3.close()
             miConexion3.close()
+
+
+    ## Vamops a actualizar los totales de la Liquidacion:
+
+    totalSuministros = LiquidacionDetalle.objects.all().filter(liquidacion_id=liquidacionId).filter(examen_id=None).exclude(estadoRegistro='I').exclude(anulado='S').aggregate(totalS=Coalesce(Sum('valorTotal'), 0))
+    totalSuministros = (totalSuministros['totalS']) + 0
+    print("totalSuministros", totalSuministros)
+    totalProcedimientos = LiquidacionDetalle.objects.all().filter(liquidacion_id=liquidacionId).filter(cums_id=None).exclude(estadoRegistro='I').exclude(anulado='S').aggregate(totalP=Coalesce(Sum('valorTotal'), 0))
+    totalProcedimientos = (totalProcedimientos['totalP']) + 0
+    print("totalProcedimientos", totalProcedimientos)
+    registroPago = Liquidacion.objects.get(id=liquidacionId)
+
+    # Continua Aqui
+
+    totalCopagos = Pagos.objects.all().filter(tipoDoc_id=tipoDocId).filter(documento_id=documentoId).filter(consec=ingresoPaciente).filter(formaPago_id=4).exclude(estadoReg='I').exclude(anulado='S').aggregate(totalC=Coalesce(Sum('valorEnCurso'), 0))
+    totalCopagos = (totalCopagos['totalC']) + 0
+    print("totalCopagos", totalCopagos)
+    totalCuotaModeradora = Pagos.objects.all().filter(tipoDoc_id=tipoDocId).filter(documento_id=documentoId).filter(consec=ingresoPaciente).filter(formaPago_id=3).exclude(estadoReg='I').exclude(anulado='S').aggregate(totalM=Coalesce(Sum('valorEnCurso'), 0))
+    totalCuotaModeradora = (totalCuotaModeradora['totalM']) + 0
+    print("totalCuotaModeradora", totalCuotaModeradora)
+    totalAnticipos = Pagos.objects.all().filter(tipoDoc_id=tipoDocId).filter(documento_id=documentoId).filter(consec=ingresoPaciente).filter(formaPago_id=1).exclude(estadoReg='I').exclude(anulado='S').aggregate(Anticipos=Coalesce(Sum('valorEnCurso'), 0))
+    totalAnticipos = (totalAnticipos['Anticipos']) + 0
+    print("totalAnticipos", totalAnticipos)
+    totalAbonos = Pagos.objects.all().filter(tipoDoc_id=tipoDocId).filter(documento_id=documentoId).filter(consec=ingresoPaciente).filter(formaPago_id=2).exclude(estadoReg='I').exclude(anulado='S').aggregate(totalAb=Coalesce(Sum('valorEnCurso'), 0))
+    totalAbonos = (totalAbonos['totalAb']) + 0
+    # totalAbonos = totalCopagos + totalAnticipos + totalCuotaModeradora
+    print("totalAbonos", totalAbonos)
+
+    totalRecibido = totalCopagos + totalCuotaModeradora + totalAnticipos + totalAbonos
+    totalApagar = totalSuministros + totalProcedimientos - totalRecibido
+    totalLiquidacion = totalSuministros + totalProcedimientos
+    print("totalLiquidacion", totalLiquidacion)
+    print("totalAPagar", totalApagar)
+
+    miConexion3 = None
+    try:
+
+        miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432",
+                                       user="postgres", password="123456")
+        cur3 = miConexion3.cursor()
+        # Primero creamos el despacho
+
+        comando = 'INSERT INTO farmacia_farmaciadespachos ("fechaRegistro", "estadoReg",farmacia_id, "serviciosAdministrativosEntrega_id","usuarioEntrega_id", "usuarioRegistro_id","serviciosAdministrativosRecibe_id" , "usuarioRecibe_id") VALUES (' + "'" + str(fechaRegistro) + "','" + str(estadoReg) + "'," + str(farmaciaId) + ",'" + str(servicioAdmonEntrega) + "','" + str(plantaEntrega) + "','" + str(username_id) + "','" +  str(servicioAdmonRecibe) + "','" +  str(plantaRecibe) + "') RETURNING id ;"
+        print(comando)
+        # Rutina Guarda en cabezote los totales
+
+        print("Voy a grabar el cabezote")
+
+        comando = 'UPDATE facturacion_liquidacion SET "totalSuministros" = ' + "'" + str(totalSuministros) + "'" + ',"totalProcedimientos" = ' + "'" + str(totalProcedimientos) + "'"  + ', "totalCopagos" = ' + "'"  + str(totalCopagos) + "'" + ' , "totalCuotaModeradora" = ' + "'"  + str(totalCuotaModeradora) + "'"  + ', anticipos = ' + "'" + str(totalAnticipos) + "'" + ' ,"totalAbonos" = ' + "'" + str(totalAbonos) + "'"  + ', "totalLiquidacion" = ' + "'" + str(totalLiquidacion) + "'" + ', "valorApagar" = ' + "'"  + str(totalApagar) + "'" + ', "totalRecibido" = ' + "'" + str(totalRecibido) + "'" + ' WHERE id =' + str(liquidacionId)
+        cur3.execute(comando)
+
+        miConexion3.commit()
+        cur3.close()
+        miConexion3.close()
+
+        return JsonResponse({'success': True, 'Mensajes': 'Despacho creado satisfactoriamente!' })
+
+    except psycopg2.DatabaseError as error:
+        print("Entre por rollback", error)
+        if miConexion3:
+            print("Entro ha hacer el Rollback")
+            miConexion3.rollback()
+        message_error= str(error)
+        return JsonResponse({'success': False, 'Mensajes': message_error})
+
+
+    finally:
+        if miConexion3:
+            cur3.close()
+            miConexion3.close()
+
+    ##Hasta aquip actualiza detalle totales
+
 
 
     # Guarda en Enfermeriarecibe
