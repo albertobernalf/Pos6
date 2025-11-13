@@ -645,7 +645,7 @@ class RipsOtrosServicios(models.Model):
    fechaSuministroTecnologia =  models.DateTimeField(default=now, blank=True, null=True, editable=True)
    tipoOS = models.ForeignKey('rips.RipsTipoOtrosServicios', blank=True, null=True, editable=True, on_delete=models.PROTECT, related_name='OtrosServ01')
    codTecnologiaSalud =  models.ForeignKey('rips.RipsCums', blank=True, null=True, editable=True, on_delete=models.PROTECT, related_name='RipsCums11')
-   nomTecnologiaSalud = models.CharField(max_length=30, blank=True,null= True, editable=True)
+   nomTecnologiaSalud = models.CharField(max_length=60, blank=True,null= True, editable=True)
    cantidadOS  =   models.DecimalField(max_digits=5, decimal_places=0, blank=True,null= True, editable=True)
    tipoDocumentoIdentificacion = models.ForeignKey('rips.RipsTiposDocumento', blank=True, null=True, editable=True, on_delete=models.PROTECT, related_name='RipsTiposDoc21')
    numDocumentoIdentificacion = models.CharField(max_length=20, blank=True,null= True, editable=True)

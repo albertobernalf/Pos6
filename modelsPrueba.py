@@ -940,3 +940,4 @@ class ProgramacionCitasMedicas(models.Model):
 -- ops crear autorizacin de la cirugia cuando se crea un proced
 -- opos crear la autorizacion de la ciru no cae en liquidaciondetalle. , sololasa utroizadas caen las otras nop
 -- ops crear ripsotrosservicios de :insumos y material, honrario y estancias
+-- ops que pasa con el consecutivo de la factura
