@@ -1028,9 +1028,7 @@ function RefrescarPantalla() {
 			</div>
 		
                         <div class="modal-body">
-
-                        
-			
+                      			
   			  <form id="postFormEstadoCirugia" name="postFormEstadoCirugia">
 
 			Programacion No : 
@@ -1057,6 +1055,12 @@ function RefrescarPantalla() {
 	
 				  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar   </button>                                  
 				<button type="button" class="btn btn-primary" id="saveBtnCrearEstadoCirugia" onclick="GuardarEstadoCirugia()">Grabar!</button> 
+
+			<textarea id="mensajesErrorModelEstado" name="mensajesErrorModelEstado" style="background-color: lightred; color: navy;"  rows="1" cols="60" placeholder="Mensajes..."  wrap="hard"></textarea>					
+
+					<textarea id="mensajesExitoModelEstado" name="mensajesExitoModelEstado" style="background-color: lightred; color: navy;"  rows="1" cols="60" placeholder="Mensajes..."  wrap="hard"></textarea>					
+	
+
                                     </div>
 						
                         </div> <!-- CIERRA MODAL CONTENTE -->

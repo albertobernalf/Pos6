@@ -935,3 +935,8 @@ class ProgramacionCitasMedicas(models.Model):
 -- no aparece la cantidassolicitada en farmacia detalle creop
 -- OPS LOS paraclinicos en ENFERMERIA NO MUESTRA CIRUGIAS ??
 -- ojo no me actualzizo desde farmacia los totales d eliquidacion (validar de nuevo)
+
+-- ops desarrollar crear el folio clinico de lacirugia cuando se realiza
+-- ops crear autorizacin de la cirugia cuando se crea un proced
+-- opos crear la autorizacion de la ciru no cae en liquidaciondetalle. , sololasa utroizadas caen las otras nop
+-- ops crear ripsotrosservicios de :insumos y material, honrario y estancias

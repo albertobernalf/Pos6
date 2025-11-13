@@ -29,7 +29,7 @@ from admisiones.models import Ingresos
 from facturacion.models import ConveniosPacienteIngresos, Liquidacion, LiquidacionDetalle, Facturacion, FacturacionDetalle, Conceptos, Suministros , TiposSuministro
 from cartera.models import TiposPagos, FormasPagos, Pagos, PagosFacturas, Glosas
 from triage.models import Triage
-from clinico.models import Servicios, EspecialidadesMedicos
+from clinico.models import Servicios, EspecialidadesMedicos, TiposFolio, Historia
 from rips.models import RipsTransaccion, RipsUsuarios, RipsEnvios, RipsDetalle, RipsTiposNotas
 from tarifarios.models import TiposTarifa, TiposTarifaProducto, TiposHonorarios, TarifariosDescripcionHonorarios ,MinimosLegales
 import io
@@ -2030,6 +2030,54 @@ def GuardarEstadoCirugia(request):
     estadoId = request.POST.get('estadoId')
     print("estadoId =", estadoId)
 
+    username_id = request.POST.get('username_id')
+    print("username_id =", username_id)
+
+    estadoConfirmadaId = EstadosCirugias.objects.get(nombre='REALIZADA')
+    print(" estadoConfirmadaId = ", estadoConfirmadaId)
+
+    ciruIdd = Cirugias.objects.get(id=cirugiaId)
+    print("ciruIdd =", ciruIdd.id)
+
+    print("ciruIdd.tipoDoc_Id =", ciruIdd.tipoDoc_id)
+
+
+    serviciosAdministrativos = ciruIdd.serviciosAdministrativos_id
+    print(" serviciosAdministrativos = ", serviciosAdministrativos)
+
+    tiposFolio = TiposFolio.objects.get(nombre='CIRUGIA')
+    print(" tiposFolio = ", tiposFolio.id)
+
+    estadoReg='A'
+    fechaRegistro = timezone.now()
+
+    sede = request.POST['sede']
+    print ("sede =", sede)
+
+
+    ingresoId = Ingresos.objects.get(tipoDoc_id=ciruIdd.tipoDoc_id, documento_id=ciruIdd.documento_id, consec = ciruIdd.consecAdmision)
+    print ("ingresoId =", ingresoId)
+
+    esTriage='N'
+    try:
+        with transaction.atomic():
+
+           ingreso = Ingresos.objects.get(id=ingresoId.id)
+
+    except Exception as e:
+            # Aquí ya se hizo rollback automáticamente
+            print("Se hizo rollback por PRONO SE HACE NADA:", e)
+            triageId = Triage.objects.get(id=ingresoId)
+            esTriage = 'S'
+
+    finally:
+        print("No haga nada")
+
+
+
+    estadoReg = 'A'
+    fechaRegistro = timezone.now()
+
     # Busco la cirugia relacionado, esperando que no hayan ms de una cirugia. OPS
     #registroProgramacion = ProgramacionCirugias.objects.get(id=programacionId)
     #registroCirugia = Cirugias.objects.get(tipoDoc_id=registroProgramacion.tipoDoc_id, documento_id=registroProgramacion.documento_id, consecAdmision=registroProgramacion.consecAdmision)
@@ -2047,6 +2095,60 @@ def GuardarEstadoCirugia(request):
         print(detalle)
 
         cur3.execute(detalle)
+
+        print("estadoId = " , estadoId)
+        print("estadoConfirmadaId.id = ", estadoConfirmadaId.id)
+        print("ciruIdd.estadoCirugia_id = ", ciruIdd.estadoCirugia_id)
+
+        if (float(estadoId) == float(estadoConfirmadaId.id)):  # Hay que crear folio
+
+            print("Pase pñrimer filtroio")
+
+            if (float(ciruIdd.estadoCirugia_id) != float(estadoConfirmadaId.id)):
+
+                ## Desde aqui INSERT FOLIO
+
+                # Primero buscamos el numero del folio nuevo
+
+                print ("Entre a crear folio")
+
+                if (esTriage == 'N'):
+
+                    ultimofolio = Historia.objects.all().filter(tipoDoc_id=ingreso.tipoDoc_id).filter(documento_id=ingreso.documento_id).aggregate(maximo=Coalesce(Max('folio'), 0))
+                else:
+                    ultimofolio = Historia.objects.all().filter(tipoDoc_id=triageId.tipoDoc_id).filter(documento_id=triageId.documento_id).aggregate(maximo=Coalesce(Max('folio'), 0))
+
+
+                print("ultimo folio = ", ultimofolio)
+                print("ultimo folio = ", ultimofolio['maximo'])
+                ultimofolio2 = (ultimofolio['maximo']) + 1
+                print("ultimo folio2 = ", ultimofolio2)
+
+                # Segundo  INSERT en clinico_historial
+
+                if (esTriage == 'N'):
+
+                    detalle = 'INSERT INTO clinico_historia ("consecAdmision", folio, fecha, "fechaRegistro", "estadoReg", documento_id, "tipoDoc_id" , planta_id, "tiposFolio_id" , "usuarioRegistro_id", "sedesClinica_id", "serviciosAdministrativos_id" ) VALUES (' + "'" + str(
+                        ingreso.consec) + "','" + str(ultimofolio2) + "','" + str(fechaRegistro) + "','" + str(
+                        fechaRegistro) + "','" + str(estadoReg) + "','" + str(ingreso.documento_id) + "','" + str(
+                        ingreso.tipoDoc_id) + "','" + str(username_id) + "','" + str(tiposFolio.id) + "','" + str(
+                        username_id) + "','" + str(sede) + "','" + str(serviciosAdministrativos) + "') RETURNING id"
+                else:
+                    detalle = 'INSERT INTO clinico_historia ("consecAdmision", folio, fecha, "fechaRegistro", "estadoReg", documento_id, "tipoDoc_id" , planta_id, "tiposFolio_id" , "usuarioRegistro_id", "sedesClinica_id", "serviciosAdministrativos_id" ) VALUES (' + "'" + str(
+                        triageId.consec) + "','" + str(ultimofolio2) + "','" + str(fechaRegistro) + "','" + str(
+                        fechaRegistro) + "','" + str(estadoReg) + "','" + str(triageId.documento_id) + "','" + str(
+                        triageId.tipoDoc_id) + "','" + str(username_id) + "','" + str(tiposFolio.id) + "','" + str(
+                        username_id) + "','" + str(sede) + "','" + str(serviciosAdministrativos) + "') RETURNING id"
+
+                print(detalle)
+                resultado = cur3.execute(detalle)
+                historiaId = cur3.fetchone()[0]
+                print("historiaId = ", historiaId)
+
+                detalle = 'INSERT INTO clinico_historialcirugias ("estadoReg",cirugia_id, historia_id, "usuarioRegistro_id")  VALUES (' + "'A','" + str(cirugiaId) + "','" + str(historiaId) + "','" + str(username_id) + "')"
+                print(detalle)
+                cur3.execute(detalle)
+
 
         miConexion3.commit()
         cur3.close()
@@ -2086,7 +2188,7 @@ def GenerarLiquidacionCirugia(request):
     registroHonorarioCirujano = TiposHonorarios.objects.get(nombre='CIRUJANO')
     registroHonorarioAnestesiologo = TiposHonorarios.objects.get(nombre='ANESTESIOLOGO')
     registroHonorarioAyudante = TiposHonorarios.objects.get(nombre='AYUDANTE')
-    registroHonorarioPerfisionista = TiposHonorarios.objects.get(nombre='PERFUSIONISTA')
+    #registroHonorarioPerfisionista = TiposHonorarios.objects.get(nombre='PERFUSIONISTA')
     registroDerechosSala = TiposHonorarios.objects.get(nombre='DERECHOS DE SALA')
     registroMateriales = TiposHonorarios.objects.get(nombre='MATERIALES DE SUTURA Y CURACIO')
 

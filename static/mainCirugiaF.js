@@ -1844,16 +1844,29 @@ function GuardarEstadoCirugia()
 
 	  	var cirugiaId = document.getElementById("cirugiaIdParaEstado2").value;
 		var estadoId = document.getElementById("estadosCirugia").value;
+		var username_id = document.getElementById("username_id").value;
+		var sede = document.getElementById("sede").value;
 
   	     // alert("programacion : " + post_id);		
     
 	$.ajax({
 
 	        url: "/guardarEstadoCirugia/",
-                data: {'cirugiaId':cirugiaId,'estadoId':estadoId},
+                data: {'cirugiaId':cirugiaId,'estadoId':estadoId,'username_id':username_id,'sede':sede},
                 type: "POST",
                 dataType: 'json',
                 success: function (info) {
+	
+		if (info.success == false)
+			{
+			document.getElementById("mensajesErrorModelEstado").value = info.Mensajes;
+			}
+			else
+			{
+			document.getElementById("mensajesExitoModelEstado").value = info.Mensajes;
+			}
+
+
 
 		var data =  {}   ;
 	 	var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;

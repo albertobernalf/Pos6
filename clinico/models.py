@@ -1473,3 +1473,22 @@ class HistorialNotasEnfermeria(models.Model):
         indexes = [
             Index(fields=['historia']),
         ]
+
+class HistorialCirugias(models.Model):
+    ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
+    id = models.AutoField(primary_key=True)
+    historia =  models.ForeignKey('clinico.Historia',  blank=True, null=True, editable=True, on_delete=models.PROTECT,   related_name='historia_3223')
+    cirugia =  models.ForeignKey('cirugia.Cirugias',  blank=True, null=True, editable=True, on_delete=models.PROTECT,   related_name='cirugia_3221')
+    observaciones = models.CharField(max_length=2000 ,blank=True, null=True)
+    usuarioRegistro = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True,    on_delete=models.PROTECT)
+    estadoReg = models.CharField(max_length=1, choices=ESTADOREG_CHOICES,default='A', editable=False)
+
+    def __str__(self):
+        return self.historia
+
+    class Meta:
+        indexes = [
+            Index(fields=['historia']),
+        ]
