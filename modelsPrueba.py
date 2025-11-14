@@ -921,9 +921,21 @@ class ProgramacionCitasMedicas(models.Model):
 -- ojo creo que problemas en historiamedicamentos cuado se autoriza u med que tuee mas de un item en el folio o sea mas de un medicamento
 -- no aparece la cantidassolicitada en farmacia detalle creop (creo esta a la derecha)
 -- OPS LOS paraclinicos en ENFERMERIA NO MUESTRA CIRUGIAS ??
+-- OJO hay que verificar quep cuando se factura una cirugia cambi a FACTURADO para que salga de la programacion de cirugias
+
 -- ojo no me actualizo desde farmacia los totales d eliquidacion (validar de nuevo)
 -- ops desarrollar crear el folio clinico de lacirugia cuando se realiza (Validar ..)
 -- ops crear autorizacin de la cirugia cuando se crea un proced
 -- opos crear la autorizacion de la ciru no cae en liquidaciondetalle. , sololasa utroizadas caen las otras nop
 -- ops crear ripsotrosservicios de :insumos y material, honrario y estancias
 -- ops que pasa con el consecutivo de la factura
+-- hay un bonche barvaro en los ripsotrosservicios respecto asl cups o cum en unos casos cums (insumos) en otros casos cups (honorarios, estancias) =?? como arreglar mejorqar
+  -- Esto es el icebert humano de concebir sistemas desacoplados , desascciados
+-- Notas credito, notas debito RIPS de pronto no es tan compleo, complcado sacar mas adelante tiempito, son cosas de cuadre TUNNIG DE OPERATION
+-- Los RIPS , GLOSAS, CIRUGIA, son una prueba muy grande, imaginese hay que cuadrar la money el dinero los $, que cuadre como asi modeardoa , cuando se prorratea ES TENAZ
+  - hasta alla hay que llegar
+-- Y que me dice de REFACTURAR una cuenta, hacer gtrasalados añadir y quira items factyura de nuevo la cirugia. y como se reporta la ANULADA
+-   -- pos hay todavia camino para recorrer. PERO TODO BIEN COMO EL PIBE.MUY PERO MUY BIEN CASI EXCELENTE. FELICITACIONES ...
+-- CUANDO SE FACYURA LA CIRUGIA TAMBIEN CAMBIA ELÑ ESTADO DE LA PROGRAMACION A realizada
+
+-- DEFINITIVAMENTE hay que aterrizar el tema insumos, qx, dispo medicos, honorarios etc. Es un saperongo, y en otros servicios ni se diga papaberol

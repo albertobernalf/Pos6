@@ -1404,6 +1404,7 @@ def FacturarCuenta(request):
     
     estadoCirugiaRealizada = EstadosCirugias.objects.get(nombre='REALIZADA')
     estadoCirugiaFacturada = EstadosCirugias.objects.get(nombre='FACTURADA')
+    estadoProgramacionRealizada = ProgramacionCirugias.objects.get(nombre='Realizada')
 
     try:
         with transaction.atomic():
@@ -1412,7 +1413,7 @@ def FacturarCuenta(request):
 
             if (cirugias >=1):
                 Cirugias.objects.filter(tipoDoc_id=usuarioId.tipoDoc_id , documento_id=usuarioId.documento_id ,consec=usuarioId.consecAdmision , estadoCirugia_id= estadoCirugiaRealizada.id).update(estadoCirugia_id=estadoCirugiaFacturada.id)
-			
+                Programacioncirugias.objects.filter(tipoDoc_id=usuarioId.tipoDoc_id , documento_id=usuarioId.documento_id ,consec=usuarioId.consecAdmision , estadoCirugia_id= estadoCirugiaRealizada.id).update(estadoProgramacion_id=estadoProgramacionRealizada.id)
 
     except Exception as e:
         # Aquí ya se hizo rollback automáticamente

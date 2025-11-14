@@ -1036,8 +1036,15 @@ def GenerarJsonRips(request):
                     curx.execute(detalle)
 
                 else:
-                    pass
 
+                    # Por aqui GLOSA
+                    detalle = 'INSERT INTO rips_ripsotrosservicios (glosa_id,"codPrestador", "numAutorizacion", "idMIPRES", "fechaSuministroTecnologia", "nomTecnologiaSalud", "cantidadOS", "numDocumentoIdentificacion", "vrUnitOS", "vrServicio", "valorPagoModerador", "numFEVPagoModerador", consecutivo, "fechaRegistro", "codTecnologiaSalud_id", "conceptoRecaudo_id", "tipoDocumentoIdentificacion_id", "tipoOS_id", "usuarioRegistro_id", "ripsDetalle_id", "itemFactura", "ripsTipos_id", "ripsTransaccion_id","motivoGlosa_id", "notasCreditoGlosa", "notasCreditoOtras", "notasDebito", "vAceptado", "valorGlosado", "valorSoportado", "estadoReg", ingreso_id, "tipoPagoModerador_id") SELECT glosa.id,"codPrestador", "numAutorizacion", "idMIPRES", "fechaSuministroTecnologia", "nomTecnologiaSalud", "cantidadOS", "numDocumentoIdentificacion", "vrUnitOS", "vrServicio", "valorPagoModerador", "numFEVPagoModerador", row_number() OVER(ORDER BY ripsOtros.id) AS consecutivo , ripsOtros."fechaRegistro", "codTecnologiaSalud_id", "conceptoRecaudo_id", "tipoDocumentoIdentificacion_id", "tipoOS_id",ripsOtros."usuarioRegistro_id",' + "'" + str(
+                        elementox['id']) + "'" + ', ripsOtros."itemFactura", ripsOtros."ripsTipos_id", ' + "'" + str(
+                        transaccionId) + "'," + 'glodet."motivoGlosa_id",gloDet."valorNotasCredito", gloDet."valorNotasCreditoOtras",gloDet."valorNotasDebito",gloDet."valorAceptado",gloDet."valorGlosa",gloDet."valorSoportado" ' + ",'A','" + str(
+                        ingresoId.id) + "'," + '"tipoPagoModerador_id" FROM rips_ripsotrosservicios ripsOtros inner join cartera_glosasdetalle gloDet on (gloDet."ripsOtrosServicios_id" = ripsOtros.id) inner join cartera_glosas glosa on (glosa.id = gloDet.glosa_id and glosa.factura_id = cast(ripsOtros."numFEVPagoModerador"  as integer)) inner join rips_ripsdetalle det on (det."numeroFactura_id" =  cast(ripsOtros."numFEVPagoModerador"  as integer) and  det.glosa_id=glosa.id and det.glosa_id=' + "'" + str(
+                        elemento) + "'" + ') where ripsOtros."numFEVPagoModerador" = ' + "'" + str(elementoOtro) + "'"
+                    print("detalle = ", detalle)
+                    curx.execute(detalle)
 
                 ## yo creo que hasta aquip filtrar para ERRORE PERO COMO HACER ESO ?
 
