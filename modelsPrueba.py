@@ -835,16 +835,10 @@ class ProgramacionCitasMedicas(models.Model):
 -- verificar ripsreciennacidos de acuredo mingov.vo
 
 -- falto mirar el detalle de los rips medicamentos, unidades, formasfarmaceuticas, etc
--- ojo hay que hacer un conciertazo , orquestado de todo el proceso glosa rips, enviado,con json , respyuesta etc que no quede mal
-
--- OPS ALTA DEPURACION PUESTA A PUNTO CIRUGIAS - RIPS - GLOSAS
-
 -- ojo en facturacion-- traslados debe actualizar a cero el valor de os procedimikentos en la tarifa desde y actulizar totales a la nueva cuneta
 -- OJo ver en sesion aparte la liquidacion puntual ISS y SOAT en detalle
--- ops los totales (OJOOOOOOOOO) el facturacion_liquidacion con error, y en algun lado me metio un registro de mas OJOOOOOOOOO PENDIENTE ELIMINARLO
 -- revisar traslados - los items anulados
 -- donde rayos coloco 'A' en columna anulkado de facturacion_liquidacion
--- al facturar una cirugia toca dejar relizada la cirugia y no poder volver a cargas mas cosas en el modulo de ciorugia ni poder liquidacr de nuevo NO LE PARECVE
 
 -- El lunes 4 de Novielmre
 
@@ -864,10 +858,6 @@ class ProgramacionCitasMedicas(models.Model):
 -------- ENFOQUES DE PUESTA A PUNTO: 1.- Acceder de cualquier forma 2.- Los datos correctos como debe ser . 3. Creo es una puesta apunta de facturtacion: abonos, totales , tot facturas CORREGIR
 ------------------------------------------------------------------------------------------------------------------------------------------------
 
--- BUENO YO CREO LLEGAR EL DIA LUNES 10 DE NOVIMBRE Y COMENZAR A SOLUCIONAR TODO ESTO ANTES DE CONTINUAR NO LE PARECE ??
--- CONCLUSION DE LA PRIMERA PUESTA A PUNTO : Miercoles tien mucha cosa, complejo, debo terminar, mucho ork. aunque voy muy bien, ES COMO INFINITO
-  --  P A C I E N C I A
-
   -- (.. ok validar)  Los combos desde HC, domnde solicita cirugia para el paciente estan corn error str() + !! ??
  -- Apenas aplico-grabo un abono no refresca saldo ( OJO SOLO EL refresh de las pantallas, liquidaciondetalle, porque si grabo bien los totales en liquidacion
 	(LO UNICO ES QUE HAYA UN ERROR SE VE QUE REFRESCA)
@@ -879,7 +869,6 @@ class ProgramacionCitasMedicas(models.Model):
  -- ops cuando uno selecciona en farmaciafarmaciadetalle un medicamento y lo señala y despacha por uno de ellos pasa que al seleccionar uno y no muetra despacho alguno, pero si seleciona el 
    -- otro muestra amos. ALGO PASA ALLI VERIFICAR (OPS CREO ESTA BIEN )
   -- (.. ok validar) ops colocar el codigo cups en la pantalla liquidaciondetalle para mejor entendimiento
--- ops farmaciadetalle en despachos, despacho un medicamento que requeria autorizacion COMO CONTROLAR ESO ????
 -- alaplicar un meiamento la nefermera no refresca ell datatable o no cordina los datatable y no lo muestra aunque si guarda la a plicacion
 
 -- cuando uno autoriza un medicamento y sale de la pantalla autorizaciondetalle si no quedan mas autorizaciones pendientes se debe colocar en el cabezote de la autortizacion=autorizado
@@ -894,23 +883,21 @@ class ProgramacionCitasMedicas(models.Model):
 	model de planta seleccionar creo el area o serv-admon
 -- ops me creo seis registro dupliado al dispensar una sola vez ALGO PASO
 
- -- ojola pantalla en cirugia de adicionar materiale qx argal cantidad * unitario = total , readonly total y hacerla multiplicacion
+-- ojala pantalla en cirugia de adicionar materiale qx argal cantidad * unitario = total , readonly total y hacerla multiplicacion
 -- ops en el modulo de cirugias en solicitud muestra elestado de  programacion mal debe ser el estado del la cirugia y lorelizado y facturado no debe salir
--- ops arreglar que en lka programacion no salga la camacho con su estado de programacion
--- ops tengo un entredo entre cirugias estados yprogramacion estados validar
+-- ops arreglar que en la programacion no salga la camacho con su estado de programacion
 -- OJO CONTROLES DE CIRUGIA SI NOESTA PROGRAMADA NO DEJAR LIQUIDAR CUENTA, SI NO ESTA REALUZAD TAMPO DEJAR LIQUIDA .tamñoco dejar liquidar si no esta hecha la descricxpionqx
 
 
 -- VEO MUY LENTO ELMODULO TARIFARIO PARA AGREAR CREAR TARIFAS
 
--- (.. ok validar) OPS PERSISTE EL ERROR DE QUE CUANDO CREA UNA CIRUGIA EN LA TBLA PROGRAMACION DE CIRUGIA NO CREA EL CIRUGIA_ID. // OJO ESTO NO SE HIZO DESDE LA HC VERIFICAR
--- la disponinbilidd de sals de cirugia no funciona aun
+-- (.. ok validar) OPS PERSISTE EL ERROR DE QUE CUANDO CREA UNA CIRUGIA EN LA TABLA PROGRAMACION DE CIRUGIA NO CREA EL CIRUGIA_ID. // OJO ESTO NO SE HIZO DESDE LA HC VERIFICAR
+-- la disponinbilidd de salas de cirugia no funciona aun
 -- (ok.. validar) ops la cirugia aun no tiene el convenio . Para colocar un convenio de los que vienen poor HC habria que crear un boton que edite la cirugia y se pueda actualzar elconveio OJOOO
--- ojo PONER control de fechas  en las fechas de quirofanos cirugias
+-- ojo PONER control de fechas  en las fechas de quirofanos cirugias (ok..Validar...)
 -- (ok.. validar)ops al generar el totala pagar esta mal eror en generarliquidcaon dese cirugia-.. UUUYY NOO comoasi que totalproceimientos = 2200 re-maluco -- ops relocoo la pantalla no me muestra lo
    que esta grabado en tablas como asi????? socorro ?? auxilio ERRROOR remaluco. son dos cosas uno lo que guarda elgeneralliquiacion de cirugia y otro el que selecciona lacuenta
 -- ojooo pendiente arreglar en facturacion la funcion : PostConsultaLiquidacion, en cuanto mlode convenio y que cea cabezotes PAILAS no debe crear nada 
--- cuano genero la liquidacion desde ciruia se salto un consecutivo de liquidaciondetalle OJOO ARREGLAR
 
 -- TODAVIA FALTA DEFINIR CUALES SON LOS MATERIALES TIPO HONORARIO Y CULAES SON MATERIALES QX . AHORA BIEN LA TARIFA DE LOS MATERIALES VIENE DE CIRUGIA O ES DEL TARIFARIO ??
 
@@ -922,21 +909,20 @@ class ProgramacionCitasMedicas(models.Model):
 -- recuerda que hat que reportar las cirugias en rips como se hace y hacer ripsotrosingreso y consultas de una vez . hay que comenzar a cuadrar toto
 
 ------------------------
-------sda puesta apunta
+------ Sda puesta apunta
 ----------------------
  
--- Poner cie10 en diagnosticos
+-- Poner cie10 en diagnosticos . (.. VALIDAR)
 -- cuando creo un triage e inmediatamente voy a crear la admision se pierden los default valores de rips
--- al crear admision desde triage l combo de dx debe traer el cie10
+-- al crear admision desde triage l combo de dx debe traer el cie10 (.. VALIDAR)
 -- por cua al seleccionar la empresa de compensa r no tyrae conevnio, hay dque jugar opara que lo traiga
 -- por que al coloar el rips de recien nacido , se arregla el erroo de los ripsegreeo ???????????????
 -- hay problemas con el checkbox de material de cirugia cuando off no graba sale error
 -- ojo creo que problemas en historiamedicamentos cuado se autoriza u med que tuee mas de un item en el folio o sea mas de un medicamento
--- no aparece la cantidassolicitada en farmacia detalle creop
+-- no aparece la cantidassolicitada en farmacia detalle creop (creo esta a la derecha)
 -- OPS LOS paraclinicos en ENFERMERIA NO MUESTRA CIRUGIAS ??
--- ojo no me actualzizo desde farmacia los totales d eliquidacion (validar de nuevo)
-
--- ops desarrollar crear el folio clinico de lacirugia cuando se realiza
+-- ojo no me actualizo desde farmacia los totales d eliquidacion (validar de nuevo)
+-- ops desarrollar crear el folio clinico de lacirugia cuando se realiza (Validar ..)
 -- ops crear autorizacin de la cirugia cuando se crea un proced
 -- opos crear la autorizacion de la ciru no cae en liquidaciondetalle. , sololasa utroizadas caen las otras nop
 -- ops crear ripsotrosservicios de :insumos y material, honrario y estancias

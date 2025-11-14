@@ -52,18 +52,20 @@ select * from facturacion_suministros where id = 34657
 select * from admisiones_ingresos
 select * from facturacion_conveniospacienteingresos	
 	select * from contratacion_convenios
-
+ 
 -- PRIMER QUERY DISPOSITIVOS MEDICOS	SISTEMA
 select "tipoHonorario_id",cirugia_id,"tipoRegistro",examen_id, cums_id,* from facturacion_facturaciondetalle where facturacion_id =	152
 select * from tarifarios_tiposhonorarios;
 select * from rips_ripstipootrosservicios
 	select * from facturacion_suministros where id=3178
 	select * from clinico_examenes where id=3178
-	select * from facturacion_suministros where id =34657 -- SOND019,, ripsCums_id
+	select "ripsCums_id",* from facturacion_suministros where id =34657 -- SOND019,, ripsCums_id
+	UPDATE facturacion_suministros SET "ripsCums_id" = 17006 WHERE  id =34657
 	select * from rips_ripsotrosservicios;
 select * from rips_ripstipos
-	select * from rips_ripscums where nombre like ('%SONDA NELA%')
+	select * from rips_ripscums where nombre like ('%SONDA NELA%') -- 17006
 	select * from rips_ripscums where id=34657
+	select * from rips_ripscums where id=3178 -- ojo esta mal el primer query de otros servivios en el codigo cuu
 	 
 INSERT INTO rips_ripsotrosservicios ( "codPrestador", "numAutorizacion", "idMIPRES", "fechaSuministroTecnologia","tipoOS_id", "codTecnologiaSalud_id",
 	"nomTecnologiaSalud", "cantidadOS", 	"tipoDocumentoIdentificacion_id", "numDocumentoIdentificacion", "vrUnitOS", "vrServicio",	
@@ -107,7 +109,7 @@ INSERT INTO rips_ripsotrosservicios ( "codPrestador", "numAutorizacion", "idMIPR
 	"nomTecnologiaSalud", "cantidadOS", 	"tipoDocumentoIdentificacion_id", "numDocumentoIdentificacion", "vrUnitOS", "vrServicio",	"tipoPagoModerador_id",	"valorPagoModerador","numFEVPagoModerador", consecutivo, "fechaRegistro",   "usuarioRegistro_id",	"ripsDetalle_id", "itemFactura", "ripsTipos_id",
 	"ripsTransaccion_id", "estadoReg", ingreso_id
 )
-SELECT sed."codigoHabilitacion", autdet."numeroAutorizacion", his.mipres, facdet."fecha",   ripsOtros.id,  exa.id,  substring(exa.nombre,1,60), facdet.cantidad,
+SELECT sed."codigoHabilitacion", autdet."numeroAutorizacion", his.mipres, facdet."fecha",   ripsOtros.id,  ripsCums.id,  substring(exa.nombre,1,60), facdet.cantidad,
 	tipdocrips.id, usu.documento,facdet."valorUnitario",	facdet."valorTotal", 
 	(select max(ripsmoderadora.id) 
 	from cartera_pagos pagos, cartera_formaspagos formapago, rips_ripstipospagomoderador ripsmoderadora , cartera_pagosfacturas carFac
@@ -121,6 +123,7 @@ SELECT sed."codigoHabilitacion", autdet."numeroAutorizacion", his.mipres, facdet
 	inner join facturacion_facturacion fac ON (fac."sedesClinica_id" = sed.id)
 	inner join facturacion_facturaciondetalle facdet ON (facdet.facturacion_id = fac.id and facdet."cums_id" is not null and (facdet.anulado = 'N' or facdet.anulado = 'R') and "tipoRegistro" = 'MANUAL' AND facDet.cirugia_id is not null)
 	inner join facturacion_suministros exa ON (exa.id = facdet."cums_id")
+	inner join rips_ripscums ripsCums ON (ripsCums.id = exa."ripsCums_id")
 	inner join admisiones_ingresos i on (i."tipoDoc_id" = fac."tipoDoc_id" and i.documento_id = fac.documento_id and i.consec = fac."consecAdmision")	
 	inner join rips_ripsenvios e ON (e."sedesClinica_id" = sed.id) 
 	inner join rips_ripsdetalle detrips ON (detrips."ripsEnvios_id" = e.id and detrips."numeroFactura_id" = fac.id) 

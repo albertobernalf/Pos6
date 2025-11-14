@@ -626,7 +626,7 @@ def escogeAcceso(request, Sede, Username, Profesional, Documento, NombreSede, es
                                    password="123456")
     curt = miConexiont.cursor()
 
-    comando = "SELECT p.id id, p.nombre  nombre FROM clinico_diagnosticos p order by p.nombre"
+    comando = 'SELECT p.id id, p.nombre||' + "' '||" + 'cie10  nombre FROM clinico_diagnosticos p order by p.nombre'
 
     curt.execute(comando)
     print(comando)
@@ -1664,7 +1664,7 @@ def escogeAcceso(request, Sede, Username, Profesional, Documento, NombreSede, es
                                        password="123456")
         curt = miConexiont.cursor()
 
-        comando = "SELECT p.id id, p.nombre  nombre FROM  clinico_diagnosticos  p"
+        comando = 'SELECT p.id id, p.nombre||' + "' '||" + 'cie10  nombre FROM  clinico_diagnosticos  p'
 
         curt.execute(comando)
         print(comando)
@@ -2287,7 +2287,7 @@ def escogeAcceso(request, Sede, Username, Profesional, Documento, NombreSede, es
                                        password="123456")
         curt = miConexiont.cursor()
 
-        comando = "SELECT p.id id, p.nombre  nombre FROM  clinico_diagnosticos  p"
+        comando = 'SELECT p.id id, p.nombre||' + "' '||" + 'cie10  nombre FROM  clinico_diagnosticos  p'
 
         curt.execute(comando)
         print(comando)
@@ -4655,7 +4655,7 @@ def buscarAdmision(request):
                                    password="123456")
     curt = miConexiont.cursor()
 
-    comando = "SELECT p.id id, p.nombre  nombre FROM clinico_diagnosticos p"
+    comando = 'SELECT p.id id, p.nombre||' + "' '||" + 'cie10  nombre FROM clinico_diagnosticos p'
 
     curt.execute(comando)
     print(comando)
@@ -6003,7 +6003,7 @@ def crearAdmisionDef(request):
                                        password="123456")
         curt = miConexiont.cursor()
 
-        comando = "SELECT p.id id, p.nombre  nombre FROM clinico_diagnosticos p ORDER BY p.nombre"
+        comando = 'SELECT p.id id, p.nombre||' + "' '||" + 'cie10  nombre FROM clinico_diagnosticos p ORDER BY p.nombre'
 
         curt.execute(comando)
         print(comando)

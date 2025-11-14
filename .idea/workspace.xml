@@ -3,11 +3,14 @@
   <component name="ChangeListManager">
     <list default="true" id="d041c887-ab16-4071-a5e4-52a8295bbd5d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JSONCLINICA/Facturas/PDF/Liquida_299.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/JSONCLINICA/Facturas/PDF/Liquida_299.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JSONCLINICA/Env73.txt" beforeDir="false" afterPath="$PROJECT_DIR$/JSONCLINICA/Env73.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JSONCLINICA/Fac152.txt" beforeDir="false" afterPath="$PROJECT_DIR$/JSONCLINICA/Fac152.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/RIPSOTROSSERVICIOS.sql" beforeDir="false" afterPath="$PROJECT_DIR$/RIPSOTROSSERVICIOS.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cirugia/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/cirugia/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RIPSOTROSSERVICIOS1.sql" beforeDir="false" afterPath="$PROJECT_DIR$/RIPSOTROSSERVICIOS1.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/admisiones/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/admisiones/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cartera/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/cartera/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/facturacion/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/facturacion/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modelsPrueba.py" beforeDir="false" afterPath="$PROJECT_DIR$/modelsPrueba.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rips/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/rips/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rips/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/rips/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

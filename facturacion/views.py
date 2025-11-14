@@ -1833,6 +1833,11 @@ def PostConsultaFacturacion(request):
     # Cierro Conexion
 
     #Extraigo la info del xml
+    contenido_completo=''
+
+    if (rutaXml == None):
+        rutaXml = 'C:\EntornosPython\Pos6\JSONCLINICA\Facturas\XML'
+
 
     print("rutaXml", rutaXml)
 
