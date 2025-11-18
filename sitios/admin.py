@@ -84,9 +84,9 @@ class dependenciasTipoAdmin(admin.ModelAdmin):
 class dependenciasAdmin(admin.ModelAdmin):
 
 
-    list_display = ("id", "sedesClinica","serviciosSedes","subServiciosSedes","numero", "dependenciasTipo", "nombre", "descripcion")
-    search_fields =  ("id", "sedesClinica__nombre","serviciosSedes__nombre","subServiciosSedes__nombre","numero", "dependenciasTipo__nombre", "nombre", "descripcion")
-    #fields =  ("sedesClinica","subServicios", "dependenciasTipo","numero", "nombre", "descripcion")
+    list_display = ("id", "sedesClinica","serviciosSedes","subServiciosSedes","numero", "dependenciasTipo", "nombre", "descripcion","cups")
+    search_fields =  ("id", "sedesClinica__nombre","serviciosSedes__nombre","subServiciosSedes__nombre","numero", "dependenciasTipo__nombre", "nombre", "descripcion","cups__nombre")
+    #fields =  ("sedesClinica","subServicios", "dependenciasTipo","numero", "nombre", "descripcion","cups")
     # Filtrar
     #list_filter = ('nombre', "sedesClinica","subServicios","numero", 'dependenciasTipo','descripcion')
 
