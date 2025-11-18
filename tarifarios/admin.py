@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 
-from tarifarios.models import TiposHonorarios, TiposTarifaProducto,TiposTarifa,TarifariosDescripcion,TarifariosProcedimientos,TarifariosSuministros, TarifariosProcedimientosHonorarios, TablaSalasDeCirugia,TablaMaterialSuturaCuracion,TablaHonorariosSoat,TablaHonorariosIss ,MinimosLegales, GruposQx, TarifariosDescripcionHonorarios ,TablaSalasDeCirugiaIss , TablaMaterialSuturaCuracionIss
+from tarifarios.models import TiposHonorarios, TiposTarifaProducto,TiposTarifa,TarifariosDescripcion,TarifariosProcedimientos,TarifariosSuministros, TarifariosProcedimientosHonorarios, TablaSalasDeCirugia,TablaMaterialSuturaCuracion,TablaHonorariosSoat,TablaHonorariosIss ,MinimosLegales, GruposQx, TarifariosDescripcionHonorarios ,TablaSalasDeCirugiaIss , TablaMaterialSuturaCuracionIss, Estancias
 
 
 @admin.register(TiposTarifa)
@@ -132,3 +132,12 @@ class tablaMaterialSuturaCuracionIss(admin.ModelAdmin):
     search_fields =  ("id","tiposSala__nombre","homologado","desdeUvr","hastaUvr", "valor", "fechaRegistro")
     # Filtrar
     list_filter = ("id", "tiposSala","homologado","desdeUvr","hastaUvr", "valor", "fechaRegistro")
+
+
+@admin.register(Estancias)
+class estanciasAdmin(admin.ModelAdmin):
+
+   list_display = ("id", "tipoEstancia", "referencia", "codigo", "descripcion", "valor")
+   search_fields = ("id", "tipoEstancia","referencia", "codigo", "descripcion", "valor")
+   # Filtrar
+   list_filter = ("id","tipoEstancia", "referencia", "codigo", "descripcion", "valor")

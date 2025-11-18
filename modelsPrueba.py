@@ -876,7 +876,7 @@ class ProgramacionCitasMedicas(models.Model):
 
 -- ojo en todas las pantallas donde se calcule total copagos,moderadoras etc es con valorEnCurso no valor
 
--- cuando uno selecione en farmacia en la primera pantalla actualziar la pantalla farmaciadetalle de acuerdo a selccion. oseas lo que no he podido seleccionar un radio de un datatable
+-- cuando uno selecione en farmacia en la primera pantalla actualizar la pantalla farmaciadetalle de acuerdo a seleccion. oseas lo que no he podido seleccionar un radio de un datatable
 
 -- ojo la pantallade farmacia depachos debe mostrat si y solo si el codigo CUPS y adems no muestran cantidades IMPORTATIDIMO
 -- como hacer para que los combos muestre los empleados d cada area o depto (desarrollo loco) en farmacia despachosppor ejemplo. se me ocurre en el 
@@ -903,10 +903,6 @@ class ProgramacionCitasMedicas(models.Model):
 
 -- ops el saldo de la cuotamoderadora , totalrecibido lo paso en ceros ta mal debe colocar lo que estaba en liquidacion. Que paso papaberol donde puede ser el error OP -RE OPS - OPS QUe proceso blanqueo estos saldos ???
    -- MAL TOTALAPAGAR, TOTALRECIBIDO, VALOR CUOTA MOPDERADORA OPS,, FUE PRODUCTO DE UN ROLLBACK YY QUE PASOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
-
--- ops creo faltan 4 rips porque (11+5)= 16 y tengo 20 items en la factura VERIFICAR ... (OJO cuando es una cirugioa el vrservicio es la suma d elos honorarios)
-
--- recuerda que hat que reportar las cirugias en rips como se hace y hacer ripsotrosingreso y consultas de una vez . hay que comenzar a cuadrar toto
 
 ------------------------
 ------ Sda puesta apunta
@@ -936,6 +932,6 @@ class ProgramacionCitasMedicas(models.Model):
   - hasta alla hay que llegar
 -- Y que me dice de REFACTURAR una cuenta, hacer gtrasalados añadir y quira items factyura de nuevo la cirugia. y como se reporta la ANULADA
 -   -- pos hay todavia camino para recorrer. PERO TODO BIEN COMO EL PIBE.MUY PERO MUY BIEN CASI EXCELENTE. FELICITACIONES ...
--- CUANDO SE FACYURA LA CIRUGIA TAMBIEN CAMBIA ELÑ ESTADO DE LA PROGRAMACION A realizada
+-- CUANDO SE FACTURA LA CIRUGIA TAMBIEN CAMBIA EL ESTADO DE LA PROGRAMACION A realizada
 
 -- DEFINITIVAMENTE hay que aterrizar el tema insumos, qx, dispo medicos, honorarios etc. Es un saperongo, y en otros servicios ni se diga papaberol

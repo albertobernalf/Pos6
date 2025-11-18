@@ -318,3 +318,27 @@ class TablaSalasDeCirugiaIss(models.Model):
 
     def __str__(self):
         return str(self.id)
+
+class Estancias(models.Model):
+    ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
+    TIPOTARIFA_CHOICES = [
+        ('S', 'SOAT'),
+        ('I', 'ISS'), 
+        ('P', 'PARTICULAR'), 
+
+]
+    id = models.AutoField(primary_key=True)
+    referencia = models.CharField(max_length=5, blank=True, null=True, editable=True)
+    codigo = models.CharField(max_length=6, blank=True, null=True, editable=True)
+    descripcion = models.CharField(max_length=30, blank=True, null=True, editable=True)
+    tipoEstancia = models.CharField(max_length=1, choices=TIPOTARIFA_CHOICES ,default='I', editable=False )
+    cups = models.ForeignKey('clinico.Examenes', blank=True, null=True, editable=True, on_delete=models.PROTECT,  related_name='cupsEstancias01')
+    valor = models.DecimalField( max_digits=15, decimal_places=0 , blank=True,null= True, editable=True)
+    usuarioRegistro = models.ForeignKey('planta.Planta', blank=True, null=True, editable=True, on_delete=models.PROTECT)
+    fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)
+    estadoReg = models.CharField(max_length=1, choices=ESTADOREG_CHOICES,default='A', editable=False )
+
+    def __str__(self):
+        return str(self.descripcion)

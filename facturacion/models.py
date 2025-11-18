@@ -78,15 +78,16 @@ class Conceptos(models.Model):
         ]
     id = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=30, null=False)
-    #tipoCups = models.ForeignKey('clinico.TiposExamen', blank=True, null=True, editable=True, on_delete=models.PROTECT)
-    codAd = models.CharField(max_length=2, default='A', editable=False)
-    codAt = models.CharField(max_length=3, default='A', editable=False)
-    ripsAc = models.CharField(max_length=1, default='A', editable=False)
-    ripsAp = models.CharField(max_length=1, default='A', editable=False)
-    ripsAt = models.CharField(max_length=1, default='A', editable=False)
-    ripsAm = models.CharField(max_length=1, default='A', editable=False)
-    ripsAh = models.CharField(max_length=1, default='A', editable=False)
-    ripsAu = models.CharField(max_length=1, default='A', editable=False)
+    tipoCups = models.ForeignKey('clinico.TiposExamen', blank=True, null=True, editable=True, on_delete=models.PROTECT)
+    tiposSuministro = models.ForeignKey('facturacion.TiposSuministro', blank=True, null=True, editable=True, on_delete=models.PROTECT)
+    #codAd = models.CharField(max_length=2, default='A', editable=False)
+    #codAt = models.CharField(max_length=3, default='A', editable=False)
+    #ripsAc = models.CharField(max_length=1, default='A', editable=False)
+    #ripsAp = models.CharField(max_length=1, default='A', editable=False)
+    #ripsAt = models.CharField(max_length=1, default='A', editable=False)
+    #ripsAm = models.CharField(max_length=1, default='A', editable=False)
+    #ripsAh = models.CharField(max_length=1, default='A', editable=False)
+    #ripsAu = models.CharField(max_length=1, default='A', editable=False)
     fechaRegistro = models.DateTimeField(default=now, blank=True, null=True, editable=True, )
     estadoReg = models.CharField(max_length=1, choices=ESTADOREG_CHOICES,  default='A', editable=False)
 
@@ -601,6 +602,7 @@ class Refacturacion(models.Model):
 
     def __str__(self):
         return str(self.id)
+
 
 
 

@@ -1,0 +1,41 @@
+CREATE OR REPLACE FUNCTION creaEstanciaAutomatica()
+
+DECLARE  estancias character(50000);
+	 tabla RECORD;
+         totalProcedimientos integer := 0;
+
+BEGIN
+
+/* PRIMERO ISS */
+
+INSERT INTO facturacion_liquidaciondetalle(consecutivo, fecha, cantidad, "valorUnitario", "valorTotal",  "fechaCrea", 
+		observaciones, "fechaRegistro", "estadoRegistro", examen_id, liquidacion_id 
+		,"tipoRegistro",anulado, "codigoHomologado") 
+select (SELECT max(liqDet.consecutivo) + 1 
+		FROM facturacion_liquidaciondetalle liqdet
+		WHERE liqDet.liquidacion_id = l1.id) consecutivo,	
+		now(),1,tar.valor,tar.valor,now(),'',now(),'A',dep.cups_id,l1.id,'SISTEMA','N',tar.referencia
+FROM facturacion_liquidacion l1
+INNER JOIN SITIOS_SERVICIOSSEDES servSed on (servSed."sedesClinica_id"=l1."sedesClinica_id")
+INNER JOIN clinico_servicios serv on (serv.id =servSed.servicios_id and serv.nombre = 'HOSPITALIZACION' )
+INNER JOIN sitios_dependencias dep on (dep."serviciosSedes_id" = servSed.id)	
+INNER JOIN contratacion_convenios conv on (conv.id = l1.convenio_id)
+INNER JOIN tarifarios_tarifariosdescripcion descripcion ON (descripcion.id=conv."tarifariosDescripcionProc_id")	
+INNER JOIN 	tarifarios_tipostarifa tiptar on (tiptar.id= descripcion."tiposTarifa_id" AND tiptar.nombre = 'ISS 2001')	
+INNER JOIN 	tarifarios_tipostarifaproducto tipProd on (tipProd.id=tiptar."tiposTarifaProducto_id")
+INNER JOIN 	tarifarios_estancias tar on (tar.cups_id = dep.cups_id)	
+WHERE l1.anulado = 'N' and l1.convenio_id = (SELECT max(l2.convenio_id) 
+						FROM facturacion_liquidacion l2 
+						where  l2."tipoDoc_id" = l1."tipoDoc_id" AND l2.documento_id = l1.documento_id AND l2."consecAdmision" = l1."consecAdmision");
+	
+
+
+/* SEGUNDO SOAT */
+
+
+/* TERCERO PARTICULAR */
+
+   
+
+    RETURN 'OK';
+END 

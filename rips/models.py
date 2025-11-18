@@ -645,7 +645,9 @@ class RipsOtrosServicios(models.Model):
    fechaSuministroTecnologia =  models.DateTimeField(default=now, blank=True, null=True, editable=True)
    tipoOS = models.ForeignKey('rips.RipsTipoOtrosServicios', blank=True, null=True, editable=True, on_delete=models.PROTECT, related_name='OtrosServ01')
    codTecnologiaSalud =  models.ForeignKey('rips.RipsCums', blank=True, null=True, editable=True, on_delete=models.PROTECT, related_name='RipsCums11')
+   codTecnologiaSaludCups =  models.ForeignKey('rips.RipsCups', blank=True, null=True, editable=True, on_delete=models.PROTECT, related_name='RipsCups11')
    nomTecnologiaSalud = models.CharField(max_length=60, blank=True,null= True, editable=True)
+   nomTecnologiaSaludCups = models.CharField(max_length=60, blank=True,null= True, editable=True)
    cantidadOS  =   models.DecimalField(max_digits=5, decimal_places=0, blank=True,null= True, editable=True)
    tipoDocumentoIdentificacion = models.ForeignKey('rips.RipsTiposDocumento', blank=True, null=True, editable=True, on_delete=models.PROTECT, related_name='RipsTiposDoc21')
    numDocumentoIdentificacion = models.CharField(max_length=20, blank=True,null= True, editable=True)
@@ -726,4 +728,17 @@ class RipsViasAdministracion (models.Model):
    nombre =   models.CharField(max_length=80, blank=True,null= True, editable=True)
 
    def __str__(self):
+        return self.nombre
+
+class RipsCups (models.Model):
+    ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
+    id = models.AutoField(primary_key=True)
+    codigo = models.CharField(max_length=2, blank=True,null= True, editable=True)
+    nombre =   models.CharField(max_length=80, blank=True,null= True, editable=True)
+    descripcion =  models.ForeignKey('facturacion.conceptos', blank=True, null=True, editable=True, on_delete=models.PROTECT, related_name='RipsCups_01')
+    estadoReg = models.CharField(max_length=1, choices=ESTADOREG_CHOICES, default='A', editable=False)
+
+    def __str__(self):
         return self.nombre

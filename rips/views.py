@@ -1021,7 +1021,7 @@ def GenerarJsonRips(request):
 
                     print("traigoConsecutivoId", traigoConsecutivo)
 
-                    detalle = 'INSERT INTO rips_ripsotrosservicios ( "codPrestador", "numAutorizacion", "idMIPRES", "fechaSuministroTecnologia","tipoOS_id", "codTecnologiaSalud_id", "nomTecnologiaSalud", "cantidadOS", 	"tipoDocumentoIdentificacion_id", "numDocumentoIdentificacion", "vrUnitOS", "vrServicio",	"tipoPagoModerador_id",	"valorPagoModerador","numFEVPagoModerador", consecutivo, "fechaRegistro",   "usuarioRegistro_id",	"ripsDetalle_id", "itemFactura", "ripsTipos_id", "ripsTransaccion_id", "estadoReg", ingreso_id) SELECT sed."codigoHabilitacion", autdet."numeroAutorizacion", his.mipres, facdet."fecha",	ripsOtros.id,  exa.id,  substring(exa.nombre,1,60) , facdet.cantidad, tipdocrips.id, usu.documento,facdet."valorUnitario",	facdet."valorTotal",  (select max(ripsmoderadora.id) from cartera_pagos pagos, cartera_formaspagos formapago, rips_ripstipospagomoderador ripsmoderadora , cartera_pagosfacturas carFac where i."tipoDoc_id" = pagos."tipoDoc_id" and i.documento_id = pagos.documento_id and i.consec = pagos.consec and carFac.pago_id = pagos.id and pagos."formaPago_id" = formapago.id and ripsmoderadora."codigoAplicativo" = cast(formapago.id as text)), (select carFac."valorAplicado" from cartera_pagos pagos, cartera_formaspagos formapago, rips_ripstipospagomoderador ripsmoderadora , cartera_pagosfacturas carFac where i."tipoDoc_id" = pagos."tipoDoc_id" and i.documento_id = pagos.documento_id and i.consec = pagos.consec and carFac.pago_id = pagos.id and pagos."formaPago_id" = formapago.id and ripsmoderadora."codigoAplicativo" = cast(formapago.id as text)), fac.id, row_number()  OVER(ORDER BY facdet.id) +  ' + str(traigoConsecutivo) + ' AS consecutivo, now(), ' + "'" + str(
+                    detalle = 'INSERT INTO rips_ripsotrosservicios ( "codPrestador", "numAutorizacion", "idMIPRES", "fechaSuministroTecnologia","tipoOS_id", "codTecnologiaSaludCups_id", "nomTecnologiaSaludCups", "cantidadOS", 	"tipoDocumentoIdentificacion_id", "numDocumentoIdentificacion", "vrUnitOS", "vrServicio",	"tipoPagoModerador_id",	"valorPagoModerador","numFEVPagoModerador", consecutivo, "fechaRegistro",   "usuarioRegistro_id",	"ripsDetalle_id", "itemFactura", "ripsTipos_id", "ripsTransaccion_id", "estadoReg", ingreso_id) SELECT sed."codigoHabilitacion", autdet."numeroAutorizacion", his.mipres, facdet."fecha",	ripsOtros.id,  exa.id,  substring(exa.nombre,1,60) , facdet.cantidad, tipdocrips.id, usu.documento,facdet."valorUnitario",	facdet."valorTotal",  (select max(ripsmoderadora.id) from cartera_pagos pagos, cartera_formaspagos formapago, rips_ripstipospagomoderador ripsmoderadora , cartera_pagosfacturas carFac where i."tipoDoc_id" = pagos."tipoDoc_id" and i.documento_id = pagos.documento_id and i.consec = pagos.consec and carFac.pago_id = pagos.id and pagos."formaPago_id" = formapago.id and ripsmoderadora."codigoAplicativo" = cast(formapago.id as text)), (select carFac."valorAplicado" from cartera_pagos pagos, cartera_formaspagos formapago, rips_ripstipospagomoderador ripsmoderadora , cartera_pagosfacturas carFac where i."tipoDoc_id" = pagos."tipoDoc_id" and i.documento_id = pagos.documento_id and i.consec = pagos.consec and carFac.pago_id = pagos.id and pagos."formaPago_id" = formapago.id and ripsmoderadora."codigoAplicativo" = cast(formapago.id as text)), fac.id, row_number()  OVER(ORDER BY facdet.id) +  ' + str(traigoConsecutivo) + ' AS consecutivo, now(), ' + "'" + str(
                         username_id) + "'" + ',detrips.id,facdet."consecutivoFactura",' + "'" + str('9') + "','" + str(
                         transaccionId) + "','A'," + "'" + str(
                         ingresoId.id) + "'" + '	FROM sitios_sedesclinica sed inner join facturacion_facturacion fac ON (fac."sedesClinica_id" = sed.id)	inner join facturacion_facturaciondetalle facdet ON (facdet.facturacion_id = fac.id and facdet."examen_id" is not null and (facdet.anulado = ' + "'" + str(
@@ -1034,6 +1034,72 @@ def GenerarJsonRips(request):
 
                     print("detalle = ", detalle)
                     curx.execute(detalle)
+
+                    ## Aqui vienen las estancias SISTEMA
+
+                    totalOtros1 = []
+                    detalle = 'SELECT count(*) totalOtros FROM  rips_ripsotrosservicios where "ripsTransaccion_id"  =' + "'" + str(transaccionId) + "'"
+                    curx.execute(detalle)
+
+                    for totalOtros  in curx.fetchall():
+                        totalOtros1.append(
+                            {'totalOtros': totalOtros})
+
+                    print("totalOtros =" , totalOtros1)
+                    print("totaltotalOtros1 =", totalOtros1[0]['totalOtros'])
+
+                    totalOtros = str(totalOtros1[0]['totalOtros'])
+                    totalOtros = totalOtros.replace("(", ' ')
+                    totalOtros = totalOtros.replace(")", ' ')
+                    totalOtros = totalOtros.replace(",", ' ')
+                    traigoConsecutivo = totalOtros
+
+                    print("traigoConsecutivoId", traigoConsecutivo)
+
+                    conceptoEstancias = Conceptos.objetcs.get(nombre='ESTANCIAS')
+                    print("conceptoEstancias", conceptoEstancias.id)
+
+                    detalle = 'INSERT INTO rips_ripsotrosservicios ( "codPrestador", "numAutorizacion", "idMIPRES", "fechaSuministroTecnologia","tipoOS_id", "codTecnologiaSalud_id", "nomTecnologiaSalud", "cantidadOS", 	"tipoDocumentoIdentificacion_id", "numDocumentoIdentificacion", "vrUnitOS", "vrServicio",	"tipoPagoModerador_id",	"valorPagoModerador","numFEVPagoModerador", consecutivo, "fechaRegistro",   "usuarioRegistro_id",	"ripsDetalle_id", "itemFactura", "ripsTipos_id", "ripsTransaccion_id", "estadoReg", ingreso_id) SELECT facDet."tipoHonorario_id" ,ripsOtros.id, ripsOtros.nombre,sed."codigoHabilitacion",  ' + "' ' , ' '," + ' facdet."fecha",	ripsOtros.id,  exa.id,  exa.nombre, facdet.cantidad, tipdocrips.id, usu.documento,facdet."valorUnitario",	facdet."valorTotal",  (select max(ripsmoderadora.id) from cartera_pagos pagos, cartera_formaspagos formapago, rips_ripstipospagomoderador ripsmoderadora , cartera_pagosfacturas carFac where i."tipoDoc_id" = pagos."tipoDoc_id" and i.documento_id = pagos.documento_id and i.consec = pagos.consec and carFac.pago_id = pagos.id and pagos."formaPago_id" = formapago.id and ripsmoderadora."codigoAplicativo" = cast(formapago.id as text)), (select carFac."valorAplicado" from cartera_pagos pagos, cartera_formaspagos formapago, rips_ripstipospagomoderador ripsmoderadora , cartera_pagosfacturas carFac where i."tipoDoc_id" = pagos."tipoDoc_id" and i.documento_id = pagos.documento_id and i.consec = pagos.consec and carFac.pago_id = pagos.id and pagos."formaPago_id" = formapago.id and ripsmoderadora."codigoAplicativo" = cast(formapago.id as text)), fac.id, row_number()  OVER(ORDER BY facdet.id) + ' + "'" + str(traigoConsecutivo) + "'" +  ' AS consecutivo, now(), ' + "'" + str(
+                        username_id) + "'" + ',detrips.id,facdet."consecutivoFactura",' + "'" + str('9') + "','" + str(transaccionId) + "','A'," + "'" + str(ingresoId.id) + "'" + '	FROM sitios_sedesclinica sed inner join facturacion_facturacion fac ON (fac."sedesClinica_id" = sed.id)	inner join facturacion_facturaciondetalle facdet ON (facdet.facturacion_id = fac.id and facdet."examen_id" is not null and (facdet.anulado = ' + "'" + str(
+                        'N') + "'" + ' or facdet.anulado = ' + "'" + str('R') + "')" + ' and "tipoRegistro" = ' + "'" + str('SISTEMA') + "'" + ' ) inner join clinico_examenes exa ON (exa.id = facdet."examen_id" and exa.concepto_id= ' + "'" + str(conceptoEstancias.id) + "'" +  '  ) inner join admisiones_ingresos i on (i."tipoDoc_id" = fac."tipoDoc_id" and i.documento_id = fac.documento_id and i.consec = fac."consecAdmision") inner join rips_ripsenvios e ON (e."sedesClinica_id" = sed.id) inner join rips_ripsdetalle detrips ON (detrips."ripsEnvios_id" = e.id and detrips."numeroFactura_id" = fac.id) inner join usuarios_tiposdocumento tipdoc ON (tipdoc.id = fac."tipoDoc_id" ) left join  rips_ripstiposdocumento tipdocrips on (tipdocrips.id = tipdoc."tipoDocRips_id" ) inner join usuarios_usuarios usu ON (usu."tipoDoc_id" = fac."tipoDoc_id" and usu.id = fac.documento_id )  inner join rips_ripstipootrosservicios ripsOtros on ( ripsOtros.nombre=' + "'" + str(
+                        'HONORARIOS') + "')" + ' where sed.id = ' + "'" + str(sede) + "'" + ' and e.id = ' + "'" + str(envioRipsId) + "'" + ' and fac.id = ' + "'" + str(elemento) + "'"
+
+                    print("detalle = ", detalle)
+                    curx.execute(detalle)
+
+                    ## Aqui vienen las estancias MANUALES
+
+                    totalOtros1 = []
+                    detalle = 'SELECT count(*) totalOtros FROM  rips_ripsotrosservicios where "ripsTransaccion_id"  =' + "'" + str(transaccionId) + "'"
+                    curx.execute(detalle)
+
+                    for totalOtros  in curx.fetchall():
+                        totalOtros1.append(
+                            {'totalOtros': totalOtros})
+
+                    print("totalOtros =" , totalOtros1)
+                    print("totaltotalOtros1 =", totalOtros1[0]['totalOtros'])
+
+                    totalOtros = str(totalOtros1[0]['totalOtros'])
+                    totalOtros = totalOtros.replace("(", ' ')
+                    totalOtros = totalOtros.replace(")", ' ')
+                    totalOtros = totalOtros.replace(",", ' ')
+                    traigoConsecutivo = totalOtros
+
+                    print("traigoConsecutivoId", traigoConsecutivo)
+
+                    conceptoEstancias = Conceptos.objetcs.get(nombre='ESTANCIAS')
+                    print("conceptoEstancias", conceptoEstancias.id)
+
+                    detalle = 'INSERT INTO rips_ripsotrosservicios ( "codPrestador", "numAutorizacion", "idMIPRES", "fechaSuministroTecnologia","tipoOS_id", "codTecnologiaSalud_id", "nomTecnologiaSalud", "cantidadOS", 	"tipoDocumentoIdentificacion_id", "numDocumentoIdentificacion", "vrUnitOS", "vrServicio",	"tipoPagoModerador_id",	"valorPagoModerador","numFEVPagoModerador", consecutivo, "fechaRegistro",   "usuarioRegistro_id",	"ripsDetalle_id", "itemFactura", "ripsTipos_id", "ripsTransaccion_id", "estadoReg", ingreso_id) SELECT facDet."tipoHonorario_id" ,ripsOtros.id, ripsOtros.nombre,sed."codigoHabilitacion",  ' + "' ' , ' '," + ' facdet."fecha",	ripsOtros.id,  exa.id,  exa.nombre, facdet.cantidad, tipdocrips.id, usu.documento,facdet."valorUnitario",	facdet."valorTotal",  (select max(ripsmoderadora.id) from cartera_pagos pagos, cartera_formaspagos formapago, rips_ripstipospagomoderador ripsmoderadora , cartera_pagosfacturas carFac where i."tipoDoc_id" = pagos."tipoDoc_id" and i.documento_id = pagos.documento_id and i.consec = pagos.consec and carFac.pago_id = pagos.id and pagos."formaPago_id" = formapago.id and ripsmoderadora."codigoAplicativo" = cast(formapago.id as text)), (select carFac."valorAplicado" from cartera_pagos pagos, cartera_formaspagos formapago, rips_ripstipospagomoderador ripsmoderadora , cartera_pagosfacturas carFac where i."tipoDoc_id" = pagos."tipoDoc_id" and i.documento_id = pagos.documento_id and i.consec = pagos.consec and carFac.pago_id = pagos.id and pagos."formaPago_id" = formapago.id and ripsmoderadora."codigoAplicativo" = cast(formapago.id as text)), fac.id, row_number()  OVER(ORDER BY facdet.id) + ' + "'" + str(traigoConsecutivo) + "'" +  ' AS consecutivo, now(), ' + "'" + str(
+                        username_id) + "'" + ',detrips.id,facdet."consecutivoFactura",' + "'" + str('9') + "','" + str(transaccionId) + "','A'," + "'" + str(ingresoId.id) + "'" + '	FROM sitios_sedesclinica sed inner join facturacion_facturacion fac ON (fac."sedesClinica_id" = sed.id)	inner join facturacion_facturaciondetalle facdet ON (facdet.facturacion_id = fac.id and facdet."examen_id" is not null and (facdet.anulado = ' + "'" + str(
+                        'N') + "'" + ' or facdet.anulado = ' + "'" + str('R') + "')" + ' and "tipoRegistro" = ' + "'" + str('MANUAL') + "'" + ' ) inner join clinico_examenes exa ON (exa.id = facdet."examen_id" and exa.concepto_id= ' + "'" + str(conceptoEstancias.id) + "'" +  '  ) inner join admisiones_ingresos i on (i."tipoDoc_id" = fac."tipoDoc_id" and i.documento_id = fac.documento_id and i.consec = fac."consecAdmision") inner join rips_ripsenvios e ON (e."sedesClinica_id" = sed.id) inner join rips_ripsdetalle detrips ON (detrips."ripsEnvios_id" = e.id and detrips."numeroFactura_id" = fac.id) inner join usuarios_tiposdocumento tipdoc ON (tipdoc.id = fac."tipoDoc_id" ) left join  rips_ripstiposdocumento tipdocrips on (tipdocrips.id = tipdoc."tipoDocRips_id" ) inner join usuarios_usuarios usu ON (usu."tipoDoc_id" = fac."tipoDoc_id" and usu.id = fac.documento_id )  inner join rips_ripstipootrosservicios ripsOtros on ( ripsOtros.nombre=' + "'" + str(
+                        'HONORARIOS') + "')" + ' where sed.id = ' + "'" + str(sede) + "'" + ' and e.id = ' + "'" + str(envioRipsId) + "'" + ' and fac.id = ' + "'" + str(elemento) + "'"
+
+                    print("detalle = ", detalle)
+                    curx.execute(detalle)
+
+
 
                 else:
 

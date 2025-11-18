@@ -96,3 +96,4 @@ class salariosMinimosLegalesAdmin(admin.ModelAdmin):
 
 
 
+

@@ -1,7 +1,7 @@
 -- PRIMER QUERY
 select "ripsTransaccion_id",* from rips_ripsotrosservicios
 detalle ='INSERT INTO rips_ripsotrosservicios ( "codPrestador", "numAutorizacion", "idMIPRES", "fechaSuministroTecnologia","tipoOS_id", "codTecnologiaSalud_id",	"nomTecnologiaSalud", "cantidadOS", 	"tipoDocumentoIdentificacion_id", "numDocumentoIdentificacion", "vrUnitOS", "vrServicio",	"tipoPagoModerador_id",	"valorPagoModerador","numFEVPagoModerador", consecutivo, "fechaRegistro",   "usuarioRegistro_id",	"ripsDetalle_id", "itemFactura", "ripsTipos_id", "ripsTransaccion_id", "estadoReg", ingreso_id) SELECT sed."codigoHabilitacion", autdet."numeroAutorizacion", his.mipres, facdet."fecha",   ripsOtros.id,  exa.id,  substring(exa.nombre,1,60), facdet.cantidad,	tipdocrips.id, usu.documento,facdet."valorUnitario",	facdet."valorTotal", (select max(ripsmoderadora.id) from cartera_pagos pagos, cartera_formaspagos formapago, rips_ripstipospagomoderador ripsmoderadora , cartera_pagosfacturas carFac where i."tipoDoc_id" = pagos."tipoDoc_id" and i.documento_id = pagos.documento_id and i.consec = pagos.consec and carFac.pago_id = pagos.id and pagos."formaPago_id" = formapago.id and ripsmoderadora."codigoAplicativo" = cast(formapago.id as text)),  (select carFac."valorAplicado" from cartera_pagos pagos, cartera_formaspagos formapago, rips_ripstipospagomoderador ripsmoderadora , cartera_pagosfacturas carFacwhere i."tipoDoc_id" = pagos."tipoDoc_id" and i.documento_id = pagos.documento_id and i.consec = pagos.consec and carFac.pago_id = pagos.id and pagos."formaPago_id" = formapago.id and ripsmoderadora."codigoAplicativo" = cast(formapago.id as text)),  fac.id, row_number()  OVER(ORDER BY facdet.id)  AS consecutivo, now(), ' + "'" + str(username_id) + "'" + ',detrips.id,facdet."consecutivoFactura",' + "'" + str('9') + "','" + 	str(transaccionId) + "','A',''" + str(ingresoId) + "'" + '	FROM sitios_sedesclinica sed inner join facturacion_facturacion fac ON (fac."sedesClinica_id" = sed.id) inner join facturacion_facturaciondetalle facdet ON (facdet.facturacion_id = fac.id and facdet."examen_id" is not null and (facdet.anulado = ' + "'" + str('N') + "'" + ' or facdet.anulado = ' + "'" + str('R') + "')" + ' and "tipoRegistro" = ' + "'" + str('SISTEMA') + "'" + ' AND facDet.cirugia_id is not null) inner join clinico_examenes exa ON (exa.id = facdet."examen_id") inner join admisiones_ingresos i on (i."tipoDoc_id" = fac."tipoDoc_id" and i.documento_id = fac.documento_id and i.consec = fac."consecAdmision")	inner join rips_ripsenvios e ON (e."sedesClinica_id" = sed.id) inner join rips_ripsdetalle detrips ON (detrips."ripsEnvios_id" = e.id and detrips."numeroFactura_id" = fac.id) inner join usuarios_tiposdocumento tipdoc ON (tipdoc.id = fac."tipoDoc_id" ) left join  rips_ripstiposdocumento tipdocrips on (tipdocrips.id = tipdoc."tipoDocRips_id" ) inner join usuarios_usuarios usu ON (usu."tipoDoc_id" = fac."tipoDoc_id" and usu.id = fac.documento_id )  left join clinico_historia his ON (his."tipoDoc_id" = i."tipoDoc_id" and his.documento_id = i.documento_id and his."consecAdmision" = i.consec ) inner join clinico_historialcirugias hisCiru ON (hisCiru.historia_id = his.id and hisCiru.cirugia_id = facDet.cirugia_id) left join autorizaciones_autorizaciones  aut on (aut.historia_id = his.id) left join autorizaciones_autorizacionesdetalle autdet on (autdet.autorizaciones_id = aut.id and autdet.examenes_id = facdet.examen_id) inner join tarifarios_tiposhonorarios tipHonor on ( tipHonor.id = facDet."tipoHonorario_id" ) inner join rips_ripstipootrosservicios ripsOtros on (ripsOtros.id=tipHonor."ripsTipoOtrosServicios_id"  and ripsOtros.nombre=' + "'" + str('DISPOSITIVOS MEDICOS E INSUMOS') + "'" + ' where sed.id = ' + "'" + str(sede) + "'" + ' and e.id = ' + "'" + str(envioRipsId) + "'" + ' and fac.id = ' + "'" +str(elemento) + "'"
-
+ 
 -- SEGUNDO QUERY
 
 detalle =	'INSERT INTO rips_ripsotrosservicios ( "codPrestador", "numAutorizacion", "idMIPRES", "fechaSuministroTecnologia","tipoOS_id", "codTecnologiaSalud_id","nomTecnologiaSalud", "cantidadOS", 	"tipoDocumentoIdentificacion_id", "numDocumentoIdentificacion", "vrUnitOS", "vrServicio",	"tipoPagoModerador_id",	"valorPagoModerador","numFEVPagoModerador", consecutivo, "fechaRegistro",   "usuarioRegistro_id",	"ripsDetalle_id", "itemFactura", "ripsTipos_id","ripsTransaccion_id", "estadoReg", ingreso_id) SELECT sed."codigoHabilitacion", autdet."numeroAutorizacion", his.mipres, facdet."fecha",   ripsOtros.id,  exa.id,  substring(exa.nombre,1,60), facdet.cantidad, tipdocrips.id, usu.documento,facdet."valorUnitario",	facdet."valorTotal", (select max(ripsmoderadora.id) from cartera_pagos pagos, cartera_formaspagos formapago, rips_ripstipospagomoderador ripsmoderadora , cartera_pagosfacturas carFacwhere i."tipoDoc_id" = pagos."tipoDoc_id" and i.documento_id = pagos.documento_id and i.consec = pagos.consec and carFac.pago_id = pagos.id and pagos."formaPago_id" = formapago.id and ripsmoderadora."codigoAplicativo" = cast(formapago.id as text)),  (select carFac."valorAplicado"	from cartera_pagos pagos, cartera_formaspagos formapago, rips_ripstipospagomoderador ripsmoderadora , cartera_pagosfacturas carFac where i."tipoDoc_id" = pagos."tipoDoc_id" and i.documento_id = pagos.documento_id and i.consec = pagos.consec and carFac.pago_id = pagos.id and pagos."formaPago_id" = formapago.id and ripsmoderadora."codigoAplicativo" = cast(formapago.id as text)),   fac.id, row_number()  OVER(ORDER BY facdet.id)  AS consecutivo, now(), ' + "'" + str(username_id) + "'" + ',detrips.id,facdet."consecutivoFactura",' + "'" + str('9') + "','" + str(transaccionId) + "','A'," + "'" + str(ingresoId.id) + "'" + '	FROM sitios_sedesclinica sed inner join facturacion_facturacion fac ON (fac."sedesClinica_id" = sed.id) inner join facturacion_facturaciondetalle facdet ON (facdet.facturacion_id = fac.id and facdet."cums_id" is not null and (facdet.anulado = ' + "'" + str('N') + "'" + ' or facdet.anulado = ' + "'" + str('R') + "')" + ' and "tipoRegistro" = ' + "'" + str('MANUAL') + "'" + ' AND facDet.cirugia_id is not null) inner join facturacion_suministros exa ON (exa.id = facdet."cums_id")	inner join admisiones_ingresos i on (i."tipoDoc_id" = fac."tipoDoc_id" and i.documento_id = fac.documento_id and i.consec = fac."consecAdmision") inner join rips_ripsenvios e ON (e."sedesClinica_id" = sed.id) inner join rips_ripsdetalle detrips ON (detrips."ripsEnvios_id" = e.id and detrips."numeroFactura_id" = fac.id)  inner join usuarios_tiposdocumento tipdoc ON (tipdoc.id = fac."tipoDoc_id" ) 	left join  rips_ripstiposdocumento tipdocrips on (tipdocrips.id = tipdoc."tipoDocRips_id" ) inner join usuarios_usuarios usu ON (usu."tipoDoc_id" = fac."tipoDoc_id" and usu.id = fac.documento_id )  left join clinico_historia his ON (his."tipoDoc_id" = i."tipoDoc_id" and his.documento_id = i.documento_id and his."consecAdmision" = i.consec ) inner join clinico_historialcirugias hisCiru ON (hisCiru.historia_id = his.id and hisCiru.cirugia_id = facDet.cirugia_id) left join autorizaciones_autorizaciones  aut on (aut.historia_id = his.id) left join autorizaciones_autorizacionesdetalle autdet on (autdet.autorizaciones_id = aut.id and autdet.examenes_id = facdet.examen_id) inner join rips_ripstipootrosservicios ripsOtros on (ripsOtros.nombre=' + "'" + str('DISPOSITIVOS MEDICOS E INSUMOS') + "')" +  ' where sed.id = ' + "'" + str(sede) + "'" + ' and e.id = ' + "'" + str(envioRipsId) + "'" + ' and fac.id = ' + "'" +str(elemento) + "'"	
@@ -13,12 +13,77 @@ detalle = 'INSERT INTO rips_ripsotrosservicios ( "codPrestador", "numAutorizacio
 
 
 -- CUARTO QUERY
-
+	-- es el honorarios MANUAL
 -- QUINTO QUERY
 
+	SELECT "serviciosSedes_id",* FROM sitios_dependencias
+	select * from facturacion_liquidacion;
+	select * from facturacion_liquidaciondetalle;
+select * from clinico_examenes where nombre like ('%HABITACION');
+
+SELECT * FROM SITIOS_SERVICIOSSEDES
+SELECT * FROM CLINICO_SERVICIOS	
+	select * from contratacion_convenios -- "tarifariosDescipcionProc_id"
+	select "tiposTarifa_id",* from tarifarios_tarifariosdescripcion;
+	select * from tarifarios_tipostarifa
+		select * from tarifarios_tipostarifaproducto
+		select * from tarifarios_estanciasiss
+		SELECT * from rips_ripstipootrosservicios
+		SELECT * FROM rips_ripsdetalle
+	-- SON LAS ESTANCIAS
+select * from rips_ripstipos
+		SELECT * from tarifarios_tipostarifaproducto
+		SELECT * from tarifarios_tipostarifa
+		
+-- PRIMERO LAS TARIFAS ISS
+select * from tarifarios_estanciasiss
+detalle = 'INSERT INTO rips_ripsotrosservicios ( "codPrestador", "numAutorizacion", "idMIPRES", "fechaSuministroTecnologia","tipoOS_id", "codTecnologiaSalud_id", "nomTecnologiaSalud", "cantidadOS", 	"tipoDocumentoIdentificacion_id", "numDocumentoIdentificacion", "vrUnitOS", "vrServicio",	"tipoPagoModerador_id",	"valorPagoModerador","numFEVPagoModerador", consecutivo, "fechaRegistro",   "usuarioRegistro_id",	"ripsDetalle_id", "itemFactura", "ripsTipos_id", "ripsTransaccion_id", "estadoReg", ingreso_id) SELECT facDet."tipoHonorario_id" ,ripsOtros.id, ripsOtros.nombre,sed."codigoHabilitacion",  ' + "' ' , ' '," +  ' facdet."fecha",	ripsOtros.id,  exa.id,  exa.nombre, facdet.cantidad, tipdocrips.id, usu.documento,facdet."valorUnitario",	facdet."valorTotal",  (select max(ripsmoderadora.id) from cartera_pagos pagos, cartera_formaspagos formapago, rips_ripstipospagomoderador ripsmoderadora , cartera_pagosfacturas carFac where i."tipoDoc_id" = pagos."tipoDoc_id" and i.documento_id = pagos.documento_id and i.consec = pagos.consec and carFac.pago_id = pagos.id and pagos."formaPago_id" = formapago.id and ripsmoderadora."codigoAplicativo" = cast(formapago.id as text)), (select carFac."valorAplicado" from cartera_pagos pagos, cartera_formaspagos formapago, rips_ripstipospagomoderador ripsmoderadora , cartera_pagosfacturas carFac where i."tipoDoc_id" = pagos."tipoDoc_id" and i.documento_id = pagos.documento_id and i.consec = pagos.consec and carFac.pago_id = pagos.id and pagos."formaPago_id" = formapago.id and ripsmoderadora."codigoAplicativo" = cast(formapago.id as text)), fac.id, row_number()  OVER(ORDER BY facdet.id) + 1 AS consecutivo, now(), ' + "'" + str(username_id) + "'" + ',detrips.id,facdet."consecutivoFactura",' + "'" + str('9') + "','" + str(transaccionId) + "','A'," + "'" + str(ingresoId.id) + "'" + '	FROM sitios_sedesclinica sed inner join facturacion_facturacion fac ON (fac."sedesClinica_id" = sed.id)	inner join facturacion_facturaciondetalle facdet ON (facdet.facturacion_id = fac.id and facdet."examen_id" is not null and (facdet.anulado = ' + "'" + str('N') + "'" + ' or facdet.anulado = ' + "'" + str('R') + "')" + ' and "tipoRegistro" = ' + "'" + str('SISTEMA') + "'" + ' AND facDet.cirugia_id is not null) inner join clinico_examenes exa ON (exa.id = facdet."examen_id") inner join admisiones_ingresos i on (i."tipoDoc_id" = fac."tipoDoc_id" and i.documento_id = fac.documento_id and i.consec = fac."consecAdmision") inner join rips_ripsenvios e ON (e."sedesClinica_id" = sed.id) inner join rips_ripsdetalle detrips ON (detrips."ripsEnvios_id" = e.id and detrips."numeroFactura_id" = fac.id) inner join usuarios_tiposdocumento tipdoc ON (tipdoc.id = fac."tipoDoc_id" ) left join  rips_ripstiposdocumento tipdocrips on (tipdocrips.id = tipdoc."tipoDocRips_id" ) inner join usuarios_usuarios usu ON (usu."tipoDoc_id" = fac."tipoDoc_id" and usu.id = fac.documento_id )  inner join rips_ripstipootrosservicios ripsOtros on ( ripsOtros.nombre=' + "'" + str('HONORARIOS') + "')" + ' where sed.id = ' + "'" + str(sede) + "'" + ' and e.id = ' + "'" + str(envioRipsId) + "'" + ' and fac.id = ' + "'" +str(elemento) + "'"	
+
+SELECT facDet."tipoHonorario_id" ,ripsOtros.id, ripsOtros.nombre,sed."codigoHabilitacion", ' ' , -- autdet."numeroAutorizacion",
+--his.mipres,
+		' ',
+		facdet."fecha",	ripsOtros.id,  exa.id,  exa.nombre, facdet.cantidad, tipdocrips.id, usu.documento,
+		facdet."valorUnitario",	facdet."valorTotal",  
+		(select max(ripsmoderadora.id) 
+		from cartera_pagos pagos, cartera_formaspagos formapago, rips_ripstipospagomoderador ripsmoderadora ,
+		cartera_pagosfacturas carFac where i."tipoDoc_id" = pagos."tipoDoc_id" and i.documento_id = pagos.documento_id and
+		i.consec = pagos.consec and carFac.pago_id = pagos.id and pagos."formaPago_id" = formapago.id and
+		ripsmoderadora."codigoAplicativo" = cast(formapago.id as text)),
+		(select carFac."valorAplicado" from cartera_pagos pagos, cartera_formaspagos formapago, 
+		rips_ripstipospagomoderador ripsmoderadora , cartera_pagosfacturas carFac 
+		where i."tipoDoc_id" = pagos."tipoDoc_id" and i.documento_id = pagos.documento_id and i.consec = pagos.consec and
+		carFac.pago_id = pagos.id and pagos."formaPago_id" = formapago.id and 
+		ripsmoderadora."codigoAplicativo" = cast(formapago.id as text)),
+		fac.id, row_number()  OVER(ORDER BY facdet.id) + 1 AS consecutivo, now(), '1',detrips.id,facdet."consecutivoFactura",' 9' , 'xxxx','A','32323'
+FROM sitios_sedesclinica sed
+inner join facturacion_facturacion fac ON (fac."sedesClinica_id" = sed.id)
+inner join facturacion_facturaciondetalle facdet ON (facdet.facturacion_id = fac.id and facdet."examen_id" is not null and (facdet.anulado = 'N' or facdet.anulado = 'R') and "tipoRegistro" = 'SISTEMA' AND facDet.cirugia_id is not null) 
+inner join clinico_examenes exa ON (exa.id = facdet."examen_id" and exa.concepto_id=1) 
+inner join admisiones_ingresos i on (i."tipoDoc_id" = fac."tipoDoc_id" and i.documento_id = fac.documento_id and i.consec = fac."consecAdmision") inner join rips_ripsenvios e ON (e."sedesClinica_id" = sed.id) 
+inner join rips_ripsdetalle detrips ON (detrips."ripsEnvios_id" = e.id and detrips."numeroFactura_id" = fac.id) 
+inner join usuarios_tiposdocumento tipdoc ON (tipdoc.id = fac."tipoDoc_id" ) 
+left join  rips_ripstiposdocumento tipdocrips on (tipdocrips.id = tipdoc."tipoDocRips_id" )
+inner join usuarios_usuarios usu ON (usu."tipoDoc_id" = fac."tipoDoc_id" and usu.id = fac.documento_id )  
+--left join clinico_historia his ON (his."tipoDoc_id" = i."tipoDoc_id" and his.documento_id = i.documento_id and his."consecAdmision" = i.consec )
+--INNER join clinico_historialcirugias hisCiru ON (hisCiru.historia_id = his.id and hisCiru.cirugia_id = facDet.cirugia_id )
+--left join autorizaciones_autorizaciones  aut on (aut.historia_id = his.id)
+--left join autorizaciones_autorizacionesdetalle autdet on (autdet.autorizaciones_id = aut.id and autdet.examenes_id = facdet.examen_id) 
+--inner join tarifarios_tiposhonorarios tipHonor on ( tipHonor.id = facDet."tipoHonorario_id" )
+--inner join rips_ripstipootrosservicios ripsOtros on ( ripsOtros.id=tipHonor."ripsTipoOtrosServicios_id" and 
+--		ripsOtros.nombre='ESTANCIAS')
+inner join rips_ripstipootrosservicios ripsOtros on ( 	ripsOtros.nombre='ESTANCIAS')
+where sed.id = '1' and e.id = '138' and fac.id = '152'	
+		
+select * from facturacion_conceptos;
+
+	
 -- SEXTO QUERY
+	-- SON LAS ESTANCIAS MANUALES
 
 
+	
+
+select * from facturacion_liquidaciondetalle;
 -- pruebas
 
 INSERT INTO rips_ripsotrosservicios ( "codPrestador", "numAutorizacion", "idMIPRES", "fechaSuministroTecnologia","tipoOS_id", "codTecnologiaSalud_id",        "nomTecnologiaSalud", "cantidadOS",      "tipoDocumentoIdentificacion_id", "numDocumentoIdentificacion", "vrUnitOS", "vrServicio",        "tipoPagoModerador_id", "valorPagoModerador","numFEVPagoModerador", consecutivo, "fechaRegistro",   "usuarioRegistro_id",        "ripsDetalle_id", "itemFactura", "ripsTipos_id", "ripsTransaccion_id", "estadoReg", ingreso_id) SELECT sed."codigoHabilitacion", autdet."numeroAutorizacion", his.mipres, facdet."fecha",   ripsOtros.id,  exa.id,  substring(exa.nombre,1,60), facdet.cantidad,   tipdocrips.id, usu.documento,facdet."valorUnitario",    facdet."valorTotal", (select max(ripsmoderadora.id) from cartera_pagos pagos, cartera_formaspagos formapago, rips_ripstipospagomoderador ripsmoderadora , cartera_pagosfacturas carFac where i."tipoDoc_id" = pagos."tipoDoc_id" and i.documento_id = pagos.documento_id and i.consec = pagos.consec and carFac.pago_id = pagos.id and pagos."formaPago_id" = formapago.id and ripsmoderadora."codigoAplicativo" = cast(formapago.id as text)),  (select carFac."valorAplicado" from cartera_pagos pagos, cartera_formaspagos formapago, rips_ripstipospagomoderador ripsmoderadora , cartera_pagosfacturas carFac where i."tipoDoc_id" = pagos."tipoDoc_id" and i.documento_id = pagos.documento_id and i.consec = pagos.consec and carFac.pago_id = pagos.id and pagos."formaPago_id" = formapago.id and ripsmoderadora."codigoAplicativo" = cast(formapago.id as text)),  fac.id, row_number()  OVER(ORDER BY facdet.id)  AS consecutivo, now(), '1',detrips.id,facdet."consecutivoFactura",'9','953','A','50364'      FROM sitios_sedesclinica sed inner join facturacion_facturacion fac ON (fac."sedesClinica_id" = sed.id) inner join facturacion_facturaciondetalle facdet ON (facdet.facturacion_id = fac.id and facdet."examen_id" is not null and (facdet.anulado = 'N' or facdet.anulado = 'R') and "tipoRegistro" = 'SISTEMA' AND facDet.cirugia_id is not null) inner join clinico_examenes exa ON (exa.id = facdet."examen_id") inner join admisiones_ingresos i on (i."tipoDoc_id" = fac."tipoDoc_id" and i.documento_id = fac.documento_id and i.consec = fac."consecAdmision")        inner join rips_ripsenvios e ON (e."sedesClinica_id" = sed.id) inner join rips_ripsdetalle detrips ON (detrips."ripsEnvios_id" = e.id and detrips."numeroFactura_id" = fac.id) inner join usuarios_tiposdocumento tipdoc ON (tipdoc.id = fac."tipoDoc_id" ) left join  rips_ripstiposdocumento tipdocrips on (tipdocrips.id = tipdoc."tipoDocRips_id" ) inner join usuarios_usuarios usu ON (usu."tipoDoc_id" = fac."tipoDoc_id" and usu.id = fac.documento_id )  left join clinico_historia his ON (his."tipoDoc_id" = i."tipoDoc_id" and his.documento_id = i.documento_id and his."consecAdmision" = i.consec ) inner join clinico_historialcirugias hisCiru ON (hisCiru.historia_id = his.id and hisCiru.cirugia_id = facDet.cirugia_id) left join autorizaciones_autorizaciones  aut on (aut.historia_id = his.id) left join autorizaciones_autorizacionesdetalle autdet on (autdet.autorizaciones_id = aut.id and autdet.examenes_id = facdet.examen_id) inner join tarifarios_tiposhonorarios tipHonor on ( tipHonor.id = facDet."tipoHonorario_id" ) inner join rips_ripstipootrosservicios ripsOtros on (ripsOtros.id=tipHonor."ripsTipoOtrosServicios_id"  and ripsOtros.nombre='DISPOSITIVOS MEDICOS E INSUMOS'
@@ -26,6 +91,7 @@ INSERT INTO rips_ripsotrosservicios ( "codPrestador", "numAutorizacion", "idMIPR
 
 	-- Aqui la funcion de OTROS SERVICIO
 
+	
 		SELECT '{"codPrestador": '|| '"' || otros."codPrestador" || '"' 
 	   ||',"numAutorizacion": '|| '"' || CASE WHEN trim(otros."numAutorizacion") is null THEN 'null' ELSE otros."numAutorizacion"  END || '"'		
   		',"idMIPRES": ' || '"'   ||CASE WHEN trim(otros."idMIPRES") is null THEN 'null'  WHEN trim(otros."idMIPRES") = null THEN 'null' WHEN trim(otros."idMIPRES") = '' THEN 'null'  ELSE otros."idMIPRES"  END|| '"'  
@@ -253,9 +319,63 @@ SELECT prog.id id,  u."tipoDoc_id" tipoDoc_id ,tipdoc.abreviatura abrev, u.docum
 	 LEFT JOIN sitios_salas sala ON (sala.id =prog.sala_id ) 
 	 WHERE sed.id = '1' AND  estcir.id IN (2,3)
 	 order by sala.numero
-
+ 
 	 SELECT * FROM cirugia_estadosprogramacion
 SELECT * FROM cirugia_estadoscirugias
 select * from cirugia_cirugias
 select * from cirugia_programacioncirugias
 update cirugia_cirugias set "estadoCirugia_id" =5  where id=40
+
+
+CREATE OR REPLACE FUNCTION creaEstanciaAutomatica()
+
+ RETURNS character varying
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $BODY$
+
+	DECLARE  estancias character(50000);
+
+BEGIN
+
+/* PRIMERO ISS */
+
+INSERT INTO facturacion_liquidaciondetalle(consecutivo, fecha, cantidad, "valorUnitario", "valorTotal",  "fechaCrea", 
+		observaciones, "fechaRegistro", "estadoRegistro", examen_id, liquidacion_id 
+		,"tipoRegistro",anulado, "codigoHomologado") 
+select (SELECT max(liqDet.consecutivo) + 1 
+		FROM facturacion_liquidaciondetalle liqdet
+		WHERE liqDet.liquidacion_id = l1.id) consecutivo,	
+		now(),1,tarIss.valor,tarIss.valor,now(),'',now(),'A',dep.cups_id,l1.id,'SISTEMA','N',tarIss.referencia
+FROM facturacion_liquidacion l1
+INNER JOIN SITIOS_SERVICIOSSEDES servSed on (servSed."sedesClinica_id"=l1."sedesClinica_id")
+INNER JOIN clinico_servicios serv on (serv.id =servSed.servicios_id and serv.nombre = 'HOSPITALIZACION' )
+INNER JOIN sitios_dependencias dep on (dep."serviciosSedes_id" = servSed.id)	
+INNER JOIN contratacion_convenios conv on (conv.id = l1.convenio_id)
+INNER JOIN tarifarios_tarifariosdescripcion descripcion ON (descripcion.id=conv."tarifariosDescripcionProc_id")	
+INNER JOIN 	tarifarios_tipostarifa tiptar on (tiptar.id= descripcion."tiposTarifa_id" AND tiptar.nombre = 'ISS 2001')	
+INNER JOIN 	tarifarios_tipostarifaproducto tipProd on (tipProd.id=tiptar."tiposTarifaProducto_id")
+INNER JOIN 	tarifarios_estanciasiss tarIss on (tarIss.cups_id = dep.cups_id)	
+WHERE l1.anulado = 'N' and l1.convenio_id = (SELECT max(l2.convenio_id) 
+											FROM facturacion_liquidacion l2 
+											where  l2."tipoDoc_id" = l1."tipoDoc_id" AND l2.documento_id = l1.documento_id AND l2."consecAdmision" = l1."consecAdmision");
+	
+/* SEGUNDO SOAT */
+
+
+/* TERCERO PARTICULAR */
+ 
+
+    RETURN 'OK';
+END 
+$BODY$;
+ALTER FUNCTION public.creaEstanciaAutomatica()
+    OWNER TO postgres;
+
+
+
+SELECT creaEstanciaAutomatica();
+SELECT * FROM facturacion_conceptos;
+select concepto_id,* from clinico_examenes
+select * from clinico_tiposexamen
