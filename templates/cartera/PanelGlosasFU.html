@@ -21,7 +21,7 @@
         <li><a href="#Glosas"><span class="fa-solid fa-user-doctor-message"></span> <span class="tab-text"> </span> Glosas</a></li>
         <li><a href="#DetalleGlosas"><span class="fa-solid fa-user-doctor-message"></span> <span   class="tab-text"> </span> Detalle Glosa Clinica</a></li>
         <li><a href="#NotasCredito"><span class="fa-solid fa-user-doctor-message"></span> <span   class="tab-text"> </span> Notas Credito</a></li>
-        <li><a href="#NotasDebito"><span class="fa-solid fa-user-doctor-message"></span> <span   class="tab-text"> </span> Nots Debito</a></li>
+        <li><a href="#DetalleNotasCredito"><span class="fa-solid fa-user-doctor-message"></span> <span   class="tab-text"> </span> Detalle notas credito</a></li>
         <li><a href="#TotalesGlosas"><span class="fa-solid fa-user-doctor-message"></span> <span   class="tab-text"> </span> Totales Glos - rips</a></li>
 
     </ul>
@@ -808,6 +808,159 @@ table.dataTable tbody tr {
 
      <!-- FIN Espacio Modales  -->
 
+
+</article>
+
+
+
+<article  id = "NotasCredito">
+
+
+
+            <!-- INICIO TABLE DE  EL DATATABLE  -->
+		<div class="container my-2">
+
+		<div align="right" height="15px" width="50px">
+               <input type="button" style="height:25px;margin-left: 0 ; margin-bottom: 0;border-top-right-radius: 0;"  size="30px" id="BtnNotasCredito"  name="BtnNotasCreditos" value="Adicionar" onclick= "NotasCredito()" >				    
+		</div>
+
+   			   <div class="row">
+				
+                                        <table  id= "tablaNotasCredito" class=" display table table-striped table-sm fs-6 nowrap" style="width: 100%";>
+                                           <thead>
+                                            <tr>    
+						<bold>                                  
+					      <th>Seleccionar</th> 
+						<th>id</th>
+						<th>fact</th>
+                                            	<th>item</th>
+				                <th>FechaNota</th>
+				                <th>ValorNota</th>
+				                <th>FecReg</th>
+						<th>Convenio</th>
+						<th>NombreConvenio</th>
+				                <th>usuarioReg</th>                                 
+						</bold>                                  
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                      
+                                        </table>
+                                    </div>
+                                </div>
+
+
+
+	            <!-- Espacio Modales  Glosas-->
+
+            <div class="modal fade" id="crearModelNotasCredito" tabindex="-1" role="dialog"  style="overflow-y:scroll;" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+                <div class="modal-dialog modal-dialog-scrollable  modal-dialog-center" role="document" modal-lg>
+                    <div class="modal-content">
+                        <div class="modal-header">
+	     <div  class="modal-title" id="exampleModalLabel" style="text-align:center;"><font gont-family="Times New roman" size=5">Crear Notas Credito</font> </div>
+                                        <button type="button" class="close" data-bs-dismiss="modal"  aria-label="Close"> <span aria-hidden="true">&times;</span>  </button>
+			<button type="button" class="btn btn-primary" id="saveBtnCrearNotasCredito" onclick="CrearNotasCredito()">Grabar!</button> 
+                        </div>
+		
+                        <div class="modal-body">
+                            <div class="alert alert-danger error-msg" style="display:none">
+                                <ul class="mb-0"></ul>
+                            </div>
+			
+  			  <form id="postFormNotasCredito" name="postFormNotasCredito">
+
+                                <input type="hidden" name="post_id" id="post_id">
+
+                      <div class="row row-cols-lg-auto g-3 align-items-center mb-3">
+
+
+				  <div class="col-4">
+					                                   
+                                    <input type="hidden" class="form-control" id="sedesClinican_id" name="sedesClinican_id"  value="{{Sede}}" readonly></input>
+                                </div>
+
+				  <div class="col-8">
+                                        <label for="serviciosAdministrativosNC_id" class="col-sm-1 control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SeviciosAdmon:</label>
+                                        <div class="col-sm-8">
+                                            <select class="select-css h-40 w-20" id="serviciosAdministrativosNC_id"  tabindex= "0"
+                                                    name="serviciosAdministrativosNC_id"
+                                                    required>
+                                                {% for serviciosAdministrativos in ServiciosAdministrativos %}
+                                                <option value="{{serviciosAdministrativos.id}}"> {{serviciosAdministrativos.nombre}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+
+                                    </div>
+
+
+				<div class="col-12">
+                                    convenio_id:
+				<select class="select-css"  id="convenioNC_id"
+                                                                name="convenioNC_id" disable>
+                                                            {% for convenios in Convenios %}
+                                                            <option value="{{convenios.id}}">
+                                                                {{convenios.nombre}}
+                                                            </option>
+                                                            {% endfor %}
+                                                        </select>
+                                </div>
+	  
+				<div class="col-12">
+					fecha Nota:
+                                   	 <label class="visually-hidden" for="fechaNota">fechaNota:</label>
+                               
+					 <input type="datetime-local"  class="form-control" id="fechaNota" name="fechaNota" placeholder="fecha Nota"  >
+                                </div>
+
+
+				<div class="col-12">
+                                   	 <label class="visually-hidden" for="facturaNC_id">factura_id:</label>
+                               
+					 <input type="text" class="form-control" id="facturaNC_id" name="facturaNc_id" placeholder="factura_id"  >
+                                </div>
+
+                   
+				<div class="col-12">
+                                    
+				 <label  for="valorNotaNC">valor Nota:</label>
+                                    <input type="text" class="form-control" id="valorNotaNC" name="valorNotaNC" value="0" placeholder="valor Nota:" ></input>
+                                </div>
+
+                                <div class="col-12">
+                                   
+                                    <input type="hidden" id="fechaRegistro" name="fechaRegistro" value="" > </input>
+                                </div>
+
+                                <div class="col-12">
+                                    Usuario:
+                                    <input type="text" id="usuarioRegistroNC_id" name="usuarioRegistroNC_id" value="{{Username_id}}" readonly > </input>
+                                </div>
+
+                                </div> <!-- CIERRA ROW 8 COLUMNAS  -->
+
+                            </form>
+
+                        </div> <!-- CIERRA BODY -->
+			<div class="modal-footer">
+		
+		
+		<textarea id="mensajesErrorModalNotasCredito" name="mensajesErrorModalNotasCredito" style="background-color: lightred; color: navy;"  rows="1" cols="60" placeholder="Mensajes..."  wrap="hard"></textarea>				
+			  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar   </button>
+				<button type="button" class="btn btn-primary" id="saveBtnCrearNotasCredito" onclick="CrearNotasCredito()">Grabar!</button> 
+                        
+			    </div> <!-- CIERRA FOOTER -->			
+                        </div> <!-- CIERRA MODAL CONTENTE -->
+                    </div> <!-- CIERRA MODAL DIALOG -->
+                </div>  <!-- CIERRA MODAL FADE -->
+
+     <!-- FIN Espacio Modales  -->
+
+</article>
+
+</article>
+<article id="DetalleNotasCredito">
 
 
 </article>

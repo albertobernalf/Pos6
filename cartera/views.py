@@ -272,6 +272,67 @@ def GuardaGlosas(request):
             miConexion3.close()
 
 
+def GuardaNotasCredito(request):
+
+    print ("Entre GuardaNotasCredito" )
+
+    sedesClinica_id = request.POST['sedesClinica_id']
+    print("sedesClinica_id =", sedesClinica_id)
+
+    fechaNota = request.POST["fechaNota"]
+    print("fechaNota =", fechaNota)
+
+    factura_id = request.POST['factura_id']
+    print ("factura_id =", factura_id)
+
+    itemFactura = request.POST['itemFactura']
+    print ("itemFactura =", itemFactura)
+
+
+    serviciosAdministrativos_id = request.POST['serviciosAdministrativos_id']
+    print ("serviciosAdministrativos_id =", serviciosAdministrativos_id)
+
+
+    usuarioRegistro_id = request.POST['usuarioRegistro_id']
+    print ("usuarioRegistro_id =", usuarioRegistro_id)
+
+    estadoReg = 'A'
+
+    fechaRegistro = timezone.now()
+
+
+    miConexion3 = None
+    miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",  password="123456")
+    cur3 = miConexion3.cursor()
+
+    try:
+        comando = 'INSERT INTO cartera_notascredito ("fechaNota",  "fechaRegistro", "estadoReg", convenio_id, "usuarioRegistro_id", factura_id, "itemFactura",  "sedesClinica_id", "serviciosAdministrativos_id", anulado) VALUES (' + "'" + str(fechaNota) + "'" + ', 0,0, ' +  str(valorNota) +  ',0,0,' + "'" + str(observaciones) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(convenio_id) + "','"  + str(usuarioRegistro_id) + "', '" + str(factura_id) + "', '" + str(tipoGlosa_id) + "', '" + str(usuarioRegistro_id) +  "', null, '" + str(estadoRecepcion_id) + "', '" + str(sedesClinica_id)  + "',null,'" + str(serviciosAdministrativos_id) + "','N'" +  ')'
+
+        print(comando)
+        cur3.execute(comando)
+        miConexion3.commit()
+        cur3.close()
+        miConexion3.close()
+
+        return JsonResponse({'success': True, 'Mensajes': 'Nota credito  creada satisfactoriamente!'})
+
+    except psycopg2.DatabaseError as error:
+        print ("Entre por rollback" , error)
+        if miConexion3:
+            print("Entro ha hacer el Rollback")
+            miConexion3.rollback()
+
+        message_error= str(error)
+        return JsonResponse({'success': False, 'Mensajes': message_error})
+
+
+    finally:
+        if miConexion3:
+            cur3.close()
+            miConexion3.close()
+
+
+
 def GuardaGlosasAdicionar(request):
 
     print ("Entre Guarda Glosas Adicionar" )
@@ -1461,6 +1522,45 @@ def BorraGlosasDetalle(request):
 
 
 
+def load_dataNotasCredito(request, data):
+    print("load_dataNotasCredito")
+
+    context = {}
+    d = json.loads(data)
+
+    username = d['username']
+    sede = d['sede']
+    username_id = d['username_id']
+
+    nombreSede = d['nombreSede']
+    print("sede:", sede)
+    print("username:", username)
+    print("username_id:", username_id)
+
+    notasCredito = []
+
+    miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                   password="123456")
+    curx = miConexionx.cursor()
+
+    detalle = 'SELECT nc.id, nc.factura_id, nc."itemFactura", nc."fechaNota", nc."valorNota", nc."fechaRegistro", conv.nombre nombreConvenio, nc."usuarioRegistro_id" FROM public.cartera_notascredito nc, facturacion_liquidacion fac ,contratacion_convenios conv WHERE nc."sedesClinica_id" = ' + "'" + str(sede) + "'" + 'AND fac.convenio_id  = conv.id '
+
+    print(detalle)
+
+    curx.execute(detalle)
+
+    for id,  factura_id, itemFactura, fechaNota, valorNota, fechaRegistro, nombreConvenio, usuarioRegistro_id in curx.fetchall():
+        notasCredito.append(
+            {"model": "cartera.notasCredito", "pk": id, "fields":
+                {'id': id, 'factura_id':factura_id,'itemFactura':itemFactura,'valorNota':valorNota, 'fechaRegistro': fechaRegistro,'nombreConvenio':nombreConvenio, 'usuarioRegistro_id': usuarioRegistro_id}})
+
+    miConexionx.close()
+    print("notasCredito "  , notasCredito)
+    context['NotasCredito'] = notasCredito
+
+    serialized1 = json.dumps(notasCredito,  default=str)
+
+    return HttpResponse(serialized1, content_type='application/json')
 
     
 

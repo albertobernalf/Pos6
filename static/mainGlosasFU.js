@@ -19,6 +19,8 @@ let dataTableGlosasHospitalizacionInitialized = false;
 let dataTableGlosasMedicamentosInitialized = false;
 let dataTableGlosasUrgenciasInitialized = false;
 let dataTableGlosasAdicionarInitialized = false;
+let dataTableNotasCreditoInitialized = false;
+
 
 
 $(document).ready(function() {
@@ -1126,13 +1128,98 @@ function arrancaGlosas(valorTabla,valorData)
 
 	            dataTableGlosasTotalesDetalleInitialized  = true;
 
-
-
-
       }
 
+    if (valorTabla == 12)
+    {
+        let dataTableOptionsNotasCredito  ={
+   dom: "<'row mb-1'<'col-sm-3'B><'col-sm-3'><'col-sm-6'f>>" + // B = Botones a la izquierda, f = filtro a la derecha
+             "<'row'<'col-sm-12'tr>>" +
+             "<'row mt-3'<'col-sm-5'i><'col-sm-7'p>>",
+  buttons: [
+    {
+      extend: 'excelHtml5',
+      text: '<i class="fas fa-file-excel"></i> ',
+      titleAttr: 'Exportar a Excel',
+      className: 'btn btn-success',
+    },
+    {
+      extend: 'pdfHtml5',
+      text: '<i class="fas fa-file-pdf"></i> ',
+      titleAttr: 'Exportar a PDF',
+      className: 'btn btn-danger',
+    },
+    {
+      extend: 'print',
+      text: '<i class="fa fa-print"></i> ',
+      titleAttr: 'Imprimir',
+      className: 'btn btn-info',
+    },
+  ],
+  lengthMenu: [2, 4, 15],
+           processing: true,
+            serverSide: false,
+            scrollY: '275px',
+	    scrollX: true,
+	    scrollCollapse: true,
+            paging:false,
+            columnDefs: [
+		{ className: 'centered', targets: [0, 1, 2, 3, 4, 5] },
+	    { width: '10%', targets: [2,3] },
+
+		{   
+                    "targets": 9
+               }
+            ],
+	 pageLength: 3,
+	  destroy: true,
+	  language: {
+		    processing: 'Procesando...',
+		    lengthMenu: 'Mostrar _MENU_ registros',
+		    zeroRecords: 'No se encontraron resultados',
+		    emptyTable: 'Ningún dato disponible en esta tabla',
+		    infoEmpty: 'Mostrando registros del 0 al 0 de un total de 0 registros',
+		    infoFiltered: '(filtrado de un total de _MAX_ registros)',
+		    search: 'Buscar:',
+		    infoThousands: ',',
+		    loadingRecords: 'Cargando...',
+		    paginate: {
+			      first: 'Primero',
+			      last: 'Último',
+			      next: 'Siguiente',
+			      previous: 'Anterior',
+		    }
+			},
 
 
+           ajax: {
+                 url:"/load_dataNotasCredito/" +  data,
+                 type: "POST",
+                 dataSrc: ""
+            },
+            columns: [
+		{
+		  "render": function ( data, type, row ) {
+                        var btn = '';
+        		     btn = btn + " <input type='radio' name='notaCredito'  style='width:15px;height:15px;accent-color: purple;border-color: purple;background-color: purple;' class='miNotaCredito form-check-input ' data-pk='"  + row.pk + "'>" + "</input>";
+                       return btn;
+                    },
+
+		},
+                { data: "fields.id"},
+		 { data: "fields.factura_id"},
+                { data: "fields.itemFactura"},
+                { data: "fields.fechaNota"},
+                { data: "fields.valorNota"},
+                { data: "fields.fechaRegistro"},
+		{ data: "fields.convenio_id"},
+		{ data: "fields.nombreConvenio"},
+                { data: "fields.usuarioRegistro_id"},
+       ]
+            }
+	        dataTable = $('#tablaNotasCredito').DataTable(dataTableOptionsNotasCredito);
+
+  }
 
 }
 
@@ -1162,20 +1249,8 @@ const initDataTableGlosas = async () => {
 	 dataTableGlosasInitialized = true;
          arrancaGlosas(11,data);
 	 dataTableGlosasTotalesInitialized = true;
-
-
-     //    arrancaGlosas(4,data);
-//         dataTableGlosasTransaccionInitialized = true;
-//	 arrancaGlosas(5,data);
-//	 dataTableGlosasUsuariosInitialized = true;
-  //       arrancaGlosas(6,data);
-	// dataTableGlosasProcedimientosInitialized = true;
-//         arrancaGlosas(7,data);
-//	 dataTableGlosasHospitalizacionInitialized = true;
-//         arrancaGlosas(8,data);
-//	 dataTableGlosasMedicamentosInitialized = true;
-//         arrancaGlosas(9,data);
-//	 dataTableGlosasUrgenciasInitialized = true;
+         arrancaGlosas(12,data);
+	 dataTableNotasCreditoInitialized = true;
 
 
 }
@@ -1728,6 +1803,19 @@ function Glosas()
         
 }
 
+function NotasCredito()
+{
+    
+	
+	
+            $('#post_id').val('');
+            $('#postFormCrearNotasCredito').trigger("reset");
+            $('#modelHeadingMotasCredito').html("Creacion NotasCredito");
+            $('#crearModelNotasCredito').modal('show');
+        
+}
+
+
 
 function GlosasAdicionar()
 {
@@ -1816,6 +1904,66 @@ function CrearGlosas()
 
 }
 
+
+
+function CrearNotasCredito()
+{
+	
+		var sedeSeleccionada = document.getElementById("sedeSeleccionada").value;
+	        var username = document.getElementById("username").value;
+	        var nombreSede = document.getElementById("nombreSede").value;
+	    	var sede = document.getElementById("sede").value;
+	        var username_id = document.getElementById("username_id").value;
+		alert("Entre Guardar Glosas Estado");
+
+	        
+		var convenio_id = document.getElementById("convenioNC_id").value;
+	        var sedesClinica_id = document.getElementById("sedesClinica_id").value;
+	        var fechaNota = document.getElementById("fechaNota").value;
+	        var valorNota = document.getElementById("valorNota").value;
+	        var factura_id = document.getElementById("facturaNC_id").value;
+	        var usuarioRegistro_id = document.getElementById("usuarioRegistro_id").value;
+	        var serviciosAdministrativos_id = document.getElementById("serviciosAdministrativosNC_id").value;
+
+
+            $.ajax({
+                data: {'serviciosAdministrativos_id':serviciosAdministrativos_id, 'convenio_id':convenio_id,'sedesClinica_id':sedesClinica_id, 'fechaNota':fechaNota, 'factura_id':factura_id, 'valorNota':valorNota , 'usuarioRegistro_id':usuarioRegistro_id },
+	        url: "/guardaNotasCredito/",
+                type: "POST",
+                dataType: 'json',
+                success: function (data2) {
+
+
+		var data =  {}   ;
+	        data['username'] = username;
+		data['username_id'] = username_id;
+	        data['sedeSeleccionada'] = sedeSeleccionada;
+	        data['nombreSede'] = nombreSede;
+	        data['sede'] = sede;
+	        data['sedesClinica_id'] = sede;
+
+		var facturaId = document.getElementById("factura_idGlo").innerHTML;
+		data['facturaId'] = document.getElementById("factura_idGlo").value;
+
+	        data = JSON.stringify(data);
+	
+  	
+			 arrancaGlosas(12,data);
+			    dataTableNotasCReditoInitialized = true;
+
+		            $('#crearModelNotasCredito').modal('hide');
+
+
+		document.getElementById("mensajesError").value = data2.Mensajes;
+
+                },
+              error: function (data) {	      
+			document.getElementById("mensajesErrorModalNotasCredito").value =   data.responseText;
+                }
+            });
+
+
+}
 
 
 function CrearGlosasAdicionar()

@@ -251,7 +251,7 @@ class GlosasDetalle(models.Model):
     valorNotasCreditoOtras =  models.DecimalField( max_digits=15, decimal_places=2, default=0,blank=True,null= True)
     observaciones = models.CharField(max_length=120, blank=True,null= True, editable=True)
     fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)
-    usuarioRegistro = models.ForeignKey('planta.Planta', default=1, on_delete=models.PROTECT, null=True ,  related_name='usuario799')
+    usuarioRegistro = models.ForeignKey('planta.Planta', default=1, on_delete=models.PROTECT, null=True ,  related_name='usuario743')
     anulado = models.CharField(max_length=1, choices=FLAG_CHOICES, default='N', editable=False)
     estadoReg = models.CharField(max_length=1, choices=ESTADOREG_CHOICES, default='A', editable=False)
 
@@ -263,18 +263,16 @@ class NotasCredito(models.Model):
         ('A', 'Activo'),
         ('I', 'Inactivo'), ]
     FLAG_CHOICES = [
-
         ('S', 'Si'),
         ('N', 'No'),
         ]
-
     id = models.AutoField(primary_key=True)
     sedesClinica = models.ForeignKey('sitios.SedesClinica', blank=True,null= True, editable=True, on_delete=models.PROTECT, related_name = 'SedesClinica765')	
     serviciosAdministrativos = models.ForeignKey('sitios.ServiciosAdministrativos', blank=True,null= True, editable=True,  on_delete=models.PROTECT,   related_name='seradm11')
-    empresa = models.ForeignKey('facturacion.Empresas',blank=True,null= True, editable=True, on_delete=models.PROTECT)
+    #empresa = models.ForeignKey('facturacion.Empresas',blank=True,null= True, editable=True, on_delete=models.PROTECT)
     fechaNota = models.DateTimeField(editable=True, null=True, blank=True)
-    factura = models.ForeignKey('facturacion.Facturacion',blank=True,null= True, editable=True, on_delete=models.PROTECT ,  related_name='facturacion103')
-    itemFactura =  models.IntegerField(editable=True, null=True, blank=True)
+    #factura = models.ForeignKey('facturacion.Facturacion',blank=True,null= True, editable=True, on_delete=models.PROTECT ,  related_name='facturacion103')
+    #itemFactura =  models.IntegerField(editable=True, null=True, blank=True)
     ripsDetalle =  models.ForeignKey('rips.RipsDetalle',blank=True,null= True, editable=True, on_delete=models.PROTECT )
     ripsTipos =  models.ForeignKey('rips.RipsTipos', blank=True, null=True, editable=True, on_delete=models.PROTECT , related_name='RpsTipos11')   
     ripsId    =  models.IntegerField(editable=True, null=True, blank=True)
@@ -290,7 +288,7 @@ class NotasCredito(models.Model):
     rutaZip = models.CharField(max_length=5000, default='A', editable=False)
     trackId =models.CharField(max_length=5000, default='A', editable=False)
     rutaXmlRespuesta = models.CharField(max_length=5000, default='A', editable=False)
-    estado = models.CharField(max_length=5000, default='A', editable=False)
+    #estado = models.CharField(max_length=5000, default='A', editable=False)
     codDian = models.CharField(max_length=5000, default='A', editable=False)
     prefijo = models.CharField(max_length=5000, default='A', editable=False)
     descripcion = models.CharField(max_length=5000, default='A', editable=False)
@@ -304,14 +302,42 @@ class NotasCredito(models.Model):
     notificacionAdministrativa = models.DateTimeField(editable=True, null=True, blank=True)
     codigoZip = models.IntegerField(editable=True, null=True, blank=True)
     fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)
-    usuarioRegistro = models.ForeignKey('planta.Planta', default=1, on_delete=models.PROTECT, null=True ,  related_name='usuario798')
+    usuarioRegistro = models.ForeignKey('planta.Planta', default=1, on_delete=models.PROTECT, null=True ,  related_name='usuario799')
     anulado = models.CharField(max_length=1, choices=FLAG_CHOICES, default='N', editable=False)
     estadoReg = models.CharField(max_length=1, choices=ESTADOREG_CHOICES, default='A', editable=False)
 
 
-
     def __str__(self):
         return self.descripcion
+
+
+class NotasCreditoDetalle(models.Model):
+    ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
+    FLAG1_CHOICES = [
+        ('S', 'Si'),
+        ('N', 'No'),
+        ]
+    NOTASCREDITO_CHOICES = [
+        ('E', 'Descuentos'),
+        ('D', 'Devolucion'),
+        ('E', 'Error'),
+        ]
+    id = models.AutoField(primary_key=True)
+    notaCredito = models.ForeignKey('cartera.NotasCredito',blank=True,null= True, editable=True, on_delete=models.PROTECT)
+    factura = models.ForeignKey('facturacion.Facturacion',blank=True,null= True, editable=True, on_delete=models.PROTECT ,  related_name='facturacion103')
+    itemFactura =  models.IntegerField(editable=True, null=True, blank=True)
+    valorNota =  models.DecimalField( max_digits=15, decimal_places=2)
+    tipo = models.CharField(max_length=1, choices=NOTASCREDITO_CHOICES, default='D', editable=False)
+    fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)
+    usuarioRegistro = models.ForeignKey('planta.Planta', default=1, on_delete=models.PROTECT, null=True ,  related_name='usuario796')
+    anulado = models.CharField(max_length=1, choices=FLAG1_CHOICES, default='N', editable=False)
+    estadoReg = models.CharField(max_length=1, choices=ESTADOREG_CHOICES, default='A', editable=False)
+
+    def __str__(self):
+        return self.factura
+
 
 
 class NotasDebito(models.Model):
