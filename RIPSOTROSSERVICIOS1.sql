@@ -345,7 +345,7 @@ CREATE OR REPLACE FUNCTION creaEstanciaAutomatica()
 AS $BODY$
 
 	DECLARE  estancias character(50000);
-
+             tabla  RECORD;
 BEGIN
 
 /* PRIMERO ISS */
@@ -372,6 +372,33 @@ WHERE serv.nombre = 'HOSPITALIZACION' and  l1.anulado = 'N' and l1.convenio_id =
 											FROM facturacion_liquidacion l2 
 											where  l2."tipoDoc_id" = l1."tipoDoc_id" AND l2.documento_id = l1.documento_id AND l2."consecAdmision" = l1."consecAdmision");
 
+raise notice 'Voy por el FOR LOOP :' ;
+
+FOR tabla IN SELECT * FROM facturacion_liquidacion l1
+	INNER JOIN admisiones_ingresos ing on (ing."tipoDoc_id" = l1."tipoDoc_id" and ing.documento_id = l1.documento_id and ing.consec = l1."consecAdmision")	
+	INNER JOIN SITIOS_SERVICIOSSEDES servSed on (servSed."sedesClinica_id"=l1."sedesClinica_id")
+	INNER JOIN clinico_servicios serv on (serv.id =servSed.servicios_id   )
+	INNER JOIN sitios_dependencias dep on (dep."sedesClinica_id" = servSed."sedesClinica_id" AND   dep."serviciosSedes_id" = servSed.id and dep.id=ing."dependenciasActual_id")	
+	INNER JOIN contratacion_convenios conv on (conv.id = l1.convenio_id)
+	INNER JOIN tarifarios_tarifariosdescripcion descripcion ON (descripcion.id=conv."tarifariosDescripcionProc_id")	
+	INNER JOIN 	tarifarios_tipostarifa tiptar on (tiptar.id= descripcion."tiposTarifa_id" AND tiptar.nombre = 'ISS 2001')	
+	INNER JOIN 	tarifarios_tipostarifaproducto tipProd on (tipProd.id=tiptar."tiposTarifaProducto_id" and tipProd.nombre='PROCEDIMIENTOS')
+	INNER JOIN 	tarifarios_estancias tar on (tar.cups_id = dep.cups_id and tar."tipoEstancia" = 'I')	
+	WHERE serv.nombre = 'HOSPITALIZACION' and  l1.anulado = 'N' and l1.convenio_id = (SELECT max(l2.convenio_id) 
+											FROM facturacion_liquidacion l2 
+											where  l2."tipoDoc_id" = l1."tipoDoc_id" AND l2.documento_id = l1.documento_id AND l2."consecAdmision" = l1."consecAdmision")
+LOOP 
+			
+			raise notice 'Voy a guardar encabezados : %s' , tabla.id;
+			Update facturacion_liquidacion SET  "totalProcedimientos" = "totalProcedimientos" + tabla.valor        where id = tabla.id;
+			raise notice 'ya guarde1: %s' , tabla.id;
+			Update facturacion_liquidacion SET  "totalLiquidacion" = "totalSuministros" + "totalProcedimientos"    where id = tabla.id;
+			raise notice 'ya guarde2: : %s' , tabla.id;
+			Update facturacion_liquidacion SET  "valorApagar" = "totalLiquidacion" - "totalRecibido"    where id = tabla.id;
+			raise notice 'En teoria ya guardes : %s' , tabla.valor;
+
+END LOOP;
+
 /* SEGUNDO SOAT */ 
 
 
@@ -396,6 +423,32 @@ INNER JOIN 	tarifarios_estancias tar on (tar.cups_id = dep.cups_id and tar."tipo
 WHERE l1.anulado = 'N' and l1.convenio_id = (SELECT max(l2.convenio_id) 
 											FROM facturacion_liquidacion l2 
 											where  l2."tipoDoc_id" = l1."tipoDoc_id" AND l2.documento_id = l1.documento_id AND l2."consecAdmision" = l1."consecAdmision");
+
+FOR tabla IN SELECT * FROM facturacion_liquidacion l1
+	INNER JOIN admisiones_ingresos ing on (ing."tipoDoc_id" = l1."tipoDoc_id" and ing.documento_id = l1.documento_id and ing.consec = l1."consecAdmision")		
+	INNER JOIN SITIOS_SERVICIOSSEDES servSed on (servSed."sedesClinica_id"=l1."sedesClinica_id")
+	INNER JOIN clinico_servicios serv on (serv.id =servSed.servicios_id and serv.nombre = 'HOSPITALIZACION' )
+	INNER JOIN sitios_dependencias dep on (dep."sedesClinica_id" = servSed."sedesClinica_id" AND   dep."serviciosSedes_id" = servSed.id and dep.id=ing."dependenciasActual_id")	
+	INNER JOIN contratacion_convenios conv on (conv.id = l1.convenio_id)
+	INNER JOIN tarifarios_tarifariosdescripcion descripcion ON (descripcion.id=conv."tarifariosDescripcionProc_id")	
+	INNER JOIN 	tarifarios_tipostarifa tiptar on (tiptar.id= descripcion."tiposTarifa_id" AND tiptar.nombre = 'SOAT 2024')	
+	INNER JOIN 	tarifarios_tipostarifaproducto tipProd on (tipProd.id=tiptar."tiposTarifaProducto_id" and tipProd.nombre='PROCEDIMIENTOS')
+	INNER JOIN 	tarifarios_estancias tar on (tar.cups_id = dep.cups_id and tar."tipoEstancia" = 'S')	
+	WHERE l1.anulado = 'N' and l1.convenio_id = (SELECT max(l2.convenio_id) 
+											FROM facturacion_liquidacion l2 
+											where  l2."tipoDoc_id" = l1."tipoDoc_id" AND l2.documento_id = l1.documento_id AND l2."consecAdmision" = l1."consecAdmision")
+LOOP 
+			
+			raise notice 'Voy a guardar encabezados : %s' , tabla.id;
+			Update facturacion_liquidacion SET  "totalProcedimientos" = "totalProcedimientos" + tabla.valor        where id = tabla.id;
+			raise notice 'ya guarde1: %s' , tabla.id;
+			Update facturacion_liquidacion SET  "totalLiquidacion" = "totalSuministros" + "totalProcedimientos"    where id = tabla.id;
+			raise notice 'ya guarde2: : %s' , tabla.id;
+			Update facturacion_liquidacion SET  "valorApagar" = "totalLiquidacion" - "totalRecibido"    where id = tabla.id;
+			raise notice 'En teoria ya guardes : %s' , tabla.valor;
+
+END LOOP;
+
 
 
 /* TERCERO PARTICULAR */
@@ -423,13 +476,44 @@ WHERE l1.anulado = 'N' and l1.convenio_id = (SELECT max(l2.convenio_id)
 											FROM facturacion_liquidacion l2 
 											where  l2."tipoDoc_id" = l1."tipoDoc_id" AND l2.documento_id = l1.documento_id AND l2."consecAdmision" = l1."consecAdmision");
 
-    RETURN 'OK'; 
+FOR tabla IN SELECT * FROM facturacion_liquidacion l1
+	INNER JOIN admisiones_ingresos ing on (ing."tipoDoc_id" = l1."tipoDoc_id" and ing.documento_id = l1.documento_id and ing.consec = l1."consecAdmision")		
+	INNER JOIN SITIOS_SERVICIOSSEDES servSed on (servSed."sedesClinica_id"=l1."sedesClinica_id")
+	INNER JOIN clinico_servicios serv on (serv.id =servSed.servicios_id and serv.nombre = 'HOSPITALIZACION' )
+	INNER JOIN sitios_dependencias dep on (dep."sedesClinica_id" = servSed."sedesClinica_id" AND   dep."serviciosSedes_id" = servSed.id and dep.id=ing."dependenciasActual_id")	
+	INNER JOIN contratacion_convenios conv on (conv.id = l1.convenio_id)
+	INNER JOIN tarifarios_tarifariosdescripcion descripcion ON (descripcion.id=conv."tarifariosDescripcionProc_id")	
+	INNER JOIN 	tarifarios_tipostarifa tiptar on (tiptar.id= descripcion."tiposTarifa_id" AND tiptar.nombre = 'PARTICULAR')	
+	INNER JOIN 	tarifarios_tipostarifaproducto tipProd on (tipProd.id=tiptar."tiposTarifaProducto_id" and tipProd.nombre='PROCEDIMIENTOS')
+	INNER JOIN 	tarifarios_estancias tar on (tar.cups_id = dep.cups_id and tar."tipoEstancia" = 'P')	
+	WHERE l1.anulado = 'N' and l1.convenio_id = (SELECT max(l2.convenio_id) 
+											FROM facturacion_liquidacion l2 
+											where  l2."tipoDoc_id" = l1."tipoDoc_id" AND l2.documento_id = l1.documento_id AND l2."consecAdmision" = l1."consecAdmision")
+	
+LOOP 
+			
+			raise notice 'Voy a guardar encabezados : %s' , tabla.id;
+			Update facturacion_liquidacion SET  "totalProcedimientos" = "totalProcedimientos" + tabla.valor        where id = tabla.id;
+			raise notice 'ya guarde1: %s' , tabla.id;
+			Update facturacion_liquidacion SET  "totalLiquidacion" = "totalSuministros" + "totalProcedimientos"    where id = tabla.id;
+			raise notice 'ya guarde2: : %s' , tabla.id;
+			Update facturacion_liquidacion SET  "valorApagar" = "totalLiquidacion" - "totalRecibido"    where id = tabla.id;
+			raise notice 'En teoria ya guardes : %s' , tabla.valor;
+
+END LOOP;
+
+
+RETURN 'OK'; 
 END 
 $BODY$;
 ALTER FUNCTION public.creaEstanciaAutomatica()
     OWNER TO postgres;
- 
- 
+  
+
+select * from facturacion_liquidacion;
+update facturacion_liquidacion set "totalProcedimientos" = 0,"totalLiquidacion"=0,"valorApagar"=0 where id=300
+select * from facturacion_liquidaciondetalle;
+delete from facturacion_liquidaciondetalle where liquidacion_id=300
 select * from tarifarios_estancias
 SELECT creaEstanciaAutomatica();
 SELECT * FROM facturacion_conceptos;
@@ -449,8 +533,13 @@ select "sedesClinica_id","serviciosSedes_id", * from sitios_dependencias where d
 	select * from sitios_dependencias where cups_id=4032
 	select * from facturacion_liquidacion
 
-	delete from facturacion_liquidaciondetalle where liquidacion_id=300
+	- delete from facturacion_liquidaciondetalle where liquidacion_id=300
 
 	select anulado,* from facturacion_liquidacion	
 	update facturacion_liquidacion set anulado='N' where id=300
+
+select * from facturacion_liquidaciondetalle where liquidacion_id=300
+
+select concepto_id,* from clinico_examenes where id = 4032
+select * from facturacion_conceptos;
 

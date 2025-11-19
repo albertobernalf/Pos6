@@ -935,3 +935,5 @@ class ProgramacionCitasMedicas(models.Model):
 -- CUANDO SE FACTURA LA CIRUGIA TAMBIEN CAMBIA EL ESTADO DE LA PROGRAMACION A realizada
 
 -- DEFINITIVAMENTE hay que aterrizar el tema insumos, qx, dispo medicos, honorarios etc. Es un saperongo, y en otros servicios ni se diga papaberol
+
+-- Que paso con ... / que desde TRIAGE coloco anulkado = 'A' en facturacion_liquidacion OPS
