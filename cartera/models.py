@@ -273,6 +273,7 @@ class NotasCredito(models.Model):
     fechaNota = models.DateTimeField(editable=True, null=True, blank=True)
     #factura = models.ForeignKey('facturacion.Facturacion',blank=True,null= True, editable=True, on_delete=models.PROTECT ,  related_name='facturacion103')
     #itemFactura =  models.IntegerField(editable=True, null=True, blank=True)
+    ripsEnvio =  models.ForeignKey('rips.RipsEnvios',blank=True,null= True, editable=True, on_delete=models.PROTECT )
     ripsDetalle =  models.ForeignKey('rips.RipsDetalle',blank=True,null= True, editable=True, on_delete=models.PROTECT )
     ripsTipos =  models.ForeignKey('rips.RipsTipos', blank=True, null=True, editable=True, on_delete=models.PROTECT , related_name='RpsTipos11')   
     #ripsId    =  models.IntegerField(editable=True, null=True, blank=True)

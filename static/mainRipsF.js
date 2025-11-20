@@ -317,7 +317,7 @@ function arrancaEnviosRips(valorTabla,valorData)
 
                        return btn;
                     },
-                    "targets": 10
+                    "targets": 11
                }
             ],
 	 pageLength: 3,
@@ -348,6 +348,7 @@ function arrancaEnviosRips(valorTabla,valorData)
 		 { data: "fields.id"},
                 { data: "fields.numeroFactura"},
                 { data: "fields.glosaId"},
+                { data: "fields.notaCreditoId"},
                 { data: "fields.cuv"},
                 { data: "fields.estadoPasoMinisterio"},
                 { data: "fields.rutaJsonRespuesta"},
@@ -1478,15 +1479,17 @@ $('#tablaRipsEnviados tbody').on('click', '.miRespuestaRips', function() {
 	console.log(" fila selecciona de vuelta dato3 = ",  dato3);
 	console.log(" fila selecciona de vuelta dato3  glosaId= ",  dato3.glosaId);
 	console.log(" fila selecciona de vuelta dato3 factura = ",  dato3.factura);
+	console.log(" fila selecciona de vuelta dato3 notaCredito = ",  dato3.notaCreditoId);
 
 
         var facturaId = dato3.factura;
         var glosaId = dato3.glosaId;
+        
 
 	$.ajax({
 
 	        url: "/actualizarEmpresaDetalleRips/",
-                data: {'facturaId':facturaId, 'glosaId':glosaId, 'empresaId':empresaId,'envioRipsId':envioRipsId, 'username_id':username_id, 'tipoRips':tipoRips},
+                data: {'notaCreditoId':glosaId, 'facturaId':facturaId, 'glosaId':glosaId, 'empresaId':empresaId,'envioRipsId':envioRipsId, 'username_id':username_id, 'tipoRips':tipoRips},
                 type: "POST",
                 dataType: 'json',
                 success: function (data2) {

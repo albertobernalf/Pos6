@@ -414,7 +414,7 @@ Actualizar SQL FacturacionDetalle  ?? umm cual es este..
 BIBLIOGRAFIA:
 --Postgresql: particionamiento de tablas usando campos de tipos definidos por el usuario
 -- Particion de postgresql    en dyango
--- postgrtesql particiones en django
+-- postgresql particiones en django
 --  Mejorar el rendimiento d ela base de datos:partivcionamiento d etablas en dyango y
 -- django-postgres-extra
 -- crear indices simultaneos en una tabla particionada
