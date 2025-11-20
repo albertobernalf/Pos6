@@ -338,6 +338,10 @@ urlpatterns = [
     path('load_tablaGlosasTotalesDetalle/<str:data>', viewsCartera.Load_tablaGlosasTotalesDetalle,name='load_tablaGlosasTotales_Detalle'),
     path('borraGlosasDetalle/', viewsCartera.BorraGlosasDetalle, name='BorraGlosas_Detalle'),
     path('load_dataNotasCredito/<str:data>', viewsCartera.load_dataNotasCredito, name='loaddata_NotasCredito'),
+    path('load_dataNotasCreditoDetalle/<str:data>', viewsCartera.load_dataNotasCreditoDetalle, name='loaddata_NotasCreditoDetalle'),
+    path('guardaNotasCredito/', viewsCartera.GuardaNotasCredito, name='guardaNotas_Credito'),
+    path('guardaNotasCreditoDetalle/', viewsCartera.GuardaNotasCreditoDetalle, name='guardaNotas_CreditoDetalle'),
+
 
     # Tarifas
 	

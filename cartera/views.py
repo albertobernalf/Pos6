@@ -24,12 +24,14 @@ import datetime
 from decimal import Decimal
 from admisiones.models import Ingresos
 from facturacion.models import ConveniosPacienteIngresos, Liquidacion, LiquidacionDetalle, Facturacion, FacturacionDetalle
-from cartera.models import TiposPagos, FormasPagos, Pagos, PagosFacturas, GlosasDetalle
+from cartera.models import TiposPagos, FormasPagos, Pagos, PagosFacturas, GlosasDetalle, NotasCredito, NotasCreditoDetalle
 from triage.models import Triage
 from clinico.models import Servicios
 from rips.models  import RipsMedicamentos, RipsConsultas, RipsProcedimientos, RipsOtrosServicios
 import pickle
 from django.db import transaction, IntegrityError
+from django.db.models import Sum
+
 
 # Function to convert dictionary keys and values
 def convert_keys_and_values(d):
@@ -282,16 +284,14 @@ def GuardaNotasCredito(request):
     fechaNota = request.POST["fechaNota"]
     print("fechaNota =", fechaNota)
 
-    factura_id = request.POST['factura_id']
-    print ("factura_id =", factura_id)
+    valorNota = request.POST["valorNota"]
+    print("valorNota =", valorNota)
 
-    itemFactura = request.POST['itemFactura']
-    print ("itemFactura =", itemFactura)
-
+    descripcion = request.POST["descripcion"]
+    print("descripcion =", descripcion)
 
     serviciosAdministrativos_id = request.POST['serviciosAdministrativos_id']
     print ("serviciosAdministrativos_id =", serviciosAdministrativos_id)
-
 
     usuarioRegistro_id = request.POST['usuarioRegistro_id']
     print ("usuarioRegistro_id =", usuarioRegistro_id)
@@ -306,7 +306,7 @@ def GuardaNotasCredito(request):
     cur3 = miConexion3.cursor()
 
     try:
-        comando = 'INSERT INTO cartera_notascredito ("fechaNota",  "fechaRegistro", "estadoReg", convenio_id, "usuarioRegistro_id", factura_id, "itemFactura",  "sedesClinica_id", "serviciosAdministrativos_id", anulado) VALUES (' + "'" + str(fechaNota) + "'" + ', 0,0, ' +  str(valorNota) +  ',0,0,' + "'" + str(observaciones) + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(convenio_id) + "','"  + str(usuarioRegistro_id) + "', '" + str(factura_id) + "', '" + str(tipoGlosa_id) + "', '" + str(usuarioRegistro_id) +  "', null, '" + str(estadoRecepcion_id) + "', '" + str(sedesClinica_id)  + "',null,'" + str(serviciosAdministrativos_id) + "','N'" +  ')'
+        comando = 'INSERT INTO cartera_notascredito ("fechaNota",  "fechaRegistro", "estadoReg", "valorNota",  "usuarioRegistro_id", "sedesClinica_id", "serviciosAdministrativos_id", descripcion, anulado) VALUES (' + "'" + str(fechaNota) + "','" + str(fechaRegistro) + "','A','"   +  str(valorNota) + "','" + str(usuarioRegistro_id) +  "','" + str(sedesClinica_id)  + "','" + str(serviciosAdministrativos_id) + "','" + str(descripcion) +   "','N')"
 
         print(comando)
         cur3.execute(comando)
@@ -315,6 +315,124 @@ def GuardaNotasCredito(request):
         miConexion3.close()
 
         return JsonResponse({'success': True, 'Mensajes': 'Nota credito  creada satisfactoriamente!'})
+
+    except psycopg2.DatabaseError as error:
+        print ("Entre por rollback" , error)
+        if miConexion3:
+            print("Entro ha hacer el Rollback")
+            miConexion3.rollback()
+
+        message_error= str(error)
+        return JsonResponse({'success': False, 'Mensajes': message_error})
+
+
+    finally:
+        if miConexion3:
+            cur3.close()
+            miConexion3.close()
+
+
+def GuardaNotasCreditoDetalle(request):
+
+    print ("Entre GuardaNotasCreditoDetalle" )
+
+    sedesClinica_id = request.POST['sedesClinica_id']
+    print("sedesClinica_id =", sedesClinica_id)
+
+    factura = request.POST['factura']
+    print ("factura = ", factura)
+
+    valorNota = request.POST['valorNota']
+    print ("valorNota = ", valorNota)
+
+    tipoNotaCredito = request.POST['tipoNotaCredito']
+    print ("tipoNotaCredito = ", tipoNotaCredito)
+
+
+    notaCredito = request.POST['notaCredito']
+    print ("notaCredito  = ", notaCredito )
+
+
+    username_id = request.POST['username_id']
+    print ("username_id =", username_id)
+
+    notasCreditoId = NotasCredito.objects.get(id=notaCredito)
+    print("notasCreditoId =" , notasCreditoId.valorNota)
+    totalNota = NotasCreditoDetalle.objects.filter(notaCredito_id=notaCredito).aggregate(Sum('valorNota'))
+
+    print("totalNota =", totalNota)
+
+    if (totalNota['valorNota__sum'] == None):
+        totalNota1=0
+    else:
+        totalNota1 =totalNota['valorNota__sum']
+
+    print("totalNota1 =" , totalNota1)
+
+    if ((float(totalNota1) + float(valorNota)) >  float(notasCreditoId.valorNota)):
+
+        return JsonResponse({'success': False, 'Mensajes': 'Valor supera el total de la nota credito'})
+
+
+
+    #Validacion
+    try:
+        with transaction.atomic():
+            facturaId = Facturacion.objects.get(id=factura)
+
+    except Exception as e:
+        # Aquí ya se hizo rollback automáticamente
+        print("Se hizo rollback INGRESO por:", e)
+
+        return JsonResponse({'success': False, 'Mensajes': 'Factura No existe'})
+
+    finally:
+        print("Finally")
+
+    if (facturaId.notasCredito == None):
+        notasCreditox=0
+    else:
+        notasCreditox = facturaId.notasCredito
+
+
+    if ((float(facturaId.valorApagar) - float(notasCreditox)) < float(valorNota)):
+
+        return JsonResponse({'success': False, 'Mensajes': 'Valor de factura menor que el total de Notas credito'})
+
+
+    estadoReg = 'A'
+
+    fechaRegistro = timezone.now()
+
+
+    miConexion3 = None
+    miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",  password="123456")
+    cur3 = miConexion3.cursor()
+
+    try:
+        comando = 'INSERT INTO cartera_notascreditodetalle ("notaCredito_id", "factura_id","valorNota",   "fechaRegistro",   "usuarioRegistro_id", "estadoReg", anulado,"tiposNotasCredito_id") VALUES (' + "'" + str(notaCredito) + "','"   + str(factura) + "','" + str(valorNota) + "','"  + str(fechaRegistro) + "','" + str(username_id) +  "','A','N','" + str(tipoNotaCredito) + "'" + ')'
+
+        print(comando)
+        cur3.execute(comando)
+
+        if (facturaId.notasCredito == None):
+            valorNot=0
+        else:
+            valorNot=facturaId.notasCredito
+
+        actualizoValorNota =  float(valorNot) +  float(valorNota)
+
+        comando = 'UPDATE facturacion_facturacion SET "notasCredito" =  ' + "'" + str(actualizoValorNota) + "'"  + ' WHERE id = ' + "'" + str(factura) + "'"
+
+        print(comando)
+        cur3.execute(comando)
+
+
+        miConexion3.commit()
+        cur3.close()
+        miConexion3.close()
+
+        return JsonResponse({'success': True, 'Mensajes': 'Nota credito Detalle  creada satisfactoriamente!'})
 
     except psycopg2.DatabaseError as error:
         print ("Entre por rollback" , error)
@@ -1543,22 +1661,70 @@ def load_dataNotasCredito(request, data):
                                    password="123456")
     curx = miConexionx.cursor()
 
-    detalle = 'SELECT nc.id, nc.factura_id, nc."itemFactura", nc."fechaNota", nc."valorNota", nc."fechaRegistro", conv.nombre nombreConvenio, nc."usuarioRegistro_id" FROM public.cartera_notascredito nc, facturacion_liquidacion fac ,contratacion_convenios conv WHERE nc."sedesClinica_id" = ' + "'" + str(sede) + "'" + 'AND fac.convenio_id  = conv.id '
+    detalle = 'SELECT nc.id,  nc."fechaNota", nc."valorNota", nc."fechaRegistro", nc."usuarioRegistro_id", nc.descripcion FROM public.cartera_notascredito nc, facturacion_liquidacion fac ,contratacion_convenios conv WHERE nc."sedesClinica_id" = ' + "'" + str(sede) + "'" + 'AND fac.convenio_id  = conv.id '
 
     print(detalle)
 
     curx.execute(detalle)
 
-    for id,  factura_id, itemFactura, fechaNota, valorNota, fechaRegistro, nombreConvenio, usuarioRegistro_id in curx.fetchall():
+    for id,  fechaNota, valorNota, fechaRegistro,  usuarioRegistro_id, descripcion  in curx.fetchall():
         notasCredito.append(
             {"model": "cartera.notasCredito", "pk": id, "fields":
-                {'id': id, 'factura_id':factura_id,'itemFactura':itemFactura,'valorNota':valorNota, 'fechaRegistro': fechaRegistro,'nombreConvenio':nombreConvenio, 'usuarioRegistro_id': usuarioRegistro_id}})
+                {'id': id, 'valorNota':valorNota, 'fechaRegistro': fechaRegistro, 'usuarioRegistro_id': usuarioRegistro_id,'descripcion':descripcion}})
 
     miConexionx.close()
     print("notasCredito "  , notasCredito)
     context['NotasCredito'] = notasCredito
 
     serialized1 = json.dumps(notasCredito,  default=str)
+
+    return HttpResponse(serialized1, content_type='application/json')
+
+    
+
+
+def load_dataNotasCreditoDetalle(request, data):
+    print("load_dataNotasCreditoDetalle")
+
+    context = {}
+    d = json.loads(data)
+
+    username = d['username']
+    sede = d['sede']
+    username_id = d['username_id']
+    notaCredito = d['notaCredito']
+    nombreSede = d['nombreSede']
+    print("sede:", sede)
+    print("username:", username)
+    print("username_id:", username_id)
+    print("notaCredito:", notaCredito)
+
+
+
+    notasCreditoDetalle = []
+
+    miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                   password="123456")
+    curx = miConexionx.cursor()
+
+    detalle = 'SELECT ncDet.id , nc.id notaCredito, ncDet.factura_id , ncDet."valorNota", ncDet."tiposNotasCredito_id" tipoNota, tip.nombre nombreTipoNota, ncDet."ripsProcedimientos_id" ripsProcedimientos,ncDet."ripsMedicamentos_id" ripsMedicamentos,ncDet."ripsConsultas_id" ripsConsultas, ncDet."ripsOtrosServicios_id" ripsOtrosServicios,  ncDet."fechaRegistro",  ncDet."usuarioRegistro_id" FROM public.cartera_notascredito nc, cartera_notascreditodetalle ncDet, cartera_tiposnotasCredito tip WHERE ncDet."notaCredito_id" = ' + "'" + str(notaCredito) + "'" + ' AND ncDet."notaCredito_id" = nc.id AND nc."sedesClinica_id" = ' + "'" + str(sede) + "'" + 'AND ncDet."tiposNotasCredito_id"  = tip.id '
+
+    print(detalle)
+
+    curx.execute(detalle)
+
+    for id,  notaCredito,factura_id, valorNota, tipoNota, nombreTipoNota, ripsProcedimientos,  ripsMedicamentos, ripsConsultas,ripsOtrosServicios, fechaRegistro, usuarioRegistro_id in curx.fetchall():
+        notasCreditoDetalle.append(
+            {"model": "cartera.notasCreditoDetalle", "pk": id, "fields":
+                {'id': id, 'notaCredito':notaCredito,'factura_id':factura_id, 'valorNota':valorNota,'tipoNota':tipoNota, 'nombreTipoNota':nombreTipoNota,
+		'ripsProcedimientos':ripsProcedimientos, 'ripsMedicamentos':ripsMedicamentos, 'ripsConsultas':ripsConsultas, 'ripsOtrosServicios':ripsOtrosServicios,
+		'fechaRegistro': fechaRegistro, 'usuarioRegistro_id': usuarioRegistro_id}})
+
+    miConexionx.close()
+    print("notasCreditoDetalle = "  , notasCreditoDetalle)
+    context['NotasCreditoDetalle'] = notasCreditoDetalle
+
+    serialized1 = json.dumps(notasCreditoDetalle,  default=str)
 
     return HttpResponse(serialized1, content_type='application/json')
 

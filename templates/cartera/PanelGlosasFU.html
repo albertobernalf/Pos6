@@ -811,11 +811,7 @@ table.dataTable tbody tr {
 
 </article>
 
-
-
-<article  id = "NotasCredito">
-
-
+<article id = "NotasCredito">
 
             <!-- INICIO TABLE DE  EL DATATABLE  -->
 		<div class="container my-2">
@@ -832,14 +828,13 @@ table.dataTable tbody tr {
 						<bold>                                  
 					      <th>Seleccionar</th> 
 						<th>id</th>
-						<th>fact</th>
-                                            	<th>item</th>
+						<th>Servicio</th>
 				                <th>FechaNota</th>
 				                <th>ValorNota</th>
 				                <th>FecReg</th>
-						<th>Convenio</th>
-						<th>NombreConvenio</th>
-				                <th>usuarioReg</th>                                 
+				                <th>usuarioReg</th> 
+					        <th>descripcion</th> 
+						<th>Seleccionar</th>                                
 						</bold>                                  
                                             </tr>
                                             </thead>
@@ -894,19 +889,7 @@ table.dataTable tbody tr {
 
                                     </div>
 
-
-				<div class="col-12">
-                                    convenio_id:
-				<select class="select-css"  id="convenioNC_id"
-                                                                name="convenioNC_id" disable>
-                                                            {% for convenios in Convenios %}
-                                                            <option value="{{convenios.id}}">
-                                                                {{convenios.nombre}}
-                                                            </option>
-                                                            {% endfor %}
-                                                        </select>
-                                </div>
-	  
+  
 				<div class="col-12">
 					fecha Nota:
                                    	 <label class="visually-hidden" for="fechaNota">fechaNota:</label>
@@ -914,14 +897,7 @@ table.dataTable tbody tr {
 					 <input type="datetime-local"  class="form-control" id="fechaNota" name="fechaNota" placeholder="fecha Nota"  >
                                 </div>
 
-
-				<div class="col-12">
-                                   	 <label class="visually-hidden" for="facturaNC_id">factura_id:</label>
-                               
-					 <input type="text" class="form-control" id="facturaNC_id" name="facturaNc_id" placeholder="factura_id"  >
-                                </div>
-
-                   
+                  
 				<div class="col-12">
                                     
 				 <label  for="valorNotaNC">valor Nota:</label>
@@ -929,13 +905,9 @@ table.dataTable tbody tr {
                                 </div>
 
                                 <div class="col-12">
-                                   
-                                    <input type="hidden" id="fechaRegistro" name="fechaRegistro" value="" > </input>
-                                </div>
-
-                                <div class="col-12">
-                                    Usuario:
-                                    <input type="text" id="usuarioRegistroNC_id" name="usuarioRegistroNC_id" value="{{Username_id}}" readonly > </input>
+                                    Descripcion:
+                                    <input type="text" id="descripcionNc" name="descripcionNc"  > </input>
+                                    <input type="hidden" id="usuarioRegistroNC_id" name="usuarioRegistroNC_id" value="{{Username_id}}" > </input>
                                 </div>
 
                                 </div> <!-- CIERRA ROW 8 COLUMNAS  -->
@@ -959,162 +931,58 @@ table.dataTable tbody tr {
 
 </article>
 
-</article>
+
 <article id="DetalleNotasCredito">
 
+		<div align="left" height="20px" width="200px">
+			 <label  for="notaCreditoId">Nota Credito:</label>
 
-</article>
+                         <input type="text"  id="notaCreditoId" name="notaCreditoId" value="0"  readonly></input>
 
-<article id="RipsTransaccion">
+                                    
+				<label  for="tipoNotaCredito">Tipo Nota Credito:</label>
+				<select   id="tipoNotaCredito"  name="tipoNotaCredito">
+                                                           {% for tiposNotasCredito in TiposNotasCredito %}
+                                                            <option value="{{tiposNotasCredito.id}}">
+                                                                {{tiposNotasCredito.nombre}}
+                                                            </option>
+                                                            {% endfor %}
+                                                          
+                                                        </select>
+                                 
+				 <label  for="facturaDetalle">Factura:</label>
+                                    <input type="text"  id="facturaDetalle" name="facturaDetalle" value="0" placeholder="factura" ></input>
+
+				 <label  for="valorNotaDetalle">Valor:</label>
+                                    <input type="text"  id="valorNotaDetalle" name="valorNotaDetalle" value="0" placeholder="valor Nota" ></input>
+
+               <input type="button" style="height:25px;margin-left: 0 ; margin-bottom: 0;border-top-right-radius: 0;"  size="50px" id="BtnNotasCreditoDetalle"  name="BtnNotasCreditoDetalle" value="Adicionar" onclick= "CrearNotasCreditoDetalle()" >				    
+
+		</div>
 
 
             <!-- INICIO TABLE DE  EL DATATABLE  -->
- 	<div class="container my-2">          
+		<div class="container my-2">
+
    			   <div class="row">
-                                        <table  id= "tablaGlosasTransaccion" class=" display table table-striped table-sm fs-6 nowrap" style="width: 100%";>
+				
+                                        <table  id= "tablaNotasCreditoDetalle" class=" display table table-striped table-sm fs-6 nowrap" style="width: 100%";>
                                            <thead>
                                             <tr>    
 						<bold>                                  
-                                                <th>id</th>
-                                                <th>NumeroDocObligatorio</th>
-                                                <th>NumNota</th>
-                                                <th>FechaRegistro</th>
-                                                <th>TipoNota</th>
-                                                <th>UsuarioRegistro</th>
-                                                <th>Envio Rips # </th>
-						<th>Sedes # </th>
-						<th>Accion </th>
-						</bold>                                  
-
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            </tbody>
- 					
-                                        </table>
-                                    </div>
-                                </div>
-
-
-
-</article>
-
-
-
-<article id="RipsUsuarios">
-	<div class="container my-2">          
-   			   <div class="row">
-                                         <table  id= "tablaGlosasUsuarios" class=" display table table-striped table-sm fs-6 nowrap" style="width: 100%";>
-                                           <thead>
-                                            <tr>    
-						<bold>                                  
-                                                <th>id</th>
-                                                <th>tipoDocumento </th>
-                                                <th>tipoUsuario </th>
-                                                <th>FechaNacimiento </th>
-                                                <th>CodSexo </th>
-                                                <th>CodZonaTerritorial </th>
-                                                <th>Incapacidad </th>
-						<th>Consecutivo </th>
-                                                <th>FechaRegistro </th>
-                                                <th>CodMunicipio</th>
-                                                <th>CodPaisOrigen </th>
-                                                <th>CodPaisResidencia </th>
-                                                <th>UsuarioRegistro </th>
-                                                <th>NumDocumentoIdentifica </th>
-                                                <th>RipsDetalleId </th>
-                                                <th>RipsTransaccionId </th>
-						<th>Accion </th>
-						</bold>                                  
-
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-
-                                            </tbody>
-                                         
-
-                                        </table>
-                                    </div>
-                                </div>
-
-</article>
-
-
-<article id="RipsHospitalizacion">
-
-	<div class="container my-2">          
-   			   <div class="row">
-                                        <table  id= "tablaGlosasHospitalizacion" class=" display table table-striped table-sm fs-6 nowrap" style="width: 100%";>
-                                           <thead>
-                                            <tr>    
-						<bold>                                  
-                                                <th>id</th>
-                                                <th>Prestador </th>
-                                                <th>fechaAtn </th>
-                                                <th>Aut </th>
-                                                <th>Egreso </th>
-                                                <th>consec </th>
-						<th>Fec.Reg </th>
-                                                <th>CausaMotivo </th>
-                                                <th>Complica</th>
-                                                <th>DxMuerte </th>
-                                                <th>DxPrincipalI </th>
-                                                <th>DxPrincipalE </th>
-                                                <th>DxRel1</th>
-                                                <th>DxRel2</th>
-                                                <th>DxRel3 </th>
-                                                <th>DestEgreso </th>
-                                                <th>UsuReg </th>
-                                                <th>ViaIngreso </th>
-                                                <th>RipsDetalle_id </th>
-                                                <th>ripsTipos_id </th>
-						<th>Accion </th>
-						</bold>                                  
-
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            </tbody>
-                                         
-
-                                        </table>
-                                    </div>
-                                </div>
-
-		
-
-</article>
-
-
-<article id="RipsUrgObs">
-
-	<div class="container my-2">          
-   			   <div class="row">
-
-					<table id="tablaGlosasUrgencias" class="display table table-striped table-sm fs-6 nowrap" style="width:100%";>
-                                           <thead>
-                                            <tr>    
-						<bold>                                  
-                                              <th>id</th>
-						<th>codPrestador</th>
-						<th>fechaInicioAtencion</th>
-						<th>fechaEgreso</th>
-						<th>consecutivo</th>
-						<th>fechaRegistro</th>
-						<th>causaMotivoAtencion_id</th>
-						<th>codDiagnosticoCausaMuerte_id</th>
-						<th>codDiagnosticoPrincipal_id</th>
-						<th>codDiagnosticoPrincipalE_id</th>
-						<th>codDiagnosticoRelacionadoE1_id</th>
-						<th>codDiagnosticoRelacionadoE2_id</th>
-						<th>codDiagnosticoRelacionadoE3_id</th>
-						<th>condicionDestinoUsuarioEgreso_id</th>
-						<th>usuarioRegistro_id</th>
-						<th>ripsDetalle_id</th>
-						<th>ripsTipos_id</th>
-						<th>ripsTransaccion_id</th>
-						<th>Accion </th>
+					      <th>Seleccionar</th> 
+						<th>id</th>
+						<th>NotaCredito</th>
+						<th>factura</th>
+				                <th>ValorNota</th>
+				                <th>TipoNota</th>
+				                <th>RipsProced</th>
+				                <th>RipsMedicamentos</th>
+				                <th>RipsConsultas</th>
+				                <th>RipsOtrosServ</th>
+				                <th>FecReg</th>
+				                <th>usuarioReg</th> 
+                               
 						</bold>                                  
                                             </tr>
                                             </thead>
@@ -1124,112 +992,10 @@ table.dataTable tbody tr {
                                         </table>
                                     </div>
                                 </div>
-  
 
 </article>
 
-<article id="RipsRecienNacido">
 
-		  <div style="height: 70px;  width:100%; background-color:#EBEBEB;">
-		
-		
-		 </div>
-</article>
-
-<article id="RipsProcedimientos">
-
-	<div class="container my-2">          
-   			   <div class="row">
-
-					<table id="tablaGlosasProcedimientos" class="display table table-striped table-sm fs-6 nowrap" style="width:100%";>
-                                           <thead>
-                                            <tr>    
-						<bold>                                  
-                                                <th>id</th>
-                                                <th>Prestador </th>
-                                                <th>fechaAtn </th>
-                                                <th>MIPRES</th>
-                                                <th>Aut </th>
-                                                <th>Identif </th>
-                                                <th>vr </th>
-						<th>Moderadora </th>                                               
-                                                <th>consec</th>
-                                                <th>Complicacion </th>
-                                                <th>Principal </th>
-                                                <th>Relacionado </th>
-                                                <th>Proced</th>
-                                                <th>Servicio </th>
-                                                <th>concepto </th>
-                                                <th>FinalTecSalud </th>
-                                                <th>grupoServ </th>
-                                                <th>modGrupoServ </th>
-                                                <th>tipoIdent </th>
-                                                <th>usuario </th>
-                                                <th>viaIngreso </th>
-                                                <th>ripsDetalle </th>
-                                                <th>tipoModerado </th>
-						<th>Accion </th>
-						</bold>                                  
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            </tbody>
-                                           
-                                        </table>
-                                    </div>
-                                </div>
-  
-
-</article>
-
-<article id="RipsMedicamentos">
-	<div class="container my-2">          
-   			   <div class="row">
-                                        <table  id= "tablaGlosasMedicamentos" class=" display table table-striped table-sm fs-6 nowrap" style="width: 100%";>
-                                           <thead>
-                                            <tr>    
-						<bold>                                  
-				<th>id</th>
-			<th>itemFac</th>
-			<th>nom</th>
-			<th> MIPRES</th>
-			<th> cums</th>
-			<th> concentra</th>
-			<th> cantidad</th>
-			<th> vrUnit</th>
-			<th> vrServicio</th>
-			<th>  consRips</th>
-			<th> tipoMed</th>
-			<th> undMed_id</th>
-			<th> cantGlosada</th>
-			<th> cantAceptada</th>
-			<th> cantSoportado</th>
-			<th> valorGlosado</th>
-			<th>vAceptado</th>
-			<th> valorSoportado </th>
-			<th> motivoGlosa_id</th>
-			<th> notasCreditoGlosa</th>
-			<th> notasCreditoOtras</th>
-			<th> notasDebito</th>
-			<th>Accion </th>
-						</bold>                                  
-
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            </tbody>
-                                       
-
-                                        </table>
-                                    </div>
-                                </div>
-
-
-
-
-  
-
-</article>
 
 <article id="TotalesGlosas">
 
@@ -1277,13 +1043,9 @@ table.dataTable tbody tr {
 </article>
 
 
-<article id="RipsOtrosServicios">
 
-		  <div style="height: 70px;  width:100%; background-color:#EBEBEB;">
-		
-		
-		 </div>
-</article>
+
+
 
 
 

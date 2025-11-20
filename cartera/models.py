@@ -275,25 +275,25 @@ class NotasCredito(models.Model):
     #itemFactura =  models.IntegerField(editable=True, null=True, blank=True)
     ripsDetalle =  models.ForeignKey('rips.RipsDetalle',blank=True,null= True, editable=True, on_delete=models.PROTECT )
     ripsTipos =  models.ForeignKey('rips.RipsTipos', blank=True, null=True, editable=True, on_delete=models.PROTECT , related_name='RpsTipos11')   
-    ripsId    =  models.IntegerField(editable=True, null=True, blank=True)
+    #ripsId    =  models.IntegerField(editable=True, null=True, blank=True)
     valorNota =  models.DecimalField( max_digits=15, decimal_places=2)
-    cufeDef =  models.CharField(max_length=5000, default='A', editable=False)
-    cufeVr =  models.CharField(max_length=5000, default='A', editable=False)
-    codQr=  models.CharField(max_length=5000, default='A', editable=False)
-    rutaQr = models.CharField(max_length=5000, default='A', editable=False)
-    rutaRaiz = models.CharField(max_length=5000, default='A', editable=False)
-    nomArchivo = models.CharField(max_length=5000, default='A', editable=False)
-    rutaXml = models.CharField(max_length=5000, default='A', editable=False)
-    rutaXmlFirmado = models.CharField(max_length=5000, default='A', editable=False)
-    rutaZip = models.CharField(max_length=5000, default='A', editable=False)
-    trackId =models.CharField(max_length=5000, default='A', editable=False)
-    rutaXmlRespuesta = models.CharField(max_length=5000, default='A', editable=False)
+    cufeDef =  models.CharField(max_length=5000,  blank=True, null=True, editable=True)
+    cufeVr =  models.CharField(max_length=5000, blank=True, null=True, editable=True)
+    codQr=  models.CharField(max_length=5000,  blank=True, null=True, editable=True)
+    rutaQr = models.CharField(max_length=5000,  blank=True, null=True, editable=True)
+    rutaRaiz = models.CharField(max_length=5000,  blank=True, null=True, editable=True)
+    nomArchivo = models.CharField(max_length=5000,  blank=True, null=True, editable=True)
+    rutaXml = models.CharField(max_length=5000,  blank=True, null=True, editable=True)
+    rutaXmlFirmado = models.CharField(max_length=5000,  blank=True, null=True, editable=True)
+    rutaZip = models.CharField(max_length=5000,  blank=True, null=True, editable=True)
+    trackId =models.CharField(max_length=5000,  blank=True, null=True, editable=True)
+    rutaXmlRespuesta = models.CharField(max_length=5000,  blank=True, null=True, editable=True)
     #estado = models.CharField(max_length=5000, default='A', editable=False)
-    codDian = models.CharField(max_length=5000, default='A', editable=False)
-    prefijo = models.CharField(max_length=5000, default='A', editable=False)
-    descripcion = models.CharField(max_length=5000, default='A', editable=False)
-    estadoDian = models.CharField(max_length=5000, default='A', editable=False)
-    mensajeDian = models.CharField(max_length=5000, default='A', editable=False)
+    codDian = models.CharField(max_length=5000,  blank=True, null=True, editable=True)
+    prefijo = models.CharField(max_length=5000,  blank=True, null=True, editable=True)
+    descripcion = models.CharField(max_length=5000,  blank=True, null=True, editable=True)
+    estadoDian = models.CharField(max_length=5000,  blank=True, null=True, editable=True)
+    mensajeDian = models.CharField(max_length=5000,  blank=True, null=True, editable=True)
     fechaEnvioDian = models.DateTimeField(editable=True, null=True, blank=True)
     conceptoCorreccion = models.DateTimeField(editable=True, null=True, blank=True)
     descConceptoCorreccion = models.DateTimeField(editable=True, null=True, blank=True)
@@ -319,17 +319,16 @@ class NotasCreditoDetalle(models.Model):
         ('S', 'Si'),
         ('N', 'No'),
         ]
-    NOTASCREDITO_CHOICES = [
-        ('E', 'Descuentos'),
-        ('D', 'Devolucion'),
-        ('E', 'Error'),
-        ]
     id = models.AutoField(primary_key=True)
     notaCredito = models.ForeignKey('cartera.NotasCredito',blank=True,null= True, editable=True, on_delete=models.PROTECT)
     factura = models.ForeignKey('facturacion.Facturacion',blank=True,null= True, editable=True, on_delete=models.PROTECT ,  related_name='facturacion103')
-    itemFactura =  models.IntegerField(editable=True, null=True, blank=True)
+    #itemFactura =  models.IntegerField(editable=True, null=True, blank=True)
     valorNota =  models.DecimalField( max_digits=15, decimal_places=2)
-    tipo = models.CharField(max_length=1, choices=NOTASCREDITO_CHOICES, default='D', editable=False)
+    tiposNotasCredito = models.ForeignKey('cartera.TiposNotasCredito',blank=True,null= True, editable=True, on_delete=models.PROTECT ,  related_name='tiposNotaCre01')
+    ripsProcedimientos =  models.ForeignKey('rips.RipsProcedimientos',blank=True,null= True, editable=True, on_delete=models.PROTECT ,  related_name='ripsProced0x1' )
+    ripsMedicamentos =  models.ForeignKey('rips.RipsMedicamentos',blank=True,null= True, editable=True, on_delete=models.PROTECT ,  related_name='ripsMedic0x1')
+    ripsConsultas =  models.ForeignKey('rips.RipsConsultas',blank=True,null= True, editable=True, on_delete=models.PROTECT ,  related_name='ripsCons0x1')
+    ripsOtrosServicios =  models.ForeignKey('rips.RipsOtrosServicios',blank=True,null= True, editable=True, on_delete=models.PROTECT ,  related_name='ripsOtros0x1')
     fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)
     usuarioRegistro = models.ForeignKey('planta.Planta', default=1, on_delete=models.PROTECT, null=True ,  related_name='usuario796')
     anulado = models.CharField(max_length=1, choices=FLAG1_CHOICES, default='N', editable=False)
@@ -338,6 +337,15 @@ class NotasCreditoDetalle(models.Model):
     def __str__(self):
         return self.factura
 
+
+class TiposNotasCredito (models.Model):
+
+   id = models.AutoField(primary_key=True)
+   codigo = models.CharField(max_length=2, blank=True,null= True, editable=True)
+   nombre =   models.CharField(max_length=80, blank=True,null= True, editable=True)
+
+   def __str__(self):
+        return self.nombre
 
 
 class NotasDebito(models.Model):

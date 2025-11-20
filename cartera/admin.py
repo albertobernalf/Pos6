@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 
-from cartera.models import FormasPagos, TiposPagos,Pagos,TiposGlosas,MotivosGlosas, Radicaciones, Remisiones, TiposNotas, EstadosGlosas, GlosasConceptoGeneral, GlosasConceptoEspecifico, Caja
+from cartera.models import FormasPagos, TiposPagos,Pagos,TiposGlosas,MotivosGlosas, Radicaciones, Remisiones, TiposNotas, EstadosGlosas, GlosasConceptoGeneral, GlosasConceptoEspecifico, Caja, TiposNotasCredito, NotasCreditoDetalle
 
 @admin.register(FormasPagos)
 class formasPagosAdmin(admin.ModelAdmin):
@@ -101,3 +101,16 @@ class cajaAdmin(admin.ModelAdmin):
     list_filter = ("id", "fecha", "serviciosAdministrativos","usuarioEntrega","totalEfectivo","totalTarjetasDebito", "totalTarjetasCredito", "totalCheques", "total" )
 
 
+@admin.register(TiposNotasCredito)
+class tiposNotasCreditoAdmin(admin.ModelAdmin):
+    list_display = ("id", "codigo","nombre")
+    search_fields = ("id", "codigo","nombre")
+    # Filtrar
+    list_filter = ("codigo",'nombre',)
+
+@admin.register(NotasCreditoDetalle)
+class notasCreditoDetalleAdmin(admin.ModelAdmin):
+    list_display = ("id", "notaCredito","valorNota","tiposNotasCredito")
+    search_fields = ("id", "notaCredito","valorNota","tiposNotasCredito__nombre")
+    # Filtrar
+    list_filter = ("id", "notaCredito","valorNota","tiposNotasCredito")

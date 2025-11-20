@@ -543,3 +543,7 @@ select * from facturacion_liquidaciondetalle where liquidacion_id=300
 select concepto_id,* from clinico_examenes where id = 4032
 select * from facturacion_conceptos;
 
+select * from cartera_notascredito
+select * from cartera_glosas
+select * from cartera_glosasdetalle
+

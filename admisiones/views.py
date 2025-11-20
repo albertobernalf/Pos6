@@ -2920,6 +2920,32 @@ def escogeAcceso(request, Sede, Username, Profesional, Documento, NombreSede, es
         print("ENTRE PERMSISO GLOSAS")
 
 
+
+        # Combo Tipos Notas Credito
+
+        miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                       password="123456")
+        curt = miConexiont.cursor()
+
+        comando = "SELECT c.id id,c.nombre nombre FROM cartera_tiposnotascredito c ORDER BY nombre asc "
+
+        curt.execute(comando)
+        print(comando)
+
+        tiposNotasCredito = []
+
+        for id, nombre in curt.fetchall():
+            tiposNotasCredito.append({'id': id, 'nombre': nombre})
+
+        miConexiont.close()
+        print(tiposNotasCredito)
+
+        context['TiposNotasCredito'] = tiposNotasCredito
+
+        # Fin combo tiposNotasCredito
+
+
+
         # Combo Convenios
 
         miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
