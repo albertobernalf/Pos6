@@ -1149,7 +1149,7 @@ def GuardarGlosasDetalle(request):
     response_data['Data'] = glosa
     response_data['Error'] = 'No'
     response_data['success'] = True
-    response_data['message'] = 'Glosa Actualizado satisfactoriamente!'
+    response_data['Mensajes'] = 'Glosa Actualizado satisfactoriamente!'
 
     print("response_data" ,response_data )
 
@@ -1707,17 +1707,16 @@ def load_dataNotasCreditoDetalle(request, data):
                                    password="123456")
     curx = miConexionx.cursor()
 
-    detalle = 'SELECT ncDet.id , nc.id notaCredito, ncDet.factura_id , ncDet."valorNota", ncDet."tiposNotasCredito_id" tipoNota, tip.nombre nombreTipoNota, ncDet."ripsProcedimientos_id" ripsProcedimientos,ncDet."ripsMedicamentos_id" ripsMedicamentos,ncDet."ripsConsultas_id" ripsConsultas, ncDet."ripsOtrosServicios_id" ripsOtrosServicios,  ncDet."fechaRegistro",  ncDet."usuarioRegistro_id" FROM public.cartera_notascredito nc, cartera_notascreditodetalle ncDet, cartera_tiposnotasCredito tip WHERE ncDet."notaCredito_id" = ' + "'" + str(notaCredito) + "'" + ' AND ncDet."notaCredito_id" = nc.id AND nc."sedesClinica_id" = ' + "'" + str(sede) + "'" + 'AND ncDet."tiposNotasCredito_id"  = tip.id '
+    detalle = 'SELECT ncDet.id , nc.id notaCredito, ncDet.factura_id , ncDet."valorNota", ncDet."tiposNotasCredito_id" tipoNota, tip.nombre nombreTipoNota,  ncDet."fechaRegistro",  ncDet."usuarioRegistro_id" FROM public.cartera_notascredito nc, cartera_notascreditodetalle ncDet, cartera_tiposnotasCredito tip WHERE ncDet."notaCredito_id" = ' + "'" + str(notaCredito) + "'" + ' AND ncDet."notaCredito_id" = nc.id AND nc."sedesClinica_id" = ' + "'" + str(sede) + "'" + 'AND ncDet."tiposNotasCredito_id"  = tip.id '
 
     print(detalle)
 
     curx.execute(detalle)
 
-    for id,  notaCredito,factura_id, valorNota, tipoNota, nombreTipoNota, ripsProcedimientos,  ripsMedicamentos, ripsConsultas,ripsOtrosServicios, fechaRegistro, usuarioRegistro_id in curx.fetchall():
+    for id,  notaCredito,factura_id, valorNota, tipoNota, nombreTipoNota, fechaRegistro, usuarioRegistro_id in curx.fetchall():
         notasCreditoDetalle.append(
             {"model": "cartera.notasCreditoDetalle", "pk": id, "fields":
                 {'id': id, 'notaCredito':notaCredito,'factura_id':factura_id, 'valorNota':valorNota,'tipoNota':tipoNota, 'nombreTipoNota':nombreTipoNota,
-		'ripsProcedimientos':ripsProcedimientos, 'ripsMedicamentos':ripsMedicamentos, 'ripsConsultas':ripsConsultas, 'ripsOtrosServicios':ripsOtrosServicios,
 		'fechaRegistro': fechaRegistro, 'usuarioRegistro_id': usuarioRegistro_id}})
 
     miConexionx.close()
@@ -1729,4 +1728,286 @@ def load_dataNotasCreditoDetalle(request, data):
     return HttpResponse(serialized1, content_type='application/json')
 
     
+
+def load_dataNotasCreditoDetalleRips(request, data):
+    print("load_dataNotasCreditoDetalleRips")
+
+    context = {}
+    d = json.loads(data)
+
+    username = d['username']
+    sede = d['sede']
+    username_id = d['username_id']
+    notaCreditoDetalle = d['notaCreditoDetalle']
+    nombreSede = d['nombreSede']
+    print("sede:", sede)
+    print("username:", username)
+    print("username_id:", username_id)
+    print("notaCreditoDetalle:", notaCreditoDetalle)
+
+    notaCreditoDetalleId = NotasCreditoDetalle.objects.get(id=notaCreditoDetalle)
+    factura = notaCreditoDetalleId.factura_id
+    notaCreditoId = notaCreditoDetalleId.notaCredito_id
+
+    notasCreditoDetalleRips = []
+
+    miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                   password="123456")
+    curx = miConexionx.cursor()
+
+    detalle = 'select ' + "'" + str('MEDICAMENTOS') + "'" + ' tipo,med.id, med.consecutivo consec, med."itemFactura",cums.cum codigo,cums.nombre nombre,med."vrServicio",  detCreRips."valorNota", detCre.id detCreId, detCreRips.id detCreRipsId, detCre."notaCredito_id" notaCreditoId	FROM rips_ripstransaccion ripstra inner join rips_ripsmedicamentos med on (med."ripsTransaccion_id" = ripstra.id) inner join  rips_ripscums cums on (cums.id =med."codTecnologiaSalud_id" ) inner join facturacion_facturaciondetalle det on (det.facturacion_id =cast(ripstra."numFactura" as float) and  det."consecutivoFactura" = med."itemFactura" ) left join cartera_notascreditodetalle detCre on (detCre."notaCredito_id" = ' + "'" + str(notaCreditoId) + "'" + ') left join cartera_notascreditodetalleRips detCreRips on (detCreRips."notaCreditoDetalle_id" = detCre.id AND  detCreRips."ripsMedicamentos_id" = med.id)	where  ripstra."numFactura"= ' + "'" + str(factura) + "'" + ' UNION select ' + "'" + str('PROCEDIMIENTOS') + "'" + ' tipo,proc.id, proc.consecutivo consec, proc."itemFactura",exa."codigoCups" codigo,exa.nombre nombre,	proc."vrServicio",  detCreRips."valorNota", detCre.id detCreId, detCreRips.id detCreRipsId, detCre."notaCredito_id" notaCreditoId	FROM rips_ripstransaccion ripstra inner join rips_ripsprocedimientos proc on (proc."ripsTransaccion_id" = ripstra.id) inner join  clinico_examenes exa on (exa.id =proc."codProcedimiento_id" ) inner join facturacion_facturaciondetalle det on (det.facturacion_id =cast(ripstra."numFactura" as float) and  det."consecutivoFactura" = proc."itemFactura" ) left join cartera_notascreditodetalle detCre on (detCre."notaCredito_id" = ' + "'" + str(notaCreditoId) + "'" + ') left join cartera_notascreditodetalleRips detCreRips on (detCreRips."notaCreditoDetalle_id" = detCre.id AND  detCreRips."ripsMedicamentos_id" = proc.id) where  ripstra."numFactura"= ' + "'" + str(factura) + "'" + ' UNION select ' + "'" + str('CONSULTAS') + "'" + ' tipo,cons.id, cons.consecutivo consec, cons."itemFactura",exa."codigoCups" codigo,exa.nombre nombre, cons."vrServicio",  detCreRips."valorNota", detCre.id detCreId, detCreRips.id detCreRipsId, detCre."notaCredito_id" notaCreditoId	FROM rips_ripstransaccion ripstra inner join rips_ripsconsultas cons on (cons."ripsTransaccion_id" = ripstra.id) 	inner join  clinico_examenes exa on (exa.id =cons."codConsulta_id" ) inner join facturacion_facturaciondetalle det on (det.facturacion_id =cast(ripstra."numFactura" as float) and  det."consecutivoFactura" = cons."itemFactura" ) left join cartera_notascreditodetalle detCre on (detCre."notaCredito_id" = ' + "'" + str(notaCreditoId) + "'" + ') left join cartera_notascreditodetalleRips detCreRips on (detCreRips."notaCreditoDetalle_id" = detCre.id AND  detCreRips."ripsMedicamentos_id" = cons.id) where  ripstra."numFactura"= ' + "'" + str(factura) + "'" + ' UNION select ' + "'" + str('OTROS SERVICIOS') + "'" + ' tipo,otros.id, otros.consecutivo consec, otros."itemFactura",exa."codigoCups" codigo,exa.nombre nombre,	otros."vrServicio",  detCreRips."valorNota", detCre.id detCreId, detCreRips.id detCreRipsId, detCre."notaCredito_id" notaCreditoId FROM rips_ripstransaccion ripstra inner join rips_ripsotrosservicios otros on (otros."ripsTransaccion_id" = ripstra.id) inner join  clinico_examenes exa on (exa.id =otros."codTecnologiaSalud_id" ) inner join facturacion_facturaciondetalle det on (det.facturacion_id =cast(ripstra."numFactura" as float) and  det."consecutivoFactura" = otros."itemFactura" ) left join cartera_notascreditodetalle detCre on (detCre."notaCredito_id" = ' + "'" + str(notaCreditoId) + "'" + ') left join cartera_notascreditodetalleRips detCreRips on (detCreRips."notaCreditoDetalle_id" = detCre.id AND  detCreRips."ripsMedicamentos_id" = otros.id) where  ripstra."numFactura"= ' + "'" + str(factura) + "'"
+
+    print(detalle)
+
+    curx.execute(detalle)
+
+    #for  tipo, id, consec, itemFactura, codigo, nombre,   ,vrServicio,  valorGlosado,vAceptado, valorSoportado , notasCreditoGlosa , valorGlosa, valorSoportado2 , valorAceptado, valorNotasCredito in curx.fetchall():
+    for tipo, id, consec, itemFactura, codigo, nombre, vrServicio , valorNota, detCreId , detCreRipsId, notaCreditoId in curx.fetchall():
+        notasCreditoDetalleRips.append(
+            {"model": "cartera.notasCreditoDetalleRips", "pk": id, "fields":
+                {'tipo':tipo, 'id': id, 'consec':consec,  'itemFactura': itemFactura ,'codigo': codigo, 'nombre': nombre,'vrServicio':vrServicio,
+                 'valorNota': valorNota, 'detCreId':detCreId,'detCreRipsId':detCreRipsId,'notaCreditoId':notaCreditoId }})
+
+    miConexionx.close()
+    serialized1 = json.dumps(notasCreditoDetalleRips,  default=str)
+    print("notasCreditoDetalleRips = ", serialized1)
+
+    return HttpResponse(serialized1, content_type='application/json')
+
+
+def GuardarNotasCreditoDetalleRips(request):
+    print("Entre GuardarNotasCreditoDetalleRips")
+
+
+    ripsId = request.POST["post_id"]
+    print("ripsId =", ripsId)
+
+    notaCreditoDetalle = request.POST["notasCreditoDetalle"]
+    print("notaCreditoDetalle =", notaCreditoDetalle)
+
+    itemFactura = request.POST['itemFacturaNotasCreditoDetalleRips']
+    print("itemFactura =", itemFactura)
+
+    vrServicio = request.POST['vrServicioNotasCreditoDetalleRips']
+    print("vrServicio =", vrServicio)
+
+    valorNota = request.POST['valorNotaNotasCreditoDetalleRips']
+    print("valorNota =", valorNota)
+
+    if (valorNota == ''):
+        valorNota = 0.0
+
+    print("valorNota =", valorNota)
+
+
+    username_id = request.POST['username_id']
+    print("username_id=", username_id)
+
+    estadoReg = 'A'
+
+    fechaRegistro = timezone.now()
+
+    if (float(valorNotaNotasCreditoDetalleRips) > float(vrServicioNotasCreditoDetalleRips)):
+        print("Entre 1")
+        print("valorNotaNotasCreditoDetalleRips=", valorNotaNotasCreditoDetalleRips)
+        print("vrServicioNotasCreditoDetalleRips=", vrServicioNotasCreditoDetalleRips)
+        return JsonResponse(
+            {'success': False, 'Error': 'Si', 'Mensajes': 'Valor Nota mayor que el valor del servicio!'})
+
+
+    miConexion3 = None
+    try:
+
+        miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                       password="123456")
+        cur3 = miConexion3.cursor()
+
+        hayRegistro = 0
+
+        try:
+            with transaction.atomic():
+
+                existeRegistro = NotasCreditoDetalleRips.objects.get(notaCreditoDetalle_id=notasCreditoDetalle, itemFactura=itemFacturaNotasCreditoDetalleRips)
+                hayRegistro = existeRegistro.id
+
+        except Exception as e:
+            # Aquí ya se hizo rollback automáticamente
+            print("Se hizo rollback por PRONO SE HACE NADA:", e)
+            hayRegistro = 0
+
+        finally:
+            print("No haga nada")
+
+        if tipoGloDet == 'MEDICAMENTOS':
+
+            if (hayRegistro == 0):
+
+                comando = 'INSERT INTO cartera_notascreditodetalleRips ( "itemFactura", "valorServicio", "valorNota", "estadoReg", "notaCreditoDetalle_id ", "usuarioRegistro_id", "fechaRegistro", anulado, "ripsMedicamentos_id"	) VALUES ( ' + "'" + str(
+                    itemFactura) + "','" + str(vrServicio) + "','" + str(valorNota) + "','A'," + str(
+                    notaCreditoDetalle) + "','" + str(username_id) + "','" + str(fechaRegistro) + "','N','" + str(ripsId) + "')"
+
+            else:
+
+                comando = 'UPDATE cartera_notascreditodetalleRips SET "itemFactura" = ' + "'" + str(
+                    itemFactura) + "'," + ' "valorServicio"  = ' + "'" + str(
+                    vrServicio) + "'," + ' "valorNota" = ' + "'" + str(
+                    valorNota) + "',"  + '"estadoReg" = ' + "'A'," + ' "usuarioRegistro_id" = ' + "'" + str(
+                    username_id) + "'," + ' "fechaRegistro" = ' + "'" + str(
+                    fechaRegistro) + "',"  + ' anulado = ' + "'N'," + ' "ripsMedicamentos_id" = ' + "'" + str(
+                    ripsId) + "'" + ' WHERE "notaCreditoDetalle_id"  = ' + "'" + str(notaCreditoDetalle) + "'" + ' AND "itemFactura" = ' + "'" + str(
+                    itemFactura) + "'"
+
+        if tipoGloDet == 'PROCEDIMIENTOS':
+
+            if (hayRegistro == 0):
+
+                comando = 'INSERT INTO cartera_notascreditodetalleRips ( "itemFactura", "valorServicio", "valorNota", "estadoReg", "notaCreditoDetalle_id ", "usuarioRegistro_id", "fechaRegistro", anulado, "ripsProcedimientos_id"	) VALUES ( ' + "'" + str(
+                    itemFactura) + "','" + str(vrServicio) + "','" + str(valorNota) + "','A'," + str(
+                    notaCreditoDetalle) + "','" + str(username_id) + "','" + str(fechaRegistro) + "','N','" + str(ripsId) + "')"
+
+            else:
+
+                comando = 'UPDATE cartera_notascreditodetalleRips SET "itemFactura" = ' + "'" + str(
+                    itemFactura) + "'," + ' "valorServicio"  = ' + "'" + str(
+                    vrServicio) + "'," + ' "valorNota" = ' + "'" + str(
+                    valorNota) + "',"  + '"estadoReg" = ' + "'A'," + ' "usuarioRegistro_id" = ' + "'" + str(
+                    username_id) + "'," + ' "fechaRegistro" = ' + "'" + str(
+                    fechaRegistro) + "',"  + ' anulado = ' + "'N'," + ' "ripsProcedimientos_id" = ' + "'" + str(
+                    ripsId) + "'" + ' WHERE "notaCreditoDetalle_id"  = ' + "'" + str(notaCreditoDetalle) + "'" + ' AND "itemFactura" = ' + "'" + str(
+                    itemFactura) + "'"
+
+        if tipoGloDet == 'CONSULTAS':
+
+            if (hayRegistro == 0):
+
+                comando = 'INSERT INTO cartera_notascreditodetalleRips ( "itemFactura", "valorServicio", "valorNota", "estadoReg", "notaCreditoDetalle_id ", "usuarioRegistro_id", "fechaRegistro", anulado, "ripsConsultas_id"	) VALUES ( ' + "'" + str(
+                    itemFactura) + "','" + str(vrServicio) + "','" + str(valorNota) + "','A'," + str(
+                    notaCreditoDetalle) + "','" + str(username_id) + "','" + str(fechaRegistro) + "','N','" + str(ripsId) + "')"
+
+            else:
+
+                comando = 'UPDATE cartera_notascreditodetalleRips SET "itemFactura" = ' + "'" + str(
+                    itemFactura) + "'," + ' "valorServicio"  = ' + "'" + str(
+                    vrServicio) + "'," + ' "valorNota" = ' + "'" + str(
+                    valorNota) + "',"  + '"estadoReg" = ' + "'A'," + ' "usuarioRegistro_id" = ' + "'" + str(
+                    username_id) + "'," + ' "fechaRegistro" = ' + "'" + str(
+                    fechaRegistro) + "',"  + ' anulado = ' + "'N'," + ' "ripsConsultas_id" = ' + "'" + str(
+                    ripsId) + "'" + ' WHERE "notaCreditoDetalle_id"  = ' + "'" + str(notaCreditoDetalle) + "'" + ' AND "itemFactura" = ' + "'" + str(
+                    itemFactura) + "'"
+
+        if tipoGloDet == 'OTROS SERVICIOS':
+
+            if (hayRegistro == 0):
+
+                comando = 'INSERT INTO cartera_notascreditodetalleRips ( "itemFactura", "valorServicio", "valorNota", "estadoReg", "notaCreditoDetalle_id ", "usuarioRegistro_id", "fechaRegistro", anulado, "ripsOtrosServicios_id"	) VALUES ( ' + "'" + str(
+                    itemFactura) + "','" + str(vrServicio) + "','" + str(valorNota) + "','A'," + str(
+                    notaCreditoDetalle) + "','" + str(username_id) + "','" + str(fechaRegistro) + "','N','" + str(ripsId) + "')"
+
+            else:
+
+                comando = 'UPDATE cartera_notascreditodetalleRips SET "itemFactura" = ' + "'" + str(
+                    itemFactura) + "'," + ' "valorServicio"  = ' + "'" + str(
+                    vrServicio) + "'," + ' "valorNota" = ' + "'" + str(
+                    valorNota) + "',"  + '"estadoReg" = ' + "'A'," + ' "usuarioRegistro_id" = ' + "'" + str(
+                    username_id) + "'," + ' "fechaRegistro" = ' + "'" + str(
+                    fechaRegistro) + "',"  + ' anulado = ' + "'N'," + ' "ripsOtrosServicios_id" = ' + "'" + str(
+                    ripsId) + "'" + ' WHERE "notaCreditoDetalle_id"  = ' + "'" + str(notaCreditoDetalle) + "'" + ' AND "itemFactura" = ' + "'" + str(
+                    itemFactura) + "'"
+
+
+        print(comando)
+        cur3.execute(comando)
+
+        # AQUI VALIDAR QUE EL DATO INGRESADO NO SUPERA EL VALOR TOTAL DE LA NC PARA ESA FACTURA
+
+        ## FIN VALIDACION
+        acumuladoParcial = NotasCreditoDetalleRips.objects.filter(notaCreditoDetalle_id=notaCreditoDetalle).aggregate(Sum('valorNota'))
+        print("acumuladoParcial =", acumuladoParcial['valorNota__sum'])
+        acumulado= float(acumuladoParcial['valorNota__sum']) + float(valorNota)
+
+        saldoFactura = 0
+        # AQUI FALTA ACTUALIZA EL VALOR REGISTRADO
+
+        comando6 = 'UPDATE cartera_notascreditodetalle SET "valorRegistrado"= ' + "'" + str(acumulado) + "'" + ' WHERE id = ' + str(notaCreditoDetalle)
+
+        print(comando6)
+        cur3.execute(comando6)
+
+        miConexion3.commit()
+        cur3.close()
+        miConexion3.close()
+
+        return JsonResponse({'success': True, 'Mensajes': 'Nota  Credito actualizada !'})
+
+
+
+    except psycopg2.DatabaseError as error:
+        print("Entre por rollback", error)
+        if miConexion3:
+            print("Entro ha hacer el Rollback")
+            miConexion3.rollback()
+        message_error = str(error)
+        return JsonResponse({'success': False, 'Mensajes': message_error})
+
+    finally:
+        if miConexion3:
+            cur3.close()
+            miConexion3.close()
+
+    ## OJO DE PRONTO POR AQUI HACE FALATA UN PEDAZO DE CODIGO
+    # EN GLOSASDETALLE ESTA ESTE CODIGO PEO OPS VERIFICAR AHI HAY UN ERROR PAPABEROL
+
+
+def ConsultaNotasCreditoDetalleRips(request):
+    print("Entre ConsultaNotasCreditoDetalleRips")
+
+    id = request.POST['id']
+    print("id  =", id)
+
+    tipo = request.POST["tipo"]
+    print("tipo  =", tipo)
+
+    detCreId = request.POST["detCreId"]
+    print("detCreId  =", detCreId)
+
+    itemFactura = request.POST["itemFactura"]
+    print("itemFactura  =", itemFactura)
+
+    medicamentosRipsUnRegistro = []
+
+    miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                   password="123456")
+    curx = miConexionx.cursor()
+
+    if (tipo == 'MEDICAMENTOS'):
+
+        detalle = 'SELECT ' + "'" + str('MEDICAMENTOS') + "'" + ' tipo, detCreRips.id detCreRipsId, med.id,med."itemFactura", med."nomTecnologiaSalud" codigo, cums.nombre nombre, med."vrServicio",	med.consecutivo,  detCreRips."valorNota" 	FROM public.rips_ripsmedicamentos med inner join public.rips_ripscums cums  on (cums.id =med."codTecnologiaSalud_id") left join cartera_notascreditodetalleRips detCreRips on (detCreRips."ripsMedicamentos_id" =med.id)  where med.id= ' + "'" + str(id) + "'"
+
+    if (tipo == 'PROCEDIMIENTOS'):
+        detalle = 'SELECT ' + "'" + str('PROCEDIMIENTOS') + "'" + ' tipo,  detCreRips.id detCreRipsId, proc.id,proc."itemFactura", proc."codProcedimiento_id" codigo, exa.nombre nombre, proc."vrServicio",	proc.consecutivo,  detCreRips."valorNota" FROM public.rips_ripsprocedimientos proc inner join clinico_examenes exa  on (exa.id =proc."codProcedimiento_id") left join cartera_notascreditodetalleRips detCreRips on (detCreRips."ripsProcedimientos_id" =proc.id)  where proc.id= ' + "'" + str(id) + "'"
+
+    if (tipo == 'CONSULTAS'):
+
+        detalle = 'SELECT ' + "'" + str('CONSULTAS') + "'" + ' tipo, detCreRips.id detCreRipsId, proc.id,proc."itemFactura", proc."codProcedimiento_id" codigo, exa.nombre nombre, proc."vrServicio",	proc.consecutivo,  detCreRips."valorNota" FROM public.rips_ripsconsultas proc inner join clinico_examenes exa  on (exa.id =proc."codConsulta_id") left join cartera_notascreditodetalleRips detCreRips on (detCreRips."ripsConsultas_id" =proc.id)  where proc.id= ' + "'" + str(id) + "'"
+
+    if (tipo == 'OTROS SERVICIOS'):
+
+        detalle = 'SELECT ' + "'" + str('OTROS SERVICIOS') + "'" + ' tipo, detCreRips.id detCreRipsId, proc.id,proc."itemFactura", proc."codProcedimiento_id" codigo, exa.nombre nombre, proc."vrServicio",	proc.consecutivo,  detCreRips."valorNota" FROM public.rips_ripsotorsservicios proc inner join clinico_examenes exa  on (exa.id =proc."codTecnologiaSalud_id") left join cartera_notascreditodetalleRips detCreRips on (detCreRips."ripsOtrosServicios_id" =proc.id)  where proc.id= ' + "'" + str(id) + "'"
+
+    print(detalle)
+
+    curx.execute(detalle)
+
+    for tipo, detCreRipsId ,id, itemFactura, codigo, nombre, vrServicio, consecutivo, valorNota in curx.fetchall():
+        medicamentosRipsUnRegistro.append(
+            {"model": "rips.ripsmedicamentos", "pk": id, "fields":
+                {'tipo': tipo, 'detCreRipsId':detCreRipsId, 'id': id, 'itemFactura': itemFactura, 'codigo': codigo, 'nombre': nombre,
+                 'vrServicio': vrServicio, 'consecutivo': consecutivo, 'valorNota': valorNota  }})
+
+    miConexionx.close()
+    print("medicamentosRipsUnRegistro ", medicamentosRipsUnRegistro)
+
+    serialized1 = json.dumps(medicamentosRipsUnRegistro, default=str)
+
+    return HttpResponse(serialized1, content_type='application/json')
 

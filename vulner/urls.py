@@ -341,8 +341,9 @@ urlpatterns = [
     path('load_dataNotasCreditoDetalle/<str:data>', viewsCartera.load_dataNotasCreditoDetalle, name='loaddata_NotasCreditoDetalle'),
     path('guardaNotasCredito/', viewsCartera.GuardaNotasCredito, name='guardaNotas_Credito'),
     path('guardaNotasCreditoDetalle/', viewsCartera.GuardaNotasCreditoDetalle, name='guardaNotas_CreditoDetalle'),
-
-
+    path('load_dataNotasCreditoDetalleRips/<str:data>', viewsCartera.load_dataNotasCreditoDetalleRips, name='loaddata_NotasCreditoDetalleRips'),
+    path('guardarNotasCreditoDetalleRips/', viewsCartera.GuardarNotasCreditoDetalleRips, name='guardarNotas_CreditoDetalleRips'),
+    path('consultaNotasCreditoDetalleRips/', viewsCartera.ConsultaNotasCreditoDetalleRips, name='consultaNotas_CreditoDetalleRips'),
     # Tarifas
 	
     path('load_dataTarifariosProcedimientos/<str:data>', viewsTarifarios.Load_dataTarifariosProcedimientos, name='Load_dataTarifariosProcedimientos'),

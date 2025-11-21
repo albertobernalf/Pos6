@@ -976,10 +976,6 @@ table.dataTable tbody tr {
 						<th>factura</th>
 				                <th>ValorNota</th>
 				                <th>TipoNota</th>
-				                <th>RipsProced</th>
-				                <th>RipsMedicamentos</th>
-				                <th>RipsConsultas</th>
-				                <th>RipsOtrosServ</th>
 				                <th>FecReg</th>
 				                <th>usuarioReg</th> 
                                
@@ -990,8 +986,131 @@ table.dataTable tbody tr {
                                             </tbody>
                                       
                                         </table>
+
+
+                                        <table  id= "tablaNotasCreditoDetalleRips" class=" display table table-striped table-sm fs-6 nowrap" style="width: 100%";>
+                                           <thead>
+                                            <tr>    
+						<bold>                                  
+					      <th>Seleccionar</th> 
+						<th>tipo</th>
+						<th>id</th>
+						<th>consec</th>
+						<th>itemFactura</th>
+						<th>codigo</th>
+						<th>nombre</th>
+						<th>vrServicio</th>
+				                <th>ValorNota</th>		              
+                            			<th>Borrar</th> 
+
+						</bold>                                  
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                      
+                                        </table>
+
+
                                     </div>
+
+
                                 </div>
+
+
+	            <!-- Espacio Modales Detalle Glosas -->
+
+            <div class="modal fade" id="crearModelNotasCreditoDetalleRips" tabindex="-1" role="dialog"  aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+                <div class="modal-dialog  modal-dialog-scrollable" modal-dialog-center  role="document" >
+                    <div class="modal-content">
+                        <div class="modal-header">
+                         <div  class="modal-title" id="exampleModalLabel" style="text-align:center;"><font gont-family="Times New roman" size=5">Detalle Glosa</font> </div>
+                                        
+			<button type="button" class="btn btn-primary" id="saveBtnCrearNotasCreditoDetalleRips" onclick="GuardarNotasCreditoDetalleRips()">Grabar!</button> 
+			<button type="button" class="close" data-bs-dismiss="modal"  aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                        </div>
+		<div style="width:500px; heigth:100px; ">
+                        <div class="modal-body">
+                            <div class="alert alert-danger error-msg" style="display:none">
+                                <ul class="mb-0"></ul>
+                            </div>
+			
+  			  <form id="postFormNotasCreditoDetalleRips" name="postFormNotasCreditoDetalleRips">
+                               
+
+                      <div class="row">
+
+			 <div class="col-2">
+			<input type="hidden" class="form-control form-control-sm" name="post_idNotasCreditoDetalleRips" id="post_idNotasCreditoDetalleRips">
+				<input type="hidden" class="form-control form-control-sm" name="post_idNotasCreditoDetalle" id="post_idNotasCreditoDetalle">
+			   </div>
+
+				<div class="col-6">
+					
+                                   	 <label  for="tipoNotasCreditoDetalleRips">Tipo de Rips:</label>
+                       			 <span class="miTexto" name="tipoNotasCreditoDetalleRips" id="tipoNotasCreditoDetalleRips"></span>
+                                </div>
+
+
+
+				<div class="col-6">
+					
+                                   	 <label  for="itemFacturaNotasCreditoDetalleRips">itemFactura:</label>
+                       			 <span class="miTexto" name="itemFacturaNotasCreditoDetalleRips" id="itemFacturaNotasCreditoDetalleRips"></span>
+                                </div>
+
+
+				<div class="col-6">
+					
+                                   	 <label  for="codigoNotasCreditoDetalleRips">itemFactura:</label>
+                       			 <span class="miTexto" name="codigoNotasCreditoDetalleRips" id="codigoNotasCreditoDetalleRips"></span>
+                                </div>
+
+				<div class="col-6">
+					
+                                   	 <label  for="nombreNotasCreditoDetalleRips">Nombre:</label>
+                       			 <span class="miTexto" name="nombreNotasCreditoDetalleRips" id="nombreNotasCreditoDetalleRips"></span>
+                                </div>
+
+
+
+             
+				<div class="col-4">
+                                    		
+				 <label  for="vrServicioNotasCreditoDetalleRips">vrServicio:</label>
+				  <span class="miTexto" name="vrServicioNotasCreditoDetalleRips" id="vrServicioNotasCreditoDetalleRips"></span>
+                                </div>
+
+                        		
+				<div class="col-4">
+                                    		
+				 <label  for="valorNotaNotasCreditoDetalleRips">valor Nota credito:</label>
+                                    <input type="text" class="form-control form-control-sm" id="valorNotaNotasCreditoDetalleRips" name="valorNotaNotasCreditoDetalleRips" value="0"  ></input>
+                                </div>
+
+
+                                </div> <!-- CIERRA ROW 8 COLUMNAS  -->
+
+                            </form>
+
+                        </div> <!-- CIERRA BODY -->
+     			 <div class="modal-footer">
+
+
+					<textarea id="mensajesErrorDNotasCreditoGlosasDetalleRips" name="mensajesErrorNotasCreditoDetalleRips" style="background-color: lightred; color: navy;"  rows="1" cols="60" placeholder="Mensajes..."  wrap="hard"></textarea>				
+					  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar   </button>
+
+	<button type="button" class="btn btn-primary" id="saveBtnCrearNotasCreditoGlosasDetalleRips" onclick="GuardarNotasCreditoDetalleRips()">Grabar!</button> 
+
+                                    </div> <!-- CIERRA FOOTER -->
+
+			</div> <!-- CIERRA DIV TAMANO -->			
+                        </div> <!-- CIERRA MODAL CONTENTE -->
+                    </div> <!-- CIERRA MODAL DIALOG -->
+                </div>  <!-- CIERRA MODAL FADE -->
+
 
 </article>
 

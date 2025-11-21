@@ -326,10 +326,10 @@ class NotasCreditoDetalle(models.Model):
     #itemFactura =  models.IntegerField(editable=True, null=True, blank=True)
     valorNota =  models.DecimalField( max_digits=15, decimal_places=2)
     tiposNotasCredito = models.ForeignKey('cartera.TiposNotasCredito',blank=True,null= True, editable=True, on_delete=models.PROTECT ,  related_name='tiposNotaCre01')
-    ripsProcedimientos =  models.ForeignKey('rips.RipsProcedimientos',blank=True,null= True, editable=True, on_delete=models.PROTECT ,  related_name='ripsProced0x1' )
-    ripsMedicamentos =  models.ForeignKey('rips.RipsMedicamentos',blank=True,null= True, editable=True, on_delete=models.PROTECT ,  related_name='ripsMedic0x1')
-    ripsConsultas =  models.ForeignKey('rips.RipsConsultas',blank=True,null= True, editable=True, on_delete=models.PROTECT ,  related_name='ripsCons0x1')
-    ripsOtrosServicios =  models.ForeignKey('rips.RipsOtrosServicios',blank=True,null= True, editable=True, on_delete=models.PROTECT ,  related_name='ripsOtros0x1')
+    #ripsProcedimientos =  models.ForeignKey('rips.RipsProcedimientos',blank=True,null= True, editable=True, on_delete=models.PROTECT ,  related_name='ripsProced0x1' )
+    #ripsMedicamentos =  models.ForeignKey('rips.RipsMedicamentos',blank=True,null= True, editable=True, on_delete=models.PROTECT ,  related_name='ripsMedic0x1')
+    #ripsConsultas =  models.ForeignKey('rips.RipsConsultas',blank=True,null= True, editable=True, on_delete=models.PROTECT ,  related_name='ripsCons0x1')
+    #ripsOtrosServicios =  models.ForeignKey('rips.RipsOtrosServicios',blank=True,null= True, editable=True, on_delete=models.PROTECT ,  related_name='ripsOtros0x1')
     fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)
     usuarioRegistro = models.ForeignKey('planta.Planta', default=1, on_delete=models.PROTECT, null=True ,  related_name='usuario796')
     anulado = models.CharField(max_length=1, choices=FLAG1_CHOICES, default='N', editable=False)
@@ -337,6 +337,34 @@ class NotasCreditoDetalle(models.Model):
 
     def __str__(self):
         return self.factura
+
+
+class NotasCreditoDetalleRips(models.Model):
+    ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
+    FLAG1_CHOICES = [
+        ('S', 'Si'),
+        ('N', 'No'),
+        ]
+    id = models.AutoField(primary_key=True)
+    notaCreditoDetalle = models.ForeignKey('cartera.NotasCreditoDetalle',blank=True,null= True, editable=True, on_delete=models.PROTECT)
+    valorNota =  models.DecimalField( max_digits=15, decimal_places=2)
+    valorServicio =  models.DecimalField( max_digits=15, decimal_places=2 ,blank=True,null= True, editable=True)
+    valorRegistrado =  models.DecimalField( max_digits=15, decimal_places=2 ,blank=True,null= True, editable=True)
+    tiposNotasCredito = models.ForeignKey('cartera.TiposNotasCredito',blank=True,null= True, editable=True, on_delete=models.PROTECT ,  related_name='tiposNotaCre02')
+    ripsProcedimientos =  models.ForeignKey('rips.RipsProcedimientos',blank=True,null= True, editable=True, on_delete=models.PROTECT ,  related_name='ripsProced0xy1' )
+    ripsMedicamentos =  models.ForeignKey('rips.RipsMedicamentos',blank=True,null= True, editable=True, on_delete=models.PROTECT ,  related_name='ripsMedic0xy1')
+    ripsConsultas =  models.ForeignKey('rips.RipsConsultas',blank=True,null= True, editable=True, on_delete=models.PROTECT ,  related_name='ripsCons0xy1')
+    ripsOtrosServicios =  models.ForeignKey('rips.RipsOtrosServicios',blank=True,null= True, editable=True, on_delete=models.PROTECT ,  related_name='ripsOtros0xy2')
+    fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)
+    usuarioRegistro = models.ForeignKey('planta.Planta', default=1, on_delete=models.PROTECT, null=True ,  related_name='usuario7956')
+    anulado = models.CharField(max_length=1, choices=FLAG1_CHOICES, default='N', editable=False)
+    estadoReg = models.CharField(max_length=1, choices=ESTADOREG_CHOICES, default='A', editable=False)
+
+    def __str__(self):
+        return self.factura
+
 
 
 class TiposNotasCredito (models.Model):
