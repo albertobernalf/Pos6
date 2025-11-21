@@ -2374,11 +2374,13 @@ function CrearGlosasAdicionar()
 	dato1 = Object.values(rowindex);
 	dato3 = dato1[2];
         console.log("dato3 de tablaNotasCreditoDetalleRips = ", dato3);
+	alert("tipo = " + dato3.tipo);
+	alert("detCreId = " + dato3.detCreId);
 
 
 
      $.ajax({
-		   data: {'tipo':dato3.tipo, 'id':dato3.id,'detCreId':dato3.detCreId,'itemFactura':dato3.itemFactura},
+		   data: {'tipo':dato3.tipo, 'id':dato3.id, 'detCreId':dato3.detCreId, 'itemFactura':dato3.itemFactura},
 	        url: "/consultaNotasCreditoDetalleRips/",
                 type: "POST",
                 dataType: 'json',
@@ -2395,12 +2397,10 @@ function CrearGlosasAdicionar()
   	document.getElementById("codigoNotasCreditoDetalleRips").innerHTML = info[0].fields.codigo;
 	document.getElementById("nombreNotasCreditoDetalleRips").innerHTML = info[0].fields.nombre;
 	document.getElementById("vrServicioNotasCreditoDetalleRips").innerHTML = info[0].fields.vrServicio;
+	document.getElementById("post_idNotasCreditoDetalle").value = info[0].fields.detCreId;
+
   	$('#valorNotaNotasCreditoDetalleRips').val(info[0].fields.valorNota);
-  	$('#post_idNotasCreditoDetalleRips').val(info[0].fields.detCreRips);
-
-
-
-
+  	$('#post_idRipsId').val(info[0].fields.id);
 
 		 $('#crearModelNotasCreditoDetalleRips').modal('show');
                 },
@@ -2422,18 +2422,19 @@ function GuardarNotasCreditoDetalleRips()
 	        var username_id = document.getElementById("username_id").value;
 	        var nombreSede = document.getElementById("nombreSede").value;
 	    	var sede = document.getElementById("sede").value;
-	    	var post_id = document.getElementById("post_idNotasCreditoDetalleRips").value;
+	    	var post_id = document.getElementById("post_idRipsId").value;
 		var notasCreditoDetalle = document.getElementById("post_idNotasCreditoDetalle").value;
-		var itemFacturaNotasCreditoDetalleRips = document.getElementById("itemFacturaNotasCreditoDetalleRips").innerHTML;
-		var vrServicioNotasCreditoDetalleRips = document.getElementById("vrServicioNotasCreditoDetalleRips").innerHTML
-		var valorNotaNotasCreditoDetalleRips = document.getElementById("valorNotaNotasCreditoDetalleRips").value;
+		var itemFactura = document.getElementById("itemFacturaNotasCreditoDetalleRips").innerHTML;
+		var vrServicio = document.getElementById("vrServicioNotasCreditoDetalleRips").innerHTML;
+		var valorNota = document.getElementById("valorNotaNotasCreditoDetalleRips").value;
+		var tipo = document.getElementById("tipoNotasCreditoDetalleRips").innerHTML;
 
 		alert("Entre a guardar GuardarNotasCreditoDetalleRips" +  post_id);
-		alert("vrservicios = " +  vrServicioNotasCreditoDetalleRips);
+		alert("notasCreditoDetalle = " +  notasCreditoDetalle);
 
 
             $.ajax({
-                data: {'post_id':post_id, 'notasCreditoDetalle':notasCreditoDetalle,'itemFacturaNotasCreditoDetalleRips':itemFacturaNotasCreditoDetalleRips, 'vrServicioNotasCreditoDetalleRips ':vrServicioNotasCreditoDetalleRips , 'valorNotaNotasCreditoDetalleRips':valorNotaNotasCreditoDetalleRips },
+                data: {'post_id':post_id, 'notasCreditoDetalle':notasCreditoDetalle,'itemFactura':itemFactura, 'vrServicio':vrServicio, 'valorNota':valorNota,'tipo':tipo ,'username_id':username_id},
 	        url: "/guardarNotasCreditoDetalleRips/",
                 type: "POST",
                 dataType: 'json',
@@ -2442,7 +2443,7 @@ function GuardarNotasCreditoDetalleRips()
 			if (data2.success == false )
 				{
 		
-				document.getElementById("mensajesErrorDetalleModal").value = data2.Mensajes
+				document.getElementById("mensajesErrorNotasCreditoDetalleRips").value = data2.Mensajes
 
 					return ;
 				}
@@ -2452,14 +2453,6 @@ function GuardarNotasCreditoDetalleRips()
 
 
 				 $('#postFormGlosasDetalle').trigger("reset");
-
-
-			// filtrodata = JSON.stringify(data2['Data']);
-	
-
-			// filtrodata = filtrodata.replace ('[','');
-			// filtrodata = filtrodata.replace (']','');
-			// filtro = JSON.parse(filtrodata);
 
 
 
@@ -2473,35 +2466,20 @@ function GuardarNotasCreditoDetalleRips()
 	        data['sedesClinica_id'] = sede;
 
 		var facturaId = dato3.factura_id;  // jquery
-		var facturaId =	document.getElementById("factura_idGlo").innerHTML;
-		data['facturaId'] = facturaId;
-		data['glosaId'] = post_idGlo;
-
+		data['notaCreditoDetalle'] = notasCreditoDetalle;
 
 	        data = JSON.stringify(data);
+			 arrancaGlosas(14,data);
+			    dataTableNotasCreditoDetalleRipsInitialized = true;
 
-			 arrancaGlosas(1,data);
-			    dataTableGlosasInitialized = true;
-
-
-//        	arrancaGlosas(7,data);
-//	    dataTableGlosasHospitalizacion = true;
-
-			 arrancaGlosas(2,data);
-			    dataTableGlosasDetalleInitialized = true;
-
-			 arrancaGlosas(10,data);
-			    dataTableGlosasAdicionarInitialized = true;
-
-
- 		 $('#crearModelGlosasDetalle').modal('hide');
-
+ 		 $('#crearModelNotasCreditoDetalleRips').modal('hide');
+		document.getElementById("mensajes").value = data2.Mensajes
 
 				}	// Cierra el if		
 
                 },
               error: function (data) {	      
-			document.getElementById("mensajesErrorModalGlosasDetalle").value =   data.responseText;
+			document.getElementById("mensajesErrorNotasCreditoDetalleRips").value =   data.responseText;
                 }
             });
 
