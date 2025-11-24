@@ -1636,6 +1636,10 @@ def BorraNotasCreditoDetalleRips(request):
     detCreRipsId = request.POST['detCreRipsId']
     print("detCreRipsId  =", detCreRipsId)
 
+    if (detCreRipsId == None):
+
+        return JsonResponse({'success': True, 'Mensajes': ''})
+
     ripsId = request.POST['ripsId']
     print("ripsId  =", ripsId)
 

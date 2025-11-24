@@ -108,16 +108,35 @@ left join cartera_notascreditodetalle detCre on (detCre.id= '7')
 left join cartera_notascreditodetalleRips detCreRips on (detCreRips."notaCreditoDetalle_id  = detCre.id AND  detCreRips."ripsMedicamentos_id" =med.id)
 where med.id= '615'
 
-select * from cartera_notascredito
-select * from cartera_notascreditodetalle
-	delete from cartera_notascreditodetalle where id=11
-select * from cartera_notascreditodetallerips
 	delete from cartera_notascreditodetallerips where "notaCreditoDetalle_id"=12
 		
 select id,"valorApagar","saldoFactura","totalValorAceptado", "totalNotasCredito","totalNotasDebito",* from facturacion_facturacion		
---update facturacion_facturacion set "totalNotasCredito"=0,"saldoFactura"="valorApagar"
 
+	--update facturacion_facturacion set "saldoFactura"=764161 where id=152
+
+	
 select "notaCreditoDetalle_id",* from cartera_notascreditodetallerips
 
 	select * from rips_ripsotrosservicios
+select * from rips_ripsprocedimientos	
+	select * from rips_ripsdetalle
+select * from rips_ripstransaccion	
+	select * from rips_ripsmedicamentos
+
+select * from rips_ripsusuarios;	
+	select * from rips_ripshospitalizacion
+	select "ripsEnvio_id",* from cartera_notascredito
+	update cartera_notascredito set "ripsEnvio_id" = null where id=3
+select * from cartera_notascreditodetalle
+	--delete from cartera_notascreditodetalle where id=13
+select * from cartera_notascreditodetallerips
+select * from rips_ripsenvios
+	select * from rips_ripsdetalle
 	
+
+SELECT nc.id,  ' ' factura, nc.id glosa_id, nc."fechaNota" fechaFactura, u.nombre paciente , ncDet."valorNota" totalFactura,
+	' ' estado 
+FROM cartera_notascredito nc , facturacion_facturacion f , admisiones_ingresos i, usuarios_usuarios u  , cartera_notascreditodetalle ncDet 
+WHERE ncDet."notaCredito_id" = nc.id AND  ncDet.factura_id = f.id AND i."tipoDoc_id" = f."tipoDoc_id" AND i.documento_id = f.documento_id
+	AND i.consec = f."consecAdmision"  AND nc."ripsEnvio_id" IS NULL AND i."tipoDoc_id" = u."tipoDoc_id" AND 	i.documento_id = u.id  and
+	nc."valorNota" >0
