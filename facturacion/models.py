@@ -362,6 +362,7 @@ class Facturacion(models.Model):
     valorApagar =  models.DecimalField( max_digits=15, decimal_places=0 , blank=True,null= True, editable=True)
     notasDebito =  models.DecimalField( max_digits=15, decimal_places=0 , blank=True,null= True, editable=True)
     notasCredito =  models.DecimalField( max_digits=15, decimal_places=0 , blank=True,null= True, editable=True)
+    saldoFactura =  models.DecimalField( max_digits=15, decimal_places=0 , blank=True,null= True, editable=True)
     valorAPagarLetras =  models.CharField(max_length=120, blank=True,null= True, editable=True,)
     anulado =  models.CharField(max_length=1, blank=True,null= True, editable=True,)
     fechaCorte =   models.DateTimeField(editable=True, null=True, blank=True)

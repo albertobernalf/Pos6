@@ -348,56 +348,61 @@ def GuardaNotasCreditoDetalle(request):
     tipoNotaCredito = request.POST['tipoNotaCredito']
     print ("tipoNotaCredito = ", tipoNotaCredito)
 
-
     notaCredito = request.POST['notaCredito']
     print ("notaCredito  = ", notaCredito )
-
 
     username_id = request.POST['username_id']
     print ("username_id =", username_id)
 
-    notasCreditoId = NotasCredito.objects.get(id=notaCredito)
-    print("notasCreditoId =" , notasCreditoId.valorNota)
-    totalNota = NotasCreditoDetalle.objects.filter(notaCredito_id=notaCredito).aggregate(Sum('valorNota'))
-
-    print("totalNota =", totalNota)
-
-    if (totalNota['valorNota__sum'] == None):
-        totalNota1=0
-    else:
-        totalNota1 =totalNota['valorNota__sum']
-
-    print("totalNota1 =" , totalNota1)
-
-    if ((float(totalNota1) + float(valorNota)) >  float(notasCreditoId.valorNota)):
-
-        return JsonResponse({'success': False, 'Mensajes': 'Valor supera el total de la nota credito'})
-
-
-
-    #Validacion
     try:
-        with transaction.atomic():
-            facturaId = Facturacion.objects.get(id=factura)
+       with transaction.atomic():
+
+           valorParcialFacturaId = Facturacion.objects.get(id=factura)
 
     except Exception as e:
-        # Aquí ya se hizo rollback automáticamente
-        print("Se hizo rollback INGRESO por:", e)
-
-        return JsonResponse({'success': False, 'Mensajes': 'Factura No existe'})
-
+            # Aquí ya se hizo rollback automáticamente
+            print("Se hizo rollback por:", e)
+            return JsonResponse({'success': False, 'Mensajes': 'Factura No existe'})
+    
     finally:
-        print("Finally")
 
-    if (facturaId.notasCredito == None):
-        notasCreditox=0
-    else:
-        notasCreditox = facturaId.notasCredito
+        print("no haga nada")
 
 
-    if ((float(facturaId.valorApagar) - float(notasCreditox)) < float(valorNota)):
+    valorParcialFactura = valorParcialFacturaId.valorApagar
+    valorParcialGlosas = valorParcialFacturaId.totalValorAceptado
 
-        return JsonResponse({'success': False, 'Mensajes': 'Valor de factura menor que el total de Notas credito'})
+    if (valorParcialGlosas == None):
+            valorParcialGlosas=0
+
+    valorParcialNotasCredito = valorParcialFacturaId.totalNotasCredito
+
+    if (valorParcialNotasCredito == None):
+            valorParcialNotasCredito=0
+
+    valorParcialNotasCredito = float(valorParcialNotasCredito) + float(valorNota)
+
+    valorParcialNotasDebito = valorParcialFacturaId.totalNotasDebito
+
+    if (valorParcialNotasDebito == None):
+            valorParcialNotasDebito=0
+
+    saldoFactura = float(valorParcialFactura) -  float(valorParcialNotasCredito) + float(valorParcialNotasDebito)
+
+    if (float(valorNota) >  float(saldoFactura)):
+
+        return JsonResponse({'success': False, 'Mensajes': 'Valor de la Nota credito No debe ser mayor que el saldo de la factura'})
+
+
+    notasCreditoId = NotasCredito.objects.get(id=notaCredito)
+    print("notasCreditoId =" , notasCreditoId.valorNota)
+    totalDetalleNotas = NotasCreditoDetalle.objects.filter(notaCredito_id=notaCredito).aggregate(Sum('valorNota'))
+    print ("totalDetalleNotas = ", totalDetalleNotas['valorNota__sum'])
+
+
+    if (float(notasCreditoId.valorNota) <  (float(totalDetalleNotas['valorNota__sum']) + float(valorNota) )):
+
+        return JsonResponse({'success': False, 'Mensajes': 'Valor supera el total de la nota credito'})
 
 
     estadoReg = 'A'
@@ -415,18 +420,10 @@ def GuardaNotasCreditoDetalle(request):
         print(comando)
         cur3.execute(comando)
 
-        if (facturaId.notasCredito == None):
-            valorNot=0
-        else:
-            valorNot=facturaId.notasCredito
+        #comando = 'UPDATE facturacion_facturacion SET "totalNotasCredito" =  ' + "'" + str(valorParcialNotasCredito) + "'," + '"saldoFactura" = ' + "'" + str(saldoFactura) + "'"  + ' WHERE id = ' + "'" + str(factura) + "'"
 
-        actualizoValorNota =  float(valorNot) +  float(valorNota)
-
-        comando = 'UPDATE facturacion_facturacion SET "notasCredito" =  ' + "'" + str(actualizoValorNota) + "'"  + ' WHERE id = ' + "'" + str(factura) + "'"
-
-        print(comando)
-        cur3.execute(comando)
-
+        #print(comando)
+        #cur3.execute(comando)
 
         miConexion3.commit()
         cur3.close()
@@ -1633,6 +1630,71 @@ def BorraGlosasDetalle(request):
             miConexion3.close()
 
 
+def BorraNotasCreditoDetalleRips(request):
+    print("Entre BorraNotasCreditoDetalleRips")
+
+    detCreRipsId = request.POST['detCreRipsId']
+    print("detCreRipsId  =", detCreRipsId)
+
+    ripsId = request.POST['ripsId']
+    print("ripsId  =", ripsId)
+
+    valorNota = request.POST['valorNota']
+
+    if (valorNota == None):
+        valorNota=0
+
+    print("valorNota  =", valorNota)
+
+    notasCreditoDetalleRipsId = NotasCreditoDetalleRips.objects.get(id=detCreRipsId)
+    notasCreditoDetalleId = NotasCreditoDetalle.objects.get(id=notasCreditoDetalleRipsId.notaCreditoDetalle_id)
+    factura = notasCreditoDetalleId.factura_id
+    facturaId = Facturacion.objects.get(id=factura)
+
+    saldoFactura = float(facturaId.saldoFactura) + float(valorNota)
+
+    totalNotasCredito = float(facturaId.totalNotasCredito) - float(valorNota)
+
+    miConexion3 = None
+    try:
+
+        miConexion3 = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres",
+                                       password="123456")
+        cur3 = miConexion3.cursor()
+
+        detalle = 'DELETE FROM cartera_notascreditodetallerips where id = ' + "'" + str(detCreRipsId) + "'"
+
+        print(detalle)
+        cur3.execute(detalle)
+
+        comando6 = 'UPDATE facturacion_facturacion SET "saldoFactura" = ' + "'" + str(
+            saldoFactura) + "'," + '"totalNotasCredito" = ' + "'" + str(totalNotasCredito) + "' WHERE id = '" + str(
+            factura) + "'"
+
+        print(comando6)
+        cur3.execute(comando6)
+
+        miConexion3.commit()
+        cur3.close()
+        miConexion3.close()
+
+        return JsonResponse({'success': True, 'Mensajes': 'Glosa Detalle eliminada !'})
+
+    except psycopg2.DatabaseError as error:
+        print("Entre por rollback", error)
+        if miConexion3:
+            print("Entro ha hacer el Rollback")
+            # miConexion3.rollback()
+
+        message_error = str(error)
+        return JsonResponse({'success': False, 'Mensajes': message_error})
+
+    finally:
+        if miConexion3:
+            cur3.close()
+            miConexion3.close()
+
+
 
 def load_dataNotasCredito(request, data):
     print("load_dataNotasCredito")
@@ -1701,17 +1763,17 @@ def load_dataNotasCreditoDetalle(request, data):
                                    password="123456")
     curx = miConexionx.cursor()
 
-    detalle = 'SELECT ncDet.id , nc.id notaCredito, ncDet.factura_id , ncDet."valorNota", ncDet."tiposNotasCredito_id" tipoNota, tip.nombre nombreTipoNota,  ncDet."fechaRegistro",  ncDet."usuarioRegistro_id" FROM public.cartera_notascredito nc, cartera_notascreditodetalle ncDet, cartera_tiposnotasCredito tip WHERE ncDet."notaCredito_id" = ' + "'" + str(notaCredito) + "'" + ' AND ncDet."notaCredito_id" = nc.id AND nc."sedesClinica_id" = ' + "'" + str(sede) + "'" + 'AND ncDet."tiposNotasCredito_id"  = tip.id '
+    detalle = 'SELECT ncDet.id , nc.id notaCredito, ncDet.factura_id , ncDet."valorNota", ncDet."tiposNotasCredito_id" tipoNota, tip.nombre nombreTipoNota,  ncDet."fechaRegistro",  ncDet."usuarioRegistro_id", fac."valorApagar", fac."totalValorAceptado", fac."totalNotasCredito", fac."saldoFactura" FROM public.cartera_notascredito nc, cartera_notascreditodetalle ncDet, cartera_tiposnotasCredito tip, facturacion_facturacion fac WHERE ncDet."notaCredito_id" = ' + "'" + str(notaCredito) + "'" + ' AND ncDet."notaCredito_id" = nc.id AND ncDet.factura_id= fac.id AND nc."sedesClinica_id" = ' + "'" + str(sede) + "'" + 'AND ncDet."tiposNotasCredito_id"  = tip.id '
 
     print(detalle)
 
     curx.execute(detalle)
 
-    for id,  notaCredito,factura_id, valorNota, tipoNota, nombreTipoNota, fechaRegistro, usuarioRegistro_id in curx.fetchall():
+    for id,  notaCredito,factura_id, valorNota, tipoNota, nombreTipoNota, fechaRegistro, usuarioRegistro_id, totalFactura, totalGlosas, totalNotasCredito, saldoFactura  in curx.fetchall():
         notasCreditoDetalle.append(
             {"model": "cartera.notasCreditoDetalle", "pk": id, "fields":
                 {'id': id, 'notaCredito':notaCredito,'factura_id':factura_id, 'valorNota':valorNota,'tipoNota':tipoNota, 'nombreTipoNota':nombreTipoNota,
-		'fechaRegistro': fechaRegistro, 'usuarioRegistro_id': usuarioRegistro_id}})
+		'fechaRegistro': fechaRegistro, 'usuarioRegistro_id': usuarioRegistro_id,'totalFactura':totalFactura, 'totalGlosas':totalGlosas,'totalNotasCredito':totalNotasCredito, 'saldoFactura':saldoFactura }})
 
     miConexionx.close()
     print("notasCreditoDetalle = "  , notasCreditoDetalle)
@@ -1814,7 +1876,65 @@ def GuardarNotasCreditoDetalleRips(request):
         print("Entre 1")
         print("valorNota=", valorNota)
         print("vrServicio=", vrServicio)
-        return JsonResponse( {'success': False,  'Mensajes': 'Valor Nota mayor que el valor del servicio!'})
+        return JsonResponse( {'success': False,  'Mensajes': 'Valor Nota mayor que el valor del servicio RIPS!'})
+
+    # Aqui controlamos el valor de la glosadetalle
+
+    notasCreditoDetalleId = NotasCreditoDetalle.objects.get(id=notaCreditoDetalle)
+
+    notasCreditoDetalle = notasCreditoDetalleId.valorNota
+
+    if (notasCreditoDetalle == None):
+        notasCreditoDetalle=0
+
+    notasCreditoDetalleRipsId = NotasCreditoDetalleRips.objects.filter(notaCreditoDetalle_id=notaCreditoDetalle).aggregate(Sum('valorNota'))
+    notasCreditoDetalleRips = notasCreditoDetalleRipsId['valorNota__sum']
+
+    print("notasCreditoDetalleRips" , notasCreditoDetalleRips)
+
+    if (notasCreditoDetalleRips == None):
+        notasCreditoDetalleRips=0
+
+    if (float(notasCreditoDetalleRips) + float(valorNota) ) > float(notasCreditoDetalle):
+        print("Entre 2")
+        return JsonResponse( {'success': False,  'Mensajes': 'Valor de Notas en RIPS no puede ser mayor que la Nota Credito !'})
+
+
+    try:
+        with transaction.atomic():
+
+            notaCreditoDetalleId = NotasCreditoDetalle.objects.get(id=notaCreditoDetalle)
+            valorParcialFacturaId = Facturacion.objects.get(id=notaCreditoDetalleId.factura_id)
+
+    except Exception as e:
+        # Aquí ya se hizo rollback automáticamente
+        print("Se hizo rollback por:", e)
+        #return JsonResponse({'success': False, 'Mensajes': 'Factura No existe'})
+
+    finally:
+
+        print("no haga nada")
+
+
+    valorParcialFactura = valorParcialFacturaId.valorApagar
+    valorParcialGlosas = valorParcialFacturaId.totalValorAceptado
+
+    if (valorParcialGlosas == None):
+            valorParcialGlosas=0
+
+    valorParcialNotasCredito = valorParcialFacturaId.totalNotasCredito
+
+    if (valorParcialNotasCredito == None):
+            valorParcialNotasCredito=0
+
+    valorParcialNotasCredito = float(valorParcialNotasCredito) + float(valorNota)
+
+    valorParcialNotasDebito = valorParcialFacturaId.totalNotasDebito
+
+    if (valorParcialNotasDebito == None):
+            valorParcialNotasDebito=0
+
+    saldoFactura = float(valorParcialFactura) -  float(valorParcialNotasCredito) + float(valorParcialNotasDebito)
 
 
     miConexion3 = None
@@ -1916,31 +2036,13 @@ def GuardarNotasCreditoDetalleRips(request):
                     ripsId) + "'" + ' WHERE "notaCreditoDetalle_id"  = ' + "'" + str(notaCreditoDetalle) + "'" + ' AND "itemFactura" = ' + "'" + str(
                     itemFactura) + "'"
 
-
         print(comando)
         cur3.execute(comando)
 
-        # AQUI VALIDAR QUE EL DATO INGRESADO NO SUPERA EL VALOR TOTAL DE LA NC PARA ESA FACTURA
+        comando = 'UPDATE facturacion_facturacion SET "totalNotasCredito" =  ' + "'" + str(valorParcialNotasCredito) + "'," + '"saldoFactura" = ' + "'" + str(saldoFactura) + "'"  + ' WHERE id = ' + "'" + str(notaCreditoDetalleId.factura_id) + "'"
 
-        ## FIN VALIDACION
-        acumuladoParcial = NotasCreditoDetalleRips.objects.filter(notaCreditoDetalle_id=notaCreditoDetalle).aggregate(Sum('valorNota'))
-
-        if (acumuladoParcial['valorNota__sum'] == None):
-
-            acumulado=0
-
-        else:
-            print("acumuladoParcial =", acumuladoParcial['valorNota__sum'])
-            acumulado= float(acumuladoParcial['valorNota__sum']) + float(valorNota)
-
-
-        saldoFactura = 0
-        # AQUI FALTA ACTUALIZA EL VALOR REGISTRADO
-
-        comando6 = 'UPDATE cartera_notascreditodetalle SET "valorRegistrado"= ' +  str(acumulado) + ' WHERE id = ' + str(notaCreditoDetalle)
-
-        print(comando6)
-        cur3.execute(comando6)
+        print(comando)
+        cur3.execute(comando)
 
         miConexion3.commit()
         cur3.close()
@@ -2001,7 +2103,7 @@ def ConsultaNotasCreditoDetalleRips(request):
 
     if (tipo == 'OTROS SERVICIOS'):
 
-        detalle = 'SELECT ' + "'" + str('OTROS SERVICIOS') + "'" + ' tipo, detCre.id detCreId, proc.id,proc."itemFactura", proc."codProcedimiento_id" codigo, exa.nombre nombre, proc."vrServicio",	proc.consecutivo,  detCreRips."valorNota" FROM public.rips_ripsotorsservicios proc inner join clinico_examenes exa  on (exa.id =proc."codTecnologiaSalud_id") left join cartera_notascreditodetalle detCre on (detCre.id= ' + "'" + str(detCreId) + "')" + ' left join cartera_notascreditodetalleRips detCreRips on (detCreRips."notaCreditoDetalle_id"  = detCre.id AND detCreRips."ripsOtrosServicios_id" =proc.id)  where proc.id= ' + "'" + str(id) + "'"
+        detalle = 'SELECT ' + "'" + str('OTROS SERVICIOS') + "'" + ' tipo, detCre.id detCreId, proc.id,proc."itemFactura", proc."codTecnologiaSaludCups_id" codigo, exa.nombre nombre, proc."vrServicio",	proc.consecutivo,  detCreRips."valorNota" FROM public.rips_ripsotrosservicios proc inner join clinico_examenes exa  on (exa.id =proc."codTecnologiaSalud_id") left join cartera_notascreditodetalle detCre on (detCre.id= ' + "'" + str(detCreId) + "')" + ' left join cartera_notascreditodetalleRips detCreRips on (detCreRips."notaCreditoDetalle_id"  = detCre.id AND detCreRips."ripsOtrosServicios_id" =proc.id)  where proc.id= ' + "'" + str(id) + "'"
 
     print(detalle)
 
