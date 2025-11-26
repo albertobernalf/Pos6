@@ -1668,6 +1668,7 @@ $('#tablaDetalleRips tbody').on('click', '.miMinisterio', function() {
 
 	var facturaId = dato3.numeroFactura;
         var glosaId = dato3.glosaId;
+	var notaCreditoId = dato3.notaCreditoId;
 
 		tipoRips =   document.getElementById("tipoRips2").value ;
 	// alert("tipoRips = " +  tipoRips);
@@ -1679,7 +1680,7 @@ $('#tablaDetalleRips tbody').on('click', '.miMinisterio', function() {
 	$.ajax({
 
 	        url: "/traerJsonRips/",
-                data: {'envioRipsId':envioRipsId,'facturaId':facturaId,'tipoRips':tipoRips,'glosaId':glosaId},
+                data: {'envioRipsId':envioRipsId,'facturaId':facturaId,'tipoRips':tipoRips,'glosaId':glosaId,'notaCreditoId':notaCreditoId},
                 type: "POST",
                 dataType: 'json',
                 success: function (info) {

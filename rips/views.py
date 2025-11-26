@@ -17,7 +17,7 @@ from django.views.generic import ListView, CreateView, TemplateView
 from django.http import JsonResponse
 from django.db.models import Max
 from django.utils import timezone
-#import MySQLdb
+#import MySQLdbg
 import pyodbc
 import psycopg2
 import json
@@ -392,6 +392,9 @@ def ActualizarEmpresaDetalleRips(request):
     glosaId = request.POST['glosaId']
     print("glosaId =", glosaId)
 
+    notaCreditoId = request.POST['notaCreditoId']
+    print("notaCreditoId =", notaCreditoId)
+
     tipoRips = request.POST['tipoRips']
     print("tipoRips =", tipoRips)
 
@@ -441,7 +444,8 @@ def ActualizarEmpresaDetalleRips(request):
 
             if (tipoRips == 'Nota Credito'):
 
-                comando1 = 'INSERT INTO RIPS_RIPSDETALLE ("notaCredito_id", "estadoPasoMinisterio", "fechaRegistro", "estadoReg", "ripsEnvios_id", "usuarioRegistro_id", estado) VALUES (' + "'" + str(glosaId)  + "','N'," + "'" + str(fechaRegistro) + "'," + "'" + str(estadoReg) + "'," + "'" + str(envioRipsId) + "'," + "'" + str(username_id) + "'," + "'" + str('ELABORADA') + "')"
+                #comando1 = 'INSERT INTO RIPS_RIPSDETALLE ("notaCredito_id", "estadoPasoMinisterio", "fechaRegistro", "estadoReg", "ripsEnvios_id", "usuarioRegistro_id", estado) VALUES (' + "'" + str(glosaId)  + "','N'," + "'" + str(fechaRegistro) + "'," + "'" + str(estadoReg) + "'," + "'" + str(envioRipsId) + "'," + "'" + str(username_id) + "'," + "'" + str('ELABORADA') + "')"
+                comando1 = 'INSERT INTO RIPS_RIPSDETALLE ("numeroFactura_id","notaCredito_id", "estadoPasoMinisterio", "fechaRegistro", "estadoReg",	"ripsEnvios_id", "usuarioRegistro_id", estado) select ncDet.factura_id, ncDet."notaCredito_id",' + "'" + str('N') + "','" + str(fechaRegistro) + "','" + str(estadoReg) + "','" + str(envioRipsId) + "'," + "'" + str(username_id) + "'," + "'" + str('ELABORADA') + "'" + ' FROM cartera_notascreditodetalle ncDet where ncDet."notaCredito_id"=' + "'" + str(notaCreditoId) + "'"
 
             print(comando)
             cur3.execute(comando1)
@@ -669,7 +673,7 @@ def GenerarJsonRips(request):
             if (tipoRips == 'Nota Credito'):
 
 
-                detalle = 'SELECT det.id, det."notaCredito_id" item , ncDet.factura_id itemOtro from rips_ripsdetalle det left join cartera_notascredito nc on (nc."ripsEnvio_id" =det."ripsEnvios_id" and nc.id =det."notaCredito_id" ) left join cartera_notascreditodetalle ncDet on (ncDet."notaCredito_id" =nc.id ) where det."ripsEnvios_id"  = ' + "'" + str(envioRipsId) + "'"
+                detalle = 'SELECT det.id, det."notaCredito_id" item , ncDet.factura_id itemOtro from rips_ripsdetalle det left join cartera_notascredito nc on (nc."ripsEnvio_id" =det."ripsEnvios_id" and nc.id =det."notaCredito_id" ) left join cartera_notascreditodetalle ncDet on (ncDet."notaCredito_id" =nc.id  and ncDet.factura_id = det."numeroFactura_id") where det."ripsEnvios_id"  = ' + "'" + str(envioRipsId) + "'"
                 curx.execute(detalle)
 
                 for id, item, itemOtro in curx.fetchall():
@@ -726,7 +730,7 @@ def GenerarJsonRips(request):
                     ingresoId = Ingresos.objects.get(tipoDoc_id=facturaId.tipoDoc_id, documento_id=facturaId.documento_id,consec=facturaId.consecAdmision)
 
 
-                    detalle = 'INSERT into rips_ripstransaccion ("numDocumentoIdObligado",  "numNota","fechaRegistro", "tipoNota_id","usuarioRegistro_id" ,"ripsEnvio_id","sedesClinica_id" ,"numFactura" ,"estadoReg") select substring(sed.nit,1,9) ,  nc.id, now(), tipnot.id,' + "'" + str(username_id) + "'" + ' , e.id, sed.id , ncDet.factura_id ,' + "'" + str('A') + "'" + ' from sitios_sedesclinica sed, cartera_notascredito nc, cartera_notascreditodetalle ncDet, rips_ripsEnvios e  , rips_ripsdetalle det ,rips_ripstiposnotas tipnot where e.id = ' + "'" + str(envioRipsId) + "'" + ' and e."sedesClinica_id" = sed.id and nc."ripsEnvio_id" = e.id and det."ripsEnvios_id" = e.id and e."ripsTiposNotas_id" = tipnot.id and tipnot.nombre=' + "'" + str('Nota Credito') + "'" + ' AND nc.id = ' + "'" + str(elemento) + "'"  + ' and nc.id = ncDet."notaCredito_id" and det."notaCredito_id" = nc.id  RETURNING id ;'
+                    detalle = 'INSERT into rips_ripstransaccion ("numDocumentoIdObligado",  "numNota","fechaRegistro", "tipoNota_id","usuarioRegistro_id" ,"ripsEnvio_id","sedesClinica_id" ,"numFactura" ,"estadoReg") select substring(sed.nit,1,9) ,  nc.id, now(), tipnot.id,' + "'" + str(username_id) + "'" + ' , e.id, sed.id , ncDet.factura_id ,' + "'" + str('A') + "'" + ' from sitios_sedesclinica sed, cartera_notascredito nc, cartera_notascreditodetalle ncDet, rips_ripsEnvios e  , rips_ripsdetalle det ,rips_ripstiposnotas tipnot where e.id = ' + "'" + str(envioRipsId) + "'" + ' and e."sedesClinica_id" = sed.id and nc."ripsEnvio_id" = e.id and det."ripsEnvios_id" = e.id and e."ripsTiposNotas_id" = tipnot.id and tipnot.nombre=' + "'" + str('Nota Credito') + "'" + ' AND ncDet.factura_id = ' + "'" + str(elementoOtro) + "'"  + ' and nc.id = ncDet."notaCredito_id" and det."notaCredito_id" = nc.id and det."numeroFactura_id" = ncDet.factura_id RETURNING id ;'
 
                     print ("detalle = ", detalle)
                     resultado = curx.execute(detalle)
@@ -756,7 +760,7 @@ def GenerarJsonRips(request):
 
                 if (tipoRips == 'Nota Credito'):
 
-                    detalle  = 'INSERT INTO rips_ripsusuarios ("tipoDocumentoIdentificacion", "tipoUsuario", "fechaNacimiento", "codSexo", "codZonaTerritorialResidencia_id", incapacidad, consecutivo, "fechaRegistro", "codMunicipioResidencia_id", "codPaisOrigen_id", "codPaisResidencia_id", "usuarioRegistro_id", "numDocumentoIdentificacion", "ripsDetalle_id", "ripsTransaccion_id","estadoReg", ingreso_id) SELECT tipdoc."tipoDocRips_id", tipousu.codigo, cast(u."fechaNacio" as date) , u.genero,u."ripsZonaTerritorial_id",   (select i.incapacidad from admisiones_ingresos i WHERE i."tipoDoc_id" = fac."tipoDoc_id" and i.documento_id=fac.documento_id and i.consec=fac."consecAdmision")      , row_number() OVER(ORDER BY det.id) AS consecutivo, now(), muni.id,  case when pais.id is null then ' + "'" + str('1') + "'" + ' else pais.id end, case when pais.id is null then ' + "'" + str('1') + "'" + ' else pais.id end, ' + "'" + str(username_id) + "'" + ',u.documento, det.id, ' + "'" + str(transaccionId) + "','A'," + "'" + str(ingresoId.id) + "'" + 'from rips_ripsenvios e	inner join rips_ripsdetalle det on (det."ripsEnvios_id"  = e.id)  inner join  facturacion_facturacion fac on (fac.id = det."numeroFactura_id" ) inner join admisiones_ingresos i on (i."tipoDoc_id" = fac."tipoDoc_id"  and i.documento_id = fac.documento_id  and i.consec = fac."consecAdmision") inner join usuarios_tiposdocumento tipdoc on ( tipdoc.id=i."tipoDoc_id" )  inner join usuarios_usuarios u on (u."tipoDoc_id"=i."tipoDoc_id" and u.id = i.documento_id) left join sitios_paises  pais on (pais.id= u.pais_id)  left join sitios_municipios muni on ( muni.id = u.municipio_id) left join rips_ripstipousuario tipousu on (tipousu.id = i."ripsTipoUsuario_id") where  e.id= ' + "'" + str(envioRipsId) + "'" + ' AND det."notaCredito_id" = ' + "'" + str(elemento) + "'"
+                    detalle  = 'INSERT INTO rips_ripsusuarios ("tipoDocumentoIdentificacion", "tipoUsuario", "fechaNacimiento", "codSexo", "codZonaTerritorialResidencia_id", incapacidad, consecutivo, "fechaRegistro", "codMunicipioResidencia_id", "codPaisOrigen_id", "codPaisResidencia_id", "usuarioRegistro_id", "numDocumentoIdentificacion", "ripsDetalle_id", "ripsTransaccion_id","estadoReg", ingreso_id) SELECT tipdoc."tipoDocRips_id", tipousu.codigo, cast(u."fechaNacio" as date) , u.genero,u."ripsZonaTerritorial_id",   (select i.incapacidad from admisiones_ingresos i WHERE i."tipoDoc_id" = fac."tipoDoc_id" and i.documento_id=fac.documento_id and i.consec=fac."consecAdmision")      , row_number() OVER(ORDER BY det.id) AS consecutivo, now(), muni.id,  case when pais.id is null then ' + "'" + str('1') + "'" + ' else pais.id end, case when pais.id is null then ' + "'" + str('1') + "'" + ' else pais.id end, ' + "'" + str(username_id) + "'" + ',u.documento, det.id, ' + "'" + str(transaccionId) + "','A'," + "'" + str(ingresoId.id) + "'" + 'from rips_ripsenvios e	inner join rips_ripsdetalle det on (det."ripsEnvios_id"  = e.id)  inner join  facturacion_facturacion fac on (fac.id = det."numeroFactura_id" and fac.id = ' + "'" + str(elementoOtro) + "'" + ') inner join admisiones_ingresos i on (i."tipoDoc_id" = fac."tipoDoc_id"  and i.documento_id = fac.documento_id  and i.consec = fac."consecAdmision") inner join usuarios_tiposdocumento tipdoc on ( tipdoc.id=i."tipoDoc_id" )  inner join usuarios_usuarios u on (u."tipoDoc_id"=i."tipoDoc_id" and u.id = i.documento_id) left join sitios_paises  pais on (pais.id= u.pais_id)  left join sitios_municipios muni on ( muni.id = u.municipio_id) left join rips_ripstipousuario tipousu on (tipousu.id = i."ripsTipoUsuario_id") where  e.id= ' + "'" + str(envioRipsId) + "'" + ' AND det."notaCredito_id" = ' + "'" + str(elemento) + "'"
 
 
                 print ("detalle = ", detalle)
@@ -877,7 +881,7 @@ def GenerarJsonRips(request):
 
                 if (tipoRips == 'Nota Credito'):
 
-                    detalle = 'INSERT INTO rips_ripsprocedimientos("notaCredito_id","codPrestador", "fechaInicioAtencion", "idMIPRES", "numAutorizacion","numDocumentoIdentificacion", "vrServicio","valorPagoModerador", "numFEVPagoModerador", consecutivo, "fechaRegistro", "codComplicacion_id", "codDiagnosticoPrincipal_id","codDiagnosticoRelacionado_id", "codProcedimiento_id", "codServicio_id", "conceptoRecaudo_id", "finalidadTecnologiaSalud_id",	"grupoServicios_id", "modalidadGrupoServicioTecSal_id","tipoDocumentoIdentificacion_id","usuarioRegistro_id", "viaIngresoServicioSalud_id", "ripsDetalle_id", "itemFactura", "ripsTipos_id", "tipoPagoModerador_id", "ripsTransaccion_id", "estadoReg", ingreso_id , "notasCreditoOtras") SELECT nc.id, 	"codPrestador", "fechaInicioAtencion", "idMIPRES", "numAutorizacion","numDocumentoIdentificacion", "notasCreditoGlosa","valorPagoModerador", "numFEVPagoModerador", row_number() OVER(ORDER BY proc.id) AS consecutivo , ' + "'" + str(fechaRegistro) + "'" + ' , "codComplicacion_id", "codDiagnosticoPrincipal_id","codDiagnosticoRelacionado_id", "codProcedimiento_id", "codServicio_id", "conceptoRecaudo_id", "finalidadTecnologiaSalud_id",	"grupoServicios_id", "modalidadGrupoServicioTecSal_id","tipoDocumentoIdentificacion_id", ' + "'" + str(username_id) + "'" + ' , "viaIngresoServicioSalud_id",' + "'" + str(elementox['id']) + "'" + ', proc."itemFactura", proc."ripsTipos_id", 	proc."tipoPagoModerador_id",' + "'" +  str(transaccionId) + "'," + "'A'," + "'" + str(ingresoId.id) + "'," +  ' ncDetRips."valorNota" FROM rips_ripsProcedimientos proc inner join cartera_notascreditodetallerips ncDetRips on (ncDetRips."ripsProcedimientos_id = proc.id) inner join cartera_notascreditoDetalle ncDet on (ncDet.id =  ncDetRips."notaCreditoDetalle_id") inner join cartera_notascreditop nc on (nc.id = ncDet."notaCredito_id") inner join rips_ripsdetalle det on (det."numeroFactura_id" =  ncDet.factura_id and  det."notaCredito_id"= ncDet.id  AND det."notaCredito_id" = ' + "'" + str(elemento) + "'" + ') where proc."numFEVPagoModerador" = ' + "'" + str(elementoOtro) + "'"
+                    detalle = 'INSERT INTO rips_ripsprocedimientos("notaCredito_id","codPrestador", "fechaInicioAtencion", "idMIPRES", "numAutorizacion","numDocumentoIdentificacion", "vrServicio","valorPagoModerador", "numFEVPagoModerador", consecutivo, "fechaRegistro", "codComplicacion_id", "codDiagnosticoPrincipal_id","codDiagnosticoRelacionado_id", "codProcedimiento_id", "codServicio_id", "conceptoRecaudo_id", "finalidadTecnologiaSalud_id",	"grupoServicios_id", "modalidadGrupoServicioTecSal_id","tipoDocumentoIdentificacion_id","usuarioRegistro_id", "viaIngresoServicioSalud_id", "ripsDetalle_id", "itemFactura", "ripsTipos_id", "tipoPagoModerador_id", "ripsTransaccion_id", "estadoReg", ingreso_id , "notasCreditoOtras") SELECT nc.id, "codPrestador", "fechaInicioAtencion", "idMIPRES", "numAutorizacion","numDocumentoIdentificacion", "vrServicio","valorPagoModerador", "numFEVPagoModerador", row_number() OVER(ORDER BY proc.id) AS consecutivo , ' + "'" + str(fechaRegistro) + "'" + ' , "codComplicacion_id", "codDiagnosticoPrincipal_id","codDiagnosticoRelacionado_id", "codProcedimiento_id", "codServicio_id", "conceptoRecaudo_id", "finalidadTecnologiaSalud_id",	"grupoServicios_id", "modalidadGrupoServicioTecSal_id","tipoDocumentoIdentificacion_id", ' + "'" + str(username_id) + "'" + ' , "viaIngresoServicioSalud_id",' + "'" + str(elementox['id']) + "'" + ', proc."itemFactura", proc."ripsTipos_id", 	proc."tipoPagoModerador_id",' + "'" +  str(transaccionId) + "'," + "'A'," + "'" + str(ingresoId.id) + "'," +  ' ncDetRips."valorNota" FROM rips_ripsProcedimientos proc inner join cartera_notascreditodetallerips ncDetRips on (ncDetRips."ripsProcedimientos_id" = proc.id) inner join cartera_notascreditoDetalle ncDet on (ncDet.id =  ncDetRips."notaCreditoDetalle_id") inner join cartera_notascredito nc on (nc.id = ncDet."notaCredito_id") inner join rips_ripsdetalle det on (det."numeroFactura_id" =  ncDet.factura_id and  det."notaCredito_id" = ' + "'" + str(elemento) + "'" + ') where proc."numFEVPagoModerador" = ' + "'" + str(elementoOtro) + "'"
 
                     print("detalle PROCEDIMIENTOS= ", detalle)
                     curx.execute(detalle)
@@ -898,19 +902,12 @@ def GenerarJsonRips(request):
                     detalle = 'INSERT INTO rips_ripshospitalizacion ("codPrestador","viaIngresoServicioSalud_id","fechaInicioAtencion", "numAutorizacion","causaMotivoAtencion_id","codComplicacion_id", "codDiagnosticoPrincipal_id", "codDiagnosticoPrincipalE_id",  "codDiagnosticoRelacionadoE1_id", "codDiagnosticoRelacionadoE2_id", "codDiagnosticoRelacionadoE3_id","condicionDestinoUsuarioEgreso_id", "codDiagnosticoCausaMuerte_id","fechaEgreso",  consecutivo, "usuarioRegistro_id", "ripsDetalle_id", "ripsTipos_id", "ripsTransaccion_id",  "fechaRegistro", ingreso_id, "estadoReg") SELECT  "codPrestador","viaIngresoServicioSalud_id","fechaInicioAtencion", "numAutorizacion","causaMotivoAtencion_id","codComplicacion_id", "codDiagnosticoPrincipal_id", "codDiagnosticoPrincipalE_id",  "codDiagnosticoRelacionadoE1_id", "codDiagnosticoRelacionadoE2_id", "codDiagnosticoRelacionadoE3_id","condicionDestinoUsuarioEgreso_id", "codDiagnosticoCausaMuerte_id","fechaEgreso",  consecutivo, ripshosp."usuarioRegistro_id",'  + "'" + str(elementox['id']) + "'" +  ' , "ripsTipos_id",' + "'" + str(transaccionId) + "'" + ',  ripshosp."fechaRegistro",' + "'" + str(ingresoId.id) + "','A'"  + ' FROM rips_ripshospitalizacion ripshosp, rips_ripsdetalle det , rips_ripstransaccion ripstra where  ripshosp."ripsTransaccion_id" = ripstra.id and ripshosp."ripsDetalle_id" = det.id and cast(ripstra."numFactura" as float) =  det."numeroFactura_id" and cast(ripstra."numFactura" as float) = ' + "'" + str(elementoOtro) + "' " + ' and cast(ripstra."numNota" as integer) = 0'
 
 
-                print("detalle = ", detalle)
-
-                curx.execute(detalle)
-
-
-
                 if (tipoRips == 'Nota Credito'):
 
                     detalle = 'INSERT INTO rips_ripshospitalizacion ("codPrestador","viaIngresoServicioSalud_id","fechaInicioAtencion", "numAutorizacion","causaMotivoAtencion_id","codComplicacion_id", "codDiagnosticoPrincipal_id", "codDiagnosticoPrincipalE_id",  "codDiagnosticoRelacionadoE1_id", "codDiagnosticoRelacionadoE2_id", "codDiagnosticoRelacionadoE3_id","condicionDestinoUsuarioEgreso_id", "codDiagnosticoCausaMuerte_id","fechaEgreso",  consecutivo, "usuarioRegistro_id", "ripsDetalle_id", "ripsTipos_id", "ripsTransaccion_id",  "fechaRegistro", ingreso_id, "estadoReg") SELECT  "codPrestador","viaIngresoServicioSalud_id","fechaInicioAtencion", "numAutorizacion","causaMotivoAtencion_id","codComplicacion_id", "codDiagnosticoPrincipal_id", "codDiagnosticoPrincipalE_id",  "codDiagnosticoRelacionadoE1_id", "codDiagnosticoRelacionadoE2_id", "codDiagnosticoRelacionadoE3_id","condicionDestinoUsuarioEgreso_id", "codDiagnosticoCausaMuerte_id","fechaEgreso",  consecutivo, ripshosp."usuarioRegistro_id",'  + "'" + str(elementox['id']) + "'" +  ' , "ripsTipos_id",' + "'" + str(transaccionId) + "'" + ',  ripshosp."fechaRegistro",' + "'" + str(ingresoId.id) + "','A'"  + ' FROM rips_ripshospitalizacion ripshosp, rips_ripsdetalle det , rips_ripstransaccion ripstra where  ripshosp."ripsTransaccion_id" = ripstra.id and ripshosp."ripsDetalle_id" = det.id and cast(ripstra."numFactura" as float) =  det."numeroFactura_id" and cast(ripstra."numFactura" as float) = ' + "'" + str(elementoOtro) + "' " + ' and cast(ripstra."numNota" as integer) = 0'
 
 
                 print("detalle = ", detalle)
-
                 curx.execute(detalle)
 
 
@@ -996,7 +993,7 @@ def GenerarJsonRips(request):
 
                 if (tipoRips == 'Nota Credito'):
 
-                    detalle = 'INSERT INTO rips_ripsmedicamentos ("notaCredito_id","codPrestador", "numAutorizacion", "idMIPRES", "fechaDispensAdmon", "nomTecnologiaSalud", "concentracionMedicamento", "cantidadMedicamento", "diasTratamiento",	"numDocumentoIdentificacion", "vrUnitMedicamento", "vrServicio", "valorPagoModerador", "numFEVPagoModerador",consecutivo, "fechaRegistro", "codDiagnosticoPrincipal_id", "codDiagnosticoRelacionado_id", "codTecnologiaSalud_id", "conceptoRecaudo_id", "formaFarmaceutica_id", "tipoDocumentoIdentificacion_id","tipoMedicamento_id", "unidadMedida_id", "unidadMinDispensa_id", "usuarioRegistro_id", "ripsDetalle_id", "itemFactura","ripsTipos_id", "ripsTransaccion_id", ingreso_id, "estadoReg" , "notasCreditoOtras") SELECT nc.id, "codPrestador", "numAutorizacion", "idMIPRES", "fechaDispensAdmon", "nomTecnologiaSalud", "concentracionMedicamento", "cantidadMedicamento", "diasTratamiento","numDocumentoIdentificacion", "vrUnitMedicamento", vrServicio, "valorPagoModerador", "numFEVPagoModerador",row_number() OVER(ORDER BY med.id) AS consecutivo , med."fechaRegistro", "codDiagnosticoPrincipal_id", "codDiagnosticoRelacionado_id", "codTecnologiaSalud_id", "conceptoRecaudo_id", "formaFarmaceutica_id", "tipoDocumentoIdentificacion_id","tipoMedicamento_id", "unidadMedida_id", "unidadMinDispensa_id", med."usuarioRegistro_id", ' + "'" + str(elementox['id']) + "'" + ' , med."itemFactura",med."ripsTipos_id", ' + "'" + str(transaccionId) + "','"  + str(ingresoId.id) + "','A'"  + ', ncDetRips."valorNota"  FROM rips_ripsMedicamentos med  inner join cartera_notascreditodetallerips ncDetRips  ON (ncDetRips."ripsProcedimientos_id" = med.id)  inner join cartera_notascreditoglosasdetalle  ncDet on (nc.id = ncDetRips."notaCreditoDetalle_id") inner join cartera_notascredito nc on (nc.id = ncDet."notaCredito_id" and ncDet.factura_id = cast(med."numFEVPagoModerador"  as integer)) inner join rips_ripsdetalle det on (det."numeroFactura_id" =  cast(med."numFEVPagoModerador"  as integer) and  det."notaCredito_id" =nc.id and det."notaCredito_id=' + "'" + str(elemento) + "'" + ')  where med."numFEVPagoModerador" = ' + "'" + str(elementoOtro) + "'"
+                    detalle = 'INSERT INTO rips_ripsmedicamentos ("notaCredito_id","codPrestador", "numAutorizacion", "idMIPRES", "fechaDispensAdmon", "nomTecnologiaSalud", "concentracionMedicamento", "cantidadMedicamento", "diasTratamiento",	"numDocumentoIdentificacion", "vrUnitMedicamento", "vrServicio", "valorPagoModerador", "numFEVPagoModerador",consecutivo, "fechaRegistro", "codDiagnosticoPrincipal_id", "codDiagnosticoRelacionado_id", "codTecnologiaSalud_id", "conceptoRecaudo_id", "formaFarmaceutica_id", "tipoDocumentoIdentificacion_id","tipoMedicamento_id", "unidadMedida_id", "unidadMinDispensa_id", "usuarioRegistro_id", "ripsDetalle_id", "itemFactura","ripsTipos_id", "ripsTransaccion_id", ingreso_id, "estadoReg" , "notasCreditoOtras") SELECT nc.id, "codPrestador", "numAutorizacion", "idMIPRES", "fechaDispensAdmon", "nomTecnologiaSalud", "concentracionMedicamento", "cantidadMedicamento", "diasTratamiento","numDocumentoIdentificacion", "vrUnitMedicamento", "vrServicio", "valorPagoModerador", "numFEVPagoModerador",row_number() OVER(ORDER BY med.id) AS consecutivo , med."fechaRegistro", "codDiagnosticoPrincipal_id", "codDiagnosticoRelacionado_id", "codTecnologiaSalud_id", "conceptoRecaudo_id", "formaFarmaceutica_id", "tipoDocumentoIdentificacion_id","tipoMedicamento_id", "unidadMedida_id", "unidadMinDispensa_id", med."usuarioRegistro_id", ' + "'" + str(elementox['id']) + "'" + ' , med."itemFactura",med."ripsTipos_id", ' + "'" + str(transaccionId) + "','"  + str(ingresoId.id) + "','A'"  + ', ncDetRips."valorNota"  FROM rips_ripsMedicamentos med  inner join cartera_notascreditodetallerips ncDetRips  ON (ncDetRips."ripsMedicamentos_id" = med.id)  inner join cartera_notascreditodetalle  ncDet on (ncDet.id = ncDetRips."notaCreditoDetalle_id") inner join cartera_notascredito nc on (nc.id = ncDet."notaCredito_id" and ncDet.factura_id = cast(med."numFEVPagoModerador"  as integer)) inner join rips_ripsdetalle det on (det."numeroFactura_id" =  cast(med."numFEVPagoModerador"  as integer) and  det."notaCredito_id" =nc.id and det."notaCredito_id"=' + "'" + str(elemento) + "'" + ')  where med."numFEVPagoModerador" = ' + "'" + str(elementoOtro) + "'"
                     print("detalle = ", detalle)
                     curx.execute(detalle)
 
@@ -1016,9 +1013,6 @@ def GenerarJsonRips(request):
                     #detalle = 'INSERT INTO rips_ripsreciennacido ("codPrestador", "numDocumentoIdentificacion", "fechaNacimiento", "edadGestacional", "numConsultasCPrenatal","codSexoBiologico", peso,"fechaEgreso", consecutivo, "fechaRegistro", "codDiagnosticoCausaMuerte_id", "codDiagnosticoPrincipal_id","condicionDestinoUsuarioEgreso_id","tipoDocumentoIdentificacion_id","usuarioRegistro_id", "ripsDetalle_id", "ripsTipos_id", "ripsTransaccion_id", ingreso_id) SELECT "codPrestador", "numDocumentoIdentificacion", "fechaNacimiento", "edadGestacional", "numConsultasCPrenatal","codSexoBiologico", peso,"fechaEgreso", consecutivo, ripsnac."fechaRegistro", "codDiagnosticoCausaMuerte_id", "codDiagnosticoPrincipal_id","condicionDestinoUsuarioEgreso_id","tipoDocumentoIdentificacion_id",ripsnac."usuarioRegistro_id",' + "'" + str(elementox['id']) + "'" + ', "ripsTipos_id", ' + "'" + str(transaccionId) + "','" + str(ingresoId.id) + "'"   + ' FROM rips_ripsreciennacido ripsnac, rips_ripsdetalle det, rips_ripstransaccion ripstra where ripstra."ripsEnvio_id" = det."ripsEnvios_id" and ripsnac."ripsTransaccion_id" = ripstra.id and ripsnac."ripsDetalle_id" = det.id and cast(ripstra."numFactura" as float) =  det."numeroFactura_id" and cast(ripstra."numFactura" as float) = ' + "'" + str(elementoOtro) + "'" + ' and fac.id = ' + "'" + str(elemento) + "'" + ' and i."ripsRecienNacido" = ' + "'" + str('S') + "'"
                     #aQUIP macehte temporal
                     detalle = 'INSERT INTO rips_ripsreciennacido ("codPrestador", "numDocumentoIdentificacion", "fechaNacimiento", "edadGestacional", "numConsultasCPrenatal","codSexoBiologico", peso, "fechaEgreso", consecutivo, "fechaRegistro", "codDiagnosticoCausaMuerte_id", "codDiagnosticoPrincipal_id","condicionDestinoUsuarioEgreso_id","tipoDocumentoIdentificacion_id", "usuarioRegistro_id", "ripsDetalle_id", "ripsTipos_id", "ripsTransaccion_id", "estadoReg", ingreso_id ) SELECT sed."codigoHabilitacion",	usu.documento,	usu."fechaNacio", i."ripsEdadGestacional", i."ripsNumConsultasCPrenatal" ,	usu.genero, i."ripsPesoRecienNacido" ,cast(i."fechaSalida" as date), row_number() OVER(ORDER BY i.id) AS consecutivo ,now(), (select diag1.id from clinico_diagnosticos diag1 where  diag1.id = i."dxSalida_id"), (select max(diag1.id) from clinico_historialdiagnosticos histdiag1, clinico_diagnosticos diag1 , clinico_historia his where histdiag1.historia_id = his.id and histdiag1."tiposDiagnostico_id" = ' + "'" + str('1') + "'" + ' and histdiag1.diagnosticos_id = diag1.id and his."tipoDoc_id" = fac."tipoDoc_id" and his.documento_id = fac.documento_id AND his."consecAdmision" = fac."consecAdmision") , dest.id, tipoDoc."tipoDocRips_id", ' + "'" + str(username_id) + "'" + ' ,det.id,' + "'" + str('7') + "'" + ' , ripstra.id, ' + "'" + str('A') +"','" + str(ingresoId.id) + "'"   + '	FROM sitios_sedesclinica sed inner join facturacion_facturacion fac ON (fac."sedesClinica_id" = sed.id) inner join admisiones_ingresos i ON (i."sedesClinica_id" = sed.id and i."tipoDoc_id" =fac."tipoDoc_id" and i.documento_id = fac.documento_id AND i.consec =fac."consecAdmision")  inner join rips_ripsenvios env ON (env."sedesClinica_id" = sed.id) inner join rips_ripsdetalle det ON ( det."ripsEnvios_id" = env.id and  det."ripsEnvios_id" = fac."ripsEnvio_id" and det."numeroFactura_id" = fac.id )  inner join rips_ripstransaccion ripstra ON ( ripstra."sedesClinica_id" = sed.id and ripstra."ripsEnvio_id" = env.id and ripstra."numFactura" = cast(fac.id as text))  left join rips_ripsdestinoegreso dest  on (dest.id = i."ripsCondicionDestinoUsuarioEgreso_id") inner join usuarios_usuarios usu on (usu."tipoDoc_id" = i."tipoDoc_id" AND usu.id = i.documento_id) inner join usuarios_tiposdocumento tipoDoc on (tipoDoc.id = i."tipoDoc_id") where sed.id = ' + "'" + str(sede) + "'" + ' AND env.id = ' + "'" + str(envioRipsId) + "'" + ' and fac.id = ' + "'" + str(elemento) + "'" + ' and i."ripsRecienNacido" = ' + "'" + str('S') + "'" + ' and cast(ripstra."numNota" as integer) = 0'
-
-                print("detalle = ", detalle)
-                curx.execute(detalle)
 
 
                 if (tipoRips == 'Nota Credito'):
@@ -1201,10 +1195,10 @@ def GenerarJsonRips(request):
                 if (tipoRips == 'Nota Credito'):
 
                     # Por aqui Nota Credito
-                    detalle = 'INSERT INTO rips_ripsotrosservicios ("notaCredito","codPrestador", "numAutorizacion", "idMIPRES", "fechaSuministroTecnologia", "nomTecnologiaSalud", "cantidadOS", "numDocumentoIdentificacion", "vrUnitOS", "vrServicio", "valorPagoModerador", "numFEVPagoModerador", consecutivo, "fechaRegistro", "codTecnologiaSalud_id", "conceptoRecaudo_id", "tipoDocumentoIdentificacion_id", "tipoOS_id", "usuarioRegistro_id", "ripsDetalle_id", "itemFactura", "ripsTipos_id", "ripsTransaccion_id", "notasCreditoOtras","estadoReg", ingreso_id, "tipoPagoModerador_id") SELECT glosa.id,"codPrestador", "numAutorizacion", "idMIPRES", "fechaSuministroTecnologia", "nomTecnologiaSalud", "cantidadOS", "numDocumentoIdentificacion", "vrUnitOS", "vrServicio", "valorPagoModerador", "numFEVPagoModerador", row_number() OVER(ORDER BY ripsOtros.id) AS consecutivo , ripsOtros."fechaRegistro", "codTecnologiaSalud_id", "conceptoRecaudo_id", "tipoDocumentoIdentificacion_id", "tipoOS_id",ripsOtros."usuarioRegistro_id",' + "'" + str(
+                    detalle = 'INSERT INTO rips_ripsotrosservicios ("notaCredito_id","codPrestador", "numAutorizacion", "idMIPRES", "fechaSuministroTecnologia", "nomTecnologiaSalud", "cantidadOS", "numDocumentoIdentificacion", "vrUnitOS", "vrServicio", "valorPagoModerador", "numFEVPagoModerador", consecutivo, "fechaRegistro", "codTecnologiaSalud_id", "conceptoRecaudo_id", "tipoDocumentoIdentificacion_id", "tipoOS_id", "usuarioRegistro_id", "ripsDetalle_id", "itemFactura", "ripsTipos_id", "ripsTransaccion_id", "notasCreditoOtras","estadoReg", ingreso_id, "tipoPagoModerador_id") SELECT nc.id,"codPrestador", "numAutorizacion", "idMIPRES", "fechaSuministroTecnologia", "nomTecnologiaSalud", "cantidadOS", "numDocumentoIdentificacion", "vrUnitOS", "vrServicio", "valorPagoModerador", "numFEVPagoModerador", row_number() OVER(ORDER BY ripsOtros.id) AS consecutivo , ripsOtros."fechaRegistro", "codTecnologiaSalud_id", "conceptoRecaudo_id", "tipoDocumentoIdentificacion_id", "tipoOS_id",ripsOtros."usuarioRegistro_id",' + "'" + str(
                         elementox['id']) + "'" + ', ripsOtros."itemFactura", ripsOtros."ripsTipos_id", ' + "'" + str(
                         transaccionId) + "'," + 'ncDetRips."valorNota" ' + ",'A','" + str(
-                        ingresoId.id) + "'," + '"tipoPagoModerador_id" FROM rips_ripsotrosservicios ripsOtros inner join cartera_notasdreditodetallerips ncDetRips ON (ncDetRips."ripsOtrosServicios_id" = ripsOtros.id) inner join cartera_notascreditodetalle ncDet on (ncDet.id = ncDetRips."notaCreditoDetalle_id") inner join cartera_notascredsito nc on (nc.id = ncDet."notaCredito_id" and ncDet.factura_id = cast(ripsOtros."numFEVPagoModerador"  as integer)) inner join rips_ripsdetalle det on (det."numeroFactura_id" =  cast(ripsOtros."numFEVPagoModerador" as integer) and det."notaCredito_id"=nc.id and det."notaCredito_id" =' + "'" + str(
+                        ingresoId.id) + "'," + '"tipoPagoModerador_id" FROM rips_ripsotrosservicios ripsOtros inner join cartera_notascreditodetallerips ncDetRips ON (ncDetRips."ripsOtrosServicios_id" = ripsOtros.id) inner join cartera_notascreditodetalle ncDet on (ncDet.id = ncDetRips."notaCreditoDetalle_id") inner join cartera_notascredito nc on (nc.id = ncDet."notaCredito_id" and ncDet.factura_id = cast(ripsOtros."numFEVPagoModerador"  as integer)) inner join rips_ripsdetalle det on (det."numeroFactura_id" =  cast(ripsOtros."numFEVPagoModerador" as integer) and det."notaCredito_id"=nc.id and det."notaCredito_id" =' + "'" + str(
                         elemento) + "'" + ') where ripsOtros."numFEVPagoModerador" = ' + "'" + str(elementoOtro) + "'"
                     print("detalle = ", detalle)
                     curx.execute(detalle)
@@ -1267,11 +1261,15 @@ def GenerarJsonRips(request):
 
                 if (tipoRips == 'Factura'):
 
-                    detalle = 'SELECT generaFacturaJSONBAK(' + "'" +  str(envioRipsId) + "','" + str(elemento) + "'"  +  ',' + "'" + str('FACTURA') + "'" + ',0) dato'
+                    detalle = 'SELECT generaFacturaJSONBAK1(' + "'" +  str(envioRipsId) + "','" + str(elemento) + "'"  +  ',' + "'" + str('FACTURA') + "'" + ',0) dato'
 
                 if (tipoRips == 'Glosa'):
 
-                    detalle = 'SELECT generaFacturaJSONBak(' + str(envioRipsId) + "," + str(elemento) +  ',' + "'" + str('GLOSA') + "'," +  str(transaccionId)  + ') dato'
+                    detalle = 'SELECT generaFacturaJSONBak1(' + str(envioRipsId) + "," + str(elemento) +  ',' + "'" + str('GLOSA') + "'," +  str(transaccionId)  + ') dato'
+
+                if (tipoRips == 'Nota Credito'):
+
+                    detalle = 'SELECT generaFacturaJSONBak1(' + str(envioRipsId) + "," + str(elemento) +  ',' + "'" + str('NOTA CREDITO') + "'," +  str(transaccionId)  + ') dato'
 
                 curx.execute(detalle)
 
@@ -1291,6 +1289,12 @@ def GenerarJsonRips(request):
                 if (tipoRips == 'Glosa'):
                     print("Glosa = ", elemento)
                     archivo = 'Glo' + str(elemento) + '.txt'
+                    nombreCarpeta = 'C:\\EntornosPython\\Pos6\\JSONCLINICA\\' + str(archivo)
+
+
+                if (tipoRips == 'Nota Credito'):
+                    print("Nota Credito = ", elemento)
+                    archivo = 'NotCre_' + str(elemento) + '_' + str(elementoOtro) + '.txt'
                     nombreCarpeta = 'C:\\EntornosPython\\Pos6\\JSONCLINICA\\' + str(archivo)
 
 
@@ -1323,9 +1327,12 @@ def GenerarJsonRips(request):
 
                     detalle = 'UPDATE rips_ripsDetalle SET "rutaJsonFactura" = ' + "'" + str(nombreCarpeta) + "', " + ' "ripsEstados_id" = ' + "'" + str(ripsEstados.id) + "'" +  ' WHERE "ripsEnvios_id" =  '  + "'" + str(envioRipsId) + "'" + ' AND "glosa_id" = ' +"'" +str(elemento) + "'"
 
+                if (tipoRips == 'Nota Credito'):
+
+                    detalle = 'UPDATE rips_ripsDetalle SET "rutaJsonFactura" = ' + "'" + str(nombreCarpeta) + "', " + ' "ripsEstados_id" = ' + "'" + str(ripsEstados.id) + "'" +  ' WHERE "ripsEnvios_id" =  '  + "'" + str(envioRipsId) + "'" + ' AND "notaCredito_id" = ' +"'" +str(elemento) + "'" + ' AND "numeroFactura_id" = ' + "'" + str(elementoOtro) + "'"
+
                 print ("detalle = ", detalle)
                 curx.execute(detalle)
-
 
             # Aqui generamos el JSON GLOBAL DE TODOS LOS ELEMENTOS (Facturas o Glosas) DEL ENVIO
                 #
@@ -1335,11 +1342,16 @@ def GenerarJsonRips(request):
 
             if (tipoRips == 'Factura'):
 
-                detalle = 'SELECT generaEnvioRipsJSON(' + str(envioRipsId) + ',' + "'" + str('FACTURA') + "'" + ') dato'
+                detalle = 'SELECT generaEnvioRipsJSON1(' + str(envioRipsId) + ',' + "'" + str('FACTURA') + "'" + ') dato'
 
             if (tipoRips == 'Glosa'):
 
-                detalle = 'SELECT generaEnvioRipsJSON(' + str(envioRipsId) + ',' + "'" + str('GLOSA') + "'" + ') dato'
+                detalle = 'SELECT generaEnvioRipsJSON1(' + str(envioRipsId) + ',' + "'" + str('GLOSA') + "'" + ') dato'
+
+            if (tipoRips == 'Nota Credito'):
+
+                detalle = 'SELECT generaEnvioRipsJSON1(' + str(envioRipsId) + ',' + "'" + str('NOTA CREDITO') + "'" + ') dato'
+
 
             curx.execute(detalle)
 
@@ -1705,6 +1717,10 @@ def TraerJsonRips(request):
     glosaId = request.POST['glosaId']
     print("glosaId =", glosaId)
 
+    notaCreditoId = request.POST['notaCreditoId']
+    print("notaCreditoId =", notaCreditoId)
+
+
 
     tipoRips = request.POST['tipoRips']
     print("tipoRips =", tipoRips)
@@ -1720,22 +1736,22 @@ def TraerJsonRips(request):
 
     if (tipoRips == 'Factura'):
 
-        detalle = 'select generaFacturaJSONBAK('  + "'" + str(envioRipsId) + "','" + str(facturaId)  + "'," + "'" + str('FACTURA') + "',0" + ') valorJson'
+        detalle = 'select generaFacturaJSONBAK1('  + "'" + str(envioRipsId) + "','" + str(facturaId)  + "'," + "'" + str('FACTURA') + "',0" + ') valorJson'
 
     if (tipoRips == 'Glosa'):
         transaccionId = RipsTransaccion.objects.get(ripsEnvio_id=envioRipsId, numFactura=facturaId, numNota=glosaId)
         transaccion=transaccionId.id
         print("transaccion = " ,transaccion )
 
-        detalle = 'select generaFacturaJSONBAK('  + "'" + str(envioRipsId) + "','" + str(glosaId)  + "'," + "'" + str('GLOSA') + "'," + str(transaccion)   + ') valorJson'
+        detalle = 'select generaFacturaJSONBAK1('  + "'" + str(envioRipsId) + "','" + str(glosaId)  + "'," + "'" + str('GLOSA') + "'," + str(transaccion)   + ') valorJson'
 
 
     if (tipoRips == 'Nota Credito'):
-        transaccionId = RipsTransaccion.objects.get(ripsEnvio_id=envioRipsId, numFactura=facturaId, numNota=glosaId)
+        transaccionId = RipsTransaccion.objects.get(ripsEnvio_id=envioRipsId, numFactura=facturaId, numNota=notaCreditoId)
         transaccion=transaccionId.id
         print("transaccion = " ,transaccion )
 
-        detalle = 'select generaFacturaJSONBAK('  + "'" + str(envioRipsId) + "','" + str(glosaId)  + "'," + "'" + str('GLOSA') + "'," + str(transaccion)   + ') valorJson'
+        detalle = 'select generaFacturaJSONBAK1('  + "'" + str(envioRipsId) + "','" + str(notaCreditoId)  + "'," + "'" + str('NOTA CREDITO') + "'," + str(transaccion)   + ') valorJson'
 
 
 
@@ -1781,11 +1797,18 @@ def TraerJsonEnvioRips(request):
 
             if (tipoRips == 'Factura'):
 
-                detalle = 'select generaEnvioRipsJSON('  + "'" + str(envioRipsId) + "','" + str('FACTURA') + "'" + ') valorJson'
+                detalle = 'select generaEnvioRipsJSON1('  + "'" + str(envioRipsId) + "','" + str('FACTURA') + "'" + ') valorJson'
 
             if (tipoRips == 'Glosa'):
 
-                detalle = 'select generaEnvioRipsJSON('  + "'" + str(envioRipsId) +  "','" + str('GLOSA') + "'" + ') valorJson'
+                detalle = 'select generaEnvioRipsJSON1('  + "'" + str(envioRipsId) +  "','" + str('GLOSA') + "'" + ') valorJson'
+
+
+            if (tipoRips == 'Nota Credito'):
+
+                detalle = 'select generaEnvioRipsJSON1('  + "'" + str(envioRipsId) +  "','" + str('NOTA CREDITO') + "'" + ') valorJson'
+
+
 
             print(detalle)
 

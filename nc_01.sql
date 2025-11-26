@@ -130,6 +130,7 @@ select * from rips_ripsusuarios;
 select * from cartera_notascreditodetalle
 	--delete from cartera_notascreditodetalle where id=13
 select * from cartera_notascreditodetallerips
+	update cartera_notascreditodetallerips set "notaCreditoDetalle_id" = 13  where id =14
 select * from rips_ripsenvios
 	select * from rips_ripsdetalle
 	

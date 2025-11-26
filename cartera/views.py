@@ -368,7 +368,6 @@ def GuardaNotasCreditoDetalle(request):
 
         print("no haga nada")
 
-
     valorParcialFactura = valorParcialFacturaId.valorApagar
     valorParcialGlosas = valorParcialFacturaId.totalValorAceptado
 
@@ -387,7 +386,7 @@ def GuardaNotasCreditoDetalle(request):
     if (valorParcialNotasDebito == None):
             valorParcialNotasDebito=0
 
-    saldoFactura = float(valorParcialFactura) -  float(valorParcialNotasCredito) + float(valorParcialNotasDebito)
+    saldoFactura = float(valorParcialFactura) -  float(valorParcialNotasCredito) + float(valorParcialNotasDebito) -  float(valorParcialGlosas)
 
     if (float(valorNota) >  float(saldoFactura)):
 
@@ -1938,7 +1937,7 @@ def GuardarNotasCreditoDetalleRips(request):
     if (valorParcialNotasDebito == None):
             valorParcialNotasDebito=0
 
-    saldoFactura = float(valorParcialFactura) -  float(valorParcialNotasCredito) + float(valorParcialNotasDebito)
+    saldoFactura = float(valorParcialFactura) -  float(valorParcialNotasCredito) + float(valorParcialNotasDebito) -  float(valorParcialGlosas)
 
 
     miConexion3 = None
