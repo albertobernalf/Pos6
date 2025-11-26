@@ -193,12 +193,12 @@ class Glosas(models.Model):
     id = models.AutoField(primary_key=True)
     sedesClinica = models.ForeignKey('sitios.SedesClinica', blank=True,null= True, editable=True, on_delete=models.PROTECT, related_name = 'SedesClinica764')
     serviciosAdministrativos = models.ForeignKey('sitios.ServiciosAdministrativos', blank=True,null= True, editable=True,  on_delete=models.PROTECT,   related_name='seradm10')
-    convenio = models.ForeignKey('contratacion.Convenios',blank=True,null= True, editable=True, on_delete=models.PROTECT)
+    #convenio = models.ForeignKey('contratacion.Convenios',blank=True,null= True, editable=True, on_delete=models.PROTECT)
     ripsEnvio =  models.ForeignKey('rips.RipsEnvios',blank=True,null= True, editable=True, on_delete=models.PROTECT )
     fechaRecepcion = models.DateTimeField(editable=True, null=True, blank=True)
     tipoGlosa = models.ForeignKey('cartera.TiposGlosas',blank=True,null= True, editable=True, on_delete=models.PROTECT ,  related_name='estadoGlosa01')
-    factura = models.ForeignKey('facturacion.Facturacion',blank=True,null= True, editable=True, on_delete=models.PROTECT ,  related_name='facturacion102')
-    saldoFactura =  models.DecimalField( max_digits=15, decimal_places=2)
+    #factura = models.ForeignKey('facturacion.Facturacion',blank=True,null= True, editable=True, on_delete=models.PROTECT ,  related_name='facturacion102')
+    #saldoFactura =  models.DecimalField( max_digits=15, decimal_places=2)
     #valorGlosa =  models.DecimalField( max_digits=15, decimal_places=2, default=0)
     totalGlosa =  models.DecimalField( max_digits=15, decimal_places=2, default=0)
     totalSoportado =  models.DecimalField( max_digits=15, decimal_places=2)
@@ -232,11 +232,41 @@ class GlosasDetalle(models.Model):
         ]
     id = models.AutoField(primary_key=True)
     glosa = models.ForeignKey('cartera.Glosas',blank=True,null= True, editable=True, on_delete=models.PROTECT )
+    factura = models.ForeignKey('facturacion.Facturacion',blank=True,null= True, editable=True, on_delete=models.PROTECT ,  related_name='facturacion10322')
+    #itemFactura =  models.IntegerField(editable=True, null=True, blank=True)
+    #ripsProcedimientos =  models.ForeignKey('rips.RipsProcedimientos',blank=True,null= True, editable=True, on_delete=models.PROTECT ,  related_name='ripsProced01' )
+    #ripsMedicamentos =  models.ForeignKey('rips.RipsMedicamentos',blank=True,null= True, editable=True, on_delete=models.PROTECT ,  related_name='ripsMedic01')
+    #ripsConsultas =  models.ForeignKey('rips.RipsConsultas',blank=True,null= True, editable=True, on_delete=models.PROTECT ,  related_name='ripsCons01')
+    #ripsOtrosServicios =  models.ForeignKey('rips.RipsOtrosServicios',blank=True,null= True, editable=True, on_delete=models.PROTECT ,  related_name='ripsOtros01')
+    #ripsTipos =  models.ForeignKey('rips.RipsTipos', blank=True, null=True, editable=True, on_delete=models.PROTECT , related_name='RpsTipos10')   
+    #itemRips =  models.IntegerField(editable=True, null=True, blank=True)
+    #ripsId    =  models.IntegerField(editable=True, null=True, blank=True)
+    #motivoGlosa = models.ForeignKey('cartera.MotivosGlosas',blank=True,null= True, editable=True, on_delete=models.PROTECT )
+    #valorServicio = models.DecimalField( max_digits=15, decimal_places=2)
+    valorGlosa = models.DecimalField( max_digits=15, decimal_places=2)
+    valorSoportado =  models.DecimalField( max_digits=15, decimal_places=2)
+    valorAceptado =  models.DecimalField( max_digits=15, decimal_places=2)
+    valorNotasCredito =  models.DecimalField( max_digits=15, decimal_places=2, default=0,blank=True,null= True)
+    observaciones = models.CharField(max_length=120, blank=True,null= True, editable=True)
+    fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)
+    usuarioRegistro = models.ForeignKey('planta.Planta', default=1, on_delete=models.PROTECT, null=True ,  related_name='usuario7423')
+    anulado = models.CharField(max_length=1, choices=FLAG_CHOICES, default='N', editable=False)
+    estadoReg = models.CharField(max_length=1, choices=ESTADOREG_CHOICES, default='A', editable=False)
+
+    def __integer__(self):
+        return self.observaciones
+
+class GlosasDetalleRips(models.Model):
+    ESTADOREG_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'), ]
+    FLAG1_CHOICES = [
+        ('S', 'Si'),
+        ('N', 'No'),
+        ]
+    id = models.AutoField(primary_key=True)
+    glosasDetalle = models.ForeignKey('cartera.GlosasDetalle',blank=True,null= True, editable=True, on_delete=models.PROTECT)
     itemFactura =  models.IntegerField(editable=True, null=True, blank=True)
-    ripsProcedimientos =  models.ForeignKey('rips.RipsProcedimientos',blank=True,null= True, editable=True, on_delete=models.PROTECT ,  related_name='ripsProced01' )
-    ripsMedicamentos =  models.ForeignKey('rips.RipsMedicamentos',blank=True,null= True, editable=True, on_delete=models.PROTECT ,  related_name='ripsMedic01')
-    ripsConsultas =  models.ForeignKey('rips.RipsConsultas',blank=True,null= True, editable=True, on_delete=models.PROTECT ,  related_name='ripsCons01')
-    ripsOtrosServicios =  models.ForeignKey('rips.RipsOtrosServicios',blank=True,null= True, editable=True, on_delete=models.PROTECT ,  related_name='ripsOtros01')
     ripsTipos =  models.ForeignKey('rips.RipsTipos', blank=True, null=True, editable=True, on_delete=models.PROTECT , related_name='RpsTipos10')   
     itemRips =  models.IntegerField(editable=True, null=True, blank=True)
     ripsId    =  models.IntegerField(editable=True, null=True, blank=True)
@@ -247,13 +277,18 @@ class GlosasDetalle(models.Model):
     valorAceptado =  models.DecimalField( max_digits=15, decimal_places=2)
     valorNotasCredito =  models.DecimalField( max_digits=15, decimal_places=2, default=0,blank=True,null= True)
     observaciones = models.CharField(max_length=120, blank=True,null= True, editable=True)
+    ripsProcedimientos =  models.ForeignKey('rips.RipsProcedimientos',blank=True,null= True, editable=True, on_delete=models.PROTECT ,  related_name='ripsProced01' )
+    ripsMedicamentos =  models.ForeignKey('rips.RipsMedicamentos',blank=True,null= True, editable=True, on_delete=models.PROTECT ,  related_name='ripsMedic01')
+    ripsConsultas =  models.ForeignKey('rips.RipsConsultas',blank=True,null= True, editable=True, on_delete=models.PROTECT ,  related_name='ripsCons01')
+    ripsOtrosServicios =  models.ForeignKey('rips.RipsOtrosServicios',blank=True,null= True, editable=True, on_delete=models.PROTECT ,  related_name='ripsOtros01')
     fechaRegistro = models.DateTimeField(editable=True, null=True, blank=True)
-    usuarioRegistro = models.ForeignKey('planta.Planta', default=1, on_delete=models.PROTECT, null=True ,  related_name='usuario743')
-    anulado = models.CharField(max_length=1, choices=FLAG_CHOICES, default='N', editable=False)
+    usuarioRegistro = models.ForeignKey('planta.Planta', default=1, on_delete=models.PROTECT, null=True ,  related_name='usuario79533')
+    anulado = models.CharField(max_length=1, choices=FLAG1_CHOICES, default='N', editable=False)
     estadoReg = models.CharField(max_length=1, choices=ESTADOREG_CHOICES, default='A', editable=False)
 
-    def __integer__(self):
-        return self.observaciones
+    def __str__(self):
+        return self.factura
+
 
 class NotasCredito(models.Model):
     ESTADOREG_CHOICES = [

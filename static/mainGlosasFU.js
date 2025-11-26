@@ -95,7 +95,7 @@ function arrancaGlosas(valorTabla,valorData)
 	    { width: '10%', targets: [2,3] },
 
 		{   
-                    "targets": 24
+                    "targets": 20
                }
             ],
 	 pageLength: 3,
@@ -133,28 +133,22 @@ function arrancaGlosas(valorTabla,valorData)
                     },
 
 		},
-		 { data: "fields.factura_id"},
+
                 { data: "fields.id"},
                 { data: "fields.fechaRecepcion"},
-                { data: "fields.saldoFactura"},
                 { data: "fields.totalSoportado"},
                 { data: "fields.totalAceptado"},
                 { data: "fields.totalGlosa"},
                 { data: "fields.totalNotasCredito"},
-
                 { data: "fields.observaciones"},
                 { data: "fields.fechaRegistro"},
                 { data: "fields.estadoReg"},
-		{ data: "fields.convenio_id"},
-		{ data: "fields.nombreConvenio"},
                 { data: "fields.usuarioRegistro_id"},
-	
 		 { data: "fields.fechaRespuesta"},
 		 { data: "fields.tipoGlosa_id"},
 		 { data: "fields.nombreTipoGlosa"},
 		  { data: "fields.usuarioRecepcion_id"},
-                { data: "fields.usuarioRespuesta_id"},    
-          
+                { data: "fields.usuarioRespuesta_id"},              
                 { data: "fields.estadoRadicacion_id"},    
                 { data: "fields.estadoRecepcion_id"},    
                 { data: "fields.estadoGlosaRecepcion"},    
@@ -206,7 +200,7 @@ function arrancaGlosas(valorTabla,valorData)
             columnDefs: [
 		{ className: 'centered', targets: [0, 1, 2, 3, 4, 5] },
 		{     
-                    "targets": 12
+                    "targets": 6
                }
             ],
 	 pageLength: 3,
@@ -242,18 +236,13 @@ function arrancaGlosas(valorTabla,valorData)
                        return btn;
                     },
 		},
-		{ data: "fields.tipo"},
 		{ data: "fields.id"},
-             	{ data: "fields.consec"},
-                { data: "fields.itemFactura"},
-                { data: "fields.codigo"},
-                { data: "fields.nombre"},
-                { data: "fields.glosaNombre"},
-	        { data: "fields.vrServicio"},
+                { data: "fields.factura_id"},
+
                 { data: "fields.valorGlosa"},
                 { data: "fields.valorAceptado"},
                 { data: "fields.valorNotasCredito"},
-                { data: "fields.valorSoportado2"},
+                { data: "fields.valorSoportado"},
 
 		{
 		"render": function ( data, type, row ) {
@@ -1523,61 +1512,16 @@ window.addEventListener('load', async () => {
 	        arrancaGlosas(2,data);
 	    dataTableGlosasDetalleInitialized = true;
 
-         arrancaGlosas(11,data);
-	 dataTableGlosasTotalesInitialized = true;
-
-
-
-//	        arrancaGlosas(4,data);
-//	    dataTableGlosasInitialized = true;
-
-//	        arrancaGlosas(5,data);
-//	    dataTableGlosasUsuariosInitialized = true;
-
-//        	arrancaGlosas(7,data);
-//	    dataTableGlosasHospitalizacion = true;
-
-//        	arrancaGlosas(8,data);
-//	    dataTableGlosasMedicamentos = true;
-
 	// AQUI tengo que colocar los datosde la Glosa en el Formulario de General y demas
 
-	document.getElementById("post_idGlo").innerHTML =post_id;
+	document.getElementById("post_idGlo").innerHTML =dato3.id;
 	document.getElementById("factura_idGlo").innerHTML = dato3.factura_id;
 	document.getElementById("facturaAdicionar_id").value = dato3.factura_id;
-	//document.getElementById("fechaRecepcionGlo").innerHTML = dato3.fechaRecepcion;
-	//document.getElementById("valorGlosaGlo").innerHTML = dato3.valorGlosa;
-	//document.getElementById("estadoRegGlo").innerHTML = dato3.estadoReg;
-	//document.getElementById("totalSoportadoGlo").innerHTML= dato3.totalSoportado;
-	//document.getElementById("totalAceptadoGlo").innerHTML = dato3.totalAceptado;
-
-	//document.getElementById("totalGlosaGlo").innerHTML= dato3.totalGlosa;
-	//document.getElementById("totalNotasCreditoGlo").innerHTML = dato3.totalNotasCredito;
-
-
-	//document.getElementById("saldoFacturaGlo").innerHTML = dato3.saldoFactura;
-	//document.getElementById("observacionesGlo").innerHTML = dato3.observaciones;
-
-	document.getElementById("convenio_idGlo").value = dato3.convenio_id;
-	document.getElementById("convenioAdicionar_id").value = dato3.convenio_id;
-	//document.getElementById("fechaRegistroGlo").innerHTML = dato3.fechaRegistro;
-	//document.getElementById("usuarioRegistro_idGlo").innerHTML = dato3.usuarioRegistro_id;
-	//document.getElementById("fechaRespuestaGlo").innerHTML = dato3.fechaRespuesta;
+	//document.getElementById("convenio_idGlo").value = dato3.convenio_id;
+	//document.getElementById("convenioAdicionar_id").value = dato3.convenio_id;
 	document.getElementById("tipoGlosa_idGlo").value = dato3.tipoGlosa_id;
-	//document.getElementById("usuarioRecepcion_idGlo").innerHTML = dato3.usuarioRecepcion_id;
-	//document.getElementById("usuarioRespuesta_idGlo").innerHTML = dato3.usuarioRespuesta_id;
-
-
 	document.getElementById("estadoRadicacion_idGlo").value = dato3.estadoRadicacion_id;
 	document.getElementById("estadoRecepcion_idGlo").value = dato3.estadoRecepcion_id;
-
-
-//        	arrancaGlosas(6,data);
-//	    dataTableGlosasProcedimientosInitialized = true;
-
-        	arrancaGlosas(10,data);
-	    dataTableGlosasAdicionarInitialized = true;
-
 
   });
 
