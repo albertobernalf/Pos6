@@ -326,7 +326,7 @@ urlpatterns = [
     path('load_tablaGlosasHospitalizacion/<str:data>', viewsCartera.Load_tablaGlosasHospitalizacion,name='load_tablaGlosasHospitalizacion'),
     path('load_tablaGlosasUrgencias/<str:data>', viewsCartera.Load_tablaGlosasUrgencias,name='load_tablaGlosasUrgencias'),
     path('consultaGlosasDetalle/', viewsCartera.ConsultaGlosasDetalle, name='consulta_GlosasDetalle'),
-    path('guardarGlosasDetalle/', viewsCartera.GuardarGlosasDetalle,name='guardarGlosasDetalle'),
+    path('guardarGlosasDetalleRips/', viewsCartera.GuardarGlosasDetalleRips,name='guardarGlosasDetalle_Rips'),
     path('guardaGlosasEstados/', viewsCartera.GuardaGlosasEstados,name='guardaGlosasEstados'),
     path('load_tablaGlosasDetalle/<str:data>', viewsCartera.Load_tablaGlosasDetalle,name='load_tablaGlosasDetalle'),
     path('load_dataCaja/<str:data>', viewsCartera.Load_dataCaja,name='load_data-Caja'),
@@ -345,6 +345,9 @@ urlpatterns = [
     path('guardarNotasCreditoDetalleRips/', viewsCartera.GuardarNotasCreditoDetalleRips, name='guardarNotas_CreditoDetalleRips'),
     path('consultaNotasCreditoDetalleRips/', viewsCartera.ConsultaNotasCreditoDetalleRips, name='consultaNotas_CreditoDetalleRips'),
     path('borraNotasCreditoDetalleRips/', viewsCartera.BorraNotasCreditoDetalleRips, name='BorraNotasCredito_DetalleRips'),
+    path('consultaGlosasDetalleRips/', viewsCartera.ConsultaGlosasDetalleRips, name='consulta_GlosasDetalleRi´ps'),
+    path('load_tablaGlosasDetalleRips/<str:data>', viewsCartera.Load_tablaGlosasDetalleRips, name='Load_tablaGlosasDetalle_Rips'),
+
 
     # Tarifas
 	
