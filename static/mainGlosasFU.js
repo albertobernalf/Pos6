@@ -895,7 +895,7 @@ window.addEventListener('load', async () => {
 	alert("Entre glosas detalle ");
 
         var data =  {}   ;
-       // post_id = document.getElementById("post_idGlo").innerHTML;
+       
 	var table = $('#tablaGlosasDetalle').DataTable();  // Inicializa el DataTable jquery
 var row = $(this).closest('tr'); // Encuentra la fila
 	var rowindex = table.row(row).data(); // Obtiene los datos de la fila
@@ -921,9 +921,11 @@ var row = $(this).closest('tr'); // Encuentra la fila
         data['username_id'] = username_id;
 	sedesClinica_id = sede;
 	data['sedesClinica_id'] = sedesClinica_id
-    data['facturaId'] = facturaId;
+        data['facturaId'] = facturaId;
+	post_id = document.getElementById("post_idGlo").innerHTML;
+	post_idGloDet = document.getElementById("post_idGloDet").innerHTML;
 	data['glosaId'] = post_id;
-
+	data['gloDetId'] = post_idGloDet;
         data = JSON.stringify(data);
 
         arrancaGlosas(3,data);
@@ -1190,10 +1192,6 @@ function GuardarGlosasDetalle()
 			 arrancaGlosas(1,data);
 			    dataTableGlosasInitialized = true;
 
-
-//        	arrancaGlosas(7,data);
-//	    dataTableGlosasHospitalizacion = true;
-
 			 arrancaGlosas(2,data);
 			    dataTableGlosasDetalleInitialized = true;
 
@@ -1226,6 +1224,7 @@ function GuardarGlosasDetalleRips()
 	    	var sede = document.getElementById("sede").value;
 		
 		var post_idGloDet = document.getElementById("post_idGloDet").innerHTML;
+		var post_idGlo = document.getElementById("post_idGlo").innerHTML;
 
 	    	var post_idGloDetRips = document.getElementById("post_idGloDetRips").innerHTML;
 	    	var tipoGloDetRips = document.getElementById("tipoGloDetRips").innerHTML;
@@ -1263,15 +1262,6 @@ function GuardarGlosasDetalleRips()
 				 $('#postFormGlosasDetalle').trigger("reset");
 
 
-			// filtrodata = JSON.stringify(data2['Data']);
-	
-
-			// filtrodata = filtrodata.replace ('[','');
-			// filtrodata = filtrodata.replace (']','');
-			// filtro = JSON.parse(filtrodata);
-
-
-
 		// document.getElementById("valorGlosaGlo").innerHTML = filtro.fields.valorGlosa;
 		// document.getElementById("totalSoportadoGlo").innerHTML = filtro.fields.totalSoportado;
 		// document.getElementById("totalAceptadoGlo").innerHTML = filtro.fields.totalAceptado;
@@ -1287,11 +1277,16 @@ function GuardarGlosasDetalleRips()
 	        data['nombreSede'] = nombreSede;
 	        data['sede'] = sede;
 	        data['sedesClinica_id'] = sede;
-
-		var facturaId = dato3.factura_id;  // jquery
 		var facturaId =	document.getElementById("factura_idGlo").innerHTML;
-		data['facturaId'] = facturaId;
+
+
 		data['glosaId'] = post_idGlo;
+		data['facturaId'] = facturaId;
+		data['gloDetId'] = post_idGloDet;
+
+		alert("voya a cargat con glosaId + " +  post_idGlo);
+		alert("voya a cargat con facturaId + " +  facturaId);
+
 
 
 	        data = JSON.stringify(data);
@@ -1299,11 +1294,8 @@ function GuardarGlosasDetalleRips()
 			 arrancaGlosas(2,data);
 			    dataTableGlosasDetalleInitialized = true;
 
-
 			 arrancaGlosas(3,data);
 			    dataTableGlosasDetalleRipsInitialized = true;
-
-
 
 
  		 $('#crearModelGlosasDetalleRips').modal('hide');
@@ -1313,7 +1305,7 @@ function GuardarGlosasDetalleRips()
 
                 },
               error: function (data) {	      
-			document.getElementById("mensajesErrorModalGlosasDetalle").value =   data.responseText;
+			document.getElementById("mensajesErrorGlosasDetalleModalRips").value =   data.responseText;
                 }
             });
 
@@ -1467,13 +1459,11 @@ function CrearGlosas()
 	    	var sede = document.getElementById("sede").value;
 	        var username_id = document.getElementById("username_id").value;
 		alert("Entre Guardar Glosas Estado");
-
-	        
-		var convenio_id = document.getElementById("convenio_id").value;
+     
+	
 	        var sedesClinica_id = document.getElementById("sedesClinica_id").value;
 	        var fechaRecepcion = document.getElementById("fechaRecepcion").value;
 	        var observaciones = document.getElementById("observaciones").value;
-	        var factura_id = document.getElementById("factura_id").value;
 	        var fechaRespuesta = document.getElementById("fechaRespuesta").value;
 	        var tipoGlosa_id = document.getElementById("tipoGlosa_id").value;
 	        var totalGlosa = document.getElementById("totalGlosa").value;
@@ -1483,7 +1473,7 @@ function CrearGlosas()
 
 
             $.ajax({
-                data: {'serviciosAdministrativos_id':serviciosAdministrativos_id, 'convenio_id':convenio_id,'sedesClinica_id':sedesClinica_id, 'fechaRecepcion':fechaRecepcion, 'observaciones':observaciones,'factura_id':factura_id,  'fechaRespuesta':fechaRespuesta, 'tipoGlosa_id':tipoGlosa_id, 'totalGlosa':totalGlosa, 'estadoRecepcion_id':estadoRecepcion_id, 'usuarioRegistro_id':usuarioRegistro_id },
+                data: {'serviciosAdministrativos_id':serviciosAdministrativos_id, 'sedesClinica_id':sedesClinica_id, 'fechaRecepcion':fechaRecepcion, 'observaciones':observaciones, 'fechaRespuesta':fechaRespuesta, 'tipoGlosa_id':tipoGlosa_id, 'totalGlosa':totalGlosa, 'estadoRecepcion_id':estadoRecepcion_id, 'usuarioRegistro_id':usuarioRegistro_id },
 	        url: "/guardaGlosas/",
                 type: "POST",
                 dataType: 'json',
@@ -1498,24 +1488,14 @@ function CrearGlosas()
 	        data['sede'] = sede;
 	        data['sedesClinica_id'] = sede;
 
-		var facturaId = document.getElementById("factura_idGlo").innerHTML;
-		data['facturaId'] = document.getElementById("factura_idGlo").value;
-
 	        data = JSON.stringify(data);
-	
   	
 			 arrancaGlosas(1,data);
 			    dataTableGlosasInitialized = true;
 
-//        	arrancaGlosas(7,data);
-//	    dataTableGlosasHospitalizacion = true;
-
-//			 arrancaGlosas(8,data);
-//			    dataTableGlosasMedicamentosInitialized = true;
 		            $('#crearModelGlosas').modal('hide');
 
-
-		document.getElementById("mensajesError").value = data2.Mensajes;
+		document.getElementById("mensajes").value = data2.Mensajes;
 
                 },
               error: function (data) {	      

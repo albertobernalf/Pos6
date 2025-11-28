@@ -189,19 +189,7 @@ table.dataTable tbody tr {
                                     </div>
 
 
-				<div class="col-12">
-                                    convenio_id:
-				<select class="select-css"  id="convenio_id"
-                                                                name="convenio_id">
-                                                            {% for convenios in Convenios %}
-                                                            <option value="{{convenios.id}}">
-                                                                {{convenios.nombre}}
-                                                            </option>
-                                                            {% endfor %}
-                                                        </select>
-                                </div>
-
-
+			
 			  
 				<div class="col-12">
 					fechaRecepcion:
@@ -215,14 +203,6 @@ table.dataTable tbody tr {
                                
 					 <input type="text"  class="form-control" id="observaciones" name="observaciones" placeholder="observaciones"  >
                                 </div>
-
-
-				<div class="col-12">
-                                   	 <label class="visually-hidden" for="factura_id">factura_id:</label>
-                               
-					 <input type="text" class="form-control" id="factura_id" name="factura_id" placeholder="factura_id"  >
-                                </div>
-
 
 
 
@@ -352,17 +332,7 @@ table.dataTable tbody tr {
                                 </div>
 		
 
-				<div class="col-sm-1">
-                                    Convenio:
-				<select class="select-css"  id="convenio_idGlo"  name="convenio_idGlo" disabled>
-                                                           {% for convenios in Convenios %}
-                                                            <option value="{{convenios.id}}">
-								  {{convenios.nombre}}
-                                                            </option>
-                                                            {% endfor %}
-                                                          
-                                                        </select>
-                                </div>
+		
 
 				<div class="col-sm-1">
                                     Tipo Glosa:
@@ -505,7 +475,7 @@ table.dataTable tbody tr {
 			 <div class="col-2">
 				Id:
 			 <span class="miTexto" name="glosaGloDetRips" id="glosaGloDetRips"></span>
-				<!-- <input type="text" class="form-control form-control-sm" name="glosaGloDetRips" id="glosaGloDetRips"> -->
+
 			   </div>
 
 				  <div class="col-1">
