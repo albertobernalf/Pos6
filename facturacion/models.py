@@ -137,7 +137,7 @@ class Suministros (models.Model):
     codigoAtc  =  models.ForeignKey('clinico.Atc', blank=True,null= True, editable=True, on_delete=models.PROTECT)
     cantidadUvr =  models.CharField(max_length=10,blank=True, null=True, editable=True)
     cums =  models.CharField(max_length=50,blank=True,null= True,  editable=True )
-    tipoHonorario = models.ForeignKey('tarifas.TiposHonorarios', blank=True,null= True, editable=True, on_delete=models.PROTECT)
+    tipoHonorario = models.ForeignKey('tarifarios.TiposHonorarios', blank=True,null= True, editable=True, on_delete=models.PROTECT)
     ripsTipoMedicamento = models.ForeignKey('rips.RipsTipoMedicamento', blank=True,null= True, editable=True, on_delete=models.PROTECT ,  related_name='RipsTipo01')
     ripsCums = models.ForeignKey('rips.RipsCums', blank=True,null= True, editable=True, on_delete=models.PROTECT,  related_name='RipsCums01')
     ripsDci = models.ForeignKey('rips.RipsDci', blank=True,null= True, editable=True, on_delete=models.PROTECT, related_name='RipsDci01')
@@ -317,7 +317,7 @@ class LiquidacionCirugias(models.Model):
         ]
     id = models.AutoField(primary_key=True)
     tipo =  models.CharField(max_length=50, default='A', editable=False )
-    tipoTarifa =  models.ForeignKey('tarifas.TiposTarifa', blank=True,null= True, editable=True, on_delete=models.PROTECT)
+    tipoTarifa =  models.ForeignKey('tarifarios.TiposTarifa', blank=True,null= True, editable=True, on_delete=models.PROTECT)
     cirujanoPorcentage      = models.DecimalField( max_digits=15, decimal_places=2 , blank=True,null= True, editable=True)
     anestesiologoPorcentage      = models.DecimalField( max_digits=15, decimal_places=2 , blank=True,null= True, editable=True)
     ayudantePorcentage      = models.DecimalField( max_digits=15, decimal_places=2 , blank=True,null= True, editable=True)

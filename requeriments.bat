@@ -74,3 +74,7 @@ pip install pygresql
 pip install reportlab
 pip install openpyxl
 pip install django-pyodbc-azure-2019
+pip install django-postgres-extra
+pip install psqlextra
+pip install fpdf
+pip install PyPDF2

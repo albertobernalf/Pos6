@@ -209,6 +209,7 @@ class MinimosLegales(models.Model):
     def __str__(self):
         return str(self.nombre)
 
+
 class TablaHonorariosSoat(models.Model):
     ESTADOREG_CHOICES = [
         ('A', 'Activo'),

@@ -2,7 +2,7 @@ from django.db import models
 from django.utils.timezone import now
 from smart_selects.db_fields import GroupedForeignKey
 
-from tarifas.models import Tarifas
+#from tarifas.models import Tarifas
 
 
 # Create your models here.
@@ -69,8 +69,8 @@ class ConveniosTarifasHonorarios (models.Model):
     id = models.AutoField(primary_key=True)
     serviciosAdministrativos = models.ForeignKey('sitios.ServiciosAdministrativos', blank=True,null= True, editable=True,  on_delete=models.PROTECT,   related_name='seradm16')
     convenio = models.ForeignKey('contratacion.Convenios', blank=True,null= True, editable=True, on_delete=models.PROTECT)        
-    tipoTarifa = models.ForeignKey('tarifas.TiposTarifa', blank=True,null= True, editable=True, on_delete=models.PROTECT)    
-    tipoHonorario =  models.ForeignKey('tarifas.TiposHonorarios', blank=True,null= True, editable=True, on_delete=models.PROTECT, related_name='TipoHonorario05')
+    tipoTarifa = models.ForeignKey('tarifarios.TiposTarifa', blank=True,null= True, editable=True, on_delete=models.PROTECT)    
+    tipoHonorario =  models.ForeignKey('tarifarios.TiposHonorarios', blank=True,null= True, editable=True, on_delete=models.PROTECT, related_name='TipoHonorario05')
     codigoHomologado = models.CharField(max_length=10, blank=True, null=True, editable=True)
     cups = models.ForeignKey('clinico.Examenes',  blank=True,null= True, editable=True, on_delete=models.PROTECT,  related_name='Cups215')
     valor = models.DecimalField( max_digits=15, decimal_places=2, blank=True,null= True, editable=True)
@@ -98,7 +98,7 @@ class ConveniosSuministros(models.Model):
     id = models.AutoField(primary_key=True)
     serviciosAdministrativos = models.ForeignKey('sitios.ServiciosAdministrativos', blank=True,null= True, editable=True,  on_delete=models.PROTECT,   related_name='seradm17')
     convenio = models.ForeignKey('contratacion.Convenios', blank=True,null= True, editable=True, on_delete=models.PROTECT)        
-    #tipoTarifa = models.ForeignKey('tarifas.TiposTarifa', blank=True,null= True, editable=True, on_delete=models.PROTECT)    
+    #tipoTarifa = models.ForeignKey('tarifarios.TiposTarifa', blank=True,null= True, editable=True, on_delete=models.PROTECT)    
     #codigoHomologado = models.CharField(max_length=10, blank=True, null=True, editable=True)
     #concepto = models.ForeignKey('facturacion.Conceptos', blank=True,null= True, editable=True, on_delete=models.PROTECT , related_name='Concepto221')
     #suministro = models.ForeignKey('facturacion.Suministros',on_delete=models.PROTECT, null= False)
@@ -126,9 +126,9 @@ class ConveniosLiquidacionTarifasHonorarios(models.Model):
     id = models.AutoField(primary_key=True)
     serviciosAdministrativos = models.ForeignKey('sitios.ServiciosAdministrativos', blank=True,null= True, editable=True,  on_delete=models.PROTECT,   related_name='seradm18')
     convenio = models.ForeignKey('contratacion.Convenios', blank=True,null= True, editable=True, on_delete=models.PROTECT)  
-    tipoTarifa =  models.ForeignKey('tarifas.TiposTarifa', blank=True,null= True, editable=True, on_delete=models.PROTECT, related_name='TipoTarifa037')
+    tipoTarifa =  models.ForeignKey('tarifarios.TiposTarifa', blank=True,null= True, editable=True, on_delete=models.PROTECT, related_name='TipoTarifa037')
     codigoHomologado = models.CharField(max_length=10, blank=True,null= True , editable=True )
-    tipoHonorario =  models.ForeignKey('tarifas.TiposHonorarios', blank=True,null= True, editable=True, on_delete=models.PROTECT, related_name='TipoHonorario017')
+    tipoHonorario =  models.ForeignKey('tarifarios.TiposHonorarios', blank=True,null= True, editable=True, on_delete=models.PROTECT, related_name='TipoHonorario017')
     concepto = models.ForeignKey('facturacion.Conceptos', blank=True,null= True, editable=True, on_delete=models.PROTECT , related_name='Concepto224')
     descripcion =  models.CharField(max_length=300, blank=True,null= True , editable=True )
     #codigoSuministro =  models.ForeignKey('facturacion.Suministros', blank=True,null= True, editable=True, on_delete=models.PROTECT , related_name='Suminis1277')

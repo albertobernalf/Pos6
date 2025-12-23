@@ -1,0 +1,90 @@
+ 'NAME': 'vulner7Particionado',
+"ENGINE" : "psqlextra.backend" , 
+
+
+	'django.contrib.postgres',
+    'psqlextra'
+
+
+import psqlextra
+import psqlextra.backend.migrations.operations.add_default_partition
+import psqlextra.backend.migrations.operations.create_partitioned_model
+import psqlextra.manager.manager
+import psqlextra.models.partitioned
+import psqlextra.types
+#from django_postgres_extra.base import PartitionedModel
+from psqlextra.models import PostgresPartitionedModel
+from psqlextra.types import PostgresPartitioningMethod
+
+
+
+class Ingresos(PostgresPartitionedModel):
+
+    method = PostgresPartitioningMethod.RANGE
+    key = ["fechaIngreso"]
+
+
+-- otravoz importante
+
+class Ingresos(PostgresPartitionedModel):
+
+    partition_key = "fechaIngreso"
+    partition_type = "range"
+
+
+
+    class PartitioningMeta:
+        method = PostgresPartitioningMethod.RANGE
+        key = ["fechaIngreso"]
+
+
+--
+
+from django.db import models
+from psqlextra.types import PostgresPartitioningMethod
+from psqlextra.models import PostgresPartitionedModel
+
+class Person(PostgresPartitionedModel):
+    class PartitioningMeta:
+        method = PostgresPartitioningMethod.RANGE
+        key = ["birth_date"]
+    
+    full_name = models.TextField()
+    birth_date = models.DateField()
+
+
+python manage.py pgmakemigrations
+
+
+python manage.py makemigrations --empty yourappname
+
+from psqlextra.backend.migrations.operations import PostgresAddRangePartition
+
+class Migration(migrations.Migration):
+    dependencies = [
+        ('people', '0001_initial'),
+    ]
+    
+    operations = [
+        PostgresAddRangePartition(
+           model_name="person",
+           name="people_partitioned_birthdays_1800_to_1850",
+           from_values='1800-01-01',
+           to_values='1850-12-31',
+        ),
+    ]
+
+-- para borrar particion desde migracion
+
+from django.db import migrations, models
+
+from psqlextra.migrations.operations import PostgresDeleteListPartition
+
+class Migration(migrations.Migration):
+    operations = [
+        PostgresDeleteListPartition(
+           model_name="person",
+           name="people_partitioned_birthdays_1800_to_1850",
+        ),
+    ]
+

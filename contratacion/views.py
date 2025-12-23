@@ -503,7 +503,7 @@ def PostConsultaConvenios(request):
     miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres", password="123456")
     curt = miConexiont.cursor()
 
-    comando = "SELECT c.id id,c.nombre nombre FROM tarifas_TiposTarifa c"
+    comando = "SELECT c.id id,c.nombre nombre FROM tarifarios_TiposTarifa c"
 
     curt.execute(comando)
     print(comando)
@@ -526,7 +526,7 @@ def PostConsultaConvenios(request):
     miConexiont = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres", password="123456")
     curt = miConexiont.cursor()
 
-    comando = "SELECT c.id id,c.nombre nombre FROM tarifas_TiposHonorarios c"
+    comando = "SELECT c.id id,c.nombre nombre FROM tarifarios_TiposHonorarios c"
 
     curt.execute(comando)
     print(comando)
@@ -744,7 +744,7 @@ def load_dataConveniosProcedimientos(request, data):
     miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres", password="123456")
     curx = miConexionx.cursor()
    
-    detalle = 'select convProc.id procId, conv.id id, convProc."codigoHomologado" codigoHomologado, convProc.valor valor,  convProc.cups_id cupsId ,exa.nombre cupsNombre, tipostar.nombre tarifa FROM contratacion_convenios conv , contratacion_conveniosprocedimientos convProc, tarifas_tipostarifa tipostar, clinico_examenes exa WHERE conv.id = convProc.convenio_id and convProc."tipoTarifa_id" = tipostar.id and convProc.cups_id = exa.id and conv.id = ' + "'" + str(convenioId) + "'"
+    detalle = 'select convProc.id procId, conv.id id, convProc."codigoHomologado" codigoHomologado, convProc.valor valor,  convProc.cups_id cupsId ,exa.nombre cupsNombre, tipostar.nombre tarifa FROM contratacion_convenios conv , contratacion_conveniosprocedimientos convProc, tarifarios_tipostarifa tipostar, clinico_examenes exa WHERE conv.id = convProc.convenio_id and convProc."tipoTarifa_id" = tipostar.id and convProc.cups_id = exa.id and conv.id = ' + "'" + str(convenioId) + "'"
 
     print(detalle)
 
@@ -1042,22 +1042,22 @@ def GrabarTarifa( request):
 
                 if (accion == 'Crear' and porcentage != 0 and conceptos == '' and valorVariacion == '0' ):
                     print("Entre1")
-                    comando = 'INSERT INTO contratacion_conveniosProcedimientos ("codigoHomologado", valor,  "fechaRegistro", "estadoReg",convenio_id,cups_id, "tipoTarifa_id", "usuarioRegistro_id", concepto_id) select "codigoHomologado", round((+"valor" +"valor"*' + str(porcentage) + '/100)) subido  ,' + "'" + str(fechaRegistro) + "'," + "'" + str(estadoReg) + "'," + "'" + str(convenioId) + "'," + ' cast("codigoCups_id" as numeric), '  + str(tiposTarifa) + "," + "'" +  str(username_id) + "'" +  ', concepto_id from tarifas_tarifas where "tipoTarifa_id" = ' + "'" + str(tiposTarifa) + "'"
+                    comando = 'INSERT INTO contratacion_conveniosProcedimientos ("codigoHomologado", valor,  "fechaRegistro", "estadoReg",convenio_id,cups_id, "tipoTarifa_id", "usuarioRegistro_id", concepto_id) select "codigoHomologado", round((+"valor" +"valor"*' + str(porcentage) + '/100)) subido  ,' + "'" + str(fechaRegistro) + "'," + "'" + str(estadoReg) + "'," + "'" + str(convenioId) + "'," + ' cast("codigoCups_id" as numeric), '  + str(tiposTarifa) + "," + "'" +  str(username_id) + "'" +  ', concepto_id from tarifarios_tarifas where "tipoTarifa_id" = ' + "'" + str(tiposTarifa) + "'"
 
 
                 if (accion == 'Crear' and porcentage != 0 and conceptos != '' and valorVariacion == '0'):
                     print("Entre2")
-                    comando = 'INSERT INTO contratacion_conveniosProcedimientos ("codigoHomologado", valor,  "fechaRegistro", "estadoReg",convenio_id,cups_id, "tipoTarifa_id", "usuarioRegistro_id", concepto_id) select "codigoHomologado", round((+"valor" +"valor"*' + str(porcentage) + '/100)) subido  ,' + "'" + str(fechaRegistro) + "'," + "'" + str(estadoReg) + "'," + "'" + str(convenioId) + "'," + ' cast("codigoCups_id" as numeric), ' +"'"  + str(tiposTarifa)  + "'," + "'" + str(username_id) + "'" + ', concepto_id from tarifas_tarifas where "tipoTarifa_id" = ' + "'" + str(tiposTarifa) + "' AND concepto_id =" + "'" + str(conceptos) + "'"
+                    comando = 'INSERT INTO contratacion_conveniosProcedimientos ("codigoHomologado", valor,  "fechaRegistro", "estadoReg",convenio_id,cups_id, "tipoTarifa_id", "usuarioRegistro_id", concepto_id) select "codigoHomologado", round((+"valor" +"valor"*' + str(porcentage) + '/100)) subido  ,' + "'" + str(fechaRegistro) + "'," + "'" + str(estadoReg) + "'," + "'" + str(convenioId) + "'," + ' cast("codigoCups_id" as numeric), ' +"'"  + str(tiposTarifa)  + "'," + "'" + str(username_id) + "'" + ', concepto_id from tarifarios_tarifas where "tipoTarifa_id" = ' + "'" + str(tiposTarifa) + "' AND concepto_id =" + "'" + str(conceptos) + "'"
 
 
                 if (accion == 'Crear' and porcentage == '0'  and conceptos == '' and valorVariacion != '0'):
                     print("Entre3")
-                    comando = 'INSERT INTO contratacion_conveniosProcedimientos ("codigoHomologado", valor,  "fechaRegistro", "estadoReg",convenio_id,cups_id, "tipoTarifa_id", "usuarioRegistro_id", concepto_id) select "codigoHomologado", round( ' + "'" + str(valorVariacion) + "')" + ' subido  ,' + "'" + str(fechaRegistro) + "'," + "'" + str(estadoReg) + "'," + "'" + str(convenioId) +  "'," + ' cast("codigoCups_id" as numeric), '   +"'" + str(tiposTarifa)  + "'," + "'" + str(username_id) + "'" + ', concepto_id from tarifas_tarifas where "tipoTarifa_id" = ' + "'" + str(tiposTarifa) + "'"
+                    comando = 'INSERT INTO contratacion_conveniosProcedimientos ("codigoHomologado", valor,  "fechaRegistro", "estadoReg",convenio_id,cups_id, "tipoTarifa_id", "usuarioRegistro_id", concepto_id) select "codigoHomologado", round( ' + "'" + str(valorVariacion) + "')" + ' subido  ,' + "'" + str(fechaRegistro) + "'," + "'" + str(estadoReg) + "'," + "'" + str(convenioId) +  "'," + ' cast("codigoCups_id" as numeric), '   +"'" + str(tiposTarifa)  + "'," + "'" + str(username_id) + "'" + ', concepto_id from tarifarios_tarifas where "tipoTarifa_id" = ' + "'" + str(tiposTarifa) + "'"
 
 
                 if (accion == 'Crear' and porcentage == '0'  and conceptos != '' and valorVariacion !='0'):
                     print("Entre4")
-                    comando = 'INSERT INTO contratacion_conveniosProcedimientos ("codigoHomologado", valor,  "fechaRegistro", "estadoReg",convenio_id,cups_id, "tipoTarifa_id", "usuarioRegistro_id", concepto_id) select "codigoHomologado", round( ' + "'" + str(valorVariacion) + "')" + ' subido  ,' + "'" + str(fechaRegistro) + "'," + "'" + str(estadoReg) + "'," + "'" + str(convenioId) + "'," + ' cast("codigoCups_id" as numeric), '  +"'"  + str(tiposTarifa)  + "'," + "'" + str(username_id) + "'" + ', concepto_id from tarifas_tarifas where "tipoTarifa_id" = ' + "'" + str(tiposTarifa) + "' AND concepto_id =" + "'" + str(conceptos) + "'"
+                    comando = 'INSERT INTO contratacion_conveniosProcedimientos ("codigoHomologado", valor,  "fechaRegistro", "estadoReg",convenio_id,cups_id, "tipoTarifa_id", "usuarioRegistro_id", concepto_id) select "codigoHomologado", round( ' + "'" + str(valorVariacion) + "')" + ' subido  ,' + "'" + str(fechaRegistro) + "'," + "'" + str(estadoReg) + "'," + "'" + str(convenioId) + "'," + ' cast("codigoCups_id" as numeric), '  +"'"  + str(tiposTarifa)  + "'," + "'" + str(username_id) + "'" + ', concepto_id from tarifarios_tarifas where "tipoTarifa_id" = ' + "'" + str(tiposTarifa) + "' AND concepto_id =" + "'" + str(conceptos) + "'"
 
 
                 if (accion == 'Borrar' and conceptos == '' and valorVariacion == '0' ):
@@ -1157,7 +1157,7 @@ def load_dataConveniosSuministros(request, data):
     miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres", password="123456")
     curx = miConexionx.cursor()
    
-    detalle = 'select convSum.id sumId, conv.id id, convSum."codigoHomologado" codigoHomologado, convSum.valor valor,  convSum.suministro_id suministroId ,exa.nombre suministroNombre, tipostar.nombre tarifa FROM contratacion_convenios conv , contratacion_conveniossuministros convSum, tarifas_tipostarifa tipostar, facturacion_suministros exa WHERE conv.id = convSum.convenio_id and convSum."tipoTarifa_id" = tipostar.id and convSum.suministro_id = exa.id and conv.id = ' + "'" + str(convenioId) + "'"
+    detalle = 'select convSum.id sumId, conv.id id, convSum."codigoHomologado" codigoHomologado, convSum.valor valor,  convSum.suministro_id suministroId ,exa.nombre suministroNombre, tipostar.nombre tarifa FROM contratacion_convenios conv , contratacion_conveniossuministros convSum, tarifarios_tipostarifa tipostar, facturacion_suministros exa WHERE conv.id = convSum.convenio_id and convSum."tipoTarifa_id" = tipostar.id and convSum.suministro_id = exa.id and conv.id = ' + "'" + str(convenioId) + "'"
 
     print(detalle)
 
@@ -1270,22 +1270,22 @@ def GrabarSuministro( request):
 
                 if (accion == 'Crear' and porcentage != 0 and conceptos == '' and valorVariacion == '0' ):
                     print("Entre1")
-                    comando = 'INSERT INTO contratacion_conveniosSuministros ("codigoHomologado", valor,  "fechaRegistro", "estadoReg",convenio_id,suministro_id, "tipoTarifa_id", "usuarioRegistro_id", concepto_id) select "codigoHomologado", round((+"valor" +"valor"*' + str(porcentage) + '/100)) subido  ,' + "'" + str(fechaRegistro) + "'," + "'" + str(estadoReg) + "'," + "'" + str(convenioId) + "'," + ' cast(suministro_id as numeric), '  + str(tiposTarifa) + "," + "'" +  str(username_id) + "'" +  ', concepto_id from tarifas_tarifassuministros where "tipoTarifa_id" = ' + "'" + str(tiposTarifa) + "'"
+                    comando = 'INSERT INTO contratacion_conveniosSuministros ("codigoHomologado", valor,  "fechaRegistro", "estadoReg",convenio_id,suministro_id, "tipoTarifa_id", "usuarioRegistro_id", concepto_id) select "codigoHomologado", round((+"valor" +"valor"*' + str(porcentage) + '/100)) subido  ,' + "'" + str(fechaRegistro) + "'," + "'" + str(estadoReg) + "'," + "'" + str(convenioId) + "'," + ' cast(suministro_id as numeric), '  + str(tiposTarifa) + "," + "'" +  str(username_id) + "'" +  ', concepto_id from tarifarios_tarifassuministros where "tipoTarifa_id" = ' + "'" + str(tiposTarifa) + "'"
 
 
                 if (accion == 'Crear' and porcentage != 0 and conceptos != '' and valorVariacion == '0'):
                     print("Entre2")
-                    comando = 'INSERT INTO contratacion_conveniosSuministros ("codigoHomologado", valor,  "fechaRegistro", "estadoReg",convenio_id,suministro_id, "tipoTarifa_id", "usuarioRegistro_id", concepto_id) select "codigoHomologado", round((+"valor" +"valor"*' + str(porcentage) + '/100)) subido  ,' + "'" + str(fechaRegistro) + "'," + "'" + str(estadoReg) + "'," + "'" + str(convenioId) + "'," + ' cast(suministro_id as numeric), ' +"'"  + str(tiposTarifa)  + "'," + "'" + str(username_id) + "'" + ', concepto_id from tarifas_tarifassuministros where "tipoTarifa_id" = ' + "'" + str(tiposTarifa) + "' AND concepto_id =" + "'" + str(conceptos) + "'"
+                    comando = 'INSERT INTO contratacion_conveniosSuministros ("codigoHomologado", valor,  "fechaRegistro", "estadoReg",convenio_id,suministro_id, "tipoTarifa_id", "usuarioRegistro_id", concepto_id) select "codigoHomologado", round((+"valor" +"valor"*' + str(porcentage) + '/100)) subido  ,' + "'" + str(fechaRegistro) + "'," + "'" + str(estadoReg) + "'," + "'" + str(convenioId) + "'," + ' cast(suministro_id as numeric), ' +"'"  + str(tiposTarifa)  + "'," + "'" + str(username_id) + "'" + ', concepto_id from tarifarios_tarifassuministros where "tipoTarifa_id" = ' + "'" + str(tiposTarifa) + "' AND concepto_id =" + "'" + str(conceptos) + "'"
 
 
                 if (accion == 'Crear' and porcentage == '0'  and conceptos == '' and valorVariacion != '0'):
                     print("Entre3")
-                    comando = 'INSERT INTO contratacion_conveniosSuministros ("codigoHomologado", valor,  "fechaRegistro", "estadoReg",convenio_id,suministro_id, "tipoTarifa_id", "usuarioRegistro_id", concepto_id) select "codigoHomologado", round( ' + "'" + str(valorVariacion) + "')" + ' subido  ,' + "'" + str(fechaRegistro) + "'," + "'" + str(estadoReg) + "'," + "'" + str(convenioId) +  "'," + ' cast(suministro_id as numeric), '   +"'" + str(tiposTarifa)  + "'," + "'" + str(username_id) + "'" + ', concepto_id from tarifas_tarifassuministros where "tipoTarifa_id" = ' + "'" + str(tiposTarifa) + "'"
+                    comando = 'INSERT INTO contratacion_conveniosSuministros ("codigoHomologado", valor,  "fechaRegistro", "estadoReg",convenio_id,suministro_id, "tipoTarifa_id", "usuarioRegistro_id", concepto_id) select "codigoHomologado", round( ' + "'" + str(valorVariacion) + "')" + ' subido  ,' + "'" + str(fechaRegistro) + "'," + "'" + str(estadoReg) + "'," + "'" + str(convenioId) +  "'," + ' cast(suministro_id as numeric), '   +"'" + str(tiposTarifa)  + "'," + "'" + str(username_id) + "'" + ', concepto_id from tarifarios_tarifassuministros where "tipoTarifa_id" = ' + "'" + str(tiposTarifa) + "'"
 
 
                 if (accion == 'Crear' and porcentage == '0'  and conceptos != '' and valorVariacion !='0'):
                     print("Entre4")
-                    comando = 'INSERT INTO contratacion_conveniosSuministros ("codigoHomologado", valor,  "fechaRegistro", "estadoReg",convenio_id,suministro_id, "tipoTarifa_id", "usuarioRegistro_id", concepto_id) select "codigoHomologado", round( ' + "'" + str(valorVariacion) + "')" + ' subido  ,' + "'" + str(fechaRegistro) + "'," + "'" + str(estadoReg) + "'," + "'" + str(convenioId) + "'," + ' cast(suministro_id as numeric), '  +"'"  + str(tiposTarifa)  + "'," + "'" + str(username_id) + "'" + ', concepto_id from tarifas_tarifassuministros where "tipoTarifa_id" = ' + "'" + str(tiposTarifa) + "' AND concepto_id =" + "'" + str(conceptos) + "'"
+                    comando = 'INSERT INTO contratacion_conveniosSuministros ("codigoHomologado", valor,  "fechaRegistro", "estadoReg",convenio_id,suministro_id, "tipoTarifa_id", "usuarioRegistro_id", concepto_id) select "codigoHomologado", round( ' + "'" + str(valorVariacion) + "')" + ' subido  ,' + "'" + str(fechaRegistro) + "'," + "'" + str(estadoReg) + "'," + "'" + str(convenioId) + "'," + ' cast(suministro_id as numeric), '  +"'"  + str(tiposTarifa)  + "'," + "'" + str(username_id) + "'" + ', concepto_id from tarifarios_tarifassuministros where "tipoTarifa_id" = ' + "'" + str(tiposTarifa) + "' AND concepto_id =" + "'" + str(conceptos) + "'"
 
 
                 if (accion == 'Borrar' and conceptos == '' and valorVariacion == '0' ):
@@ -1406,32 +1406,32 @@ def GrabarHonorarios( request):
 
         if (accion == 'Crear' and porcentage != 0 and conceptos == '' and valorVariacion == '0' and honorarios == '' and cups == ''):
             print("Entre1")
-            comando = 'INSERT INTO contratacion_ConveniosLiquidacionTarifasHonorarios ("codigoHomologado", valor,  "fechaRegistro", "estadoReg",convenio_id,suministro_id, "tipoTarifa_id", "usuarioRegistro_id", concepto_id , "tipoHonorario_id", cups_id) select "codigoHomologado", round((+"valor" +"valor"*' + str(porcentage) + '/100)) subido  ,' + "'" + str(fechaRegistro) + "'," + "'" + str(estadoReg) + "'," + "'" + str(convenioId) + "'," + ' cast(suministro_id as numeric), '  + str(tiposTarifa) + "," + "'" +  str(username_id) + "'" +  ', concepto_id , "tipoHonorario_id", "codigoCups_id"  from tarifas_LiquidacionTarifasHonorarios where "tipoTarifa_id" = ' + "'" + str(tiposTarifa) + "'"
+            comando = 'INSERT INTO contratacion_ConveniosLiquidacionTarifasHonorarios ("codigoHomologado", valor,  "fechaRegistro", "estadoReg",convenio_id,suministro_id, "tipoTarifa_id", "usuarioRegistro_id", concepto_id , "tipoHonorario_id", cups_id) select "codigoHomologado", round((+"valor" +"valor"*' + str(porcentage) + '/100)) subido  ,' + "'" + str(fechaRegistro) + "'," + "'" + str(estadoReg) + "'," + "'" + str(convenioId) + "'," + ' cast(suministro_id as numeric), '  + str(tiposTarifa) + "," + "'" +  str(username_id) + "'" +  ', concepto_id , "tipoHonorario_id", "codigoCups_id"  from tarifarios_LiquidacionTarifasHonorarios where "tipoTarifa_id" = ' + "'" + str(tiposTarifa) + "'"
 
 
         if (accion == 'Crear' and porcentage != 0 and conceptos == '' and valorVariacion == '0' and honorarios != '' and cups == ''):
             print("Entre1UNO")
-            comando = 'INSERT INTO contratacion_ConveniosLiquidacionTarifasHonorarios ("codigoHomologado", valor,  "fechaRegistro", "estadoReg",convenio_id,suministro_id, "tipoTarifa_id", "usuarioRegistro_id", concepto_id, "tipoHonorario_id" , cups_id) select "codigoHomologado", round((+"valor" +"valor"*' + str(porcentage) + '/100)) subido  ,' + "'" + str(fechaRegistro) + "'," + "'" + str(estadoReg) + "'," + "'" + str(convenioId) + "'," + ' cast(suministro_id as numeric), '  + str(tiposTarifa) + "," + "'" +  str(username_id) + "'" +  ', concepto_id  , "tipoHonorario_id", "codigoCups_id" from tarifas_LiquidacionTarifasHonorarios where "tipoTarifa_id" = ' + "'" + str(tiposTarifa) + "'" + ' AND "tipoHonorario_id" = ' + honorarios
+            comando = 'INSERT INTO contratacion_ConveniosLiquidacionTarifasHonorarios ("codigoHomologado", valor,  "fechaRegistro", "estadoReg",convenio_id,suministro_id, "tipoTarifa_id", "usuarioRegistro_id", concepto_id, "tipoHonorario_id" , cups_id) select "codigoHomologado", round((+"valor" +"valor"*' + str(porcentage) + '/100)) subido  ,' + "'" + str(fechaRegistro) + "'," + "'" + str(estadoReg) + "'," + "'" + str(convenioId) + "'," + ' cast(suministro_id as numeric), '  + str(tiposTarifa) + "," + "'" +  str(username_id) + "'" +  ', concepto_id  , "tipoHonorario_id", "codigoCups_id" from tarifarios_LiquidacionTarifasHonorarios where "tipoTarifa_id" = ' + "'" + str(tiposTarifa) + "'" + ' AND "tipoHonorario_id" = ' + honorarios
 
         if (accion == 'Crear' and porcentage != 0 and conceptos == '' and valorVariacion == '0' and honorarios != '' and cups != ''):
                 print("Entre1DOS")
-                comando = 'INSERT INTO contratacion_ConveniosLiquidacionTarifasHonorarios ("codigoHomologado", valor,  "fechaRegistro", "estadoReg",convenio_id,suministro_id, "tipoTarifa_id", "usuarioRegistro_id", concepto_id, "tipoHonorario_id" , cups_id) select "codigoHomologado", round((+"valor" +"valor"*' + str(porcentage) + '/100)) subido  ,' + "'" + str(fechaRegistro) + "'," + "'" + str(estadoReg) + "'," + "'" + str(convenioId) + "'," + ' cast(suministro_id as numeric), ' + str(tiposTarifa) + "," + "'" + str(username_id) + "'" + ', concepto_id  , "tipoHonorario_id", "codigoCups_id" from tarifas_LiquidacionTarifasHonorarios where "tipoTarifa_id" = ' + "'" + str(tiposTarifa) + "'" + ' AND "tipoHonorario_id" = ' + honorarios + ' AND "codigoCups_id" = ' + cups
+                comando = 'INSERT INTO contratacion_ConveniosLiquidacionTarifasHonorarios ("codigoHomologado", valor,  "fechaRegistro", "estadoReg",convenio_id,suministro_id, "tipoTarifa_id", "usuarioRegistro_id", concepto_id, "tipoHonorario_id" , cups_id) select "codigoHomologado", round((+"valor" +"valor"*' + str(porcentage) + '/100)) subido  ,' + "'" + str(fechaRegistro) + "'," + "'" + str(estadoReg) + "'," + "'" + str(convenioId) + "'," + ' cast(suministro_id as numeric), ' + str(tiposTarifa) + "," + "'" + str(username_id) + "'" + ', concepto_id  , "tipoHonorario_id", "codigoCups_id" from tarifarios_LiquidacionTarifasHonorarios where "tipoTarifa_id" = ' + "'" + str(tiposTarifa) + "'" + ' AND "tipoHonorario_id" = ' + honorarios + ' AND "codigoCups_id" = ' + cups
 
             ## VERIFICAR ESTEP DE ABAJO
 
         if (accion == 'Crear' and porcentage != 0 and conceptos != '' and valorVariacion == '0'):
                 print("Entre2")
-                comando = 'INSERT INTO contratacion_ConveniosLiquidacionTarifasHonorarios ("codigoHomologado", valor,  "fechaRegistro", "estadoReg",convenio_id,suministro_id, "tipoTarifa_id", "usuarioRegistro_id", concepto_id) select "codigoHomologado", round((+"valor" +"valor"*' + str(porcentage) + '/100)) subido  ,' + "'" + str(fechaRegistro) + "'," + "'" + str(estadoReg) + "'," + "'" + str(convenioId) + "'," + ' cast(suministro_id as numeric), ' + "'" + str(tiposTarifa) + "'," + "'" + str(username_id) + "'" + ', concepto_id from tarifas_LiquidacionTarifasHonorarios where "tipoTarifa_id" = ' + "'" + str(tiposTarifa) + "' AND concepto_id =" + "'" + str(conceptos) + "'"
+                comando = 'INSERT INTO contratacion_ConveniosLiquidacionTarifasHonorarios ("codigoHomologado", valor,  "fechaRegistro", "estadoReg",convenio_id,suministro_id, "tipoTarifa_id", "usuarioRegistro_id", concepto_id) select "codigoHomologado", round((+"valor" +"valor"*' + str(porcentage) + '/100)) subido  ,' + "'" + str(fechaRegistro) + "'," + "'" + str(estadoReg) + "'," + "'" + str(convenioId) + "'," + ' cast(suministro_id as numeric), ' + "'" + str(tiposTarifa) + "'," + "'" + str(username_id) + "'" + ', concepto_id from tarifarios_LiquidacionTarifasHonorarios where "tipoTarifa_id" = ' + "'" + str(tiposTarifa) + "' AND concepto_id =" + "'" + str(conceptos) + "'"
 
                 ## es decir por valor
         if (accion == 'Crear' and porcentage == '0'  and conceptos == '' and valorVariacion != '0' and honorarios == '' and cups == ''):
             print("Entre3")
-            comando = 'INSERT INTO contratacion_ConveniosLiquidacionTarifasHonorarios ("codigoHomologado", valor,  "fechaRegistro", "estadoReg",convenio_id,suministro_id, "tipoTarifa_id", "usuarioRegistro_id", concepto_id, "tipoHonorario_id", cups_id) select "codigoHomologado", round( ' + "'" + str(valorVariacion) + "')" + ' subido  ,' + "'" + str(fechaRegistro) + "'," + "'" + str(estadoReg) + "'," + "'" + str(convenioId) +  "'," + ' cast(suministro_id as numeric), '   +"'" + str(tiposTarifa)  + "'," + "'" + str(username_id) + "'" + ', concepto_id , "tipoHonorario_id", "codigoCups_id"  from tarifas_LiquidacionTarifasHonorarios where "tipoTarifa_id" = ' + "'" + str(tiposTarifa) + "'"
+            comando = 'INSERT INTO contratacion_ConveniosLiquidacionTarifasHonorarios ("codigoHomologado", valor,  "fechaRegistro", "estadoReg",convenio_id,suministro_id, "tipoTarifa_id", "usuarioRegistro_id", concepto_id, "tipoHonorario_id", cups_id) select "codigoHomologado", round( ' + "'" + str(valorVariacion) + "')" + ' subido  ,' + "'" + str(fechaRegistro) + "'," + "'" + str(estadoReg) + "'," + "'" + str(convenioId) +  "'," + ' cast(suministro_id as numeric), '   +"'" + str(tiposTarifa)  + "'," + "'" + str(username_id) + "'" + ', concepto_id , "tipoHonorario_id", "codigoCups_id"  from tarifarios_LiquidacionTarifasHonorarios where "tipoTarifa_id" = ' + "'" + str(tiposTarifa) + "'"
 
 
         if (accion == 'Crear' and porcentage == '0'  and conceptos != '' and valorVariacion !='0' and honorarios == '' and cups == ''):
             print("Entre4")
-            comando = 'INSERT INTO contratacion_ConveniosLiquidacionTarifasHonorarios ("codigoHomologado", valor,  "fechaRegistro", "estadoReg",convenio_id,suministro_id, "tipoTarifa_id", "usuarioRegistro_id", concepto_id, "tipoHonorario_id", cups_id) select "codigoHomologado", round( ' + "'" + str(valorVariacion) + "')" + ' subido  ,' + "'" + str(fechaRegistro) + "'," + "'" + str(estadoReg) + "'," + "'" + str(convenioId) + "'," + ' cast(suministro_id as numeric), '  +"'"  + str(tiposTarifa)  + "'," + "'" + str(username_id) + "'" + ', concepto_id , "tipoHonorario_id", "codigoCups_id"  from tarifas_LiquidacionTarifasHonorarios where "tipoTarifa_id" = ' + "'" + str(tiposTarifa) + "' AND concepto_id =" + "'" + str(conceptos) + "'"
+            comando = 'INSERT INTO contratacion_ConveniosLiquidacionTarifasHonorarios ("codigoHomologado", valor,  "fechaRegistro", "estadoReg",convenio_id,suministro_id, "tipoTarifa_id", "usuarioRegistro_id", concepto_id, "tipoHonorario_id", cups_id) select "codigoHomologado", round( ' + "'" + str(valorVariacion) + "')" + ' subido  ,' + "'" + str(fechaRegistro) + "'," + "'" + str(estadoReg) + "'," + "'" + str(convenioId) + "'," + ' cast(suministro_id as numeric), '  +"'"  + str(tiposTarifa)  + "'," + "'" + str(username_id) + "'" + ', concepto_id , "tipoHonorario_id", "codigoCups_id"  from tarifarios_LiquidacionTarifasHonorarios where "tipoTarifa_id" = ' + "'" + str(tiposTarifa) + "' AND concepto_id =" + "'" + str(conceptos) + "'"
 
         if (accion == 'Borrar' and conceptos == '' and valorVariacion == '0' and honorarios == '' and cups == ''):
             print("Entre11")
@@ -1518,7 +1518,7 @@ def load_dataConveniosHonorarios(request, data):
     miConexionx = psycopg2.connect(host="192.168.79.133", database="vulner6", port="5432", user="postgres", password="123456")
     curx = miConexionx.cursor()
    
-    detalle = 'select convHon.id sumId, conv.id id, convHon."codigoHomologado" codigoHomologado, convHon.valor valor,  convHon.suministro_id suministroId ,exa.nombre suministroNombre, tipostar.nombre tarifa FROM contratacion_convenios conv , contratacion_ConveniosLiquidacionTarifasHonorarios convHon, tarifas_tipostarifa tipostar, facturacion_suministros exa WHERE conv.id = convHon.convenio_id and convHon."tipoTarifa_id" = tipostar.id and convHon.suministro_id = exa.id and conv.id = ' + "'" + str(convenioId) + "'"
+    detalle = 'select convHon.id sumId, conv.id id, convHon."codigoHomologado" codigoHomologado, convHon.valor valor,  convHon.suministro_id suministroId ,exa.nombre suministroNombre, tipostar.nombre tarifa FROM contratacion_convenios conv , contratacion_ConveniosLiquidacionTarifasHonorarios convHon, tarifarios_tipostarifa tipostar, facturacion_suministros exa WHERE conv.id = convHon.convenio_id and convHon."tipoTarifa_id" = tipostar.id and convHon.suministro_id = exa.id and conv.id = ' + "'" + str(convenioId) + "'"
 
     print(detalle)
 

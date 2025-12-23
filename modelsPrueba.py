@@ -418,9 +418,62 @@ BIBLIOGRAFIA:
 --  Mejorar el rendimiento d ela base de datos:partivcionamiento d etablas en dyango y
 -- django-postgres-extra
 -- crear indices simultaneos en una tabla particionada
--- Las tabvlas de consulta externa, crean en admisiones_ingresos, el consecutivo = numero de la cita, pasas a liquidacion, liqudaciondetalle, facturacion, facturaciondetalle.
+-- Las tablas de consulta externa, crean en admisiones_ingresos, el consecutivo = numero de la cita, pasas a liquidacion, liqudaciondetalle, facturacion, facturaciondetalle.
 -- trabajar pantallas convenio en facturacion y admisiones
+
+----------------------------------------------------------- PARTICIONES -----------------------------------------------------------------
+
+-- Creo aqui sin utilizar pgmakemigratIons sino NORMALITO
+-- Crear tabla particionada maestra
+CREATE TABLE mi_tabla_particionada (
+    ...
+) PARTITION BY RANGE (fecha);
+
+-- Crear particiones individuales
+CREATE TABLE mi_tabla_particionada_2023 PARTITION OF mi_tabla_particionada
+    FOR VALUES FROM ('2023-01-01') TO ('2024-01-01');
+
+CREATE TABLE mi_tabla_particionada_2024 PARTITION OF mi_tabla_particionada
+    FOR VALUES FROM ('2024-01-01') TO ('2025-01-01');
+
+-- En Django, se puede modelar con modelos normales
+# models.py
+from django.db import models
+
+class MiTablaParticionada(models.Model):
+    # Define campos aquí
+    campo1 = models.CharField(max_length=100)
+    fecha = models.DateField()
+
+    class Meta:
+        abstract = True # Esto es para no crear una tabla física con este nombre
+
+class MiTablaParticionada2023(MiTablaParticionada):
+    pass
+
+class MiTablaParticionada2024(MiTablaParticionada):
+    pass
+
+
+----------------------------------------------------------- FIN PARTICIONES -----------------------------------------------------------------
+
+LINK MIGRACIONES
+
+-- 1. https://medium.com/@akshatgadodia/enhancing-database-performance-table-partitioning-in-django-and-postgresql-using-569ae085ef6a
+-- 2. https://www.google.com/search?q=ejemplos+completos+migraciones+de+particiones++en+django&sca_esv=aa650d13515d1176&rlz=1C1CHBF_esCO999CO999&sxsrf=AE3TifOni_VZR5ZcI8Z7tHRibECV-y2WjQ%3A1764598282523&ei=CqItadTYH6CWwbkPgr2qoQQ&ved=0ahUKEwjUhbTuyJyRAxUgSzABHYKeKkQQ4dUDCBE&uact=5&oq=ejemplos+completos+migraciones+de+particiones++en+django&gs_lp=Egxnd3Mtd2l6LXNlcnAiOGVqZW1wbG9zIGNvbXBsZXRvcyBtaWdyYWNpb25lcyBkZSBwYXJ0aWNpb25lcyAgZW4gZGphbmdvMggQABiABBiiBDIFEAAY7wUyCBAAGIAEGKIEMggQABiABBiiBDIFEAAY7wVI7BxQsQdYxBtwAXgAkAEAmAG6AaAByxOqAQQwLjE3uAEDyAEA-AEBmAILoAK5C8ICCxAAGIAEGLADGKIEwgILEAAYsAMYogQYiQXCAgQQIxgnwgIIECEYoAEYwwTCAgoQIRigARjDBBgKwgIEECEYCpgDAIgGAZAGA5IHBDEuMTCgB9VFsgcEMC4xMLgHtwvCBwUxLjguMsgHGA&sclient=gws-wiz-serp
+-- 3. https://pganalyze.com/blog/postgresql-partitioning-django  OJOOOOO LA QUE MEDIO HA FUINCIONADO
+-- 4. https://pganalyze.com/blog/postgresql-partitioning-django#:~:text=Recuerde%20que%20una%20tabla%20particionada,nombres%20descriptivos%20a%20las%20tablas.&text=Como%20puede%20ver%2C%20los%20registros,se%20encuentran%20en%20cada%20partici%C3%B3n.
+      ojo para crear particiones con las migraciones ASI SE HACE OJOPg
+-- 5. carga masiva video : https://www.youtube.com/watch?v=D0JxuiVw8j4
+-- 6. https://django-postgres-extra.readthedocs.io/en/master/table_partitioning.html
+-- 7. https://www.google.com/search?q=no+me+funcionan+tablas+particionadas+con+django+en+postgres+que+otra+opcion+hay&rlz=1C1CHBF_esCO999CO999&oq=no+me+funcionan+tablas+particionadas+con+django+en+postgres+que+otra+opcion+hay&gs_lcrp=EgZjaHJvbWUyBggAEEUYOdIBCjIwMDUwajBqMTWoAgmwAgHxBdBxowMnUMtt&sourceid=chrome&ie=UTF-8
+      ojo probar esta opcion el dia diciembre 9 del 2025
+-- 8 . django consults lentas:
+       https://www.google.com/search?q=no+me+funcionan+tablas+particionadas+con+django+en+postgres+que+otra+opcion+hay&rlz=1C1CHBF_esCO999CO999&gs_lcrp=EgZjaHJvbWUyBggAEEUYOdIBCjIwMDUwajBqMTWoAgmwAgHxBdBxowMnUMtt&sourceid=chrome&ie=UTF-8&udm=50&ved=2ahUKEwiA-fePtqaRAxXvVTABHa88Jk8Q0NsOegQIAxAB&aep=10&ntc=1&mstk=AUtExfDGBx5II2RCaPgUwWspXHUIfIwPEsgF19ZSqh5-Ve72eBr-lcD7PY-QTQwVLYks_9ejeSFQSNukkQ5HgXY9ikxY4oiiO5CodUwtnZJQCgTsua9uYRCoVpfTRQ0YyJ38PmY-BdCRHTSUqijjUt3rw1Ak8wPh5XyNYbO3R6iwHUTewdg6zek8uRyu81M-2Pd_HtFmhs8iB7K7x3WP2LTy3VXHxlgqzRb8BUh1r2lC3HvyeT4yYGFcv77kpsAZvirWSoXMO4yKs_vg5Uu3wbtBwbuS79_QzpPTiVS49TcG6ZIEiqHIBbwqGKsUGbqUmn77KqoQl6u6xZoT7A&csuir=1&mtid=S80yaZWkFJiIwbkP8PvrwQo
+
+
 --------------------------------------
+
 ------------- FIN WORK ---------------
 --------------------------------------
 -- Ojo validar que al borrar de tarifarios_tarifariosprocedimientos no haya un
@@ -937,3 +990,23 @@ class ProgramacionCitasMedicas(models.Model):
 -- DEFINITIVAMENTE hay que aterrizar el tema insumos, qx, dispo medicos, honorarios etc. Es un saperongo, y en otros servicios ni se diga papaberol
 
 -- Que paso con ... / que desde TRIAGE coloco anulkado = 'A' en facturacion_liquidacion OPS
+
+-- OJO MARTES 9 de Diciemnbre
+
+   No sube bien tipoHonorarios y ripstipootrosservicios hay un afila con error VERIFICAR
+   No sube examenes por culpa de los anteriores VERIFICAr
+   Continuar con el cargue de clinico y seguir creo facturacion. Terminar eljueves es mejor porque despues del dia 11 pailander
+
+-- Diciembre 22 
+
+  Toca crear los perfiles clinica y perfilesgralusu, sedesserviciosclinica, sedessubserviciosclinica, dependencias , habitaciones, tarifarios
+  ojo arreglar que pasa cuando en el convenio no mesta definido el tipo de tarifa proced y/o suministros , debe ir a buscar las particulares . Hace esto
+
+-- Diciembre 23
+
+	-- El deber ser volver a estudoar , repasar para seguir afianzar conceptros tecnicos, globales etc
+        -- ojo el corte carga parametrizacion inicial + parmetrizacion : tarifarios, conceptos, examenes, suministros ,sitios, etc crea la visualizacion del triunfo del software
+           coordinar bien , adecuadamente esta parametrizacion base
+        -- El cargue de clinico_examenes debe ser bien parametrizado y total, al igual que el de facturacion_suministros
+
+
